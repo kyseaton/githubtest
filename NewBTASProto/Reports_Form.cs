@@ -238,7 +238,7 @@ namespace NewBTASProto
 
         private void workOrderSummary()
         {
-            reportSet = new DataSet();
+            reportSet = new  DataSet();
 
             if (!(comboBox1.SelectedIndex < 1)) // make sure we have a selection to act on...
             {
