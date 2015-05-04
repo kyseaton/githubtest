@@ -39,7 +39,7 @@ namespace NewBTASProto
             CScanDataStore testData = new CScanDataStore();
 
             // Open the comport
-            ComPort.ReadTimeout = 1000;
+            ComPort.ReadTimeout = 10000;
             ComPort.PortName = Convert.ToString(cboPorts.Text);
             ComPort.BaudRate = Convert.ToInt32(cboBaudRate.Text);
             ComPort.DataBits = Convert.ToInt32(cboDataBits.Text);
