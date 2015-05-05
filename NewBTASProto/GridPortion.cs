@@ -178,12 +178,60 @@ namespace NewBTASProto
             {
                 return;
             }
-            if (e.ColumnIndex == 4 || e.ColumnIndex == 5 || e.ColumnIndex == 8)
+            if (e.ColumnIndex == 0)
             {
-                if ((bool)d.Rows[e.RowIndex][e.ColumnIndex]) { d.Rows[e.RowIndex][e.ColumnIndex] = false; }
-                else { d.Rows[e.RowIndex][e.ColumnIndex] = true; }
+                //fill in
+            }
+            else if (e.ColumnIndex == 1)
+            {
+                //fill in 
+            }
+            else if (e.ColumnIndex == 2)
+            {
+                // fill in
+            }
+            else if (e.ColumnIndex == 3)
+            {
+                // fill in
+            }
+            else if (e.ColumnIndex == 4)
+            {
+                if ((bool)d.Rows[e.RowIndex][e.ColumnIndex]) 
+                {
+                    d.Rows[e.RowIndex][e.ColumnIndex] = false;
+                    dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor = Color.Gainsboro;
+
+                }
+                else 
+                {
+                    d.Rows[e.RowIndex][e.ColumnIndex] = true;
+                    dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor = Color.Red;
+                }
+            }
+            else if (e.ColumnIndex == 5)
+            {
+                if ((bool)d.Rows[e.RowIndex][e.ColumnIndex])
+                {
+                    d.Rows[e.RowIndex][e.ColumnIndex] = false;
+                }
+                else
+                {
+                    d.Rows[e.RowIndex][e.ColumnIndex] = true;
+                }
+            }
+            else if (e.ColumnIndex == 8)
+            {
+                if ((bool)d.Rows[e.RowIndex][e.ColumnIndex])
+                {
+                    d.Rows[e.RowIndex][e.ColumnIndex] = false;
+                }
+                else
+                {
+                    d.Rows[e.RowIndex][e.ColumnIndex] = true;
+                }
             }
 
+            dataGridView1.ClearSelection();
         }
 
     }

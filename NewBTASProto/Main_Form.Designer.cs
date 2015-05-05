@@ -28,19 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            this.btnGetSerialPorts_Click = new System.Windows.Forms.Button();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.rtbIncoming = new System.Windows.Forms.RichTextBox();
             this.cboPorts = new System.Windows.Forms.ComboBox();
-            this.cboBaudRate = new System.Windows.Forms.ComboBox();
-            this.cboDataBits = new System.Windows.Forms.ComboBox();
-            this.cboStopBits = new System.Windows.Forms.ComboBox();
-            this.cboParity = new System.Windows.Forms.ComboBox();
-            this.cboHandShaking = new System.Windows.Forms.ComboBox();
-            this.btnPortState = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
-            this.sendCScan = new System.Windows.Forms.Button();
             this.tbT1 = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -125,6 +117,19 @@
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.button5 = new System.Windows.Forms.Button();
+            this.button6 = new System.Windows.Forms.Button();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.textBox5 = new System.Windows.Forms.TextBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
+            this.textBox6 = new System.Windows.Forms.TextBox();
+            this.label17 = new System.Windows.Forms.Label();
+            this.comboBox9 = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -135,21 +140,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.SuspendLayout();
             // 
-            // btnGetSerialPorts_Click
-            // 
-            this.btnGetSerialPorts_Click.Location = new System.Drawing.Point(726, 477);
-            this.btnGetSerialPorts_Click.Name = "btnGetSerialPorts_Click";
-            this.btnGetSerialPorts_Click.Size = new System.Drawing.Size(75, 21);
-            this.btnGetSerialPorts_Click.TabIndex = 0;
-            this.btnGetSerialPorts_Click.Text = "Ports";
-            this.btnGetSerialPorts_Click.UseVisualStyleBackColor = true;
-            this.btnGetSerialPorts_Click.Click += new System.EventHandler(this.btnGetSerialPorts_Click_Click);
-            // 
             // rtbIncoming
             // 
-            this.rtbIncoming.Location = new System.Drawing.Point(731, 607);
+            this.rtbIncoming.Location = new System.Drawing.Point(726, 603);
             this.rtbIncoming.Name = "rtbIncoming";
-            this.rtbIncoming.Size = new System.Drawing.Size(291, 121);
+            this.rtbIncoming.Size = new System.Drawing.Size(291, 130);
             this.rtbIncoming.TabIndex = 1;
             this.rtbIncoming.Text = "";
             // 
@@ -161,79 +156,18 @@
             this.cboPorts.Size = new System.Drawing.Size(105, 21);
             this.cboPorts.TabIndex = 2;
             // 
-            // cboBaudRate
-            // 
-            this.cboBaudRate.FormattingEnabled = true;
-            this.cboBaudRate.Location = new System.Drawing.Point(807, 476);
-            this.cboBaudRate.Name = "cboBaudRate";
-            this.cboBaudRate.Size = new System.Drawing.Size(105, 21);
-            this.cboBaudRate.TabIndex = 3;
-            // 
-            // cboDataBits
-            // 
-            this.cboDataBits.FormattingEnabled = true;
-            this.cboDataBits.Location = new System.Drawing.Point(807, 503);
-            this.cboDataBits.Name = "cboDataBits";
-            this.cboDataBits.Size = new System.Drawing.Size(105, 21);
-            this.cboDataBits.TabIndex = 4;
-            // 
-            // cboStopBits
-            // 
-            this.cboStopBits.FormattingEnabled = true;
-            this.cboStopBits.Location = new System.Drawing.Point(918, 451);
-            this.cboStopBits.Name = "cboStopBits";
-            this.cboStopBits.Size = new System.Drawing.Size(105, 21);
-            this.cboStopBits.TabIndex = 5;
-            // 
-            // cboParity
-            // 
-            this.cboParity.FormattingEnabled = true;
-            this.cboParity.Location = new System.Drawing.Point(918, 478);
-            this.cboParity.Name = "cboParity";
-            this.cboParity.Size = new System.Drawing.Size(105, 21);
-            this.cboParity.TabIndex = 6;
-            // 
-            // cboHandShaking
-            // 
-            this.cboHandShaking.FormattingEnabled = true;
-            this.cboHandShaking.Location = new System.Drawing.Point(917, 505);
-            this.cboHandShaking.Name = "cboHandShaking";
-            this.cboHandShaking.Size = new System.Drawing.Size(105, 21);
-            this.cboHandShaking.TabIndex = 7;
-            // 
-            // btnPortState
-            // 
-            this.btnPortState.Location = new System.Drawing.Point(726, 503);
-            this.btnPortState.Name = "btnPortState";
-            this.btnPortState.Size = new System.Drawing.Size(75, 23);
-            this.btnPortState.TabIndex = 8;
-            this.btnPortState.Text = "Closed";
-            this.btnPortState.UseVisualStyleBackColor = true;
-            this.btnPortState.Click += new System.EventHandler(this.btnPortState_Click);
-            // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(751, 555);
+            this.label1.Location = new System.Drawing.Point(728, 475);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(89, 13);
+            this.label1.Size = new System.Drawing.Size(63, 13);
             this.label1.TabIndex = 10;
-            this.label1.Text = "C-scan command";
-            // 
-            // sendCScan
-            // 
-            this.sendCScan.Enabled = false;
-            this.sendCScan.Location = new System.Drawing.Point(754, 578);
-            this.sendCScan.Name = "sendCScan";
-            this.sendCScan.Size = new System.Drawing.Size(75, 23);
-            this.sendCScan.TabIndex = 11;
-            this.sendCScan.Text = "Send";
-            this.sendCScan.UseVisualStyleBackColor = true;
-            this.sendCScan.Click += new System.EventHandler(this.sendCScan_Click);
+            this.label1.Text = "C-scan cmd";
             // 
             // tbT1
             // 
-            this.tbT1.Location = new System.Drawing.Point(844, 580);
+            this.tbT1.Location = new System.Drawing.Point(807, 500);
             this.tbT1.Name = "tbT1";
             this.tbT1.Size = new System.Drawing.Size(31, 20);
             this.tbT1.TabIndex = 12;
@@ -242,7 +176,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(841, 555);
+            this.label2.Location = new System.Drawing.Point(804, 475);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(20, 13);
             this.label2.TabIndex = 13;
@@ -251,7 +185,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(878, 555);
+            this.label3.Location = new System.Drawing.Point(841, 475);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(20, 13);
             this.label3.TabIndex = 14;
@@ -259,7 +193,7 @@
             // 
             // tbT2
             // 
-            this.tbT2.Location = new System.Drawing.Point(881, 581);
+            this.tbT2.Location = new System.Drawing.Point(844, 501);
             this.tbT2.Name = "tbT2";
             this.tbT2.Size = new System.Drawing.Size(31, 20);
             this.tbT2.TabIndex = 15;
@@ -267,7 +201,7 @@
             // 
             // tbWDO
             // 
-            this.tbWDO.Location = new System.Drawing.Point(918, 581);
+            this.tbWDO.Location = new System.Drawing.Point(881, 501);
             this.tbWDO.Name = "tbWDO";
             this.tbWDO.Size = new System.Drawing.Size(31, 20);
             this.tbWDO.TabIndex = 17;
@@ -276,7 +210,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(915, 555);
+            this.label4.Location = new System.Drawing.Point(878, 475);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(34, 13);
             this.label4.TabIndex = 16;
@@ -284,7 +218,7 @@
             // 
             // tbKM1
             // 
-            this.tbKM1.Location = new System.Drawing.Point(955, 581);
+            this.tbKM1.Location = new System.Drawing.Point(918, 501);
             this.tbKM1.Name = "tbKM1";
             this.tbKM1.Size = new System.Drawing.Size(31, 20);
             this.tbKM1.TabIndex = 19;
@@ -293,7 +227,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(952, 555);
+            this.label5.Location = new System.Drawing.Point(915, 475);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(29, 13);
             this.label5.TabIndex = 18;
@@ -301,7 +235,7 @@
             // 
             // tbKM2
             // 
-            this.tbKM2.Location = new System.Drawing.Point(992, 581);
+            this.tbKM2.Location = new System.Drawing.Point(955, 501);
             this.tbKM2.Name = "tbKM2";
             this.tbKM2.Size = new System.Drawing.Size(31, 20);
             this.tbKM2.TabIndex = 21;
@@ -310,7 +244,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(989, 555);
+            this.label6.Location = new System.Drawing.Point(952, 475);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(29, 13);
             this.label6.TabIndex = 20;
@@ -659,7 +593,7 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1,
             this.toolStripStatusLabel2});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 736);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 739);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(1282, 22);
             this.statusStrip1.SizingGrip = false;
@@ -931,13 +865,13 @@
             // 
             // chart1
             // 
-            chartArea2.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea2);
+            chartArea1.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea1);
             this.chart1.Location = new System.Drawing.Point(6, 42);
             this.chart1.Name = "chart1";
-            series2.ChartArea = "ChartArea1";
-            series2.Name = "Series1";
-            this.chart1.Series.Add(series2);
+            series1.ChartArea = "ChartArea1";
+            series1.Name = "Series1";
+            this.chart1.Series.Add(series1);
             this.chart1.Size = new System.Drawing.Size(696, 242);
             this.chart1.TabIndex = 30;
             this.chart1.Text = "chart1";
@@ -952,12 +886,138 @@
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(726, 527);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(75, 23);
+            this.button6.TabIndex = 50;
+            this.button6.Text = "Poll";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
+            // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(955, 577);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(31, 20);
+            this.textBox2.TabIndex = 49;
+            this.textBox2.Text = "0";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(952, 551);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(29, 13);
+            this.label12.TabIndex = 48;
+            this.label12.Text = "KM2";
+            // 
+            // textBox3
+            // 
+            this.textBox3.Location = new System.Drawing.Point(918, 577);
+            this.textBox3.Name = "textBox3";
+            this.textBox3.Size = new System.Drawing.Size(31, 20);
+            this.textBox3.TabIndex = 47;
+            this.textBox3.Text = "0";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(915, 551);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(29, 13);
+            this.label13.TabIndex = 46;
+            this.label13.Text = "KM1";
+            // 
+            // textBox4
+            // 
+            this.textBox4.Location = new System.Drawing.Point(881, 577);
+            this.textBox4.Name = "textBox4";
+            this.textBox4.Size = new System.Drawing.Size(31, 20);
+            this.textBox4.TabIndex = 45;
+            this.textBox4.Text = "L";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(878, 551);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(34, 13);
+            this.label14.TabIndex = 44;
+            this.label14.Text = "WDO";
+            // 
+            // textBox5
+            // 
+            this.textBox5.Location = new System.Drawing.Point(844, 577);
+            this.textBox5.Name = "textBox5";
+            this.textBox5.Size = new System.Drawing.Size(31, 20);
+            this.textBox5.TabIndex = 43;
+            this.textBox5.Text = "6";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(841, 551);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(20, 13);
+            this.label15.TabIndex = 42;
+            this.label15.Text = "T2";
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(804, 551);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(20, 13);
+            this.label16.TabIndex = 41;
+            this.label16.Text = "T1";
+            // 
+            // textBox6
+            // 
+            this.textBox6.Location = new System.Drawing.Point(807, 576);
+            this.textBox6.Name = "textBox6";
+            this.textBox6.Size = new System.Drawing.Size(31, 20);
+            this.textBox6.TabIndex = 40;
+            this.textBox6.Text = "2";
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(728, 553);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(66, 13);
+            this.label17.TabIndex = 38;
+            this.label17.Text = "IC command";
+            this.label17.Click += new System.EventHandler(this.label17_Click);
+            // 
+            // comboBox9
+            // 
+            this.comboBox9.FormattingEnabled = true;
+            this.comboBox9.Location = new System.Drawing.Point(807, 527);
+            this.comboBox9.Name = "comboBox9";
+            this.comboBox9.Size = new System.Drawing.Size(105, 21);
+            this.comboBox9.TabIndex = 31;
+            // 
             // Main_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(1282, 758);
+            this.ClientSize = new System.Drawing.Size(1282, 761);
+            this.Controls.Add(this.button6);
+            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.label12);
+            this.Controls.Add(this.textBox3);
+            this.Controls.Add(this.label13);
+            this.Controls.Add(this.textBox4);
+            this.Controls.Add(this.label14);
+            this.Controls.Add(this.textBox5);
+            this.Controls.Add(this.label15);
+            this.Controls.Add(this.label16);
+            this.Controls.Add(this.textBox6);
+            this.Controls.Add(this.label17);
+            this.Controls.Add(this.comboBox9);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
@@ -974,17 +1034,9 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.tbT1);
-            this.Controls.Add(this.sendCScan);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.btnPortState);
-            this.Controls.Add(this.cboHandShaking);
-            this.Controls.Add(this.cboParity);
-            this.Controls.Add(this.cboStopBits);
-            this.Controls.Add(this.cboDataBits);
-            this.Controls.Add(this.cboBaudRate);
             this.Controls.Add(this.cboPorts);
             this.Controls.Add(this.rtbIncoming);
-            this.Controls.Add(this.btnGetSerialPorts_Click);
             this.Controls.Add(this.menuStrip1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MainMenuStrip = this.menuStrip1;
@@ -1012,17 +1064,9 @@
 
         #endregion
 
-        private System.Windows.Forms.Button btnGetSerialPorts_Click;
         private System.Windows.Forms.RichTextBox rtbIncoming;
         private System.Windows.Forms.ComboBox cboPorts;
-        private System.Windows.Forms.ComboBox cboBaudRate;
-        private System.Windows.Forms.ComboBox cboDataBits;
-        private System.Windows.Forms.ComboBox cboStopBits;
-        private System.Windows.Forms.ComboBox cboParity;
-        private System.Windows.Forms.ComboBox cboHandShaking;
-        private System.Windows.Forms.Button btnPortState;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button sendCScan;
         private System.Windows.Forms.TextBox tbT1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
@@ -1107,6 +1151,19 @@
         private System.Windows.Forms.ComboBox comboBox3;
         private System.Windows.Forms.ComboBox comboBox2;
         private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.TextBox textBox4;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.TextBox textBox5;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.TextBox textBox6;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.ComboBox comboBox9;
     }
 }
 

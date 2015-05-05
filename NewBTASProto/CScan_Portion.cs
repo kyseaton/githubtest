@@ -39,13 +39,13 @@ namespace NewBTASProto
             CScanDataStore testData = new CScanDataStore();
 
             // Open the comport
-            ComPort.ReadTimeout = 10000;
+            ComPort.ReadTimeout = 500;
             ComPort.PortName = Convert.ToString(cboPorts.Text);
-            ComPort.BaudRate = Convert.ToInt32(cboBaudRate.Text);
-            ComPort.DataBits = Convert.ToInt32(cboDataBits.Text);
-            ComPort.StopBits = (StopBits)Enum.Parse(typeof(StopBits), cboStopBits.Text);
-            ComPort.Handshake = (Handshake)Enum.Parse(typeof(Handshake), cboHandShaking.Text);
-            ComPort.Parity = (Parity)Enum.Parse(typeof(Parity), cboParity.Text);
+            ComPort.BaudRate = 19200;
+            ComPort.DataBits = 8;
+            ComPort.StopBits = StopBits.One;
+            ComPort.Handshake = Handshake.None;
+            ComPort.Parity = Parity.None;
 
             ThreadPool.QueueUserWorkItem(_ =>
             {
@@ -88,7 +88,7 @@ namespace NewBTASProto
 
                         for (int i = 0; i < 24; i++)
                         {
-                            series1.Points.AddXY(i + 1, testData.orderedCells[23-i]);
+                            series1.Points.AddXY(i + 1, testData.orderedCells[i]);
                             // color test
                             series1.Points[i].Color = pointColorMain(0, 1,testData.orderedCells[23-i], 4);
                         }
@@ -108,7 +108,7 @@ namespace NewBTASProto
                         textBox1.Text += "Current#2:  " + testData.currentTwo.ToString("00.00") + Environment.NewLine;
                         for (int i = 0; i < 24; i++)
                         {
-                            textBox1.Text += "Cell #" + i.ToString()+":  " + testData.orderedCells[23-i].ToString("0.000") + Environment.NewLine;
+                            textBox1.Text += "Cell #" + (i+1).ToString()+":  " + testData.orderedCells[i].ToString("0.000") + Environment.NewLine;
                         }
                         textBox1.Text += "Temp Plate 1:  " + testData.TP1 + Environment.NewLine;
                         textBox1.Text += "Temp Plate 2:  " + testData.TP2 + Environment.NewLine;
@@ -139,10 +139,6 @@ namespace NewBTASProto
 
         }
 
-        private void btnGetSerialPorts_Click_Click(object sender, EventArgs e)
-        {
-            
-        }
 
         private void port_DataReceived_1(object sender, SerialDataReceivedEventArgs e)
         {
@@ -153,10 +149,6 @@ namespace NewBTASProto
             }
         }
 
-        private void SetText(string text)
-        {
-            this.rtbIncoming.Text += text;
-        }
 
         private Color pointColorMain(int tech, int Cells, double Value, int type)
         {

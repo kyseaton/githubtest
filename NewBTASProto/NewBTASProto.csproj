@@ -70,6 +70,7 @@
     <Compile Include="Business_Name.Designer.cs">
       <DependentUpon>Business_Name.cs</DependentUpon>
     </Compile>
+    <Compile Include="ICDataStore.cs" />
     <Compile Include="CScanDataStore.cs" />
     <Compile Include="CScan_Portion.cs">
       <SubType>Form</SubType>
@@ -84,6 +85,9 @@
       <DependentUpon>DataSet1.xsd</DependentUpon>
     </Compile>
     <Compile Include="GlobalVars.cs" />
+    <Compile Include="IC_Portion.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Splash.cs">
       <SubType>Form</SubType>
     </Compile>
