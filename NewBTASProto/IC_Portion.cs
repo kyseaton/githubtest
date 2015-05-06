@@ -31,13 +31,15 @@ namespace NewBTASProto
 
         public void pollIC()
         {
+            //This code is here to poll the ICs/////////////////////////////////////////////////////////////////////////////////////
+            // We are going to run all of this code on a helper thread, as to improve GUI performance//////////////////////////////////////////
 
             string tempBuff;
-            CScanDataStore testData = new CScanDataStore();
+            ICDataStore testData;
 
             // Open the comport
-            ICComPort.ReadTimeout = 500;
-            ICComPort.PortName = Convert.ToString(comboBox9.Text);
+            ICComPort.ReadTimeout = 300;
+            ICComPort.PortName = "COM11";
             ICComPort.BaudRate = 19200;
             ICComPort.DataBits = 8;
             ICComPort.StopBits = StopBits.One;
@@ -83,52 +85,222 @@ namespace NewBTASProto
             byte ULCH = 0;                                          //---
 
 
+
             ThreadPool.QueueUserWorkItem(_ =>
             {
-                
+                while (true)
+                {
+                    for (int j = 0; j < 16; j++)
+                    {
 
+
+
+                        try
+                        {
+                            ICComPort.Open();
+                            // do this all on a threadpool thread
+
+                            // send the polling command
+                            string outText = "~" + T1.ToString() + T2.ToString() + "L" + KM0 + KM1 + KM2 + KM3 + KM4 + KM5 + KM6 + KM7 + KM8 + KM9 + KM10 + KM11 + KM12 + KM13 + KM14 + KM15 + KM16 + KM17 + KM18 + KM19 + KM20 + KM21 + ULCH + "Z";    //send wake-up character, terminal ID, WDO, commands and Z
+
+                            ICComPort.Write(outText);
+                            // wait for a response
+                            tempBuff = ICComPort.ReadTo("Z");
+                            // close the comport
+                            ICComPort.Close();
+                            //do something with the new data
+                            char[] delims = { ' ' };
+                            string[] A = tempBuff.Split(delims);
+                            //A[1] has the terminal ID in it
+                            ICDataStore currentICData = new ICDataStore(A);
+
+                            //put this new data in the chart!
+                            this.Invoke((MethodInvoker)delegate
+                            {
+                                rtbIncoming.Text = j.ToString() +"  :";
+                                rtbIncoming.Text = tempBuff;
+                                button6.Enabled = true;
+                            });
+
+
+                        }
+                        catch (Exception ex)
+                        {
+                            ICComPort.Close();
+                            if (ex is System.TimeoutException)
+                            {
+                                // serial port timed out...
+                            }
+                        }
+                    }
+                }
+            }); // end thread
+
+/*            ThreadPool.QueueUserWorkItem(_ =>
+            {
+                // this function is a while loop that is going to run forever
                 try
                 {
-                    ICComPort.Open();
-                    // do this all on a threadpool thread
 
-                    // send the polling command
-                    string outText = "~" + T1.ToString() + T2.ToString() + "L" + KM0 + KM1 + KM2 + KM3 + KM4 + KM5 + KM6 + KM7 + KM8 + KM9 + KM10 + KM11 + KM12 + KM13 + KM14 + KM15 + KM16 + KM17 + KM18 + KM19 + KM20 + KM21 + ULCH + "Z";    //send wake-up character, terminal ID, WDO, commands and Z
-
-                    ICComPort.Write(outText);
-                    // wait for a response
-                    tempBuff = ICComPort.ReadTo("Z");
-                    // close the comport
-                    ICComPort.Close();
-                    //do something with the new data
-                    char[] delims = { ' ' };
-                    string[] A = tempBuff.Split(delims);
-                    //A[1] has the terminal ID in it
-                    ICDataStore currentICData = new ICDataStore(A);
-                    
-                    //put this new data in the chart!
-                    this.Invoke((MethodInvoker)delegate
+                    while (true)
                     {
-                        rtbIncoming.Text = "";
-                        rtbIncoming.Text = tempBuff;
-                        button6.Enabled = true;
-                    });
+                        for (int j = 0; j < 16; j++)
+                        {
+                            // first look at the selected row and then recheck all the other rows...
+                            // look for the "In Use" columns and check for attached cscans
+                            if ((bool)d.Rows[dataGridView1.CurrentRow.Index][4])
+                            {
+                                try
+                                {
+                                    ICComPort.Open();
+                                    // do this all on a threadpool thread
 
-                    
-                }
-                catch (Exception ex)
+                                    // send the polling command
+                                    string outText = ("~" + (dataGridView1.CurrentRow.Index + 16).ToString("00") + tbWDO.Text.ToString() + tbKM1.Text.ToString() + tbKM2.Text.ToString() + "Z");
+                                    ICComPort.Write(outText);
+                                    // wait for a response
+                                    tempBuff = ICComPort.ReadTo("Z");
+                                    // close the comport
+                                    ICComPort.Close();
+                                    //do something with the new data
+                                    char[] delims = { ' ' };
+                                    string[] A = tempBuff.Split(delims);
+                                    //A[1] has the terminal ID in it
+                                    testData = new CScanDataStore(A);
+
+                                    //put this new data in the chart!
+                                    this.Invoke((MethodInvoker)delegate
+                                    {
+                                        // first set the cell to green
+                                        dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[4].Style.BackColor = Color.Green;
+
+                                        //if that row is selected, update the chart portion
+                                        chart1.Series.Clear();
+                                        var series1 = new System.Windows.Forms.DataVisualization.Charting.Series
+                                        {
+                                            Name = "Series1",
+                                            Color = System.Drawing.Color.Green,
+                                            IsVisibleInLegend = false,
+                                            IsXValueIndexed = true,
+                                            ChartType = SeriesChartType.Column,
+                                            BorderColor = System.Drawing.Color.DarkGray,
+                                            BorderWidth = 1
+                                        };
+                                        this.chart1.Series.Add(series1);
+
+                                        for (int i = 0; i < 24; i++)
+                                        {
+                                            series1.Points.AddXY(i + 1, testData.orderedCells[i]);
+                                            // color test
+                                            series1.Points[i].Color = pointColorMain(0, 1, testData.orderedCells[23 - i], 4);
+                                        }
+                                        chart1.Invalidate();
+                                        chart1.ChartAreas[0].RecalculateAxesScale();
+
+
+
+                                    });
+                                }
+                                catch (Exception ex)
+                                {
+                                    ICComPort.Close();
+                                    if (ex is System.TimeoutException)
+                                    {
+                                        this.Invoke((MethodInvoker)delegate
+                                        {
+                                            dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[4].Style.BackColor = Color.Red;
+                                            chart1.Series.Clear();
+                                            chart1.Invalidate();
+                                            textBox1.Text = "";
+                                        });
+
+                                    }
+                                }
+                            }// end if for selected case
+                            else
+                            {
+                                this.Invoke((MethodInvoker)delegate
+                                {
+                                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[4].Style.BackColor = Color.Gainsboro;
+                                    chart1.Series.Clear();
+                                    chart1.Invalidate();
+                                    textBox1.Text = "";
+                                });
+
+                            }
+
+                            // now look at all of the other cases to up date the label
+
+                            if ((bool)d.Rows[j][4] && j != dataGridView1.CurrentRow.Index)
+                            {
+
+                                // look for the "In Use" columns and check for attached cscans
+                                try
+                                {
+                                    ICComPort.Open();
+                                    // do this all on a threadpool thread
+
+                                    // send the polling command
+                                    string outText = ("~" + (j + 16).ToString("00") + tbWDO.Text.ToString() + tbKM1.Text.ToString() + tbKM2.Text.ToString() + "Z");
+                                    ICComPort.Write(outText);
+                                    // wait for a response
+                                    tempBuff = ICComPort.ReadTo("Z");
+                                    // close the comport
+                                    ICComPort.Close();
+                                    //do something with the new data
+                                    char[] delims = { ' ' };
+                                    string[] A = tempBuff.Split(delims);
+                                    //A[1] has the terminal ID in it
+                                    testData = new CScanDataStore(A);
+
+
+                                    //put this new data in the chart!
+                                    this.Invoke((MethodInvoker)delegate
+                                    {
+                                        // first set the cell to green
+                                        dataGridView1.Rows[j].Cells[4].Style.BackColor = Color.Green;
+                                    });
+
+
+                                }
+                                catch (Exception ex)
+                                {
+                                    ICComPort.Close();
+                                    if (ex is System.TimeoutException)
+                                    {
+                                        this.Invoke((MethodInvoker)delegate
+                                        {
+                                            dataGridView1.Rows[j].Cells[4].Style.BackColor = Color.Red;
+                                        });
+                                    }
+                                }
+                            }           // end if
+                            else if (j != dataGridView1.CurrentRow.Index || (bool)d.Rows[j][4] == false)
+                            {
+                                try
+                                {
+                                    this.Invoke((MethodInvoker)delegate
+                                    {
+                                        dataGridView1.Rows[j].Cells[4].Style.BackColor = Color.Gainsboro;
+                                    });
+                                }
+                                catch
+                                {
+
+                                }
+
+                            }
+                        }               // end for
+                    }                   // end while
+                }                       // end try
+                catch
                 {
-                    MessageBox.Show(ex.ToString());
-                    ICComPort.Close();
-                    this.Invoke((MethodInvoker)delegate
-                    {
-                        button5.Enabled = true;
-                    });
-                    
-                }
-            });
 
-        }
+                }                   // end catch
+            });                     // end thread
+ * */
+
+        }  // end pollICs
 
 
         private void SetText(string text)

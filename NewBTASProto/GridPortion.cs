@@ -234,5 +234,10 @@ namespace NewBTASProto
             dataGridView1.ClearSelection();
         }
 
+        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            dataGridView1.ClearSelection();
+        }
+
     }
 }

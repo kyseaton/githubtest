@@ -14,9 +14,17 @@ namespace NewBTASProto
         [STAThread]
         static void Main(String[] args)
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Splash());
+            try
+            {
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new Splash());
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("From Main:  " + ex.ToString());
+            }
+
         }
     }
 

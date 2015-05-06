@@ -16,16 +16,25 @@ namespace NewBTASProto
     {
         public Main_Form()
         {
-            InitializeComponent();
-            Initialize_Menus_Tools();
+            try
+            {
+                InitializeComponent();
+                Initialize_Menus_Tools();
 
 
-            InitializeGrid();
+                InitializeGrid();
 
-            
 
-            InitializeTimers();
-            loadCommPorts();
+
+                InitializeTimers();
+                loadCommPorts();
+                Scan();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("In Main_Form:  " + ex.ToString());
+            }
+
 
         }
 
@@ -227,6 +236,41 @@ namespace NewBTASProto
         {
             pollIC();
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (button1.Text == "Find Stations")
+            {
+                for (int i = 0; i < 16; i++)
+                {
+                    d.Rows[i][4] = true;
+                    dataGridView1.Rows[i].Cells[4].Style.BackColor = Color.Red;
+                }
+                button1.Text = "Clear Stations";
+            }
+            else
+            {
+                for (int i = 0; i < 16; i++)
+                {
+                    d.Rows[i][4] = false;
+                    dataGridView1.Rows[i].Cells[4].Style.BackColor = Color.Gainsboro;
+                    button1.Text = "Find Stations";
+                }
+            }
+
+        }
+
+        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        {
+
+        }
+
+        private void backgroundWorker2_DoWork(object sender, DoWorkEventArgs e)
+        {
+
+        }
+
+
 
     }
 }
