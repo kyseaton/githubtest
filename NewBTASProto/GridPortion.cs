@@ -30,7 +30,7 @@ namespace NewBTASProto
         /// <summary>
         /// This method builds the BTAS table
         /// </summary>
-        public DataTable GetResultsTable()
+        public void SetUpTable()
         {
 
             // Add 16 rows to the data table to fit all of the channel data
@@ -51,7 +51,6 @@ namespace NewBTASProto
                     d.Rows[i][a] = temp[a];
                 }
             }
-            return d;
         }
 
         private void InitializeGrid()
@@ -96,7 +95,8 @@ namespace NewBTASProto
             }
 
             // Render the DataGridView.
-            dataGridView1.DataSource = this.GetResultsTable();
+            SetUpTable();
+            dataGridView1.DataSource = d;
 
             // change settings for the individual columns
             for (int i = 0; i < 12; i++)
@@ -224,6 +224,7 @@ namespace NewBTASProto
                 if ((bool)d.Rows[e.RowIndex][e.ColumnIndex])
                 {
                     d.Rows[e.RowIndex][e.ColumnIndex] = false;
+                    d.Rows[e.RowIndex][11] = "";
                 }
                 else
                 {

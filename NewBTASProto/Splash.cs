@@ -64,6 +64,8 @@ namespace NewBTASProto
 
             GlobalVars.businessName = options.Tables[0].Rows[0][2].ToString();
 
+            GlobalVars.highlightCurrent = false;
+
         }
 
 
@@ -72,7 +74,7 @@ namespace NewBTASProto
             Load_Globals();
             tmr = new Timer();
             //set time interval 3 sec
-            tmr.Interval = 500;
+            tmr.Interval = 3000;
             //starts the timer
             tmr.Start();
             tmr.Tick += tmr_Tick;
@@ -98,19 +100,19 @@ namespace NewBTASProto
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Image = global::NewBTASProto.Properties.Resources.SplashImage;
-            this.pictureBox1.Location = new System.Drawing.Point(1, 0);
+            this.pictureBox1.Image = global::NewBTASProto.Properties.Resources.splash6;
+            this.pictureBox1.Location = new System.Drawing.Point(-2, -1);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(241, 224);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.Size = new System.Drawing.Size(491, 286);
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
+            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
             // Splash
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(244, 226);
+            this.ClientSize = new System.Drawing.Size(490, 285);
             this.Controls.Add(this.pictureBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
@@ -120,6 +122,11 @@ namespace NewBTASProto
             this.Shown += new System.EventHandler(this.SplashScreen_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
+
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
 
         }
 

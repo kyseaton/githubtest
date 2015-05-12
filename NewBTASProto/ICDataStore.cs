@@ -32,9 +32,13 @@ namespace NewBTASProto
         public float HSTemp2;           // Heat Sink #2 temperature
         public int AuxIn;               // Auxiliary Input
 
+        public string runStatus;
+        public string faultStatus;
+        public string endStatus;
+        public string testMode;
+        public string availabilityStatus;
+
         bool online = false;
-        bool run = false;
-        bool hold = false;
 
         // the constructor pulls in the data and stores it in the familiar A
         public ICDataStore(string[] ICDATA)
@@ -74,14 +78,160 @@ namespace NewBTASProto
             {
                 online = true;
             }
-            if ((QS1 & 0x02) == 2)
+            
+            //run status
+            
+            switch ((QS1 & 0x06) >> 1)
             {
-                run = true;
-            }
-            if ((QS1 & 0x04) == 4)
+                case 0:
+                    runStatus = "RESET";
+                    break;
+                case 1:
+                    runStatus = "RUN";
+                    break;
+                case 2:
+                    runStatus = "HOLD";
+                    break;
+                case 3:
+                    runStatus = "END";
+                    break;
+            }   // end runStatus Switch
+
+            //Fault status
+
+            switch ((QS1 & 0x38) >> 3)
             {
-                hold = true;
-            }
+                case 0:
+                    faultStatus = "";
+                    break;
+                case 1:
+                    faultStatus = "Power Fail";
+                    break;
+                case 2:
+                    faultStatus = "Limiter";
+                    break;
+                case 3:
+                    faultStatus = "Low AC";
+                    break;
+                case 4:
+                    faultStatus = "AOV";
+                    break;
+                case 5:
+                    faultStatus = "OverHeat";
+                    break;
+                case 6:
+                    faultStatus = "OverTemp";
+                    break;
+                case 7:
+                    faultStatus = "Overvoltage";
+                    break;
+            }   // end faultStatus Switch
+
+            //end status
+
+            switch ((QS1 & 0xC0) >> 6)
+            {
+                case 0:
+                    endStatus = "RESET";
+                    break;
+                case 1:
+                    endStatus = "RUN";
+                    break;
+                case 2:
+                    endStatus = "HOLD";
+                    break;
+                case 3:
+                    endStatus = "END";
+                    break;
+            }   // end endStatus Switch
+
+            //test mode
+
+            switch (QS2 & 0x0F)
+            {
+                case 0:
+                    testMode = "None";
+                    break;
+                case 1:
+                    testMode = "10 - Single Rate";
+                    break;
+                case 2:
+                    testMode = "11 - Peak";
+                    break;
+                case 3:
+                    testMode = "12 - Float";
+                    break;
+                case 4:
+                    testMode = "20 - Dual Rate";
+                    break;
+                case 5:
+                    testMode = "21 - Dual + Peak Xfr";
+                    break;
+                case 6:
+                    testMode = "30 - Full Discharge";
+                    break;
+                case 7:
+                    testMode = "31 - Cap Test";
+                    break;
+                case 8:
+                    testMode = "32 - CRD Cap Test";
+                    break;
+            }   // end testMode Switch
+
+            //test mode
+
+            switch (QS2 & 0xF0 >> 4)
+            {
+                case 0:
+                    availabilityStatus = "Enabled";
+                    break;
+                case 1:
+                    availabilityStatus = "Disabled";
+                    break;
+                case 2:
+                    availabilityStatus = "x2x";
+                    break;
+                case 3:
+                    availabilityStatus = "x3x";
+                    break;
+                case 4:
+                    availabilityStatus = "x4x";
+                    break;
+                case 5:
+                    availabilityStatus = "x5x";
+                    break;
+                case 6:
+                    availabilityStatus = "x6x";
+                    break;
+                case 7:
+                    availabilityStatus = "x7x";
+                    break;
+                case 8:
+                    availabilityStatus = "x8x";
+                    break;
+                case 9:
+                    availabilityStatus = "x9x";
+                    break;
+                case 10:
+                    availabilityStatus = "x10x";
+                    break;
+                case 11:
+                    availabilityStatus = "x11x";
+                    break;
+                case 12:
+                    availabilityStatus = "x12x";
+                    break;
+                case 13:
+                    availabilityStatus = "x13x";
+                    break;
+                case 14:
+                    availabilityStatus = "x14x";
+                    break;
+                case 15:
+                    availabilityStatus = "x15x";
+                    break;
+            }   // end availabilityStatus Switch
+
 
         }
 

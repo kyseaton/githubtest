@@ -9,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO.Ports;
+using System.Threading;
+
 
 namespace NewBTASProto
 {
@@ -18,17 +20,14 @@ namespace NewBTASProto
         {
             try
             {
+                SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
                 InitializeComponent();
                 Initialize_Menus_Tools();
 
-
                 InitializeGrid();
-
-
-
                 InitializeTimers();
-                loadCommPorts();
                 Scan();
+
             }
             catch(Exception ex)
             {
@@ -36,35 +35,6 @@ namespace NewBTASProto
             }
 
 
-        }
-
-        //Replace with Dialog!
-        private void loadCommPorts()
-        {
-            // Get the list of availible Ports
-            string[] ArrayComPortsNames = null;
-            int index = -1;
-            string ComPortName = null;
-
-            ArrayComPortsNames = SerialPort.GetPortNames();
-            do
-            {
-                index += 1;
-                cboPorts.Items.Add(ArrayComPortsNames[index]);
-                comboBox9.Items.Add(ArrayComPortsNames[index]);
-            }
-
-            while (!((ArrayComPortsNames[index] == ComPortName)
-                          || (index == ArrayComPortsNames.GetUpperBound(0))));
-            Array.Sort(ArrayComPortsNames);
-
-            //want to get first out
-            if (index == ArrayComPortsNames.GetUpperBound(0))
-            {
-                ComPortName = ArrayComPortsNames[0];
-            }
-            cboPorts.Text = ArrayComPortsNames[ArrayComPortsNames.GetUpperBound(0)];
-            comboBox9.Text = ArrayComPortsNames[ArrayComPortsNames.GetUpperBound(0)];
         }
 
         /// <summary>
@@ -214,13 +184,6 @@ namespace NewBTASProto
             label10.Text = GlobalVars.businessName;
         }
 
-        private void button5_Click(object sender, EventArgs e)
-        {
-            chart1.Series.Clear();
-            button5.Enabled = false;
-            pollCScan(1);
-
-        }
 
         private void btnGetSerialPorts_Click_Click(object sender, EventArgs e)
         {
@@ -232,31 +195,65 @@ namespace NewBTASProto
 
         }
 
-        private void button6_Click(object sender, EventArgs e)
-        {
-            pollIC();
-        }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (button1.Text == "Find Stations")
+
+
+
+            // create a thread to go through and look for the stations, this way the UI will still work while the search is happening
+            ThreadPool.QueueUserWorkItem(s =>
             {
+                this.Invoke((MethodInvoker)delegate
+                    {
+                        // start by disabling the button while we look for stations
+                        button1.Enabled = false;
+                        // also disable the grid, so the user cannot interfere with the search
+                        dataGridView1.Enabled = false;
+                    });
+
+                // turn on all of the in use buttons
                 for (int i = 0; i < 16; i++)
                 {
-                    d.Rows[i][4] = true;
-                    dataGridView1.Rows[i].Cells[4].Style.BackColor = Color.Red;
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        d.Rows[i][4] = true;
+                        dataGridView1.Rows[i].Cells[4].Style.BackColor = Color.Red;
+                    });
                 }
-                button1.Text = "Clear Stations";
-            }
-            else
-            {
+                // here is the for loop we'll use to look for cscans
                 for (int i = 0; i < 16; i++)
                 {
-                    d.Rows[i][4] = false;
-                    dataGridView1.Rows[i].Cells[4].Style.BackColor = Color.Gainsboro;
-                    button1.Text = "Find Stations";
+
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        dataGridView1.CurrentCell = dataGridView1.Rows[i].Cells[0];
+                        dataGridView1.ClearSelection();
+                    });
+
+                    Thread.Sleep(1000);
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        if (dataGridView1.Rows[i].Cells[4].Style.BackColor == Color.Red)
+                        {
+                            d.Rows[i][4] = false;
+                            dataGridView1.Rows[i].Cells[4].Style.BackColor = Color.Gainsboro;
+                        }
+                    });
                 }
-            }
+
+                //reenable the button before exit
+                this.Invoke((MethodInvoker)delegate
+                {
+                    // start by disabling the button while we look for stations
+                    button1.Enabled = true;
+                    // also disable the grid, so the user cannot interfere with the search
+                    dataGridView1.Enabled = true;
+                });
+
+            });                     // end thread
+
+
 
         }
 
@@ -267,6 +264,31 @@ namespace NewBTASProto
 
         private void backgroundWorker2_DoWork(object sender, DoWorkEventArgs e)
         {
+
+        }
+
+        private void Main_Form_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // tell those threadpool work items to stop!!!!!
+            cPollIC.Cancel();
+            cPollCScans.Cancel();
+            sequentialScanT.Cancel();
+            // make sure it takes...
+            Thread.Sleep(500);      
+        }
+
+        private void highlightCurrentToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (highlightCurrentToolStripMenuItem.Checked == false)
+            {
+                highlightCurrentToolStripMenuItem.Checked = true;
+                GlobalVars.highlightCurrent = true;
+            }
+            else
+            {
+                highlightCurrentToolStripMenuItem.Checked = false;
+                GlobalVars.highlightCurrent = false;
+            }
 
         }
 

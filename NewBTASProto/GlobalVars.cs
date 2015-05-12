@@ -18,6 +18,11 @@ namespace NewBTASProto
         /// </summary>
         public static string businessName;
 
+        /// <summary>
+        /// Selects where ther the highlight feature is on or off
+        /// </summary>
+        public static bool highlightCurrent;
+
 
     }
 }

@@ -10,11 +10,14 @@ using System.Windows.Forms;
 using System.IO.Ports;
 using System.Threading;
 using System.Windows.Forms.DataVisualization.Charting;
+using System.Runtime.InteropServices;
 
 namespace NewBTASProto
 {
     public partial class Main_Form : Form
     {
+
+        
 
         //ComPort.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(port_DataReceived_1);
         //EventArgs E = new EventArgs();
@@ -31,124 +34,298 @@ namespace NewBTASProto
         // this is for the chart on the main form
         DataSet graphMainSet = new DataSet();
 
+        // cancellation token
+        CancellationTokenSource cPollCScans = new CancellationTokenSource();
+        CancellationTokenSource sequentialScanT = new CancellationTokenSource();
 
-        public void pollCScan(int terminalID)
+
+        public void pollCScans()
         {
 
             string tempBuff;
-            CScanDataStore testData = new CScanDataStore();
+            CScanDataStore testData;
+            int tempClick = 0;
 
+            //MOVE TO A STARTUP LOCATION!!!!!!!!!!!!!!!!!!!!!
             // Open the comport
-            ComPort.ReadTimeout = 500;
-            ComPort.PortName = Convert.ToString(cboPorts.Text);
+            ComPort.ReadTimeout = 200;
+            ComPort.PortName = "COM12";
             ComPort.BaudRate = 19200;
             ComPort.DataBits = 8;
             ComPort.StopBits = StopBits.One;
             ComPort.Handshake = Handshake.None;
             ComPort.Parity = Parity.None;
 
-            ThreadPool.QueueUserWorkItem(_ =>
+            ThreadPool.QueueUserWorkItem(s =>
             {
-                
+                CancellationToken token = (CancellationToken)s;
+                Thread.Sleep(1500);
 
-                try
+                while (true)
                 {
-                    ComPort.Open();
-                    // do this all on a threadpool thread
-
-                    // send the polling command
-                    string outText = ("~" + tbT1.Text.ToString() + tbT2.Text.ToString() + tbWDO.Text.ToString() + tbKM1.Text.ToString() + tbKM2.Text.ToString() + "Z");
-                    ComPort.Write(outText);
-                    // wait for a response
-                    tempBuff = ComPort.ReadTo("Z");
-                    // close the comport
-                    ComPort.Close();
-                    //do something with the new data
-                    char[] delims = { ' ' };
-                    string[] A = tempBuff.Split(delims);
-                    //A[1] has the terminal ID in it
-                    testData = new CScanDataStore(A);
-                    
-                    //put this new data in the chart!
-                    this.Invoke((MethodInvoker)delegate
+                    // this function consists of a while loop that is going to run until the thread is cancelled
+                    try
                     {
-                        //chart portion
-                        chart1.Series.Clear();
-                        var series1 = new System.Windows.Forms.DataVisualization.Charting.Series
-                        {
-                            Name = "Series1",
-                            Color = System.Drawing.Color.Green,
-                            IsVisibleInLegend = false,
-                            IsXValueIndexed = true,
-                            ChartType = SeriesChartType.Column,
-                            BorderColor = System.Drawing.Color.DarkGray,
-                            BorderWidth = 1
-                        };
-                        this.chart1.Series.Add(series1);
 
-                        for (int i = 0; i < 24; i++)
+                        for (int j = 0; j < 16; j++)
                         {
-                            series1.Points.AddXY(i + 1, testData.orderedCells[i]);
-                            // color test
-                            series1.Points[i].Color = pointColorMain(0, 1,testData.orderedCells[23-i], 4);
-                        }
-                        chart1.Invalidate();
-                        chart1.ChartAreas[0].RecalculateAxesScale();
+                            //pause for a little each time
+                            Thread.Sleep(50);
 
-                        //Real Time Data Portion
-                        textBox1.Text = System.DateTime.Now.ToString("M/d/yyyy") + "       Terminal:  " + testData.terminalID.ToString() + Environment.NewLine;
-                        textBox1.Text += "Temp. Cable:  " + testData.TCAB.ToString() + "   (" + testData.tempPlateType + ")" + Environment.NewLine;
-                        textBox1.Text += "Cells Cable:  " + testData.CCID.ToString() + "   (" + testData.cellCableType + ")" + Environment.NewLine;
-                        textBox1.Text += "Shunt Cable:  " + testData.SHCID.ToString() + "   (" + testData.shuntCableType + ")" + Environment.NewLine;
-                        textBox1.Text += "Voltage Batt 1:  " + testData.VB1.ToString("00.00") + Environment.NewLine;
-                        textBox1.Text += "Voltage Batt 2:  " + testData.VB2.ToString("00.00") + Environment.NewLine;
-                        textBox1.Text += "Voltage Batt 3:  " + testData.VB3.ToString("00.00") + Environment.NewLine;
-                        textBox1.Text += "Voltage Batt 4:  " + testData.VB4.ToString("00.00") + Environment.NewLine;
-                        textBox1.Text += "Current#1:  " + testData.currentOne.ToString("00.00") + Environment.NewLine;
-                        textBox1.Text += "Current#2:  " + testData.currentTwo.ToString("00.00") + Environment.NewLine;
-                        for (int i = 0; i < 24; i++)
-                        {
-                            textBox1.Text += "Cell #" + (i+1).ToString()+":  " + testData.orderedCells[i].ToString("0.000") + Environment.NewLine;
-                        }
-                        textBox1.Text += "Temp Plate 1:  " + testData.TP1 + Environment.NewLine;
-                        textBox1.Text += "Temp Plate 2:  " + testData.TP2 + Environment.NewLine;
-                        textBox1.Text += "Temp Plate 3:  " + testData.TP3 + Environment.NewLine;
-                        textBox1.Text += "Temp Plate 4:  " + testData.TP4 + Environment.NewLine;
-                        textBox1.Text += "Ambient Temp:  " + testData.TP5 + Environment.NewLine;
-                        textBox1.Text += "Reference:  " + testData.ref95V + Environment.NewLine;
+                            // putting the cancel check in a well looked at place
+                            if (token.IsCancellationRequested) return;
 
+                            // first look at the selected row and then recheck all the other rows...
+                            // look for the "In Use" columns and check for attached cscans
+                            tempClick = dataGridView1.CurrentRow.Index;
+
+                            if ((bool)d.Rows[dataGridView1.CurrentRow.Index][4])
+                            {
+
+                                try
+                                {
+                                    ComPort.Open();
+                                    // do this all on a threadpool thread
+
+                                    // send the polling command
+                                    string outText = "~" + (dataGridView1.CurrentRow.Index + 16).ToString("00") + "L00Z";
+                                    ComPort.Write(outText);
+                                    // wait for a response
+                                    
+                                    tempBuff = ComPort.ReadTo("Z");
+                                    // close the comport
+                                    ComPort.Close();
+                                    //do something with the new data
+                                    char[] delims = { ' ' };
+                                    string[] A = tempBuff.Split(delims);
+                                    //A[1] has the terminal ID in it
+                                    testData = new CScanDataStore(A);
+
+                                    if ((bool)d.Rows[dataGridView1.CurrentRow.Index][4] && tempClick == dataGridView1.CurrentRow.Index)  // test to see if we've clicked in the mean time...
+                                    {
+                                        //put this new data in the chart!
+                                        this.Invoke((MethodInvoker)delegate
+                                        {
+                                            // first set the cell to green
+                                            dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[4].Style.BackColor = Color.Green;
+
+                                            //if that row is selected, update the chart portion
+                                            chart1.Series.Clear();
+                                            var series1 = new System.Windows.Forms.DataVisualization.Charting.Series
+                                            {
+                                                Name = "Series1",
+                                                Color = System.Drawing.Color.Green,
+                                                IsVisibleInLegend = false,
+                                                IsXValueIndexed = true,
+                                                ChartType = SeriesChartType.Column,
+                                                BorderColor = System.Drawing.Color.DarkGray,
+                                                BorderWidth = 1
+                                            };
+                                            this.chart1.Series.Add(series1);
+
+                                            for (int i = 0; i < 24; i++)
+                                            {
+                                                series1.Points.AddXY(i + 1, testData.orderedCells[i]);
+                                                // color test
+                                                series1.Points[i].Color = pointColorMain(0, 1, testData.orderedCells[23 - i], 4);
+                                            }
+                                            chart1.Invalidate();
+                                            chart1.ChartAreas[0].RecalculateAxesScale();
+
+                                            //Real Time Data Portion
+                                            string tempText = "";
+                                            tempText = System.DateTime.Now.ToString("M/d/yyyy") + "       Terminal:  " + testData.terminalID.ToString() + Environment.NewLine;
+                                            tempText += "Temp. Cable:  " + testData.TCAB.ToString() + "   (" + testData.tempPlateType + ")" + Environment.NewLine;
+                                            tempText += "Cells Cable:  " + testData.CCID.ToString() + "   (" + testData.cellCableType + ")" + Environment.NewLine;
+                                            tempText += "Shunt Cable:  " + testData.SHCID.ToString() + "   (" + testData.shuntCableType + ")" + Environment.NewLine;
+                                            tempText += "Voltage Batt 1:  " + testData.VB1.ToString("00.00") + Environment.NewLine;
+                                            tempText += "Voltage Batt 2:  " + testData.VB2.ToString("00.00") + Environment.NewLine;
+                                            tempText += "Voltage Batt 3:  " + testData.VB3.ToString("00.00") + Environment.NewLine;
+                                            tempText += "Voltage Batt 4:  " + testData.VB4.ToString("00.00") + Environment.NewLine;
+                                            tempText += "Current#1:  " + testData.currentOne.ToString("00.00") + Environment.NewLine;
+                                            tempText += "Current#2:  " + testData.currentTwo.ToString("00.00") + Environment.NewLine;
+
+                                            for (int i = 0; i < 24; i++)
+                                            {
+                                                tempText += "Cell #" + (i + 1).ToString() + ":  " + testData.orderedCells[i].ToString("0.000") + Environment.NewLine;
+                                            }
+                                            tempText += "Temp Plate 1:  " + testData.TP1 + Environment.NewLine;
+                                            tempText += "Temp Plate 2:  " + testData.TP2 + Environment.NewLine;
+                                            tempText += "Temp Plate 3:  " + testData.TP3 + Environment.NewLine;
+                                            tempText += "Temp Plate 4:  " + testData.TP4 + Environment.NewLine;
+                                            tempText += "Ambient Temp:  " + testData.TP5 + Environment.NewLine;
+                                            tempText += "Reference:  " + testData.ref95V + Environment.NewLine;
+                                            tempText += "Program Version " + testData.programVersion;
+                                            textBox1.Text = tempText;
+
+
+                                        });
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    if (ex is System.TimeoutException)
+                                    {
+                                        // make sure there haven't been any clicks in the mean time...
+                                        if ((bool)d.Rows[j][4] && tempClick == dataGridView1.CurrentRow.Index)
+                                        {
+                                            this.Invoke((MethodInvoker)delegate
+                                            {
+
+                                                dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[4].Style.BackColor = Color.Red;
+                                                chart1.Series.Clear();
+                                                chart1.Invalidate();
+                                                textBox1.Text = "";
+                                            });
+                                        }
+                                        ComPort.Close();
+
+                                    }
+                                }
+                            }// end if for selected case
                             
-                            
 
-                        button5.Enabled = true;
-                    });
 
-                    
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.ToString());
-                    ComPort.Close();
-                    this.Invoke((MethodInvoker)delegate
+                            // now look at all of the other cases to up date the label after a little break...
+                            // if we are not looking for stations with the "find stations" function...
+
+                            if (button1.Enabled == true)
+                            {
+
+                                if ((bool)d.Rows[j][4] && j != dataGridView1.CurrentRow.Index)
+                                {
+
+                                    // this allows for the current cscan being interrogated to be highlighted in the grid
+                                    if (GlobalVars.highlightCurrent)
+                                    {
+                                        this.Invoke((MethodInvoker)delegate
+                                        {
+                                            dataGridView1.Rows[j].Cells[4].Style.BackColor = Color.Azure;
+                                        });
+                                    }
+
+
+                                    // look at the "In Use" columns and check for attached cscans
+                                    try
+                                    {
+                                        ComPort.Open();
+                                        // do this all on a threadpool thread
+
+                                        // send the polling command
+                                        string outText = ("~" + (j + 16).ToString("00") + "L00Z");
+                                        ComPort.Write(outText);
+                                        // wait for a response
+                                        tempBuff = ComPort.ReadTo("Z");
+                                        // close the comport
+                                        ComPort.Close();
+                                        //do something with the new data
+                                        char[] delims = { ' ' };
+                                        string[] A = tempBuff.Split(delims);
+                                        //A[1] has the terminal ID in it
+                                        testData = new CScanDataStore(A);
+
+                                        if ((bool)d.Rows[j][4])  // added to help with gui look
+                                        {
+                                            //put this new data in the chart!
+                                            this.Invoke((MethodInvoker)delegate
+                                            {
+                                                // set the cell to green
+                                                dataGridView1.Rows[j].Cells[4].Style.BackColor = Color.Green;
+                                            });
+                                        }  // end if
+                                    }  // end try
+                                    catch (Exception ex)
+                                    {
+                                        ComPort.Close();
+                                        if (ex is System.TimeoutException)
+                                        {
+                                            if ((bool)d.Rows[j][4] && dataGridView1.CurrentRow.Index != j)  // added to help with gui look
+                                            {
+                                                this.Invoke((MethodInvoker)delegate
+                                                {
+                                                    // set the cell to green
+                                                    dataGridView1.Rows[j].Cells[4].Style.BackColor = Color.Red;
+                                                });
+                                            }
+                                        }  // end if
+
+                                    }  // end catch
+                                }  // end if
+                                else if ((bool)d.Rows[j][4] == false)
+                                {
+                                    this.Invoke((MethodInvoker)delegate
+                                    {
+                                        dataGridView1.Rows[j].Cells[4].Style.BackColor = Color.Gainsboro;
+                                    });
+
+                                }
+                            }
+
+                        }               // end for
+                        // end while
+                    }                       // end try
+                    catch (Exception ex)
                     {
-                        button5.Enabled = true;
-                    });
-                    
-                }
-            });
+                        if (token.IsCancellationRequested) return;
+                        else
+                        {
+                            MessageBox.Show(ex.ToString());
+                        }
+                        
+                    }                   // end catch
+                }                       // end while
+            }, cPollCScans.Token);                     // end thread
 
         }
 
-
-        private void port_DataReceived_1(object sender, SerialDataReceivedEventArgs e)
+        public void sequentialScan()
         {
-            InputData = ComPort.ReadExisting();
-            if (InputData != String.Empty)
+            ThreadPool.QueueUserWorkItem(s =>
             {
-                this.BeginInvoke(new SetTextCallback(SetText), new object[] { InputData });
-            }
-        }
 
+                // set up thread
+                int tempClick = 0;      // this var will store the last channels value between loops
+                int multi = 0;
+                CancellationToken token = (CancellationToken)s;
+                Thread.Sleep(600);
+
+                // here is the main loop
+                while (true)
+                {
+                    // this function consists of a while loop that is going to run until the thread is cancelled
+                    try         // on error the loop will just start again...
+                    {
+                        if (token.IsCancellationRequested) return;
+                        Thread.Sleep(500);             // loop every 0.5 seconds
+                        multi += 1;                    // increment multi
+                        multi %= 10;                     // test every fourth count
+                        if (checkBox1.Checked && multi == 0)          // sequential scanning is turned on
+                        {
+                            tempClick = dataGridView1.CurrentRow.Index;
+                            //search from tempclick onto the next "in use" row
+                            for (int q = 1; q < 16; q++)
+                            {
+                                if ((bool)d.Rows[(tempClick + q) % 16][4])
+                                {
+                                    this.Invoke((MethodInvoker)delegate
+                                    {
+                                        dataGridView1.CurrentCell = dataGridView1.Rows[(tempClick + q) % 16].Cells[0];
+                                        dataGridView1.ClearSelection();
+                                    });
+                                    break;
+                                }
+                            }  // end for
+                        }// end if
+                    }// end try
+                    catch
+                    {
+                        // take a break and then start over...
+                        Thread.Sleep(500);    
+                    }
+                }// end while
+            }, sequentialScanT.Token);                     // end thread
+
+        }
 
         private Color pointColorMain(int tech, int Cells, double Value, int type)
         {
