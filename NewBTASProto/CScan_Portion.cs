@@ -251,16 +251,15 @@ namespace NewBTASProto
 
                                     }  // end catch
                                 }  // end if
-                                else if ((bool)d.Rows[j][4] == false)
-                                {
+                                else if ((bool)d.Rows[j][4] == false && dataGridView1.Rows[j].Cells[4].Style.BackColor != Color.Gainsboro && dataGridView1.Rows[j].Cells[4].Style.BackColor != Color.Empty)
+                                {                                    
                                     this.Invoke((MethodInvoker)delegate
                                     {
-                                        dataGridView1.Rows[j].Cells[4].Style.BackColor = Color.Gainsboro;
+                                            dataGridView1.Rows[j].Cells[4].Style.BackColor = Color.Gainsboro; 
                                     });
-
                                 }
-                            }
 
+                            }
                         }               // end for
                         // end while
                     }                       // end try
@@ -299,7 +298,7 @@ namespace NewBTASProto
                         Thread.Sleep(500);             // loop every 0.5 seconds
                         multi += 1;                    // increment multi
                         multi %= 10;                     // test every fourth count
-                        if (checkBox1.Checked && multi == 0)          // sequential scanning is turned on
+                        if (checkBox1.Checked && multi == 0 && button1.Enabled == true)          // sequential scanning is turned on
                         {
                             tempClick = dataGridView1.CurrentRow.Index;
                             //search from tempclick onto the next "in use" row
@@ -434,6 +433,8 @@ namespace NewBTASProto
 
 
         }
+
+
 
     }
 }

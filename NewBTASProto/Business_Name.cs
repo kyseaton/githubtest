@@ -12,7 +12,7 @@ namespace NewBTASProto
 {
     public partial class Business_Name : Form
     {
-        public Business_Name(object sender)
+        public Business_Name()
         {
             InitializeComponent();
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
@@ -30,7 +30,7 @@ namespace NewBTASProto
 
         private void button2_Click(object sender, EventArgs e)
         {
-            this.Close();
+            this.Dispose();
         }
     }
 }

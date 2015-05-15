@@ -167,6 +167,11 @@ namespace NewBTASProto
                 dataGridView1.Rows[i].Height = 20;
             }
 
+            // finally, so we can clean up the startup jitter
+            for (int j = 0; j < 16; j++)
+            {
+                dataGridView1.Rows[j].Cells[4].Style.BackColor = Color.Gainsboro;
+            }
             #endregion
 
 
@@ -177,22 +182,6 @@ namespace NewBTASProto
             if (e.RowIndex == -1)
             {
                 return;
-            }
-            if (e.ColumnIndex == 0)
-            {
-                //fill in
-            }
-            else if (e.ColumnIndex == 1)
-            {
-                //fill in 
-            }
-            else if (e.ColumnIndex == 2)
-            {
-                // fill in
-            }
-            else if (e.ColumnIndex == 3)
-            {
-                // fill in
             }
             else if (e.ColumnIndex == 4)
             {
@@ -210,14 +199,7 @@ namespace NewBTASProto
             }
             else if (e.ColumnIndex == 5)
             {
-                if ((bool)d.Rows[e.RowIndex][e.ColumnIndex])
-                {
-                    d.Rows[e.RowIndex][e.ColumnIndex] = false;
-                }
-                else
-                {
-                    d.Rows[e.RowIndex][e.ColumnIndex] = true;
-                }
+                cMSStartStop.Show(Cursor.Position);
             }
             else if (e.ColumnIndex == 8)
             {
@@ -238,6 +220,24 @@ namespace NewBTASProto
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             dataGridView1.ClearSelection();
+            switch(e.ColumnIndex)
+            {
+                case 1:
+                    Choose_WO cwo = new Choose_WO(dataGridView1.CurrentRow.Index,(string) d.Rows[dataGridView1.CurrentRow.Index][1]);
+                    cwo.Owner = this;
+                    cwo.Show();
+                    break;
+                case 2:
+                    cMSTestType.Show(Cursor.Position);
+                    break;
+                case 9:
+                    cMSChargerChannel.Show(Cursor.Position);
+                    break;
+            case 10:
+                    cMSChargerType.Show(Cursor.Position);
+                    break;
+            }  // end switch
+            
         }
 
     }

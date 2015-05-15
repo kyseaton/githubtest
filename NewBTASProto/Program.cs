@@ -22,7 +22,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show("From Main:  " + ex.ToString());
+                MessageBox.Show("From Program.cs:  " + ex.ToString());
             }
 
         }

@@ -86,6 +86,18 @@
     <Compile Include="Business_Name.Designer.cs">
       <DependentUpon>Business_Name.cs</DependentUpon>
     </Compile>
+    <Compile Include="Choose_WO.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Choose_WO.Designer.cs">
+      <DependentUpon>Choose_WO.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmVEWorkOrders.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmVEWorkOrders.Designer.cs">
+      <DependentUpon>frmVEWorkOrders.cs</DependentUpon>
+    </Compile>
     <Compile Include="ICDataStore.cs" />
     <Compile Include="CScanDataStore.cs" />
     <Compile Include="CScan_Portion.cs">
@@ -140,6 +152,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Business_Name.resx">
       <DependentUpon>Business_Name.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Choose_WO.resx">
+      <DependentUpon>Choose_WO.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmVEWorkOrders.resx">
+      <DependentUpon>frmVEWorkOrders.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\WorkOrderSummary.rdlc" />
     <EmbeddedResource Include="Reports\WorkOrderLog.rdlc" />

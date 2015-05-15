@@ -27,6 +27,7 @@ namespace NewBTASProto
                 InitializeGrid();
                 InitializeTimers();
                 Scan();
+                
 
             }
             catch(Exception ex)
@@ -123,7 +124,7 @@ namespace NewBTASProto
 
         private void bussinessNameToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Business_Name bn = new Business_Name(this);
+            Business_Name bn = new Business_Name();
             bn.Owner = this;
             bn.Show();
         }
@@ -184,6 +185,11 @@ namespace NewBTASProto
             label10.Text = GlobalVars.businessName;
         }
 
+        internal void updateWOC(int channel, string workOrder)
+        {
+            d.Rows[channel][1] = workOrder;
+        }
+
 
         private void btnGetSerialPorts_Click_Click(object sender, EventArgs e)
         {
@@ -210,7 +216,11 @@ namespace NewBTASProto
                         button1.Enabled = false;
                         // also disable the grid, so the user cannot interfere with the search
                         dataGridView1.Enabled = false;
+                        //select the first row as your selected cell
+                        dataGridView1.CurrentCell = dataGridView1.Rows[0].Cells[0];
+                        dataGridView1.ClearSelection();
                     });
+                Thread.Sleep(500);
 
                 // turn on all of the in use buttons
                 for (int i = 0; i < 16; i++)
@@ -222,7 +232,7 @@ namespace NewBTASProto
                     });
                 }
                 // here is the for loop we'll use to look for cscans
-                for (int i = 0; i < 16; i++)
+                for (int i = 0; i < 15; i++)
                 {
 
                     this.Invoke((MethodInvoker)delegate
@@ -231,7 +241,18 @@ namespace NewBTASProto
                         dataGridView1.ClearSelection();
                     });
 
-                    Thread.Sleep(1000);
+                    //give it time to check the channel
+                    Thread.Sleep(900);
+
+                    // move the current channel
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        dataGridView1.CurrentCell = dataGridView1.Rows[i+1].Cells[0];
+                        dataGridView1.ClearSelection();
+                    });
+
+                    // wait again
+                    Thread.Sleep(100);
                     this.Invoke((MethodInvoker)delegate
                     {
                         if (dataGridView1.Rows[i].Cells[4].Style.BackColor == Color.Red)
@@ -241,6 +262,28 @@ namespace NewBTASProto
                         }
                     });
                 }
+
+                //Finally take care of the last channel
+                //give it time to check the channel
+                Thread.Sleep(900);
+
+                // move back to channel 0
+                this.Invoke((MethodInvoker)delegate
+                {
+                    dataGridView1.CurrentCell = dataGridView1.Rows[0].Cells[0];
+                    dataGridView1.ClearSelection();
+                });
+
+                // wait again
+                Thread.Sleep(100);
+                this.Invoke((MethodInvoker)delegate
+                {
+                    if (dataGridView1.Rows[15].Cells[4].Style.BackColor == Color.Red)
+                    {
+                        d.Rows[15][4] = false;
+                        dataGridView1.Rows[15].Cells[4].Style.BackColor = Color.Gainsboro;
+                    }
+                });
 
                 //reenable the button before exit
                 this.Invoke((MethodInvoker)delegate
@@ -290,6 +333,243 @@ namespace NewBTASProto
                 GlobalVars.highlightCurrent = false;
             }
 
+        }
+
+        private void Main_Form_Load(object sender, EventArgs e)
+        {
+            dataGridView1.ClearSelection();
+        }
+
+        private void customChrgToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            d.Rows[dataGridView1.CurrentRow.Index][2] = "Custom Chg";
+        }
+
+        private void asReceivedToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            d.Rows[dataGridView1.CurrentRow.Index][2] = "As Received";
+        }
+
+        private void fullChargeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            d.Rows[dataGridView1.CurrentRow.Index][2] = "Full Charge-6";
+        }
+
+        private void fullCharge4ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            d.Rows[dataGridView1.CurrentRow.Index][2] = "Full Charge-4";
+        }
+
+        private void topCharge4ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            d.Rows[dataGridView1.CurrentRow.Index][2] = "Top Charge-4";
+        }
+
+        private void topCharge2ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            d.Rows[dataGridView1.CurrentRow.Index][2] = "Top Charge-2";
+        }
+
+        private void topCharge1ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            d.Rows[dataGridView1.CurrentRow.Index][2] = "Top Charge-1";
+        }
+
+        private void capacity1ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            d.Rows[dataGridView1.CurrentRow.Index][2] = "Capacity-1";
+        }
+
+        private void dischargeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            d.Rows[dataGridView1.CurrentRow.Index][2] = "Discharge";
+        }
+
+        private void slowCharge14ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            d.Rows[dataGridView1.CurrentRow.Index][2] = "Slow Charge-14";
+        }
+
+        private void slowCharge16ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            d.Rows[dataGridView1.CurrentRow.Index][2] = "Slow Charge-16";
+        }
+
+        private void testToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            d.Rows[dataGridView1.CurrentRow.Index][2] = "Test";
+        }
+
+        private void customCapToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            d.Rows[dataGridView1.CurrentRow.Index][2] = "Custom Cap";
+        }
+
+        private void reflexChg1ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            d.Rows[dataGridView1.CurrentRow.Index][2] = "Reflex Chg-1";
+        }
+
+        private void clearToolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            d.Rows[dataGridView1.CurrentRow.Index][2] = "";
+        }
+
+        private void clearToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            d.Rows[dataGridView1.CurrentRow.Index][9] = "";
+        }
+
+        private void toolStripMenuItem7_Click(object sender, EventArgs e)
+        {
+            d.Rows[dataGridView1.CurrentRow.Index][9] = "0";
+        }
+
+        private void toolStripMenuItem8_Click(object sender, EventArgs e)
+        {
+            d.Rows[dataGridView1.CurrentRow.Index][9] = "1";
+        }
+
+        private void toolStripMenuItem9_Click(object sender, EventArgs e)
+        {
+            d.Rows[dataGridView1.CurrentRow.Index][9] = "2";
+        }
+
+        private void toolStripMenuItem10_Click(object sender, EventArgs e)
+        {
+            d.Rows[dataGridView1.CurrentRow.Index][9] = "3";
+        }
+
+        private void toolStripMenuItem11_Click(object sender, EventArgs e)
+        {
+            d.Rows[dataGridView1.CurrentRow.Index][9] = "4";
+        }
+
+        private void toolStripMenuItem12_Click(object sender, EventArgs e)
+        {
+            d.Rows[dataGridView1.CurrentRow.Index][9] = "5";
+        }
+
+        private void toolStripMenuItem13_Click(object sender, EventArgs e)
+        {
+            d.Rows[dataGridView1.CurrentRow.Index][9] = "6";
+        }
+
+        private void toolStripMenuItem14_Click(object sender, EventArgs e)
+        {
+            d.Rows[dataGridView1.CurrentRow.Index][9] = "7";
+        }
+
+        private void toolStripMenuItem15_Click(object sender, EventArgs e)
+        {
+            d.Rows[dataGridView1.CurrentRow.Index][9] = "8";
+        }
+
+        private void toolStripMenuItem16_Click(object sender, EventArgs e)
+        {
+            d.Rows[dataGridView1.CurrentRow.Index][9] = "9";
+        }
+
+        private void toolStripMenuItem17_Click(object sender, EventArgs e)
+        {
+            d.Rows[dataGridView1.CurrentRow.Index][9] = "10";
+        }
+
+        private void toolStripMenuItem18_Click(object sender, EventArgs e)
+        {
+            d.Rows[dataGridView1.CurrentRow.Index][9] = "11";
+        }
+
+        private void toolStripMenuItem19_Click(object sender, EventArgs e)
+        {
+            d.Rows[dataGridView1.CurrentRow.Index][9] = "12";
+        }
+
+        private void toolStripMenuItem20_Click(object sender, EventArgs e)
+        {
+            d.Rows[dataGridView1.CurrentRow.Index][9] = "13";
+        }
+
+        private void toolStripMenuItem21_Click(object sender, EventArgs e)
+        {
+            d.Rows[dataGridView1.CurrentRow.Index][9] = "14";
+        }
+
+        private void toolStripMenuItem22_Click(object sender, EventArgs e)
+        {
+            d.Rows[dataGridView1.CurrentRow.Index][9] = "15";
+        }
+
+        private void masterToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Master Selected.  Needs to be implemented...");
+        }
+
+        private void slaveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Slave Selected.  Needs to be implemented...");
+        }
+
+        private void cMSChargerType_Opening(object sender, CancelEventArgs e)
+        {
+
+        }
+
+        private void cCAToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            d.Rows[dataGridView1.CurrentRow.Index][10] = "CCA";
+        }
+
+        private void iCAToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            d.Rows[dataGridView1.CurrentRow.Index][10] = "ICA";
+        }
+
+        private void otherToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            d.Rows[dataGridView1.CurrentRow.Index][10] = "Other";
+        }
+
+        private void clearToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            d.Rows[dataGridView1.CurrentRow.Index][10] = "";
+        }
+
+        private void cMSStartStop_Opening(object sender, CancelEventArgs e)
+        {
+
+        }
+
+        private void startNewTestToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Start New Test Selected.  Needs to be implemented...");
+        }
+
+        private void resumeTestToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Resume Test Selected.  Needs to be implemented...");
+        }
+
+        private void stopTestToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Stop Test Selected.  Needs to be implemented...");
+        }
+
+        private void viewEditDeleteWorkOrdersToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmVEWorkOrders f1 = new frmVEWorkOrders();
+            f1.Show();
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void databindingTestToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmVEWorkOrders f1 = new frmVEWorkOrders();
+            f1.Show();
         }
 
 
