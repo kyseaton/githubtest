@@ -79,6 +79,7 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.test3ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.databindingTestToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
@@ -157,7 +158,6 @@
             this.otherToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem23 = new System.Windows.Forms.ToolStripSeparator();
             this.clearToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.databindingTestToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -331,6 +331,7 @@
             this.viewEditDeleteCustomersToolStripMenuItem.Name = "viewEditDeleteCustomersToolStripMenuItem";
             this.viewEditDeleteCustomersToolStripMenuItem.Size = new System.Drawing.Size(222, 22);
             this.viewEditDeleteCustomersToolStripMenuItem.Text = "View/Edit/Delete Customers";
+            this.viewEditDeleteCustomersToolStripMenuItem.Click += new System.EventHandler(this.viewEditDeleteCustomersToolStripMenuItem_Click);
             // 
             // batteriesToolStripMenuItem
             // 
@@ -535,6 +536,13 @@
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new System.Drawing.Size(157, 6);
+            // 
+            // databindingTestToolStripMenuItem
+            // 
+            this.databindingTestToolStripMenuItem.Name = "databindingTestToolStripMenuItem";
+            this.databindingTestToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.databindingTestToolStripMenuItem.Text = "databinding test";
+            this.databindingTestToolStripMenuItem.Click += new System.EventHandler(this.databindingTestToolStripMenuItem_Click);
             // 
             // statusStrip1
             // 
@@ -1215,13 +1223,6 @@
             this.clearToolStripMenuItem1.Size = new System.Drawing.Size(104, 22);
             this.clearToolStripMenuItem1.Text = "Clear";
             this.clearToolStripMenuItem1.Click += new System.EventHandler(this.clearToolStripMenuItem1_Click);
-            // 
-            // databindingTestToolStripMenuItem
-            // 
-            this.databindingTestToolStripMenuItem.Name = "databindingTestToolStripMenuItem";
-            this.databindingTestToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-            this.databindingTestToolStripMenuItem.Text = "databinding test";
-            this.databindingTestToolStripMenuItem.Click += new System.EventHandler(this.databindingTestToolStripMenuItem_Click);
             // 
             // Main_Form
             // 

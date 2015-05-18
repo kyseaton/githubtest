@@ -92,6 +92,12 @@
     <Compile Include="Choose_WO.Designer.cs">
       <DependentUpon>Choose_WO.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmVECustomers.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmVECustomers.Designer.cs">
+      <DependentUpon>frmVECustomers.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmVEWorkOrders.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -155,6 +161,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Choose_WO.resx">
       <DependentUpon>Choose_WO.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmVECustomers.resx">
+      <DependentUpon>frmVECustomers.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmVEWorkOrders.resx">
       <DependentUpon>frmVEWorkOrders.cs</DependentUpon>

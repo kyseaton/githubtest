@@ -572,6 +572,12 @@ namespace NewBTASProto
             f1.Show();
         }
 
+        private void viewEditDeleteCustomersToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmVECustomers f2 = new frmVECustomers();
+            f2.Show();
+        }
+
 
 
     }
