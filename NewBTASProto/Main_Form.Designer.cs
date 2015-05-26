@@ -49,8 +49,6 @@
             this.newCustomerBatteryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewEditDeleteCustomerBatteriesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.customersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.newCustomerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.viewEditDeleteCustomersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.batteriesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewStandardBatteriesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newCustomBatteryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -96,7 +94,6 @@
             this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.timeLabel = new System.Windows.Forms.Label();
             this.timeLbLabel = new System.Windows.Forms.Label();
             this.dateLabel = new System.Windows.Forms.Label();
@@ -158,18 +155,19 @@
             this.otherToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem23 = new System.Windows.Forms.ToolStripSeparator();
             this.clearToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.cMSTestType.SuspendLayout();
             this.cMSStartStop.SuspendLayout();
             this.cMSChargerChannel.SuspendLayout();
             this.cMSChargerType.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // rtbIncoming
@@ -313,25 +311,10 @@
             // 
             // customersToolStripMenuItem
             // 
-            this.customersToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.newCustomerToolStripMenuItem,
-            this.viewEditDeleteCustomersToolStripMenuItem});
             this.customersToolStripMenuItem.Name = "customersToolStripMenuItem";
-            this.customersToolStripMenuItem.Size = new System.Drawing.Size(76, 20);
-            this.customersToolStripMenuItem.Text = "Customers";
-            // 
-            // newCustomerToolStripMenuItem
-            // 
-            this.newCustomerToolStripMenuItem.Name = "newCustomerToolStripMenuItem";
-            this.newCustomerToolStripMenuItem.Size = new System.Drawing.Size(222, 22);
-            this.newCustomerToolStripMenuItem.Text = "New Customer";
-            // 
-            // viewEditDeleteCustomersToolStripMenuItem
-            // 
-            this.viewEditDeleteCustomersToolStripMenuItem.Name = "viewEditDeleteCustomersToolStripMenuItem";
-            this.viewEditDeleteCustomersToolStripMenuItem.Size = new System.Drawing.Size(222, 22);
-            this.viewEditDeleteCustomersToolStripMenuItem.Text = "View/Edit/Delete Customers";
-            this.viewEditDeleteCustomersToolStripMenuItem.Click += new System.EventHandler(this.viewEditDeleteCustomersToolStripMenuItem_Click);
+            this.customersToolStripMenuItem.Size = new System.Drawing.Size(122, 20);
+            this.customersToolStripMenuItem.Text = "Manage Customers";
+            this.customersToolStripMenuItem.Click += new System.EventHandler(this.customersToolStripMenuItem_Click);
             // 
             // batteriesToolStripMenuItem
             // 
@@ -348,6 +331,7 @@
             this.viewStandardBatteriesToolStripMenuItem.Name = "viewStandardBatteriesToolStripMenuItem";
             this.viewStandardBatteriesToolStripMenuItem.Size = new System.Drawing.Size(276, 22);
             this.viewStandardBatteriesToolStripMenuItem.Text = "View Standard Batteries";
+            this.viewStandardBatteriesToolStripMenuItem.Click += new System.EventHandler(this.viewStandardBatteriesToolStripMenuItem_Click);
             // 
             // newCustomBatteryToolStripMenuItem
             // 
@@ -706,16 +690,6 @@
             this.label7.Size = new System.Drawing.Size(129, 32);
             this.label7.TabIndex = 5;
             this.label7.Text = "BTAS16";
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = global::NewBTASProto.Properties.Resources.btas7_h_I;
-            this.pictureBox1.Location = new System.Drawing.Point(218, 11);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(44, 38);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 4;
-            this.pictureBox1.TabStop = false;
             // 
             // timeLabel
             // 
@@ -1224,6 +1198,16 @@
             this.clearToolStripMenuItem1.Text = "Clear";
             this.clearToolStripMenuItem1.Click += new System.EventHandler(this.clearToolStripMenuItem1_Click);
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::NewBTASProto.Properties.Resources.btas7_h_I;
+            this.pictureBox1.Location = new System.Drawing.Point(218, 11);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(44, 38);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 4;
+            this.pictureBox1.TabStop = false;
+            // 
             // Main_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1256,7 +1240,6 @@
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
@@ -1264,6 +1247,7 @@
             this.cMSStartStop.ResumeLayout(false);
             this.cMSChargerChannel.ResumeLayout(false);
             this.cMSChargerType.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1299,8 +1283,6 @@
         private System.Windows.Forms.ToolStripMenuItem newWorkOrderToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewEditDeleteWorkOrdersToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem customersToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem newCustomerToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem viewEditDeleteCustomersToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem batteriesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewStandardBatteriesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newCustomBatteryToolStripMenuItem;

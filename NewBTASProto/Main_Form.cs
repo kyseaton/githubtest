@@ -578,6 +578,37 @@ namespace NewBTASProto
             f2.Show();
         }
 
+        private void customersToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormCollection fc = Application.OpenForms;
+
+            foreach (Form frm in fc)
+            {
+                if (frm is frmVECustomers)
+                {
+                    return;
+                }
+            }
+            frmVECustomers f2 = new frmVECustomers();
+            f2.Show();
+        }
+
+        private void viewStandardBatteriesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormCollection fc = Application.OpenForms;
+
+            foreach (Form frm in fc)
+            {
+                if (frm is frmVStandardBats)
+                {
+                    return;
+                }
+            }
+            frmVStandardBats f2 = new frmVStandardBats();
+            f2.Show();
+
+        }
+
 
 
     }
