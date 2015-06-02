@@ -94,6 +94,24 @@
     <Compile Include="Choose_WO.Designer.cs">
       <DependentUpon>Choose_WO.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmVECustomerBats.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmVECustomerBats.Designer.cs">
+      <DependentUpon>frmVECustomerBats.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmVETechs.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmVETechs.Designer.cs">
+      <DependentUpon>frmVETechs.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmVECustomBats.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmVECustomBats.Designer.cs">
+      <DependentUpon>frmVECustomBats.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmVStandardBats.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -169,6 +187,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Choose_WO.resx">
       <DependentUpon>Choose_WO.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmVECustomerBats.resx">
+      <DependentUpon>frmVECustomerBats.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmVETechs.resx">
+      <DependentUpon>frmVETechs.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmVECustomBats.resx">
+      <DependentUpon>frmVECustomBats.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmVStandardBats.resx">
       <DependentUpon>frmVStandardBats.cs</DependentUpon>

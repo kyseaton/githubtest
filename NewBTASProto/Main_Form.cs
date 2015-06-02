@@ -23,6 +23,7 @@ namespace NewBTASProto
                 SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
                 InitializeComponent();
                 Initialize_Menus_Tools();
+                Initialize_Operators_CB();
 
                 InitializeGrid();
                 InitializeTimers();
@@ -34,6 +35,53 @@ namespace NewBTASProto
             {
                 MessageBox.Show("In Main_Form:  " + ex.ToString());
             }
+
+
+        }
+
+        public void Initialize_Operators_CB()
+        {
+            string strAccessConn;
+            string strAccessSelect;
+            // Open database containing all the battery data....
+            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Kyle\Documents\Visual Studio 2013\Projects\NewBTASProto\BTS16NV.MDB";
+            strAccessSelect = @"SELECT * FROM Operators";
+            OleDbConnection myAccessConn;
+            DataSet operators = new DataSet();
+
+            // try to open the DB
+            try
+            {
+                myAccessConn = new OleDbConnection(strAccessConn);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                return;
+            }
+            //  now try to access it
+            try
+            {
+                OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                myAccessConn.Open();
+                myDataAdapter.Fill(operators, "Operators");
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                return;
+            }
+            finally
+            {
+                myAccessConn.Close();
+            }
+
+            this.comboBox1.DisplayMember = "OperatorName";
+            this.comboBox1.ValueMember = "OperatorName";
+            this.comboBox1.DataSource = operators.Tables["Operators"];
 
 
         }
@@ -52,6 +100,7 @@ namespace NewBTASProto
             toolStripStatusLabel1.Text = "Version:  " + Application.ProductVersion;
 
             label10.Text = GlobalVars.businessName;
+
 
         }
 
@@ -608,6 +657,56 @@ namespace NewBTASProto
             f2.Show();
 
         }
+
+        private void editTechniciansToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+            FormCollection fc = Application.OpenForms;
+
+            foreach (Form frm in fc)
+            {
+                if (frm is frmVETechs)
+                {
+                    return;
+                }
+            }
+            frmVETechs f2 = new frmVETechs();
+            f2.Owner = this;
+            f2.Show();
+           
+        }
+
+        private void viewEditDeleteBatteriesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormCollection fc = Application.OpenForms;
+
+            foreach (Form frm in fc)
+            {
+                if (frm is frmVECustomBats)
+                {
+                    return;
+                }
+            }
+            frmVECustomBats f2 = new frmVECustomBats();
+            f2.Show();
+        }
+
+        private void customerBatteriesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormCollection fc = Application.OpenForms;
+
+            foreach (Form frm in fc)
+            {
+                if (frm is frmVECustomerBats)
+                {
+                    return;
+                }
+            }
+            frmVECustomerBats f2 = new frmVECustomerBats();
+            f2.Show();
+
+        }
+
 
 
 
