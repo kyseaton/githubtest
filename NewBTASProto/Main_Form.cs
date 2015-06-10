@@ -606,8 +606,6 @@ namespace NewBTASProto
 
         private void viewEditDeleteWorkOrdersToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            frmVEWorkOrders f1 = new frmVEWorkOrders();
-            f1.Show();
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -617,8 +615,6 @@ namespace NewBTASProto
 
         private void databindingTestToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            frmVEWorkOrders f1 = new frmVEWorkOrders();
-            f1.Show();
         }
 
         private void viewEditDeleteCustomersToolStripMenuItem_Click(object sender, EventArgs e)
@@ -705,6 +701,36 @@ namespace NewBTASProto
             frmVECustomerBats f2 = new frmVECustomerBats();
             f2.Show();
 
+        }
+
+        private void batteriesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormCollection fc = Application.OpenForms;
+
+            foreach (Form frm in fc)
+            {
+                if (frm is frmVECustomBats)
+                {
+                    return;
+                }
+            }
+            frmVECustomBats f2 = new frmVECustomBats();
+            f2.Show();
+        }
+
+        private void workOrdersToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormCollection fc = Application.OpenForms;
+
+            foreach (Form frm in fc)
+            {
+                if (frm is frmVEWorkOrders)
+                {
+                    return;
+                }
+            }
+            frmVEWorkOrders f2 = new frmVEWorkOrders();
+            f2.Show();
         }
 
 

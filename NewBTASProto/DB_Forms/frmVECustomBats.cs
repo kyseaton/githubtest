@@ -318,42 +318,42 @@ namespace NewBTASProto
                 {
                     //record already exist as we need to do an update
 
-                    string cmdStr = "UPDATE BatteriesCustom SET BMFR='" + textBox1.Text +
-                        "', BatteryModel='" + textBox2.Text +
-                        "', BPN='" + textBox3.Text +
-                        "', BTECH='" + textBox4.Text +
-                        "', BAPP='" + textBox5.Text +
-                        "', VOLT='" + textBox6.Text +
-                        "', NCELLS='" + textBox7.Text +
-                        "', CAP='" + textBox8.Text +
-                        "', CELL='" + textBox9.Text +
-                        "', CPN='" + textBox10.Text +
-                        "', CTORQU='" + textBox11.Text +
-                        "', MCC='" + textBox12.Text +
-                        "', MCT='" + textBox13.Text +
-                        "', MPV='" + textBox14.Text +
-                        "', TCC='" + textBox15.Text +
-                        "', TCT='" + textBox16.Text +
-                        "', TPV='" + textBox17.Text +
-                        "', SCC='" + textBox18.Text +
-                        "', SCT='" + textBox19.Text +
-                        "', SPV='" + textBox20.Text +
-                        "', BCVMIN='" + textBox21.Text +
-                        "', BCVMAX='" + textBox22.Text +
-                        "', COT='" + textBox23.Text +
-                        "', CTC='" + textBox24.Text +
-                        "', CTT='" + textBox25.Text +
-                        "', CTMV='" + textBox26.Text +
-                        "', CCVMMIN='" + textBox27.Text +
-                        "', CCVMAX='" + textBox28.Text +
-                        "', CCAPV='" + textBox29.Text +
-                        "', TS1='" + textBox30.Text +
-                        "', TS2='" + textBox31.Text +
-                        "', SLACV='" + textBox32.Text +
-                        "', SLAPK='" + textBox33.Text +
-                        "', SLACVC='" + textBox34.Text +
-                        "', SLAPKC='" + textBox35.Text +
-                        "', NOTES='" + textBox36.Text +
+                    string cmdStr = "UPDATE BatteriesCustom SET BMFR='" + textBox1.Text.Replace("'", "''") +
+                        "', BatteryModel='" + textBox2.Text.Replace("'", "''") +
+                        "', BPN='" + textBox3.Text.Replace("'", "''") +
+                        "', BTECH='" + textBox4.Text.Replace("'", "''") +
+                        "', BAPP='" + textBox5.Text.Replace("'", "''") +
+                        "', VOLT='" + textBox6.Text.Replace("'", "''") +
+                        "', NCELLS='" + textBox7.Text.Replace("'", "''") +
+                        "', CAP='" + textBox8.Text.Replace("'", "''") +
+                        "', CELL='" + textBox9.Text.Replace("'", "''") +
+                        "', CPN='" + textBox10.Text.Replace("'", "''") +
+                        "', CTORQU='" + textBox11.Text.Replace("'", "''") +
+                        "', MCC='" + textBox12.Text.Replace("'", "''") +
+                        "', MCT='" + textBox13.Text.Replace("'", "''") +
+                        "', MPV='" + textBox14.Text.Replace("'", "''") +
+                        "', TCC='" + textBox15.Text.Replace("'", "''") +
+                        "', TCT='" + textBox16.Text.Replace("'", "''") +
+                        "', TPV='" + textBox17.Text.Replace("'", "''") +
+                        "', SCC='" + textBox18.Text.Replace("'", "''") +
+                        "', SCT='" + textBox19.Text.Replace("'", "''") +
+                        "', SPV='" + textBox20.Text.Replace("'", "''") +
+                        "', BCVMIN='" + textBox21.Text.Replace("'", "''") +
+                        "', BCVMAX='" + textBox22.Text.Replace("'", "''") +
+                        "', COT='" + textBox23.Text.Replace("'", "''") +
+                        "', CTC='" + textBox24.Text.Replace("'", "''") +
+                        "', CTT='" + textBox25.Text.Replace("'", "''") +
+                        "', CTMV='" + textBox26.Text.Replace("'", "''") +
+                        "', CCVMMIN='" + textBox27.Text.Replace("'", "''") +
+                        "', CCVMAX='" + textBox28.Text.Replace("'", "''") +
+                        "', CCAPV='" + textBox29.Text.Replace("'", "''") +
+                        "', TS1='" + textBox30.Text.Replace("'", "''") +
+                        "', TS2='" + textBox31.Text.Replace("'", "''") +
+                        "', SLACV='" + textBox32.Text.Replace("'", "''") +
+                        "', SLAPK='" + textBox33.Text.Replace("'", "''") +
+                        "', SLACVC='" + textBox34.Text.Replace("'", "''") +
+                        "', SLAPKC='" + textBox35.Text.Replace("'", "''") +
+                        "', NOTES='" + textBox36.Text.Replace("'", "''") +
                         "' WHERE RecordID=" + current["RecordID"].ToString();
                     OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
                     cmd.ExecuteNonQuery();
@@ -367,42 +367,42 @@ namespace NewBTASProto
                     string cmdStr = "INSERT INTO BatteriesCustom (RecordID, BMFR, BatteryModel, BPN, BTECH, BAPP, VOLT, NCELLS, CAP, CELL, CPN, CTORQU, MCC, MCT, MPV, TCC, TCT, " +
                        "TPV, SCC, SCT, SPV, BCVMIN, BCVMAX, COT, CTC, CTT, CTMV, CCVMMIN, CCVMAX, CCAPV, TS1, TS2, SLACV, SLAPK, SLACVC, SLAPKC, NOTES) " +
                         "VALUES (" + (max + 1).ToString() + ",'" +
-                        textBox1.Text + "','" +
-                        textBox2.Text + "','" +
-                        textBox3.Text + "','" +
-                        textBox4.Text + "','" +
-                        textBox5.Text + "','" +
-                        textBox6.Text + "','" +
-                        textBox7.Text + "','" +
-                        textBox8.Text + "','" +
-                        textBox9.Text + "','" +
-                        textBox10.Text + "','" +
-                        textBox11.Text + "','" +
-                        textBox12.Text + "','" +
-                        textBox13.Text + "','" +
-                        textBox14.Text + "','" +
-                        textBox15.Text + "','" +
-                        textBox16.Text + "','" +
-                        textBox17.Text + "','" +
-                        textBox18.Text + "','" +
-                        textBox19.Text + "','" +
-                        textBox20.Text + "','" +
-                        textBox21.Text + "','" +
-                        textBox22.Text + "','" +
-                        textBox23.Text + "','" +
-                        textBox24.Text + "','" +
-                        textBox25.Text + "','" +
-                        textBox26.Text + "','" +
-                        textBox27.Text + "','" +
-                        textBox28.Text + "','" +
-                        textBox29.Text + "','" +
-                        textBox30.Text + "','" +
-                        textBox31.Text + "','" +
-                        textBox32.Text + "','" +
-                        textBox33.Text + "','" +
-                        textBox34.Text + "','" +
-                        textBox35.Text + "','" +
-                        textBox36.Text + "')";
+                        textBox1.Text.Replace("'", "''") + "','" +
+                        textBox2.Text.Replace("'", "''") + "','" +
+                        textBox3.Text.Replace("'", "''") + "','" +
+                        textBox4.Text.Replace("'", "''") + "','" +
+                        textBox5.Text.Replace("'", "''") + "','" +
+                        textBox6.Text.Replace("'", "''") + "','" +
+                        textBox7.Text.Replace("'", "''") + "','" +
+                        textBox8.Text.Replace("'", "''") + "','" +
+                        textBox9.Text.Replace("'", "''") + "','" +
+                        textBox10.Text.Replace("'", "''") + "','" +
+                        textBox11.Text.Replace("'", "''") + "','" +
+                        textBox12.Text.Replace("'", "''") + "','" +
+                        textBox13.Text.Replace("'", "''") + "','" +
+                        textBox14.Text.Replace("'", "''") + "','" +
+                        textBox15.Text.Replace("'", "''") + "','" +
+                        textBox16.Text.Replace("'", "''") + "','" +
+                        textBox17.Text.Replace("'", "''") + "','" +
+                        textBox18.Text.Replace("'", "''") + "','" +
+                        textBox19.Text.Replace("'", "''") + "','" +
+                        textBox20.Text.Replace("'", "''") + "','" +
+                        textBox21.Text.Replace("'", "''") + "','" +
+                        textBox22.Text.Replace("'", "''") + "','" +
+                        textBox23.Text.Replace("'", "''") + "','" +
+                        textBox24.Text.Replace("'", "''") + "','" +
+                        textBox25.Text.Replace("'", "''") + "','" +
+                        textBox26.Text.Replace("'", "''") + "','" +
+                        textBox27.Text.Replace("'", "''") + "','" +
+                        textBox28.Text.Replace("'", "''") + "','" +
+                        textBox29.Text.Replace("'", "''") + "','" +
+                        textBox30.Text.Replace("'", "''") + "','" +
+                        textBox31.Text.Replace("'", "''") + "','" +
+                        textBox32.Text.Replace("'", "''") + "','" +
+                        textBox33.Text.Replace("'", "''") + "','" +
+                        textBox34.Text.Replace("'", "''") + "','" +
+                        textBox35.Text.Replace("'", "''") + "','" +
+                        textBox36.Text.Replace("'", "''") + "')";
                     OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
                     cmd.ExecuteNonQuery();
 

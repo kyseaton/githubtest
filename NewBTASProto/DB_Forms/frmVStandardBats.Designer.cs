@@ -124,6 +124,7 @@
             this.label36 = new System.Windows.Forms.Label();
             this.textBox36 = new System.Windows.Forms.TextBox();
             this.groupBox11 = new System.Windows.Forms.GroupBox();
+            this.label37 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.bindingNavigator1)).BeginInit();
             this.bindingNavigator1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
@@ -1035,11 +1036,21 @@
             this.groupBox11.TabStop = false;
             this.groupBox11.Text = "Notes";
             // 
+            // label37
+            // 
+            this.label37.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.label37.Location = new System.Drawing.Point(10, 26);
+            this.label37.Name = "label37";
+            this.label37.Size = new System.Drawing.Size(716, 2);
+            this.label37.TabIndex = 97;
+            this.label37.Text = "label37";
+            // 
             // frmVStandardBats
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(736, 499);
+            this.Controls.Add(this.label37);
             this.Controls.Add(this.groupBox11);
             this.Controls.Add(this.groupBox10);
             this.Controls.Add(this.groupBox9);
@@ -1052,10 +1063,12 @@
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.bindingNavigator1);
+            this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "frmVStandardBats";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "View, Edit and Add Customers";
             ((System.ComponentModel.ISupportInitialize)(this.bindingNavigator1)).EndInit();
             this.bindingNavigator1.ResumeLayout(false);
@@ -1184,5 +1197,6 @@
         private System.Windows.Forms.Label label36;
         private System.Windows.Forms.TextBox textBox36;
         private System.Windows.Forms.GroupBox groupBox11;
+        private System.Windows.Forms.Label label37;
     }
 }

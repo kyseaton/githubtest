@@ -261,15 +261,15 @@ namespace NewBTASProto
                 {
                     //record already exist as we need to do an update
 
-                    string cmdStr = "UPDATE CUSTOMERS SET CustomerName='" + textBox1.Text +
-                        "', Address1='" + textBox2.Text +
-                        "', Address2='" + textBox3.Text +
-                        "', Address3='" + textBox4.Text +
-                        "', Phone='" + textBox5.Text +
-                        "', Fax='" + textBox6.Text +
-                        "', Contact='" + textBox7.Text +
-                        "', [E-Mail]='" + textBox8.Text +
-                        "', Notes='" + textBox9.Text +
+                    string cmdStr = "UPDATE CUSTOMERS SET CustomerName='" + textBox1.Text.Replace("'","''") +
+                        "', Address1='" + textBox2.Text.Replace("'", "''") +
+                        "', Address2='" + textBox3.Text.Replace("'", "''") +
+                        "', Address3='" + textBox4.Text.Replace("'", "''") +
+                        "', Phone='" + textBox5.Text.Replace("'", "''") +
+                        "', Fax='" + textBox6.Text.Replace("'", "''") +
+                        "', Contact='" + textBox7.Text.Replace("'", "''") +
+                        "', [E-Mail]='" + textBox8.Text.Replace("'", "''") +
+                        "', Notes='" + textBox9.Text.Replace("'", "''") +
                         "' WHERE CustomerID=" + current["CustomerID"].ToString();
                     OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
                     cmd.ExecuteNonQuery();
@@ -282,15 +282,15 @@ namespace NewBTASProto
                     int max = Customers.Tables[0].AsEnumerable().Max(r => r.Field<int>("CustomerID"));
                     string cmdStr = "INSERT INTO CUSTOMERS (CustomerID, CustomerName, Address1, Address2, Address3, Phone, Fax, Contact, [E-Mail], Notes) " +
                         "VALUES (" + (max + 1).ToString() + ",'" +
-                        textBox1.Text + "','" +
-                        textBox2.Text + "','" +
-                        textBox3.Text + "','" +
-                        textBox4.Text + "','" +
-                        textBox5.Text + "','" +
-                        textBox6.Text + "','" +
-                        textBox7.Text + "','" +
-                        textBox8.Text + "','" +
-                        textBox9.Text + "')";
+                        textBox1.Text.Replace("'", "''") + "','" +
+                        textBox2.Text.Replace("'", "''") + "','" +
+                        textBox3.Text.Replace("'", "''") + "','" +
+                        textBox4.Text.Replace("'", "''") + "','" +
+                        textBox5.Text.Replace("'", "''") + "','" +
+                        textBox6.Text.Replace("'", "''") + "','" +
+                        textBox7.Text.Replace("'", "''") + "','" +
+                        textBox8.Text.Replace("'", "''") + "','" +
+                        textBox9.Text.Replace("'", "''") + "')";
                     OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
                     cmd.ExecuteNonQuery();
 

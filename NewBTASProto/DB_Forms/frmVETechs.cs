@@ -249,7 +249,7 @@ namespace NewBTASProto
                 {
                     //record already exist as we need to do an update
 
-                    string cmdStr = "UPDATE Operators SET OperatorName='" + textBox1.Text +
+                    string cmdStr = "UPDATE Operators SET OperatorName='" + textBox1.Text.Replace("'", "''") +
                         "' WHERE ID=" + current["ID"].ToString();
                     OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
                     cmd.ExecuteNonQuery();

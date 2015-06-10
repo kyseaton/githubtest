@@ -43,13 +43,9 @@
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.workOrdersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.newWorkOrderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.viewEditDeleteWorkOrdersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.customerBatteriesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.customersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.batteriesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.viewStandardBatteriesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.viewEditDeleteBatteriesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fastReadingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.debugModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -263,25 +259,10 @@
             // 
             // workOrdersToolStripMenuItem
             // 
-            this.workOrdersToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.newWorkOrderToolStripMenuItem,
-            this.viewEditDeleteWorkOrdersToolStripMenuItem});
             this.workOrdersToolStripMenuItem.Name = "workOrdersToolStripMenuItem";
-            this.workOrdersToolStripMenuItem.Size = new System.Drawing.Size(85, 20);
-            this.workOrdersToolStripMenuItem.Text = "Work Orders";
-            // 
-            // newWorkOrderToolStripMenuItem
-            // 
-            this.newWorkOrderToolStripMenuItem.Name = "newWorkOrderToolStripMenuItem";
-            this.newWorkOrderToolStripMenuItem.Size = new System.Drawing.Size(231, 22);
-            this.newWorkOrderToolStripMenuItem.Text = "New Work Order";
-            // 
-            // viewEditDeleteWorkOrdersToolStripMenuItem
-            // 
-            this.viewEditDeleteWorkOrdersToolStripMenuItem.Name = "viewEditDeleteWorkOrdersToolStripMenuItem";
-            this.viewEditDeleteWorkOrdersToolStripMenuItem.Size = new System.Drawing.Size(231, 22);
-            this.viewEditDeleteWorkOrdersToolStripMenuItem.Text = "View/Edit/Delete Work Orders";
-            this.viewEditDeleteWorkOrdersToolStripMenuItem.Click += new System.EventHandler(this.viewEditDeleteWorkOrdersToolStripMenuItem_Click);
+            this.workOrdersToolStripMenuItem.Size = new System.Drawing.Size(131, 20);
+            this.workOrdersToolStripMenuItem.Text = "Manage Work Orders";
+            this.workOrdersToolStripMenuItem.Click += new System.EventHandler(this.workOrdersToolStripMenuItem_Click);
             // 
             // customerBatteriesToolStripMenuItem
             // 
@@ -299,26 +280,10 @@
             // 
             // batteriesToolStripMenuItem
             // 
-            this.batteriesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.viewStandardBatteriesToolStripMenuItem,
-            this.viewEditDeleteBatteriesToolStripMenuItem});
             this.batteriesToolStripMenuItem.Name = "batteriesToolStripMenuItem";
             this.batteriesToolStripMenuItem.Size = new System.Drawing.Size(144, 20);
             this.batteriesToolStripMenuItem.Text = "Manage Battery Models";
-            // 
-            // viewStandardBatteriesToolStripMenuItem
-            // 
-            this.viewStandardBatteriesToolStripMenuItem.Name = "viewStandardBatteriesToolStripMenuItem";
-            this.viewStandardBatteriesToolStripMenuItem.Size = new System.Drawing.Size(244, 22);
-            this.viewStandardBatteriesToolStripMenuItem.Text = "View Standard Battery Models";
-            this.viewStandardBatteriesToolStripMenuItem.Click += new System.EventHandler(this.viewStandardBatteriesToolStripMenuItem_Click);
-            // 
-            // viewEditDeleteBatteriesToolStripMenuItem
-            // 
-            this.viewEditDeleteBatteriesToolStripMenuItem.Name = "viewEditDeleteBatteriesToolStripMenuItem";
-            this.viewEditDeleteBatteriesToolStripMenuItem.Size = new System.Drawing.Size(244, 22);
-            this.viewEditDeleteBatteriesToolStripMenuItem.Text = "Manage Custom Battery Models";
-            this.viewEditDeleteBatteriesToolStripMenuItem.Click += new System.EventHandler(this.viewEditDeleteBatteriesToolStripMenuItem_Click);
+            this.batteriesToolStripMenuItem.Click += new System.EventHandler(this.batteriesToolStripMenuItem_Click);
             // 
             // toolsToolStripMenuItem
             // 
@@ -1184,11 +1149,12 @@
             this.Controls.Add(this.rtbIncoming);
             this.Controls.Add(this.menuStrip1);
             this.DoubleBuffered = true;
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
             this.Name = "Main_Form";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "BTAS16";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_Form_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Main_Form_FormClosed);
@@ -1241,12 +1207,8 @@
         private System.Windows.Forms.ToolStripMenuItem restoreDatabaseToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem workOrdersToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem newWorkOrderToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem viewEditDeleteWorkOrdersToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem customersToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem batteriesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem viewStandardBatteriesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem viewEditDeleteBatteriesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem customerBatteriesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fastReadingsToolStripMenuItem;

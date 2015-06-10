@@ -94,40 +94,40 @@
     <Compile Include="Choose_WO.Designer.cs">
       <DependentUpon>Choose_WO.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmVECustomerBats.cs">
+    <Compile Include="DB_Forms\frmVECustomerBats.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmVECustomerBats.Designer.cs">
+    <Compile Include="DB_Forms\frmVECustomerBats.Designer.cs">
       <DependentUpon>frmVECustomerBats.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmVETechs.cs">
+    <Compile Include="DB_Forms\frmVETechs.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmVETechs.Designer.cs">
+    <Compile Include="DB_Forms\frmVETechs.Designer.cs">
       <DependentUpon>frmVETechs.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmVECustomBats.cs">
+    <Compile Include="DB_Forms\frmVECustomBats.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmVECustomBats.Designer.cs">
+    <Compile Include="DB_Forms\frmVECustomBats.Designer.cs">
       <DependentUpon>frmVECustomBats.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmVStandardBats.cs">
+    <Compile Include="DB_Forms\frmVStandardBats.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmVStandardBats.Designer.cs">
+    <Compile Include="DB_Forms\frmVStandardBats.Designer.cs">
       <DependentUpon>frmVStandardBats.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmVECustomers.cs">
+    <Compile Include="DB_Forms\frmVECustomers.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmVECustomers.Designer.cs">
+    <Compile Include="DB_Forms\frmVECustomers.Designer.cs">
       <DependentUpon>frmVECustomers.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmVEWorkOrders.cs">
+    <Compile Include="DB_Forms\frmVEWorkOrders.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmVEWorkOrders.Designer.cs">
+    <Compile Include="DB_Forms\frmVEWorkOrders.Designer.cs">
       <DependentUpon>frmVEWorkOrders.cs</DependentUpon>
     </Compile>
     <Compile Include="ICDataStore.cs" />
@@ -156,16 +156,16 @@
     <Compile Include="Splash.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Reports_Form.cs">
+    <Compile Include="Reports\Reports_Form.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Reports_Form.Designer.cs">
+    <Compile Include="Reports\Reports_Form.Designer.cs">
       <DependentUpon>Reports_Form.cs</DependentUpon>
     </Compile>
-    <Compile Include="Graphics_Form.cs">
+    <Compile Include="Reports\Graphics_Form.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Graphics_Form.Designer.cs">
+    <Compile Include="Reports\Graphics_Form.Designer.cs">
       <DependentUpon>Graphics_Form.cs</DependentUpon>
     </Compile>
     <Compile Include="GridPortion.cs">
@@ -188,22 +188,22 @@
     <EmbeddedResource Include="Choose_WO.resx">
       <DependentUpon>Choose_WO.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmVECustomerBats.resx">
+    <EmbeddedResource Include="DB_Forms\frmVECustomerBats.resx">
       <DependentUpon>frmVECustomerBats.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmVETechs.resx">
+    <EmbeddedResource Include="DB_Forms\frmVETechs.resx">
       <DependentUpon>frmVETechs.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmVECustomBats.resx">
+    <EmbeddedResource Include="DB_Forms\frmVECustomBats.resx">
       <DependentUpon>frmVECustomBats.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmVStandardBats.resx">
+    <EmbeddedResource Include="DB_Forms\frmVStandardBats.resx">
       <DependentUpon>frmVStandardBats.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmVECustomers.resx">
+    <EmbeddedResource Include="DB_Forms\frmVECustomers.resx">
       <DependentUpon>frmVECustomers.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmVEWorkOrders.resx">
+    <EmbeddedResource Include="DB_Forms\frmVEWorkOrders.resx">
       <DependentUpon>frmVEWorkOrders.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\WorkOrderSummary.rdlc" />
@@ -228,10 +228,10 @@
     <EmbeddedResource Include="Main_Form.resx">
       <DependentUpon>Main_Form.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reports_Form.resx">
+    <EmbeddedResource Include="Reports\Reports_Form.resx">
       <DependentUpon>Reports_Form.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Graphics_Form.resx">
+    <EmbeddedResource Include="Reports\Graphics_Form.resx">
       <DependentUpon>Graphics_Form.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">

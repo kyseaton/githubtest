@@ -17,6 +17,7 @@ namespace NewBTASProto
     {
 
         DataSet Bats = new DataSet();
+        
         int max;
 
         public frmVECustomerBats()
@@ -29,7 +30,6 @@ namespace NewBTASProto
         {
             #region setup the binding
 
-            // The xml to bind to.
             string strAccessConn;
             string strAccessSelect;
             // Open database containing all the battery data....
@@ -82,7 +82,6 @@ namespace NewBTASProto
             comboBox2.DataBindings.Add("Text", bindingSource1, "BatteryModel");
             textBox3.DataBindings.Add("Text", bindingSource1, "BatterySerialNumber");
             textBox4.DataBindings.Add("Text", bindingSource1, "BatteryBCN");
-            textBox5.DataBindings.Add("Text", bindingSource1, "BatteryGroup");
 
 
             #endregion
@@ -91,15 +90,94 @@ namespace NewBTASProto
             ComboBox SerNumCB = toolStripCBSerNum.ComboBox;
             SerNumCB.DisplayMember = "BatterySerialNumber";
             SerNumCB.DataSource = bindingSource1;
+            
 
-            List<string> Customers =  Bats.Tables[0].AsEnumerable().Select(x => x[5].ToString()).Distinct().ToList();
+            //  Setup the drop down to contain all customers availible in the customer table
+
+            // Open database containing all the customer names data....
+
+            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Kyle\Documents\Visual Studio 2013\Projects\NewBTASProto\BTS16NV.MDB";
+            strAccessSelect = @"SELECT CustomerName FROM CUSTOMERS ORDER BY CustomerName ASC";
+
+            DataSet Custs = new DataSet();
+            myAccessConn = null;
+            // try to open the DB
+            try
+            {
+                myAccessConn = new OleDbConnection(strAccessConn);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                return;
+            }
+            //  now try to access it
+            try
+            {
+                OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                myAccessConn.Open();
+                myDataAdapter.Fill(Custs);
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                return;
+            }
+            finally
+            {
+                myAccessConn.Close();
+            }
+
+            List<string> Customers =  Custs.Tables[0].AsEnumerable().Select(x => x[0].ToString()).Distinct().ToList();
             Customers.Sort();
             Customers.Insert(0, "");
             ComboBox CustCB = toolStripCBCustomers.ComboBox;
             //SerNumCB.DisplayMember = "BatterySerialNumber";
             CustCB.DataSource = Customers;
 
-            List<string> Mods = Bats.Tables[0].AsEnumerable().Select(x => x[1].ToString()).Distinct().ToList();
+            //  Finally, setup the drop down to contain all customers availible in the customer table
+
+            // Open database containing all the customer names data....
+
+            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Kyle\Documents\Visual Studio 2013\Projects\NewBTASProto\BTS16NV.MDB";
+            strAccessSelect = @"SELECT BatteryModel FROM BatteriesCustom ORDER BY BatteryModel ASC";
+
+            DataSet BatsList = new DataSet();
+            myAccessConn = null;
+            // try to open the DB
+            try
+            {
+                myAccessConn = new OleDbConnection(strAccessConn);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                return;
+            }
+            //  now try to access it
+            try
+            {
+                OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                myAccessConn.Open();
+                myDataAdapter.Fill(BatsList);
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                return;
+            }
+            finally
+            {
+                myAccessConn.Close();
+            }
+
+            List<string> Mods = BatsList.Tables[0].AsEnumerable().Select(x => x[0].ToString()).Distinct().ToList();
             Mods.Sort();
             Mods.Insert(0, "");
             ComboBox ModCB = toolStripCBBatMod.ComboBox;
@@ -179,74 +257,42 @@ namespace NewBTASProto
 
         }
 
-        private void textBox5_Leave(object sender, EventArgs e)
-        {
-
-            // Maybe down the line...
-
-            /*            ulong num;
-
-                        if (textBox5.Text.Length == 11 && ulong.TryParse(textBox5.Text, out num))
-                        {
-
-                            string pn = textBox5.Text;
-
-                            textBox5.Text = String.Format("({0}) {1}-{2}", pn.Substring(0, 3), pn.Substring(3, 3), pn.Substring(6));
-
-                        }
-                        if (textBox5.Text.Length == 11 && ulong.TryParse(textBox5.Text, out num))
-                        {
-
-                            string pn = textBox5.Text;
-
-                            textBox5.Text = String.Format("({0}) {1}-{2}", pn.Substring(0, 3), pn.Substring(3, 3), pn.Substring(6));
-
-                        }
-
-                        else
-                        {
-
-                            MessageBox.Show("Invalid phone number, please change");
-
-                            textBox5.Focus();
-
-
-                        }
-             *  * */
-        }
 
         private void toolStripCBCustomers_SelectedIndexChanged(object sender, EventArgs e)
         {
+            UpdateBats();
+            toolStripCBCustomers.SelectionLength = 0;
+ 
+        }
 
+        private void UpdateBats()
+        {
             #region setup the binding
 
             // The xml to bind to.
             string strAccessConn;
             string strAccessSelect;
             // Open database containing all the battery data....
+            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Kyle\Documents\Visual Studio 2013\Projects\NewBTASProto\BTS16NV.MDB";
 
             if (toolStripCBCustomers.Text == "" && toolStripCBBatMod.Text == "")
             {
-                strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Kyle\Documents\Visual Studio 2013\Projects\NewBTASProto\BTS16NV.MDB";
                 strAccessSelect = @"SELECT * FROM Batteries ORDER BY BatterySerialNumber ASC";
             }
 
             else if (toolStripCBBatMod.Text == "")
             {
-                strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Kyle\Documents\Visual Studio 2013\Projects\NewBTASProto\BTS16NV.MDB";
-                strAccessSelect = @"SELECT * FROM Batteries WHERE CustomerName='" + toolStripCBCustomers.Text + "' ORDER BY BatterySerialNumber ASC";
+                strAccessSelect = @"SELECT * FROM Batteries WHERE CustomerName='" + toolStripCBCustomers.Text.Replace("'", "''") + "' ORDER BY BatterySerialNumber ASC";
             }
             else if (toolStripCBCustomers.Text == "")
             {
-                strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Kyle\Documents\Visual Studio 2013\Projects\NewBTASProto\BTS16NV.MDB";
-                strAccessSelect = @"SELECT * FROM Batteries WHERE BatteryModel='" + toolStripCBBatMod.Text + "' ORDER BY BatterySerialNumber ASC";
+                strAccessSelect = @"SELECT * FROM Batteries WHERE BatteryModel='" + toolStripCBBatMod.Text.Replace("'", "''") + "' ORDER BY BatterySerialNumber ASC";
             }
             else
             {
-                strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Kyle\Documents\Visual Studio 2013\Projects\NewBTASProto\BTS16NV.MDB";
-                strAccessSelect = @"SELECT * FROM Batteries WHERE CustomerName='" + toolStripCBCustomers.Text + "' AND " + "BatteryModel='" + toolStripCBBatMod.Text + "' ORDER BY BatterySerialNumber ASC";
+                strAccessSelect = @"SELECT * FROM Batteries WHERE CustomerName='" + toolStripCBCustomers.Text.Replace("'", "''") + "' AND " + "BatteryModel='" + toolStripCBBatMod.Text.Replace("'", "''") + "' ORDER BY BatterySerialNumber ASC";
             }
-            
+
             Bats.Clear();
             OleDbConnection myAccessConn = null;
             // try to open the DB
@@ -333,12 +379,16 @@ namespace NewBTASProto
 
         private void saveToolStripButton_Click(object sender, EventArgs e)
         {
+
+            string currentID = "";
+
+            if (comboBox1.Text == "" || comboBox2.Text == "" || textBox3.Text == "")
+            {
+                MessageBox.Show("Please Enter A Customer, Model and Serial Number in order to create a customer battery");
+                return;
+            }
             try
             {
-
-                if (radioButton1.Checked == true) textBox5.Text = "STD";
-                else if (radioButton2.Checked == true) textBox5.Text = "Custom";
-                else textBox5.Text = "";
 
                 // set up the db Connection
                 string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Kyle\Documents\Visual Studio 2013\Projects\NewBTASProto\BTS16NV.MDB";
@@ -356,15 +406,15 @@ namespace NewBTASProto
                 //OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
                 //int count = (int)cmd.ExecuteScalar();
 
-                if (current["BID"].ToString() != "")
+                currentID = current["BID"].ToString();
+                if (currentID != "")
                 {
                     //record already exist as we need to do an update
 
-                    string cmdStr = "UPDATE Batteries SET CustomerName='" + comboBox1.Text +
-                        "', BatteryModel='" + comboBox2.Text +
-                        "', BatterySerialNumber='" + textBox3.Text +
-                        "', BatteryBCN='" + textBox4.Text +
-                        "', BatteryGroup='" + textBox5.Text +
+                    string cmdStr = "UPDATE Batteries SET CustomerName='" + comboBox1.Text.Replace("'", "''") +
+                        "', BatteryModel='" + comboBox2.Text.Replace("'", "''") +
+                        "', BatterySerialNumber='" + textBox3.Text.Replace("'", "''") +
+                        "', BatteryBCN='" + textBox4.Text.Replace("'", "''") +
                         "' WHERE BID=" + current["BID"].ToString();
                     OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
                     cmd.ExecuteNonQuery();
@@ -375,18 +425,18 @@ namespace NewBTASProto
                     // we need to insert a new record...
                     // find the max value in the CustomerID column so we know what to assign to the new record
                     max++;
-                    string cmdStr = "INSERT INTO Batteries (BID, CustomerName, BatteryModel, BatterySerialNumber, BatteryBCN, BatteryGroup) " +
+                    string cmdStr = "INSERT INTO Batteries (BID, CustomerName, BatteryModel, BatterySerialNumber, BatteryBCN) " +
                         "VALUES (" + (max).ToString() + ",'" +
-                        comboBox1.Text + "','" +
-                        comboBox2.Text + "','" +
-                        textBox3.Text + "','" +
-                        textBox4.Text + "','" +
-                        textBox5.Text + "')";
+                        comboBox1.Text.Replace("'", "''") + "','" +
+                        comboBox2.Text.Replace("'", "''") + "','" +
+                        textBox3.Text.Replace("'", "''") + "','" +
+                        textBox4.Text.Replace("'", "''") + "')";
                     OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
                     cmd.ExecuteNonQuery();
 
                     // update the dataTable with the new customer ID also..
                     current[0] = max;
+                    currentID = max.ToString();
 
 
                 }
@@ -411,114 +461,50 @@ namespace NewBTASProto
                 MessageBox.Show(ex.ToString());
             }
 
+            
+
+            UpdateBats();
+
+            //set the current record to this record, if possible...
+            try
+            {
+                int index = bindingSource1.Find("BID", currentID.ToString());
+                if (index >= 0)
+                {
+                    bindingSource1.Position = index;
+                }
+            }
+            catch(Exception ex)
+            {
+                return;
+            }
+            
+
+
+
 
         }
 
         private void bindingNavigatorAddNewItem_Click(object sender, EventArgs e)
         {
-
+            comboBox1.Text = toolStripCBCustomers.Text;
+            comboBox2.Text = toolStripCBBatMod.Text;
+            return;
         }
 
         private void toolStripCBBatMod_SelectedIndexChanged(object sender, EventArgs e)
         {
-            #region setup the binding
-
-            // The xml to bind to.
-            string strAccessConn;
-            string strAccessSelect;
-            // Open database containing all the battery data....
-
-            if (toolStripCBCustomers.Text == "" && toolStripCBBatMod.Text == "")
-            {
-                strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Kyle\Documents\Visual Studio 2013\Projects\NewBTASProto\BTS16NV.MDB";
-                strAccessSelect = @"SELECT * FROM Batteries ORDER BY BatterySerialNumber ASC";
-            }
-
-            else if (toolStripCBBatMod.Text == "")
-            {
-                strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Kyle\Documents\Visual Studio 2013\Projects\NewBTASProto\BTS16NV.MDB";
-                strAccessSelect = @"SELECT * FROM Batteries WHERE CustomerName='" + toolStripCBCustomers.Text + "' ORDER BY BatterySerialNumber ASC";
-            }
-            else if (toolStripCBCustomers.Text == "")
-            {
-                strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Kyle\Documents\Visual Studio 2013\Projects\NewBTASProto\BTS16NV.MDB";
-                strAccessSelect = @"SELECT * FROM Batteries WHERE BatteryModel='" + toolStripCBBatMod.Text + "' ORDER BY BatterySerialNumber ASC";
-            }
-            else
-            {
-                strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Kyle\Documents\Visual Studio 2013\Projects\NewBTASProto\BTS16NV.MDB";
-                strAccessSelect = @"SELECT * FROM Batteries WHERE CustomerName='" + toolStripCBCustomers.Text + "' AND " + "BatteryModel='" + toolStripCBBatMod.Text + "' ORDER BY BatterySerialNumber ASC";
-            }
-
-            Bats.Clear();
-            OleDbConnection myAccessConn = null;
-            // try to open the DB
-            try
-            {
-                myAccessConn = new OleDbConnection(strAccessConn);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
-                return;
-            }
-            //  now try to access it
-            try
-            {
-                OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
-                OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
-
-                myAccessConn.Open();
-                myDataAdapter.Fill(Bats);
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
-                return;
-            }
-            finally
-            {
-                myAccessConn.Close();
-            }
-
-
-            #endregion
-
-            #region setup the combo boxes
-            ComboBox SerNumCB = toolStripCBSerNum.ComboBox;
-            SerNumCB.DisplayMember = "BatterySerialNumber";
-            SerNumCB.DataSource = bindingSource1;
-
-            #endregion
+            UpdateBats();
         }
 
         private void bindingNavigator1_RefreshItems(object sender, EventArgs e)
         {
-            if (textBox5.Text == "STD")
-            {
-                radioButton2.Checked = false;
-                radioButton1.Checked = true;
-            }
-            else if (textBox5.Text == "Custom")
-            {
-                radioButton1.Checked = false;
-                radioButton2.Checked = true;
-            }
+
         }
 
         private void bindingNavigator1_Layout(object sender, LayoutEventArgs e)
         {
-            if (textBox5.Text == "STD")
-            {
-                radioButton2.Checked = false;
-                radioButton1.Checked = true;
-            }
-            else if (textBox5.Text == "Custom")
-            {
-                radioButton1.Checked = false;
-                radioButton2.Checked = true;
-            }
+
         }
 
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
