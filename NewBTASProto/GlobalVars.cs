@@ -23,6 +23,16 @@ namespace NewBTASProto
         /// </summary>
         public static bool highlightCurrent;
 
+        /// <summary>
+        /// Stores the comport used for the CScans
+        /// </summary>
+        public static string CSCANComPort;
+
+        /// <summary>
+        /// Stores the comport used for the IC
+        /// </summary>
+        public static string ICComPort;
+
 
     }
 }

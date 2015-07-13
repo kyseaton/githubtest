@@ -39,6 +39,9 @@ namespace NewBTASProto
 
         }
 
+        /// <summary>
+        /// This function looks at the DB and fills up the dropdown designating the oporator
+        /// </summary>
         public void Initialize_Operators_CB()
         {
             string strAccessConn;
@@ -173,7 +176,7 @@ namespace NewBTASProto
 
         private void bussinessNameToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Business_Name bn = new Business_Name();
+            ComportSettings bn = new ComportSettings();
             bn.Owner = this;
             bn.Show();
         }
@@ -731,6 +734,22 @@ namespace NewBTASProto
             }
             frmVEWorkOrders f2 = new frmVEWorkOrders();
             f2.Show();
+        }
+
+        private void commPortSettingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormCollection fc = Application.OpenForms;
+
+            foreach (Form frm in fc)
+            {
+                if (frm is ComportSettings)
+                {
+                    return;
+                }
+            }
+            ComportSettings f2 = new ComportSettings();
+            f2.Show();
+
         }
 
 

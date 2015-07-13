@@ -82,6 +82,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ComportSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ComportSettings.Designer.cs">
+      <DependentUpon>ComportSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="Business_Name.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -182,6 +188,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="ComportSettings.resx">
+      <DependentUpon>ComportSettings.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Business_Name.resx">
       <DependentUpon>Business_Name.cs</DependentUpon>
     </EmbeddedResource>

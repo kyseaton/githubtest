@@ -68,7 +68,29 @@ namespace NewBTASProto
         public void Scan()
         {
 
-            
+            // First do a commPort Check
+            try
+            {
+                CSCANComPort.PortName = GlobalVars.CSCANComPort;
+                ICComPort.PortName = GlobalVars.ICComPort;
+                
+                CSCANComPort.Open();
+                ICComPort.Open();
+            }
+            catch
+            {
+                label8.Text = "Check Coms!";
+                label8.Visible = true;
+                //MessageBox.Show("There is a Comport configuration issue.  Please check the Data Hub connections and the ComPort Settings");
+                return;
+            }
+            finally
+            {
+                CSCANComPort.Close();
+                ICComPort.Close();
+
+            }
+
 
 
             // to make this all more readable...

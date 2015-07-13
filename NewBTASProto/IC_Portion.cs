@@ -41,7 +41,7 @@ namespace NewBTASProto
 
             // Open the comport
             ICComPort.ReadTimeout = 100;
-            ICComPort.PortName = "COM11";
+            ICComPort.PortName = GlobalVars.ICComPort;
             ICComPort.BaudRate = 19200;
             ICComPort.DataBits = 8;
             ICComPort.StopBits = StopBits.One;
@@ -132,8 +132,17 @@ namespace NewBTASProto
                                     //put this new data in the chart...
                                     this.Invoke((MethodInvoker)delegate
                                     {
-                                        d.Rows[j][11] = testData.runStatus;
+                                        if (testData.online == true)
+                                        {
+                                            d.Rows[j][11] = testData.runStatus;    
+                                        }
+                                        else
+                                        {
+                                            d.Rows[j][11] = "offline!"; 
+                                        }
+                                        
                                         rtbIncoming.Text = j.ToString() + "  :  " + tempBuff;
+                                        
                                     });
 
                                     Thread.Sleep(200);

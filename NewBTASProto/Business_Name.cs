@@ -15,7 +15,6 @@ namespace NewBTASProto
         public Business_Name()
         {
             InitializeComponent();
-            this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.textBox1.Text = GlobalVars.businessName;
 
         }

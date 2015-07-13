@@ -38,7 +38,7 @@ namespace NewBTASProto
         public string testMode;
         public string availabilityStatus;
 
-        bool online = false;
+        public bool online = false;
 
         // the constructor pulls in the data and stores it in the familiar A
         public ICDataStore(string[] ICDATA)
@@ -77,6 +77,10 @@ namespace NewBTASProto
             if((QS1 & 0x01) == 1)
             {
                 online = true;
+            }
+            else
+            {
+                online = false;
             }
             
             //run status
@@ -132,16 +136,16 @@ namespace NewBTASProto
             switch ((QS1 & 0xC0) >> 6)
             {
                 case 0:
-                    endStatus = "RESET";
+                    endStatus = "";
                     break;
                 case 1:
-                    endStatus = "RUN";
+                    endStatus = "Current Fault";
                     break;
                 case 2:
-                    endStatus = "HOLD";
+                    endStatus = "Peak End";
                     break;
                 case 3:
-                    endStatus = "END";
+                    endStatus = "Cap Fail";
                     break;
             }   // end endStatus Switch
 

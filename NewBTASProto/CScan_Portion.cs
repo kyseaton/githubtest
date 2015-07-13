@@ -25,7 +25,7 @@ namespace NewBTASProto
         /// <summary>
         /// Serial Stuff defined here
         /// </summary>
-        SerialPort ComPort = new SerialPort();
+        SerialPort CSCANComPort = new SerialPort();
 
         internal delegate void SerialDataReceivedEventHandlerDelegate(object sender, SerialDataReceivedEventArgs e);
         delegate void SetTextCallback(string text);
@@ -48,13 +48,13 @@ namespace NewBTASProto
 
             //MOVE TO A STARTUP LOCATION!!!!!!!!!!!!!!!!!!!!!
             // Open the comport
-            ComPort.ReadTimeout = 200;
-            ComPort.PortName = "COM12";
-            ComPort.BaudRate = 19200;
-            ComPort.DataBits = 8;
-            ComPort.StopBits = StopBits.One;
-            ComPort.Handshake = Handshake.None;
-            ComPort.Parity = Parity.None;
+            CSCANComPort.ReadTimeout = 200;
+            CSCANComPort.PortName = GlobalVars.CSCANComPort;
+            CSCANComPort.BaudRate = 19200;
+            CSCANComPort.DataBits = 8;
+            CSCANComPort.StopBits = StopBits.One;
+            CSCANComPort.Handshake = Handshake.None;
+            CSCANComPort.Parity = Parity.None;
 
             ThreadPool.QueueUserWorkItem(s =>
             {
@@ -84,17 +84,17 @@ namespace NewBTASProto
 
                                 try
                                 {
-                                    ComPort.Open();
+                                    CSCANComPort.Open();
                                     // do this all on a threadpool thread
 
                                     // send the polling command
                                     string outText = "~" + (dataGridView1.CurrentRow.Index + 16).ToString("00") + "L00Z";
-                                    ComPort.Write(outText);
+                                    CSCANComPort.Write(outText);
                                     // wait for a response
                                     
-                                    tempBuff = ComPort.ReadTo("Z");
+                                    tempBuff = CSCANComPort.ReadTo("Z");
                                     // close the comport
-                                    ComPort.Close();
+                                    CSCANComPort.Close();
                                     //do something with the new data
                                     char[] delims = { ' ' };
                                     string[] A = tempBuff.Split(delims);
@@ -178,7 +178,7 @@ namespace NewBTASProto
                                                 textBox1.Text = "";
                                             });
                                         }
-                                        ComPort.Close();
+                                        CSCANComPort.Close();
 
                                     }
                                 }
@@ -208,16 +208,16 @@ namespace NewBTASProto
                                     // look at the "In Use" columns and check for attached cscans
                                     try
                                     {
-                                        ComPort.Open();
+                                        CSCANComPort.Open();
                                         // do this all on a threadpool thread
 
                                         // send the polling command
                                         string outText = ("~" + (j + 16).ToString("00") + "L00Z");
-                                        ComPort.Write(outText);
+                                        CSCANComPort.Write(outText);
                                         // wait for a response
-                                        tempBuff = ComPort.ReadTo("Z");
+                                        tempBuff = CSCANComPort.ReadTo("Z");
                                         // close the comport
-                                        ComPort.Close();
+                                        CSCANComPort.Close();
                                         //do something with the new data
                                         char[] delims = { ' ' };
                                         string[] A = tempBuff.Split(delims);
@@ -236,7 +236,7 @@ namespace NewBTASProto
                                     }  // end try
                                     catch (Exception ex)
                                     {
-                                        ComPort.Close();
+                                        CSCANComPort.Close();
                                         if (ex is System.TimeoutException)
                                         {
                                             if ((bool)d.Rows[j][4] && dataGridView1.CurrentRow.Index != j)  // added to help with gui look

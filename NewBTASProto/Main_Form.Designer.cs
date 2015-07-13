@@ -223,6 +223,7 @@
             this.commPortSettingsToolStripMenuItem.Name = "commPortSettingsToolStripMenuItem";
             this.commPortSettingsToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
             this.commPortSettingsToolStripMenuItem.Text = "Comm Port Settings";
+            this.commPortSettingsToolStripMenuItem.Click += new System.EventHandler(this.commPortSettingsToolStripMenuItem_Click);
             // 
             // databaseOperationsToolStripMenuItem
             // 
@@ -601,10 +602,12 @@
             // label8
             // 
             this.label8.BackColor = System.Drawing.Color.Red;
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label8.Location = new System.Drawing.Point(403, 11);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(144, 38);
             this.label8.TabIndex = 6;
+            this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.label8.Visible = false;
             // 
             // label7
