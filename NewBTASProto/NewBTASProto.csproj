@@ -136,6 +136,13 @@
     <Compile Include="DB_Forms\frmVEWorkOrders.Designer.cs">
       <DependentUpon>frmVEWorkOrders.cs</DependentUpon>
     </Compile>
+    <Compile Include="ICSettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ICSettingsForm.Designer.cs">
+      <DependentUpon>ICSettingsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ICSettingStore.cs" />
     <Compile Include="ICDataStore.cs" />
     <Compile Include="CScanDataStore.cs" />
     <Compile Include="CScan_Portion.cs">
@@ -151,6 +158,9 @@
       <DependentUpon>DataSet1.xsd</DependentUpon>
     </Compile>
     <Compile Include="GlobalVars.cs" />
+    <Compile Include="Test_Portion.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="IC_Portion.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -214,6 +224,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DB_Forms\frmVEWorkOrders.resx">
       <DependentUpon>frmVEWorkOrders.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ICSettingsForm.resx">
+      <DependentUpon>ICSettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\WorkOrderSummary.rdlc" />
     <EmbeddedResource Include="Reports\WorkOrderLog.rdlc" />

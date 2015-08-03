@@ -164,9 +164,35 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                MessageBox.Show("Error: Failed to store new data in the DataBase.\n" + ex.Message);
                 return;
             }
+
+            // We also have to save our Com Ports!
+            try
+            {
+                strUpdateCMD = "UPDATE Comconfig SET Comm1='" + GlobalVars.CSCANComPort + "', Comm2='" + GlobalVars.ICComPort + "';";
+                myAccessConn = new OleDbConnection(strAccessConn);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                return;
+            }
+            try
+            {
+                OleDbCommand myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
+
+                myAccessConn.Open();
+                myAccessCommand.ExecuteNonQuery();
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: Failed to store new data in the DataBase.\n" + ex.Message);
+                return;
+            }
+
             finally
             {
                 myAccessConn.Close();
@@ -176,7 +202,17 @@ namespace NewBTASProto
 
         private void bussinessNameToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ComportSettings bn = new ComportSettings();
+            FormCollection fc = Application.OpenForms;
+
+            foreach (Form frm in fc)
+            {
+                if (frm is Business_Name)
+                {
+                    return;
+                }
+            }
+
+            Business_Name bn = new Business_Name();
             bn.Owner = this;
             bn.Show();
         }
@@ -256,8 +292,6 @@ namespace NewBTASProto
 
         private void button1_Click(object sender, EventArgs e)
         {
-
-
 
             // create a thread to go through and look for the stations, this way the UI will still work while the search is happening
             ThreadPool.QueueUserWorkItem(s =>
@@ -365,11 +399,27 @@ namespace NewBTASProto
         private void Main_Form_FormClosing(object sender, FormClosingEventArgs e)
         {
             // tell those threadpool work items to stop!!!!!
-            cPollIC.Cancel();
-            cPollCScans.Cancel();
-            sequentialScanT.Cancel();
-            // make sure it takes...
-            Thread.Sleep(500);      
+            try
+            {
+                cPollIC.Cancel();
+                cPollCScans.Cancel();
+                sequentialScanT.Cancel();
+                // make sure it takes...
+                Thread.Sleep(500);  
+            }
+            catch(Exception ex)
+            {
+                if (ex is NullReferenceException)
+                {
+
+                }
+                else
+                {
+                    throw ex;
+                }
+
+            }
+    
         }
 
         private void highlightCurrentToolStripMenuItem_Click(object sender, EventArgs e)
@@ -474,81 +524,321 @@ namespace NewBTASProto
 
         private void toolStripMenuItem7_Click(object sender, EventArgs e)
         {
+            for (int i = 0; i < 16; i++)
+            {
+                if (d.Rows[i][9] == "0" && i != dataGridView1.CurrentRow.Index)
+                {
+                    // there is already a zero in one of the other rows!
+                    // make that one the master
+                    d.Rows[i][9] = "0-M";
+                    // and the current one the slave
+                    d.Rows[dataGridView1.CurrentRow.Index][9] = "0-S";
+                    // Now disable adding another...
+                    toolStripMenuItem7.Enabled = false;
+                    return;
+                }
+            }
+            // otherwise we'll proceed as normal...
             d.Rows[dataGridView1.CurrentRow.Index][9] = "0";
         }
 
         private void toolStripMenuItem8_Click(object sender, EventArgs e)
         {
+            for (int i = 0; i < 16; i++)
+            {
+                if (d.Rows[i][9] == "1" && i != dataGridView1.CurrentRow.Index)
+                {
+                    // there is already a zero in one of the other rows!
+                    // make that one the master
+                    d.Rows[i][9] = "1-M";
+                    // and the current one the slave
+                    d.Rows[dataGridView1.CurrentRow.Index][9] = "1-S";
+                    // Now disable adding another...
+                    toolStripMenuItem7.Enabled = false;
+                    return;
+                }
+            }
+            // otherwise we'll proceed as normal...
             d.Rows[dataGridView1.CurrentRow.Index][9] = "1";
         }
 
         private void toolStripMenuItem9_Click(object sender, EventArgs e)
         {
+            for (int i = 0; i < 16; i++)
+            {
+                if (d.Rows[i][9] == "2" && i != dataGridView1.CurrentRow.Index)
+                {
+                    // there is already a zero in one of the other rows!
+                    // make that one the master
+                    d.Rows[i][9] = "2-M";
+                    // and the current one the slave
+                    d.Rows[dataGridView1.CurrentRow.Index][9] = "2-S";
+                    // Now disable adding another...
+                    toolStripMenuItem7.Enabled = false;
+                    return;
+                }
+            }
+            // otherwise we'll proceed as normal...
             d.Rows[dataGridView1.CurrentRow.Index][9] = "2";
         }
 
         private void toolStripMenuItem10_Click(object sender, EventArgs e)
         {
+            for (int i = 0; i < 16; i++)
+            {
+                if (d.Rows[i][9] == "3" && i != dataGridView1.CurrentRow.Index)
+                {
+                    // there is already a zero in one of the other rows!
+                    // make that one the master
+                    d.Rows[i][9] = "3-M";
+                    // and the current one the slave
+                    d.Rows[dataGridView1.CurrentRow.Index][9] = "3-S";
+                    // Now disable adding another...
+                    toolStripMenuItem7.Enabled = false;
+                    return;
+                }
+            }
+            // otherwise we'll proceed as normal...
             d.Rows[dataGridView1.CurrentRow.Index][9] = "3";
         }
 
         private void toolStripMenuItem11_Click(object sender, EventArgs e)
         {
+            for (int i = 0; i < 16; i++)
+            {
+                if (d.Rows[i][9] == "4" && i != dataGridView1.CurrentRow.Index)
+                {
+                    // there is already a zero in one of the other rows!
+                    // make that one the master
+                    d.Rows[i][9] = "4-M";
+                    // and the current one the slave
+                    d.Rows[dataGridView1.CurrentRow.Index][9] = "4-S";
+                    // Now disable adding another...
+                    toolStripMenuItem7.Enabled = false;
+                    return;
+                }
+            }
+            // otherwise we'll proceed as normal...
             d.Rows[dataGridView1.CurrentRow.Index][9] = "4";
         }
 
         private void toolStripMenuItem12_Click(object sender, EventArgs e)
         {
+            for (int i = 0; i < 16; i++)
+            {
+                if (d.Rows[i][9] == "5" && i != dataGridView1.CurrentRow.Index)
+                {
+                    // there is already a zero in one of the other rows!
+                    // make that one the master
+                    d.Rows[i][9] = "5-M";
+                    // and the current one the slave
+                    d.Rows[dataGridView1.CurrentRow.Index][9] = "5-S";
+                    // Now disable adding another...
+                    toolStripMenuItem7.Enabled = false;
+                    return;
+                }
+            }
+            // otherwise we'll proceed as normal...
             d.Rows[dataGridView1.CurrentRow.Index][9] = "5";
         }
 
         private void toolStripMenuItem13_Click(object sender, EventArgs e)
         {
+            for (int i = 0; i < 16; i++)
+            {
+                if (d.Rows[i][9] == "6" && i != dataGridView1.CurrentRow.Index)
+                {
+                    // there is already a zero in one of the other rows!
+                    // make that one the master
+                    d.Rows[i][9] = "6-M";
+                    // and the current one the slave
+                    d.Rows[dataGridView1.CurrentRow.Index][9] = "6-S";
+                    // Now disable adding another...
+                    toolStripMenuItem7.Enabled = false;
+                    return;
+                }
+            }
+            // otherwise we'll proceed as normal...
             d.Rows[dataGridView1.CurrentRow.Index][9] = "6";
         }
 
         private void toolStripMenuItem14_Click(object sender, EventArgs e)
         {
+            for (int i = 0; i < 16; i++)
+            {
+                if (d.Rows[i][9] == "7" && i != dataGridView1.CurrentRow.Index)
+                {
+                    // there is already a zero in one of the other rows!
+                    // make that one the master
+                    d.Rows[i][9] = "7-M";
+                    // and the current one the slave
+                    d.Rows[dataGridView1.CurrentRow.Index][9] = "7-S";
+                    // Now disable adding another...
+                    toolStripMenuItem7.Enabled = false;
+                    return;
+                }
+            }
+            // otherwise we'll proceed as normal...
             d.Rows[dataGridView1.CurrentRow.Index][9] = "7";
         }
 
         private void toolStripMenuItem15_Click(object sender, EventArgs e)
         {
+            for (int i = 0; i < 16; i++)
+            {
+                if (d.Rows[i][9] == "8" && i != dataGridView1.CurrentRow.Index)
+                {
+                    // there is already a zero in one of the other rows!
+                    // make that one the master
+                    d.Rows[i][9] = "8-M";
+                    // and the current one the slave
+                    d.Rows[dataGridView1.CurrentRow.Index][9] = "8-S";
+                    // Now disable adding another...
+                    toolStripMenuItem7.Enabled = false;
+                    return;
+                }
+            }
+            // otherwise we'll proceed as normal...
             d.Rows[dataGridView1.CurrentRow.Index][9] = "8";
         }
 
         private void toolStripMenuItem16_Click(object sender, EventArgs e)
         {
+            for (int i = 0; i < 16; i++)
+            {
+                if (d.Rows[i][9] == "9" && i != dataGridView1.CurrentRow.Index)
+                {
+                    // there is already a zero in one of the other rows!
+                    // make that one the master
+                    d.Rows[i][9] = "9-M";
+                    // and the current one the slave
+                    d.Rows[dataGridView1.CurrentRow.Index][9] = "9-S";
+                    // Now disable adding another...
+                    toolStripMenuItem7.Enabled = false;
+                    return;
+                }
+            }
+            // otherwise we'll proceed as normal...
             d.Rows[dataGridView1.CurrentRow.Index][9] = "9";
         }
 
         private void toolStripMenuItem17_Click(object sender, EventArgs e)
         {
+            for (int i = 0; i < 16; i++)
+            {
+                if (d.Rows[i][9] == "10" && i != dataGridView1.CurrentRow.Index)
+                {
+                    // there is already a zero in one of the other rows!
+                    // make that one the master
+                    d.Rows[i][9] = "10-M";
+                    // and the current one the slave
+                    d.Rows[dataGridView1.CurrentRow.Index][9] = "10-S";
+                    // Now disable adding another...
+                    toolStripMenuItem7.Enabled = false;
+                    return;
+                }
+            }
+            // otherwise we'll proceed as normal...
             d.Rows[dataGridView1.CurrentRow.Index][9] = "10";
         }
 
         private void toolStripMenuItem18_Click(object sender, EventArgs e)
         {
+            for (int i = 0; i < 16; i++)
+            {
+                if (d.Rows[i][9] == "11" && i != dataGridView1.CurrentRow.Index)
+                {
+                    // there is already a zero in one of the other rows!
+                    // make that one the master
+                    d.Rows[i][9] = "11-M";
+                    // and the current one the slave
+                    d.Rows[dataGridView1.CurrentRow.Index][9] = "11-S";
+                    // Now disable adding another...
+                    toolStripMenuItem7.Enabled = false;
+                    return;
+                }
+            }
+            // otherwise we'll proceed as normal...
             d.Rows[dataGridView1.CurrentRow.Index][9] = "11";
         }
 
         private void toolStripMenuItem19_Click(object sender, EventArgs e)
         {
+            for (int i = 0; i < 16; i++)
+            {
+                if (d.Rows[i][9] == "12" && i != dataGridView1.CurrentRow.Index)
+                {
+                    // there is already a zero in one of the other rows!
+                    // make that one the master
+                    d.Rows[i][9] = "12-M";
+                    // and the current one the slave
+                    d.Rows[dataGridView1.CurrentRow.Index][9] = "12-S";
+                    // Now disable adding another...
+                    toolStripMenuItem7.Enabled = false;
+                    return;
+                }
+            }
+            // otherwise we'll proceed as normal...
             d.Rows[dataGridView1.CurrentRow.Index][9] = "12";
         }
 
         private void toolStripMenuItem20_Click(object sender, EventArgs e)
         {
+            for (int i = 0; i < 16; i++)
+            {
+                if (d.Rows[i][9] == "13" && i != dataGridView1.CurrentRow.Index)
+                {
+                    // there is already a zero in one of the other rows!
+                    // make that one the master
+                    d.Rows[i][9] = "13-M";
+                    // and the current one the slave
+                    d.Rows[dataGridView1.CurrentRow.Index][9] = "13-S";
+                    // Now disable adding another...
+                    toolStripMenuItem7.Enabled = false;
+                    return;
+                }
+            }
+            // otherwise we'll proceed as normal...
             d.Rows[dataGridView1.CurrentRow.Index][9] = "13";
         }
 
         private void toolStripMenuItem21_Click(object sender, EventArgs e)
         {
+            for (int i = 0; i < 16; i++)
+            {
+                if (d.Rows[i][9] == "14" && i != dataGridView1.CurrentRow.Index)
+                {
+                    // there is already a zero in one of the other rows!
+                    // make that one the master
+                    d.Rows[i][9] = "14-M";
+                    // and the current one the slave
+                    d.Rows[dataGridView1.CurrentRow.Index][9] = "14-S";
+                    // Now disable adding another...
+                    toolStripMenuItem7.Enabled = false;
+                    return;
+                }
+            }
+            // otherwise we'll proceed as normal...
             d.Rows[dataGridView1.CurrentRow.Index][9] = "14";
         }
 
         private void toolStripMenuItem22_Click(object sender, EventArgs e)
         {
+            for (int i = 0; i < 16; i++)
+            {
+                if (d.Rows[i][9] == "15" && i != dataGridView1.CurrentRow.Index)
+                {
+                    // there is already a zero in one of the other rows!
+                    // make that one the master
+                    d.Rows[i][9] = "15-M";
+                    // and the current one the slave
+                    d.Rows[dataGridView1.CurrentRow.Index][9] = "15-S";
+                    // Now disable adding another...
+                    toolStripMenuItem7.Enabled = false;
+                    return;
+                }
+            }
+            // otherwise we'll proceed as normal...
             d.Rows[dataGridView1.CurrentRow.Index][9] = "15";
         }
 
@@ -594,7 +884,11 @@ namespace NewBTASProto
 
         private void startNewTestToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Start New Test Selected.  Needs to be implemented...");
+
+            // we will run the tests on a helper thread
+            // helper thread code is located in Test_Portion.cs
+            RunTest();
+
         }
 
         private void resumeTestToolStripMenuItem_Click(object sender, EventArgs e)
@@ -748,6 +1042,24 @@ namespace NewBTASProto
                 }
             }
             ComportSettings f2 = new ComportSettings();
+            f2.Owner = this;
+            f2.Show();
+
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            FormCollection fc = Application.OpenForms;
+
+            foreach (Form frm in fc)
+            {
+                if (frm is ICSettingsForm)
+                {
+                    return;
+                }
+            }
+            ICSettingsForm f2 = new ICSettingsForm();
+            f2.Owner = this;
             f2.Show();
 
         }

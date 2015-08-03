@@ -74,8 +74,8 @@ namespace NewBTASProto
                 OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
 
                 myDataAdapter.Fill(comconfig, "Comconfig");
-                GlobalVars.CSCANComPort = "COM" + comconfig.Tables[0].Rows[0][0].ToString();
-                GlobalVars.ICComPort = "COM" + comconfig.Tables[0].Rows[0][1].ToString();
+                GlobalVars.CSCANComPort = comconfig.Tables[0].Rows[0][0].ToString();
+                GlobalVars.ICComPort = comconfig.Tables[0].Rows[0][1].ToString();
 
             }
             catch (Exception ex)
@@ -88,6 +88,14 @@ namespace NewBTASProto
             {
                 myAccessConn.Close();
             }
+
+            //This section will pull in the settings for the chargers
+            // TODO For now there is not DB, needs to be added
+            for (int num = 0; num < 16; num++)
+            {
+                GlobalVars.ICSettings[num] = new ICSettingStore(num);
+            }
+
             
         }
 

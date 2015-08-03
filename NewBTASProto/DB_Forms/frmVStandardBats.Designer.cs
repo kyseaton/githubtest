@@ -1069,7 +1069,7 @@
             this.MaximizeBox = false;
             this.Name = "frmVStandardBats";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "View, Edit and Add Customers";
+            this.Text = "View, Edit and Add Batteries";
             ((System.ComponentModel.ISupportInitialize)(this.bindingNavigator1)).EndInit();
             this.bindingNavigator1.ResumeLayout(false);
             this.bindingNavigator1.PerformLayout();

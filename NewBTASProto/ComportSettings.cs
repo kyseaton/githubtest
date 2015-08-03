@@ -48,7 +48,44 @@ namespace NewBTASProto
 
         private void button1_Click(object sender, EventArgs e)
         {
-            
+            // stop all of the scanning threads
+            try
+            {
+                ((Main_Form)this.Owner).cPollIC.Cancel();
+                ((Main_Form)this.Owner).cPollCScans.Cancel();
+                ((Main_Form)this.Owner).sequentialScanT.Cancel();
+
+                ((Main_Form)this.Owner).cPollIC.Dispose();
+                ((Main_Form)this.Owner).cPollCScans.Dispose();
+                ((Main_Form)this.Owner).sequentialScanT.Dispose();
+            }
+            catch (Exception ex)
+            {
+                if (ex is NullReferenceException || ex is ObjectDisposedException)
+                {
+
+                }
+                else
+                {
+                    throw ex;
+                }
+            }
+           
+
+            // close the comms
+            ((Main_Form)this.Owner).CSCANComPort.Close();
+            ((Main_Form)this.Owner).ICComPort.Close();
+
+            //Update the Globals
+            GlobalVars.CSCANComPort = comboBox1.SelectedItem.ToString();
+            GlobalVars.ICComPort = comboBox2.SelectedItem.ToString();
+
+            //Make sure the warnings have been cleared
+            ((Main_Form)this.Owner).label8.Visible = false;
+
+            //Start the threads back up
+            ((Main_Form)this.Owner).Scan();
+
             this.Dispose();
 
         }

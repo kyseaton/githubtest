@@ -33,7 +33,7 @@ namespace NewBTASProto
         public void SetUpTable()
         {
 
-            // Add 16 rows to the data table to fit all of the channel data
+            // Add 16 rows to the data table to fit all of the grid data
             while (d.Rows.Count < 16)
             {
                 d.Rows.Add();
@@ -211,6 +211,10 @@ namespace NewBTASProto
                 else
                 {
                     d.Rows[e.RowIndex][e.ColumnIndex] = true;
+                    if (d.Rows[e.RowIndex][9] == "")
+                    {
+                        MessageBox.Show("You Still Need to Select a Charger ID Number");
+                    }
                 }
             }
 

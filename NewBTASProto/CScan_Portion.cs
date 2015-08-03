@@ -25,7 +25,7 @@ namespace NewBTASProto
         /// <summary>
         /// Serial Stuff defined here
         /// </summary>
-        SerialPort CSCANComPort = new SerialPort();
+        public SerialPort CSCANComPort = new SerialPort();
 
         internal delegate void SerialDataReceivedEventHandlerDelegate(object sender, SerialDataReceivedEventArgs e);
         delegate void SetTextCallback(string text);
@@ -35,12 +35,15 @@ namespace NewBTASProto
         DataSet graphMainSet = new DataSet();
 
         // cancellation token
-        CancellationTokenSource cPollCScans = new CancellationTokenSource();
-        CancellationTokenSource sequentialScanT = new CancellationTokenSource();
+        public CancellationTokenSource cPollCScans;
+        public CancellationTokenSource sequentialScanT;
 
 
         public void pollCScans()
         {
+
+            cPollCScans = new CancellationTokenSource();
+            sequentialScanT = new CancellationTokenSource();
 
             string tempBuff;
             CScanDataStore testData;
@@ -100,6 +103,7 @@ namespace NewBTASProto
                                     string[] A = tempBuff.Split(delims);
                                     //A[1] has the terminal ID in it
                                     testData = new CScanDataStore(A);
+                                    GlobalVars.CScanData[dataGridView1.CurrentRow.Index] = testData;
 
                                     if ((bool)d.Rows[dataGridView1.CurrentRow.Index][4] && tempClick == dataGridView1.CurrentRow.Index)  // test to see if we've clicked in the mean time...
                                     {
@@ -223,6 +227,7 @@ namespace NewBTASProto
                                         string[] A = tempBuff.Split(delims);
                                         //A[1] has the terminal ID in it
                                         testData = new CScanDataStore(A);
+                                        GlobalVars.CScanData[j] = testData;
 
                                         if ((bool)d.Rows[j][4])  // added to help with gui look
                                         {

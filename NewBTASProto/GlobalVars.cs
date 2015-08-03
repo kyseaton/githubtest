@@ -33,6 +33,20 @@ namespace NewBTASProto
         /// </summary>
         public static string ICComPort;
 
+        /// <summary>
+        /// Stores the settings for all possible attached Chargers
+        /// </summary>
+        public static ICSettingStore[] ICSettings =  new ICSettingStore[16];
+
+        /// <summary>
+        /// Stores the current data for all possible attached Chargers
+        /// </summary>
+        public static ICDataStore[] ICData = new ICDataStore[16];
+
+        /// <summary>
+        /// Stores the current data for all the attached CScans
+        /// </summary>
+        public static CScanDataStore[] CScanData = new CScanDataStore[16];
 
     }
 }
