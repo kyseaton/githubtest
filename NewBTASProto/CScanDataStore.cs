@@ -58,8 +58,10 @@ namespace NewBTASProto
 
         public double ref95V;
 
+        public int technology;
 
-
+        public int customNoCells;
+        public int batNumCable10;
 
 
 
@@ -257,6 +259,14 @@ namespace NewBTASProto
             orderedCells[15] = cells[21];
             orderedCells[21] = cells[22];
             orderedCells[16] = cells[23];
+
+            // and set the technology
+            technology = 0;
+            customNoCells = 0;
+            batNumCable10 = 0;
+
+           // TODO set this variable to be changed when cable 10 is used and the user designates that lead acid batteries are being tested
+
 
         }
 

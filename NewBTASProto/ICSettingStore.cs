@@ -66,7 +66,7 @@ namespace NewBTASProto
             WDO = (byte)'L';
 
             //--- P ---
-            KE1 = 1;                                           //KE1 is defined at the beginning of this subroutine: 0=query, 1=data, 2=command, 3=data/command
+            KE1 = 0;                                           //KE1 is defined at the beginning of this subroutine: 0=query, 1=data, 2=command, 3=data/command
             //query: read status and data only
             //send Battery Test Profile programming parameters
             //command: issue a command (start,stop, reset)

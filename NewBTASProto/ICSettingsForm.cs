@@ -142,7 +142,7 @@ namespace NewBTASProto
 
         private void button1_Click(object sender, EventArgs e)
         {
-            // reset KE1
+            // set KE1 to data
             GlobalVars.ICSettings[comboBox1.SelectedIndex].KE1 = (byte) 1;
             // update KM1
             GlobalVars.ICSettings[comboBox1.SelectedIndex].KM1 = (byte)(testMode[comboBox2.Text] + 48);
@@ -213,6 +213,16 @@ namespace NewBTASProto
 
             //Update the output string value
             GlobalVars.ICSettings[comboBox1.SelectedIndex].UpdateOutText();
+            
+            int inVal = comboBox1.SelectedIndex;
+            //now we are going to create a thread to set KE1 back to data mode after 15 seconds
+            ThreadPool.QueueUserWorkItem(s =>
+            {
+                Thread.Sleep(15000);
+                // set KE1 to 1 ("query")
+                GlobalVars.ICSettings[inVal].KE1 = (byte) 0;
+                GlobalVars.ICSettings[inVal].UpdateOutText();
+            }, inVal);                     // end thread
 
         }
 
@@ -230,8 +240,9 @@ namespace NewBTASProto
             ThreadPool.QueueUserWorkItem(s =>
             {
                 Thread.Sleep(15000);
-                // set KE1 to 1 ("data")
-                GlobalVars.ICSettings[inVal].KE1 = (byte) 1;
+                // set KE1 to 1 ("query")
+                GlobalVars.ICSettings[inVal].KE1 = (byte) 0;
+                GlobalVars.ICSettings[inVal].UpdateOutText();
             },inVal);                     // end thread
 
         }

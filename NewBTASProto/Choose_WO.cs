@@ -112,5 +112,27 @@ namespace NewBTASProto
             this.Dispose();
         }
 
+        private void dataGridView1_DoubleClick(object sender, EventArgs e)
+        {
+            string temp = "";
+            int count = 0;
+
+            foreach (DataGridViewRow row in dataGridView1.SelectedRows)
+            {
+                count++;
+                if (count > 3)
+                {
+                    MessageBox.Show("Maximum of 3 Work Orders Per Channel!");
+                    break;
+                }
+                temp += dataGridView1[0, row.Index].Value + " ";
+
+            }
+
+
+            ((Main_Form)this.Owner).updateWOC(selectedChannel, temp);
+            this.Dispose();
+        }
+
     }
 }

@@ -27,6 +27,10 @@ namespace NewBTASProto
 
         public CancellationTokenSource cPollIC;
 
+        bool check =  false;
+        int toCheck;
+        int chanNum;
+
         
 
 
@@ -75,12 +79,12 @@ namespace NewBTASProto
                             //putting the cancellation token in a often looked at place...
                             if (token.IsCancellationRequested) return;
 
-                            if ((bool)d.Rows[j][8] && (bool)d.Rows[j][4] && d.Rows[j][9] != "" )
+                            if ((bool) d.Rows[j][8] && (bool) d.Rows[j][4] && (string) d.Rows[j][9] != "" && (string) d.Rows[j][10] == "ICA")
                             {
                                 Thread.Sleep(500);
                                 try
                                 {
-                                    // send command based on the settings for the charger...
+                                    // send the short command based on the settings for the charger...
                                     ICComPort.Write(GlobalVars.ICSettings[Convert.ToInt32(d.Rows[j][9])].outText, 0, 28);
                                     // wait for a response
                                     tempBuff = ICComPort.ReadTo("Z");
@@ -108,7 +112,6 @@ namespace NewBTASProto
 
                                     Thread.Sleep(200);
 
-
                                 }
                                 catch (Exception ex)
                                 {
@@ -124,6 +127,32 @@ namespace NewBTASProto
                                     else { throw ex; }
                                 }       // end catch
                             }       // end if
+
+                            else if (check)
+                            {
+                                Thread.Sleep(500);
+                                try
+                                {
+                                    // send the short command based on the settings for the charger...
+                                    ICComPort.Write(GlobalVars.ICSettings[toCheck].outText, 0, 28);
+                                    // wait for a response
+                                    tempBuff = ICComPort.ReadTo("Z");
+                                    // if we got one then we can determine that we have an ICA
+                                    d.Rows[chanNum][10] = "ICA";
+                                    // and we don't need to check any more
+                                    check = false;
+                                    Thread.Sleep(200);
+                                }
+                                catch (Exception ex)
+                                {
+                                    if (ex is System.TimeoutException)
+                                    {
+                                        Thread.Sleep(100);
+                                    }
+                                    else { throw ex; }
+                                }       // end catch
+                            }       // end else if
+
                             else 
                             {
                                 if ((string) d.Rows[j][11] != "")
@@ -147,6 +176,24 @@ namespace NewBTASProto
 
 
         }  // end pollICs
+
+        private void checkForIC(int chargerNum, int channelNum)
+        {
+            check = true;
+            toCheck = chargerNum;
+            chanNum = channelNum;
+            // create a thread to check if we've got an IC connected at the selected address
+             ThreadPool.QueueUserWorkItem(s =>
+            {
+                // we're going to give it 3 seconds to think about it...
+                // it gets checked every other time...
+                Thread.Sleep(3000);
+                // now we'll make sure we're not looking anymore...
+                check = false;
+            }); // end thread
+
+
+        }
 
 
     }

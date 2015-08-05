@@ -48,5 +48,10 @@ namespace NewBTASProto
         /// </summary>
         public static CScanDataStore[] CScanData = new CScanDataStore[16];
 
+        /// <summary>
+        /// Indicates if we are going to automatically configure the ICs
+        /// </summary>
+        public static bool autoConfig = false;
+
     }
 }

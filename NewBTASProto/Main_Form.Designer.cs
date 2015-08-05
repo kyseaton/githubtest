@@ -108,7 +108,6 @@
             this.dischargeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.slowCharge14ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.slowCharge16ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.testToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.customChrgToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.customCapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reflexChg1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -768,7 +767,6 @@
             this.dischargeToolStripMenuItem,
             this.slowCharge14ToolStripMenuItem,
             this.slowCharge16ToolStripMenuItem,
-            this.testToolStripMenuItem1,
             this.customChrgToolStripMenuItem,
             this.customCapToolStripMenuItem,
             this.reflexChg1ToolStripMenuItem,
@@ -847,13 +845,6 @@
             this.slowCharge16ToolStripMenuItem.Text = "SlowCharge-16";
             this.slowCharge16ToolStripMenuItem.Click += new System.EventHandler(this.slowCharge16ToolStripMenuItem_Click);
             // 
-            // testToolStripMenuItem1
-            // 
-            this.testToolStripMenuItem1.Name = "testToolStripMenuItem1";
-            this.testToolStripMenuItem1.Size = new System.Drawing.Size(157, 22);
-            this.testToolStripMenuItem1.Text = "Test";
-            this.testToolStripMenuItem1.Click += new System.EventHandler(this.testToolStripMenuItem1_Click);
-            // 
             // customChrgToolStripMenuItem
             // 
             this.customChrgToolStripMenuItem.Name = "customChrgToolStripMenuItem";
@@ -895,13 +886,13 @@
             this.toolStripMenuItem2,
             this.stopTestToolStripMenuItem});
             this.cMSStartStop.Name = "cMSStartStop";
-            this.cMSStartStop.Size = new System.Drawing.Size(153, 98);
+            this.cMSStartStop.Size = new System.Drawing.Size(151, 76);
             this.cMSStartStop.Opening += new System.ComponentModel.CancelEventHandler(this.cMSStartStop_Opening);
             // 
             // startNewTestToolStripMenuItem
             // 
             this.startNewTestToolStripMenuItem.Name = "startNewTestToolStripMenuItem";
-            this.startNewTestToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.startNewTestToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
             this.startNewTestToolStripMenuItem.Text = "Start New Test";
             this.startNewTestToolStripMenuItem.Click += new System.EventHandler(this.startNewTestToolStripMenuItem_Click);
             // 
@@ -909,20 +900,20 @@
             // 
             this.resumeTestToolStripMenuItem.Enabled = false;
             this.resumeTestToolStripMenuItem.Name = "resumeTestToolStripMenuItem";
-            this.resumeTestToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.resumeTestToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
             this.resumeTestToolStripMenuItem.Text = "Resume Test";
             this.resumeTestToolStripMenuItem.Click += new System.EventHandler(this.resumeTestToolStripMenuItem_Click);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(149, 6);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(147, 6);
             // 
             // stopTestToolStripMenuItem
             // 
             this.stopTestToolStripMenuItem.Enabled = false;
             this.stopTestToolStripMenuItem.Name = "stopTestToolStripMenuItem";
-            this.stopTestToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.stopTestToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
             this.stopTestToolStripMenuItem.Text = "Stop Test";
             this.stopTestToolStripMenuItem.Click += new System.EventHandler(this.stopTestToolStripMenuItem_Click);
             // 
@@ -1275,7 +1266,6 @@
         private System.Windows.Forms.ToolStripMenuItem dischargeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem slowCharge14ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem slowCharge16ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem testToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem customChrgToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem customCapToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem reflexChg1ToolStripMenuItem;

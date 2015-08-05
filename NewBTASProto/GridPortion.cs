@@ -207,19 +207,31 @@ namespace NewBTASProto
                 {
                     d.Rows[e.RowIndex][e.ColumnIndex] = false;
                     d.Rows[e.RowIndex][11] = "";
+                    d.Rows[e.RowIndex][10] = "";
+
+
                 }
                 else
                 {
+                    
+
+
                     d.Rows[e.RowIndex][e.ColumnIndex] = true;
-                    if (d.Rows[e.RowIndex][9] == "")
+                    if ((string) d.Rows[e.RowIndex][9] == "")
                     {
                         MessageBox.Show("You Still Need to Select a Charger ID Number");
+                    }
+                    else
+                    {
+                        checkForIC(int.Parse((string)d.Rows[e.RowIndex][9]),e.RowIndex);
                     }
                 }
             }
 
             dataGridView1.ClearSelection();
         }
+
+
 
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {

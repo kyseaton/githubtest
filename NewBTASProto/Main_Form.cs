@@ -526,7 +526,7 @@ namespace NewBTASProto
         {
             for (int i = 0; i < 16; i++)
             {
-                if (d.Rows[i][9] == "0" && i != dataGridView1.CurrentRow.Index)
+                if ((string) d.Rows[i][9] == "0" && i != dataGridView1.CurrentRow.Index)
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
@@ -540,6 +540,13 @@ namespace NewBTASProto
             }
             // otherwise we'll proceed as normal...
             d.Rows[dataGridView1.CurrentRow.Index][9] = "0";
+
+            // also check for a charger if the channel is linked...
+            if ((bool) d.Rows[dataGridView1.CurrentRow.Index][8] == true)
+            {
+                checkForIC(int.Parse((string)d.Rows[dataGridView1.CurrentRow.Index][9]), dataGridView1.CurrentRow.Index);
+            }
+
         }
 
         private void toolStripMenuItem8_Click(object sender, EventArgs e)
@@ -560,6 +567,12 @@ namespace NewBTASProto
             }
             // otherwise we'll proceed as normal...
             d.Rows[dataGridView1.CurrentRow.Index][9] = "1";
+            
+            // also check for a charger if the channel is linked...
+            if ((bool)d.Rows[dataGridView1.CurrentRow.Index][8] == true)
+            {
+                checkForIC(int.Parse((string)d.Rows[dataGridView1.CurrentRow.Index][9]), dataGridView1.CurrentRow.Index);
+            }
         }
 
         private void toolStripMenuItem9_Click(object sender, EventArgs e)
@@ -580,6 +593,12 @@ namespace NewBTASProto
             }
             // otherwise we'll proceed as normal...
             d.Rows[dataGridView1.CurrentRow.Index][9] = "2";
+
+            // also check for a charger if the channel is linked...
+            if ((bool)d.Rows[dataGridView1.CurrentRow.Index][8] == true)
+            {
+                checkForIC(int.Parse((string)d.Rows[dataGridView1.CurrentRow.Index][9]), dataGridView1.CurrentRow.Index);
+            }
         }
 
         private void toolStripMenuItem10_Click(object sender, EventArgs e)
@@ -600,6 +619,12 @@ namespace NewBTASProto
             }
             // otherwise we'll proceed as normal...
             d.Rows[dataGridView1.CurrentRow.Index][9] = "3";
+
+            // also check for a charger if the channel is linked...
+            if ((bool)d.Rows[dataGridView1.CurrentRow.Index][8] == true)
+            {
+                checkForIC(int.Parse((string)d.Rows[dataGridView1.CurrentRow.Index][9]), dataGridView1.CurrentRow.Index);
+            }
         }
 
         private void toolStripMenuItem11_Click(object sender, EventArgs e)
@@ -620,6 +645,12 @@ namespace NewBTASProto
             }
             // otherwise we'll proceed as normal...
             d.Rows[dataGridView1.CurrentRow.Index][9] = "4";
+
+            // also check for a charger if the channel is linked...
+            if ((bool)d.Rows[dataGridView1.CurrentRow.Index][8] == true)
+            {
+                checkForIC(int.Parse((string)d.Rows[dataGridView1.CurrentRow.Index][9]), dataGridView1.CurrentRow.Index);
+            }
         }
 
         private void toolStripMenuItem12_Click(object sender, EventArgs e)
@@ -640,6 +671,12 @@ namespace NewBTASProto
             }
             // otherwise we'll proceed as normal...
             d.Rows[dataGridView1.CurrentRow.Index][9] = "5";
+
+            // also check for a charger if the channel is linked...
+            if ((bool)d.Rows[dataGridView1.CurrentRow.Index][8] == true)
+            {
+                checkForIC(int.Parse((string)d.Rows[dataGridView1.CurrentRow.Index][9]), dataGridView1.CurrentRow.Index);
+            }
         }
 
         private void toolStripMenuItem13_Click(object sender, EventArgs e)
@@ -660,6 +697,12 @@ namespace NewBTASProto
             }
             // otherwise we'll proceed as normal...
             d.Rows[dataGridView1.CurrentRow.Index][9] = "6";
+
+            // also check for a charger if the channel is linked...
+            if ((bool)d.Rows[dataGridView1.CurrentRow.Index][8] == true)
+            {
+                checkForIC(int.Parse((string)d.Rows[dataGridView1.CurrentRow.Index][9]), dataGridView1.CurrentRow.Index);
+            }
         }
 
         private void toolStripMenuItem14_Click(object sender, EventArgs e)
@@ -680,6 +723,12 @@ namespace NewBTASProto
             }
             // otherwise we'll proceed as normal...
             d.Rows[dataGridView1.CurrentRow.Index][9] = "7";
+
+            // also check for a charger if the channel is linked...
+            if ((bool)d.Rows[dataGridView1.CurrentRow.Index][8] == true)
+            {
+                checkForIC(int.Parse((string)d.Rows[dataGridView1.CurrentRow.Index][9]), dataGridView1.CurrentRow.Index);
+            }
         }
 
         private void toolStripMenuItem15_Click(object sender, EventArgs e)
@@ -700,6 +749,12 @@ namespace NewBTASProto
             }
             // otherwise we'll proceed as normal...
             d.Rows[dataGridView1.CurrentRow.Index][9] = "8";
+
+            // also check for a charger if the channel is linked...
+            if ((bool)d.Rows[dataGridView1.CurrentRow.Index][8] == true)
+            {
+                checkForIC(int.Parse((string)d.Rows[dataGridView1.CurrentRow.Index][9]), dataGridView1.CurrentRow.Index);
+            }
         }
 
         private void toolStripMenuItem16_Click(object sender, EventArgs e)
@@ -720,6 +775,12 @@ namespace NewBTASProto
             }
             // otherwise we'll proceed as normal...
             d.Rows[dataGridView1.CurrentRow.Index][9] = "9";
+
+            // also check for a charger if the channel is linked...
+            if ((bool)d.Rows[dataGridView1.CurrentRow.Index][8] == true)
+            {
+                checkForIC(int.Parse((string)d.Rows[dataGridView1.CurrentRow.Index][9]), dataGridView1.CurrentRow.Index);
+            }
         }
 
         private void toolStripMenuItem17_Click(object sender, EventArgs e)
@@ -740,6 +801,12 @@ namespace NewBTASProto
             }
             // otherwise we'll proceed as normal...
             d.Rows[dataGridView1.CurrentRow.Index][9] = "10";
+
+            // also check for a charger if the channel is linked...
+            if ((bool)d.Rows[dataGridView1.CurrentRow.Index][8] == true)
+            {
+                checkForIC(int.Parse((string)d.Rows[dataGridView1.CurrentRow.Index][9]), dataGridView1.CurrentRow.Index);
+            }
         }
 
         private void toolStripMenuItem18_Click(object sender, EventArgs e)
@@ -760,6 +827,12 @@ namespace NewBTASProto
             }
             // otherwise we'll proceed as normal...
             d.Rows[dataGridView1.CurrentRow.Index][9] = "11";
+
+            // also check for a charger if the channel is linked...
+            if ((bool)d.Rows[dataGridView1.CurrentRow.Index][8] == true)
+            {
+                checkForIC(int.Parse((string)d.Rows[dataGridView1.CurrentRow.Index][9]), dataGridView1.CurrentRow.Index);
+            }
         }
 
         private void toolStripMenuItem19_Click(object sender, EventArgs e)
@@ -780,6 +853,12 @@ namespace NewBTASProto
             }
             // otherwise we'll proceed as normal...
             d.Rows[dataGridView1.CurrentRow.Index][9] = "12";
+
+            // also check for a charger if the channel is linked...
+            if ((bool)d.Rows[dataGridView1.CurrentRow.Index][8] == true)
+            {
+                checkForIC(int.Parse((string)d.Rows[dataGridView1.CurrentRow.Index][9]), dataGridView1.CurrentRow.Index);
+            }
         }
 
         private void toolStripMenuItem20_Click(object sender, EventArgs e)
@@ -800,6 +879,12 @@ namespace NewBTASProto
             }
             // otherwise we'll proceed as normal...
             d.Rows[dataGridView1.CurrentRow.Index][9] = "13";
+
+            // also check for a charger if the channel is linked...
+            if ((bool)d.Rows[dataGridView1.CurrentRow.Index][8] == true)
+            {
+                checkForIC(int.Parse((string)d.Rows[dataGridView1.CurrentRow.Index][9]), dataGridView1.CurrentRow.Index);
+            }
         }
 
         private void toolStripMenuItem21_Click(object sender, EventArgs e)
@@ -820,6 +905,12 @@ namespace NewBTASProto
             }
             // otherwise we'll proceed as normal...
             d.Rows[dataGridView1.CurrentRow.Index][9] = "14";
+
+            // also check for a charger if the channel is linked...
+            if ((bool)d.Rows[dataGridView1.CurrentRow.Index][8] == true)
+            {
+                checkForIC(int.Parse((string)d.Rows[dataGridView1.CurrentRow.Index][9]), dataGridView1.CurrentRow.Index);
+            }
         }
 
         private void toolStripMenuItem22_Click(object sender, EventArgs e)
@@ -840,6 +931,12 @@ namespace NewBTASProto
             }
             // otherwise we'll proceed as normal...
             d.Rows[dataGridView1.CurrentRow.Index][9] = "15";
+
+            // also check for a charger if the channel is linked...
+            if ((bool)d.Rows[dataGridView1.CurrentRow.Index][8] == true)
+            {
+                checkForIC(int.Parse((string)d.Rows[dataGridView1.CurrentRow.Index][9]), dataGridView1.CurrentRow.Index);
+            }
         }
 
         private void masterToolStripMenuItem_Click(object sender, EventArgs e)
