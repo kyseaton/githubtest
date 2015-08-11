@@ -63,6 +63,8 @@ namespace NewBTASProto
         public int customNoCells;
         public int batNumCable10;
 
+        public int cellsToDisplay;
+
 
 
         // the constructor pulls in the data and stores it in the familiar A
@@ -91,7 +93,7 @@ namespace NewBTASProto
                     tempPlateType = "TEMP-PLATE";
                     break;
                 case 3:
-                    tempPlateType = "none";
+                    tempPlateType = "NONE";
                     break;
                 default:
                     tempPlateType = "BAD VALUE";
@@ -106,18 +108,23 @@ namespace NewBTASProto
             {
                 case 0:
                     cellCableType = "NONE";
+                    cellsToDisplay = 0;
                     break;
                 case 1:
                     cellCableType = "20 CELLS";
+                    cellsToDisplay = 20;
                     break;
                 case 2:
                     cellCableType = "19 CELLS";
+                    cellsToDisplay = 19;
                     break;
                 case 10:
                     cellCableType = "4 BATT";
+                    cellsToDisplay = 24;
                     break;
                 case 31:
                     cellCableType = "CELL SIM";
+                    cellsToDisplay = 24;
                     break;
                 default:
                     break;

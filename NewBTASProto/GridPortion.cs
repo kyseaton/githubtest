@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO.Ports;
+using System.Threading;
 
 namespace NewBTASProto
 {
@@ -48,7 +49,7 @@ namespace NewBTASProto
                 // Add each item to the cells in the column.
                 for (int a = 0; a < 12; a++)
                 {
-                    d.Rows[i][a] = temp[a];
+                    updateD(i,a,temp[a]);
                 }
             }
         }
@@ -183,40 +184,45 @@ namespace NewBTASProto
             {
                 return;
             }
-            else if (e.ColumnIndex == 4)
+            else if (e.ColumnIndex == 4 && (bool) d.Rows[e.RowIndex][5] != true)
             {
                 if ((bool)d.Rows[e.RowIndex][e.ColumnIndex]) 
                 {
-                    d.Rows[e.RowIndex][e.ColumnIndex] = false;
+                    updateD(e.RowIndex,e.ColumnIndex,false);
                     dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor = Color.Gainsboro;
 
                 }
                 else 
                 {
-                    d.Rows[e.RowIndex][e.ColumnIndex] = true;
+                    updateD(e.RowIndex,e.ColumnIndex,true);
                     dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor = Color.Red;
                 }
             }
             else if (e.ColumnIndex == 5)
             {
-                cMSStartStop.Show(Cursor.Position);
-            }
-            else if (e.ColumnIndex == 8)
-            {
-                if ((bool)d.Rows[e.RowIndex][e.ColumnIndex])
+                if ((bool) d.Rows[e.RowIndex][e.ColumnIndex] == true)
                 {
-                    d.Rows[e.RowIndex][e.ColumnIndex] = false;
-                    d.Rows[e.RowIndex][11] = "";
-                    d.Rows[e.RowIndex][10] = "";
-
-
+                    startNewTestToolStripMenuItem.Enabled = false;
+                    stopTestToolStripMenuItem.Enabled = true;
                 }
                 else
                 {
-                    
-
-
-                    d.Rows[e.RowIndex][e.ColumnIndex] = true;
+                    startNewTestToolStripMenuItem.Enabled = true;
+                    stopTestToolStripMenuItem.Enabled = false;
+                }
+                cMSStartStop.Show(Cursor.Position);
+            }
+            else if (e.ColumnIndex == 8 && (bool)d.Rows[e.RowIndex][5] != true)
+            {
+                if ((bool)d.Rows[e.RowIndex][e.ColumnIndex])
+                {
+                    updateD(e.RowIndex,e.ColumnIndex,false);
+                    updateD(e.RowIndex,11,"");
+                    updateD(e.RowIndex,10,"");
+                }
+                else
+                {
+                    updateD(e.RowIndex,e.ColumnIndex,true);
                     if ((string) d.Rows[e.RowIndex][9] == "")
                     {
                         MessageBox.Show("You Still Need to Select a Charger ID Number");
@@ -236,25 +242,45 @@ namespace NewBTASProto
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             dataGridView1.ClearSelection();
-            switch(e.ColumnIndex)
+            // only proceed if there isn't a test running!
+            if ((bool)d.Rows[e.RowIndex][5] != true)
             {
-                case 1:
-                    Choose_WO cwo = new Choose_WO(dataGridView1.CurrentRow.Index,(string) d.Rows[dataGridView1.CurrentRow.Index][1]);
-                    cwo.Owner = this;
-                    cwo.Show();
-                    break;
-                case 2:
-                    cMSTestType.Show(Cursor.Position);
-                    break;
-                case 9:
-                    cMSChargerChannel.Show(Cursor.Position);
-                    break;
-            case 10:
-                    cMSChargerType.Show(Cursor.Position);
-                    break;
-            }  // end switch
+                switch (e.ColumnIndex)
+                {
+                    case 1:
+                        Choose_WO cwo = new Choose_WO(dataGridView1.CurrentRow.Index, (string)d.Rows[dataGridView1.CurrentRow.Index][1]);
+                        cwo.Owner = this;
+                        cwo.Show();
+                        break;
+                    case 2:
+                        cMSTestType.Show(Cursor.Position);
+                        break;
+                    case 9:
+                        cMSChargerChannel.Show(Cursor.Position);
+                        break;
+                    case 10:
+                        cMSChargerType.Show(Cursor.Position);
+                        break;
+                }  // end switch
+            }
             
         }
+
+        //////////////////////////////////////////////////////////////////////locking stuff////////////////////////////
+        private readonly object dLock = new object();
+
+        private void updateD(int r, int c, object inVal)
+        {
+            lock (dLock)
+            {
+
+                d.Rows[r][c] = inVal;
+
+            }
+        }
+
+
+
 
     }
 }

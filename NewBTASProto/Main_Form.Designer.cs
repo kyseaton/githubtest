@@ -50,6 +50,9 @@
             this.fastReadingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.debugModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.highlightCurrentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.automaticallyConfigureChargerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.chargerConfigurationInterfaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.selectTemperatureUnitsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.centigradeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -291,7 +294,10 @@
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fastReadingsToolStripMenuItem,
             this.debugModeToolStripMenuItem,
-            this.highlightCurrentToolStripMenuItem});
+            this.highlightCurrentToolStripMenuItem,
+            this.automaticallyConfigureChargerToolStripMenuItem,
+            this.toolStripSeparator5,
+            this.chargerConfigurationInterfaceToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
@@ -299,21 +305,40 @@
             // fastReadingsToolStripMenuItem
             // 
             this.fastReadingsToolStripMenuItem.Name = "fastReadingsToolStripMenuItem";
-            this.fastReadingsToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.fastReadingsToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
             this.fastReadingsToolStripMenuItem.Text = "Fast Readings";
             // 
             // debugModeToolStripMenuItem
             // 
             this.debugModeToolStripMenuItem.Name = "debugModeToolStripMenuItem";
-            this.debugModeToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.debugModeToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
             this.debugModeToolStripMenuItem.Text = "Debug Mode";
             // 
             // highlightCurrentToolStripMenuItem
             // 
             this.highlightCurrentToolStripMenuItem.Name = "highlightCurrentToolStripMenuItem";
-            this.highlightCurrentToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.highlightCurrentToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
             this.highlightCurrentToolStripMenuItem.Text = "Highlight Current";
             this.highlightCurrentToolStripMenuItem.Click += new System.EventHandler(this.highlightCurrentToolStripMenuItem_Click);
+            // 
+            // automaticallyConfigureChargerToolStripMenuItem
+            // 
+            this.automaticallyConfigureChargerToolStripMenuItem.Name = "automaticallyConfigureChargerToolStripMenuItem";
+            this.automaticallyConfigureChargerToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
+            this.automaticallyConfigureChargerToolStripMenuItem.Text = "Automatically Configure Charger";
+            this.automaticallyConfigureChargerToolStripMenuItem.Click += new System.EventHandler(this.automaticallyConfigureChargerToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(246, 6);
+            // 
+            // chargerConfigurationInterfaceToolStripMenuItem
+            // 
+            this.chargerConfigurationInterfaceToolStripMenuItem.Name = "chargerConfigurationInterfaceToolStripMenuItem";
+            this.chargerConfigurationInterfaceToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
+            this.chargerConfigurationInterfaceToolStripMenuItem.Text = "Charger Configuration Interface";
+            this.chargerConfigurationInterfaceToolStripMenuItem.Click += new System.EventHandler(this.chargerConfigurationInterfaceToolStripMenuItem_Click);
             // 
             // optionsToolStripMenuItem
             // 
@@ -589,6 +614,8 @@
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(135, 21);
             this.comboBox1.TabIndex = 8;
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            this.comboBox1.SelectionChangeCommitted += new System.EventHandler(this.comboBox1_SelectionChangeCommitted);
             // 
             // label9
             // 
@@ -773,7 +800,7 @@
             this.toolStripMenuItem4,
             this.clearToolStripMenuItem2});
             this.cMSTestType.Name = "cMSTestType";
-            this.cMSTestType.Size = new System.Drawing.Size(158, 340);
+            this.cMSTestType.Size = new System.Drawing.Size(158, 318);
             // 
             // asReceivedToolStripMenuItem
             // 
@@ -1306,6 +1333,9 @@
         private System.Windows.Forms.ToolStripMenuItem clearToolStripMenuItem2;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.ToolStripMenuItem automaticallyConfigureChargerToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+        private System.Windows.Forms.ToolStripMenuItem chargerConfigurationInterfaceToolStripMenuItem;
     }
 }
 

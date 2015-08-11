@@ -51,7 +51,12 @@ namespace NewBTASProto
         /// <summary>
         /// Indicates if we are going to automatically configure the ICs
         /// </summary>
-        public static bool autoConfig = false;
+        public static bool autoConfig;
+
+        /// <summary>
+        /// Stores the Current Technician
+        /// </summary>
+        public static string currentTech;
 
     }
 }

@@ -219,7 +219,7 @@ namespace NewBTASProto
             ThreadPool.QueueUserWorkItem(s =>
             {
                 Thread.Sleep(15000);
-                // set KE1 to 1 ("query")
+                // set KE1 to 0 ("data")
                 GlobalVars.ICSettings[inVal].KE1 = (byte) 0;
                 GlobalVars.ICSettings[inVal].UpdateOutText();
             }, inVal);                     // end thread

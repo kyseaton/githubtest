@@ -127,11 +127,25 @@ namespace NewBTASProto
                                             };
                                             this.chart1.Series.Add(series1);
 
-                                            for (int i = 0; i < 24; i++)
+                                            int type = 4;
+
+                                            if ((string) d.Rows[dataGridView1.CurrentRow.Index][2] == "As Received" ||
+                                                (string)d.Rows[dataGridView1.CurrentRow.Index][2] == "Capacity-1" ||
+                                                (string)d.Rows[dataGridView1.CurrentRow.Index][2] == "Test" ||
+                                                (string)d.Rows[dataGridView1.CurrentRow.Index][2] == "Custom Cap")
+                                            {
+                                                type = 2;
+                                            }
+                                            else if ((string)d.Rows[dataGridView1.CurrentRow.Index][2] == "Discharge")
+                                            {
+                                                type = 0;
+                                            }
+
+                                            for (int i = 0; i < GlobalVars.CScanData[dataGridView1.CurrentRow.Index].cellsToDisplay; i++)
                                             {
                                                 series1.Points.AddXY(i + 1, testData.orderedCells[i]);
                                                 // color test
-                                                series1.Points[i].Color = pointColorMain(0, 1, testData.orderedCells[23 - i], 4);
+                                                series1.Points[i].Color = pointColorMain(0, 1, testData.orderedCells[i], type);
                                             }
                                             chart1.Invalidate();
                                             chart1.ChartAreas[0].RecalculateAxesScale();
@@ -149,7 +163,7 @@ namespace NewBTASProto
                                             tempText += "Current#1:  " + testData.currentOne.ToString("00.00") + Environment.NewLine;
                                             tempText += "Current#2:  " + testData.currentTwo.ToString("00.00") + Environment.NewLine;
 
-                                            for (int i = 0; i < 24; i++)
+                                            for (int i = 0; i < GlobalVars.CScanData[dataGridView1.CurrentRow.Index].cellsToDisplay; i++)
                                             {
                                                 tempText += "Cell #" + (i + 1).ToString() + ":  " + testData.orderedCells[i].ToString("0.000") + Environment.NewLine;
                                             }
@@ -187,7 +201,18 @@ namespace NewBTASProto
                                     }
                                 }
                             }// end if for selected case
-                            
+                            // the channel is not in use. clear everything!
+                            else
+                            {
+                                this.Invoke((MethodInvoker)delegate
+                                {
+                                    chart1.Series.Clear();
+                                    chart1.Series.Clear();
+                                    chart1.Invalidate();
+                                    textBox1.Text = "";
+                                });
+
+                            }
 
 
                             // now look at all of the other cases to up date the label after a little break...
@@ -377,6 +402,7 @@ namespace NewBTASProto
                     Min4 = 11.7;
                     Max = 1.25;
                     break;
+                // this is for charging Nicads
                 case 4:
                     Min1 = 0.1;
                     Min2 = 1.2;

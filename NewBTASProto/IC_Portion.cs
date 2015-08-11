@@ -10,7 +10,6 @@ using System.Windows.Forms;
 using System.IO.Ports;
 using System.Threading;
 using System.Windows.Forms.DataVisualization.Charting;
-using System.Text;
 
 namespace NewBTASProto
 {
@@ -27,9 +26,13 @@ namespace NewBTASProto
 
         public CancellationTokenSource cPollIC;
 
+        //for checking the IC when selected
         bool check =  false;
         int toCheck;
         int chanNum;
+
+        //for critical operations (Start,Stop, etc)
+        bool [] criticalNum = new bool[16];
 
         
 
@@ -99,11 +102,11 @@ namespace NewBTASProto
                                     {
                                         if (testData.online == true)
                                         {
-                                            d.Rows[j][11] = testData.runStatus;    
+                                            updateD(j,11,testData.runStatus);    
                                         }
                                         else
                                         {
-                                            d.Rows[j][11] = "offline!"; 
+                                            updateD(j,11,"offline!"); 
                                         }
                                         
                                         rtbIncoming.Text = j.ToString() + "  :  " + tempBuff;
@@ -127,8 +130,16 @@ namespace NewBTASProto
                                     else { throw ex; }
                                 }       // end catch
                             }       // end if
+                                
+                            else 
+                            {
+                                if ((string) d.Rows[j][11] != "")
+                                {
+                                    updateD(j,11,"");
+                                } 
+                            }
 
-                            else if (check)
+                            if (check)
                             {
                                 Thread.Sleep(500);
                                 try
@@ -138,7 +149,7 @@ namespace NewBTASProto
                                     // wait for a response
                                     tempBuff = ICComPort.ReadTo("Z");
                                     // if we got one then we can determine that we have an ICA
-                                    d.Rows[chanNum][10] = "ICA";
+                                    updateD(chanNum,10,"ICA");
                                     // and we don't need to check any more
                                     check = false;
                                     Thread.Sleep(200);
@@ -153,13 +164,36 @@ namespace NewBTASProto
                                 }       // end catch
                             }       // end else if
 
-                            else 
+                            // we need to check for critical operation also!
+                            for(int i = 0;i < 16; i++)
                             {
-                                if ((string) d.Rows[j][11] != "")
+                                if (criticalNum[i] == true)
                                 {
-                                    d.Rows[j][11] = "";
-                                } 
-                            }
+                                    try
+                                    {
+                                        Thread.Sleep(500);
+                                        // send the short command based on the settings for the charger...
+                                        ICComPort.Write(GlobalVars.ICSettings[i].outText, 0, 28);
+                                        // wait for a response
+                                        tempBuff = ICComPort.ReadTo("Z");
+                                        // and we don't need to check any more
+                                        this.Invoke((MethodInvoker)delegate
+                                        {
+                                            rtbIncoming.Text = "Critical  " + i.ToString() + "  :  " + tempBuff;
+                                        });
+                                        Thread.Sleep(200);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        if (ex is System.TimeoutException)
+                                        {
+                                            Thread.Sleep(100);
+                                        }
+                                        else { throw ex; }
+                                    }       // end catch
+                                } // end if
+                            }// end for
+
                         }           // end for
                     }               // end try
                     catch (Exception ex)

@@ -84,13 +84,89 @@ namespace NewBTASProto
                 myAccessConn.Close();
                 return;
             }
+
+
+            // Now We'll pull in the  AutoConfig setting which is located in ProgramSettings
+            try
+            {
+                // Load the Comconfig table...
+                strAccessSelect = "SELECT * FROM ProgramSettings WHERE SettingName='AutoConfigCharger'";
+                DataSet progSettings = new DataSet();
+                OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                myDataAdapter.Fill(progSettings, "progSettings");
+                if (progSettings.Tables[0].Rows.Count < 1)
+                {
+                    // we need to insert
+                    string strUpdateCMD = "INSERT INTO ProgramSettings (SettingName,SettingValue) VALUES ('AutoConfigCharger','false');";
+                    myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
+                    myAccessCommand.ExecuteNonQuery();
+                    // don't forget to set the global!
+                    GlobalVars.autoConfig = false;
+                }
+                else
+                {
+                    // read what we got!
+                    if ((string) progSettings.Tables[0].Rows[0][2] == "False")
+                    {
+                        GlobalVars.autoConfig = false;
+                    }
+                    else
+                    {
+                        GlobalVars.autoConfig = true;
+                    }
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                //MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                myAccessConn.Close();
+                return;
+            }
+
+            // Now We'll pull in the current tech setting which is located in ProgramSettings
+            try
+            {
+                // Load the Comconfig table...
+                strAccessSelect = "SELECT * FROM ProgramSettings WHERE SettingName='CurrentTech'";
+                DataSet progSettings = new DataSet();
+                OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                myDataAdapter.Fill(progSettings, "progSettings");
+                if (progSettings.Tables[0].Rows.Count < 1)
+                {
+                    // we need to insert
+                    string strUpdateCMD = "INSERT INTO ProgramSettings (SettingName,SettingValue) VALUES ('CurrentTech','Technician');";
+                    myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
+                    myAccessCommand.ExecuteNonQuery();
+                    // don't forget to set the global!
+                    GlobalVars.currentTech = "Technician";
+                }
+                else
+                {
+                    // read what we got!
+                    GlobalVars.currentTech = (string) progSettings.Tables[0].Rows[0][2];
+                }
+
+            }
+            catch (Exception ex)
+            {
+                //MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                myAccessConn.Close();
+                return;
+            }
+
+
             finally
             {
                 myAccessConn.Close();
             }
 
-            //This section will pull in the settings for the chargers
-            // TODO For now there is not DB, needs to be added
+            //This section is here to initialize the ICSettings array, which will later be filled either via the manual interface or the automatic charger programming routine
             for (int num = 0; num < 16; num++)
             {
                 GlobalVars.ICSettings[num] = new ICSettingStore(num);

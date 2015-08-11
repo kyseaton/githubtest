@@ -85,6 +85,7 @@ namespace NewBTASProto
             this.comboBox1.DisplayMember = "OperatorName";
             this.comboBox1.ValueMember = "OperatorName";
             this.comboBox1.DataSource = operators.Tables["Operators"];
+            comboBox1.SelectedValue = GlobalVars.currentTech;
 
 
         }
@@ -104,6 +105,11 @@ namespace NewBTASProto
 
             label10.Text = GlobalVars.businessName;
 
+
+            if (GlobalVars.autoConfig) { this.automaticallyConfigureChargerToolStripMenuItem.Checked = true; }
+            else { this.automaticallyConfigureChargerToolStripMenuItem.Checked = false; }
+
+            this.comboBox1.SelectedValue = GlobalVars.currentTech;
 
         }
 
@@ -172,6 +178,56 @@ namespace NewBTASProto
             try
             {
                 strUpdateCMD = "UPDATE Comconfig SET Comm1='" + GlobalVars.CSCANComPort + "', Comm2='" + GlobalVars.ICComPort + "';";
+                myAccessConn = new OleDbConnection(strAccessConn);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                return;
+            }
+            try
+            {
+                OleDbCommand myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
+
+                myAccessConn.Open();
+                myAccessCommand.ExecuteNonQuery();
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: Failed to store new data in the DataBase.\n" + ex.Message);
+                return;
+            }
+
+            // And the auto config settings!
+            try
+            {
+                strUpdateCMD = "UPDATE ProgramSettings SET SettingValue='" + GlobalVars.autoConfig.ToString() + "' WHERE SettingName='AutoConfigCharger';";
+                myAccessConn = new OleDbConnection(strAccessConn);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                return;
+            }
+            try
+            {
+                OleDbCommand myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
+
+                myAccessConn.Open();
+                myAccessCommand.ExecuteNonQuery();
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: Failed to store new data in the DataBase.\n" + ex.Message);
+                return;
+            }
+
+            // And the current tech settings!
+            try
+            {
+                strUpdateCMD = "UPDATE ProgramSettings SET SettingValue='" + GlobalVars.currentTech + "' WHERE SettingName='CurrentTech';";
                 myAccessConn = new OleDbConnection(strAccessConn);
             }
             catch (Exception ex)
@@ -995,7 +1051,7 @@ namespace NewBTASProto
 
         private void stopTestToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Stop Test Selected.  Needs to be implemented...");
+            cRunTest[dataGridView1.CurrentRow.Index].Cancel(); 
         }
 
         private void viewEditDeleteWorkOrdersToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1159,6 +1215,45 @@ namespace NewBTASProto
             f2.Owner = this;
             f2.Show();
 
+        }
+
+        private void automaticallyConfigureChargerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (automaticallyConfigureChargerToolStripMenuItem.Checked == false)
+            {
+                automaticallyConfigureChargerToolStripMenuItem.Checked = true;
+                GlobalVars.autoConfig = true;
+            }
+            else
+            {
+                automaticallyConfigureChargerToolStripMenuItem.Checked = false;
+                GlobalVars.autoConfig = false;
+            }
+        }
+
+        private void chargerConfigurationInterfaceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormCollection fc = Application.OpenForms;
+
+            foreach (Form frm in fc)
+            {
+                if (frm is ICSettingsForm)
+                {
+                    return;
+                }
+            }
+            ICSettingsForm f2 = new ICSettingsForm();
+            f2.Owner = this;
+            f2.Show();
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+        }
+
+        private void comboBox1_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            GlobalVars.currentTech = (string)comboBox1.SelectedValue;
         }
 
 
