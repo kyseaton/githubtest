@@ -12,7 +12,7 @@ using System.Threading;
 
 namespace NewBTASProto
 {
-
+    
     public partial class Main_Form : Form
     {
         /// <summary>
@@ -203,12 +203,21 @@ namespace NewBTASProto
                 if ((bool) d.Rows[e.RowIndex][e.ColumnIndex] == true)
                 {
                     startNewTestToolStripMenuItem.Enabled = false;
+                    resumeTestToolStripMenuItem.Enabled = false;
                     stopTestToolStripMenuItem.Enabled = true;
                 }
                 else
                 {
                     startNewTestToolStripMenuItem.Enabled = true;
                     stopTestToolStripMenuItem.Enabled = false;
+                    if ((string)d.Rows[e.RowIndex][6] == "")
+                    {
+                        resumeTestToolStripMenuItem.Enabled = false;
+                    }
+                    else
+                    {
+                        resumeTestToolStripMenuItem.Enabled = true;
+                    }
                 }
                 cMSStartStop.Show(Cursor.Position);
             }
@@ -217,8 +226,6 @@ namespace NewBTASProto
                 if ((bool)d.Rows[e.RowIndex][e.ColumnIndex])
                 {
                     updateD(e.RowIndex,e.ColumnIndex,false);
-                    updateD(e.RowIndex,11,"");
-                    updateD(e.RowIndex,10,"");
                 }
                 else
                 {
@@ -232,6 +239,7 @@ namespace NewBTASProto
                         checkForIC(int.Parse((string)d.Rows[e.RowIndex][9]),e.RowIndex);
                     }
                 }
+
             }
 
             dataGridView1.ClearSelection();
@@ -256,10 +264,16 @@ namespace NewBTASProto
                         cMSTestType.Show(Cursor.Position);
                         break;
                     case 9:
-                        cMSChargerChannel.Show(Cursor.Position);
+                        if((bool)d.Rows[e.RowIndex][8] != true || (string) d.Rows[e.RowIndex][9] == "")
+                        {
+                            cMSChargerChannel.Show(Cursor.Position);
+                        }
                         break;
                     case 10:
-                        cMSChargerType.Show(Cursor.Position);
+                        if ((bool)d.Rows[e.RowIndex][8] != true)
+                        {
+                            cMSChargerType.Show(Cursor.Position);                            
+                        }
                         break;
                 }  // end switch
             }

@@ -17,7 +17,8 @@ namespace NewBTASProto
     public partial class Main_Form : Form
     {
 
-        
+        [DllImport("user32.dll")]
+        static extern bool LockWindowUpdate(IntPtr hWndLock);
 
         //ComPort.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(port_DataReceived_1);
         //EventArgs E = new EventArgs();
@@ -107,9 +108,11 @@ namespace NewBTASProto
 
                                     if ((bool)d.Rows[dataGridView1.CurrentRow.Index][4] && tempClick == dataGridView1.CurrentRow.Index)  // test to see if we've clicked in the mean time...
                                     {
+                                        
                                         //put this new data in the chart!
                                         this.Invoke((MethodInvoker)delegate
                                         {
+                                            
                                             // first set the cell to green
                                             dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[4].Style.BackColor = Color.Green;
 
@@ -174,8 +177,12 @@ namespace NewBTASProto
                                             tempText += "Ambient Temp:  " + testData.TP5 + Environment.NewLine;
                                             tempText += "Reference:  " + testData.ref95V + Environment.NewLine;
                                             tempText += "Program Version " + testData.programVersion;
-                                            textBox1.Text = tempText;
 
+                                            LockWindowUpdate(label1.Handle);
+                                            //label1.Text = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\n\rXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXXXX";
+                                            //Thread.Sleep(2000);
+                                            label1.Text = tempText;
+                                            LockWindowUpdate(IntPtr.Zero);
 
                                         });
                                     }
@@ -193,7 +200,10 @@ namespace NewBTASProto
                                                 dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[4].Style.BackColor = Color.Red;
                                                 chart1.Series.Clear();
                                                 chart1.Invalidate();
-                                                textBox1.Text = "";
+                                                LockWindowUpdate(this.Handle);
+                                                label1.Text = "";
+                                                LockWindowUpdate(IntPtr.Zero);
+                                                
                                             });
                                         }
                                         CSCANComPort.Close();
@@ -209,7 +219,9 @@ namespace NewBTASProto
                                     chart1.Series.Clear();
                                     chart1.Series.Clear();
                                     chart1.Invalidate();
-                                    textBox1.Text = "";
+                                    LockWindowUpdate(this.Handle);
+                                    label1.Text = "";
+                                    LockWindowUpdate(IntPtr.Zero);
                                 });
 
                             }

@@ -331,7 +331,12 @@ namespace NewBTASProto
 
         internal void updateWOC(int channel, string workOrder)
         {
-            d.Rows[channel][1] = workOrder;
+            updateD(channel,1,workOrder);
+            // clear the grid
+            updateD(channel, 2, "");
+            updateD(channel, 3, "");
+            updateD(channel, 6, "");
+            updateD(channel, 7, "");
         }
 
 
@@ -500,72 +505,100 @@ namespace NewBTASProto
 
         private void customChrgToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            d.Rows[dataGridView1.CurrentRow.Index][2] = "Custom Chg";
+            updateD(dataGridView1.CurrentRow.Index,2,"Custom Chg");
+            updateD(dataGridView1.CurrentRow.Index, 6, "");
+            updateD(dataGridView1.CurrentRow.Index, 7, "");
         }
 
         private void asReceivedToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            d.Rows[dataGridView1.CurrentRow.Index][2] = "As Received";
+            updateD(dataGridView1.CurrentRow.Index, 2, "As Received");
+            updateD(dataGridView1.CurrentRow.Index, 6, "");
+            updateD(dataGridView1.CurrentRow.Index, 7, "");
         }
 
         private void fullChargeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            d.Rows[dataGridView1.CurrentRow.Index][2] = "Full Charge-6";
+            updateD(dataGridView1.CurrentRow.Index, 2, "Full Charge-6");
+            updateD(dataGridView1.CurrentRow.Index, 6, "");
+            updateD(dataGridView1.CurrentRow.Index, 7, "");
         }
 
         private void fullCharge4ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            d.Rows[dataGridView1.CurrentRow.Index][2] = "Full Charge-4";
+            updateD(dataGridView1.CurrentRow.Index, 2, "Full Charge-4");
+            updateD(dataGridView1.CurrentRow.Index, 6, "");
+            updateD(dataGridView1.CurrentRow.Index, 7, "");
         }
 
         private void topCharge4ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            d.Rows[dataGridView1.CurrentRow.Index][2] = "Top Charge-4";
+            updateD(dataGridView1.CurrentRow.Index, 2, "Top Charge-4");
+            updateD(dataGridView1.CurrentRow.Index, 6, "");
+            updateD(dataGridView1.CurrentRow.Index, 7, "");
         }
 
         private void topCharge2ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            d.Rows[dataGridView1.CurrentRow.Index][2] = "Top Charge-2";
+            updateD(dataGridView1.CurrentRow.Index, 2, "Top Charge-2");
+            updateD(dataGridView1.CurrentRow.Index, 6, "");
+            updateD(dataGridView1.CurrentRow.Index, 7, "");
         }
 
         private void topCharge1ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            d.Rows[dataGridView1.CurrentRow.Index][2] = "Top Charge-1";
+            updateD(dataGridView1.CurrentRow.Index, 2, "Top Charge-1");
+            updateD(dataGridView1.CurrentRow.Index, 6, "");
+            updateD(dataGridView1.CurrentRow.Index, 7, "");
         }
 
         private void capacity1ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            d.Rows[dataGridView1.CurrentRow.Index][2] = "Capacity-1";
+            updateD(dataGridView1.CurrentRow.Index, 2, "Capacity-1");
+            updateD(dataGridView1.CurrentRow.Index, 6, "");
+            updateD(dataGridView1.CurrentRow.Index, 7, "");
         }
 
         private void dischargeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            d.Rows[dataGridView1.CurrentRow.Index][2] = "Discharge";
+            updateD(dataGridView1.CurrentRow.Index, 2, "Discharge");
+            updateD(dataGridView1.CurrentRow.Index, 6, "");
+            updateD(dataGridView1.CurrentRow.Index, 7, "");
         }
 
         private void slowCharge14ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            d.Rows[dataGridView1.CurrentRow.Index][2] = "Slow Charge-14";
+            updateD(dataGridView1.CurrentRow.Index, 2, "Slow Charge-14");
+            updateD(dataGridView1.CurrentRow.Index, 6, "");
+            updateD(dataGridView1.CurrentRow.Index, 7, "");
         }
 
         private void slowCharge16ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            d.Rows[dataGridView1.CurrentRow.Index][2] = "Slow Charge-16";
+            updateD(dataGridView1.CurrentRow.Index, 2, "Slow Charge-16");
+            updateD(dataGridView1.CurrentRow.Index, 6, "");
+            updateD(dataGridView1.CurrentRow.Index, 7, "");
         }
 
         private void testToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            d.Rows[dataGridView1.CurrentRow.Index][2] = "Test";
+            updateD(dataGridView1.CurrentRow.Index, 2, "Test");
+            updateD(dataGridView1.CurrentRow.Index, 6, "");
+            updateD(dataGridView1.CurrentRow.Index, 7, "");
         }
 
         private void customCapToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            d.Rows[dataGridView1.CurrentRow.Index][2] = "Custom Cap";
+            updateD(dataGridView1.CurrentRow.Index, 2, "Custom Cap");
+            updateD(dataGridView1.CurrentRow.Index, 6, "");
+            updateD(dataGridView1.CurrentRow.Index, 7, "");
         }
 
-        private void reflexChg1ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void constantVoltageToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            d.Rows[dataGridView1.CurrentRow.Index][2] = "Reflex Chg-1";
+            updateD(dataGridView1.CurrentRow.Index, 2, "Constant Voltage");
+            updateD(dataGridView1.CurrentRow.Index, 6, "");
+            updateD(dataGridView1.CurrentRow.Index, 7, "");
         }
 
         private void clearToolStripMenuItem2_Click(object sender, EventArgs e)
@@ -576,6 +609,10 @@ namespace NewBTASProto
         private void clearToolStripMenuItem_Click(object sender, EventArgs e)
         {
             d.Rows[dataGridView1.CurrentRow.Index][9] = "";
+
+            //make sure we clear the current test
+            updateD(dataGridView1.CurrentRow.Index, 6, "");
+            updateD(dataGridView1.CurrentRow.Index, 7, "");
         }
 
         private void toolStripMenuItem7_Click(object sender, EventArgs e)
@@ -603,6 +640,10 @@ namespace NewBTASProto
                 checkForIC(int.Parse((string)d.Rows[dataGridView1.CurrentRow.Index][9]), dataGridView1.CurrentRow.Index);
             }
 
+            //make sure we clear the current test
+            updateD(dataGridView1.CurrentRow.Index, 6, "");
+            updateD(dataGridView1.CurrentRow.Index, 7, "");
+
         }
 
         private void toolStripMenuItem8_Click(object sender, EventArgs e)
@@ -629,6 +670,10 @@ namespace NewBTASProto
             {
                 checkForIC(int.Parse((string)d.Rows[dataGridView1.CurrentRow.Index][9]), dataGridView1.CurrentRow.Index);
             }
+
+            //make sure we clear the current test
+            updateD(dataGridView1.CurrentRow.Index, 6, "");
+            updateD(dataGridView1.CurrentRow.Index, 7, "");
         }
 
         private void toolStripMenuItem9_Click(object sender, EventArgs e)
@@ -655,6 +700,10 @@ namespace NewBTASProto
             {
                 checkForIC(int.Parse((string)d.Rows[dataGridView1.CurrentRow.Index][9]), dataGridView1.CurrentRow.Index);
             }
+
+            //make sure we clear the current test
+            updateD(dataGridView1.CurrentRow.Index, 6, "");
+            updateD(dataGridView1.CurrentRow.Index, 7, "");
         }
 
         private void toolStripMenuItem10_Click(object sender, EventArgs e)
@@ -681,6 +730,10 @@ namespace NewBTASProto
             {
                 checkForIC(int.Parse((string)d.Rows[dataGridView1.CurrentRow.Index][9]), dataGridView1.CurrentRow.Index);
             }
+
+            //make sure we clear the current test
+            updateD(dataGridView1.CurrentRow.Index, 6, "");
+            updateD(dataGridView1.CurrentRow.Index, 7, "");
         }
 
         private void toolStripMenuItem11_Click(object sender, EventArgs e)
@@ -707,6 +760,10 @@ namespace NewBTASProto
             {
                 checkForIC(int.Parse((string)d.Rows[dataGridView1.CurrentRow.Index][9]), dataGridView1.CurrentRow.Index);
             }
+
+            //make sure we clear the current test
+            updateD(dataGridView1.CurrentRow.Index, 6, "");
+            updateD(dataGridView1.CurrentRow.Index, 7, "");
         }
 
         private void toolStripMenuItem12_Click(object sender, EventArgs e)
@@ -733,6 +790,10 @@ namespace NewBTASProto
             {
                 checkForIC(int.Parse((string)d.Rows[dataGridView1.CurrentRow.Index][9]), dataGridView1.CurrentRow.Index);
             }
+
+            //make sure we clear the current test
+            updateD(dataGridView1.CurrentRow.Index, 6, "");
+            updateD(dataGridView1.CurrentRow.Index, 7, "");
         }
 
         private void toolStripMenuItem13_Click(object sender, EventArgs e)
@@ -759,6 +820,10 @@ namespace NewBTASProto
             {
                 checkForIC(int.Parse((string)d.Rows[dataGridView1.CurrentRow.Index][9]), dataGridView1.CurrentRow.Index);
             }
+
+            //make sure we clear the current test
+            updateD(dataGridView1.CurrentRow.Index, 6, "");
+            updateD(dataGridView1.CurrentRow.Index, 7, "");
         }
 
         private void toolStripMenuItem14_Click(object sender, EventArgs e)
@@ -785,6 +850,10 @@ namespace NewBTASProto
             {
                 checkForIC(int.Parse((string)d.Rows[dataGridView1.CurrentRow.Index][9]), dataGridView1.CurrentRow.Index);
             }
+
+            //make sure we clear the current test
+            updateD(dataGridView1.CurrentRow.Index, 6, "");
+            updateD(dataGridView1.CurrentRow.Index, 7, "");
         }
 
         private void toolStripMenuItem15_Click(object sender, EventArgs e)
@@ -811,6 +880,10 @@ namespace NewBTASProto
             {
                 checkForIC(int.Parse((string)d.Rows[dataGridView1.CurrentRow.Index][9]), dataGridView1.CurrentRow.Index);
             }
+
+            //make sure we clear the current test
+            updateD(dataGridView1.CurrentRow.Index, 6, "");
+            updateD(dataGridView1.CurrentRow.Index, 7, "");
         }
 
         private void toolStripMenuItem16_Click(object sender, EventArgs e)
@@ -837,6 +910,10 @@ namespace NewBTASProto
             {
                 checkForIC(int.Parse((string)d.Rows[dataGridView1.CurrentRow.Index][9]), dataGridView1.CurrentRow.Index);
             }
+
+            //make sure we clear the current test
+            updateD(dataGridView1.CurrentRow.Index, 6, "");
+            updateD(dataGridView1.CurrentRow.Index, 7, "");
         }
 
         private void toolStripMenuItem17_Click(object sender, EventArgs e)
@@ -863,6 +940,10 @@ namespace NewBTASProto
             {
                 checkForIC(int.Parse((string)d.Rows[dataGridView1.CurrentRow.Index][9]), dataGridView1.CurrentRow.Index);
             }
+
+            //make sure we clear the current test
+            updateD(dataGridView1.CurrentRow.Index, 6, "");
+            updateD(dataGridView1.CurrentRow.Index, 7, "");
         }
 
         private void toolStripMenuItem18_Click(object sender, EventArgs e)
@@ -889,6 +970,10 @@ namespace NewBTASProto
             {
                 checkForIC(int.Parse((string)d.Rows[dataGridView1.CurrentRow.Index][9]), dataGridView1.CurrentRow.Index);
             }
+
+            //make sure we clear the current test
+            updateD(dataGridView1.CurrentRow.Index, 6, "");
+            updateD(dataGridView1.CurrentRow.Index, 7, "");
         }
 
         private void toolStripMenuItem19_Click(object sender, EventArgs e)
@@ -915,6 +1000,10 @@ namespace NewBTASProto
             {
                 checkForIC(int.Parse((string)d.Rows[dataGridView1.CurrentRow.Index][9]), dataGridView1.CurrentRow.Index);
             }
+
+            //make sure we clear the current test
+            updateD(dataGridView1.CurrentRow.Index, 6, "");
+            updateD(dataGridView1.CurrentRow.Index, 7, "");
         }
 
         private void toolStripMenuItem20_Click(object sender, EventArgs e)
@@ -941,6 +1030,10 @@ namespace NewBTASProto
             {
                 checkForIC(int.Parse((string)d.Rows[dataGridView1.CurrentRow.Index][9]), dataGridView1.CurrentRow.Index);
             }
+
+            //make sure we clear the current test
+            updateD(dataGridView1.CurrentRow.Index, 6, "");
+            updateD(dataGridView1.CurrentRow.Index, 7, "");
         }
 
         private void toolStripMenuItem21_Click(object sender, EventArgs e)
@@ -967,6 +1060,10 @@ namespace NewBTASProto
             {
                 checkForIC(int.Parse((string)d.Rows[dataGridView1.CurrentRow.Index][9]), dataGridView1.CurrentRow.Index);
             }
+
+            //make sure we clear the current test
+            updateD(dataGridView1.CurrentRow.Index, 6, "");
+            updateD(dataGridView1.CurrentRow.Index, 7, "");
         }
 
         private void toolStripMenuItem22_Click(object sender, EventArgs e)
@@ -993,6 +1090,10 @@ namespace NewBTASProto
             {
                 checkForIC(int.Parse((string)d.Rows[dataGridView1.CurrentRow.Index][9]), dataGridView1.CurrentRow.Index);
             }
+
+            //make sure we clear the current test
+            updateD(dataGridView1.CurrentRow.Index, 6, "");
+            updateD(dataGridView1.CurrentRow.Index, 7, "");
         }
 
         private void masterToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1012,22 +1113,38 @@ namespace NewBTASProto
 
         private void cCAToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            d.Rows[dataGridView1.CurrentRow.Index][10] = "CCA";
+            updateD(dataGridView1.CurrentRow.Index,10,"CCA");
+
+            //make sure we clear the current test
+            updateD(dataGridView1.CurrentRow.Index, 6, "");
+            updateD(dataGridView1.CurrentRow.Index, 7, "");
         }
 
         private void iCAToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            d.Rows[dataGridView1.CurrentRow.Index][10] = "ICA";
+            updateD(dataGridView1.CurrentRow.Index, 10, "ICA");
+
+            //make sure we clear the current test
+            updateD(dataGridView1.CurrentRow.Index, 6, "");
+            updateD(dataGridView1.CurrentRow.Index, 7, "");
         }
 
         private void otherToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            d.Rows[dataGridView1.CurrentRow.Index][10] = "Other";
+            updateD(dataGridView1.CurrentRow.Index, 10, "Other");
+
+            //make sure we clear the current test
+            updateD(dataGridView1.CurrentRow.Index, 6, "");
+            updateD(dataGridView1.CurrentRow.Index, 7, "");
         }
 
         private void clearToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            d.Rows[dataGridView1.CurrentRow.Index][10] = "";
+            updateD(dataGridView1.CurrentRow.Index, 10, "");
+
+            //make sure we clear the current test
+            updateD(dataGridView1.CurrentRow.Index, 6, "");
+            updateD(dataGridView1.CurrentRow.Index, 7, "");
         }
 
         private void cMSStartStop_Opening(object sender, CancelEventArgs e)
@@ -1037,7 +1154,8 @@ namespace NewBTASProto
 
         private void startNewTestToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            //clear the E-time to set the test to a new test
+            updateD(dataGridView1.CurrentRow.Index, 6, "");
             // we will run the tests on a helper thread
             // helper thread code is located in Test_Portion.cs
             RunTest();
@@ -1046,7 +1164,8 @@ namespace NewBTASProto
 
         private void resumeTestToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Resume Test Selected.  Needs to be implemented...");
+            //runtest without resetting the time!
+            RunTest();
         }
 
         private void stopTestToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1255,6 +1374,8 @@ namespace NewBTASProto
         {
             GlobalVars.currentTech = (string)comboBox1.SelectedValue;
         }
+
+  
 
 
 

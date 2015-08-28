@@ -179,6 +179,7 @@ namespace NewBTASProto
         private void SplashScreen_Shown(object sender, EventArgs e)
         {
             Load_Globals();
+            checkDB();
             tmr = new Timer();
             //set time interval 3 sec
             tmr.Interval = 3000;
@@ -186,6 +187,8 @@ namespace NewBTASProto
             tmr.Start();
             tmr.Tick += tmr_Tick;
         }
+
+
 
         void tmr_Tick(object sender, EventArgs e)
         {
@@ -236,6 +239,63 @@ namespace NewBTASProto
         {
 
         }
+
+        // this function will check the DB and update it accordingly
+        private void checkDB()
+        {
+
+            // USE this function to update the DB!
+
+
+            //// check to see if we have a "BatteryProfiles" table and create it if we don't
+            //string strAccessConn;
+            //string strAccessSelect;
+            //OleDbConnection myAccessConn;
+
+            //// create the connection
+            //try
+            //{
+            //    strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Kyle\Documents\Visual Studio 2013\Projects\NewBTASProto\BTS16NV.MDB";
+            //    myAccessConn = new OleDbConnection(strAccessConn);
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+            //    return;
+            //}
+
+            ////  open the db and try to get something out of the "BatteryProfiles" table
+            //try
+            //{
+            //    strAccessSelect = @"SELECT FIRST FROM BatteryProfiles;";
+            //    DataSet test = new DataSet();
+            //    OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+            //    OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+            //    myAccessConn.Open();
+            //    myDataAdapter.Fill(test, "test");
+
+            //}
+            //catch (Exception ex)
+            //{
+            //    myAccessConn.Close();
+            //    MessageBox.Show("You do not have a battery Profiles Table. Please convert to the new database!");
+            //    //if (ex is OleDbException)
+            //    //{
+            //    //    // we didn't find the table, so we need to create it!
+            //    //    // we need to insert
+            //    //    string strUpdateCMD = "CREATE TABLE BatteryProfiles (RecordID AutoNumber,Model Text,NCELLS Integer,MaxCellVoltage Single," +
+            //    //        "BMFR Text,BPN Text,BTECH Text,Notes Memo," +
+            //    //    ");";
+            //    //    OleDbCommand myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
+            //    //    myAccessCommand.ExecuteNonQuery();
+
+            //    //}
+            //    //else {throw ex;}
+            //}
+            
+        }
+
 
     }
 

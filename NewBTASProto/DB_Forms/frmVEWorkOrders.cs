@@ -77,6 +77,7 @@ namespace NewBTASProto
 
 
 
+
             // Set the DataSource to the DataSet, and the DataMember
             bindingSource1.DataSource = null;
             bindingSource1.DataSource = WorkOrders;
@@ -248,9 +249,17 @@ namespace NewBTASProto
                 myAccessConn.Close();
             }
 
-            max = countSet.Tables[0].AsEnumerable().Max(r => r.Field<int>("WorkOrderID"));
-            toolStripCBWorkOrderStatus.Text = "Open";
+            //if there are no work orders to load, then just set max to 1..
+            if (WorkOrders.Tables[0].Rows.Count < 1)
+            {
+                max = 1;
+            }
+            else
+            {
+                max = countSet.Tables[0].AsEnumerable().Max(r => r.Field<int>("WorkOrderID"));
+            }
 
+            toolStripCBWorkOrderStatus.Text = "Open";
         }
 
         private void bindingSource1_DataError(object sender, BindingManagerDataErrorEventArgs e)
@@ -367,7 +376,7 @@ namespace NewBTASProto
             // Open database containing all the battery data....
 
             strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Kyle\Documents\Visual Studio 2013\Projects\NewBTASProto\BTS16NV.MDB";
-            strAccessSelect = @"SELECT StepNumber,TestName,Notes FROM Tests WHERE WorkOrderNumber='" + toolStripCBWorkOrders.Text + @"'";
+            strAccessSelect = @"SELECT StepNumber,TestName,Notes FROM Tests WHERE WorkOrderNumber='" + toolStripCBWorkOrders.Text + @"' ORDER BY StepNumber ASC";
 
             
             OleDbConnection myAccessConn = null;
@@ -622,8 +631,17 @@ namespace NewBTASProto
                     {
                         //record already exist as we need to do an update
 
-                        string cmdStr = "DELETE FROM WorkOrders WHERE WorkOrderID=" + current["WorkOrderID"].ToString();
+                        // first delete the tests and scandata!
+                        string cmdStr = "DELETE FROM Tests WHERE WorkOrderNumber='" + current["WorkOrderNumber"].ToString() + "'";
                         OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
+                        cmd.ExecuteNonQuery();
+
+                        cmdStr = "DELETE FROM ScanData WHERE BWO='" + current["WorkOrderNumber"].ToString() + "'";
+                        cmd = new OleDbCommand(cmdStr, conn);
+                        cmd.ExecuteNonQuery();
+
+                        cmdStr = "DELETE FROM WorkOrders WHERE WorkOrderID=" + current["WorkOrderID"].ToString();
+                        cmd = new OleDbCommand(cmdStr, conn);
                         cmd.ExecuteNonQuery();
 
                         // Also update the binding source
@@ -663,12 +681,13 @@ namespace NewBTASProto
                     OleDbConnection conn = new OleDbConnection(connectionString);
                     conn.Open();
 
-                    // first test to see if there is a test to delete
-
-                    //there is a test to delete
-
-                    string cmdStr = "DELETE FROM Tests WHERE WorkOrderNumber='" + textBox1.Text + "' AND StepNumber='" + testList.Tables[0].Rows[testList.Tables[0].Rows.Count - 1][0] + "'";
+                    // first get rid of the scan data from the test
+                    string cmdStr = "DELETE FROM ScanData WHERE BWO='" + textBox1.Text + "' AND STEP='" + testList.Tables[0].Rows[testList.Tables[0].Rows.Count - 1][0] + "'";
                     OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
+                    cmd.ExecuteNonQuery();
+
+                    cmdStr = "DELETE FROM Tests WHERE WorkOrderNumber='" + textBox1.Text + "' AND StepNumber='" + testList.Tables[0].Rows[testList.Tables[0].Rows.Count - 1][0] + "'";
+                    cmd = new OleDbCommand(cmdStr, conn);
                     cmd.ExecuteNonQuery();
                     // Also update the test datagrid view again
                     // use another thread to dealy the call

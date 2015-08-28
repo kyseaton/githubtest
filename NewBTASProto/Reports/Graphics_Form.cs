@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
+using System.Threading;
 
 namespace NewBTASProto
 {
@@ -29,6 +30,8 @@ namespace NewBTASProto
         int type2 = 0;
         Title tt1 = new Title();
         Title tt2 = new Title();
+
+        private readonly object dataBaseLock = new object();
 
         public Graphics_Form()
         {
@@ -83,101 +86,33 @@ namespace NewBTASProto
 
         private void loadWorkOrderLists()
         {
+            comboBox1.Enabled = false;
+            comboBox1.Text = "Loading";
+            comboBox3.Enabled = false;
+            comboBox3.Text = "Loading";
 
-            string strAccessConn;
-            string strAccessSelect;
-            // Open database containing all the battery data....
-            if (checkBox2.Checked == true)
+            // do this on a helper thread!
+            ThreadPool.QueueUserWorkItem(s =>
             {
-                strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Kyle\Documents\Visual Studio 2013\Projects\NewBTASProto\BTS16NV.MDB";
-                strAccessSelect = @"SELECT WorkOrderNumber FROM WorkOrders";
-            }
-            else
-            {
-                strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Kyle\Documents\Visual Studio 2013\Projects\NewBTASProto\BTS16NV.MDB";
-                strAccessSelect = @"SELECT WorkOrderNumber FROM WorkOrders WHERE OrderStatus<>'Archived'";
-            }
+
+                string strAccessConn;
+                string strAccessSelect;
+                // Open database containing all the battery data....
+                if (checkBox2.Checked == true)
+                {
+                    strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Kyle\Documents\Visual Studio 2013\Projects\NewBTASProto\BTS16NV.MDB";
+                    strAccessSelect = @"SELECT WorkOrderNumber FROM WorkOrders";
+                }
+                else
+                {
+                    strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Kyle\Documents\Visual Studio 2013\Projects\NewBTASProto\BTS16NV.MDB";
+                    strAccessSelect = @"SELECT WorkOrderNumber FROM WorkOrders WHERE OrderStatus<>'Archived'";
+                }
 
 
             
-            DataSet workOrderList1 = new DataSet();
-            DataSet workOrderList2 = new DataSet();
-            OleDbConnection myAccessConn = null;
-            // try to open the DB
-            try
-            {
-                myAccessConn = new OleDbConnection(strAccessConn);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
-                return;
-            }
-            //  now try to access it
-            try
-            {
-                OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
-                OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
-
-                myAccessConn.Open();
-                myDataAdapter.Fill(workOrderList1, "ScanData");
-                myDataAdapter.Fill(workOrderList2, "ScanData");
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
-                return;
-            }
-            finally
-            {
-                myAccessConn.Close();
-            }
-
-            DataRow emptyRow1 = workOrderList1.Tables["ScanData"].NewRow();
-            emptyRow1["WorkOrderNumber"] = "";
-            workOrderList1.Tables["ScanData"].Rows.InsertAt(emptyRow1,0);
-
-            DataRow emptyRow2 = workOrderList2.Tables["ScanData"].NewRow();
-            emptyRow2["WorkOrderNumber"] = "";
-            workOrderList2.Tables["ScanData"].Rows.InsertAt(emptyRow2, 0);
-
-            this.comboBox1.DisplayMember = "WorkOrderNumber";
-            this.comboBox1.ValueMember = "WorkOrderNumber";
-            this.comboBox1.DataSource = workOrderList1.Tables["ScanData"];
-
-            this.comboBox3.DisplayMember = "WorkOrderNumber";
-            this.comboBox3.ValueMember = "WorkOrderNumber";
-            this.comboBox3.DataSource = workOrderList2.Tables["ScanData"];
-
-            // remember to clear everything!
-            this.comboBox2.DataSource = null;
-            this.comboBox4.DataSource = null;
-            tt1.Text = "";
-            tt2.Text = "";
-        }
-
-        private void comboBox1_SelectedValueChanged(object sender, EventArgs e)
-        {
-            chart1.Series.Clear();
-            tt1.Text = "";
-            if (comboBox1.SelectedIndex <= 0) { return; }
-            else
-            {
-                // reset cells
-                cell1 = 0;
-                // first clear the graph type comboboxes
-                comboBox5.Items.Clear();
-                comboBox5.Text = "";
-                comboBox6.Items.Clear();
-                comboBox6.Text = "";
-
-                // Open database containing all the battery data....
-                string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Kyle\Documents\Visual Studio 2013\Projects\NewBTASProto\BTS16NV.MDB";
-                string strAccessSelect = @"SELECT StepNumber,TestName, Technology, CustomNoCells FROM Tests WHERE WorkOrderNumber='" + comboBox1.Text + @"'";
-
-
-                DataSet testsPerformed = new DataSet();
+                DataSet workOrderList1 = new DataSet();
+                DataSet workOrderList2 = new DataSet();
                 OleDbConnection myAccessConn = null;
                 // try to open the DB
                 try
@@ -195,41 +130,149 @@ namespace NewBTASProto
                     OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
                     OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
 
-                    myAccessConn.Open();
-                    myDataAdapter.Fill(testsPerformed, "Tests");
+                    lock (dataBaseLock)
+                    {
+                        myAccessConn.Open();
+                        myDataAdapter.Fill(workOrderList1, "ScanData");
+                        myDataAdapter.Fill(workOrderList2, "ScanData");
+                        myAccessConn.Close();
+                    }
+
+
 
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
-                    return;
-                }
-                finally
-                {
                     myAccessConn.Close();
-                }
-
-                try
-                {
-                    DataRow emptyRow1 = testsPerformed.Tables["Tests"].NewRow();
-                    emptyRow1["TestName"] = "";
-                    testsPerformed.Tables["Tests"].Rows.InsertAt(emptyRow1, 0);
-                    testsPerformed.Tables["Tests"].Columns.Add("ForList", typeof(string), "StepNumber + ' - '+ TestName");
-
-                    this.comboBox2.DisplayMember = "ForList";
-                    this.comboBox2.ValueMember = "StepNumber";
-                    this.comboBox2.DataSource = testsPerformed.Tables["Tests"];
-
-                    // update the technology var
-                    technology1 = (int)testsPerformed.Tables["Tests"].Rows[1][2];
-                    if (Int32.Parse(testsPerformed.Tables["Tests"].Rows[1][3].ToString()) != 0) { cell1 = Int32.Parse(testsPerformed.Tables["Tests"].Rows[1][3].ToString()); }
-                }
-                catch(Exception ex)
-                {
                     MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
                     return;
                 }
-                
+
+                DataRow emptyRow1 = workOrderList1.Tables["ScanData"].NewRow();
+                emptyRow1["WorkOrderNumber"] = "";
+                workOrderList1.Tables["ScanData"].Rows.InsertAt(emptyRow1,0);
+
+                DataRow emptyRow2 = workOrderList2.Tables["ScanData"].NewRow();
+                emptyRow2["WorkOrderNumber"] = "";
+                workOrderList2.Tables["ScanData"].Rows.InsertAt(emptyRow2, 0);
+
+                this.Invoke((MethodInvoker)delegate()
+                {                
+                    this.comboBox1.DisplayMember = "WorkOrderNumber";
+                    this.comboBox1.ValueMember = "WorkOrderNumber";
+                    this.comboBox1.DataSource = workOrderList1.Tables["ScanData"];
+
+                    this.comboBox3.DisplayMember = "WorkOrderNumber";
+                    this.comboBox3.ValueMember = "WorkOrderNumber";
+                    this.comboBox3.DataSource = workOrderList2.Tables["ScanData"];
+
+                    // remember to clear everything!
+                    this.comboBox2.DataSource = null;
+                    this.comboBox4.DataSource = null;
+                    tt1.Text = "";
+                    tt2.Text = "";
+
+                    comboBox1.Enabled = true;
+                    comboBox3.Enabled = true;
+                });
+
+            }); // end thread
+        }
+
+        private void comboBox1_SelectedValueChanged(object sender, EventArgs e)
+        {
+            chart1.Series.Clear();
+            tt1.Text = "";
+            string combo1Text = comboBox1.Text;
+
+
+            if (comboBox1.SelectedIndex <= 0) { return; }
+
+            else
+            {
+                comboBox2.Enabled = false;
+                comboBox2.Text = "Loading";
+
+                // do it on a helper thread!
+                ThreadPool.QueueUserWorkItem(s =>
+                {
+                    // reset cells
+                    cell1 = 0;
+
+                    // first clear the graph type comboboxes
+                    this.Invoke((MethodInvoker)delegate()
+                    {
+                        comboBox5.Items.Clear();
+                        comboBox5.Text = "";
+                        comboBox6.Items.Clear();
+                        comboBox6.Text = "";
+                    });
+
+                    // Open database containing all the battery data....
+                    string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Kyle\Documents\Visual Studio 2013\Projects\NewBTASProto\BTS16NV.MDB";
+                    string strAccessSelect = @"SELECT StepNumber,TestName, Technology, CustomNoCells FROM Tests WHERE WorkOrderNumber='" + combo1Text + @"'";
+
+
+                    DataSet testsPerformed = new DataSet();
+                    OleDbConnection myAccessConn = null;
+                    // try to open the DB
+                    try
+                    {
+                        myAccessConn = new OleDbConnection(strAccessConn);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                        return;
+                    }
+                    //  now try to access it
+                    try
+                    {
+                        OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                        OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                        lock (dataBaseLock)
+                        {
+                            myAccessConn.Open();
+                            myDataAdapter.Fill(testsPerformed, "Tests");
+                            myAccessConn.Close();
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+                        myAccessConn.Close();
+                        MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                        return;
+                    }
+
+                    try
+                    {
+                        DataRow emptyRow1 = testsPerformed.Tables["Tests"].NewRow();
+                        emptyRow1["TestName"] = "";
+                        testsPerformed.Tables["Tests"].Rows.InsertAt(emptyRow1, 0);
+                        testsPerformed.Tables["Tests"].Columns.Add("ForList", typeof(string), "StepNumber + ' - '+ TestName");
+
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            this.comboBox2.DisplayMember = "ForList";
+                            this.comboBox2.ValueMember = "StepNumber";
+                            this.comboBox2.DataSource = testsPerformed.Tables["Tests"];
+
+                            comboBox2.Enabled = true;
+                        });
+
+                        // update the technology var
+                        technology1 = (int)testsPerformed.Tables["Tests"].Rows[1][2];
+                        if (Int32.Parse(testsPerformed.Tables["Tests"].Rows[1][3].ToString()) != 0) { cell1 = Int32.Parse(testsPerformed.Tables["Tests"].Rows[1][3].ToString()); }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                        return;
+                    }
+
+                });
 
             }
         }
@@ -237,75 +280,94 @@ namespace NewBTASProto
         {
             chart2.Series.Clear();
             tt2.Text = "";
+            string combo3Text = comboBox3.Text;
+
+
             if (comboBox3.SelectedIndex <= 0) { return; }
             else
             {
-                // reset cells
-                cell2 = 0;
-                // first clear the graph type comboboxes
-                comboBox7.Items.Clear();
-                comboBox7.Text = "";
-                comboBox8.Items.Clear();
-                comboBox8.Text = "";
-
-                // Open database containing all the battery data....
-                string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Kyle\Documents\Visual Studio 2013\Projects\NewBTASProto\BTS16NV.MDB";
-                string strAccessSelect = @"SELECT StepNumber,TestName, Technology, CustomNoCells FROM Tests WHERE WorkOrderNumber='" + comboBox3.Text + @"'";
-
-
-                DataSet testsPerformed = new DataSet();
-                OleDbConnection myAccessConn = null;
-                // try to open the DB
-                try
+                comboBox4.Enabled = false;
+                comboBox4.Text = "Loading";
+                // do it on a helper thread!
+                ThreadPool.QueueUserWorkItem(s =>
                 {
-                    myAccessConn = new OleDbConnection(strAccessConn);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
-                    return;
-                }
-                //  now try to access it
-                try
-                {
-                    OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
-                    OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+                    // reset cells
+                    cell2 = 0;
 
-                    myAccessConn.Open();
-                    myDataAdapter.Fill(testsPerformed, "Tests");
+                    // first clear the graph type comboboxes
+                    this.Invoke((MethodInvoker)delegate()
+                    {
+                        comboBox7.Items.Clear();
+                        comboBox7.Text = "";
+                        comboBox8.Items.Clear();
+                        comboBox8.Text = "";
+                    });
 
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
-                    return;
-                }
-                finally
-                {
-                    myAccessConn.Close();
-                }
+                    // Open database containing all the battery data....
+                    string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Kyle\Documents\Visual Studio 2013\Projects\NewBTASProto\BTS16NV.MDB";
+                    string strAccessSelect = @"SELECT StepNumber,TestName, Technology, CustomNoCells FROM Tests WHERE WorkOrderNumber='" + combo3Text + @"'";
 
-                try
-                {
-                    DataRow emptyRow1 = testsPerformed.Tables["Tests"].NewRow();
-                    emptyRow1["TestName"] = "";
-                    testsPerformed.Tables["Tests"].Rows.InsertAt(emptyRow1, 0);
-                    testsPerformed.Tables["Tests"].Columns.Add("ForList", typeof(string), "StepNumber + ' '+ TestName");
 
-                    this.comboBox4.DisplayMember = "ForList";
-                    this.comboBox4.ValueMember = "StepNumber";
-                    this.comboBox4.DataSource = testsPerformed.Tables["Tests"];
+                    DataSet testsPerformed = new DataSet();
+                    OleDbConnection myAccessConn = null;
+                    // try to open the DB
+                    try
+                    {
+                        myAccessConn = new OleDbConnection(strAccessConn);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                        return;
+                    }
+                    //  now try to access it
+                    try
+                    {
+                        OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                        OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
 
-                    // update the technology var
-                    technology2 = (int)testsPerformed.Tables["Tests"].Rows[1][2];
-                    if (Int32.Parse(testsPerformed.Tables["Tests"].Rows[1][3].ToString()) != 0) { cell2 = Int32.Parse(testsPerformed.Tables["Tests"].Rows[1][3].ToString()); }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
-                    return;
-                }
+                        lock (dataBaseLock)
+                        {
+                            myAccessConn.Open();
+                            myDataAdapter.Fill(testsPerformed, "Tests");
+                            myAccessConn.Close();
+                        }
 
+
+                    }
+                    catch (Exception ex)
+                    {   
+                        myAccessConn.Close();
+                        MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                        return;
+                    }
+
+                    try
+                    {
+                        DataRow emptyRow1 = testsPerformed.Tables["Tests"].NewRow();
+                        emptyRow1["TestName"] = "";
+                        testsPerformed.Tables["Tests"].Rows.InsertAt(emptyRow1, 0);
+                        testsPerformed.Tables["Tests"].Columns.Add("ForList", typeof(string), "StepNumber + ' '+ TestName");
+
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            this.comboBox4.DisplayMember = "ForList";
+                            this.comboBox4.ValueMember = "StepNumber";
+                            this.comboBox4.DataSource = testsPerformed.Tables["Tests"];
+
+                            comboBox4.Enabled = true;
+                        });
+
+                        // update the technology var
+                        technology2 = (int)testsPerformed.Tables["Tests"].Rows[1][2];
+                        if (Int32.Parse(testsPerformed.Tables["Tests"].Rows[1][3].ToString()) != 0) { cell2 = Int32.Parse(testsPerformed.Tables["Tests"].Rows[1][3].ToString()); }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                        return;
+                    }
+                });
 
             }
         }
@@ -316,297 +378,319 @@ namespace NewBTASProto
 
             chart1.Series.Clear();
             tt1.Text = "";
+
+            string combo1Text = comboBox1.Text;
+            string combo2Text = comboBox2.Text;
             if (comboBox2.SelectedIndex <= 0) { return; }
             else
             {
-                // FIRST CLEAR THE OLD DATA SET!
-                graph1Set.Clear();
-                // Open database containing all the battery data....
-                string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Kyle\Documents\Visual Studio 2013\Projects\NewBTASProto\BTS16NV.MDB";
-                string strAccessSelect = @"SELECT * FROM ScanData WHERE BWO='" + comboBox1.Text + @"' AND STEP='" + comboBox2.Text.Substring(0,2) +@"'";
+                comboBox5.Enabled = false;
+                comboBox5.Text = "Loading";
+                comboBox6.Enabled = false;
+                comboBox6.Text = "Loading";
 
-                //Here is where I load the form wide dataset which will both let me fill in the rest of the combo boxes and the graphs!
-                OleDbConnection myAccessConn = null;
-                // try to open the DB
-                try
+                // do it on a helper thread!
+                ThreadPool.QueueUserWorkItem(s =>
                 {
-                    myAccessConn = new OleDbConnection(strAccessConn);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
-                    return;
-                }
-                //  now try to access it
-                try
-                {
-                    OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
-                    OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+                    // FIRST CLEAR THE OLD DATA SET!
+                    graph1Set.Clear();
+                    // Open database containing all the battery data....
+                    string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Kyle\Documents\Visual Studio 2013\Projects\NewBTASProto\BTS16NV.MDB";
+                    string strAccessSelect = @"SELECT * FROM ScanData WHERE BWO='" + combo1Text + @"' AND STEP='" + combo2Text.Substring(0, 2) + @"'";
 
-                    myAccessConn.Open();
-                    myDataAdapter.Fill(graph1Set, "ScanData");
+                    //Here is where I load the form wide dataset which will both let me fill in the rest of the combo boxes and the graphs!
+                    OleDbConnection myAccessConn = null;
+                    // try to open the DB
+                    try
+                    {
+                        myAccessConn = new OleDbConnection(strAccessConn);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                        return;
+                    }
+                    //  now try to access it
+                    try
+                    {
+                        OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                        OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
 
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
-                    return;
-                }
-                finally
-                {
-                    myAccessConn.Close();
-                }
-
-                // we have the data table at this point, but we still need to update the graph combo boxes
-                // first we look up the cable used for the test
-
-                // Open database containing all the battery data....
-                strAccessSelect = @"SELECT CellCableID FROM Tests WHERE WorkOrderNumber='" + comboBox1.Text + @"' AND StepNumber='" + comboBox2.Text.Substring(0, 2) + @"'";
+                        lock (dataBaseLock)
+                        {
+                            myAccessConn.Open();
+                            myDataAdapter.Fill(graph1Set, "ScanData");
+                            myAccessConn.Close();
+                        }
 
 
-                DataSet lookForCable = new DataSet();
-                myAccessConn = null;
-                // try to open the DB
-                try
-                {
-                    myAccessConn = new OleDbConnection(strAccessConn);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
-                    return;
-                }
-                //  now try to access it
-                try
-                {
-                    OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
-                    OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+                    }
+                    catch (Exception ex)
+                    {   
+                        myAccessConn.Close();
+                        MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                        return;
+                    }
 
-                    myAccessConn.Open();
-                    myDataAdapter.Fill(lookForCable, "Tests");
+                    // we have the data table at this point, but we still need to update the graph combo boxes
+                    // first we look up the cable used for the test
 
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
-                    return;
-                }
-                finally
-                {
-                    myAccessConn.Close();
-                }
+                    // Open database containing all the battery data....
+                    strAccessSelect = @"SELECT CellCableID FROM Tests WHERE WorkOrderNumber='" + combo1Text + @"' AND StepNumber='" + combo2Text.Substring(0, 2) + @"'";
 
-                string cellCable = lookForCable.Tables["Tests"].Rows[0][0].ToString();
 
-                switch (cellCable)
-                {
-                    case "1":
-                        // update the cells value
-                        if (cell1 == 0) { cell1 = 20; }
-                        // Battery combobox
-                        comboBox5.Items.Clear();
-                        comboBox5.Text = "";
-                        comboBox5.Items.Add("Voltage");
-                        comboBox5.Items.Add("Current");
-                        comboBox5.Items.Add("Temperature 1");
-                        comboBox5.Items.Add("Temperature 2");
-                        comboBox5.Items.Add("Temperature 3");
-                        comboBox5.Items.Add("Temperature 4");
-                        // Cells combobox
-                        comboBox6.Items.Clear();
-                        comboBox6.Text = "";
-                        comboBox6.Items.Add("Ending Voltages");
-                        comboBox6.Items.Add("Cell 1");
-                        comboBox6.Items.Add("Cell 2");
-                        comboBox6.Items.Add("Cell 3");
-                        comboBox6.Items.Add("Cell 4");
-                        comboBox6.Items.Add("Cell 5");
-                        comboBox6.Items.Add("Cell 6");
-                        comboBox6.Items.Add("Cell 7");
-                        comboBox6.Items.Add("Cell 8");
-                        comboBox6.Items.Add("Cell 9");
-                        comboBox6.Items.Add("Cell 10");
-                        comboBox6.Items.Add("Cell 11");
-                        comboBox6.Items.Add("Cell 12");
-                        comboBox6.Items.Add("Cell 13");
-                        comboBox6.Items.Add("Cell 14");
-                        comboBox6.Items.Add("Cell 15");
-                        comboBox6.Items.Add("Cell 16");
-                        comboBox6.Items.Add("Cell 17");
-                        comboBox6.Items.Add("Cell 18");
-                        comboBox6.Items.Add("Cell 19");
-                        comboBox6.Items.Add("Cell 20");
-                        break;
-                    case "3":
-                        // update the cells value
-                        if (cell1 == 0) { cell1 = 22; }
-                        // Battery combobox
-                        comboBox5.Items.Clear();
-                        comboBox5.Text = "";
-                        comboBox5.Items.Add("Voltage 1");
-                        comboBox5.Items.Add("Voltage 2");
-                        comboBox5.Items.Add("Current");
-                        comboBox5.Items.Add("Temperature 1");
-                        comboBox5.Items.Add("Temperature 2");
-                        comboBox5.Items.Add("Temperature 3");
-                        comboBox5.Items.Add("Temperature 4");
-                        // Cells combobox
-                        comboBox6.Items.Clear();
-                        comboBox6.Text = "";
-                        comboBox6.Items.Add("Ending Voltages");
-                        comboBox6.Items.Add("Cell 1");
-                        comboBox6.Items.Add("Cell 2");
-                        comboBox6.Items.Add("Cell 3");
-                        comboBox6.Items.Add("Cell 4");
-                        comboBox6.Items.Add("Cell 5");
-                        comboBox6.Items.Add("Cell 6");
-                        comboBox6.Items.Add("Cell 7");
-                        comboBox6.Items.Add("Cell 8");
-                        comboBox6.Items.Add("Cell 9");
-                        comboBox6.Items.Add("Cell 10");
-                        comboBox6.Items.Add("Cell 11");
-                        comboBox6.Items.Add("Cell 12");
-                        comboBox6.Items.Add("Cell 13");
-                        comboBox6.Items.Add("Cell 14");
-                        comboBox6.Items.Add("Cell 15");
-                        comboBox6.Items.Add("Cell 16");
-                        comboBox6.Items.Add("Cell 17");
-                        comboBox6.Items.Add("Cell 18");
-                        comboBox6.Items.Add("Cell 19");
-                        comboBox6.Items.Add("Cell 20");
-                        comboBox6.Items.Add("Cell 21");
-                        comboBox6.Items.Add("Cell 22");
-                        break;
-                    case "4":
-                        // update the cells value
-                        if (cell1 == 0) { cell1 = 21; }
-                        // Battery combobox
-                        comboBox5.Items.Clear();
-                        comboBox5.Text = "";
-                        comboBox5.Items.Add("Voltage 1");
-                        comboBox5.Items.Add("Voltage 2");
-                        comboBox5.Items.Add("Voltage 3");
-                        comboBox5.Items.Add("Current");
-                        comboBox5.Items.Add("Temperature 1");
-                        comboBox5.Items.Add("Temperature 2");
-                        comboBox5.Items.Add("Temperature 3");
-                        comboBox5.Items.Add("Temperature 4");
-                        // Cells combobox
-                        comboBox6.Items.Clear();
-                        comboBox6.Text = "";
-                        comboBox6.Items.Add("Ending Voltages");
-                        comboBox6.Items.Add("Cell 1");
-                        comboBox6.Items.Add("Cell 2");
-                        comboBox6.Items.Add("Cell 3");
-                        comboBox6.Items.Add("Cell 4");
-                        comboBox6.Items.Add("Cell 5");
-                        comboBox6.Items.Add("Cell 6");
-                        comboBox6.Items.Add("Cell 7");
-                        comboBox6.Items.Add("Cell 8");
-                        comboBox6.Items.Add("Cell 9");
-                        comboBox6.Items.Add("Cell 10");
-                        comboBox6.Items.Add("Cell 11");
-                        comboBox6.Items.Add("Cell 12");
-                        comboBox6.Items.Add("Cell 13");
-                        comboBox6.Items.Add("Cell 14");
-                        comboBox6.Items.Add("Cell 15");
-                        comboBox6.Items.Add("Cell 16");
-                        comboBox6.Items.Add("Cell 17");
-                        comboBox6.Items.Add("Cell 18");
-                        comboBox6.Items.Add("Cell 19");
-                        comboBox6.Items.Add("Cell 20");
-                        comboBox6.Items.Add("Cell 21");
-                        break;
-                    case "21":
-                        // update the cells value
-                        if (cell1 == 0) { cell1 = 21; }
-                        // Battery combobox
-                        comboBox5.Items.Clear();
-                        comboBox5.Text = "";
-                        comboBox5.Items.Add("Voltage");
-                        comboBox5.Items.Add("Current");
-                        comboBox5.Items.Add("Temperature 1");
-                        comboBox5.Items.Add("Temperature 2");
-                        comboBox5.Items.Add("Temperature 3");
-                        comboBox5.Items.Add("Temperature 4");
-                        // Cells combobox
-                        comboBox6.Items.Clear();
-                        comboBox6.Text = "";
-                        comboBox6.Items.Add("Ending Voltages");
-                        comboBox6.Items.Add("Cell 1");
-                        comboBox6.Items.Add("Cell 2");
-                        comboBox6.Items.Add("Cell 3");
-                        comboBox6.Items.Add("Cell 4");
-                        comboBox6.Items.Add("Cell 5");
-                        comboBox6.Items.Add("Cell 6");
-                        comboBox6.Items.Add("Cell 7");
-                        comboBox6.Items.Add("Cell 8");
-                        comboBox6.Items.Add("Cell 9");
-                        comboBox6.Items.Add("Cell 10");
-                        comboBox6.Items.Add("Cell 11");
-                        comboBox6.Items.Add("Cell 12");
-                        comboBox6.Items.Add("Cell 13");
-                        comboBox6.Items.Add("Cell 14");
-                        comboBox6.Items.Add("Cell 15");
-                        comboBox6.Items.Add("Cell 16");
-                        comboBox6.Items.Add("Cell 17");
-                        comboBox6.Items.Add("Cell 18");
-                        comboBox6.Items.Add("Cell 19");
-                        comboBox6.Items.Add("Cell 20");
-                        comboBox6.Items.Add("Cell 21");
-                        break;
-                    default:
-                        // update the cells value
-                        if (cell1 == 0) { cell1 = 20; }
-                        // Battery combobox
-                        comboBox5.Items.Clear();
-                        comboBox5.Text = "";
-                        comboBox5.Items.Add("Voltage 1");
-                        comboBox5.Items.Add("Voltage 2");
-                        comboBox5.Items.Add("Voltage 3");
-                        comboBox5.Items.Add("Voltage 4");
-                        comboBox5.Items.Add("Current");
-                        comboBox5.Items.Add("Temperature 1");
-                        comboBox5.Items.Add("Temperature 2");
-                        comboBox5.Items.Add("Temperature 3");
-                        comboBox5.Items.Add("Temperature 4");
-                        // Cells combobox
-                        comboBox6.Items.Clear();
-                        comboBox6.Text = "";
-                        comboBox6.Items.Add("Ending Voltages");
-                        comboBox6.Items.Add("Cell 1");
-                        comboBox6.Items.Add("Cell 2");
-                        comboBox6.Items.Add("Cell 3");
-                        comboBox6.Items.Add("Cell 4");
-                        comboBox6.Items.Add("Cell 5");
-                        comboBox6.Items.Add("Cell 6");
-                        comboBox6.Items.Add("Cell 7");
-                        comboBox6.Items.Add("Cell 8");
-                        comboBox6.Items.Add("Cell 9");
-                        comboBox6.Items.Add("Cell 10");
-                        comboBox6.Items.Add("Cell 11");
-                        comboBox6.Items.Add("Cell 12");
-                        comboBox6.Items.Add("Cell 13");
-                        comboBox6.Items.Add("Cell 14");
-                        comboBox6.Items.Add("Cell 15");
-                        comboBox6.Items.Add("Cell 16");
-                        comboBox6.Items.Add("Cell 17");
-                        comboBox6.Items.Add("Cell 18");
-                        comboBox6.Items.Add("Cell 19");
-                        comboBox6.Items.Add("Cell 20");
-                        comboBox6.Items.Add("Cell 21");
-                        comboBox6.Items.Add("Cell 22");
-                        comboBox6.Items.Add("Cell 23");
-                        comboBox6.Items.Add("Cell 24");
-                        break;
-                }// end switch
+                    DataSet lookForCable = new DataSet();
+                    myAccessConn = null;
+                    // try to open the DB
+                    try
+                    {
+                        myAccessConn = new OleDbConnection(strAccessConn);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                        return;
+                    }
+                    //  now try to access it
+                    try
+                    {
+                        OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                        OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
 
-                // The final step is to update the type of test that was selected
-                if (comboBox2.Text.Contains("As Recieved")) { type1 = 1; }
-                else if (comboBox2.Text.Contains("Discharge")) { type1 = 2; }
-                else if (comboBox2.Text.Contains("Capacity")) { type1 = 3; }
-                else { type1 = 0; }
+                        lock (dataBaseLock)
+                        {
+                            myAccessConn.Open();
+                            myDataAdapter.Fill(lookForCable, "Tests");
+                            myAccessConn.Close();
+                        }
+                        
 
+                    }
+                    catch (Exception ex)
+                    {   myAccessConn.Close();
+                        MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                        return;
+                    }
+
+
+                    string cellCable = lookForCable.Tables["Tests"].Rows[0][0].ToString();
+
+                    this.Invoke((MethodInvoker)delegate()
+                    {
+                        switch (cellCable)
+                        {
+                            case "1":
+                                // update the cells value
+                                if (cell1 == 0) { cell1 = 20; }
+                                // Battery combobox
+                                comboBox5.Items.Clear();
+                                comboBox5.Text = "";
+                                comboBox5.Items.Add("Voltage");
+                                comboBox5.Items.Add("Current");
+                                comboBox5.Items.Add("Temperature 1");
+                                comboBox5.Items.Add("Temperature 2");
+                                comboBox5.Items.Add("Temperature 3");
+                                comboBox5.Items.Add("Temperature 4");
+                                // Cells combobox
+                                comboBox6.Items.Clear();
+                                comboBox6.Text = "";
+                                comboBox6.Items.Add("Ending Voltages");
+                                comboBox6.Items.Add("Cell 1");
+                                comboBox6.Items.Add("Cell 2");
+                                comboBox6.Items.Add("Cell 3");
+                                comboBox6.Items.Add("Cell 4");
+                                comboBox6.Items.Add("Cell 5");
+                                comboBox6.Items.Add("Cell 6");
+                                comboBox6.Items.Add("Cell 7");
+                                comboBox6.Items.Add("Cell 8");
+                                comboBox6.Items.Add("Cell 9");
+                                comboBox6.Items.Add("Cell 10");
+                                comboBox6.Items.Add("Cell 11");
+                                comboBox6.Items.Add("Cell 12");
+                                comboBox6.Items.Add("Cell 13");
+                                comboBox6.Items.Add("Cell 14");
+                                comboBox6.Items.Add("Cell 15");
+                                comboBox6.Items.Add("Cell 16");
+                                comboBox6.Items.Add("Cell 17");
+                                comboBox6.Items.Add("Cell 18");
+                                comboBox6.Items.Add("Cell 19");
+                                comboBox6.Items.Add("Cell 20");
+                                break;
+                            case "3":
+                                // update the cells value
+                                if (cell1 == 0) { cell1 = 22; }
+                                // Battery combobox
+                                comboBox5.Items.Clear();
+                                comboBox5.Text = "";
+                                comboBox5.Items.Add("Voltage 1");
+                                comboBox5.Items.Add("Voltage 2");
+                                comboBox5.Items.Add("Current");
+                                comboBox5.Items.Add("Temperature 1");
+                                comboBox5.Items.Add("Temperature 2");
+                                comboBox5.Items.Add("Temperature 3");
+                                comboBox5.Items.Add("Temperature 4");
+                                // Cells combobox
+                                comboBox6.Items.Clear();
+                                comboBox6.Text = "";
+                                comboBox6.Items.Add("Ending Voltages");
+                                comboBox6.Items.Add("Cell 1");
+                                comboBox6.Items.Add("Cell 2");
+                                comboBox6.Items.Add("Cell 3");
+                                comboBox6.Items.Add("Cell 4");
+                                comboBox6.Items.Add("Cell 5");
+                                comboBox6.Items.Add("Cell 6");
+                                comboBox6.Items.Add("Cell 7");
+                                comboBox6.Items.Add("Cell 8");
+                                comboBox6.Items.Add("Cell 9");
+                                comboBox6.Items.Add("Cell 10");
+                                comboBox6.Items.Add("Cell 11");
+                                comboBox6.Items.Add("Cell 12");
+                                comboBox6.Items.Add("Cell 13");
+                                comboBox6.Items.Add("Cell 14");
+                                comboBox6.Items.Add("Cell 15");
+                                comboBox6.Items.Add("Cell 16");
+                                comboBox6.Items.Add("Cell 17");
+                                comboBox6.Items.Add("Cell 18");
+                                comboBox6.Items.Add("Cell 19");
+                                comboBox6.Items.Add("Cell 20");
+                                comboBox6.Items.Add("Cell 21");
+                                comboBox6.Items.Add("Cell 22");
+                                break;
+                            case "4":
+                                // update the cells value
+                                if (cell1 == 0) { cell1 = 21; }
+                                // Battery combobox
+                                comboBox5.Items.Clear();
+                                comboBox5.Text = "";
+                                comboBox5.Items.Add("Voltage 1");
+                                comboBox5.Items.Add("Voltage 2");
+                                comboBox5.Items.Add("Voltage 3");
+                                comboBox5.Items.Add("Current");
+                                comboBox5.Items.Add("Temperature 1");
+                                comboBox5.Items.Add("Temperature 2");
+                                comboBox5.Items.Add("Temperature 3");
+                                comboBox5.Items.Add("Temperature 4");
+                                // Cells combobox
+                                comboBox6.Items.Clear();
+                                comboBox6.Text = "";
+                                comboBox6.Items.Add("Ending Voltages");
+                                comboBox6.Items.Add("Cell 1");
+                                comboBox6.Items.Add("Cell 2");
+                                comboBox6.Items.Add("Cell 3");
+                                comboBox6.Items.Add("Cell 4");
+                                comboBox6.Items.Add("Cell 5");
+                                comboBox6.Items.Add("Cell 6");
+                                comboBox6.Items.Add("Cell 7");
+                                comboBox6.Items.Add("Cell 8");
+                                comboBox6.Items.Add("Cell 9");
+                                comboBox6.Items.Add("Cell 10");
+                                comboBox6.Items.Add("Cell 11");
+                                comboBox6.Items.Add("Cell 12");
+                                comboBox6.Items.Add("Cell 13");
+                                comboBox6.Items.Add("Cell 14");
+                                comboBox6.Items.Add("Cell 15");
+                                comboBox6.Items.Add("Cell 16");
+                                comboBox6.Items.Add("Cell 17");
+                                comboBox6.Items.Add("Cell 18");
+                                comboBox6.Items.Add("Cell 19");
+                                comboBox6.Items.Add("Cell 20");
+                                comboBox6.Items.Add("Cell 21");
+                                break;
+                            case "21":
+                                // update the cells value
+                                if (cell1 == 0) { cell1 = 21; }
+                                // Battery combobox
+                                comboBox5.Items.Clear();
+                                comboBox5.Text = "";
+                                comboBox5.Items.Add("Voltage");
+                                comboBox5.Items.Add("Current");
+                                comboBox5.Items.Add("Temperature 1");
+                                comboBox5.Items.Add("Temperature 2");
+                                comboBox5.Items.Add("Temperature 3");
+                                comboBox5.Items.Add("Temperature 4");
+                                // Cells combobox
+                                comboBox6.Items.Clear();
+                                comboBox6.Text = "";
+                                comboBox6.Items.Add("Ending Voltages");
+                                comboBox6.Items.Add("Cell 1");
+                                comboBox6.Items.Add("Cell 2");
+                                comboBox6.Items.Add("Cell 3");
+                                comboBox6.Items.Add("Cell 4");
+                                comboBox6.Items.Add("Cell 5");
+                                comboBox6.Items.Add("Cell 6");
+                                comboBox6.Items.Add("Cell 7");
+                                comboBox6.Items.Add("Cell 8");
+                                comboBox6.Items.Add("Cell 9");
+                                comboBox6.Items.Add("Cell 10");
+                                comboBox6.Items.Add("Cell 11");
+                                comboBox6.Items.Add("Cell 12");
+                                comboBox6.Items.Add("Cell 13");
+                                comboBox6.Items.Add("Cell 14");
+                                comboBox6.Items.Add("Cell 15");
+                                comboBox6.Items.Add("Cell 16");
+                                comboBox6.Items.Add("Cell 17");
+                                comboBox6.Items.Add("Cell 18");
+                                comboBox6.Items.Add("Cell 19");
+                                comboBox6.Items.Add("Cell 20");
+                                comboBox6.Items.Add("Cell 21");
+                                break;
+                            default:
+                                // update the cells value
+                                if (cell1 == 0) { cell1 = 20; }
+                                // Battery combobox
+                                comboBox5.Items.Clear();
+                                comboBox5.Text = "";
+                                comboBox5.Items.Add("Voltage 1");
+                                comboBox5.Items.Add("Voltage 2");
+                                comboBox5.Items.Add("Voltage 3");
+                                comboBox5.Items.Add("Voltage 4");
+                                comboBox5.Items.Add("Current");
+                                comboBox5.Items.Add("Temperature 1");
+                                comboBox5.Items.Add("Temperature 2");
+                                comboBox5.Items.Add("Temperature 3");
+                                comboBox5.Items.Add("Temperature 4");
+                                // Cells combobox
+                                comboBox6.Items.Clear();
+                                comboBox6.Text = "";
+                                comboBox6.Items.Add("Ending Voltages");
+                                comboBox6.Items.Add("Cell 1");
+                                comboBox6.Items.Add("Cell 2");
+                                comboBox6.Items.Add("Cell 3");
+                                comboBox6.Items.Add("Cell 4");
+                                comboBox6.Items.Add("Cell 5");
+                                comboBox6.Items.Add("Cell 6");
+                                comboBox6.Items.Add("Cell 7");
+                                comboBox6.Items.Add("Cell 8");
+                                comboBox6.Items.Add("Cell 9");
+                                comboBox6.Items.Add("Cell 10");
+                                comboBox6.Items.Add("Cell 11");
+                                comboBox6.Items.Add("Cell 12");
+                                comboBox6.Items.Add("Cell 13");
+                                comboBox6.Items.Add("Cell 14");
+                                comboBox6.Items.Add("Cell 15");
+                                comboBox6.Items.Add("Cell 16");
+                                comboBox6.Items.Add("Cell 17");
+                                comboBox6.Items.Add("Cell 18");
+                                comboBox6.Items.Add("Cell 19");
+                                comboBox6.Items.Add("Cell 20");
+                                comboBox6.Items.Add("Cell 21");
+                                comboBox6.Items.Add("Cell 22");
+                                comboBox6.Items.Add("Cell 23");
+                                comboBox6.Items.Add("Cell 24");
+                                break;
+                        }// end switch
+
+
+                        // The final step is to update the type of test that was selected
+                        if (comboBox2.Text.Contains("As Recieved")) { type1 = 1; }
+                        else if (comboBox2.Text.Contains("Discharge")) { type1 = 2; }
+                        else if (comboBox2.Text.Contains("Capacity")) { type1 = 3; }
+                        else { type1 = 0; }
+
+                        comboBox5.Enabled = true;
+                        comboBox6.Enabled = true;
+                    });// end invoke
+                });// end helper thread
             }
         }
 
@@ -615,297 +699,320 @@ namespace NewBTASProto
 
             chart2.Series.Clear();
             tt2.Text = "";
+
+            string combo3Text = comboBox3.Text;
+            string combo4Text = comboBox4.Text;
             if (comboBox4.SelectedIndex <= 0) { return; }
             else
             {
-                // FIRST CLEAR THE OLD DATA SET!
-                graph2Set.Clear();
-                // Open database containing all the battery data....
-                string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Kyle\Documents\Visual Studio 2013\Projects\NewBTASProto\BTS16NV.MDB";
-                string strAccessSelect = @"SELECT * FROM ScanData WHERE BWO='" + comboBox3.Text + @"' AND STEP='" + comboBox4.Text.Substring(0, 2) + @"'";
+                comboBox7.Enabled = false;
+                comboBox7.Text = "Loading";
+                comboBox8.Enabled = false;
+                comboBox8.Text = "Loading";
 
-                //Here is where I load the form wide dataset which will both let me fill in the rest of the combo boxes and the graphs!
-                OleDbConnection myAccessConn = null;
-                // try to open the DB
-                try
+                // do it on a helper thread!
+                ThreadPool.QueueUserWorkItem(s =>
                 {
-                    myAccessConn = new OleDbConnection(strAccessConn);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
-                    return;
-                }
-                //  now try to access it
-                try
-                {
-                    OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
-                    OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+                    // FIRST CLEAR THE OLD DATA SET!
+                    graph2Set.Clear();
+                    // Open database containing all the battery data....
+                    string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Kyle\Documents\Visual Studio 2013\Projects\NewBTASProto\BTS16NV.MDB";
+                    string strAccessSelect = @"SELECT * FROM ScanData WHERE BWO='" + combo3Text + @"' AND STEP='" + combo4Text.Substring(0, 2) + @"'";
 
-                    myAccessConn.Open();
-                    myDataAdapter.Fill(graph2Set, "ScanData");
+                    //Here is where I load the form wide dataset which will both let me fill in the rest of the combo boxes and the graphs!
+                    OleDbConnection myAccessConn = null;
+                    // try to open the DB
+                    try
+                    {
+                        myAccessConn = new OleDbConnection(strAccessConn);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                        return;
+                    }
+                    //  now try to access it
+                    try
+                    {
+                        OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                        OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
 
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
-                    return;
-                }
-                finally
-                {
-                    myAccessConn.Close();
-                }
-
-                // we have the data table at this point, but we still need to update the graph combo boxes
-                // first we look up the cable used for the test
-
-                // Open database containing all the battery data....
-                strAccessSelect = @"SELECT CellCableID FROM Tests WHERE WorkOrderNumber='" + comboBox3.Text + @"' AND StepNumber='" + comboBox4.Text.Substring(0, 2) + @"'";
+                        lock (dataBaseLock)
+                        {
+                            myAccessConn.Open();
+                            myDataAdapter.Fill(graph2Set, "ScanData");
+                            myAccessConn.Close();
+                        }
 
 
-                DataSet lookForCable = new DataSet();
-                myAccessConn = null;
-                // try to open the DB
-                try
-                {
-                    myAccessConn = new OleDbConnection(strAccessConn);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
-                    return;
-                }
-                //  now try to access it
-                try
-                {
-                    OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
-                    OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+                    }
+                    catch (Exception ex)
+                    {
+                        myAccessConn.Close();
+                        MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                        return;
+                    }
 
-                    myAccessConn.Open();
-                    myDataAdapter.Fill(lookForCable, "Tests");
+                    // we have the data table at this point, but we still need to update the graph combo boxes
+                    // first we look up the cable used for the test
 
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
-                    return;
-                }
-                finally
-                {
-                    myAccessConn.Close();
-                }
+                    // Open database containing all the battery data....
+                    strAccessSelect = @"SELECT CellCableID FROM Tests WHERE WorkOrderNumber='" + combo3Text + @"' AND StepNumber='" + combo4Text.Substring(0, 2) + @"'";
 
-                string cellCable = lookForCable.Tables["Tests"].Rows[0][0].ToString();
 
-                switch (cellCable)
-                {
-                    case "1":
-                        // update the cells value
-                        if (cell2 == 0) { cell2 = 20; }
-                        // Battery combobox
-                        comboBox7.Items.Clear();
-                        comboBox7.Text = "";
-                        comboBox7.Items.Add("Voltage");
-                        comboBox7.Items.Add("Current");
-                        comboBox7.Items.Add("Temperature 1");
-                        comboBox7.Items.Add("Temperature 2");
-                        comboBox7.Items.Add("Temperature 3");
-                        comboBox7.Items.Add("Temperature 4");
-                        // Cells combobox
-                        comboBox8.Items.Clear();
-                        comboBox8.Text = "";
-                        comboBox8.Items.Add("Ending Voltages");
-                        comboBox8.Items.Add("Cell 1");
-                        comboBox8.Items.Add("Cell 2");
-                        comboBox8.Items.Add("Cell 3");
-                        comboBox8.Items.Add("Cell 4");
-                        comboBox8.Items.Add("Cell 5");
-                        comboBox8.Items.Add("Cell 6");
-                        comboBox8.Items.Add("Cell 7");
-                        comboBox8.Items.Add("Cell 8");
-                        comboBox8.Items.Add("Cell 9");
-                        comboBox8.Items.Add("Cell 10");
-                        comboBox8.Items.Add("Cell 11");
-                        comboBox8.Items.Add("Cell 12");
-                        comboBox8.Items.Add("Cell 13");
-                        comboBox8.Items.Add("Cell 14");
-                        comboBox8.Items.Add("Cell 15");
-                        comboBox8.Items.Add("Cell 16");
-                        comboBox8.Items.Add("Cell 17");
-                        comboBox8.Items.Add("Cell 18");
-                        comboBox8.Items.Add("Cell 19");
-                        comboBox8.Items.Add("Cell 20");
-                        break;
-                    case "3":
-                        // update the cells value
-                        if (cell2 == 0) { cell2 = 22; }
-                        // Battery combobox
-                        comboBox7.Items.Clear();
-                        comboBox7.Text = "";
-                        comboBox7.Items.Add("Voltage 1");
-                        comboBox7.Items.Add("Voltage 2");
-                        comboBox7.Items.Add("Current");
-                        comboBox7.Items.Add("Temperature 1");
-                        comboBox7.Items.Add("Temperature 2");
-                        comboBox7.Items.Add("Temperature 3");
-                        comboBox7.Items.Add("Temperature 4");
-                        // Cells combobox
-                        comboBox8.Items.Clear();
-                        comboBox8.Text = "";
-                        comboBox8.Items.Add("Ending Voltages");
-                        comboBox8.Items.Add("Cell 1");
-                        comboBox8.Items.Add("Cell 2");
-                        comboBox8.Items.Add("Cell 3");
-                        comboBox8.Items.Add("Cell 4");
-                        comboBox8.Items.Add("Cell 5");
-                        comboBox8.Items.Add("Cell 6");
-                        comboBox8.Items.Add("Cell 7");
-                        comboBox8.Items.Add("Cell 8");
-                        comboBox8.Items.Add("Cell 9");
-                        comboBox8.Items.Add("Cell 10");
-                        comboBox8.Items.Add("Cell 11");
-                        comboBox8.Items.Add("Cell 12");
-                        comboBox8.Items.Add("Cell 13");
-                        comboBox8.Items.Add("Cell 14");
-                        comboBox8.Items.Add("Cell 15");
-                        comboBox8.Items.Add("Cell 16");
-                        comboBox8.Items.Add("Cell 17");
-                        comboBox8.Items.Add("Cell 18");
-                        comboBox8.Items.Add("Cell 19");
-                        comboBox8.Items.Add("Cell 20");
-                        comboBox8.Items.Add("Cell 21");
-                        comboBox8.Items.Add("Cell 22");
-                        break;
-                    case "4":
-                        // update the cells value
-                        if (cell2 == 0) { cell2 = 21; }
-                        // Battery combobox
-                        comboBox7.Items.Clear();
-                        comboBox7.Text = "";
-                        comboBox7.Items.Add("Voltage 1");
-                        comboBox7.Items.Add("Voltage 2");
-                        comboBox7.Items.Add("Voltage 3");
-                        comboBox7.Items.Add("Current");
-                        comboBox7.Items.Add("Temperature 1");
-                        comboBox7.Items.Add("Temperature 2");
-                        comboBox7.Items.Add("Temperature 3");
-                        comboBox7.Items.Add("Temperature 4");
-                        // Cells combobox
-                        comboBox8.Items.Clear();
-                        comboBox8.Text = "";
-                        comboBox8.Items.Add("Ending Voltages");
-                        comboBox8.Items.Add("Cell 1");
-                        comboBox8.Items.Add("Cell 2");
-                        comboBox8.Items.Add("Cell 3");
-                        comboBox8.Items.Add("Cell 4");
-                        comboBox8.Items.Add("Cell 5");
-                        comboBox8.Items.Add("Cell 6");
-                        comboBox8.Items.Add("Cell 7");
-                        comboBox8.Items.Add("Cell 8");
-                        comboBox8.Items.Add("Cell 9");
-                        comboBox8.Items.Add("Cell 10");
-                        comboBox8.Items.Add("Cell 11");
-                        comboBox8.Items.Add("Cell 12");
-                        comboBox8.Items.Add("Cell 13");
-                        comboBox8.Items.Add("Cell 14");
-                        comboBox8.Items.Add("Cell 15");
-                        comboBox8.Items.Add("Cell 16");
-                        comboBox8.Items.Add("Cell 17");
-                        comboBox8.Items.Add("Cell 18");
-                        comboBox8.Items.Add("Cell 19");
-                        comboBox8.Items.Add("Cell 20");
-                        comboBox8.Items.Add("Cell 21");
-                        break;
-                    case "21":
-                        // update the cells value
-                        if (cell2 == 0) { cell2 = 21; }
-                        // Battery combobox
-                        comboBox7.Items.Clear();
-                        comboBox7.Text = "";
-                        comboBox7.Items.Add("Voltage");
-                        comboBox7.Items.Add("Current");
-                        comboBox7.Items.Add("Temperature 1");
-                        comboBox7.Items.Add("Temperature 2");
-                        comboBox7.Items.Add("Temperature 3");
-                        comboBox7.Items.Add("Temperature 4");
-                        // Cells combobox
-                        comboBox8.Items.Clear();
-                        comboBox8.Text = "";
-                        comboBox8.Items.Add("Ending Voltages");
-                        comboBox8.Items.Add("Cell 1");
-                        comboBox8.Items.Add("Cell 2");
-                        comboBox8.Items.Add("Cell 3");
-                        comboBox8.Items.Add("Cell 4");
-                        comboBox8.Items.Add("Cell 5");
-                        comboBox8.Items.Add("Cell 6");
-                        comboBox8.Items.Add("Cell 7");
-                        comboBox8.Items.Add("Cell 8");
-                        comboBox8.Items.Add("Cell 9");
-                        comboBox8.Items.Add("Cell 10");
-                        comboBox8.Items.Add("Cell 11");
-                        comboBox8.Items.Add("Cell 12");
-                        comboBox8.Items.Add("Cell 13");
-                        comboBox8.Items.Add("Cell 14");
-                        comboBox8.Items.Add("Cell 15");
-                        comboBox8.Items.Add("Cell 16");
-                        comboBox8.Items.Add("Cell 17");
-                        comboBox8.Items.Add("Cell 18");
-                        comboBox8.Items.Add("Cell 19");
-                        comboBox8.Items.Add("Cell 20");
-                        comboBox8.Items.Add("Cell 21");
-                        break;
-                    default:
-                        // update the cells value
-                        if (cell2 == 0) { cell2 = 20; }
-                        // Battery combobox
-                        comboBox7.Items.Clear();
-                        comboBox7.Text = "";
-                        comboBox7.Items.Add("Voltage 1");
-                        comboBox7.Items.Add("Voltage 2");
-                        comboBox7.Items.Add("Voltage 3");
-                        comboBox7.Items.Add("Voltage 4");
-                        comboBox7.Items.Add("Current");
-                        comboBox7.Items.Add("Temperature 1");
-                        comboBox7.Items.Add("Temperature 2");
-                        comboBox7.Items.Add("Temperature 3");
-                        comboBox7.Items.Add("Temperature 4");
-                        // Cells combobox
-                        comboBox8.Items.Clear();
-                        comboBox8.Text = "";
-                        comboBox8.Items.Add("Ending Voltages");
-                        comboBox8.Items.Add("Cell 1");
-                        comboBox8.Items.Add("Cell 2");
-                        comboBox8.Items.Add("Cell 3");
-                        comboBox8.Items.Add("Cell 4");
-                        comboBox8.Items.Add("Cell 5");
-                        comboBox8.Items.Add("Cell 6");
-                        comboBox8.Items.Add("Cell 7");
-                        comboBox8.Items.Add("Cell 8");
-                        comboBox8.Items.Add("Cell 9");
-                        comboBox8.Items.Add("Cell 10");
-                        comboBox8.Items.Add("Cell 11");
-                        comboBox8.Items.Add("Cell 12");
-                        comboBox8.Items.Add("Cell 13");
-                        comboBox8.Items.Add("Cell 14");
-                        comboBox8.Items.Add("Cell 15");
-                        comboBox8.Items.Add("Cell 16");
-                        comboBox8.Items.Add("Cell 17");
-                        comboBox8.Items.Add("Cell 18");
-                        comboBox8.Items.Add("Cell 19");
-                        comboBox8.Items.Add("Cell 20");
-                        comboBox8.Items.Add("Cell 21");
-                        comboBox8.Items.Add("Cell 22");
-                        comboBox8.Items.Add("Cell 23");
-                        comboBox8.Items.Add("Cell 24");
-                        break;
-                }// end switch
+                    DataSet lookForCable = new DataSet();
+                    myAccessConn = null;
+                    // try to open the DB
+                    try
+                    {
+                        myAccessConn = new OleDbConnection(strAccessConn);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                        return;
+                    }
+                    //  now try to access it
+                    try
+                    {
+                        OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                        OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
 
-                // The final step is to update the type of test that was selected
-                if (comboBox4.Text.Contains("As Recieved")) { type2 = 1; }
-                else if (comboBox4.Text.Contains("Discharge")) { type2 = 2; }
-                else if (comboBox4.Text.Contains("Capacity")) { type2 = 3; }
-                else { type2 = 0; }
+                        lock (dataBaseLock)
+                        {
+                            myAccessConn.Open();
+                            myDataAdapter.Fill(lookForCable, "Tests");
+                            myAccessConn.Close();
+                        }
+ 
 
+                    }
+                    catch (Exception ex)
+                    {
+                        myAccessConn.Close();
+                        MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                        return;
+                    }
+
+                    string cellCable = lookForCable.Tables["Tests"].Rows[0][0].ToString();
+
+                    this.Invoke((MethodInvoker)delegate()
+                    {
+                        switch (cellCable)
+                        {
+                            case "1":
+                                // update the cells value
+                                if (cell2 == 0) { cell2 = 20; }
+                                // Battery combobox
+                                comboBox7.Items.Clear();
+                                comboBox7.Text = "";
+                                comboBox7.Items.Add("Voltage");
+                                comboBox7.Items.Add("Current");
+                                comboBox7.Items.Add("Temperature 1");
+                                comboBox7.Items.Add("Temperature 2");
+                                comboBox7.Items.Add("Temperature 3");
+                                comboBox7.Items.Add("Temperature 4");
+                                // Cells combobox
+                                comboBox8.Items.Clear();
+                                comboBox8.Text = "";
+                                comboBox8.Items.Add("Ending Voltages");
+                                comboBox8.Items.Add("Cell 1");
+                                comboBox8.Items.Add("Cell 2");
+                                comboBox8.Items.Add("Cell 3");
+                                comboBox8.Items.Add("Cell 4");
+                                comboBox8.Items.Add("Cell 5");
+                                comboBox8.Items.Add("Cell 6");
+                                comboBox8.Items.Add("Cell 7");
+                                comboBox8.Items.Add("Cell 8");
+                                comboBox8.Items.Add("Cell 9");
+                                comboBox8.Items.Add("Cell 10");
+                                comboBox8.Items.Add("Cell 11");
+                                comboBox8.Items.Add("Cell 12");
+                                comboBox8.Items.Add("Cell 13");
+                                comboBox8.Items.Add("Cell 14");
+                                comboBox8.Items.Add("Cell 15");
+                                comboBox8.Items.Add("Cell 16");
+                                comboBox8.Items.Add("Cell 17");
+                                comboBox8.Items.Add("Cell 18");
+                                comboBox8.Items.Add("Cell 19");
+                                comboBox8.Items.Add("Cell 20");
+                                break;
+                            case "3":
+                                // update the cells value
+                                if (cell2 == 0) { cell2 = 22; }
+                                // Battery combobox
+                                comboBox7.Items.Clear();
+                                comboBox7.Text = "";
+                                comboBox7.Items.Add("Voltage 1");
+                                comboBox7.Items.Add("Voltage 2");
+                                comboBox7.Items.Add("Current");
+                                comboBox7.Items.Add("Temperature 1");
+                                comboBox7.Items.Add("Temperature 2");
+                                comboBox7.Items.Add("Temperature 3");
+                                comboBox7.Items.Add("Temperature 4");
+                                // Cells combobox
+                                comboBox8.Items.Clear();
+                                comboBox8.Text = "";
+                                comboBox8.Items.Add("Ending Voltages");
+                                comboBox8.Items.Add("Cell 1");
+                                comboBox8.Items.Add("Cell 2");
+                                comboBox8.Items.Add("Cell 3");
+                                comboBox8.Items.Add("Cell 4");
+                                comboBox8.Items.Add("Cell 5");
+                                comboBox8.Items.Add("Cell 6");
+                                comboBox8.Items.Add("Cell 7");
+                                comboBox8.Items.Add("Cell 8");
+                                comboBox8.Items.Add("Cell 9");
+                                comboBox8.Items.Add("Cell 10");
+                                comboBox8.Items.Add("Cell 11");
+                                comboBox8.Items.Add("Cell 12");
+                                comboBox8.Items.Add("Cell 13");
+                                comboBox8.Items.Add("Cell 14");
+                                comboBox8.Items.Add("Cell 15");
+                                comboBox8.Items.Add("Cell 16");
+                                comboBox8.Items.Add("Cell 17");
+                                comboBox8.Items.Add("Cell 18");
+                                comboBox8.Items.Add("Cell 19");
+                                comboBox8.Items.Add("Cell 20");
+                                comboBox8.Items.Add("Cell 21");
+                                comboBox8.Items.Add("Cell 22");
+                                break;
+                            case "4":
+                                // update the cells value
+                                if (cell2 == 0) { cell2 = 21; }
+                                // Battery combobox
+                                comboBox7.Items.Clear();
+                                comboBox7.Text = "";
+                                comboBox7.Items.Add("Voltage 1");
+                                comboBox7.Items.Add("Voltage 2");
+                                comboBox7.Items.Add("Voltage 3");
+                                comboBox7.Items.Add("Current");
+                                comboBox7.Items.Add("Temperature 1");
+                                comboBox7.Items.Add("Temperature 2");
+                                comboBox7.Items.Add("Temperature 3");
+                                comboBox7.Items.Add("Temperature 4");
+                                // Cells combobox
+                                comboBox8.Items.Clear();
+                                comboBox8.Text = "";
+                                comboBox8.Items.Add("Ending Voltages");
+                                comboBox8.Items.Add("Cell 1");
+                                comboBox8.Items.Add("Cell 2");
+                                comboBox8.Items.Add("Cell 3");
+                                comboBox8.Items.Add("Cell 4");
+                                comboBox8.Items.Add("Cell 5");
+                                comboBox8.Items.Add("Cell 6");
+                                comboBox8.Items.Add("Cell 7");
+                                comboBox8.Items.Add("Cell 8");
+                                comboBox8.Items.Add("Cell 9");
+                                comboBox8.Items.Add("Cell 10");
+                                comboBox8.Items.Add("Cell 11");
+                                comboBox8.Items.Add("Cell 12");
+                                comboBox8.Items.Add("Cell 13");
+                                comboBox8.Items.Add("Cell 14");
+                                comboBox8.Items.Add("Cell 15");
+                                comboBox8.Items.Add("Cell 16");
+                                comboBox8.Items.Add("Cell 17");
+                                comboBox8.Items.Add("Cell 18");
+                                comboBox8.Items.Add("Cell 19");
+                                comboBox8.Items.Add("Cell 20");
+                                comboBox8.Items.Add("Cell 21");
+                                break;
+                            case "21":
+                                // update the cells value
+                                if (cell2 == 0) { cell2 = 21; }
+                                // Battery combobox
+                                comboBox7.Items.Clear();
+                                comboBox7.Text = "";
+                                comboBox7.Items.Add("Voltage");
+                                comboBox7.Items.Add("Current");
+                                comboBox7.Items.Add("Temperature 1");
+                                comboBox7.Items.Add("Temperature 2");
+                                comboBox7.Items.Add("Temperature 3");
+                                comboBox7.Items.Add("Temperature 4");
+                                // Cells combobox
+                                comboBox8.Items.Clear();
+                                comboBox8.Text = "";
+                                comboBox8.Items.Add("Ending Voltages");
+                                comboBox8.Items.Add("Cell 1");
+                                comboBox8.Items.Add("Cell 2");
+                                comboBox8.Items.Add("Cell 3");
+                                comboBox8.Items.Add("Cell 4");
+                                comboBox8.Items.Add("Cell 5");
+                                comboBox8.Items.Add("Cell 6");
+                                comboBox8.Items.Add("Cell 7");
+                                comboBox8.Items.Add("Cell 8");
+                                comboBox8.Items.Add("Cell 9");
+                                comboBox8.Items.Add("Cell 10");
+                                comboBox8.Items.Add("Cell 11");
+                                comboBox8.Items.Add("Cell 12");
+                                comboBox8.Items.Add("Cell 13");
+                                comboBox8.Items.Add("Cell 14");
+                                comboBox8.Items.Add("Cell 15");
+                                comboBox8.Items.Add("Cell 16");
+                                comboBox8.Items.Add("Cell 17");
+                                comboBox8.Items.Add("Cell 18");
+                                comboBox8.Items.Add("Cell 19");
+                                comboBox8.Items.Add("Cell 20");
+                                comboBox8.Items.Add("Cell 21");
+                                break;
+                            default:
+                                // update the cells value
+                                if (cell2 == 0) { cell2 = 20; }
+                                // Battery combobox
+                                comboBox7.Items.Clear();
+                                comboBox7.Text = "";
+                                comboBox7.Items.Add("Voltage 1");
+                                comboBox7.Items.Add("Voltage 2");
+                                comboBox7.Items.Add("Voltage 3");
+                                comboBox7.Items.Add("Voltage 4");
+                                comboBox7.Items.Add("Current");
+                                comboBox7.Items.Add("Temperature 1");
+                                comboBox7.Items.Add("Temperature 2");
+                                comboBox7.Items.Add("Temperature 3");
+                                comboBox7.Items.Add("Temperature 4");
+                                // Cells combobox
+                                comboBox8.Items.Clear();
+                                comboBox8.Text = "";
+                                comboBox8.Items.Add("Ending Voltages");
+                                comboBox8.Items.Add("Cell 1");
+                                comboBox8.Items.Add("Cell 2");
+                                comboBox8.Items.Add("Cell 3");
+                                comboBox8.Items.Add("Cell 4");
+                                comboBox8.Items.Add("Cell 5");
+                                comboBox8.Items.Add("Cell 6");
+                                comboBox8.Items.Add("Cell 7");
+                                comboBox8.Items.Add("Cell 8");
+                                comboBox8.Items.Add("Cell 9");
+                                comboBox8.Items.Add("Cell 10");
+                                comboBox8.Items.Add("Cell 11");
+                                comboBox8.Items.Add("Cell 12");
+                                comboBox8.Items.Add("Cell 13");
+                                comboBox8.Items.Add("Cell 14");
+                                comboBox8.Items.Add("Cell 15");
+                                comboBox8.Items.Add("Cell 16");
+                                comboBox8.Items.Add("Cell 17");
+                                comboBox8.Items.Add("Cell 18");
+                                comboBox8.Items.Add("Cell 19");
+                                comboBox8.Items.Add("Cell 20");
+                                comboBox8.Items.Add("Cell 21");
+                                comboBox8.Items.Add("Cell 22");
+                                comboBox8.Items.Add("Cell 23");
+                                comboBox8.Items.Add("Cell 24");
+                                break;
+                        }// end switch
+
+
+
+                        // The final step is to update the type of test that was selected
+                        if (comboBox4.Text.Contains("As Recieved")) { type2 = 1; }
+                        else if (comboBox4.Text.Contains("Discharge")) { type2 = 2; }
+                        else if (comboBox4.Text.Contains("Capacity")) { type2 = 3; }
+                        else { type2 = 0; }
+
+                        comboBox7.Enabled = true;
+                        comboBox8.Enabled = true;
+                    });// end invoke
+                });// end helper thread
             }
         }
 

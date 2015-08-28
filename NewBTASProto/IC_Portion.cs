@@ -102,7 +102,19 @@ namespace NewBTASProto
                                     {
                                         if (testData.online == true)
                                         {
-                                            updateD(j,11,testData.runStatus);    
+                                            if (testData.faultStatus != "")
+                                            {
+                                                updateD(j, 11, testData.faultStatus);
+                                            }
+                                            else if (testData.endStatus != "")
+                                            {
+                                                updateD(j, 11, testData.endStatus);
+                                            }
+                                            else
+                                            {
+                                                updateD(j, 11, testData.runStatus); 
+                                            }
+                                               
                                         }
                                         else
                                         {
@@ -176,10 +188,35 @@ namespace NewBTASProto
                                         ICComPort.Write(GlobalVars.ICSettings[i].outText, 0, 28);
                                         // wait for a response
                                         tempBuff = ICComPort.ReadTo("Z");
-                                        // and we don't need to check any more
+
+
+                                        // we got a response so lets update the grid and the status box
+                                        //A[1] has the terminal ID in it
+                                        char[] delims = { ' ' };
+                                        string[] A = tempBuff.Split(delims);
+                                        testData = new ICDataStore(A);
                                         this.Invoke((MethodInvoker)delegate
                                         {
                                             rtbIncoming.Text = "Critical  " + i.ToString() + "  :  " + tempBuff;
+                                            if (testData.online == true)
+                                            {
+                                                if (testData.faultStatus != "")
+                                                {
+                                                    updateD(i, 11, testData.faultStatus);
+                                                }
+                                                else if (testData.endStatus != "")
+                                                {
+                                                    updateD(i, 11, testData.endStatus);
+                                                }
+                                                else
+                                                {
+                                                    updateD(i, 11, testData.runStatus);
+                                                }
+                                            }
+                                            else
+                                            {
+                                                updateD(i, 11, "offline!");
+                                            }
                                         });
                                         Thread.Sleep(200);
                                     }
@@ -221,7 +258,7 @@ namespace NewBTASProto
             {
                 // we're going to give it 3 seconds to think about it...
                 // it gets checked every other time...
-                Thread.Sleep(3000);
+                Thread.Sleep(6000);
                 // now we'll make sure we're not looking anymore...
                 check = false;
             }); // end thread

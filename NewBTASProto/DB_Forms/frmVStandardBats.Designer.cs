@@ -125,6 +125,31 @@
             this.textBox36 = new System.Windows.Forms.TextBox();
             this.groupBox11 = new System.Windows.Forms.GroupBox();
             this.label37 = new System.Windows.Forms.Label();
+            this.groupBox12 = new System.Windows.Forms.GroupBox();
+            this.comboBox2 = new System.Windows.Forms.ComboBox();
+            this.label38 = new System.Windows.Forms.Label();
+            this.groupBox13 = new System.Windows.Forms.GroupBox();
+            this.numericUpDown4 = new System.Windows.Forms.NumericUpDown();
+            this.label39 = new System.Windows.Forms.Label();
+            this.label40 = new System.Windows.Forms.Label();
+            this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.label41 = new System.Windows.Forms.Label();
+            this.label42 = new System.Windows.Forms.Label();
+            this.label43 = new System.Windows.Forms.Label();
+            this.label44 = new System.Windows.Forms.Label();
+            this.groupBox14 = new System.Windows.Forms.GroupBox();
+            this.numericUpDown5 = new System.Windows.Forms.NumericUpDown();
+            this.label45 = new System.Windows.Forms.Label();
+            this.label46 = new System.Windows.Forms.Label();
+            this.numericUpDown6 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown7 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown8 = new System.Windows.Forms.NumericUpDown();
+            this.label47 = new System.Windows.Forms.Label();
+            this.label48 = new System.Windows.Forms.Label();
+            this.label49 = new System.Windows.Forms.Label();
+            this.label50 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.bindingNavigator1)).BeginInit();
             this.bindingNavigator1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
@@ -139,6 +164,17 @@
             this.groupBox9.SuspendLayout();
             this.groupBox10.SuspendLayout();
             this.groupBox11.SuspendLayout();
+            this.groupBox12.SuspendLayout();
+            this.groupBox13.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            this.groupBox14.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown6)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown7)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown8)).BeginInit();
             this.SuspendLayout();
             // 
             // bindingNavigator1
@@ -163,7 +199,7 @@
             this.bindingNavigator1.MovePreviousItem = this.bindingNavigatorMovePreviousItem;
             this.bindingNavigator1.Name = "bindingNavigator1";
             this.bindingNavigator1.PositionItem = this.bindingNavigatorPositionItem;
-            this.bindingNavigator1.Size = new System.Drawing.Size(736, 25);
+            this.bindingNavigator1.Size = new System.Drawing.Size(1119, 25);
             this.bindingNavigator1.TabIndex = 2;
             this.bindingNavigator1.Text = "bindingNavigator1";
             // 
@@ -1045,11 +1081,278 @@
             this.label37.TabIndex = 97;
             this.label37.Text = "label37";
             // 
+            // groupBox12
+            // 
+            this.groupBox12.Controls.Add(this.groupBox14);
+            this.groupBox12.Controls.Add(this.groupBox13);
+            this.groupBox12.Controls.Add(this.label38);
+            this.groupBox12.Controls.Add(this.comboBox2);
+            this.groupBox12.Location = new System.Drawing.Point(734, 28);
+            this.groupBox12.Name = "groupBox12";
+            this.groupBox12.Size = new System.Drawing.Size(372, 462);
+            this.groupBox12.TabIndex = 99;
+            this.groupBox12.TabStop = false;
+            this.groupBox12.Text = "Full Charge-6";
+            // 
+            // comboBox2
+            // 
+            this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox2.FormattingEnabled = true;
+            this.comboBox2.Items.AddRange(new object[] {
+            "10 Single Rate",
+            "11 Single Rate with Peak",
+            "12 Constant Voltage",
+            "20 Dual Rate",
+            "21 Dual Rate with Peak",
+            "30 Full Discharge",
+            "31 Capacity Test",
+            "32 Constant Resistance"});
+            this.comboBox2.Location = new System.Drawing.Point(55, 17);
+            this.comboBox2.Name = "comboBox2";
+            this.comboBox2.Size = new System.Drawing.Size(201, 21);
+            this.comboBox2.TabIndex = 99;
+            // 
+            // label38
+            // 
+            this.label38.AutoSize = true;
+            this.label38.Location = new System.Drawing.Point(6, 20);
+            this.label38.Name = "label38";
+            this.label38.Size = new System.Drawing.Size(43, 13);
+            this.label38.TabIndex = 100;
+            this.label38.Text = "Mode:  ";
+            // 
+            // groupBox13
+            // 
+            this.groupBox13.Controls.Add(this.numericUpDown4);
+            this.groupBox13.Controls.Add(this.label39);
+            this.groupBox13.Controls.Add(this.label40);
+            this.groupBox13.Controls.Add(this.numericUpDown3);
+            this.groupBox13.Controls.Add(this.numericUpDown2);
+            this.groupBox13.Controls.Add(this.numericUpDown1);
+            this.groupBox13.Controls.Add(this.label41);
+            this.groupBox13.Controls.Add(this.label42);
+            this.groupBox13.Controls.Add(this.label43);
+            this.groupBox13.Controls.Add(this.label44);
+            this.groupBox13.Location = new System.Drawing.Point(9, 60);
+            this.groupBox13.Name = "groupBox13";
+            this.groupBox13.Size = new System.Drawing.Size(307, 165);
+            this.groupBox13.TabIndex = 101;
+            this.groupBox13.TabStop = false;
+            this.groupBox13.Text = "Primary Charge";
+            // 
+            // numericUpDown4
+            // 
+            this.numericUpDown4.DecimalPlaces = 2;
+            this.numericUpDown4.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            this.numericUpDown4.Location = new System.Drawing.Point(100, 128);
+            this.numericUpDown4.Name = "numericUpDown4";
+            this.numericUpDown4.Size = new System.Drawing.Size(201, 20);
+            this.numericUpDown4.TabIndex = 33;
+            // 
+            // label39
+            // 
+            this.label39.AutoSize = true;
+            this.label39.Location = new System.Drawing.Point(97, 109);
+            this.label39.Name = "label39";
+            this.label39.Size = new System.Drawing.Size(89, 13);
+            this.label39.TabIndex = 32;
+            this.label39.Text = "Charge Voltage 1";
+            // 
+            // label40
+            // 
+            this.label40.AutoSize = true;
+            this.label40.Location = new System.Drawing.Point(51, 130);
+            this.label40.Name = "label40";
+            this.label40.Size = new System.Drawing.Size(39, 13);
+            this.label40.TabIndex = 31;
+            this.label40.Text = "Volts:  ";
+            // 
+            // numericUpDown3
+            // 
+            this.numericUpDown3.DecimalPlaces = 1;
+            this.numericUpDown3.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            this.numericUpDown3.Location = new System.Drawing.Point(100, 86);
+            this.numericUpDown3.Name = "numericUpDown3";
+            this.numericUpDown3.Size = new System.Drawing.Size(201, 20);
+            this.numericUpDown3.TabIndex = 30;
+            // 
+            // numericUpDown2
+            // 
+            this.numericUpDown2.Location = new System.Drawing.Point(100, 44);
+            this.numericUpDown2.Name = "numericUpDown2";
+            this.numericUpDown2.Size = new System.Drawing.Size(201, 20);
+            this.numericUpDown2.TabIndex = 29;
+            // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.Location = new System.Drawing.Point(100, 19);
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(201, 20);
+            this.numericUpDown1.TabIndex = 28;
+            // 
+            // label41
+            // 
+            this.label41.AutoSize = true;
+            this.label41.Location = new System.Drawing.Point(97, 67);
+            this.label41.Name = "label41";
+            this.label41.Size = new System.Drawing.Size(87, 13);
+            this.label41.TabIndex = 27;
+            this.label41.Text = "Charge Current 1";
+            // 
+            // label42
+            // 
+            this.label42.AutoSize = true;
+            this.label42.Location = new System.Drawing.Point(51, 88);
+            this.label42.Name = "label42";
+            this.label42.Size = new System.Drawing.Size(42, 13);
+            this.label42.TabIndex = 26;
+            this.label42.Text = "Amps:  ";
+            // 
+            // label43
+            // 
+            this.label43.AutoSize = true;
+            this.label43.Location = new System.Drawing.Point(24, 47);
+            this.label43.Name = "label43";
+            this.label43.Size = new System.Drawing.Size(70, 13);
+            this.label43.TabIndex = 25;
+            this.label43.Text = "Time (Mins):  ";
+            // 
+            // label44
+            // 
+            this.label44.AutoSize = true;
+            this.label44.Location = new System.Drawing.Point(18, 21);
+            this.label44.Name = "label44";
+            this.label44.Size = new System.Drawing.Size(76, 13);
+            this.label44.TabIndex = 24;
+            this.label44.Text = "Time (Hours):  ";
+            // 
+            // groupBox14
+            // 
+            this.groupBox14.Controls.Add(this.numericUpDown5);
+            this.groupBox14.Controls.Add(this.label45);
+            this.groupBox14.Controls.Add(this.label46);
+            this.groupBox14.Controls.Add(this.numericUpDown6);
+            this.groupBox14.Controls.Add(this.numericUpDown7);
+            this.groupBox14.Controls.Add(this.numericUpDown8);
+            this.groupBox14.Controls.Add(this.label47);
+            this.groupBox14.Controls.Add(this.label48);
+            this.groupBox14.Controls.Add(this.label49);
+            this.groupBox14.Controls.Add(this.label50);
+            this.groupBox14.Location = new System.Drawing.Point(9, 231);
+            this.groupBox14.Name = "groupBox14";
+            this.groupBox14.Size = new System.Drawing.Size(307, 165);
+            this.groupBox14.TabIndex = 102;
+            this.groupBox14.TabStop = false;
+            this.groupBox14.Text = "Secondary Charge";
+            // 
+            // numericUpDown5
+            // 
+            this.numericUpDown5.DecimalPlaces = 2;
+            this.numericUpDown5.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            this.numericUpDown5.Location = new System.Drawing.Point(100, 130);
+            this.numericUpDown5.Name = "numericUpDown5";
+            this.numericUpDown5.Size = new System.Drawing.Size(201, 20);
+            this.numericUpDown5.TabIndex = 45;
+            // 
+            // label45
+            // 
+            this.label45.AutoSize = true;
+            this.label45.Location = new System.Drawing.Point(97, 111);
+            this.label45.Name = "label45";
+            this.label45.Size = new System.Drawing.Size(89, 13);
+            this.label45.TabIndex = 44;
+            this.label45.Text = "Charge Voltage 2";
+            // 
+            // label46
+            // 
+            this.label46.AutoSize = true;
+            this.label46.Location = new System.Drawing.Point(51, 132);
+            this.label46.Name = "label46";
+            this.label46.Size = new System.Drawing.Size(39, 13);
+            this.label46.TabIndex = 43;
+            this.label46.Text = "Volts:  ";
+            // 
+            // numericUpDown6
+            // 
+            this.numericUpDown6.DecimalPlaces = 1;
+            this.numericUpDown6.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            this.numericUpDown6.Location = new System.Drawing.Point(100, 88);
+            this.numericUpDown6.Name = "numericUpDown6";
+            this.numericUpDown6.Size = new System.Drawing.Size(201, 20);
+            this.numericUpDown6.TabIndex = 42;
+            // 
+            // numericUpDown7
+            // 
+            this.numericUpDown7.Location = new System.Drawing.Point(100, 46);
+            this.numericUpDown7.Name = "numericUpDown7";
+            this.numericUpDown7.Size = new System.Drawing.Size(201, 20);
+            this.numericUpDown7.TabIndex = 41;
+            // 
+            // numericUpDown8
+            // 
+            this.numericUpDown8.Location = new System.Drawing.Point(100, 21);
+            this.numericUpDown8.Name = "numericUpDown8";
+            this.numericUpDown8.Size = new System.Drawing.Size(201, 20);
+            this.numericUpDown8.TabIndex = 40;
+            // 
+            // label47
+            // 
+            this.label47.AutoSize = true;
+            this.label47.Location = new System.Drawing.Point(97, 69);
+            this.label47.Name = "label47";
+            this.label47.Size = new System.Drawing.Size(87, 13);
+            this.label47.TabIndex = 39;
+            this.label47.Text = "Charge Current 2";
+            // 
+            // label48
+            // 
+            this.label48.AutoSize = true;
+            this.label48.Location = new System.Drawing.Point(51, 90);
+            this.label48.Name = "label48";
+            this.label48.Size = new System.Drawing.Size(42, 13);
+            this.label48.TabIndex = 38;
+            this.label48.Text = "Amps:  ";
+            // 
+            // label49
+            // 
+            this.label49.AutoSize = true;
+            this.label49.Location = new System.Drawing.Point(24, 49);
+            this.label49.Name = "label49";
+            this.label49.Size = new System.Drawing.Size(70, 13);
+            this.label49.TabIndex = 36;
+            this.label49.Text = "Time (Mins):  ";
+            // 
+            // label50
+            // 
+            this.label50.AutoSize = true;
+            this.label50.Location = new System.Drawing.Point(18, 23);
+            this.label50.Name = "label50";
+            this.label50.Size = new System.Drawing.Size(76, 13);
+            this.label50.TabIndex = 35;
+            this.label50.Text = "Time (Hours):  ";
+            // 
             // frmVStandardBats
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(736, 499);
+            this.ClientSize = new System.Drawing.Size(1119, 497);
+            this.Controls.Add(this.groupBox12);
             this.Controls.Add(this.label37);
             this.Controls.Add(this.groupBox11);
             this.Controls.Add(this.groupBox10);
@@ -1096,6 +1399,20 @@
             this.groupBox10.PerformLayout();
             this.groupBox11.ResumeLayout(false);
             this.groupBox11.PerformLayout();
+            this.groupBox12.ResumeLayout(false);
+            this.groupBox12.PerformLayout();
+            this.groupBox13.ResumeLayout(false);
+            this.groupBox13.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            this.groupBox14.ResumeLayout(false);
+            this.groupBox14.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown6)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown7)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown8)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1198,5 +1515,30 @@
         private System.Windows.Forms.TextBox textBox36;
         private System.Windows.Forms.GroupBox groupBox11;
         private System.Windows.Forms.Label label37;
+        private System.Windows.Forms.GroupBox groupBox12;
+        private System.Windows.Forms.Label label38;
+        private System.Windows.Forms.ComboBox comboBox2;
+        private System.Windows.Forms.GroupBox groupBox13;
+        private System.Windows.Forms.NumericUpDown numericUpDown4;
+        private System.Windows.Forms.Label label39;
+        private System.Windows.Forms.Label label40;
+        private System.Windows.Forms.NumericUpDown numericUpDown3;
+        private System.Windows.Forms.NumericUpDown numericUpDown2;
+        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.Label label41;
+        private System.Windows.Forms.Label label42;
+        private System.Windows.Forms.Label label43;
+        private System.Windows.Forms.Label label44;
+        private System.Windows.Forms.GroupBox groupBox14;
+        private System.Windows.Forms.NumericUpDown numericUpDown5;
+        private System.Windows.Forms.Label label45;
+        private System.Windows.Forms.Label label46;
+        private System.Windows.Forms.NumericUpDown numericUpDown6;
+        private System.Windows.Forms.NumericUpDown numericUpDown7;
+        private System.Windows.Forms.NumericUpDown numericUpDown8;
+        private System.Windows.Forms.Label label47;
+        private System.Windows.Forms.Label label48;
+        private System.Windows.Forms.Label label49;
+        private System.Windows.Forms.Label label50;
     }
 }

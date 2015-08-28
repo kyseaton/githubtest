@@ -76,7 +76,6 @@
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.button2 = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label11 = new System.Windows.Forms.Label();
@@ -107,13 +106,13 @@
             this.topCharge4ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.topCharge2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.topCharge1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.constantVoltageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.capacity1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dischargeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.slowCharge14ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.slowCharge16ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.customChrgToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.customCapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.reflexChg1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
             this.clearToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.cMSStartStop = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -140,9 +139,6 @@
             this.toolStripMenuItem20 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem21 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem22 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripSeparator();
-            this.masterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.slaveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cMSChargerType = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.cCAToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.iCAToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -150,6 +146,7 @@
             this.toolStripMenuItem23 = new System.Windows.Forms.ToolStripSeparator();
             this.clearToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.button5 = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -507,7 +504,7 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.textBox1);
+            this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.button2);
             this.groupBox1.Location = new System.Drawing.Point(1035, 90);
             this.groupBox1.Name = "groupBox1";
@@ -515,17 +512,6 @@
             this.groupBox1.TabIndex = 26;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "REAL TIME DATA";
-            // 
-            // textBox1
-            // 
-            this.textBox1.BackColor = System.Drawing.Color.White;
-            this.textBox1.Font = new System.Drawing.Font("Lucida Sans", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.Location = new System.Drawing.Point(6, 16);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(230, 587);
-            this.textBox1.TabIndex = 1;
             // 
             // button2
             // 
@@ -790,118 +776,118 @@
             this.topCharge4ToolStripMenuItem,
             this.topCharge2ToolStripMenuItem,
             this.topCharge1ToolStripMenuItem,
+            this.constantVoltageToolStripMenuItem,
             this.capacity1ToolStripMenuItem,
             this.dischargeToolStripMenuItem,
             this.slowCharge14ToolStripMenuItem,
             this.slowCharge16ToolStripMenuItem,
             this.customChrgToolStripMenuItem,
             this.customCapToolStripMenuItem,
-            this.reflexChg1ToolStripMenuItem,
             this.toolStripMenuItem4,
             this.clearToolStripMenuItem2});
             this.cMSTestType.Name = "cMSTestType";
-            this.cMSTestType.Size = new System.Drawing.Size(158, 318);
+            this.cMSTestType.Size = new System.Drawing.Size(166, 318);
             // 
             // asReceivedToolStripMenuItem
             // 
             this.asReceivedToolStripMenuItem.Name = "asReceivedToolStripMenuItem";
-            this.asReceivedToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.asReceivedToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
             this.asReceivedToolStripMenuItem.Text = "As Received";
             this.asReceivedToolStripMenuItem.Click += new System.EventHandler(this.asReceivedToolStripMenuItem_Click);
             // 
             // fullChargeToolStripMenuItem
             // 
             this.fullChargeToolStripMenuItem.Name = "fullChargeToolStripMenuItem";
-            this.fullChargeToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.fullChargeToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
             this.fullChargeToolStripMenuItem.Text = "Full Charge-6";
             this.fullChargeToolStripMenuItem.Click += new System.EventHandler(this.fullChargeToolStripMenuItem_Click);
             // 
             // fullCharge4ToolStripMenuItem
             // 
             this.fullCharge4ToolStripMenuItem.Name = "fullCharge4ToolStripMenuItem";
-            this.fullCharge4ToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.fullCharge4ToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
             this.fullCharge4ToolStripMenuItem.Text = "Full Charge-4";
             this.fullCharge4ToolStripMenuItem.Click += new System.EventHandler(this.fullCharge4ToolStripMenuItem_Click);
             // 
             // topCharge4ToolStripMenuItem
             // 
             this.topCharge4ToolStripMenuItem.Name = "topCharge4ToolStripMenuItem";
-            this.topCharge4ToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.topCharge4ToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
             this.topCharge4ToolStripMenuItem.Text = "Top Charge-4";
             this.topCharge4ToolStripMenuItem.Click += new System.EventHandler(this.topCharge4ToolStripMenuItem_Click);
             // 
             // topCharge2ToolStripMenuItem
             // 
             this.topCharge2ToolStripMenuItem.Name = "topCharge2ToolStripMenuItem";
-            this.topCharge2ToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.topCharge2ToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
             this.topCharge2ToolStripMenuItem.Text = "Top Charge-2";
             this.topCharge2ToolStripMenuItem.Click += new System.EventHandler(this.topCharge2ToolStripMenuItem_Click);
             // 
             // topCharge1ToolStripMenuItem
             // 
             this.topCharge1ToolStripMenuItem.Name = "topCharge1ToolStripMenuItem";
-            this.topCharge1ToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.topCharge1ToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
             this.topCharge1ToolStripMenuItem.Text = "Top Charge-1";
             this.topCharge1ToolStripMenuItem.Click += new System.EventHandler(this.topCharge1ToolStripMenuItem_Click);
+            // 
+            // constantVoltageToolStripMenuItem
+            // 
+            this.constantVoltageToolStripMenuItem.Name = "constantVoltageToolStripMenuItem";
+            this.constantVoltageToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.constantVoltageToolStripMenuItem.Text = "Constant Voltage";
+            this.constantVoltageToolStripMenuItem.Click += new System.EventHandler(this.constantVoltageToolStripMenuItem_Click);
             // 
             // capacity1ToolStripMenuItem
             // 
             this.capacity1ToolStripMenuItem.Name = "capacity1ToolStripMenuItem";
-            this.capacity1ToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.capacity1ToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
             this.capacity1ToolStripMenuItem.Text = "Capacity-1";
             this.capacity1ToolStripMenuItem.Click += new System.EventHandler(this.capacity1ToolStripMenuItem_Click);
             // 
             // dischargeToolStripMenuItem
             // 
             this.dischargeToolStripMenuItem.Name = "dischargeToolStripMenuItem";
-            this.dischargeToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.dischargeToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
             this.dischargeToolStripMenuItem.Text = "Discharge";
             this.dischargeToolStripMenuItem.Click += new System.EventHandler(this.dischargeToolStripMenuItem_Click);
             // 
             // slowCharge14ToolStripMenuItem
             // 
             this.slowCharge14ToolStripMenuItem.Name = "slowCharge14ToolStripMenuItem";
-            this.slowCharge14ToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.slowCharge14ToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
             this.slowCharge14ToolStripMenuItem.Text = "Slow Charge-14";
             this.slowCharge14ToolStripMenuItem.Click += new System.EventHandler(this.slowCharge14ToolStripMenuItem_Click);
             // 
             // slowCharge16ToolStripMenuItem
             // 
             this.slowCharge16ToolStripMenuItem.Name = "slowCharge16ToolStripMenuItem";
-            this.slowCharge16ToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.slowCharge16ToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
             this.slowCharge16ToolStripMenuItem.Text = "SlowCharge-16";
             this.slowCharge16ToolStripMenuItem.Click += new System.EventHandler(this.slowCharge16ToolStripMenuItem_Click);
             // 
             // customChrgToolStripMenuItem
             // 
             this.customChrgToolStripMenuItem.Name = "customChrgToolStripMenuItem";
-            this.customChrgToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.customChrgToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
             this.customChrgToolStripMenuItem.Text = "Custom Chg";
             this.customChrgToolStripMenuItem.Click += new System.EventHandler(this.customChrgToolStripMenuItem_Click);
             // 
             // customCapToolStripMenuItem
             // 
             this.customCapToolStripMenuItem.Name = "customCapToolStripMenuItem";
-            this.customCapToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.customCapToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
             this.customCapToolStripMenuItem.Text = "Custom Cap";
             this.customCapToolStripMenuItem.Click += new System.EventHandler(this.customCapToolStripMenuItem_Click);
-            // 
-            // reflexChg1ToolStripMenuItem
-            // 
-            this.reflexChg1ToolStripMenuItem.Name = "reflexChg1ToolStripMenuItem";
-            this.reflexChg1ToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
-            this.reflexChg1ToolStripMenuItem.Text = "Reflex Chg-1";
-            this.reflexChg1ToolStripMenuItem.Click += new System.EventHandler(this.reflexChg1ToolStripMenuItem_Click);
             // 
             // toolStripMenuItem4
             // 
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(154, 6);
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(162, 6);
             // 
             // clearToolStripMenuItem2
             // 
             this.clearToolStripMenuItem2.Name = "clearToolStripMenuItem2";
-            this.clearToolStripMenuItem2.Size = new System.Drawing.Size(157, 22);
+            this.clearToolStripMenuItem2.Size = new System.Drawing.Size(165, 22);
             this.clearToolStripMenuItem2.Text = "Clear";
             this.clearToolStripMenuItem2.Click += new System.EventHandler(this.clearToolStripMenuItem2_Click);
             // 
@@ -964,155 +950,133 @@
             this.toolStripMenuItem19,
             this.toolStripMenuItem20,
             this.toolStripMenuItem21,
-            this.toolStripMenuItem22,
-            this.toolStripMenuItem6,
-            this.masterToolStripMenuItem,
-            this.slaveToolStripMenuItem});
+            this.toolStripMenuItem22});
             this.cMSChargerChannel.Name = "cMSChargerChannel";
-            this.cMSChargerChannel.Size = new System.Drawing.Size(111, 434);
+            this.cMSChargerChannel.Size = new System.Drawing.Size(102, 384);
             // 
             // clearToolStripMenuItem
             // 
             this.clearToolStripMenuItem.Name = "clearToolStripMenuItem";
-            this.clearToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
+            this.clearToolStripMenuItem.Size = new System.Drawing.Size(101, 22);
             this.clearToolStripMenuItem.Text = "Clear";
             this.clearToolStripMenuItem.Click += new System.EventHandler(this.clearToolStripMenuItem_Click);
             // 
             // toolStripMenuItem5
             // 
             this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-            this.toolStripMenuItem5.Size = new System.Drawing.Size(107, 6);
+            this.toolStripMenuItem5.Size = new System.Drawing.Size(98, 6);
             // 
             // toolStripMenuItem7
             // 
             this.toolStripMenuItem7.Name = "toolStripMenuItem7";
-            this.toolStripMenuItem7.Size = new System.Drawing.Size(110, 22);
+            this.toolStripMenuItem7.Size = new System.Drawing.Size(101, 22);
             this.toolStripMenuItem7.Text = "0";
             this.toolStripMenuItem7.Click += new System.EventHandler(this.toolStripMenuItem7_Click);
             // 
             // toolStripMenuItem8
             // 
             this.toolStripMenuItem8.Name = "toolStripMenuItem8";
-            this.toolStripMenuItem8.Size = new System.Drawing.Size(110, 22);
+            this.toolStripMenuItem8.Size = new System.Drawing.Size(101, 22);
             this.toolStripMenuItem8.Text = "1";
             this.toolStripMenuItem8.Click += new System.EventHandler(this.toolStripMenuItem8_Click);
             // 
             // toolStripMenuItem9
             // 
             this.toolStripMenuItem9.Name = "toolStripMenuItem9";
-            this.toolStripMenuItem9.Size = new System.Drawing.Size(110, 22);
+            this.toolStripMenuItem9.Size = new System.Drawing.Size(101, 22);
             this.toolStripMenuItem9.Text = "2";
             this.toolStripMenuItem9.Click += new System.EventHandler(this.toolStripMenuItem9_Click);
             // 
             // toolStripMenuItem10
             // 
             this.toolStripMenuItem10.Name = "toolStripMenuItem10";
-            this.toolStripMenuItem10.Size = new System.Drawing.Size(110, 22);
+            this.toolStripMenuItem10.Size = new System.Drawing.Size(101, 22);
             this.toolStripMenuItem10.Text = "3";
             this.toolStripMenuItem10.Click += new System.EventHandler(this.toolStripMenuItem10_Click);
             // 
             // toolStripMenuItem11
             // 
             this.toolStripMenuItem11.Name = "toolStripMenuItem11";
-            this.toolStripMenuItem11.Size = new System.Drawing.Size(110, 22);
+            this.toolStripMenuItem11.Size = new System.Drawing.Size(101, 22);
             this.toolStripMenuItem11.Text = "4";
             this.toolStripMenuItem11.Click += new System.EventHandler(this.toolStripMenuItem11_Click);
             // 
             // toolStripMenuItem12
             // 
             this.toolStripMenuItem12.Name = "toolStripMenuItem12";
-            this.toolStripMenuItem12.Size = new System.Drawing.Size(110, 22);
+            this.toolStripMenuItem12.Size = new System.Drawing.Size(101, 22);
             this.toolStripMenuItem12.Text = "5";
             this.toolStripMenuItem12.Click += new System.EventHandler(this.toolStripMenuItem12_Click);
             // 
             // toolStripMenuItem13
             // 
             this.toolStripMenuItem13.Name = "toolStripMenuItem13";
-            this.toolStripMenuItem13.Size = new System.Drawing.Size(110, 22);
+            this.toolStripMenuItem13.Size = new System.Drawing.Size(101, 22);
             this.toolStripMenuItem13.Text = "6";
             this.toolStripMenuItem13.Click += new System.EventHandler(this.toolStripMenuItem13_Click);
             // 
             // toolStripMenuItem14
             // 
             this.toolStripMenuItem14.Name = "toolStripMenuItem14";
-            this.toolStripMenuItem14.Size = new System.Drawing.Size(110, 22);
+            this.toolStripMenuItem14.Size = new System.Drawing.Size(101, 22);
             this.toolStripMenuItem14.Text = "7";
             this.toolStripMenuItem14.Click += new System.EventHandler(this.toolStripMenuItem14_Click);
             // 
             // toolStripMenuItem15
             // 
             this.toolStripMenuItem15.Name = "toolStripMenuItem15";
-            this.toolStripMenuItem15.Size = new System.Drawing.Size(110, 22);
+            this.toolStripMenuItem15.Size = new System.Drawing.Size(101, 22);
             this.toolStripMenuItem15.Text = "8";
             this.toolStripMenuItem15.Click += new System.EventHandler(this.toolStripMenuItem15_Click);
             // 
             // toolStripMenuItem16
             // 
             this.toolStripMenuItem16.Name = "toolStripMenuItem16";
-            this.toolStripMenuItem16.Size = new System.Drawing.Size(110, 22);
+            this.toolStripMenuItem16.Size = new System.Drawing.Size(101, 22);
             this.toolStripMenuItem16.Text = "9";
             this.toolStripMenuItem16.Click += new System.EventHandler(this.toolStripMenuItem16_Click);
             // 
             // toolStripMenuItem17
             // 
             this.toolStripMenuItem17.Name = "toolStripMenuItem17";
-            this.toolStripMenuItem17.Size = new System.Drawing.Size(110, 22);
+            this.toolStripMenuItem17.Size = new System.Drawing.Size(101, 22);
             this.toolStripMenuItem17.Text = "10";
             this.toolStripMenuItem17.Click += new System.EventHandler(this.toolStripMenuItem17_Click);
             // 
             // toolStripMenuItem18
             // 
             this.toolStripMenuItem18.Name = "toolStripMenuItem18";
-            this.toolStripMenuItem18.Size = new System.Drawing.Size(110, 22);
+            this.toolStripMenuItem18.Size = new System.Drawing.Size(101, 22);
             this.toolStripMenuItem18.Text = "11";
             this.toolStripMenuItem18.Click += new System.EventHandler(this.toolStripMenuItem18_Click);
             // 
             // toolStripMenuItem19
             // 
             this.toolStripMenuItem19.Name = "toolStripMenuItem19";
-            this.toolStripMenuItem19.Size = new System.Drawing.Size(110, 22);
+            this.toolStripMenuItem19.Size = new System.Drawing.Size(101, 22);
             this.toolStripMenuItem19.Text = "12";
             this.toolStripMenuItem19.Click += new System.EventHandler(this.toolStripMenuItem19_Click);
             // 
             // toolStripMenuItem20
             // 
             this.toolStripMenuItem20.Name = "toolStripMenuItem20";
-            this.toolStripMenuItem20.Size = new System.Drawing.Size(110, 22);
+            this.toolStripMenuItem20.Size = new System.Drawing.Size(101, 22);
             this.toolStripMenuItem20.Text = "13";
             this.toolStripMenuItem20.Click += new System.EventHandler(this.toolStripMenuItem20_Click);
             // 
             // toolStripMenuItem21
             // 
             this.toolStripMenuItem21.Name = "toolStripMenuItem21";
-            this.toolStripMenuItem21.Size = new System.Drawing.Size(110, 22);
+            this.toolStripMenuItem21.Size = new System.Drawing.Size(101, 22);
             this.toolStripMenuItem21.Text = "14";
             this.toolStripMenuItem21.Click += new System.EventHandler(this.toolStripMenuItem21_Click);
             // 
             // toolStripMenuItem22
             // 
             this.toolStripMenuItem22.Name = "toolStripMenuItem22";
-            this.toolStripMenuItem22.Size = new System.Drawing.Size(110, 22);
+            this.toolStripMenuItem22.Size = new System.Drawing.Size(101, 22);
             this.toolStripMenuItem22.Text = "15";
             this.toolStripMenuItem22.Click += new System.EventHandler(this.toolStripMenuItem22_Click);
-            // 
-            // toolStripMenuItem6
-            // 
-            this.toolStripMenuItem6.Name = "toolStripMenuItem6";
-            this.toolStripMenuItem6.Size = new System.Drawing.Size(107, 6);
-            // 
-            // masterToolStripMenuItem
-            // 
-            this.masterToolStripMenuItem.Name = "masterToolStripMenuItem";
-            this.masterToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
-            this.masterToolStripMenuItem.Text = "Master";
-            this.masterToolStripMenuItem.Click += new System.EventHandler(this.masterToolStripMenuItem_Click);
-            // 
-            // slaveToolStripMenuItem
-            // 
-            this.slaveToolStripMenuItem.Name = "slaveToolStripMenuItem";
-            this.slaveToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
-            this.slaveToolStripMenuItem.Text = "Slave";
-            this.slaveToolStripMenuItem.Click += new System.EventHandler(this.slaveToolStripMenuItem_Click);
             // 
             // cMSChargerType
             // 
@@ -1169,6 +1133,15 @@
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
+            // label1
+            // 
+            this.label1.BackColor = System.Drawing.SystemColors.Window;
+            this.label1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.label1.Location = new System.Drawing.Point(6, 16);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(230, 587);
+            this.label1.TabIndex = 34;
+            // 
             // Main_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1200,7 +1173,6 @@
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -1253,7 +1225,6 @@
         private System.Windows.Forms.ToolStripMenuItem editTechniciansToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem testToolStripMenuItem;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
@@ -1295,7 +1266,6 @@
         private System.Windows.Forms.ToolStripMenuItem slowCharge16ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem customChrgToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem customCapToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem reflexChg1ToolStripMenuItem;
         private System.Windows.Forms.ContextMenuStrip cMSStartStop;
         private System.Windows.Forms.ToolStripMenuItem startNewTestToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem resumeTestToolStripMenuItem;
@@ -1320,9 +1290,6 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem20;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem21;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem22;
-        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem6;
-        private System.Windows.Forms.ToolStripMenuItem masterToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem slaveToolStripMenuItem;
         private System.Windows.Forms.ContextMenuStrip cMSChargerType;
         private System.Windows.Forms.ToolStripMenuItem cCAToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem iCAToolStripMenuItem;
@@ -1336,6 +1303,8 @@
         private System.Windows.Forms.ToolStripMenuItem automaticallyConfigureChargerToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripMenuItem chargerConfigurationInterfaceToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem constantVoltageToolStripMenuItem;
+        private System.Windows.Forms.Label label1;
     }
 }
 

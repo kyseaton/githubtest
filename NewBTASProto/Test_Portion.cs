@@ -29,11 +29,21 @@ namespace NewBTASProto
         private void RunTest()
         {
             int station = dataGridView1.CurrentRow.Index;
+            int Cstation = 0;
+            if ((string) d.Rows[station][9] != "")
+            {
+                Cstation = int.Parse((string)d.Rows[station][9]);
+            }
+            
             cRunTest[station] = new CancellationTokenSource();
 
             // Everything is going to be done on a helper thread
             ThreadPool.QueueUserWorkItem(s =>
             {
+                string strAccessConn;
+                string strAccessSelect;
+                OleDbConnection myAccessConn;
+
                 // setup the canellation token
                 CancellationToken token = (CancellationToken)s;
 
@@ -72,18 +82,8 @@ namespace NewBTASProto
                 }
                 #endregion
 
-                #region load test readings and interval values
-                // Now we'll load the test parameters
-                // We need to know the Interval and the number of readings///////////////////////////////////////////////////////////////////////
-
-                int readings;
-                int interval;
-
-                string strAccessConn;
-                string strAccessSelect;
-                OleDbConnection myAccessConn;
-
-                // create the connection
+                #region db connection setup
+                // create db connection
                 try
                 {
                     strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Kyle\Documents\Visual Studio 2013\Projects\NewBTASProto\BTS16NV.MDB";
@@ -94,6 +94,471 @@ namespace NewBTASProto
                     MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
                     return;
                 }
+                #endregion
+
+                // we passed the tests so we'll check the box to indicate we are a go!
+                updateD(station, 5, true);
+
+                #region if we are doing the autoconfig, let's get the charger settings in order and then loaded into the charger!
+
+                // we'll tell the charger what to do! (if we have an IC and the user wants us to...)
+                if (GlobalVars.autoConfig && (string)d.Rows[station][10] == "ICA" && (string)d.Rows[station][2] != "As Received" )
+                {
+
+                    // GENERAL PROCEDURE
+                    // We are going to look up the settings
+                    // Tell the User to confirm the settings (later only let them directly change them
+                    // Then load them into the charger
+                     
+
+                    // first we need to pull in the settings from the DB
+                    //  open the db and pull in the options table
+                    try
+                    {
+                        // get the battery serial model
+                        strAccessSelect = @"SELECT * FROM WorkOrders WHERE WorkOrderNumber='" + d.Rows[station][1].ToString() + "';";
+                        DataSet workOrder = new DataSet();
+                        OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                        OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                        lock (dataBaseLock)
+                        {
+                            myAccessConn.Open();
+                            myDataAdapter.Fill(workOrder, "workOrder");
+                            myAccessConn.Close();
+                        }
+
+                        string model = (string)workOrder.Tables[0].Rows[0][4];
+
+                        //now that we have the model we need to pull in the settings to load into the charger
+                        strAccessSelect = @"SELECT * FROM BatteriesCustom WHERE BatteryModel='" + model + "';";
+                        DataSet battery = new DataSet();
+                        myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                        myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+
+                        lock (dataBaseLock)
+                        {
+                            myAccessConn.Open();
+                            myDataAdapter.Fill(battery, "battery");
+                            myAccessConn.Close();
+                        }
+
+                        // now we can assign the battery settings to the GlobalVars.
+                        // We will decide on the settings based on the test being performed...
+                        byte[] tempKMStore = new byte[21] {48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48}; // 21 values for the 21 KM params
+
+                        #region setting switch
+                        try
+                        {
+                            switch ((string)d.Rows[station][2])
+                            {
+                                case "Full Charge-6":
+                                    tempKMStore[0] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][42].ToString().Substring(0, 2)));  //mode
+                                    tempKMStore[1] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][43].ToString()));                  //time hours
+                                    //tempKMStore[2] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][44].ToString()));                  //time mins
+                                    tempKMStore[3] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][45].ToString()) / 10));         //top current byte
+                                    tempKMStore[4] = (byte)(48 + 10 * (float.Parse(battery.Tables[0].Rows[0][45].ToString()) % 10));    //bottom current byte
+                                    tempKMStore[5] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][46].ToString()) / 1));          //top voltage byte
+                                    tempKMStore[6] = (byte)(48 + 100 * (float.Parse(battery.Tables[0].Rows[0][46].ToString()) % 1));    //bottom current byte
+
+                                    tempKMStore[7] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][47].ToString()));                  //time 2 hours
+                                    //tempKMStore[8] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][48].ToString()));                  //time 2 mins
+                                    tempKMStore[9] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][49].ToString()) / 10));         //top current 2 byte
+                                    tempKMStore[10] = (byte)(48 + 10 * (float.Parse(battery.Tables[0].Rows[0][49].ToString()) % 10));   //bottom current 2 byte
+                                    tempKMStore[11] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][50].ToString()) / 1));         //top voltage 2 byte
+                                    tempKMStore[12] = (byte)(48 + 100 * (float.Parse(battery.Tables[0].Rows[0][50].ToString()) % 1));   //bottom voltage 2 byte
+
+                                    tempKMStore[13] = (byte) 48;                                                                                //discharge time hours
+                                    //tempKMStore[14] = (byte) 48;                                                                                //discharge time mins
+                                    tempKMStore[15] = (byte) 48;                                                                                //discharge current high byte
+                                    tempKMStore[16] = (byte) 48;                                                                                //discharge current low byte
+                                    tempKMStore[17] = (byte) 48;                                                                                //discharge voltage high byte
+                                    tempKMStore[18] = (byte) 48;                                                                                //discharge voltage low byte
+                                    tempKMStore[19] = (byte) 48;                                                                                //discharge resistance high byte
+                                    tempKMStore[20] = (byte) 48;                                                                                //discharge resistance low byte
+                                    break;
+                                case "Full Charge-4":
+                                    tempKMStore[0] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][52].ToString().Substring(0, 2)));  //mode
+                                    tempKMStore[1] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][53].ToString()));                  //time hours
+                                    //tempKMStore[2] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][54].ToString()));                  //time mins
+                                    tempKMStore[3] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][55].ToString()) / 10));         //top current byte
+                                    tempKMStore[4] = (byte)(48 + 10 * (float.Parse(battery.Tables[0].Rows[0][55].ToString()) % 10));    //bottom current byte
+                                    tempKMStore[5] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][56].ToString()) / 1));          //top voltage byte
+                                    tempKMStore[6] = (byte)(48 + 100 * (float.Parse(battery.Tables[0].Rows[0][56].ToString()) % 1));    //bottom current byte
+
+                                    tempKMStore[7] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][57].ToString()));                  //time 2 hours
+                                    //tempKMStore[8] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][58].ToString()));                  //time 2 mins
+                                    tempKMStore[9] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][59].ToString()) / 10));         //top current 2 byte
+                                    tempKMStore[10] = (byte)(48 + 10 * (float.Parse(battery.Tables[0].Rows[0][59].ToString()) % 10));   //bottom current 2 byte
+                                    tempKMStore[11] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][60].ToString()) / 1));         //top voltage 2 byte
+                                    tempKMStore[12] = (byte)(48 + 100 * (float.Parse(battery.Tables[0].Rows[0][60].ToString()) % 1));   //bottom voltage 2 byte
+
+                                    tempKMStore[13] = (byte) 48;                                                                                //discharge time hours
+                                    //tempKMStore[14] = (byte) 48;                                                                                //discharge time mins
+                                    tempKMStore[15] = (byte) 48;                                                                                //discharge current high byte
+                                    tempKMStore[16] = (byte) 48;                                                                                //discharge current low byte
+                                    tempKMStore[17] = (byte) 48;                                                                                //discharge voltage high byte
+                                    tempKMStore[18] = (byte) 48;                                                                                //discharge voltage low byte
+                                    tempKMStore[19] = (byte) 48;                                                                                //discharge resistance high byte
+                                    tempKMStore[20] = (byte) 48;                                                                                //discharge resistance low byte
+                                    break;
+                                case "Top Charge-4":
+                                    tempKMStore[0] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][62].ToString().Substring(0, 2)));  //mode
+                                    tempKMStore[1] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][63].ToString()));                  //time hours
+                                    //tempKMStore[2] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][64].ToString()));                  //time mins
+                                    tempKMStore[3] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][65].ToString()) / 10));         //top current byte
+                                    tempKMStore[4] = (byte)(48 + 10 * (float.Parse(battery.Tables[0].Rows[0][65].ToString()) % 10));    //bottom current byte
+                                    tempKMStore[5] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][66].ToString()) / 1));          //top voltage byte
+                                    tempKMStore[6] = (byte)(48 + 100 * (float.Parse(battery.Tables[0].Rows[0][66].ToString()) % 1));    //bottom current byte
+
+                                    tempKMStore[7] = (byte) 48;                                                                                 //time 2 hours
+                                    //tempKMStore[8] = (byte) 48;                                                                                 //time 2 mins
+                                    tempKMStore[9] = (byte) 48;                                                                                 //top current 2 byte
+                                    tempKMStore[10] = (byte) 48;                                                                                //bottom current 2 byte
+                                    tempKMStore[11] = (byte) 48;                                                                                //top voltage 2 byte
+                                    tempKMStore[12] = (byte) 48;                                                                                //bottom voltage 2 byte
+
+                                    tempKMStore[13] = (byte) 48;                                                                                //discharge time hours
+                                    //tempKMStore[14] = (byte) 48;                                                                                //discharge time mins
+                                    tempKMStore[15] = (byte) 48;                                                                                //discharge current high byte
+                                    tempKMStore[16] = (byte) 48;                                                                                //discharge current low byte
+                                    tempKMStore[17] = (byte) 48;                                                                                //discharge voltage high byte
+                                    tempKMStore[18] = (byte) 48;                                                                                //discharge voltage low byte
+                                    tempKMStore[19] = (byte) 48;                                                                                //discharge resistance high byte
+                                    tempKMStore[20] = (byte) 48;                                                                                //discharge resistance low byte
+                                    break;
+                                case "Top Charge-2":
+                                    tempKMStore[0] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][72].ToString().Substring(0, 2)));  //mode
+                                    tempKMStore[1] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][73].ToString()));                  //time hours
+                                    //tempKMStore[2] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][74].ToString()));                  //time mins
+                                    tempKMStore[3] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][75].ToString()) / 10));         //top current byte
+                                    tempKMStore[4] = (byte)(48 + 10 * (float.Parse(battery.Tables[0].Rows[0][75].ToString()) % 10));    //bottom current byte
+                                    tempKMStore[5] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][76].ToString()) / 1));          //top voltage byte
+                                    tempKMStore[6] = (byte)(48 + 100 * (float.Parse(battery.Tables[0].Rows[0][76].ToString()) % 1));    //bottom current byte
+
+                                    tempKMStore[7] = (byte) 48;                                                                                 //time 2 hours
+                                    //tempKMStore[8] = (byte) 48;                                                                                 //time 2 mins
+                                    tempKMStore[9] = (byte) 48;                                                                                 //top current 2 byte
+                                    tempKMStore[10] = (byte) 48;                                                                                //bottom current 2 byte
+                                    tempKMStore[11] = (byte) 48;                                                                                //top voltage 2 byte
+                                    tempKMStore[12] = (byte) 48;                                                                                //bottom voltage 2 byte
+
+                                    tempKMStore[13] = (byte) 48;                                                                                //discharge time hours
+                                    //tempKMStore[14] = (byte) 48;                                                                                //discharge time mins
+                                    tempKMStore[15] = (byte) 48;                                                                                //discharge current high byte
+                                    tempKMStore[16] = (byte) 48;                                                                                //discharge current low byte
+                                    tempKMStore[17] = (byte) 48;                                                                                //discharge voltage high byte
+                                    tempKMStore[18] = (byte) 48;                                                                                //discharge voltage low byte
+                                    tempKMStore[19] = (byte) 48;                                                                                //discharge resistance high byte
+                                    tempKMStore[20] = (byte) 48;                                                                                //discharge resistance low byte
+                                    break;
+                                case "Top Charge-1":
+                                    tempKMStore[0] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][82].ToString().Substring(0, 2)));  //mode
+                                    tempKMStore[1] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][83].ToString()));                  //time hours
+                                    //tempKMStore[2] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][84].ToString()));                  //time mins
+                                    tempKMStore[3] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][85].ToString()) / 10));         //top current byte
+                                    tempKMStore[4] = (byte)(48 + 10 * (float.Parse(battery.Tables[0].Rows[0][85].ToString()) % 10));    //bottom current byte
+                                    tempKMStore[5] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][86].ToString()) / 1));          //top voltage byte
+                                    tempKMStore[6] = (byte)(48 + 100 * (float.Parse(battery.Tables[0].Rows[0][86].ToString()) % 1));    //bottom current byte
+
+                                    tempKMStore[7] = (byte) 48;                                                                                 //time 2 hours
+                                    //tempKMStore[8] = (byte) 48;                                                                                 //time 2 mins
+                                    tempKMStore[9] = (byte) 48;                                                                                 //top current 2 byte
+                                    tempKMStore[10] = (byte) 48;                                                                                //bottom current 2 byte
+                                    tempKMStore[11] = (byte) 48;                                                                                //top voltage 2 byte
+                                    tempKMStore[12] = (byte) 48;                                                                                //bottom voltage 2 byte
+
+                                    tempKMStore[13] = (byte) 48;                                                                                //discharge time hours
+                                    //tempKMStore[14] = (byte) 48;                                                                                //discharge time mins
+                                    tempKMStore[15] = (byte) 48;                                                                                //discharge current high byte
+                                    tempKMStore[16] = (byte) 48;                                                                                //discharge current low byte
+                                    tempKMStore[17] = (byte) 48;                                                                                //discharge voltage high byte
+                                    tempKMStore[18] = (byte) 48;                                                                                //discharge voltage low byte
+                                    tempKMStore[19] = (byte) 48;                                                                                //discharge resistance high byte
+                                    tempKMStore[20] = (byte) 48;                                                                                //discharge resistance low byte
+                                    break;
+                                case "Capacity-1":
+                                    tempKMStore[0] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][92].ToString().Substring(0, 2)));  //mode
+                                    tempKMStore[1] = (byte) 48;                                                                                 //time hours
+                                    //tempKMStore[2] = (byte) 48;                                                                                 //time mins
+                                    tempKMStore[3] = (byte) 48;                                                                                 //top current byte
+                                    tempKMStore[4] = (byte) 48;                                                                                 //bottom current byte
+                                    tempKMStore[5] = (byte) 48;                                                                                 //top voltage byte
+                                    tempKMStore[6] = (byte) 48;                                                                                 //bottom current byte
+
+                                    tempKMStore[7] = (byte) 48;                                                                                 //time 2 hours
+                                    //tempKMStore[8] = (byte) 48;                                                                                 //time 2 mins
+                                    tempKMStore[9] = (byte) 48;                                                                                 //top current 2 byte
+                                    tempKMStore[10] = (byte) 48;                                                                                //bottom current 2 byte
+                                    tempKMStore[11] = (byte) 48;                                                                                //top voltage 2 byte
+                                    tempKMStore[12] = (byte) 48;                                                                                //bottom voltage 2 byte
+
+                                    tempKMStore[13] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][93].ToString()));                 //discharge time hours
+                                    //tempKMStore[14] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][94].ToString()));                 //discharge time mins
+                                    if (tempKMStore[0] == 31 + 48)
+                                    {
+                                        tempKMStore[15] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][95].ToString()) / 10));   //discharge current high byte
+                                        tempKMStore[16] = (byte)(48 + 10 * (float.Parse(battery.Tables[0].Rows[0][95].ToString()) % 10));   //discharge current low byte
+                                    }
+                                    tempKMStore[17] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][96].ToString()) / 1));         //discharge voltage high byte
+                                    tempKMStore[18] = (byte)(48 + 100 * (float.Parse(battery.Tables[0].Rows[0][96].ToString()) % 1));   //discharge voltage low byte
+                                    if (tempKMStore[0] == 32 + 48)
+                                    {
+                                        tempKMStore[19] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][101].ToString()) / 1));         //discharge resistance high byte
+                                        tempKMStore[20] = (byte)(48 + 100 * (float.Parse(battery.Tables[0].Rows[0][101].ToString()) % 1));   //discharge resistance low byte
+                                    }
+                                    break;
+                                case "Discharge":
+                                    tempKMStore[0] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][102].ToString().Substring(0, 2))); //mode
+                                    tempKMStore[1] = (byte) 48;                                                                                 //time hours
+                                    //tempKMStore[2] = (byte) 48;                                                                                 //time mins
+                                    tempKMStore[3] = (byte) 48;                                                                                 //top current byte
+                                    tempKMStore[4] = (byte) 48;                                                                                 //bottom current byte
+                                    tempKMStore[5] = (byte) 48;                                                                                 //top voltage byte
+                                    tempKMStore[6] = (byte) 48;                                                                                 //bottom current byte
+
+                                    tempKMStore[7] = (byte) 48;                                                                                 //time 2 hours
+                                    //tempKMStore[8] = (byte) 48;                                                                                 //time 2 mins
+                                    tempKMStore[9] = (byte) 48;                                                                                 //top current 2 byte
+                                    tempKMStore[10] = (byte) 48;                                                                                //bottom current 2 byte
+                                    tempKMStore[11] = (byte) 48;                                                                                //top voltage 2 byte
+                                    tempKMStore[12] = (byte) 48;                                                                                //bottom voltage 2 byte
+
+                                    tempKMStore[13] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][103].ToString()));                //discharge time hours
+                                    //tempKMStore[14] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][104].ToString()));                //discharge time mins
+                                    tempKMStore[15] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][105].ToString()) / 10));       //discharge current high byte
+                                    tempKMStore[16] = (byte)(48 + 10 * (float.Parse(battery.Tables[0].Rows[0][105].ToString()) % 10));  //discharge current low byte
+                                    tempKMStore[17] = (byte) 48;                                                                                //discharge voltage high byte
+                                    tempKMStore[18] = (byte) 48;                                                                                //discharge voltage low byte
+                                    tempKMStore[19] = (byte) 48;                                                                                //discharge resistance high byte
+                                    tempKMStore[20] = (byte) 48;                                                                                //discharge resistance low byte
+                                    break;
+                                case "Slow Charge-14":
+                                    tempKMStore[0] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][112].ToString().Substring(0, 2)));  //mode
+                                    tempKMStore[1] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][113].ToString()));                  //time hours
+                                    //tempKMStore[2] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][114].ToString()));                  //time mins
+                                    tempKMStore[3] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][115].ToString()) / 10));         //top current byte
+                                    tempKMStore[4] = (byte)(48 + 10 * (float.Parse(battery.Tables[0].Rows[0][115].ToString()) % 10));    //bottom current byte
+                                    tempKMStore[5] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][116].ToString()) / 1));          //top voltage byte
+                                    tempKMStore[6] = (byte)(48 + 100 * (float.Parse(battery.Tables[0].Rows[0][116].ToString()) % 1));    //bottom current byte
+
+                                    tempKMStore[7] = (byte) 48;                                                                                 //time 2 hours
+                                    //tempKMStore[8] = (byte) 48;                                                                                 //time 2 mins
+                                    tempKMStore[9] = (byte) 48;                                                                                 //top current 2 byte
+                                    tempKMStore[10] = (byte) 48;                                                                                //bottom current 2 byte
+                                    tempKMStore[11] = (byte) 48;                                                                                //top voltage 2 byte
+                                    tempKMStore[12] = (byte) 48;                                                                                //bottom voltage 2 byte
+
+                                    tempKMStore[13] = (byte) 48;                                                                                //discharge time hours
+                                    //tempKMStore[14] = (byte) 48;                                                                                //discharge time mins
+                                    tempKMStore[15] = (byte) 48;                                                                                //discharge current high byte
+                                    tempKMStore[16] = (byte) 48;                                                                                //discharge current low byte
+                                    tempKMStore[17] = (byte) 48;                                                                                //discharge voltage high byte
+                                    tempKMStore[18] = (byte) 48;                                                                                //discharge voltage low byte
+                                    tempKMStore[19] = (byte) 48;                                                                                //discharge resistance high byte
+                                    tempKMStore[20] = (byte) 48;                                                                                //discharge resistance low byte
+                                    break;
+                                case "Slow Charge-16":
+                                    tempKMStore[0] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][122].ToString().Substring(0, 2)));  //mode
+                                    tempKMStore[1] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][123].ToString()));                  //time hours
+                                    //tempKMStore[2] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][124].ToString()));                  //time mins
+                                    tempKMStore[3] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][125].ToString()) / 10));         //top current byte
+                                    tempKMStore[4] = (byte)(48 + 10 * (float.Parse(battery.Tables[0].Rows[0][125].ToString()) % 10));    //bottom current byte
+                                    tempKMStore[5] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][126].ToString()) / 1));          //top voltage byte
+                                    tempKMStore[6] = (byte)(48 + 100 * (float.Parse(battery.Tables[0].Rows[0][126].ToString()) % 1));    //bottom current byte
+
+                                    tempKMStore[7] = (byte) 48;                                                                                 //time 2 hours
+                                    //tempKMStore[8] = (byte) 48;                                                                                 //time 2 mins
+                                    tempKMStore[9] = (byte) 48;                                                                                 //top current 2 byte
+                                    tempKMStore[10] = (byte) 48;                                                                                //bottom current 2 byte
+                                    tempKMStore[11] = (byte) 48;                                                                                //top voltage 2 byte
+                                    tempKMStore[12] = (byte) 48;                                                                                //bottom voltage 2 byte
+
+                                    tempKMStore[13] = (byte) 48;                                                                                //discharge time hours
+                                    //tempKMStore[14] = (byte) 48;                                                                                //discharge time mins
+                                    tempKMStore[15] = (byte) 48;                                                                                //discharge current high byte
+                                    tempKMStore[16] = (byte) 48;                                                                                //discharge current low byte
+                                    tempKMStore[17] = (byte) 48;                                                                                //discharge voltage high byte
+                                    tempKMStore[18] = (byte) 48;                                                                                //discharge voltage low byte
+                                    tempKMStore[19] = (byte) 48;                                                                                //discharge resistance high byte
+                                    tempKMStore[20] = (byte) 48;                                                                                //discharge resistance low byte
+                                    break;
+                                case "Custom Chg":
+                                    tempKMStore[0] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][132].ToString().Substring(0, 2)));  //mode
+                                    tempKMStore[1] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][133].ToString()));                  //time hours
+                                    //tempKMStore[2] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][134].ToString()));                  //time mins
+                                    tempKMStore[3] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][135].ToString()) / 10));         //top current byte
+                                    tempKMStore[4] = (byte)(48 + 10 * (float.Parse(battery.Tables[0].Rows[0][135].ToString()) % 10));    //bottom current byte
+                                    tempKMStore[5] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][136].ToString()) / 1));          //top voltage byte
+                                    tempKMStore[6] = (byte)(48 + 100 * (float.Parse(battery.Tables[0].Rows[0][136].ToString()) % 1));    //bottom current byte
+
+                                    if (tempKMStore[0] == 20 || tempKMStore[0] == 21)
+                                    {
+                                        tempKMStore[7] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][137].ToString()));                  //time 2 hours
+                                        //tempKMStore[8] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][138].ToString()));                  //time 2 mins
+                                        tempKMStore[9] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][139].ToString()) / 10));         //top current 2 byte
+                                        tempKMStore[10] = (byte)(48 + 10 * (float.Parse(battery.Tables[0].Rows[0][139].ToString()) % 10));   //bottom current 2 byte
+                                        tempKMStore[11] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][140].ToString()) / 1));         //top voltage 2 byte
+                                        tempKMStore[12] = (byte)(48 + 100 * (float.Parse(battery.Tables[0].Rows[0][140].ToString()) % 1));   //bottom voltage 2 byte
+                                    }
+
+                                    tempKMStore[13] = (byte) 48;                                                                                //discharge time hours
+                                    //tempKMStore[14] = (byte) 48;                                                                                //discharge time mins
+                                    tempKMStore[15] = (byte) 48;                                                                                //discharge current high byte
+                                    tempKMStore[16] = (byte) 48;                                                                                //discharge current low byte
+                                    tempKMStore[17] = (byte) 48;                                                                                //discharge voltage high byte
+                                    tempKMStore[18] = (byte) 48;                                                                                //discharge voltage low byte
+                                    tempKMStore[19] = (byte) 48;                                                                                //discharge resistance high byte
+                                    tempKMStore[20] = (byte) 48;                                                                                //discharge resistance low byte
+                                    break;
+                                case "Custom Cap":
+                                    tempKMStore[0] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][142].ToString().Substring(0, 2)));  //mode
+                                    tempKMStore[1] = (byte) 48;                                                                                 //time hours
+                                    //tempKMStore[2] = (byte) 48;                                                                                 //time mins
+                                    tempKMStore[3] = (byte) 48;                                                                                 //top current byte
+                                    tempKMStore[4] = (byte) 48;                                                                                 //bottom current byte
+                                    tempKMStore[5] = (byte) 48;                                                                                 //top voltage byte
+                                    tempKMStore[6] = (byte) 48;                                                                                 //bottom current byte
+
+                                    tempKMStore[7] = (byte) 48;                                                                                 //time 2 hours
+                                    //tempKMStore[8] = (byte) 48;                                                                                 //time 2 mins
+                                    tempKMStore[9] = (byte) 48;                                                                                 //top current 2 byte
+                                    tempKMStore[10] = (byte) 48;                                                                                //bottom current 2 byte
+                                    tempKMStore[11] = (byte) 48;                                                                                //top voltage 2 byte
+                                    tempKMStore[12] = (byte) 48;                                                                                //bottom voltage 2 byte
+
+                                    tempKMStore[13] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][143].ToString()));                 //discharge time hours
+                                    //tempKMStore[14] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][144].ToString()));                 //discharge time mins
+                                    if (tempKMStore[0] != 32 + 48)
+                                    {
+                                        tempKMStore[15] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][145].ToString()) / 10));        //discharge current high byte
+                                        tempKMStore[16] = (byte)(48 + 10 * (float.Parse(battery.Tables[0].Rows[0][145].ToString()) % 10));   //discharge current low byte
+                                    }
+                                    if (tempKMStore[0] != 30 + 48)
+                                    {
+                                        tempKMStore[17] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][146].ToString()) / 1));         //discharge voltage high byte
+                                        tempKMStore[18] = (byte)(48 + 100 * (float.Parse(battery.Tables[0].Rows[0][146].ToString()) % 1));   //discharge voltage low byte
+                                    }
+                                    if (tempKMStore[0] == 32 + 48)
+                                    {
+                                        tempKMStore[19] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][151].ToString()) / 1));         //discharge resistance high byte
+                                        tempKMStore[20] = (byte)(48 + 100 * (float.Parse(battery.Tables[0].Rows[0][151].ToString()) % 1));   //discharge resistance low byte
+                                    }
+                                    break;
+                                case "Constant Voltage":
+                                    tempKMStore[0] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][152].ToString().Substring(0, 2)));  //mode
+                                    tempKMStore[1] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][153].ToString()));                  //time hours
+                                    //tempKMStore[2] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][154].ToString()));                  //time mins
+                                    tempKMStore[3] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][155].ToString()) / 10));         //top current byte
+                                    tempKMStore[4] = (byte)(48 + 10 * (float.Parse(battery.Tables[0].Rows[0][155].ToString()) % 10));    //bottom current byte
+                                    tempKMStore[5] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][156].ToString()) / 1));          //top voltage byte
+                                    tempKMStore[6] = (byte)(48 + 100 * (float.Parse(battery.Tables[0].Rows[0][156].ToString()) % 1));    //bottom voltage byte
+
+                                    tempKMStore[7] = (byte) 48;                                                                                 //time 2 hours
+                                    //tempKMStore[8] = (byte) 48;                                                                                 //time 2 mins
+                                    tempKMStore[9] = (byte) 48;                                                                                 //top current 2 byte
+                                    tempKMStore[10] = (byte) 48;                                                                                //bottom current 2 byte
+                                    tempKMStore[11] = (byte) 48;                                                                                //top voltage 2 byte
+                                    tempKMStore[12] = (byte) 48;                                                                                //bottom voltage 2 byte
+
+                                    tempKMStore[13] = (byte) 48;                                                                                //discharge time hours
+                                    //tempKMStore[14] = (byte) 48;                                                                                //discharge time mins
+                                    tempKMStore[15] = (byte) 48;                                                                                //discharge current high byte
+                                    tempKMStore[16] = (byte) 48;                                                                                //discharge current low byte
+                                    tempKMStore[17] = (byte) 48;                                                                                //discharge voltage high byte
+                                    tempKMStore[18] = (byte) 48;                                                                                //discharge voltage low byte
+                                    tempKMStore[19] = (byte) 48;                                                                                //discharge resistance high byte
+                                    tempKMStore[20] = (byte) 48;                                                                                //discharge resistance low byte
+                                    break;
+                                default:
+                                    break;
+                            }// end switch
+                        }
+                        catch
+                        {
+                            MessageBox.Show("Fail to pull the settings from the DataBase. \r\nPlease make sure you have the battery model setup for this test under the Manage Battery Models menu.");
+                            updateD(station, 5, false);
+                            return;
+                        }
+
+                        #endregion
+
+                        // set KE1 to data
+                        GlobalVars.ICSettings[Cstation].KE1 = (byte)1;
+
+                        // update KM1
+                        GlobalVars.ICSettings[Cstation].KM1 = tempKMStore[0];
+                        //// Charge Time 1
+                        GlobalVars.ICSettings[Cstation].KM2 = tempKMStore[1];
+                        //GlobalVars.ICSettings[Cstation].KM3 = tempKMStore[2];
+                        //// Charge Current 1
+                        GlobalVars.ICSettings[Cstation].KM4 = tempKMStore[3];
+                        GlobalVars.ICSettings[Cstation].KM5 = tempKMStore[4];
+                        //// Charge Voltage 1
+                        GlobalVars.ICSettings[Cstation].KM6 = tempKMStore[5];
+                        GlobalVars.ICSettings[Cstation].KM7 = tempKMStore[6];
+
+
+                        // Charge Time 2
+                        GlobalVars.ICSettings[Cstation].KM8 = tempKMStore[7];
+                        //GlobalVars.ICSettings[Cstation].KM9 = tempKMStore[8];
+                        // Charge Current 2
+                        GlobalVars.ICSettings[Cstation].KM10 = tempKMStore[9];
+                        GlobalVars.ICSettings[Cstation].KM11 = tempKMStore[10];
+                        // Charge Voltage 2
+                        GlobalVars.ICSettings[Cstation].KM12 = tempKMStore[11];
+                        GlobalVars.ICSettings[Cstation].KM13 = tempKMStore[12];
+
+
+                        // Discharge Time
+                        GlobalVars.ICSettings[Cstation].KM14 = tempKMStore[13];
+                        //GlobalVars.ICSettings[Cstation].KM15 = tempKMStore[14];
+                        // Discharge Current
+                        GlobalVars.ICSettings[Cstation].KM16 = tempKMStore[15];
+                        GlobalVars.ICSettings[Cstation].KM17 = tempKMStore[16];
+                        // Discharge Voltage
+                        GlobalVars.ICSettings[Cstation].KM18 = tempKMStore[17];
+                        GlobalVars.ICSettings[Cstation].KM19 = tempKMStore[18];
+                        // Discharge Resistance
+                        GlobalVars.ICSettings[Cstation].KM20 = tempKMStore[19];
+                        GlobalVars.ICSettings[Cstation].KM21 = tempKMStore[20];
+
+                        //Update the output string value
+                        GlobalVars.ICSettings[Cstation].UpdateOutText();
+                        updateD(station, 7, "Loading Settings");
+
+                        //make sure the charger has priority
+                        criticalNum[Cstation] = true;
+
+                        Thread.Sleep(5000);
+                        // set KE1 to 0 ("data")
+                        GlobalVars.ICSettings[Cstation].KE1 = (byte)0;
+                        GlobalVars.ICSettings[Cstation].UpdateOutText();
+
+                        //make sure the charger has priority
+                        criticalNum[Cstation] = false;
+
+                    } // end try
+                    catch (Exception ex)
+                    {
+                        myAccessConn.Close();
+                        MessageBox.Show("Error: Failed to Auto Load settings into the Charger.\n");
+                        // reset everything
+                        updateD(station, 5, false);
+                        return;
+                    } // end catch
+
+                }// end if
+
+                #endregion
+
+                #region load test readings and interval values
+                // Now we'll load the test parameters
+                // We need to know the Interval and the number of readings///////////////////////////////////////////////////////////////////////
+
+                int readings;
+                int interval;
 
                 //  open the db and pull in the options table
                 try
@@ -118,147 +583,139 @@ namespace NewBTASProto
                 {
                     myAccessConn.Close();
                     MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                    updateD(station, 5, false);
                     return;
                 }
                 #endregion
 
-                #region set up test number and ID
-                // Now we'll look up the current test number and increment the new step number/////////////////////////////////////////////////////
                 int stepNum;
 
-                //  open the db and pull in the options table
-                try
+                //check if this is a new test first!
+                if ((string)d.Rows[station][6] == "")
                 {
-                    strAccessSelect = @"SELECT * FROM Tests WHERE WorkOrderNumber='" + d.Rows[station][1].ToString() + "' ORDER BY StepNumber DESC;";
-                    DataSet tests = new DataSet();
-                    OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
-                    OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
 
-                    lock (dataBaseLock)
+                    #region set up test number and ID
+                    // Now we'll look up the current test number and increment the new step number/////////////////////////////////////////////////////
+                    
+
+                    //  open the db and pull in the options table
+                    try
                     {
-                        myAccessConn.Open();
-                        myDataAdapter.Fill(tests, "Tests");
+                        strAccessSelect = @"SELECT * FROM Tests WHERE WorkOrderNumber='" + d.Rows[station][1].ToString() + "' ORDER BY StepNumber DESC;";
+                        DataSet tests = new DataSet();
+                        OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                        OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                        lock (dataBaseLock)
+                        {
+                            myAccessConn.Open();
+                            myDataAdapter.Fill(tests, "Tests");
+                            myAccessConn.Close();
+                        }
+
+                        if (tests.Tables[0].Rows.Count == 0)
+                        {
+                            stepNum = 1;
+                        }
+                        else
+                        {
+                            stepNum = int.Parse((string)tests.Tables[0].Rows[0][4]) + 1;
+                        }
+
+
+                    }
+                    catch (Exception ex)
+                    {
                         myAccessConn.Close();
+                        MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                        updateD(station, 5, false);
+                        return;
                     }
-                    
-                    if(tests.Tables[0].Rows.Count == 0)
+
+
+
+
+                    #endregion
+
+                    // Save the test information to the test table///////////////////////////////////////////////////////////////////////////////////////////
+
+                    this.Invoke((MethodInvoker)delegate()
                     {
-                        stepNum = 1;                        
+                        comboText = comboBox1.Text;
+                    });
+
+                    #region save new test to test table
+                    //  now try to INSERT INTO it
+                    try
+                    {
+                        string strUpdateCMD = "INSERT INTO Tests (WorkOrderId,WorkOrderNumber,AggrWorkOrders,StepNumber,[TestName],Readings,[Interval]," +
+                            "StationNumber,Charger,DateStarted,DateCompleted,Technician,TerminalID,CellCableID,ShuntCableID,TempCableID,TerminalNumber," +
+                            "Technology,CustomNoCells,BATNUMCABLE10) "
+                            + "VALUES ('" +
+                            "0" + "','" +                                                          //WorkOrderID
+                            d.Rows[station][1].ToString().Trim() + "','" +                         //WorkOrderNumber
+                            "" + "','" +                                                           //AggrWorkOrders
+                            stepNum.ToString("00") + "','" +                                       //StepNumber
+                            d.Rows[station][2].ToString() + "','" +                                //TestName
+                            readings.ToString() + "','" +                                          //Reading
+                            (interval * 1000).ToString() + "','" +                                 //interval in msec
+                            station.ToString() + "','" +                                           // station number
+                            d.Rows[station][10].ToString() + "',#" +                               // charger type
+                            DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "#,#" +                 // start date
+                            DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "#,'" +                 // date completed
+                            comboText + "','" +                                                    // technician
+                            (GlobalVars.CScanData[station].terminalID + 216).ToString() + "','" +  //terminal ID
+                            GlobalVars.CScanData[station].CCID.ToString() + "','" +                //cells cable ID
+                            GlobalVars.CScanData[station].SHCID.ToString() + "','" +               //shunt cable ID
+                            GlobalVars.CScanData[station].TCAB.ToString() + "','" +                //temp cable ID
+                            d.Rows[station][9].ToString() + "','" +                                //charger ID (Terminal Number)
+                            GlobalVars.CScanData[station].technology.ToString() + "','" +          //technology
+                            GlobalVars.CScanData[station].customNoCells.ToString() + "','" +       //CustomNoCells
+                            GlobalVars.CScanData[station].batNumCable10.ToString() +               //BATNUMCABLE10
+                            "');";
+
+
+                        OleDbCommand myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
+
+                        lock (dataBaseLock)
+                        {
+                            myAccessConn.Open();
+                            myAccessCommand.ExecuteNonQuery();
+                            myAccessConn.Close();
+                        }
+
+
+
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        stepNum = int.Parse((string) tests.Tables[0].Rows[0][4]) + 1;
-                    }
-                    
-
-                }
-                catch (Exception ex)
-                {
-                    myAccessConn.Close();
-                    MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
-                    return;
-                }
-
-                // we also need to come up with a new test ID///////////////////////////////////////////////////////////////////////////////////////
-                int testID;
-
-                try
-                {
-                    strAccessSelect = @"SELECT MAX(TestID) FROM Tests;";
-                    DataSet testIDTable = new DataSet();
-                    OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
-                    OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
-
-                    lock (dataBaseLock)
-                    {
-                        myAccessConn.Open();
-                        myDataAdapter.Fill(testIDTable, "TestID");
                         myAccessConn.Close();
+                        MessageBox.Show("Error: Failed to store new data in the DataBase.\n" + ex.Message);
+                        updateD(station, 5, false);
+                        return;
                     }
-                    
-                    testID = int.Parse(testIDTable.Tables[0].Rows[0][0].ToString()) + 1;
 
-                }
-                catch (Exception ex)
+                    #endregion
+
+                    #region   We made it to this point without errors, so we'll update the grid with the step number
+                    updateD(station, 3, stepNum.ToString());
+
+                }// end if
+
+                else    // We've got a resume!
                 {
-                    myAccessConn.Close();
-                    MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
-                    return;
-                }
-
-                this.Invoke((MethodInvoker)delegate()
-                {
-                    comboText = comboBox1.Text;
-                });
-
-                #endregion
-
-                // Save the test information to the test table///////////////////////////////////////////////////////////////////////////////////////////
-
-
-                #region save new test to test table
-                //  now try to INSERT INTO it
-                try
-                {
-                    string strUpdateCMD = "INSERT INTO Tests (TestID,WorkOrderId,WorkOrderNumber,AggrWorkOrders,StepNumber,[TestName],Readings,[Interval]," +
-                        "StationNumber,Charger,DateStarted,DateCompleted,Technician,TerminalID,CellCableID,ShuntCableID,TempCableID,TerminalNumber," +
-                        "Technology,CustomNoCells,BATNUMCABLE10) "
-                        + "VALUES ('" + testID.ToString() + "','" +                            //TestID
-                        "0" + "','" +                                                          //WorkOrderID
-                        d.Rows[station][1].ToString().Trim() + "','" +                         //WorkOrderNumber
-                        "" + "','" +                                                           //AggrWorkOrders
-                        stepNum.ToString("00") + "','" +                                       //StepNumber
-                        d.Rows[station][2].ToString() + "','" +                                //TestName
-                        readings.ToString() + "','" +                                          //Reading
-                        (interval * 1000).ToString() + "','" +                                 //interval in msec
-                        station.ToString() + "','" +                                           // station number
-                        d.Rows[station][10].ToString() + "',#" +                               // charger type
-                        DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "#,#" +                 // start date
-                        DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "#,'" +                 // date completed
-                        comboText + "','" +                                                    // technician
-                        (GlobalVars.CScanData[station].terminalID + 216).ToString() + "','" +  //terminal ID
-                        GlobalVars.CScanData[station].CCID.ToString() + "','" +                //cells cable ID
-                        GlobalVars.CScanData[station].SHCID.ToString() + "','" +               //shunt cable ID
-                        GlobalVars.CScanData[station].TCAB.ToString() + "','" +                //temp cable ID
-                        d.Rows[station][9].ToString() + "','" +                                //charger ID (Terminal Number)
-                        GlobalVars.CScanData[station].technology.ToString() + "','" +          //technology
-                        GlobalVars.CScanData[station].customNoCells.ToString() + "','" +       //CustomNoCells
-                        GlobalVars.CScanData[station].batNumCable10.ToString() +               //BATNUMCABLE10
-                        "');";
-                    
-
-                    OleDbCommand myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
-
-                    lock (dataBaseLock)
-                    {
-                        myAccessConn.Open();
-                        myAccessCommand.ExecuteNonQuery();
-                        myAccessConn.Close();
-                    }
-                    
-
-
-                }
-                catch (Exception ex)
-                {
-                    myAccessConn.Close();
-                    MessageBox.Show("Error: Failed to store new data in the DataBase.\n" + ex.Message);
-                    return;
+                    //get the current step number from d
+                    stepNum = int.Parse((string) d.Rows[station][3]);
                 }
 
-                #endregion
-
-                #region                // We made it to this point without errors, so we'll update the grid with the step number
-                updateD(station,3,stepNum.ToString());
                 // and indicate that the test is starting
                 updateD(station,7,"Starting Test");
-                // also make sure that the check box is checked
-                updateD(station, 5, true);
 
                 //reset the menu...
                 this.Invoke((MethodInvoker)delegate()
                 {
                     startNewTestToolStripMenuItem.Enabled = false;
+                    resumeTestToolStripMenuItem.Enabled = false;
                     stopTestToolStripMenuItem.Enabled = true;
                 });
 
@@ -275,169 +732,51 @@ namespace NewBTASProto
                 }// end if
                 else
                 {
-                    // open the DB
-                    // we'll tell the charger what to do! (if we have an IC)
-                    if (GlobalVars.autoConfig && (string) d.Rows[station][10] == "ICA")
-                    {
-                        // change the settings of the charger before running it!
-                        
-                        // first we need to pull in the settings from the DB
-                        //  open the db and pull in the options table
-                        try
-                        {
-                            // get the battery serial model
-                            strAccessSelect = @"SELECT * FROM WorkOrders WHERE WorkOrderNumber='" + d.Rows[station][1].ToString() + "';";
-                            DataSet workOrder = new DataSet();
-                            OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
-                            OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
-
-                            lock (dataBaseLock)
-                            {
-                                myAccessConn.Open();
-                                myDataAdapter.Fill(workOrder, "workOrder");
-                                myAccessConn.Close();
-                            }
-                            
-                            string model = (string) workOrder.Tables[0].Rows[0][4];
-
-                            //now that we have the model we need to pull in the settings to load into the charger
-                            strAccessSelect = @"SELECT * FROM BatteriesCustom WHERE BatteryModel='" + model + "';";
-                            DataSet battery = new DataSet();
-                            myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
-                            myDataAdapter = new OleDbDataAdapter(myAccessCommand);
-
-
-                            lock (dataBaseLock)
-                            {
-                                myAccessConn.Open();
-                                myDataAdapter.Fill(battery, "battery");
-                                myAccessConn.Close();
-                            }
-                            
-                            // now we can assigne the battery settings to the GlobalVars.
-                            
-                            // set KE1 to data
-                            GlobalVars.ICSettings[int.Parse((string)d.Rows[station][9])].KE1 = (byte)1;
-                            // TODO pick a test mode based on the test setting
-
-                            // update KM1
-                            GlobalVars.ICSettings[int.Parse((string)d.Rows[station][9])].KM1 = (byte)(10 + 48);
-
-                            //// Charge Time 1
-                            //Also Based on test choosen!!!!!!!!!!!!!!!
-                            ////update KM2
-                            GlobalVars.ICSettings[int.Parse((string)d.Rows[station][9])].KM2 = (byte)(int.Parse((string) battery.Tables[0].Rows[0][13]) + 48);
-                            ////update KM3
-                            GlobalVars.ICSettings[int.Parse((string)d.Rows[station][9])].KM3 = (byte)(0 + 48);
-
-                            //// Charge Current 1
-                            //// update KM4
-                            GlobalVars.ICSettings[int.Parse((string)d.Rows[station][9])].KM4 = (byte)(int.Parse((string)battery.Tables[0].Rows[0][12]) / 10 + 48);
-                            ////update KM5
-                            GlobalVars.ICSettings[int.Parse((string)d.Rows[station][9])].KM5 = (byte)((int.Parse((string)battery.Tables[0].Rows[0][12]) % 10) * 10 + 48);
-
-                            //// Charge Voltage 1
-                            ////update KM6
-                            GlobalVars.ICSettings[int.Parse((string)d.Rows[station][9])].KM6 = (byte)(int.Parse((string)battery.Tables[0].Rows[0][14]) / 1 + 48);
-                            ////update KM7
-                            GlobalVars.ICSettings[int.Parse((string)d.Rows[station][9])].KM7 = (byte)((int.Parse((string)battery.Tables[0].Rows[0][14]) % 1) * 100 + 48);
-                            
-                            //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                            //// Charge Time 2
-                            ////update KM8
-                            //GlobalVars.ICSettings[comboBox1.SelectedIndex].KM8 = (byte)(numericUpDown8.Value + 48);
-                            ////update KM9
-                            //GlobalVars.ICSettings[comboBox1.SelectedIndex].KM9 = (byte)(numericUpDown7.Value + 48);
-
-                            //// Charge Current 2
-                            //// update KM10
-                            //GlobalVars.ICSettings[comboBox1.SelectedIndex].KM10 = (byte)(numericUpDown6.Value / 10 + 48);
-                            ////update KM11
-                            //GlobalVars.ICSettings[comboBox1.SelectedIndex].KM11 = (byte)((numericUpDown6.Value % 10) * 10 + 48);
-
-                            //// Charge Voltage 2
-                            ////update KM12
-                            //GlobalVars.ICSettings[comboBox1.SelectedIndex].KM12 = (byte)(numericUpDown5.Value / 1 + 48);
-                            ////update KM13
-                            //GlobalVars.ICSettings[comboBox1.SelectedIndex].KM13 = (byte)((numericUpDown5.Value % 1) * 100 + 48);
-
-                            //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                            //// Discharge Time
-                            ////update KM14
-                            //GlobalVars.ICSettings[comboBox1.SelectedIndex].KM14 = (byte)(numericUpDown12.Value + 48);
-                            ////update KM15
-                            //GlobalVars.ICSettings[comboBox1.SelectedIndex].KM15 = (byte)(numericUpDown11.Value + 48);
-
-                            //// Discharge Current
-                            //// update KM16
-                            //GlobalVars.ICSettings[comboBox1.SelectedIndex].KM16 = (byte)(numericUpDown10.Value / 10 + 48);
-                            ////update KM17
-                            //GlobalVars.ICSettings[comboBox1.SelectedIndex].KM17 = (byte)((numericUpDown10.Value % 10) * 10 + 48);
-
-                            //// Discharge Voltage
-                            ////update KM18
-                            //GlobalVars.ICSettings[comboBox1.SelectedIndex].KM18 = (byte)(numericUpDown9.Value / 1 + 48);
-                            ////update KM19
-                            //GlobalVars.ICSettings[comboBox1.SelectedIndex].KM19 = (byte)((numericUpDown9.Value % 1) * 100 + 48);
-
-                            //// Discharge Resistance
-                            ////update KM20
-                            //GlobalVars.ICSettings[comboBox1.SelectedIndex].KM20 = (byte)(numericUpDown13.Value / 1 + 48);
-                            ////update KM21
-                            //GlobalVars.ICSettings[comboBox1.SelectedIndex].KM21 = (byte)((numericUpDown13.Value % 1) * 100 + 48);
-
-                            //Update the output string value
-                            GlobalVars.ICSettings[int.Parse((string)d.Rows[station][9])].UpdateOutText();
-                            updateD(station, 7, "Loading Settings");
-
-                            //make sure the charger has priority
-                            criticalNum[station] = true;
-            
-                            Thread.Sleep(5000);
-                            // set KE1 to 0 ("data")
-                            GlobalVars.ICSettings[int.Parse((string)d.Rows[station][9])].KE1 = (byte)0;
-                            GlobalVars.ICSettings[int.Parse((string)d.Rows[station][9])].UpdateOutText();
-
-                            //make sure the charger has priority
-                            criticalNum[station] = false;
-
-                        }
-                        catch (Exception ex)
-                        {
-                            myAccessConn.Close();
-                            MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
-                            return;
-                        }
-
-                    }
-
-
                     // we have an intelligent charger connected and it's not an as received test
                     if ((string)d.Rows[station][9] != "" && (string)d.Rows[station][10] == "ICA" && (string)d.Rows[station][2] != "As Received")
                     {
                         //make sure the charger has priority
-                        criticalNum[station] = true;
+                        criticalNum[Cstation] = true;
+
+                        // If we are in hold and we are starting a new test we need to reset before starting!
+                        if ((string)d.Rows[station][11] != "RESET" && (string)d.Rows[station][6] == "")
+                        {
+                            // now we need to reset the charger
+                            updateD(station, 7, "Resetting Charger");
+                            // set KE1 to 2 ("command")
+                            GlobalVars.ICSettings[Cstation].KE1 = (byte)2;
+                            // set KE3 to RESET
+                            GlobalVars.ICSettings[Cstation].KE3 = (byte)3;
+                            //Update the output string value
+                            GlobalVars.ICSettings[Cstation].UpdateOutText();
+                            //now we are going to create a thread to set KE1 back to data mode after 15 seconds
+                            Thread.Sleep(5000);
+                            // set KE1 to 1 ("query")
+                            GlobalVars.ICSettings[Cstation].KE1 = (byte)0;
+                            //Update the output string value
+                            GlobalVars.ICSettings[Cstation].UpdateOutText();
+                        }
+                    
 
                         updateD(station, 7, "Telling Charger to Run");
                         // set KE1 to 2 ("command")
-                        GlobalVars.ICSettings[int.Parse((string)d.Rows[station][9])].KE1 = (byte)2;
-                        // reset KE3
-                        GlobalVars.ICSettings[int.Parse((string)d.Rows[station][9])].KE3 = (byte)1;
+                        GlobalVars.ICSettings[Cstation].KE1 = (byte)2;
+                        // set KE3 to run
+                        GlobalVars.ICSettings[Cstation].KE3 = (byte)1;
                         //Update the output string value
-                        GlobalVars.ICSettings[int.Parse((string)d.Rows[station][9])].UpdateOutText();
+                        GlobalVars.ICSettings[Cstation].UpdateOutText();
                         //now we are going to create a thread to set KE1 back to data mode after 15 seconds
                         Thread.Sleep(5000);
                         // set KE1 to 1 ("query")
-                        GlobalVars.ICSettings[int.Parse((string)d.Rows[station][9])].KE1 = (byte)0;
+                        GlobalVars.ICSettings[Cstation].KE1 = (byte)0;
                         // set KE3 to 0 ("query")
-                        GlobalVars.ICSettings[int.Parse((string)d.Rows[station][9])].KE3 = (byte)3;
+                        GlobalVars.ICSettings[Cstation].KE3 = (byte)3;
                         //Update the output string value
-                        GlobalVars.ICSettings[int.Parse((string)d.Rows[station][9])].UpdateOutText();
+                        GlobalVars.ICSettings[Cstation].UpdateOutText();
+                        Thread.Sleep(5000);
 
                         //make sure the charger has priority
-                        criticalNum[station] = false;
+                        criticalNum[Cstation] = false;
                     }
                     else
                     {
@@ -447,20 +786,40 @@ namespace NewBTASProto
 
                 // We are now good to go on starting the test loop timer...
                 // going to do the timming with a stop watch
-                var stopwatch = new Stopwatch();
-                stopwatch.Start();
-                int currentReading = 1;
-                TimeSpan eTime = new TimeSpan();
-                string eTimeS = eTime.ToString(@"hh\:mm\:ss");
+
+                int currentReading;
                 string oldETime = "";
+                var stopwatch = new Stopwatch();
+                TimeSpan offset;
+
+                //first check if we are resuming
+                if ((string) d.Rows[station][6] != "")
+                {
+                    // we got a resume!
+                    string temp = (string)d.Rows[station][6];
+                    offset = new TimeSpan(int.Parse(temp.Substring(0, 2)), int.Parse(temp.Substring(3, 2)), int.Parse(temp.Substring(6, 2)));
+                    currentReading = ((offset.Hours * 3600 + offset.Minutes * 60 + offset.Seconds) / interval) + 2;
+                    updateD(station, 7, ("Reading " + (currentReading - 1).ToString() + "of " + readings.ToString()));
+                }
+                else
+                {
+                    //fresh test!
+                    offset = new TimeSpan();
+                    currentReading = 1; 
+                }
+
+                TimeSpan eTime = new TimeSpan().Add(offset);
+                string eTimeS = eTime.ToString(@"hh\:mm\:ss");
+                stopwatch.Start();
+
 
                 while (currentReading <= readings)
                 {
                     // check if we need to take a reading
-                    if (((currentReading - 1) * interval * 1000) < stopwatch.ElapsedMilliseconds )
+                    if (((currentReading - 1) * interval * 1000) < stopwatch.Elapsed.Add(offset).TotalMilliseconds )
                     {
                         //first record the elapsed amount of time
-                        TimeSpan temp = stopwatch.Elapsed;
+                        TimeSpan temp = stopwatch.Elapsed.Add(offset);
                         // update the grid
                         updateD(station,7,("Reading " + currentReading.ToString() + "of " + readings.ToString()));
 
@@ -539,6 +898,7 @@ namespace NewBTASProto
                         {
                             myAccessConn.Close();
                             MessageBox.Show("Error: Failed to store new data in the DataBase.\n" + ex.Message);
+                            updateD(station, 5, false);
                             return;
                         }
                         #endregion
@@ -548,7 +908,7 @@ namespace NewBTASProto
                     }
 
                     //Now update the timer
-                    eTime = TimeSpan.FromMilliseconds(stopwatch.ElapsedMilliseconds);
+                    eTime = stopwatch.Elapsed.Add(offset);
                     eTimeS = eTime.ToString(@"hh\:mm\:ss");
                     if (oldETime != eTimeS)
                     {
@@ -561,39 +921,144 @@ namespace NewBTASProto
                     }
                     oldETime = eTimeS;
 
+                    //Lets test for a charger issue now
+                    if ((string) d.Rows[station][11] != "RUN")
+                    {
+                        //make sure the charger has priority
+                        criticalNum[Cstation] = true;
+
+                        //try it a couple more times
+                        for (byte b = 0; b < 3; b++)
+                        {
+                            Thread.Sleep(2000); 
+                            if ((string)d.Rows[station][11] == "RUN") { break; }
+                        }
+                        updateD(station, 7, ("Found Fault!"));
+                        // we got an issue!
+                        // stop the clock!
+                        stopwatch.Stop();
+                        Thread.Sleep(5000); 
+
+                        if ((string) d.Rows[station][11] == "Power Fail")
+                        {
+
+                            updateD(station, 7, ("Waiting For Charger"));
+                            // lets put things on pause and wait for the charger to come back
+                            while ((string) d.Rows[station][11] != "HOLD")
+                            {
+                                //check for a cancel
+                                if (token.IsCancellationRequested)
+                                {
+                                    //clear values from d
+                                    updateD(station, 7, ("Read " + (currentReading - 1).ToString() + "of " + readings.ToString()));
+                                    updateD(station, 5, false);
+
+                                    //update the gui
+                                    this.Invoke((MethodInvoker)delegate()
+                                    {
+                                        startNewTestToolStripMenuItem.Enabled = true;
+                                        resumeTestToolStripMenuItem.Enabled = true;
+                                        stopTestToolStripMenuItem.Enabled = false;
+                                    });
+
+                                    //return the charger to low priority
+                                    criticalNum[Cstation] = false;
+
+                                    return;
+                                }
+
+                                Thread.Sleep(400);
+                            }
+                            // were back!
+                            //start the charger back up!
+                            if ((string)d.Rows[station][9] != "" && (string)d.Rows[station][10] == "ICA" && (string)d.Rows[station][2] != "As Received")
+                            {
+                                //make sure the charger has priority
+                                criticalNum[Cstation] = true;
+
+                                updateD(station, 7, "Telling Charger to Run");
+                                // set KE1 to 2 ("command")
+                                GlobalVars.ICSettings[Cstation].KE1 = (byte)2;
+                                // set KE3 to run
+                                GlobalVars.ICSettings[Cstation].KE3 = (byte)1;
+                                //Update the output string value
+                                GlobalVars.ICSettings[Cstation].UpdateOutText();
+                                //now we are going to create a thread to set KE1 back to data mode after 5 seconds
+                                Thread.Sleep(5000);
+                                // set KE1 to 1 ("query")
+                                GlobalVars.ICSettings[Cstation].KE1 = (byte)0;
+                                // set KE3 to 0 ("query")
+                                GlobalVars.ICSettings[Cstation].KE3 = (byte)3;
+                                //Update the output string value
+                                GlobalVars.ICSettings[Cstation].UpdateOutText();
+                                Thread.Sleep(10000);
+
+                                //make sure the charger no longer has priority
+                                criticalNum[Cstation] = false;
+                            }
+
+                            stopwatch.Start();
+                            updateD(station, 7, ("Reading " + currentReading.ToString() + "of " + readings.ToString()));
+
+                        }// end power fail if
+                        else
+                        {
+                            // end the test!
+                            //clear values from d
+                            updateD(station, 7, ("FAILED ON " + (currentReading - 1).ToString() + " of " + readings.ToString()));
+                            updateD(station, 5, false);
+
+                            //update the gui
+                            this.Invoke((MethodInvoker)delegate()
+                            {
+                                startNewTestToolStripMenuItem.Enabled = true;
+                                resumeTestToolStripMenuItem.Enabled = true;
+                                stopTestToolStripMenuItem.Enabled = false;
+                            });
+
+                            //return the charger to low priority
+                            criticalNum[Cstation] = false;
+
+                            return;
+                        }// end test fail else
+
+                        //return the charger to low priority
+                        criticalNum[Cstation] = false;
+                    }  // end problem test block
+
                     //Now we should check for a cancel
                     #region cancel block
                     if (token.IsCancellationRequested)
                     {
-                        if (GlobalVars.autoConfig == true)
+                        if (GlobalVars.autoConfig == true && (string)d.Rows[station][2] != "As Received")
                         {
 
-
                             //make sure the charger has priority
-                            criticalNum[station] = true;
+                            criticalNum[Cstation] = true;
 
                             // now we need to stop the charger
                             updateD(station, 7, "Telling Charger to Stop");
                             // set KE1 to 2 ("command")
-                            GlobalVars.ICSettings[int.Parse((string)d.Rows[station][9])].KE1 = (byte)2;
+                            GlobalVars.ICSettings[Cstation].KE1 = (byte)2;
                             // set KE3 to stop
-                            GlobalVars.ICSettings[int.Parse((string)d.Rows[station][9])].KE3 = (byte)2;
+                            GlobalVars.ICSettings[Cstation].KE3 = (byte)2;
                             //Update the output string value
-                            GlobalVars.ICSettings[int.Parse((string)d.Rows[station][9])].UpdateOutText();
+                            GlobalVars.ICSettings[Cstation].UpdateOutText();
                             //now we are going to create a thread to set KE1 back to data mode after 15 seconds
                             Thread.Sleep(5000);
                             //turn off priority
-                            criticalNum[station] = false;
+                            criticalNum[Cstation] = false;
                         }
                         
                         //clear values from d
-                        updateD(station, 7, ("Read " + currentReading.ToString() + "of " + readings.ToString()));
+                        updateD(station, 7, ("Read " + (currentReading - 1).ToString() + "of " + readings.ToString()));
                         updateD(station, 5, false);
 
                         //update the gui
                         this.Invoke((MethodInvoker)delegate()
                         {
                             startNewTestToolStripMenuItem.Enabled = true;
+                            resumeTestToolStripMenuItem.Enabled = true;
                             stopTestToolStripMenuItem.Enabled = false;
                         });
 
@@ -610,33 +1075,33 @@ namespace NewBTASProto
                 if ((string)d.Rows[station][9] != "" && (string)d.Rows[station][10] == "ICA" && (string)d.Rows[station][2] != "As Received")
                 {
                     //make sure the charger has priority
-                    criticalNum[station] = true;
+                    criticalNum[Cstation] = true;
 
                     // now we need to stop the charger
                     updateD(station, 7, "Telling Charger to Stop");
                     // set KE1 to 2 ("command")
-                    GlobalVars.ICSettings[int.Parse((string)d.Rows[station][9])].KE1 = (byte)2;
+                    GlobalVars.ICSettings[Cstation].KE1 = (byte)2;
                     // set KE3 to stop
-                    GlobalVars.ICSettings[int.Parse((string)d.Rows[station][9])].KE3 = (byte)2;
+                    GlobalVars.ICSettings[Cstation].KE3 = (byte)2;
                     //Update the output string value
-                    GlobalVars.ICSettings[int.Parse((string)d.Rows[station][9])].UpdateOutText();
+                    GlobalVars.ICSettings[Cstation].UpdateOutText();
                     //now we are going to create a thread to set KE1 back to data mode after 15 seconds
                     Thread.Sleep(5000);
                     // now we need to reset the charger
                     updateD(station, 7, "Resetting Charger");
                     // set KE3 to RESET
-                    GlobalVars.ICSettings[int.Parse((string)d.Rows[station][9])].KE3 = (byte)3;
+                    GlobalVars.ICSettings[Cstation].KE3 = (byte)3;
                     //Update the output string value
-                    GlobalVars.ICSettings[int.Parse((string)d.Rows[station][9])].UpdateOutText();
+                    GlobalVars.ICSettings[Cstation].UpdateOutText();
                     //now we are going to create a thread to set KE1 back to data mode after 15 seconds
                     Thread.Sleep(5000);
                     // set KE1 to 1 ("query")
-                    GlobalVars.ICSettings[int.Parse((string)d.Rows[station][9])].KE1 = (byte)0;
+                    GlobalVars.ICSettings[Cstation].KE1 = (byte)0;
                     //Update the output string value
-                    GlobalVars.ICSettings[int.Parse((string)d.Rows[station][9])].UpdateOutText();
+                    GlobalVars.ICSettings[Cstation].UpdateOutText();
 
                     //turn off priority
-                    criticalNum[station] = false;
+                    criticalNum[Cstation] = false;
                 }
                 
 
@@ -644,6 +1109,7 @@ namespace NewBTASProto
                 this.Invoke((MethodInvoker)delegate()
                 {
                     startNewTestToolStripMenuItem.Enabled = true;
+                    resumeTestToolStripMenuItem.Enabled = false;
                     stopTestToolStripMenuItem.Enabled = false;
                 });
 

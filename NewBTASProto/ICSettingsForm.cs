@@ -91,7 +91,7 @@ namespace NewBTASProto
             try
             {
                 comboBox1.SelectedIndex = ((Main_Form)this.Owner).dataGridView1.CurrentRow.Index;
-                comboBox2.SelectedText = reverseTestMode[GlobalVars.ICSettings[comboBox1.SelectedIndex].KM1 - 48];
+                comboBox2.Text = reverseTestMode[GlobalVars.ICSettings[comboBox1.SelectedIndex].KM1 - 48];
                 comboBox3.SelectedText = reverseAction[GlobalVars.ICSettings[comboBox1.SelectedIndex].KE3];
                 // Primary Charge
                 //time
