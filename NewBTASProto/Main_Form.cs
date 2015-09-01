@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO.Ports;
 using System.Threading;
+using System.IO;
 
 
 namespace NewBTASProto
@@ -459,6 +460,13 @@ namespace NewBTASProto
 
         private void Main_Form_FormClosing(object sender, FormClosingEventArgs e)
         {
+            //save the grid for the next time we restart
+            using (StreamWriter writer = new StreamWriter("../main_grid.xml",false))
+            {
+                d.WriteXml(writer);
+            }
+            
+
             // tell those threadpool work items to stop!!!!!
             try
             {
@@ -608,11 +616,102 @@ namespace NewBTASProto
 
         private void clearToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            string current = d.Rows[dataGridView1.CurrentRow.Index][9].ToString();
+
+            if (current.Length > 2)
+            {
+                //we've got a master or a slave
+                // check for slaves or master associated with this channel also
+
+                if (current.Length == 3)
+                {
+                    // one digit case
+                    current = current.Substring(0, 1);
+                }
+                else
+                {
+                    // two digit case
+                    current = current.Substring(0, 2);
+                }
+
+
+                for (int i = 0; i < 16; i++)
+                {
+                    if (d.Rows[i][9].ToString() == "")
+                    {
+                        //go to the next
+                        ;
+                    }
+                    else if (d.Rows[i][9].ToString().Substring(0,current.Length) == current)
+                    {
+                        // found it!
+                        // make that one the master
+                        d.Rows[i][9] = current;
+                        // Now enable adding another...
+                        switch (Convert.ToInt32(current))
+                        {
+                            case 0:
+                                toolStripMenuItem7.Enabled = true;
+                                break;
+                            case 1:
+                                toolStripMenuItem8.Enabled = true;
+                                break;
+                            case 2:
+                                toolStripMenuItem9.Enabled = true;
+                                break;
+                            case 3:
+                                toolStripMenuItem10.Enabled = true;
+                                break;
+                            case 4:
+                                toolStripMenuItem11.Enabled = true;
+                                break;
+                            case 5:
+                                toolStripMenuItem12.Enabled = true;
+                                break;
+                            case 6:
+                                toolStripMenuItem13.Enabled = true;
+                                break;
+                            case 7:
+                                toolStripMenuItem14.Enabled = true;
+                                break;
+                            case 8:
+                                toolStripMenuItem15.Enabled = true;
+                                break;
+                            case 9:
+                                toolStripMenuItem16.Enabled = true;
+                                break;
+                            case 10:
+                                toolStripMenuItem17.Enabled = true;
+                                break;
+                            case 11:
+                                toolStripMenuItem18.Enabled = true;
+                                break;
+                            case 12:
+                                toolStripMenuItem19.Enabled = true;
+                                break;
+                            case 13:
+                                toolStripMenuItem20.Enabled = true;
+                                break;
+                            case 14:
+                                toolStripMenuItem21.Enabled = true;
+                                break;
+                            case 15:
+                                toolStripMenuItem22.Enabled = true;
+                                break;
+                        }// end switch
+
+                    }// end else if
+                }
+
+            }
+            
+            // we always clear the current one..
             d.Rows[dataGridView1.CurrentRow.Index][9] = "";
 
             //make sure we clear the current test
             updateD(dataGridView1.CurrentRow.Index, 6, "");
             updateD(dataGridView1.CurrentRow.Index, 7, "");
+
         }
 
         private void toolStripMenuItem7_Click(object sender, EventArgs e)
@@ -650,7 +749,7 @@ namespace NewBTASProto
         {
             for (int i = 0; i < 16; i++)
             {
-                if (d.Rows[i][9] == "1" && i != dataGridView1.CurrentRow.Index)
+                if (d.Rows[i][9].ToString() == "1" && i != dataGridView1.CurrentRow.Index)
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
@@ -658,7 +757,7 @@ namespace NewBTASProto
                     // and the current one the slave
                     d.Rows[dataGridView1.CurrentRow.Index][9] = "1-S";
                     // Now disable adding another...
-                    toolStripMenuItem7.Enabled = false;
+                    toolStripMenuItem8.Enabled = false;
                     return;
                 }
             }
@@ -680,7 +779,7 @@ namespace NewBTASProto
         {
             for (int i = 0; i < 16; i++)
             {
-                if (d.Rows[i][9] == "2" && i != dataGridView1.CurrentRow.Index)
+                if (d.Rows[i][9].ToString() == "2" && i != dataGridView1.CurrentRow.Index)
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
@@ -688,7 +787,7 @@ namespace NewBTASProto
                     // and the current one the slave
                     d.Rows[dataGridView1.CurrentRow.Index][9] = "2-S";
                     // Now disable adding another...
-                    toolStripMenuItem7.Enabled = false;
+                    toolStripMenuItem9.Enabled = false;
                     return;
                 }
             }
@@ -710,7 +809,7 @@ namespace NewBTASProto
         {
             for (int i = 0; i < 16; i++)
             {
-                if (d.Rows[i][9] == "3" && i != dataGridView1.CurrentRow.Index)
+                if (d.Rows[i][9].ToString() == "3" && i != dataGridView1.CurrentRow.Index)
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
@@ -718,7 +817,7 @@ namespace NewBTASProto
                     // and the current one the slave
                     d.Rows[dataGridView1.CurrentRow.Index][9] = "3-S";
                     // Now disable adding another...
-                    toolStripMenuItem7.Enabled = false;
+                    toolStripMenuItem10.Enabled = false;
                     return;
                 }
             }
@@ -740,7 +839,7 @@ namespace NewBTASProto
         {
             for (int i = 0; i < 16; i++)
             {
-                if (d.Rows[i][9] == "4" && i != dataGridView1.CurrentRow.Index)
+                if (d.Rows[i][9].ToString() == "4" && i != dataGridView1.CurrentRow.Index)
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
@@ -748,7 +847,7 @@ namespace NewBTASProto
                     // and the current one the slave
                     d.Rows[dataGridView1.CurrentRow.Index][9] = "4-S";
                     // Now disable adding another...
-                    toolStripMenuItem7.Enabled = false;
+                    toolStripMenuItem11.Enabled = false;
                     return;
                 }
             }
@@ -770,7 +869,7 @@ namespace NewBTASProto
         {
             for (int i = 0; i < 16; i++)
             {
-                if (d.Rows[i][9] == "5" && i != dataGridView1.CurrentRow.Index)
+                if (d.Rows[i][9].ToString() == "5" && i != dataGridView1.CurrentRow.Index)
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
@@ -778,7 +877,7 @@ namespace NewBTASProto
                     // and the current one the slave
                     d.Rows[dataGridView1.CurrentRow.Index][9] = "5-S";
                     // Now disable adding another...
-                    toolStripMenuItem7.Enabled = false;
+                    toolStripMenuItem12.Enabled = false;
                     return;
                 }
             }
@@ -800,7 +899,7 @@ namespace NewBTASProto
         {
             for (int i = 0; i < 16; i++)
             {
-                if (d.Rows[i][9] == "6" && i != dataGridView1.CurrentRow.Index)
+                if (d.Rows[i][9].ToString() == "6" && i != dataGridView1.CurrentRow.Index)
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
@@ -808,7 +907,7 @@ namespace NewBTASProto
                     // and the current one the slave
                     d.Rows[dataGridView1.CurrentRow.Index][9] = "6-S";
                     // Now disable adding another...
-                    toolStripMenuItem7.Enabled = false;
+                    toolStripMenuItem13.Enabled = false;
                     return;
                 }
             }
@@ -830,7 +929,7 @@ namespace NewBTASProto
         {
             for (int i = 0; i < 16; i++)
             {
-                if (d.Rows[i][9] == "7" && i != dataGridView1.CurrentRow.Index)
+                if (d.Rows[i][9].ToString() == "7" && i != dataGridView1.CurrentRow.Index)
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
@@ -838,7 +937,7 @@ namespace NewBTASProto
                     // and the current one the slave
                     d.Rows[dataGridView1.CurrentRow.Index][9] = "7-S";
                     // Now disable adding another...
-                    toolStripMenuItem7.Enabled = false;
+                    toolStripMenuItem14.Enabled = false;
                     return;
                 }
             }
@@ -860,7 +959,7 @@ namespace NewBTASProto
         {
             for (int i = 0; i < 16; i++)
             {
-                if (d.Rows[i][9] == "8" && i != dataGridView1.CurrentRow.Index)
+                if (d.Rows[i][9].ToString() == "8" && i != dataGridView1.CurrentRow.Index)
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
@@ -868,7 +967,7 @@ namespace NewBTASProto
                     // and the current one the slave
                     d.Rows[dataGridView1.CurrentRow.Index][9] = "8-S";
                     // Now disable adding another...
-                    toolStripMenuItem7.Enabled = false;
+                    toolStripMenuItem15.Enabled = false;
                     return;
                 }
             }
@@ -890,7 +989,7 @@ namespace NewBTASProto
         {
             for (int i = 0; i < 16; i++)
             {
-                if (d.Rows[i][9] == "9" && i != dataGridView1.CurrentRow.Index)
+                if (d.Rows[i][9].ToString() == "9" && i != dataGridView1.CurrentRow.Index)
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
@@ -898,7 +997,7 @@ namespace NewBTASProto
                     // and the current one the slave
                     d.Rows[dataGridView1.CurrentRow.Index][9] = "9-S";
                     // Now disable adding another...
-                    toolStripMenuItem7.Enabled = false;
+                    toolStripMenuItem16.Enabled = false;
                     return;
                 }
             }
@@ -920,7 +1019,7 @@ namespace NewBTASProto
         {
             for (int i = 0; i < 16; i++)
             {
-                if (d.Rows[i][9] == "10" && i != dataGridView1.CurrentRow.Index)
+                if (d.Rows[i][9].ToString() == "10" && i != dataGridView1.CurrentRow.Index)
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
@@ -928,7 +1027,7 @@ namespace NewBTASProto
                     // and the current one the slave
                     d.Rows[dataGridView1.CurrentRow.Index][9] = "10-S";
                     // Now disable adding another...
-                    toolStripMenuItem7.Enabled = false;
+                    toolStripMenuItem17.Enabled = false;
                     return;
                 }
             }
@@ -950,7 +1049,7 @@ namespace NewBTASProto
         {
             for (int i = 0; i < 16; i++)
             {
-                if (d.Rows[i][9] == "11" && i != dataGridView1.CurrentRow.Index)
+                if (d.Rows[i][9].ToString() == "11" && i != dataGridView1.CurrentRow.Index)
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
@@ -958,7 +1057,7 @@ namespace NewBTASProto
                     // and the current one the slave
                     d.Rows[dataGridView1.CurrentRow.Index][9] = "11-S";
                     // Now disable adding another...
-                    toolStripMenuItem7.Enabled = false;
+                    toolStripMenuItem18.Enabled = false;
                     return;
                 }
             }
@@ -980,7 +1079,7 @@ namespace NewBTASProto
         {
             for (int i = 0; i < 16; i++)
             {
-                if (d.Rows[i][9] == "12" && i != dataGridView1.CurrentRow.Index)
+                if (d.Rows[i][9].ToString() == "12" && i != dataGridView1.CurrentRow.Index)
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
@@ -988,7 +1087,7 @@ namespace NewBTASProto
                     // and the current one the slave
                     d.Rows[dataGridView1.CurrentRow.Index][9] = "12-S";
                     // Now disable adding another...
-                    toolStripMenuItem7.Enabled = false;
+                    toolStripMenuItem19.Enabled = false;
                     return;
                 }
             }
@@ -1010,7 +1109,7 @@ namespace NewBTASProto
         {
             for (int i = 0; i < 16; i++)
             {
-                if (d.Rows[i][9] == "13" && i != dataGridView1.CurrentRow.Index)
+                if (d.Rows[i][9].ToString() == "13" && i != dataGridView1.CurrentRow.Index)
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
@@ -1018,7 +1117,7 @@ namespace NewBTASProto
                     // and the current one the slave
                     d.Rows[dataGridView1.CurrentRow.Index][9] = "13-S";
                     // Now disable adding another...
-                    toolStripMenuItem7.Enabled = false;
+                    toolStripMenuItem20.Enabled = false;
                     return;
                 }
             }
@@ -1040,7 +1139,7 @@ namespace NewBTASProto
         {
             for (int i = 0; i < 16; i++)
             {
-                if (d.Rows[i][9] == "14" && i != dataGridView1.CurrentRow.Index)
+                if (d.Rows[i][9].ToString() == "14" && i != dataGridView1.CurrentRow.Index)
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
@@ -1048,7 +1147,7 @@ namespace NewBTASProto
                     // and the current one the slave
                     d.Rows[dataGridView1.CurrentRow.Index][9] = "14-S";
                     // Now disable adding another...
-                    toolStripMenuItem7.Enabled = false;
+                    toolStripMenuItem21.Enabled = false;
                     return;
                 }
             }
@@ -1070,7 +1169,7 @@ namespace NewBTASProto
         {
             for (int i = 0; i < 16; i++)
             {
-                if (d.Rows[i][9] == "15" && i != dataGridView1.CurrentRow.Index)
+                if (d.Rows[i][9].ToString() == "15" && i != dataGridView1.CurrentRow.Index)
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
@@ -1078,7 +1177,7 @@ namespace NewBTASProto
                     // and the current one the slave
                     d.Rows[dataGridView1.CurrentRow.Index][9] = "15-S";
                     // Now disable adding another...
-                    toolStripMenuItem7.Enabled = false;
+                    toolStripMenuItem22.Enabled = false;
                     return;
                 }
             }
@@ -1374,6 +1473,13 @@ namespace NewBTASProto
         {
             GlobalVars.currentTech = (string)comboBox1.SelectedValue;
         }
+
+        private void cMSChargerChannel_Opening(object sender, CancelEventArgs e)
+        {
+
+        }
+
+
 
   
 

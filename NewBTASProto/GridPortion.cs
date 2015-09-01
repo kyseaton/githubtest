@@ -34,6 +34,8 @@ namespace NewBTASProto
         public void SetUpTable()
         {
 
+            d.TableName = "main_grid";
+
             // Add 16 rows to the data table to fit all of the grid data
             while (d.Rows.Count < 16)
             {
@@ -96,7 +98,24 @@ namespace NewBTASProto
             }
 
             // Render the DataGridView.
-            SetUpTable();
+            try
+            {
+                d.TableName = "main_grid";
+                //System.IO.FileStream streamRead = new System.IO.FileStream(@"C:\Users\Kyle\Documents\Visual Studio 2013\Projects\NewBTASProto\main_grid.xml", System.IO.FileMode.Open, System.IO.FileAccess.Read);
+                d.ReadXml("../main_grid.xml");
+                //streamRead.Close();
+
+                if (d.Rows.Count == 1)
+                {
+                    SetUpTable();
+                }
+            }
+            catch
+            {
+                SetUpTable();
+                //error reading the grid!
+            }
+            
             dataGridView1.DataSource = d;
 
             // change settings for the individual columns
@@ -236,7 +255,33 @@ namespace NewBTASProto
                     }
                     else
                     {
-                        checkForIC(int.Parse((string)d.Rows[e.RowIndex][9]),e.RowIndex);
+                        int chargerID = 0;
+
+                        if (d.Rows[e.RowIndex][9].ToString() == "") { ;}  // do nothing if there is no assigned charger id
+                        else if (d.Rows[e.RowIndex][9].ToString().Length > 2)  // this is the case where we have a master and slave config
+                        {
+                            // we have a master slave charger
+                            // split into 3 and 4 digit case
+                            if (d.Rows[e.RowIndex][9].ToString().Length == 3)
+                            {
+                                if (d.Rows[e.RowIndex][9].ToString().Substring(2, 1) == "S") { return; }
+                                // 3 case
+                                chargerID = int.Parse(d.Rows[e.RowIndex][9].ToString().Substring(0, 1));
+                            }
+                            else
+                            {
+                                if (d.Rows[e.RowIndex][9].ToString().Substring(3, 1) == "S") { return; }
+                                // 4 case
+                                chargerID = int.Parse(d.Rows[e.RowIndex][9].ToString().Substring(0, 2));
+
+                            }
+                        }
+
+                        else  // this is the normal case with just one charger
+                        {
+                            chargerID = Convert.ToInt32(d.Rows[e.RowIndex][9]);
+                        }
+                        checkForIC(chargerID,e.RowIndex);
                     }
                 }
 
@@ -249,6 +294,8 @@ namespace NewBTASProto
 
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+            
+
             dataGridView1.ClearSelection();
             // only proceed if there isn't a test running!
             if ((bool)d.Rows[e.RowIndex][5] != true)
@@ -287,13 +334,15 @@ namespace NewBTASProto
         {
             lock (dLock)
             {
-
                 d.Rows[r][c] = inVal;
-
             }
         }
 
-
+        private void dataGridView1_RowEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            // fill the plotCombos
+            fillPlotCombos(e.RowIndex);
+        }
 
 
     }

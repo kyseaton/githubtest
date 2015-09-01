@@ -34,9 +34,8 @@ namespace NewBTASProto
         //for critical operations (Start,Stop, etc)
         bool [] criticalNum = new bool[16];
 
-        
-
-
+        //Com Error count 
+        byte[] comErrorNum = new byte[16] {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
         public void pollICs()
         {
@@ -73,8 +72,6 @@ namespace NewBTASProto
                     
                     try
                     {
-
-
                         for (int j = 0; j < 16; j++)
                         {
                             //sleep a little each time as to not overload the host
@@ -84,11 +81,39 @@ namespace NewBTASProto
 
                             if ((bool) d.Rows[j][8] && (bool) d.Rows[j][4] && (string) d.Rows[j][9] != "" && (string) d.Rows[j][10] == "ICA")
                             {
-                                Thread.Sleep(500);
+                                Thread.Sleep(600);
                                 try
                                 {
+                                    // control for master slave setup
+                                    int chargerID = 0;
+
+                                    if (d.Rows[j][9].ToString() == "") { ;}  // do nothing if there is no assigned charger id
+                                    else if (d.Rows[j][9].ToString().Length > 2)  // this is the case where we have a master and slave config
+                                    {
+                                        // we have a master slave charger
+                                        // split into 3 and 4 digit case
+                                        if (d.Rows[j][9].ToString().Length == 3)
+                                        {
+                                            if (d.Rows[j][9].ToString().Substring(2, 1) == "S") { break; }
+                                            // 3 case
+                                            chargerID = int.Parse(d.Rows[j][9].ToString().Substring(0, 1));
+                                        }
+                                        else
+                                        {
+                                            if (d.Rows[j][9].ToString().Substring(3, 1) == "S") { break; }
+                                            // 4 case
+                                            chargerID = int.Parse(d.Rows[j][9].ToString().Substring(0, 2));
+
+                                        }
+                                    }
+                                    else  // this is the normal case with just one charger
+                                    {
+                                        chargerID = Convert.ToInt32(d.Rows[j][9]);
+                                    }
+
+
                                     // send the short command based on the settings for the charger...
-                                    ICComPort.Write(GlobalVars.ICSettings[Convert.ToInt32(d.Rows[j][9])].outText, 0, 28);
+                                    ICComPort.Write(GlobalVars.ICSettings[chargerID].outText, 0, 28);
                                     // wait for a response
                                     tempBuff = ICComPort.ReadTo("Z");
                                     //do something with the new data
@@ -125,6 +150,8 @@ namespace NewBTASProto
                                         
                                     });
 
+                                    comErrorNum[j] = 0;
+
                                     Thread.Sleep(200);
 
                                 }
@@ -132,8 +159,13 @@ namespace NewBTASProto
                                 {
                                     if (ex is System.TimeoutException)
                                     {
+                                        if (comErrorNum[j] < 3) { comErrorNum[j]++; }
                                         this.Invoke((MethodInvoker)delegate
                                         {
+                                            if (comErrorNum[j] > 2)
+                                            {
+                                                updateD(j, 11, "");
+                                            }
                                             tempBuff = ICComPort.ReadExisting();
                                             rtbIncoming.Text = "Com Error" + System.Environment.NewLine + tempBuff;
                                         });
@@ -189,6 +221,34 @@ namespace NewBTASProto
                                         // wait for a response
                                         tempBuff = ICComPort.ReadTo("Z");
 
+                                        int station = 0;
+                                        //find where the charger is located
+                                        for (byte v = 0; v < 16; v++)
+                                        {
+                                            if (d.Rows[v][9].ToString() == "") { ;}  // do nothing if there is no assigned charger id
+                                            else if (d.Rows[v][9].ToString().Length > 2)  // this is the case where we have a master and slave config
+                                            {
+                                                // we have a master slave charger
+                                                // split into 3 and 4 digit case
+                                                if (d.Rows[v][9].ToString().Length == 3)
+                                                {
+                                                    // 3 case
+                                                    station = int.Parse(d.Rows[v][9].ToString().Substring(0,1));
+                                                }
+                                                else
+                                                {
+                                                    // 4 case
+                                                    station = int.Parse(d.Rows[v][9].ToString().Substring(0, 2));
+
+                                                }
+                                            }
+                                            else if (int.Parse(d.Rows[v][9].ToString()) == i)  // this is the normal case of just one charger
+                                            {
+                                                station = v;
+                                                break;
+                                            }
+                                        }
+
 
                                         // we got a response so lets update the grid and the status box
                                         //A[1] has the terminal ID in it
@@ -202,20 +262,20 @@ namespace NewBTASProto
                                             {
                                                 if (testData.faultStatus != "")
                                                 {
-                                                    updateD(i, 11, testData.faultStatus);
+                                                    updateD(station, 11, testData.faultStatus);
                                                 }
                                                 else if (testData.endStatus != "")
                                                 {
-                                                    updateD(i, 11, testData.endStatus);
+                                                    updateD(station, 11, testData.endStatus);
                                                 }
                                                 else
                                                 {
-                                                    updateD(i, 11, testData.runStatus);
+                                                    updateD(station, 11, testData.runStatus);
                                                 }
                                             }
                                             else
                                             {
-                                                updateD(i, 11, "offline!");
+                                                updateD(station, 11, "offline!");
                                             }
                                         });
                                         Thread.Sleep(200);
@@ -258,7 +318,7 @@ namespace NewBTASProto
             {
                 // we're going to give it 3 seconds to think about it...
                 // it gets checked every other time...
-                Thread.Sleep(6000);
+                Thread.Sleep(12000);
                 // now we'll make sure we're not looking anymore...
                 check = false;
             }); // end thread

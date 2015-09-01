@@ -1743,6 +1743,11 @@ namespace NewBTASProto
             chart2.Height = (this.Height - 196) / 2;
             chart2.Top = (int) (panel1.Height * 0.509666);
             chart2.Invalidate();
+        }
+
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }    
 
 

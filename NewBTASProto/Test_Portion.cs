@@ -30,9 +30,29 @@ namespace NewBTASProto
         {
             int station = dataGridView1.CurrentRow.Index;
             int Cstation = 0;
-            if ((string) d.Rows[station][9] != "")
+            bool isASlave = false;
+
+            if (d.Rows[station][9].ToString() == "") { ;}  // do nothing if there is no assigned charger id
+            else if (d.Rows[station][9].ToString().Length > 2)  // this is the case where we have a master and slave config
             {
-                Cstation = int.Parse((string)d.Rows[station][9]);
+                // we have a master slave charger
+                // split into 3 and 4 digit case
+                if (d.Rows[station][9].ToString().Length == 3)
+                {
+                    if (d.Rows[station][9].ToString().Substring(2, 1) == "S") { isASlave = true; }
+                    // 3 case
+                    Cstation = int.Parse(d.Rows[station][9].ToString().Substring(0, 1));
+                }
+                else
+                {
+                    if (d.Rows[station][9].ToString().Substring(3, 1) == "S") { isASlave = true; }
+                    // 4 case
+                    Cstation = int.Parse(d.Rows[station][9].ToString().Substring(0, 2));
+                }
+            }
+            else  // this is the normal case with just one charger
+            {
+                Cstation = Convert.ToInt32(d.Rows[station][9]);
             }
             
             cRunTest[station] = new CancellationTokenSource();
@@ -102,7 +122,7 @@ namespace NewBTASProto
                 #region if we are doing the autoconfig, let's get the charger settings in order and then loaded into the charger!
 
                 // we'll tell the charger what to do! (if we have an IC and the user wants us to...)
-                if (GlobalVars.autoConfig && (string)d.Rows[station][10] == "ICA" && (string)d.Rows[station][2] != "As Received" )
+                if (GlobalVars.autoConfig && (string)d.Rows[station][10] == "ICA" && (string)d.Rows[station][2] != "As Received" && isASlave != true)
                 {
 
                     // GENERAL PROCEDURE
@@ -726,7 +746,7 @@ namespace NewBTASProto
 
                 // OK now we'll tell the charger to startup (if we need to!)/////////////////////////////////////////////////////////////////////////////////////
 
-                if ((string)d.Rows[station][2] == "As Received" || GlobalVars.autoConfig == false)
+                if ((string)d.Rows[station][2] == "As Received" || GlobalVars.autoConfig == false && isASlave == true)
                 {
                     // we don't have to interact with the charger for this test
                 }// end if
@@ -741,12 +761,30 @@ namespace NewBTASProto
                         // If we are in hold and we are starting a new test we need to reset before starting!
                         if ((string)d.Rows[station][11] != "RESET" && (string)d.Rows[station][6] == "")
                         {
+                            // if we are in RUN stop the charger first
+                            if ((string)d.Rows[station][11] != "RUN")
+                            {
+                                // now we need to reset the charger
+                                updateD(station, 7, "Stopping Charger!");
+                                // set KE1 to 2 ("command")
+                                GlobalVars.ICSettings[Cstation].KE1 = (byte)2;
+                                // set KE3 to stop
+                                GlobalVars.ICSettings[Cstation].KE3 = (byte)3;
+                                //Update the output string value
+                                GlobalVars.ICSettings[Cstation].UpdateOutText();
+                                //now we are going to create a thread to set KE1 back to data mode after 15 seconds
+                                Thread.Sleep(5000);
+                                // set KE1 to 1 ("query")
+                                GlobalVars.ICSettings[Cstation].KE1 = (byte)0;
+                                //Update the output string value
+                                GlobalVars.ICSettings[Cstation].UpdateOutText();
+                            }
                             // now we need to reset the charger
                             updateD(station, 7, "Resetting Charger");
                             // set KE1 to 2 ("command")
                             GlobalVars.ICSettings[Cstation].KE1 = (byte)2;
                             // set KE3 to RESET
-                            GlobalVars.ICSettings[Cstation].KE3 = (byte)3;
+                            GlobalVars.ICSettings[Cstation].KE3 = (byte)2;
                             //Update the output string value
                             GlobalVars.ICSettings[Cstation].UpdateOutText();
                             //now we are going to create a thread to set KE1 back to data mode after 15 seconds
@@ -755,6 +793,26 @@ namespace NewBTASProto
                             GlobalVars.ICSettings[Cstation].KE1 = (byte)0;
                             //Update the output string value
                             GlobalVars.ICSettings[Cstation].UpdateOutText();
+                        }
+
+                        else if ((string)d.Rows[station][11] != "HOLD" && (string)d.Rows[station][6] != "")
+                        {
+                            // we are resuming after a fault has been corrected..
+                            // now we need to reset the charger
+                            updateD(station, 7, "Clearing Charger!");
+                            // set KE1 to 2 ("command")
+                            GlobalVars.ICSettings[Cstation].KE1 = (byte)2;
+                            // set KE3 to stop
+                            GlobalVars.ICSettings[Cstation].KE3 = (byte)0;
+                            //Update the output string value
+                            GlobalVars.ICSettings[Cstation].UpdateOutText();
+                            //now we are going to create a thread to set KE1 back to data mode after 5 seconds
+                            Thread.Sleep(5000);
+                            // set KE1 to 1 ("query")
+                            GlobalVars.ICSettings[Cstation].KE1 = (byte)0;
+                            //Update the output string value
+                            GlobalVars.ICSettings[Cstation].UpdateOutText();
+
                         }
                     
 
@@ -799,7 +857,7 @@ namespace NewBTASProto
                     string temp = (string)d.Rows[station][6];
                     offset = new TimeSpan(int.Parse(temp.Substring(0, 2)), int.Parse(temp.Substring(3, 2)), int.Parse(temp.Substring(6, 2)));
                     currentReading = ((offset.Hours * 3600 + offset.Minutes * 60 + offset.Seconds) / interval) + 2;
-                    updateD(station, 7, ("Reading " + (currentReading - 1).ToString() + "of " + readings.ToString()));
+                    updateD(station, 7, ("Reading " + (currentReading - 1).ToString() + " of " + readings.ToString()));
                 }
                 else
                 {
@@ -821,7 +879,7 @@ namespace NewBTASProto
                         //first record the elapsed amount of time
                         TimeSpan temp = stopwatch.Elapsed.Add(offset);
                         // update the grid
-                        updateD(station,7,("Reading " + currentReading.ToString() + "of " + readings.ToString()));
+                        updateD(station,7,("Reading " + currentReading.ToString() + " of " + readings.ToString()));
 
                         #region save a scan to the DB
                         //  now try to INSERT INTO it
@@ -937,9 +995,9 @@ namespace NewBTASProto
                         // we got an issue!
                         // stop the clock!
                         stopwatch.Stop();
-                        Thread.Sleep(5000); 
+                        Thread.Sleep(5000);
 
-                        if ((string) d.Rows[station][11] == "Power Fail")
+                        if ((string)d.Rows[station][11] == "Power Fail" || (string)d.Rows[station][11] == "HOLD")
                         {
 
                             updateD(station, 7, ("Waiting For Charger"));
@@ -950,7 +1008,7 @@ namespace NewBTASProto
                                 if (token.IsCancellationRequested)
                                 {
                                     //clear values from d
-                                    updateD(station, 7, ("Read " + (currentReading - 1).ToString() + "of " + readings.ToString()));
+                                    updateD(station, 7, ("Read " + (currentReading - 1).ToString() + " of " + readings.ToString()));
                                     updateD(station, 5, false);
 
                                     //update the gui
@@ -998,7 +1056,7 @@ namespace NewBTASProto
                             }
 
                             stopwatch.Start();
-                            updateD(station, 7, ("Reading " + currentReading.ToString() + "of " + readings.ToString()));
+                            updateD(station, 7, ("Reading " + currentReading.ToString() + " of " + readings.ToString()));
 
                         }// end power fail if
                         else
@@ -1051,7 +1109,7 @@ namespace NewBTASProto
                         }
                         
                         //clear values from d
-                        updateD(station, 7, ("Read " + (currentReading - 1).ToString() + "of " + readings.ToString()));
+                        updateD(station, 7, ("Read " + (currentReading - 1).ToString() + " of " + readings.ToString()));
                         updateD(station, 5, false);
 
                         //update the gui
@@ -1072,7 +1130,7 @@ namespace NewBTASProto
 
                 // We finished so let's clearn up!
                 // If we are running the charger tell it to stop and reset
-                if ((string)d.Rows[station][9] != "" && (string)d.Rows[station][10] == "ICA" && (string)d.Rows[station][2] != "As Received")
+                if ((string)d.Rows[station][9] != "" && (string)d.Rows[station][10] == "ICA" && (string)d.Rows[station][2] != "As Received" && isASlave != true)
                 {
                     //make sure the charger has priority
                     criticalNum[Cstation] = true;

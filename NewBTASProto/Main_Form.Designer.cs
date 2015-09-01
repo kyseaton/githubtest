@@ -76,6 +76,7 @@
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label11 = new System.Windows.Forms.Label();
@@ -146,7 +147,6 @@
             this.toolStripMenuItem23 = new System.Windows.Forms.ToolStripSeparator();
             this.clearToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.button5 = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -188,6 +188,7 @@
             this.dataGridView1.TabIndex = 22;
             this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
+            this.dataGridView1.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_RowEnter);
             // 
             // menuStrip1
             // 
@@ -512,6 +513,15 @@
             this.groupBox1.TabIndex = 26;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "REAL TIME DATA";
+            // 
+            // label1
+            // 
+            this.label1.BackColor = System.Drawing.SystemColors.Window;
+            this.label1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.label1.Location = new System.Drawing.Point(6, 16);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(230, 587);
+            this.label1.TabIndex = 34;
             // 
             // button2
             // 
@@ -953,6 +963,7 @@
             this.toolStripMenuItem22});
             this.cMSChargerChannel.Name = "cMSChargerChannel";
             this.cMSChargerChannel.Size = new System.Drawing.Size(102, 384);
+            this.cMSChargerChannel.Opening += new System.ComponentModel.CancelEventHandler(this.cMSChargerChannel_Opening);
             // 
             // clearToolStripMenuItem
             // 
@@ -1132,15 +1143,6 @@
             this.button5.Text = "Configure Charger";
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Click += new System.EventHandler(this.button5_Click);
-            // 
-            // label1
-            // 
-            this.label1.BackColor = System.Drawing.SystemColors.Window;
-            this.label1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.label1.Location = new System.Drawing.Point(6, 16);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(230, 587);
-            this.label1.TabIndex = 34;
             // 
             // Main_Form
             // 
