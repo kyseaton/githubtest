@@ -28,6 +28,32 @@ namespace NewBTASProto
 
         private void RunTest()
         {
+            ///
+            /// General Structure:
+            /// 
+            /// As Recieved - Y - >  Jump straight to the test (case 1)
+            ///  |
+            ///  N
+            ///  |
+            ///  V
+            ///  Intelligent Charger with Auto Config - Y - >  Do everything! (case 2)
+            ///  |
+            ///  N
+            ///  |
+            ///  V
+            ///  Intelligent Charger - Y - >  Skip the configure part... (case 3)
+            ///  |
+            ///  N
+            ///  |
+            ///  V
+            ///  Legacy Charger - Y - >  Limited version of the test (case 4)
+            ///  |
+            ///  N
+            ///  |
+            ///  V
+            ///  Shunt - Y - >  Start test when you see a current (case 5)
+
+            
             int station = dataGridView1.CurrentRow.Index;
             int Cstation = 0;
             bool isASlave = false;
@@ -67,7 +93,7 @@ namespace NewBTASProto
                 // setup the canellation token
                 CancellationToken token = (CancellationToken)s;
 
-                #region startup checks
+                #region startup checks (all cases)
                 // first we check if we have all the relavent options selected
                 if ((string) d.Rows[station][1] == "")
                 {
@@ -89,24 +115,32 @@ namespace NewBTASProto
                     MessageBox.Show("CScan is not currently connected.  Please Check Connection.");
                     return;
                 }
-                // also need to check if an intelligent charger is connected for autoconfig
-                else if (GlobalVars.autoConfig == true && (string) d.Rows[station][10] != "ICA" && (string)d.Rows[station][2] != "As Received")
+                else if (GlobalVars.CScanData[station].cellCableType == "NONE")
                 {
-                    MessageBox.Show("Auto Configure is turned on, but their is not Intelligent charger detected.  Please connect an intelligent charger or turn Auto Configure off in the tools menu.");
+                    MessageBox.Show("CScan is not connected to a cells Cable.  Please connect a cells cable to this CSCAN to run a test.");
                     return;
                 }
-                else if (GlobalVars.autoConfig == true && (string) d.Rows[station][11] == "offline!" && (string)d.Rows[station][2] != "As Received")
+
+                //I removed this because the charger present will determine how the test is run...
+                // also need to check if an intelligent charger is connected for autoconfig
+                //else if (GlobalVars.autoConfig == true && d.Rows[station][10].ToString().Contains("ICA") && (string)d.Rows[station][2] != "As Received")
+                //{
+                //    MessageBox.Show("Auto Configure is turned on, but there is no intelligent charger detected.  Please connect an intelligent charger or turn Auto Configure off in the tools menu.");
+                //     return;
+                //}
+
+                else if (GlobalVars.autoConfig == true && (string)d.Rows[station][11] == "offline!" && (string)d.Rows[station][2] != "As Received" && d.Rows[station][10].ToString().Contains("ICA"))
                 {
                     MessageBox.Show("Auto Configure is turned on, but the Intelligent Charger is set to be offline.  Please turn Auto Configure off in the tools menu or set the charger to be online by pressing the following key sequence on the charger: FUNC, 1, 1 and ENTER.");
                     return;
                 }
                 #endregion
 
-                #region db connection setup
+                #region db connection setup (all cases)
                 // create db connection
                 try
                 {
-                    strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Kyle\Documents\Visual Studio 2013\Projects\NewBTASProto\BTS16NV.MDB";
+                    strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB";
                     myAccessConn = new OleDbConnection(strAccessConn);
                 }
                 catch (Exception ex)
@@ -116,13 +150,14 @@ namespace NewBTASProto
                 }
                 #endregion
 
+
                 // we passed the tests so we'll check the box to indicate we are a go!
                 updateD(station, 5, true);
 
-                #region if we are doing the autoconfig, let's get the charger settings in order and then loaded into the charger!
+                #region if we are doing the autoconfig, let's get the charger settings in order and then loaded into the charger! (case 2 only)
 
                 // we'll tell the charger what to do! (if we have an IC and the user wants us to...)
-                if (GlobalVars.autoConfig && (string)d.Rows[station][10] == "ICA" && (string)d.Rows[station][2] != "As Received" && isASlave != true)
+                if (GlobalVars.autoConfig && d.Rows[station][10].ToString().Contains("ICA") && (string)d.Rows[station][2] != "As Received" && isASlave != true)
                 {
 
                     // GENERAL PROCEDURE
@@ -556,7 +591,7 @@ namespace NewBTASProto
                         GlobalVars.ICSettings[Cstation].KE1 = (byte)0;
                         GlobalVars.ICSettings[Cstation].UpdateOutText();
 
-                        //make sure the charger has priority
+                        //turn off priority
                         criticalNum[Cstation] = false;
 
                     } // end try
@@ -573,7 +608,7 @@ namespace NewBTASProto
 
                 #endregion
 
-                #region load test readings and interval values
+                #region load test readings and interval values (true for all cases)
                 // Now we'll load the test parameters
                 // We need to know the Interval and the number of readings///////////////////////////////////////////////////////////////////////
 
@@ -659,6 +694,7 @@ namespace NewBTASProto
 
                     // Save the test information to the test table///////////////////////////////////////////////////////////////////////////////////////////
 
+                    // we need the technicial selected in the combo box too..
                     this.Invoke((MethodInvoker)delegate()
                     {
                         comboText = comboBox1.Text;
@@ -672,7 +708,7 @@ namespace NewBTASProto
                             "StationNumber,Charger,DateStarted,DateCompleted,Technician,TerminalID,CellCableID,ShuntCableID,TempCableID,TerminalNumber," +
                             "Technology,CustomNoCells,BATNUMCABLE10) "
                             + "VALUES ('" +
-                            "0" + "','" +                                                          //WorkOrderID
+                            "0" + "','" +                                                          //WorkOrderID (don't care..)
                             d.Rows[station][1].ToString().Trim() + "','" +                         //WorkOrderNumber
                             "" + "','" +                                                           //AggrWorkOrders
                             stepNum.ToString("00") + "','" +                                       //StepNumber
@@ -704,8 +740,6 @@ namespace NewBTASProto
                             myAccessConn.Close();
                         }
 
-
-
                     }
                     catch (Exception ex)
                     {
@@ -715,12 +749,14 @@ namespace NewBTASProto
                         return;
                     }
 
-                    #endregion
 
-                    #region   We made it to this point without errors, so we'll update the grid with the step number
+
+                   //We made it to this point without errors, so we'll update the grid with the step number
                     updateD(station, 3, stepNum.ToString());
 
                 }// end if
+                    
+                    #endregion
 
                 else    // We've got a resume!
                 {
@@ -742,19 +778,15 @@ namespace NewBTASProto
 
                 Thread.Sleep(1000);  // here so that we can actually see the grid update
 
-                #endregion
 
                 // OK now we'll tell the charger to startup (if we need to!)/////////////////////////////////////////////////////////////////////////////////////
-
-                if ((string)d.Rows[station][2] == "As Received" || GlobalVars.autoConfig == false && isASlave == true)
+                if ((string)d.Rows[station][2] == "As Received" || isASlave)
                 {
-                    // we don't have to interact with the charger for this test
-                }// end if
-                else
+                    // nothing to do! if it's an "As Received" or we are running the test on a slave charger... 
+                }
+                else if (d.Rows[station][10].ToString().Contains("ICA"))
                 {
-                    // we have an intelligent charger connected and it's not an as received test
-                    if ((string)d.Rows[station][9] != "" && (string)d.Rows[station][10] == "ICA" && (string)d.Rows[station][2] != "As Received")
-                    {
+                    // we have an intelligent charger
                         //make sure the charger has priority
                         criticalNum[Cstation] = true;
 
@@ -835,12 +867,54 @@ namespace NewBTASProto
 
                         //make sure the charger has priority
                         criticalNum[Cstation] = false;
-                    }
-                    else
+                }// end else if for ICs...
+                else if (d.Rows[station][10].ToString().Contains("CCA"))
+                {
+                    // We have a legacy Charger!
+                    // We need to let it run!
+                    GlobalVars.cHold[station] = false;
+                }  // end else if for Legacy chargers
+                else if (d.Rows[station][10].ToString().Contains("Shunt"))
+                {
+                    // We have a shunt!!!!!!
+                    // We'll start the test when we start to see current...
+                    updateD(station, 7, "Waiting!");
+                    while (true)
                     {
-                        MessageBox.Show("Not Implemented for use without an intelligent charger!");
+                        // make sure we didn't get a cancel first...
+                        #region cancel block
+                        if (token.IsCancellationRequested)
+                        {
+                            //clear values from d
+                            updateD(station, 7, ("Cancelled"));
+                            updateD(station, 5, false);
+
+                            //update the gui
+                            this.Invoke((MethodInvoker)delegate()
+                            {
+                                startNewTestToolStripMenuItem.Enabled = true;
+                                resumeTestToolStripMenuItem.Enabled = true;
+                                stopTestToolStripMenuItem.Enabled = false;
+                            });
+
+                            return;
+                        }
+                        #endregion
+                        // look for a current
+                        if (GlobalVars.CScanData[station].currentOne > 0.2)
+                        {
+                            // we found a current!
+                            break;
+                        }
+                        Thread.Sleep(100);
                     }
-                }// end else
+                }  // end the shunt else!
+                else
+                {
+                    // No idea how we got here!
+                    MessageBox.Show("Test failed!  Please check settings!");
+                    return;
+                }
 
                 // We are now good to go on starting the test loop timer...
                 // going to do the timming with a stop watch
@@ -979,110 +1053,125 @@ namespace NewBTASProto
                     }
                     oldETime = eTimeS;
 
+                    #region Here is where wer are going to look for charging issues!
                     //Lets test for a charger issue now
-                    if ((string) d.Rows[station][11] != "RUN")
+                    // there are going to be three sections, IC section, CCA section and shunt section
+                    if (d.Rows[station][10].ToString().Contains("ICA"))
                     {
-                        //make sure the charger has priority
-                        criticalNum[Cstation] = true;
-
-                        //try it a couple more times
-                        for (byte b = 0; b < 3; b++)
+                        if ((string)d.Rows[station][11] != "RUN" && (string)d.Rows[station][2] != "As Received")
                         {
-                            Thread.Sleep(2000); 
-                            if ((string)d.Rows[station][11] == "RUN") { break; }
-                        }
-                        updateD(station, 7, ("Found Fault!"));
-                        // we got an issue!
-                        // stop the clock!
-                        stopwatch.Stop();
-                        Thread.Sleep(5000);
+                            //make sure the charger has priority
+                            criticalNum[Cstation] = true;
 
-                        if ((string)d.Rows[station][11] == "Power Fail" || (string)d.Rows[station][11] == "HOLD")
-                        {
-
-                            updateD(station, 7, ("Waiting For Charger"));
-                            // lets put things on pause and wait for the charger to come back
-                            while ((string) d.Rows[station][11] != "HOLD")
+                            //try it a couple more times
+                            for (byte b = 0; b < 3; b++)
                             {
-                                //check for a cancel
-                                if (token.IsCancellationRequested)
+                                Thread.Sleep(2000);
+                                if ((string)d.Rows[station][11] == "RUN") { break; }
+                            }
+                            updateD(station, 7, ("Found Fault!"));
+                            // we got an issue!
+                            // stop the clock!
+                            stopwatch.Stop();
+                            Thread.Sleep(5000);
+
+                            if ((string)d.Rows[station][11] == "Power Fail" || (string)d.Rows[station][11] == "HOLD")
+                            {
+
+                                updateD(station, 7, ("Waiting For Charger"));
+                                // lets put things on pause and wait for the charger to come back
+                                while ((string)d.Rows[station][11] != "HOLD")
                                 {
-                                    //clear values from d
-                                    updateD(station, 7, ("Read " + (currentReading - 1).ToString() + " of " + readings.ToString()));
-                                    updateD(station, 5, false);
-
-                                    //update the gui
-                                    this.Invoke((MethodInvoker)delegate()
+                                    //check for a cancel
+                                    if (token.IsCancellationRequested)
                                     {
-                                        startNewTestToolStripMenuItem.Enabled = true;
-                                        resumeTestToolStripMenuItem.Enabled = true;
-                                        stopTestToolStripMenuItem.Enabled = false;
-                                    });
+                                        //clear values from d
+                                        updateD(station, 7, ("Read " + (currentReading - 1).ToString() + " of " + readings.ToString()));
+                                        updateD(station, 5, false);
 
-                                    //return the charger to low priority
+                                        //update the gui
+                                        this.Invoke((MethodInvoker)delegate()
+                                        {
+                                            startNewTestToolStripMenuItem.Enabled = true;
+                                            resumeTestToolStripMenuItem.Enabled = true;
+                                            stopTestToolStripMenuItem.Enabled = false;
+                                        });
+
+                                        //return the charger to low priority
+                                        criticalNum[Cstation] = false;
+
+                                        return;
+                                    }
+
+                                    Thread.Sleep(400);
+                                }
+                                // were back!
+                                //start the charger back up!
+                                if ((string)d.Rows[station][9] != "" && (string)d.Rows[station][10] == "ICA" && (string)d.Rows[station][2] != "As Received")
+                                {
+                                    //make sure the charger has priority
+                                    criticalNum[Cstation] = true;
+
+                                    updateD(station, 7, "Telling Charger to Run");
+                                    // set KE1 to 2 ("command")
+                                    GlobalVars.ICSettings[Cstation].KE1 = (byte)2;
+                                    // set KE3 to run
+                                    GlobalVars.ICSettings[Cstation].KE3 = (byte)1;
+                                    //Update the output string value
+                                    GlobalVars.ICSettings[Cstation].UpdateOutText();
+                                    //now we are going to create a thread to set KE1 back to data mode after 5 seconds
+                                    Thread.Sleep(5000);
+                                    // set KE1 to 1 ("query")
+                                    GlobalVars.ICSettings[Cstation].KE1 = (byte)0;
+                                    // set KE3 to 0 ("query")
+                                    GlobalVars.ICSettings[Cstation].KE3 = (byte)3;
+                                    //Update the output string value
+                                    GlobalVars.ICSettings[Cstation].UpdateOutText();
+                                    Thread.Sleep(10000);
+
+                                    //make sure the charger no longer has priority
                                     criticalNum[Cstation] = false;
-
-                                    return;
                                 }
 
-                                Thread.Sleep(400);
-                            }
-                            // were back!
-                            //start the charger back up!
-                            if ((string)d.Rows[station][9] != "" && (string)d.Rows[station][10] == "ICA" && (string)d.Rows[station][2] != "As Received")
+                                stopwatch.Start();
+                                updateD(station, 7, ("Reading " + currentReading.ToString() + " of " + readings.ToString()));
+
+                            }// end power fail if
+                            else
                             {
-                                //make sure the charger has priority
-                                criticalNum[Cstation] = true;
+                                // end the test!
+                                //clear values from d
+                                updateD(station, 7, ("FAILED ON " + (currentReading - 1).ToString() + " of " + readings.ToString()));
+                                updateD(station, 5, false);
 
-                                updateD(station, 7, "Telling Charger to Run");
-                                // set KE1 to 2 ("command")
-                                GlobalVars.ICSettings[Cstation].KE1 = (byte)2;
-                                // set KE3 to run
-                                GlobalVars.ICSettings[Cstation].KE3 = (byte)1;
-                                //Update the output string value
-                                GlobalVars.ICSettings[Cstation].UpdateOutText();
-                                //now we are going to create a thread to set KE1 back to data mode after 5 seconds
-                                Thread.Sleep(5000);
-                                // set KE1 to 1 ("query")
-                                GlobalVars.ICSettings[Cstation].KE1 = (byte)0;
-                                // set KE3 to 0 ("query")
-                                GlobalVars.ICSettings[Cstation].KE3 = (byte)3;
-                                //Update the output string value
-                                GlobalVars.ICSettings[Cstation].UpdateOutText();
-                                Thread.Sleep(10000);
+                                //update the gui
+                                this.Invoke((MethodInvoker)delegate()
+                                {
+                                    startNewTestToolStripMenuItem.Enabled = true;
+                                    resumeTestToolStripMenuItem.Enabled = true;
+                                    stopTestToolStripMenuItem.Enabled = false;
+                                });
 
-                                //make sure the charger no longer has priority
+                                //return the charger to low priority
                                 criticalNum[Cstation] = false;
-                            }
 
-                            stopwatch.Start();
-                            updateD(station, 7, ("Reading " + currentReading.ToString() + " of " + readings.ToString()));
-
-                        }// end power fail if
-                        else
-                        {
-                            // end the test!
-                            //clear values from d
-                            updateD(station, 7, ("FAILED ON " + (currentReading - 1).ToString() + " of " + readings.ToString()));
-                            updateD(station, 5, false);
-
-                            //update the gui
-                            this.Invoke((MethodInvoker)delegate()
-                            {
-                                startNewTestToolStripMenuItem.Enabled = true;
-                                resumeTestToolStripMenuItem.Enabled = true;
-                                stopTestToolStripMenuItem.Enabled = false;
-                            });
+                                return;
+                            }// end test fail else
 
                             //return the charger to low priority
                             criticalNum[Cstation] = false;
+                        }  // end IC test block
+                    }
+                    else if (d.Rows[station][10].ToString().Contains("CCA"))
+                    {
 
-                            return;
-                        }// end test fail else
+                    }
+                    else if (d.Rows[station][10].ToString().Contains("Shunt"))
+                    {
 
-                        //return the charger to low priority
-                        criticalNum[Cstation] = false;
-                    }  // end problem test block
+                    }
+
+                    #endregion
 
                     //Now we should check for a cancel
                     #region cancel block

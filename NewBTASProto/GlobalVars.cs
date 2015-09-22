@@ -58,5 +58,20 @@ namespace NewBTASProto
         /// </summary>
         public static string currentTech;
 
+        /// <summary>
+        /// this is the loading bool
+        /// </summary>
+        public static bool loading = true;
+
+        /// <summary>
+        /// this array will determine if the cscan is holding the charger
+        /// this bit needs to be cleared when the test is going to be run
+        /// </summary>
+        public static bool[] cHold = new bool[16] {
+            true,true,true,true,
+            true,true,true,true,
+            true,true,true,true,
+            true,true,true,true};
+
     }
 }

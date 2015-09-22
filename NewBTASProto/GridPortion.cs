@@ -27,6 +27,9 @@ namespace NewBTASProto
         // Create the output table.
         DataTable d = new DataTable();
 
+        // Create graph settings table
+        DataTable gs = new DataTable();
+
 
         /// <summary>
         /// This method builds the BTAS table
@@ -245,6 +248,8 @@ namespace NewBTASProto
                 if ((bool)d.Rows[e.RowIndex][e.ColumnIndex])
                 {
                     updateD(e.RowIndex,e.ColumnIndex,false);
+                    updateD(e.RowIndex, 10, "");
+                    dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor = Color.Gainsboro;
                 }
                 else
                 {
@@ -340,10 +345,62 @@ namespace NewBTASProto
 
         private void dataGridView1_RowEnter(object sender, DataGridViewCellEventArgs e)
         {
-            // fill the plotCombos
-            fillPlotCombos(e.RowIndex);
+            if (GlobalVars.loading == false)
+            {
+                try
+                {
+                    fillPlotCombos(e.RowIndex);
+                }
+                // fill the plotCombos
+                catch { ;}
+            }
+
+            
         }
 
+        private void dataGridView1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+
+        private void Initialize_Graph_Settings()
+        {
+            try
+            {
+                //create the columns
+                gs.Columns.Add("radio",typeof(bool));
+                gs.Columns.Add("test",typeof(string));
+                //name the table
+                gs.TableName = "graph_set";
+                //now read in what we got!
+                gs.ReadXml("../graph_set.xml");
+
+                // do we have a good datatable?
+                if (gs.Rows.Count == 1)
+                {
+                    gs.Clear();
+                    for (int i = 0; i < 16; i++)
+                    {
+                        gs.Rows.Add();
+                        gs.Rows[i][0] = false;
+                        gs.Rows[i][1] = "Cell Voltages";
+                    }
+                }
+            }
+            catch
+            {
+                //  we need to set the table up to be a null value table...
+                gs.Clear();
+                for (int i = 0; i < 16; i++)
+                {
+                    gs.Rows.Add();
+                    gs.Rows[i][0] = false;
+                    gs.Rows[i][1] = "Cell Voltages";
+                }
+            }
+            
+        }
 
     }
 }

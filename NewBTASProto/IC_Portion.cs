@@ -79,7 +79,8 @@ namespace NewBTASProto
                             //putting the cancellation token in a often looked at place...
                             if (token.IsCancellationRequested) return;
 
-                            if ((bool) d.Rows[j][8] && (bool) d.Rows[j][4] && (string) d.Rows[j][9] != "" && (string) d.Rows[j][10] == "ICA")
+                            ////////////////////////////////////////////NORMAL PRIORITY CHARGERS ARE CHECKED HERE///////////////////////
+                            if ((bool) d.Rows[j][8] && (bool) d.Rows[j][4] && (string) d.Rows[j][9] != "" && d.Rows[j][10].ToString().Contains("ICA"))
                             {
                                 Thread.Sleep(600);
                                 try
@@ -127,24 +128,22 @@ namespace NewBTASProto
                                     {
                                         if (testData.online == true)
                                         {
-                                            if (testData.faultStatus != "")
-                                            {
-                                                updateD(j, 11, testData.faultStatus);
-                                            }
-                                            else if (testData.endStatus != "")
-                                            {
-                                                updateD(j, 11, testData.endStatus);
-                                            }
-                                            else
-                                            {
-                                                updateD(j, 11, testData.runStatus); 
-                                            }
-                                               
+                                            if (testData.faultStatus != "") { updateD(j, 11, testData.faultStatus); }
+                                            else if (testData.endStatus != "") { updateD(j, 11, testData.endStatus);}
+                                            else { updateD(j, 11, testData.runStatus); }
+                                            if ((bool)d.Rows[j][8]) { dataGridView1.Rows[j].Cells[8].Style.BackColor = Color.Green; }
                                         }
-                                        else
+                                        else 
                                         {
-                                            updateD(j,11,"offline!"); 
+                                            updateD(j,11,"offline!");
+                                            if ((bool)d.Rows[j][8]) { dataGridView1.Rows[j].Cells[8].Style.BackColor = Color.Red; }
                                         }
+
+                                        // also update the type of charger being used
+                                        if (testData.boardID == 1) { updateD(j, 10, "ICA mini"); }
+                                        else if (testData.boardID == 6) { updateD(j, 10, "ICA SMC"); }
+                                        else if (testData.boardID == 8) { updateD(j, 10, "ICA SMC ED"); }
+                                        else if (testData.boardID == 6) { updateD(j, 10, "ICA SMini"); }
                                         
                                         rtbIncoming.Text = j.ToString() + "  :  " + tempBuff;
                                         
@@ -175,14 +174,17 @@ namespace NewBTASProto
                                 }       // end catch
                             }       // end if
                                 
-                            else 
+                            else if(d.Rows[j][10].ToString().Contains("ICA")) 
                             {
-                                if ((string) d.Rows[j][11] != "")
+                                if ((string)d.Rows[j][11] != "")
                                 {
-                                    updateD(j,11,"");
-                                } 
+                                    updateD(j, 11, "");
+                                }
+                                dataGridView1.Rows[j].Cells[8].Style.BackColor = Color.Gainsboro;
+                              
                             }
 
+                            /////////////////////////////CHECK FOR CHARGER IDENTITY///////////////////////////////////////
                             if (check)
                             {
                                 Thread.Sleep(500);
@@ -192,8 +194,16 @@ namespace NewBTASProto
                                     ICComPort.Write(GlobalVars.ICSettings[toCheck].outText, 0, 28);
                                     // wait for a response
                                     tempBuff = ICComPort.ReadTo("Z");
+                                    //do something with the new data
+                                    char[] delims = { ' ' };
+                                    string[] A = tempBuff.Split(delims);
+                                    //A[1] has the terminal ID in it
+                                    testData = new ICDataStore(A);
                                     // if we got one then we can determine that we have an ICA
-                                    updateD(chanNum,10,"ICA");
+                                    if (testData.boardID == 1) { updateD(chanNum, 10, "ICA mini"); }
+                                    else if (testData.boardID == 6) { updateD(chanNum, 10, "ICA SMC"); }
+                                    else if (testData.boardID == 8) { updateD(chanNum, 10, "ICA SMC ED"); }
+                                    else if (testData.boardID == 6) { updateD(chanNum, 10, "ICA SMini"); }
                                     // and we don't need to check any more
                                     check = false;
                                     Thread.Sleep(200);
@@ -208,6 +218,7 @@ namespace NewBTASProto
                                 }       // end catch
                             }       // end else if
 
+                            ////////////////////////////////////////////HIGH PRIORTIY CHARGERS ARE CHECKED HERE///////////////////////
                             // we need to check for critical operation also!
                             for(int i = 0;i < 16; i++)
                             {
@@ -260,23 +271,24 @@ namespace NewBTASProto
                                             rtbIncoming.Text = "Critical  " + i.ToString() + "  :  " + tempBuff;
                                             if (testData.online == true)
                                             {
-                                                if (testData.faultStatus != "")
-                                                {
-                                                    updateD(station, 11, testData.faultStatus);
-                                                }
-                                                else if (testData.endStatus != "")
-                                                {
-                                                    updateD(station, 11, testData.endStatus);
-                                                }
-                                                else
-                                                {
-                                                    updateD(station, 11, testData.runStatus);
-                                                }
+                                                if (testData.faultStatus != "") { updateD(station, 11, testData.faultStatus); }
+                                                else if (testData.endStatus != "") { updateD(station, 11, testData.endStatus); }
+                                                else { updateD(station, 11, testData.runStatus);}
+                                                if ((bool)d.Rows[station][8]) { dataGridView1.Rows[station].Cells[8].Style.BackColor = Color.Green; }
                                             }
-                                            else
+                                            else 
                                             {
                                                 updateD(station, 11, "offline!");
+                                                if ((bool)d.Rows[station][8]) { dataGridView1.Rows[station].Cells[8].Style.BackColor = Color.Red; }
+                            
                                             }
+
+                                            // also update the type of charger being used
+                                            if (testData.boardID == 1) { updateD(station, 10, "ICA mini"); }
+                                            else if (testData.boardID == 6) { updateD(station, 10, "ICA SMC"); }
+                                            else if (testData.boardID == 8) { updateD(station, 10, "ICA SMC ED"); }
+                                            else if (testData.boardID == 6) { updateD(station, 10, "ICA SMini"); }
+
                                         });
                                         Thread.Sleep(200);
                                     }

@@ -34,7 +34,7 @@ namespace NewBTASProto
             string strAccessSelect;
             // Open database containing all the battery data....
 
-            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Kyle\Documents\Visual Studio 2013\Projects\NewBTASProto\BTS16NV.MDB";
+            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB";
             strAccessSelect = @"SELECT * FROM Batteries ORDER BY BatterySerialNumber ASC";
 
             Bats.Clear();
@@ -96,7 +96,7 @@ namespace NewBTASProto
 
             // Open database containing all the customer names data....
 
-            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Kyle\Documents\Visual Studio 2013\Projects\NewBTASProto\BTS16NV.MDB";
+            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB";
             strAccessSelect = @"SELECT CustomerName FROM CUSTOMERS ORDER BY CustomerName ASC";
 
             DataSet Custs = new DataSet();
@@ -142,7 +142,7 @@ namespace NewBTASProto
 
             // Open database containing all the customer names data....
 
-            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Kyle\Documents\Visual Studio 2013\Projects\NewBTASProto\BTS16NV.MDB";
+            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB";
             strAccessSelect = @"SELECT BatteryModel FROM BatteriesCustom ORDER BY BatteryModel ASC";
 
             DataSet BatsList = new DataSet();
@@ -185,7 +185,15 @@ namespace NewBTASProto
             ModCB.DataSource = Mods;
             #endregion
 
-            max = Bats.Tables[0].AsEnumerable().Max(r => r.Field<int>("BID"));
+            try
+            {
+                max = Bats.Tables[0].AsEnumerable().Max(r => r.Field<int>("BID"));
+            }
+            catch
+            {
+                max = 1;
+            }
+
 
             foreach (string x in Customers)
             {
@@ -273,7 +281,7 @@ namespace NewBTASProto
             string strAccessConn;
             string strAccessSelect;
             // Open database containing all the battery data....
-            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Kyle\Documents\Visual Studio 2013\Projects\NewBTASProto\BTS16NV.MDB";
+            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB";
 
             if (toolStripCBCustomers.Text == "" && toolStripCBBatMod.Text == "")
             {
@@ -343,7 +351,7 @@ namespace NewBTASProto
                 if (MessageBox.Show("Are you sure you want to remove this Battery?", "Delete Record", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     // set up the db Connection
-                    string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Kyle\Documents\Visual Studio 2013\Projects\NewBTASProto\BTS16NV.MDB";
+                    string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB";
                     OleDbConnection conn = new OleDbConnection(connectionString);
                     conn.Open();
 
@@ -391,7 +399,7 @@ namespace NewBTASProto
             {
 
                 // set up the db Connection
-                string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Kyle\Documents\Visual Studio 2013\Projects\NewBTASProto\BTS16NV.MDB";
+                string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB";
                 OleDbConnection conn = new OleDbConnection(connectionString);
                 conn.Open();
 

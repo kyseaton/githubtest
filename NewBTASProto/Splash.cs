@@ -20,18 +20,20 @@ namespace NewBTASProto
         {
             string strAccessConn;
             string strAccessSelect;        
-            OleDbConnection myAccessConn;
+            OleDbConnection myAccessConn = null;
 
             // create the connection
             try
             {
-                strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Kyle\Documents\Visual Studio 2013\Projects\NewBTASProto\BTS16NV.MDB";
+                strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB";
                 myAccessConn = new OleDbConnection(strAccessConn);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+
+                MessageBox.Show("Error: Failed to set up the database connection. \n" + ex.Message);
                 return;
+
             }
 
             //  open the db and pull in the options table
@@ -42,7 +44,46 @@ namespace NewBTASProto
                 OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
                 OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
 
-                myAccessConn.Open();
+                try
+                {
+                    myAccessConn.Open();
+                }
+                catch
+                {
+
+                    //The DB isn't there!
+                    //make the DB folder
+                    try
+                    {
+                        System.IO.Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB");
+                    }
+                    catch
+                    {
+                        // already there!
+                    }
+
+                    //now copy the file over
+                    try
+                    {
+                        System.IO.File.WriteAllBytes(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB", Properties.Resources.BTS16NV_clean);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error: Failed to set up the database connection. \n" + ex.Message);
+                        return;
+                    }
+
+                    try
+                    {
+                        myAccessConn.Open();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error: Failed to set up the database connection. \n" + ex.Message);
+                        return;
+                    }
+                }
+
                 myDataAdapter.Fill(options, "Options");
 
                 // use the information to set the globals
@@ -255,7 +296,7 @@ namespace NewBTASProto
             //// create the connection
             //try
             //{
-            //    strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Kyle\Documents\Visual Studio 2013\Projects\NewBTASProto\BTS16NV.MDB";
+            //    strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB";
             //    myAccessConn = new OleDbConnection(strAccessConn);
             //}
             //catch (Exception ex)

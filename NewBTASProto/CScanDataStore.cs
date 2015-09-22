@@ -65,7 +65,12 @@ namespace NewBTASProto
 
         public int cellsToDisplay;
 
-
+        // these are related to the status of the charger connected to the CSCAN
+        // does not apply to ICs
+        public bool cHold = false;
+        public bool connected = false;
+        public bool powerOn = false;
+        public bool cycleEnd = false;
 
         // the constructor pulls in the data and stores it in the familiar A
         public CScanDataStore(string[] CDATA)
@@ -78,6 +83,12 @@ namespace NewBTASProto
 
             //this is a status field equals A[3] - 1000
             QS1 = Int32.Parse(CDATA[3]) - 1000;
+            //connected?
+            if (((byte) QS1 & 0X08) != 0) { connected = false; }
+            else { connected = true; }
+            //powerOn?
+            if (((byte)QS1 & 0X04) != 0) { powerOn = false; }
+            else { powerOn = true; }
 
             //TCAB represents the temp plate type
             TCAB = (byte) (Int32.Parse(CDATA[3]) - 1000);
@@ -120,11 +131,15 @@ namespace NewBTASProto
                     break;
                 case 10:
                     cellCableType = "4 BATT";
-                    cellsToDisplay = 24;
+                    cellsToDisplay = 0;
                     break;
                 case 31:
                     cellCableType = "CELL SIM";
                     cellsToDisplay = 24;
+                    break;
+                case 3:
+                    cellCableType = "2X11 Cable";
+                    cellsToDisplay = 22;
                     break;
                 default:
                     break;

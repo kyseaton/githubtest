@@ -41,7 +41,7 @@ namespace NewBTASProto
             string strAccessSelect;
             // Open database containing all the battery data....
 
-            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Kyle\Documents\Visual Studio 2013\Projects\NewBTASProto\BTS16NV.MDB";
+            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB";
             strAccessSelect = @"SELECT * FROM BatteriesCustom ORDER BY BatteryModel ASC";
 
             CustomBats = new DataSet();
@@ -355,7 +355,7 @@ namespace NewBTASProto
                 if (MessageBox.Show("Are you sure you want to remove this battery from the data base?", "Delete Record", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     // set up the db Connection
-                    string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Kyle\Documents\Visual Studio 2013\Projects\NewBTASProto\BTS16NV.MDB";
+                    string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB";
                     OleDbConnection conn = new OleDbConnection(connectionString);
                     conn.Open();
 
@@ -411,7 +411,7 @@ namespace NewBTASProto
                 
 
                 // set up the db Connection
-                string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Kyle\Documents\Visual Studio 2013\Projects\NewBTASProto\BTS16NV.MDB";
+                string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB";
                 OleDbConnection conn = new OleDbConnection(connectionString);
                 conn.Open();
 
@@ -563,7 +563,15 @@ namespace NewBTASProto
                 {
                     // we need to insert a new record...
                     // find the max value in the RecordID column so we know what to assign to the new record
-                    int max = CustomBats.Tables[0].AsEnumerable().Max(r => r.Field<int>("RecordID"));
+                    int max;
+                    try
+                    {
+                        max = CustomBats.Tables[0].AsEnumerable().Max(r => r.Field<int>("RecordID"));
+                    }
+                    catch
+                    {
+                        max = 0;
+                    }
                     string cmdStr = "INSERT INTO BatteriesCustom (RecordID, BMFR, BatteryModel, BPN, BTECH, VOLT, NCELLS, CAP, CELL, CPN, " +
                        "BCVMIN, BCVMAX, COT, CCVMMIN, CCVMAX, CCAPV, NOTES, " +
                        "[T1Mode], T1Time1Hr, T1Time1Min, T1Curr1, T1Volts1, T1Time2Hr, T1Time2Min, T1Curr2, T1Volts2, " +

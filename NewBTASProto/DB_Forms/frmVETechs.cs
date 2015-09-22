@@ -33,7 +33,7 @@ namespace NewBTASProto
             string strAccessSelect;
             // Open database containing all the battery data....
 
-            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Kyle\Documents\Visual Studio 2013\Projects\NewBTASProto\BTS16NV.MDB";
+            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB";
             strAccessSelect = @"SELECT * FROM Operators ORDER BY OperatorName ASC";
 
             Operators = new DataSet();
@@ -191,7 +191,7 @@ namespace NewBTASProto
                 if (MessageBox.Show("Are you sure you want to remove this Technician?", "Delete Record", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     // set up the db Connection
-                    string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Kyle\Documents\Visual Studio 2013\Projects\NewBTASProto\BTS16NV.MDB";
+                    string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB";
                     OleDbConnection conn = new OleDbConnection(connectionString);
                     conn.Open();
 
@@ -230,7 +230,7 @@ namespace NewBTASProto
             {
 
                 // set up the db Connection
-                string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Kyle\Documents\Visual Studio 2013\Projects\NewBTASProto\BTS16NV.MDB";
+                string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB";
                 OleDbConnection conn = new OleDbConnection(connectionString);
                 conn.Open();
 
@@ -259,7 +259,15 @@ namespace NewBTASProto
                 {
                     // we need to insert a new record...
                     // find the max value in the CustomerID column so we know what to assign to the new record
-                    int max = Operators.Tables[0].AsEnumerable().Max(r => r.Field<int>("ID"));
+                    int max;
+                    try
+                    {
+                        max = Operators.Tables[0].AsEnumerable().Max(r => r.Field<int>("ID"));
+                    }
+                    catch
+                    {
+                        max = 0;
+                    }
                     string cmdStr = "INSERT INTO Operators (ID, OperatorName) " +
                         "VALUES (" + (max + 1).ToString() + ",'" +
                         textBox1.Text + "')";

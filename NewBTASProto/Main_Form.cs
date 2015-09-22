@@ -17,6 +17,9 @@ namespace NewBTASProto
 {
     public partial class Main_Form : Form
     {
+
+
+
         public Main_Form()
         {
             try
@@ -25,10 +28,13 @@ namespace NewBTASProto
                 InitializeComponent();
                 Initialize_Menus_Tools();
                 Initialize_Operators_CB();
+                Initialize_Graph_Settings();
 
                 InitializeGrid();
                 InitializeTimers();
                 Scan();
+
+                GlobalVars.loading = false;
                 
 
             }
@@ -40,6 +46,8 @@ namespace NewBTASProto
 
         }
 
+
+
         /// <summary>
         /// This function looks at the DB and fills up the dropdown designating the oporator
         /// </summary>
@@ -48,7 +56,7 @@ namespace NewBTASProto
             string strAccessConn;
             string strAccessSelect;
             // Open database containing all the battery data....
-            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Kyle\Documents\Visual Studio 2013\Projects\NewBTASProto\BTS16NV.MDB";
+            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB";
             strAccessSelect = @"SELECT * FROM Operators";
             OleDbConnection myAccessConn;
             DataSet operators = new DataSet();
@@ -102,7 +110,7 @@ namespace NewBTASProto
             if (GlobalVars.Pos2Neg) { this.positiveToNegativeToolStripMenuItem.Checked = true; }
             else { this.negativeToPositiveToolStripMenuItem.Checked = true; }
 
-            toolStripStatusLabel1.Text = "Version:  " + Application.ProductVersion;
+            toolStripStatusLabel4.Text = "Version:  6.0.0.31";
 
             label10.Text = GlobalVars.businessName;
 
@@ -146,7 +154,7 @@ namespace NewBTASProto
             string strAccessConn;
             string strUpdateCMD;
             // Open database containing all the battery data....
-            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\Kyle\Documents\Visual Studio 2013\Projects\NewBTASProto\BTS16NV.MDB";
+            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB";
             strUpdateCMD = "UPDATE Options SET Degree='" + (GlobalVars.useF ? "F." : "C.") + "', CellOrder='" + (GlobalVars.Pos2Neg ? "Pos. to Neg." : "Neg. to Pos.") + "', BusinessName='"+ GlobalVars.businessName+"';";
             OleDbConnection myAccessConn;
 
@@ -464,6 +472,12 @@ namespace NewBTASProto
             using (StreamWriter writer = new StreamWriter("../main_grid.xml",false))
             {
                 d.WriteXml(writer);
+            }
+
+            //save the grid for the next time we restart
+            using (StreamWriter writer = new StreamWriter("../graph_set.xml", false))
+            {
+                gs.WriteXml(writer);
             }
             
 
@@ -1230,7 +1244,7 @@ namespace NewBTASProto
 
         private void otherToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            updateD(dataGridView1.CurrentRow.Index, 10, "Other");
+            updateD(dataGridView1.CurrentRow.Index, 10, "Shunt");
 
             //make sure we clear the current test
             updateD(dataGridView1.CurrentRow.Index, 6, "");
@@ -1269,7 +1283,14 @@ namespace NewBTASProto
 
         private void stopTestToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            cRunTest[dataGridView1.CurrentRow.Index].Cancel(); 
+            try
+            {
+                cRunTest[dataGridView1.CurrentRow.Index].Cancel();
+            }
+            catch
+            {
+                updateD(dataGridView1.CurrentRow.Index, 5, false);
+            }
         }
 
         private void viewEditDeleteWorkOrdersToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1478,6 +1499,18 @@ namespace NewBTASProto
         {
 
         }
+
+        private void toolStripStatusLabel1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+
+
+
+
+
+
 
 
 
