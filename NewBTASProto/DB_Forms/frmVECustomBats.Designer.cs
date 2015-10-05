@@ -49,6 +49,7 @@
             this.textBox28 = new System.Windows.Forms.TextBox();
             this.textBox29 = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.comboBox13 = new System.Windows.Forms.ComboBox();
             this.label11 = new System.Windows.Forms.Label();
             this.textBox10 = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
@@ -72,6 +73,8 @@
             this.label28 = new System.Windows.Forms.Label();
             this.label29 = new System.Windows.Forms.Label();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.label35 = new System.Windows.Forms.Label();
+            this.textBox23 = new System.Windows.Forms.TextBox();
             this.label32 = new System.Windows.Forms.Label();
             this.label33 = new System.Windows.Forms.Label();
             this.textBox36 = new System.Windows.Forms.TextBox();
@@ -355,9 +358,6 @@
             this.label112 = new System.Windows.Forms.Label();
             this.label113 = new System.Windows.Forms.Label();
             this.comboBox8 = new System.Windows.Forms.ComboBox();
-            this.label35 = new System.Windows.Forms.Label();
-            this.textBox23 = new System.Windows.Forms.TextBox();
-            this.comboBox13 = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.bindingNavigator1)).BeginInit();
             this.bindingNavigator1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -681,10 +681,24 @@
             this.groupBox1.TabIndex = 49;
             this.groupBox1.TabStop = false;
             // 
+            // comboBox13
+            // 
+            this.comboBox13.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox13.FormattingEnabled = true;
+            this.comboBox13.Items.AddRange(new object[] {
+            "NiCd",
+            "Sealed Lead Acid",
+            "NiCd ULM"});
+            this.comboBox13.Location = new System.Drawing.Point(94, 89);
+            this.comboBox13.Name = "comboBox13";
+            this.comboBox13.Size = new System.Drawing.Size(129, 21);
+            this.comboBox13.TabIndex = 64;
+            this.comboBox13.SelectedValueChanged += new System.EventHandler(this.comboBox13_SelectedValueChanged);
+            // 
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(9, 14);
+            this.label11.Location = new System.Drawing.Point(9, 40);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(79, 13);
             this.label11.TabIndex = 81;
@@ -798,7 +812,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(43, 40);
+            this.label2.Location = new System.Drawing.Point(43, 14);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(45, 13);
             this.label2.TabIndex = 64;
@@ -815,14 +829,14 @@
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(94, 37);
+            this.textBox2.Location = new System.Drawing.Point(94, 11);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(129, 20);
             this.textBox2.TabIndex = 62;
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(94, 11);
+            this.textBox1.Location = new System.Drawing.Point(94, 37);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(129, 20);
             this.textBox1.TabIndex = 61;
@@ -883,6 +897,22 @@
             this.groupBox8.TabIndex = 93;
             this.groupBox8.TabStop = false;
             this.groupBox8.Text = "Battery";
+            // 
+            // label35
+            // 
+            this.label35.AutoSize = true;
+            this.label35.Location = new System.Drawing.Point(11, 74);
+            this.label35.Name = "label35";
+            this.label35.Size = new System.Drawing.Size(82, 13);
+            this.label35.TabIndex = 91;
+            this.label35.Text = "OverTemp (C):  ";
+            // 
+            // textBox23
+            // 
+            this.textBox23.Location = new System.Drawing.Point(99, 71);
+            this.textBox23.Name = "textBox23";
+            this.textBox23.Size = new System.Drawing.Size(106, 20);
+            this.textBox23.TabIndex = 90;
             // 
             // label32
             // 
@@ -2397,7 +2427,7 @@
             this.tabPage12.Controls.Add(this.comboBox12);
             this.tabPage12.Location = new System.Drawing.Point(4, 40);
             this.tabPage12.Name = "tabPage12";
-            this.tabPage12.Size = new System.Drawing.Size(470, 415);
+            this.tabPage12.Size = new System.Drawing.Size(470, 411);
             this.tabPage12.TabIndex = 11;
             this.tabPage12.Text = "Constant Voltage";
             this.tabPage12.UseVisualStyleBackColor = true;
@@ -2690,7 +2720,7 @@
             this.tabPage6.Location = new System.Drawing.Point(4, 40);
             this.tabPage6.Name = "tabPage6";
             this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage6.Size = new System.Drawing.Size(470, 415);
+            this.tabPage6.Size = new System.Drawing.Size(470, 411);
             this.tabPage6.TabIndex = 5;
             this.tabPage6.Text = "Capacity-1  ";
             this.tabPage6.UseVisualStyleBackColor = true;
@@ -2899,7 +2929,7 @@
             this.tabPage7.Location = new System.Drawing.Point(4, 40);
             this.tabPage7.Name = "tabPage7";
             this.tabPage7.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage7.Size = new System.Drawing.Size(470, 415);
+            this.tabPage7.Size = new System.Drawing.Size(470, 411);
             this.tabPage7.TabIndex = 6;
             this.tabPage7.Text = "Discharge  ";
             this.tabPage7.UseVisualStyleBackColor = true;
@@ -3106,7 +3136,7 @@
             this.tabPage8.Location = new System.Drawing.Point(4, 40);
             this.tabPage8.Name = "tabPage8";
             this.tabPage8.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage8.Size = new System.Drawing.Size(470, 415);
+            this.tabPage8.Size = new System.Drawing.Size(470, 411);
             this.tabPage8.TabIndex = 7;
             this.tabPage8.Text = "Slow Charge-14  ";
             this.tabPage8.UseVisualStyleBackColor = true;
@@ -3379,7 +3409,7 @@
             this.tabPage9.Location = new System.Drawing.Point(4, 40);
             this.tabPage9.Name = "tabPage9";
             this.tabPage9.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage9.Size = new System.Drawing.Size(470, 415);
+            this.tabPage9.Size = new System.Drawing.Size(470, 411);
             this.tabPage9.TabIndex = 8;
             this.tabPage9.Text = "Slow Charge-16  ";
             this.tabPage9.UseVisualStyleBackColor = true;
@@ -4146,36 +4176,6 @@
             this.comboBox8.Size = new System.Drawing.Size(201, 21);
             this.comboBox8.TabIndex = 122;
             this.comboBox8.SelectedValueChanged += new System.EventHandler(this.comboBox8_SelectedValueChanged);
-            // 
-            // label35
-            // 
-            this.label35.AutoSize = true;
-            this.label35.Location = new System.Drawing.Point(11, 74);
-            this.label35.Name = "label35";
-            this.label35.Size = new System.Drawing.Size(82, 13);
-            this.label35.TabIndex = 91;
-            this.label35.Text = "OverTemp (C):  ";
-            // 
-            // textBox23
-            // 
-            this.textBox23.Location = new System.Drawing.Point(99, 71);
-            this.textBox23.Name = "textBox23";
-            this.textBox23.Size = new System.Drawing.Size(106, 20);
-            this.textBox23.TabIndex = 90;
-            // 
-            // comboBox13
-            // 
-            this.comboBox13.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox13.FormattingEnabled = true;
-            this.comboBox13.Items.AddRange(new object[] {
-            "NiCd",
-            "Sealed Lead Acid",
-            "NiCd ULM"});
-            this.comboBox13.Location = new System.Drawing.Point(94, 89);
-            this.comboBox13.Name = "comboBox13";
-            this.comboBox13.Size = new System.Drawing.Size(129, 21);
-            this.comboBox13.TabIndex = 64;
-            this.comboBox13.SelectedValueChanged += new System.EventHandler(this.comboBox13_SelectedValueChanged);
             // 
             // frmVECustomBats
             // 

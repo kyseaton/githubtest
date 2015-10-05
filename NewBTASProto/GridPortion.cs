@@ -25,7 +25,7 @@ namespace NewBTASProto
         /// </summary>
         List<object[]> channelArray = new List<object[]>();
         // Create the output table.
-        DataTable d = new DataTable();
+        public DataTable d = new DataTable();
 
         // Create graph settings table
         DataTable gs = new DataTable();
@@ -249,6 +249,7 @@ namespace NewBTASProto
                 {
                     updateD(e.RowIndex,e.ColumnIndex,false);
                     updateD(e.RowIndex, 10, "");
+                    updateD(e.RowIndex, 11, "");
                     dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor = Color.Gainsboro;
                 }
                 else
@@ -299,35 +300,37 @@ namespace NewBTASProto
 
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            
-
-            dataGridView1.ClearSelection();
-            // only proceed if there isn't a test running!
-            if ((bool)d.Rows[e.RowIndex][5] != true)
+            if (e.RowIndex > -1)
             {
-                switch (e.ColumnIndex)
+
+                dataGridView1.ClearSelection();
+                // only proceed if there isn't a test running!
+                if ((bool)d.Rows[e.RowIndex][5] != true)
                 {
-                    case 1:
-                        Choose_WO cwo = new Choose_WO(dataGridView1.CurrentRow.Index, (string)d.Rows[dataGridView1.CurrentRow.Index][1]);
-                        cwo.Owner = this;
-                        cwo.Show();
-                        break;
-                    case 2:
-                        cMSTestType.Show(Cursor.Position);
-                        break;
-                    case 9:
-                        if((bool)d.Rows[e.RowIndex][8] != true || (string) d.Rows[e.RowIndex][9] == "")
-                        {
-                            cMSChargerChannel.Show(Cursor.Position);
-                        }
-                        break;
-                    case 10:
-                        if ((bool)d.Rows[e.RowIndex][8] != true)
-                        {
-                            cMSChargerType.Show(Cursor.Position);                            
-                        }
-                        break;
-                }  // end switch
+                    switch (e.ColumnIndex)
+                    {
+                        case 1:
+                            Choose_WO cwo = new Choose_WO(dataGridView1.CurrentRow.Index, (string)d.Rows[dataGridView1.CurrentRow.Index][1]);
+                            cwo.Owner = this;
+                            cwo.Show();
+                            break;
+                        case 2:
+                            cMSTestType.Show(Cursor.Position);
+                            break;
+                        case 9:
+                            if ((bool)d.Rows[e.RowIndex][8] != true || (string)d.Rows[e.RowIndex][9] == "")
+                            {
+                                cMSChargerChannel.Show(Cursor.Position);
+                            }
+                            break;
+                        case 10:
+                            if ((bool)d.Rows[e.RowIndex][8] != true)
+                            {
+                                //cMSChargerType.Show(Cursor.Position);
+                            }
+                            break;
+                    }  // end switch
+                }
             }
             
         }
@@ -349,6 +352,7 @@ namespace NewBTASProto
             {
                 try
                 {
+                    goodRead = false;
                     fillPlotCombos(e.RowIndex);
                 }
                 // fill the plotCombos

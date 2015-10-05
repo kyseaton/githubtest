@@ -557,6 +557,7 @@ namespace NewBTASProto
                         "' WHERE RecordID=" + current["RecordID"].ToString();
                     OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
                     cmd.ExecuteNonQuery();
+                    MessageBox.Show("Battery model " + textBox2.Text + "'s entry has been updated.");
 
                 }
                 else
@@ -719,6 +720,7 @@ namespace NewBTASProto
 
                     OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
                     cmd.ExecuteNonQuery();
+                    MessageBox.Show("Battery model " + textBox2.Text + "'s entry has been created.");
 
                     // update the dataTable with the new record ID also..
                     current[0] = max + 1;

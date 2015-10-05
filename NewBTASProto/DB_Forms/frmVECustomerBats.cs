@@ -426,6 +426,7 @@ namespace NewBTASProto
                         "' WHERE BID=" + current["BID"].ToString();
                     OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
                     cmd.ExecuteNonQuery();
+                    MessageBox.Show("Battery serial number " + current["BatterySerialNumber"].ToString() + "'s entry has been updated.");
 
                 }
                 else
@@ -441,6 +442,7 @@ namespace NewBTASProto
                         textBox4.Text.Replace("'", "''") + "')";
                     OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
                     cmd.ExecuteNonQuery();
+                    MessageBox.Show("Battery serial number " + textBox3.Text + "'s entry has been created.");
 
                     // update the dataTable with the new customer ID also..
                     current[0] = max;

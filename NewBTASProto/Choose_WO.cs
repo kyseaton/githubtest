@@ -72,6 +72,61 @@ namespace NewBTASProto
                 myAccessConn.Close();
             }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+            DataSet workOrderList2;
+            DataRow tempRow;
+
+            foreach (string oldWO in oldSelect)
+            {
+                if (oldWO == "") { ;}  // do nothing
+                else
+                {
+                    strAccessSelect = @"SELECT WorkOrderNumber,CustomerName,DateReceived FROM WorkOrders WHERE WorkOrderNumber='" + oldWO + "'";
+                    // Add aditional rows to show the currently selected WOs at top of workOrderList1.Tables["ScanData"]
+
+                    workOrderList2 = new DataSet();
+                    myAccessConn = null;
+                    // try to open the DB
+                    try
+                    {
+                        myAccessConn = new OleDbConnection(strAccessConn);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                        return;
+                    }
+                    //  now try to access it
+                    try
+                    {
+                        OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                        OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                        myAccessConn.Open();
+                        myDataAdapter.Fill(workOrderList2, "ScanData");
+
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                        return;
+                    }
+
+                    //Now we need to add the records in!  ,,
+                    tempRow = workOrderList1.Tables["ScanData"].NewRow();
+                    tempRow["WorkOrderNumber"] = workOrderList2.Tables["ScanData"].Rows[0][0];
+                    tempRow["CustomerName"] = workOrderList2.Tables["ScanData"].Rows[0][1];
+                    tempRow["DateReceived"] = workOrderList2.Tables["ScanData"].Rows[0][2];
+
+                    workOrderList1.Tables["ScanData"].Rows.InsertAt(tempRow,0);
+                }
+            }
+            
+            myAccessConn.Close();    
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
             dataGridView1.DataSource = workOrderList1.Tables["ScanData"];
 
         }
@@ -86,18 +141,39 @@ namespace NewBTASProto
             string temp = "";
             int count = 0;
 
+            //Update the DB to show that the old Work Orders are now Open
+            // set up the db Connection
+            string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB";
+            OleDbConnection conn = new OleDbConnection(connectionString);
+            conn.Open();
+
+            string cmdStr = "";
+            OleDbCommand cmd;
+
+            foreach (string oldWO in oldSelect)
+            {
+                cmdStr = "UPDATE WorkOrders SET OrderStatus='Open' WHERE WorkOrderNumber='" + oldWO + "'";
+                cmd = new OleDbCommand(cmdStr, conn);
+                cmd.ExecuteNonQuery();
+            }
+
+            //Update the DB to show that the new Work Orders are now active
+            // set up the db Connection            
             foreach (DataGridViewRow row in dataGridView1.SelectedRows)
             {
                 count++;
                 if (count > 3)
                 {
                     MessageBox.Show("Maximum of 3 Work Orders Per Channel!");
-                        break;
+                    break;
                 }
                 temp += dataGridView1[0, row.Index].Value + " ";
- 
+                cmdStr = "UPDATE WorkOrders SET OrderStatus='Active' WHERE WorkOrderNumber='" + dataGridView1[0, row.Index].Value + "'";
+                cmd = new OleDbCommand(cmdStr, conn);
+                cmd.ExecuteNonQuery();
             }
-            
+
+            conn.Close();
 
             ((Main_Form)this.Owner).updateWOC(selectedChannel,temp);
             this.Dispose();
@@ -105,6 +181,25 @@ namespace NewBTASProto
 
         private void buttonClear_Click(object sender, EventArgs e)
         {
+            //Update the DB to show that the old Work Orders are now Open
+            // set up the db Connection
+            string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB";
+            OleDbConnection conn = new OleDbConnection(connectionString);
+            conn.Open();
+
+            string cmdStr = "";
+            OleDbCommand cmd;
+
+            foreach (string oldWO in oldSelect)
+            {
+                cmdStr = "UPDATE WorkOrders SET OrderStatus='Open' WHERE WorkOrderNumber='" + oldWO + "'";
+                cmd = new OleDbCommand(cmdStr, conn);
+                cmd.ExecuteNonQuery();
+            }
+
+            conn.Close();
+
+
             //listBox1.ClearSelected();
             string temp = "";
 
@@ -117,6 +212,24 @@ namespace NewBTASProto
             string temp = "";
             int count = 0;
 
+            //Update the DB to show that the old Work Orders are now Open
+            // set up the db Connection
+            string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB";
+            OleDbConnection conn = new OleDbConnection(connectionString);
+            conn.Open();
+
+            string cmdStr = "";
+            OleDbCommand cmd;
+
+            foreach (string oldWO in oldSelect)
+            {
+                cmdStr = "UPDATE WorkOrders SET OrderStatus='Open' WHERE WorkOrderNumber='" + oldWO + "'";
+                cmd = new OleDbCommand(cmdStr, conn);
+                cmd.ExecuteNonQuery();
+            }
+
+            //Update the DB to show that the new Work Orders are now active
+            // set up the db Connection            
             foreach (DataGridViewRow row in dataGridView1.SelectedRows)
             {
                 count++;
@@ -126,9 +239,12 @@ namespace NewBTASProto
                     break;
                 }
                 temp += dataGridView1[0, row.Index].Value + " ";
-
+                cmdStr = "UPDATE WorkOrders SET OrderStatus='Active' WHERE WorkOrderNumber='" + dataGridView1[0, row.Index].Value + "'";
+                cmd = new OleDbCommand(cmdStr, conn);
+                cmd.ExecuteNonQuery();
             }
 
+            conn.Close();
 
             ((Main_Form)this.Owner).updateWOC(selectedChannel, temp);
             this.Dispose();

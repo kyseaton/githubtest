@@ -110,7 +110,7 @@ namespace NewBTASProto
             if (GlobalVars.Pos2Neg) { this.positiveToNegativeToolStripMenuItem.Checked = true; }
             else { this.negativeToPositiveToolStripMenuItem.Checked = true; }
 
-            toolStripStatusLabel4.Text = "Version:  6.0.0.31";
+            toolStripStatusLabel4.Text = "Version:  " + GlobalVars.programVersion;
 
             label10.Text = GlobalVars.businessName;
 
@@ -346,6 +346,8 @@ namespace NewBTASProto
             updateD(channel, 3, "");
             updateD(channel, 6, "");
             updateD(channel, 7, "");
+            // also re set the combos...
+            fillPlotCombos(channel);
         }
 
 
@@ -383,7 +385,7 @@ namespace NewBTASProto
                 {
                     this.Invoke((MethodInvoker)delegate
                     {
-                        d.Rows[i][4] = true;
+                        updateD(i,4, true);
                         dataGridView1.Rows[i].Cells[4].Style.BackColor = Color.Red;
                     });
                 }
@@ -413,7 +415,7 @@ namespace NewBTASProto
                     {
                         if (dataGridView1.Rows[i].Cells[4].Style.BackColor == Color.Red)
                         {
-                            d.Rows[i][4] = false;
+                            updateD(i,4, false);
                             dataGridView1.Rows[i].Cells[4].Style.BackColor = Color.Gainsboro;
                         }
                     });
@@ -436,7 +438,7 @@ namespace NewBTASProto
                 {
                     if (dataGridView1.Rows[15].Cells[4].Style.BackColor == Color.Red)
                     {
-                        d.Rows[15][4] = false;
+                        updateD(15,4, false);
                         dataGridView1.Rows[15].Cells[4].Style.BackColor = Color.Gainsboro;
                     }
                 });
@@ -468,9 +470,37 @@ namespace NewBTASProto
 
         private void Main_Form_FormClosing(object sender, FormClosingEventArgs e)
         {
+            // We need to check if there are tests running and ask the user if they are sure they want to quite in the event that there are tests running...
+            for (int i = 0; i < 16; i++)
+            {
+                if ((bool) d.Rows[i][5] == true)
+                {
+                    DialogResult dialogResult = MessageBox.Show("There is a test running. If you quit, the test data will no longer be recorded. You will also need to attend to the charger associated with the test, as it will no longer be computer controlled.", "Are you sure you want to quit?", MessageBoxButtons.OKCancel);
+                    if (dialogResult == DialogResult.OK)
+                    {
+                        break;
+                    }
+                    else 
+                    {
+                        e.Cancel = true;
+                        return; 
+                    }
+
+                }
+            }// end for
+
+
             //save the grid for the next time we restart
             using (StreamWriter writer = new StreamWriter("../main_grid.xml",false))
             {
+                for (int i = 0; i < 16; i++)
+                {
+                    updateD(i, 5, false);
+                    updateD(i, 6, "");
+                    updateD(i, 7, "");
+                    updateD(i, 11, "");
+                }// end for
+
                 d.WriteXml(writer);
             }
 
@@ -528,64 +558,82 @@ namespace NewBTASProto
         private void customChrgToolStripMenuItem_Click(object sender, EventArgs e)
         {
             updateD(dataGridView1.CurrentRow.Index,2,"Custom Chg");
+            updateD(dataGridView1.CurrentRow.Index, 3, "");
             updateD(dataGridView1.CurrentRow.Index, 6, "");
             updateD(dataGridView1.CurrentRow.Index, 7, "");
+            fillPlotCombos(dataGridView1.CurrentRow.Index);
         }
 
         private void asReceivedToolStripMenuItem_Click(object sender, EventArgs e)
         {
             updateD(dataGridView1.CurrentRow.Index, 2, "As Received");
+            updateD(dataGridView1.CurrentRow.Index, 3, "");
             updateD(dataGridView1.CurrentRow.Index, 6, "");
             updateD(dataGridView1.CurrentRow.Index, 7, "");
+            fillPlotCombos(dataGridView1.CurrentRow.Index);
         }
 
         private void fullChargeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             updateD(dataGridView1.CurrentRow.Index, 2, "Full Charge-6");
+            updateD(dataGridView1.CurrentRow.Index, 3, "");
             updateD(dataGridView1.CurrentRow.Index, 6, "");
             updateD(dataGridView1.CurrentRow.Index, 7, "");
+            fillPlotCombos(dataGridView1.CurrentRow.Index);
         }
 
         private void fullCharge4ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             updateD(dataGridView1.CurrentRow.Index, 2, "Full Charge-4");
+            updateD(dataGridView1.CurrentRow.Index, 3, "");
             updateD(dataGridView1.CurrentRow.Index, 6, "");
             updateD(dataGridView1.CurrentRow.Index, 7, "");
+            fillPlotCombos(dataGridView1.CurrentRow.Index);
         }
 
         private void topCharge4ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             updateD(dataGridView1.CurrentRow.Index, 2, "Top Charge-4");
+            updateD(dataGridView1.CurrentRow.Index, 3, "");
             updateD(dataGridView1.CurrentRow.Index, 6, "");
             updateD(dataGridView1.CurrentRow.Index, 7, "");
+            fillPlotCombos(dataGridView1.CurrentRow.Index);
         }
 
         private void topCharge2ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             updateD(dataGridView1.CurrentRow.Index, 2, "Top Charge-2");
+            updateD(dataGridView1.CurrentRow.Index, 3, "");
             updateD(dataGridView1.CurrentRow.Index, 6, "");
             updateD(dataGridView1.CurrentRow.Index, 7, "");
+            fillPlotCombos(dataGridView1.CurrentRow.Index);
         }
 
         private void topCharge1ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             updateD(dataGridView1.CurrentRow.Index, 2, "Top Charge-1");
+            updateD(dataGridView1.CurrentRow.Index, 3, "");
             updateD(dataGridView1.CurrentRow.Index, 6, "");
             updateD(dataGridView1.CurrentRow.Index, 7, "");
+            fillPlotCombos(dataGridView1.CurrentRow.Index);
         }
 
         private void capacity1ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             updateD(dataGridView1.CurrentRow.Index, 2, "Capacity-1");
+            updateD(dataGridView1.CurrentRow.Index, 3, "");
             updateD(dataGridView1.CurrentRow.Index, 6, "");
             updateD(dataGridView1.CurrentRow.Index, 7, "");
+            fillPlotCombos(dataGridView1.CurrentRow.Index);
         }
 
         private void dischargeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             updateD(dataGridView1.CurrentRow.Index, 2, "Discharge");
+            updateD(dataGridView1.CurrentRow.Index, 3, "");
             updateD(dataGridView1.CurrentRow.Index, 6, "");
             updateD(dataGridView1.CurrentRow.Index, 7, "");
+            fillPlotCombos(dataGridView1.CurrentRow.Index);
         }
 
         private void slowCharge14ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -593,42 +641,71 @@ namespace NewBTASProto
             updateD(dataGridView1.CurrentRow.Index, 2, "Slow Charge-14");
             updateD(dataGridView1.CurrentRow.Index, 6, "");
             updateD(dataGridView1.CurrentRow.Index, 7, "");
+            fillPlotCombos(dataGridView1.CurrentRow.Index);
         }
 
         private void slowCharge16ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             updateD(dataGridView1.CurrentRow.Index, 2, "Slow Charge-16");
+            updateD(dataGridView1.CurrentRow.Index, 3, "");
             updateD(dataGridView1.CurrentRow.Index, 6, "");
             updateD(dataGridView1.CurrentRow.Index, 7, "");
+            fillPlotCombos(dataGridView1.CurrentRow.Index);
         }
 
         private void testToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             updateD(dataGridView1.CurrentRow.Index, 2, "Test");
+            updateD(dataGridView1.CurrentRow.Index, 3, "");
             updateD(dataGridView1.CurrentRow.Index, 6, "");
             updateD(dataGridView1.CurrentRow.Index, 7, "");
+            fillPlotCombos(dataGridView1.CurrentRow.Index);
         }
 
         private void customCapToolStripMenuItem_Click(object sender, EventArgs e)
         {
             updateD(dataGridView1.CurrentRow.Index, 2, "Custom Cap");
+            updateD(dataGridView1.CurrentRow.Index, 3, "");
             updateD(dataGridView1.CurrentRow.Index, 6, "");
             updateD(dataGridView1.CurrentRow.Index, 7, "");
+            fillPlotCombos(dataGridView1.CurrentRow.Index);
         }
 
         private void constantVoltageToolStripMenuItem_Click(object sender, EventArgs e)
         {
             updateD(dataGridView1.CurrentRow.Index, 2, "Constant Voltage");
+            updateD(dataGridView1.CurrentRow.Index, 3, "");
             updateD(dataGridView1.CurrentRow.Index, 6, "");
             updateD(dataGridView1.CurrentRow.Index, 7, "");
+            fillPlotCombos(dataGridView1.CurrentRow.Index);
         }
 
         private void clearToolStripMenuItem2_Click(object sender, EventArgs e)
         {
-            d.Rows[dataGridView1.CurrentRow.Index][2] = "";
+            updateD(dataGridView1.CurrentRow.Index, 2, "");
+            updateD(dataGridView1.CurrentRow.Index, 3, "");
+            updateD(dataGridView1.CurrentRow.Index, 6, "");
+            updateD(dataGridView1.CurrentRow.Index, 7, "");
+            fillPlotCombos(dataGridView1.CurrentRow.Index);
         }
 
         private void clearToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            correctMasterSlave();
+
+            
+            // we always clear the current one..
+            updateD(dataGridView1.CurrentRow.Index,9, "");
+
+            //make sure we clear the current test
+            updateD(dataGridView1.CurrentRow.Index, 3, "");
+            updateD(dataGridView1.CurrentRow.Index, 6, "");
+            updateD(dataGridView1.CurrentRow.Index, 7, "");
+            fillPlotCombos(dataGridView1.CurrentRow.Index);
+
+        }
+
+        private void correctMasterSlave()
         {
             string current = d.Rows[dataGridView1.CurrentRow.Index][9].ToString();
 
@@ -651,16 +728,16 @@ namespace NewBTASProto
 
                 for (int i = 0; i < 16; i++)
                 {
-                    if (d.Rows[i][9].ToString() == "")
+                    if (d.Rows[i][9].ToString() == "" || d.Rows[i][9].ToString().Length != (current.Length + 2))
                     {
                         //go to the next
                         ;
                     }
-                    else if (d.Rows[i][9].ToString().Substring(0,current.Length) == current)
+                    else if (d.Rows[i][9].ToString().Substring(0, current.Length) == current)
                     {
                         // found it!
                         // make that one the master
-                        d.Rows[i][9] = current;
+                        updateD(i,9, current);
                         // Now enable adding another...
                         switch (Convert.ToInt32(current))
                         {
@@ -718,34 +795,28 @@ namespace NewBTASProto
                 }
 
             }
-            
-            // we always clear the current one..
-            d.Rows[dataGridView1.CurrentRow.Index][9] = "";
-
-            //make sure we clear the current test
-            updateD(dataGridView1.CurrentRow.Index, 6, "");
-            updateD(dataGridView1.CurrentRow.Index, 7, "");
-
         }
 
         private void toolStripMenuItem7_Click(object sender, EventArgs e)
         {
+            if (d.Rows[dataGridView1.CurrentRow.Index][9].ToString() != "") { correctMasterSlave(); }
+
             for (int i = 0; i < 16; i++)
             {
                 if ((string) d.Rows[i][9] == "0" && i != dataGridView1.CurrentRow.Index)
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
-                    d.Rows[i][9] = "0-M";
+                    updateD(i,9,"0-M");
                     // and the current one the slave
-                    d.Rows[dataGridView1.CurrentRow.Index][9] = "0-S";
+                    updateD(dataGridView1.CurrentRow.Index,9,"0-S");
                     // Now disable adding another...
                     toolStripMenuItem7.Enabled = false;
                     return;
                 }
             }
             // otherwise we'll proceed as normal...
-            d.Rows[dataGridView1.CurrentRow.Index][9] = "0";
+            updateD(dataGridView1.CurrentRow.Index,9,"0");
 
             // also check for a charger if the channel is linked...
             if ((bool) d.Rows[dataGridView1.CurrentRow.Index][8] == true)
@@ -761,22 +832,24 @@ namespace NewBTASProto
 
         private void toolStripMenuItem8_Click(object sender, EventArgs e)
         {
+            if (d.Rows[dataGridView1.CurrentRow.Index][9].ToString() != "") { correctMasterSlave(); }
+
             for (int i = 0; i < 16; i++)
             {
                 if (d.Rows[i][9].ToString() == "1" && i != dataGridView1.CurrentRow.Index)
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
-                    d.Rows[i][9] = "1-M";
+                    updateD(i,9, "1-M");
                     // and the current one the slave
-                    d.Rows[dataGridView1.CurrentRow.Index][9] = "1-S";
+                    updateD(dataGridView1.CurrentRow.Index,9, "1-S");
                     // Now disable adding another...
                     toolStripMenuItem8.Enabled = false;
                     return;
                 }
             }
             // otherwise we'll proceed as normal...
-            d.Rows[dataGridView1.CurrentRow.Index][9] = "1";
+            updateD(dataGridView1.CurrentRow.Index,9, "1");
             
             // also check for a charger if the channel is linked...
             if ((bool)d.Rows[dataGridView1.CurrentRow.Index][8] == true)
@@ -791,22 +864,24 @@ namespace NewBTASProto
 
         private void toolStripMenuItem9_Click(object sender, EventArgs e)
         {
+            if (d.Rows[dataGridView1.CurrentRow.Index][9].ToString() != "") { correctMasterSlave(); }
+
             for (int i = 0; i < 16; i++)
             {
                 if (d.Rows[i][9].ToString() == "2" && i != dataGridView1.CurrentRow.Index)
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
-                    d.Rows[i][9] = "2-M";
+                    updateD(i,9,"2-M");
                     // and the current one the slave
-                    d.Rows[dataGridView1.CurrentRow.Index][9] = "2-S";
+                    updateD(dataGridView1.CurrentRow.Index,9, "2-S");
                     // Now disable adding another...
                     toolStripMenuItem9.Enabled = false;
                     return;
                 }
             }
             // otherwise we'll proceed as normal...
-            d.Rows[dataGridView1.CurrentRow.Index][9] = "2";
+            updateD(dataGridView1.CurrentRow.Index,9, "2");
 
             // also check for a charger if the channel is linked...
             if ((bool)d.Rows[dataGridView1.CurrentRow.Index][8] == true)
@@ -821,22 +896,24 @@ namespace NewBTASProto
 
         private void toolStripMenuItem10_Click(object sender, EventArgs e)
         {
+            if (d.Rows[dataGridView1.CurrentRow.Index][9].ToString() != "") { correctMasterSlave(); }
+
             for (int i = 0; i < 16; i++)
             {
                 if (d.Rows[i][9].ToString() == "3" && i != dataGridView1.CurrentRow.Index)
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
-                    d.Rows[i][9] = "3-M";
+                    updateD(i,9, "3-M");
                     // and the current one the slave
-                    d.Rows[dataGridView1.CurrentRow.Index][9] = "3-S";
+                    updateD(dataGridView1.CurrentRow.Index,9, "3-S");
                     // Now disable adding another...
                     toolStripMenuItem10.Enabled = false;
                     return;
                 }
             }
             // otherwise we'll proceed as normal...
-            d.Rows[dataGridView1.CurrentRow.Index][9] = "3";
+            updateD(dataGridView1.CurrentRow.Index,9, "3");
 
             // also check for a charger if the channel is linked...
             if ((bool)d.Rows[dataGridView1.CurrentRow.Index][8] == true)
@@ -851,22 +928,24 @@ namespace NewBTASProto
 
         private void toolStripMenuItem11_Click(object sender, EventArgs e)
         {
+            if (d.Rows[dataGridView1.CurrentRow.Index][9].ToString() != "") { correctMasterSlave(); }
+
             for (int i = 0; i < 16; i++)
             {
                 if (d.Rows[i][9].ToString() == "4" && i != dataGridView1.CurrentRow.Index)
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
-                    d.Rows[i][9] = "4-M";
+                    updateD(i,9, "4-M");
                     // and the current one the slave
-                    d.Rows[dataGridView1.CurrentRow.Index][9] = "4-S";
+                    updateD(dataGridView1.CurrentRow.Index,9, "4-S");
                     // Now disable adding another...
                     toolStripMenuItem11.Enabled = false;
                     return;
                 }
             }
             // otherwise we'll proceed as normal...
-            d.Rows[dataGridView1.CurrentRow.Index][9] = "4";
+            updateD(dataGridView1.CurrentRow.Index,9, "4");
 
             // also check for a charger if the channel is linked...
             if ((bool)d.Rows[dataGridView1.CurrentRow.Index][8] == true)
@@ -881,22 +960,24 @@ namespace NewBTASProto
 
         private void toolStripMenuItem12_Click(object sender, EventArgs e)
         {
+            if (d.Rows[dataGridView1.CurrentRow.Index][9].ToString() != "") { correctMasterSlave(); }
+
             for (int i = 0; i < 16; i++)
             {
                 if (d.Rows[i][9].ToString() == "5" && i != dataGridView1.CurrentRow.Index)
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
-                    d.Rows[i][9] = "5-M";
+                    updateD(i,9, "5-M");
                     // and the current one the slave
-                    d.Rows[dataGridView1.CurrentRow.Index][9] = "5-S";
+                    updateD(dataGridView1.CurrentRow.Index,9, "5-S");
                     // Now disable adding another...
                     toolStripMenuItem12.Enabled = false;
                     return;
                 }
             }
             // otherwise we'll proceed as normal...
-            d.Rows[dataGridView1.CurrentRow.Index][9] = "5";
+            updateD(dataGridView1.CurrentRow.Index,9, "5");
 
             // also check for a charger if the channel is linked...
             if ((bool)d.Rows[dataGridView1.CurrentRow.Index][8] == true)
@@ -911,22 +992,24 @@ namespace NewBTASProto
 
         private void toolStripMenuItem13_Click(object sender, EventArgs e)
         {
+            if (d.Rows[dataGridView1.CurrentRow.Index][9].ToString() != "") { correctMasterSlave(); }
+
             for (int i = 0; i < 16; i++)
             {
                 if (d.Rows[i][9].ToString() == "6" && i != dataGridView1.CurrentRow.Index)
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
-                    d.Rows[i][9] = "6-M";
+                    updateD(i,9, "6-M");
                     // and the current one the slave
-                    d.Rows[dataGridView1.CurrentRow.Index][9] = "6-S";
+                    updateD(dataGridView1.CurrentRow.Index,9, "6-S");
                     // Now disable adding another...
                     toolStripMenuItem13.Enabled = false;
                     return;
                 }
             }
             // otherwise we'll proceed as normal...
-            d.Rows[dataGridView1.CurrentRow.Index][9] = "6";
+            updateD(dataGridView1.CurrentRow.Index,9, "6");
 
             // also check for a charger if the channel is linked...
             if ((bool)d.Rows[dataGridView1.CurrentRow.Index][8] == true)
@@ -941,22 +1024,24 @@ namespace NewBTASProto
 
         private void toolStripMenuItem14_Click(object sender, EventArgs e)
         {
+            if (d.Rows[dataGridView1.CurrentRow.Index][9].ToString() != "") { correctMasterSlave(); }
+
             for (int i = 0; i < 16; i++)
             {
                 if (d.Rows[i][9].ToString() == "7" && i != dataGridView1.CurrentRow.Index)
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
-                    d.Rows[i][9] = "7-M";
+                    updateD(i,9, "7-M");
                     // and the current one the slave
-                    d.Rows[dataGridView1.CurrentRow.Index][9] = "7-S";
+                    updateD(dataGridView1.CurrentRow.Index,9, "7-S");
                     // Now disable adding another...
                     toolStripMenuItem14.Enabled = false;
                     return;
                 }
             }
             // otherwise we'll proceed as normal...
-            d.Rows[dataGridView1.CurrentRow.Index][9] = "7";
+            updateD(dataGridView1.CurrentRow.Index,9, "7");
 
             // also check for a charger if the channel is linked...
             if ((bool)d.Rows[dataGridView1.CurrentRow.Index][8] == true)
@@ -971,22 +1056,24 @@ namespace NewBTASProto
 
         private void toolStripMenuItem15_Click(object sender, EventArgs e)
         {
+            if (d.Rows[dataGridView1.CurrentRow.Index][9].ToString() != "") { correctMasterSlave(); }
+
             for (int i = 0; i < 16; i++)
             {
                 if (d.Rows[i][9].ToString() == "8" && i != dataGridView1.CurrentRow.Index)
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
-                    d.Rows[i][9] = "8-M";
+                    updateD(i,9, "8-M");
                     // and the current one the slave
-                    d.Rows[dataGridView1.CurrentRow.Index][9] = "8-S";
+                    updateD(dataGridView1.CurrentRow.Index,9, "8-S");
                     // Now disable adding another...
                     toolStripMenuItem15.Enabled = false;
                     return;
                 }
             }
             // otherwise we'll proceed as normal...
-            d.Rows[dataGridView1.CurrentRow.Index][9] = "8";
+            updateD(dataGridView1.CurrentRow.Index,9, "8");
 
             // also check for a charger if the channel is linked...
             if ((bool)d.Rows[dataGridView1.CurrentRow.Index][8] == true)
@@ -1001,22 +1088,24 @@ namespace NewBTASProto
 
         private void toolStripMenuItem16_Click(object sender, EventArgs e)
         {
+            if (d.Rows[dataGridView1.CurrentRow.Index][9].ToString() != "") { correctMasterSlave(); }
+
             for (int i = 0; i < 16; i++)
             {
                 if (d.Rows[i][9].ToString() == "9" && i != dataGridView1.CurrentRow.Index)
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
-                    d.Rows[i][9] = "9-M";
+                    updateD(i,9, "9-M");
                     // and the current one the slave
-                    d.Rows[dataGridView1.CurrentRow.Index][9] = "9-S";
+                    updateD(dataGridView1.CurrentRow.Index,9, "9-S");
                     // Now disable adding another...
                     toolStripMenuItem16.Enabled = false;
                     return;
                 }
             }
             // otherwise we'll proceed as normal...
-            d.Rows[dataGridView1.CurrentRow.Index][9] = "9";
+            updateD(dataGridView1.CurrentRow.Index,9, "9");
 
             // also check for a charger if the channel is linked...
             if ((bool)d.Rows[dataGridView1.CurrentRow.Index][8] == true)
@@ -1031,22 +1120,24 @@ namespace NewBTASProto
 
         private void toolStripMenuItem17_Click(object sender, EventArgs e)
         {
+            if (d.Rows[dataGridView1.CurrentRow.Index][9].ToString() != "") { correctMasterSlave(); }
+
             for (int i = 0; i < 16; i++)
             {
                 if (d.Rows[i][9].ToString() == "10" && i != dataGridView1.CurrentRow.Index)
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
-                    d.Rows[i][9] = "10-M";
+                    updateD(i,9, "10-M");
                     // and the current one the slave
-                    d.Rows[dataGridView1.CurrentRow.Index][9] = "10-S";
+                    updateD(dataGridView1.CurrentRow.Index,9, "10-S");
                     // Now disable adding another...
                     toolStripMenuItem17.Enabled = false;
                     return;
                 }
             }
             // otherwise we'll proceed as normal...
-            d.Rows[dataGridView1.CurrentRow.Index][9] = "10";
+            updateD(dataGridView1.CurrentRow.Index,9, "10");
 
             // also check for a charger if the channel is linked...
             if ((bool)d.Rows[dataGridView1.CurrentRow.Index][8] == true)
@@ -1061,22 +1152,24 @@ namespace NewBTASProto
 
         private void toolStripMenuItem18_Click(object sender, EventArgs e)
         {
+            if (d.Rows[dataGridView1.CurrentRow.Index][9].ToString() != "") { correctMasterSlave(); }
+
             for (int i = 0; i < 16; i++)
             {
                 if (d.Rows[i][9].ToString() == "11" && i != dataGridView1.CurrentRow.Index)
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
-                    d.Rows[i][9] = "11-M";
+                    updateD(i,9, "11-M");
                     // and the current one the slave
-                    d.Rows[dataGridView1.CurrentRow.Index][9] = "11-S";
+                    updateD(dataGridView1.CurrentRow.Index,9, "11-S");
                     // Now disable adding another...
                     toolStripMenuItem18.Enabled = false;
                     return;
                 }
             }
             // otherwise we'll proceed as normal...
-            d.Rows[dataGridView1.CurrentRow.Index][9] = "11";
+            updateD(dataGridView1.CurrentRow.Index,9, "11");
 
             // also check for a charger if the channel is linked...
             if ((bool)d.Rows[dataGridView1.CurrentRow.Index][8] == true)
@@ -1091,22 +1184,24 @@ namespace NewBTASProto
 
         private void toolStripMenuItem19_Click(object sender, EventArgs e)
         {
+            if (d.Rows[dataGridView1.CurrentRow.Index][9].ToString() != "") { correctMasterSlave(); }
+
             for (int i = 0; i < 16; i++)
             {
                 if (d.Rows[i][9].ToString() == "12" && i != dataGridView1.CurrentRow.Index)
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
-                    d.Rows[i][9] = "12-M";
+                    updateD(i,9, "12-M");
                     // and the current one the slave
-                    d.Rows[dataGridView1.CurrentRow.Index][9] = "12-S";
+                    updateD(dataGridView1.CurrentRow.Index,9, "12-S");
                     // Now disable adding another...
                     toolStripMenuItem19.Enabled = false;
                     return;
                 }
             }
             // otherwise we'll proceed as normal...
-            d.Rows[dataGridView1.CurrentRow.Index][9] = "12";
+            updateD(dataGridView1.CurrentRow.Index,9, "12");
 
             // also check for a charger if the channel is linked...
             if ((bool)d.Rows[dataGridView1.CurrentRow.Index][8] == true)
@@ -1121,22 +1216,24 @@ namespace NewBTASProto
 
         private void toolStripMenuItem20_Click(object sender, EventArgs e)
         {
+            if (d.Rows[dataGridView1.CurrentRow.Index][9].ToString() != "") { correctMasterSlave(); }
+
             for (int i = 0; i < 16; i++)
             {
                 if (d.Rows[i][9].ToString() == "13" && i != dataGridView1.CurrentRow.Index)
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
-                    d.Rows[i][9] = "13-M";
+                    updateD(i,9, "13-M");
                     // and the current one the slave
-                    d.Rows[dataGridView1.CurrentRow.Index][9] = "13-S";
+                    updateD(dataGridView1.CurrentRow.Index,9, "13-S");
                     // Now disable adding another...
                     toolStripMenuItem20.Enabled = false;
                     return;
                 }
             }
             // otherwise we'll proceed as normal...
-            d.Rows[dataGridView1.CurrentRow.Index][9] = "13";
+            updateD(dataGridView1.CurrentRow.Index,9, "13");
 
             // also check for a charger if the channel is linked...
             if ((bool)d.Rows[dataGridView1.CurrentRow.Index][8] == true)
@@ -1151,22 +1248,24 @@ namespace NewBTASProto
 
         private void toolStripMenuItem21_Click(object sender, EventArgs e)
         {
+            if (d.Rows[dataGridView1.CurrentRow.Index][9].ToString() != "") { correctMasterSlave(); }
+
             for (int i = 0; i < 16; i++)
             {
                 if (d.Rows[i][9].ToString() == "14" && i != dataGridView1.CurrentRow.Index)
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
-                    d.Rows[i][9] = "14-M";
+                    updateD(i,9, "14-M");
                     // and the current one the slave
-                    d.Rows[dataGridView1.CurrentRow.Index][9] = "14-S";
+                    updateD(dataGridView1.CurrentRow.Index,9, "14-S");
                     // Now disable adding another...
                     toolStripMenuItem21.Enabled = false;
                     return;
                 }
             }
             // otherwise we'll proceed as normal...
-            d.Rows[dataGridView1.CurrentRow.Index][9] = "14";
+            updateD(dataGridView1.CurrentRow.Index,9, "14");
 
             // also check for a charger if the channel is linked...
             if ((bool)d.Rows[dataGridView1.CurrentRow.Index][8] == true)
@@ -1181,22 +1280,24 @@ namespace NewBTASProto
 
         private void toolStripMenuItem22_Click(object sender, EventArgs e)
         {
+            if (d.Rows[dataGridView1.CurrentRow.Index][9].ToString() != "") { correctMasterSlave(); }
+
             for (int i = 0; i < 16; i++)
             {
                 if (d.Rows[i][9].ToString() == "15" && i != dataGridView1.CurrentRow.Index)
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
-                    d.Rows[i][9] = "15-M";
+                    updateD(i,9, "15-M");
                     // and the current one the slave
-                    d.Rows[dataGridView1.CurrentRow.Index][9] = "15-S";
+                    updateD(dataGridView1.CurrentRow.Index,9, "15-S");
                     // Now disable adding another...
                     toolStripMenuItem22.Enabled = false;
                     return;
                 }
             }
             // otherwise we'll proceed as normal...
-            d.Rows[dataGridView1.CurrentRow.Index][9] = "15";
+            updateD(dataGridView1.CurrentRow.Index,9, "15");
 
             // also check for a charger if the channel is linked...
             if ((bool)d.Rows[dataGridView1.CurrentRow.Index][8] == true)
@@ -1327,21 +1428,6 @@ namespace NewBTASProto
             f2.Show();
         }
 
-        private void viewStandardBatteriesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            FormCollection fc = Application.OpenForms;
-
-            foreach (Form frm in fc)
-            {
-                if (frm is frmVStandardBats)
-                {
-                    return;
-                }
-            }
-            frmVStandardBats f2 = new frmVStandardBats();
-            f2.Show();
-
-        }
 
         private void editTechniciansToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1502,6 +1588,95 @@ namespace NewBTASProto
 
         private void toolStripStatusLabel1_Click(object sender, EventArgs e)
         {
+
+        }
+
+        private void rtbIncoming_Resize(object sender, EventArgs e)
+        {
+
+
+        }
+
+        private void Main_Form_ResizeEnd(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dataGridView1_Resize(object sender, EventArgs e)
+        {
+            int cumWidth = 0;
+            //Scale the columns to the new width!
+            dataGridView1.Columns[0].Width = (40 * dataGridView1.Width) / 1017;
+            cumWidth += (40 * dataGridView1.Width) / 1017;
+            dataGridView1.Columns[1].Width = (180 * dataGridView1.Width) / 1017;
+            cumWidth += (180 * dataGridView1.Width) / 1017;
+            dataGridView1.Columns[2].Width = (140 * dataGridView1.Width) / 1017;
+            cumWidth += (140 * dataGridView1.Width) / 1017;
+            dataGridView1.Columns[3].Width = (40 * dataGridView1.Width) / 1017;
+            cumWidth += (40 * dataGridView1.Width) / 1017;
+            dataGridView1.Columns[4].Width = (44 * dataGridView1.Width) / 1017;
+            cumWidth += (44 * dataGridView1.Width) / 1017;
+            dataGridView1.Columns[5].Width = (44 * dataGridView1.Width) / 1017;
+            cumWidth += (44 * dataGridView1.Width) / 1017;
+            dataGridView1.Columns[6].Width = (100 * dataGridView1.Width) / 1017;
+            cumWidth += (100 * dataGridView1.Width) / 1017;
+            dataGridView1.Columns[7].Width = (120 * dataGridView1.Width) / 1017;
+            cumWidth += (120 * dataGridView1.Width) / 1017;
+            dataGridView1.Columns[8].Width = (60 * dataGridView1.Width) / 1017;
+            cumWidth += (60 * dataGridView1.Width) / 1017;
+            dataGridView1.Columns[9].Width = (50 * dataGridView1.Width) / 1017;
+            cumWidth += (50 * dataGridView1.Width) / 1017;
+            dataGridView1.Columns[10].Width = (78 * dataGridView1.Width) / 1017;
+            cumWidth += (78 * dataGridView1.Width) / 1017;
+            dataGridView1.Columns[11].Width = (dataGridView1.Width - 43) - cumWidth;
+
+        }
+
+        private void editTestSettingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormCollection fc = Application.OpenForms;
+
+            foreach (Form frm in fc)
+            {
+                if (frm is frmVETests)
+                {
+                    return;
+                }
+            }
+            frmVETests f2 = new frmVETests();
+            f2.Show();
+        }
+
+        private void programVersionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormCollection fc = Application.OpenForms;
+
+            foreach (Form frm in fc)
+            {
+                if (frm is Program_Version)
+                {
+                    return;
+                }
+            }
+
+            Program_Version bn = new Program_Version();
+            bn.Show();
+        }
+
+        private void helpToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            FormCollection fc = Application.OpenForms;
+
+            foreach (Form frm in fc)
+            {
+                if (frm is Help)
+                {
+                    return;
+                }
+            }
+
+            Help bn = new Help();
+            bn.Show();
 
         }
 

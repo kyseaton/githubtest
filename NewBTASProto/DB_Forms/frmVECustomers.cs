@@ -273,6 +273,7 @@ namespace NewBTASProto
                         "' WHERE CustomerID=" + current["CustomerID"].ToString();
                     OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
                     cmd.ExecuteNonQuery();
+                    MessageBox.Show(current["CustomerName"].ToString() + "'s entry has been updated.");
 
                 }
                 else
@@ -301,6 +302,7 @@ namespace NewBTASProto
                         textBox9.Text.Replace("'", "''") + "')";
                     OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
                     cmd.ExecuteNonQuery();
+                    MessageBox.Show(textBox1.Text + " has been added as a customer.");
 
                     // update the dataTable with the new customer ID also..
                     current[0] = max + 1;

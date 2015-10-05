@@ -32,7 +32,6 @@
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main_Form));
-            this.rtbIncoming = new System.Windows.Forms.RichTextBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -47,12 +46,11 @@
             this.customersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.batteriesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.fastReadingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.debugModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.highlightCurrentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.automaticallyConfigureChargerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.chargerConfigurationInterfaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.editTestSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.selectTemperatureUnitsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.centigradeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -62,7 +60,6 @@
             this.positiveToNegativeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bussinessNameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.editTechniciansToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.etcToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -147,7 +144,8 @@
             this.otherToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem23 = new System.Windows.Forms.ToolStripSeparator();
             this.clearToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.button5 = new System.Windows.Forms.Button();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.rtbIncoming = new System.Windows.Forms.RichTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -160,15 +158,8 @@
             this.cMSStartStop.SuspendLayout();
             this.cMSChargerChannel.SuspendLayout();
             this.cMSChargerType.SuspendLayout();
+            this.groupBox4.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // rtbIncoming
-            // 
-            this.rtbIncoming.Location = new System.Drawing.Point(726, 485);
-            this.rtbIncoming.Name = "rtbIncoming";
-            this.rtbIncoming.Size = new System.Drawing.Size(303, 248);
-            this.rtbIncoming.TabIndex = 1;
-            this.rtbIncoming.Text = "";
             // 
             // dataGridView1
             // 
@@ -176,6 +167,8 @@
             this.dataGridView1.AllowUserToDeleteRows = false;
             this.dataGridView1.AllowUserToResizeColumns = false;
             this.dataGridView1.AllowUserToResizeRows = false;
+            this.dataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridView1.ColumnHeadersHeight = 25;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dataGridView1.Location = new System.Drawing.Point(12, 90);
@@ -184,6 +177,7 @@
             this.dataGridView1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dataGridView1.RowTemplate.Height = 20;
             this.dataGridView1.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridView1.ShowEditingIcon = false;
             this.dataGridView1.Size = new System.Drawing.Size(1017, 347);
             this.dataGridView1.TabIndex = 22;
@@ -191,6 +185,7 @@
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             this.dataGridView1.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_RowEnter);
             this.dataGridView1.Click += new System.EventHandler(this.dataGridView1_Click);
+            this.dataGridView1.Resize += new System.EventHandler(this.dataGridView1_Resize);
             // 
             // menuStrip1
             // 
@@ -292,27 +287,14 @@
             // toolsToolStripMenuItem
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fastReadingsToolStripMenuItem,
-            this.debugModeToolStripMenuItem,
             this.highlightCurrentToolStripMenuItem,
             this.automaticallyConfigureChargerToolStripMenuItem,
             this.toolStripSeparator5,
-            this.chargerConfigurationInterfaceToolStripMenuItem});
+            this.chargerConfigurationInterfaceToolStripMenuItem,
+            this.editTestSettingsToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
-            // 
-            // fastReadingsToolStripMenuItem
-            // 
-            this.fastReadingsToolStripMenuItem.Name = "fastReadingsToolStripMenuItem";
-            this.fastReadingsToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
-            this.fastReadingsToolStripMenuItem.Text = "Fast Readings";
-            // 
-            // debugModeToolStripMenuItem
-            // 
-            this.debugModeToolStripMenuItem.Name = "debugModeToolStripMenuItem";
-            this.debugModeToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
-            this.debugModeToolStripMenuItem.Text = "Debug Mode";
             // 
             // highlightCurrentToolStripMenuItem
             // 
@@ -340,6 +322,13 @@
             this.chargerConfigurationInterfaceToolStripMenuItem.Text = "Charger Configuration Interface";
             this.chargerConfigurationInterfaceToolStripMenuItem.Click += new System.EventHandler(this.chargerConfigurationInterfaceToolStripMenuItem_Click);
             // 
+            // editTestSettingsToolStripMenuItem
+            // 
+            this.editTestSettingsToolStripMenuItem.Name = "editTestSettingsToolStripMenuItem";
+            this.editTestSettingsToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
+            this.editTestSettingsToolStripMenuItem.Text = "Edit Custom Test Settings";
+            this.editTestSettingsToolStripMenuItem.Click += new System.EventHandler(this.editTestSettingsToolStripMenuItem_Click);
+            // 
             // optionsToolStripMenuItem
             // 
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -347,7 +336,6 @@
             this.selectCellOrderToolStripMenuItem,
             this.bussinessNameToolStripMenuItem,
             this.toolStripSeparator2,
-            this.toolStripMenuItem3,
             this.editTechniciansToolStripMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
@@ -411,12 +399,6 @@
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(203, 6);
             // 
-            // toolStripMenuItem3
-            // 
-            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(206, 22);
-            this.toolStripMenuItem3.Text = "Change Custom Times";
-            // 
             // editTechniciansToolStripMenuItem
             // 
             this.editTechniciansToolStripMenuItem.Name = "editTechniciansToolStripMenuItem";
@@ -468,6 +450,7 @@
             this.programVersionToolStripMenuItem.Name = "programVersionToolStripMenuItem";
             this.programVersionToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.programVersionToolStripMenuItem.Text = "Program Version";
+            this.programVersionToolStripMenuItem.Click += new System.EventHandler(this.programVersionToolStripMenuItem_Click);
             // 
             // toolStripSeparator3
             // 
@@ -479,6 +462,7 @@
             this.helpToolStripMenuItem1.Name = "helpToolStripMenuItem1";
             this.helpToolStripMenuItem1.Size = new System.Drawing.Size(162, 22);
             this.helpToolStripMenuItem1.Text = "Help";
+            this.helpToolStripMenuItem1.Click += new System.EventHandler(this.helpToolStripMenuItem1_Click);
             // 
             // statusStrip1
             // 
@@ -526,27 +510,35 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.button2);
+            this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox1.ForeColor = System.Drawing.SystemColors.ControlText;
             this.groupBox1.Location = new System.Drawing.Point(1035, 90);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(241, 643);
+            this.groupBox1.Size = new System.Drawing.Size(235, 640);
             this.groupBox1.TabIndex = 26;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "REAL TIME DATA";
             // 
             // label1
             // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.BackColor = System.Drawing.SystemColors.Window;
             this.label1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label1.Location = new System.Drawing.Point(6, 16);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(230, 587);
+            this.label1.Size = new System.Drawing.Size(223, 579);
             this.label1.TabIndex = 34;
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(160, 609);
+            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button2.Location = new System.Drawing.Point(160, 605);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 0;
@@ -555,6 +547,8 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox2.Controls.Add(this.label11);
             this.groupBox2.Controls.Add(this.label10);
             this.groupBox2.Controls.Add(this.checkBox1);
@@ -719,6 +713,9 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox3.Controls.Add(this.comboBox3);
             this.groupBox3.Controls.Add(this.comboBox2);
             this.groupBox3.Controls.Add(this.radioButton2);
@@ -727,7 +724,7 @@
             this.groupBox3.Controls.Add(this.chart1);
             this.groupBox3.Location = new System.Drawing.Point(12, 443);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(708, 290);
+            this.groupBox3.Size = new System.Drawing.Size(708, 287);
             this.groupBox3.TabIndex = 28;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "GRAPHICAL DATA";
@@ -766,7 +763,7 @@
             // radioButton1
             // 
             this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(6, 19);
+            this.radioButton1.Location = new System.Drawing.Point(6, 16);
             this.radioButton1.Name = "radioButton1";
             this.radioButton1.Size = new System.Drawing.Size(58, 17);
             this.radioButton1.TabIndex = 32;
@@ -777,6 +774,7 @@
             // 
             // button4
             // 
+            this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button4.Location = new System.Drawing.Point(627, 13);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(75, 23);
@@ -786,6 +784,9 @@
             // 
             // chart1
             // 
+            this.chart1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             chartArea1.AxisX.Interval = 1D;
             chartArea1.AxisX.MajorGrid.Enabled = false;
             chartArea1.AxisX.MajorTickMark.Enabled = false;
@@ -799,7 +800,7 @@
             series1.ChartArea = "ChartArea1";
             series1.Name = "Series1";
             this.chart1.Series.Add(series1);
-            this.chart1.Size = new System.Drawing.Size(696, 242);
+            this.chart1.Size = new System.Drawing.Size(696, 239);
             this.chart1.TabIndex = 30;
             this.chart1.Text = "chart1";
             // 
@@ -1122,37 +1123,49 @@
             this.toolStripMenuItem23,
             this.clearToolStripMenuItem1});
             this.cMSChargerType.Name = "cMSChargerType";
-            this.cMSChargerType.Size = new System.Drawing.Size(153, 76);
+            this.cMSChargerType.Size = new System.Drawing.Size(106, 54);
             this.cMSChargerType.Opening += new System.ComponentModel.CancelEventHandler(this.cMSChargerType_Opening);
             // 
             // otherToolStripMenuItem
             // 
             this.otherToolStripMenuItem.Name = "otherToolStripMenuItem";
-            this.otherToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.otherToolStripMenuItem.Size = new System.Drawing.Size(105, 22);
             this.otherToolStripMenuItem.Text = "Shunt";
             this.otherToolStripMenuItem.Click += new System.EventHandler(this.otherToolStripMenuItem_Click);
             // 
             // toolStripMenuItem23
             // 
             this.toolStripMenuItem23.Name = "toolStripMenuItem23";
-            this.toolStripMenuItem23.Size = new System.Drawing.Size(149, 6);
+            this.toolStripMenuItem23.Size = new System.Drawing.Size(102, 6);
             // 
             // clearToolStripMenuItem1
             // 
             this.clearToolStripMenuItem1.Name = "clearToolStripMenuItem1";
-            this.clearToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.clearToolStripMenuItem1.Size = new System.Drawing.Size(105, 22);
             this.clearToolStripMenuItem1.Text = "Clear";
             this.clearToolStripMenuItem1.Click += new System.EventHandler(this.clearToolStripMenuItem1_Click);
             // 
-            // button5
+            // groupBox4
             // 
-            this.button5.Location = new System.Drawing.Point(924, 456);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(105, 23);
-            this.button5.TabIndex = 32;
-            this.button5.Text = "Configure Charger";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
+            this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox4.Controls.Add(this.rtbIncoming);
+            this.groupBox4.Location = new System.Drawing.Point(726, 443);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(303, 287);
+            this.groupBox4.TabIndex = 29;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "MESSAGE CENTER";
+            // 
+            // rtbIncoming
+            // 
+            this.rtbIncoming.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.rtbIncoming.Location = new System.Drawing.Point(6, 13);
+            this.rtbIncoming.Name = "rtbIncoming";
+            this.rtbIncoming.Size = new System.Drawing.Size(291, 268);
+            this.rtbIncoming.TabIndex = 2;
+            this.rtbIncoming.Text = "";
             // 
             // Main_Form
             // 
@@ -1160,24 +1173,23 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(1282, 755);
-            this.Controls.Add(this.button5);
+            this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.dataGridView1);
-            this.Controls.Add(this.rtbIncoming);
             this.Controls.Add(this.menuStrip1);
             this.DoubleBuffered = true;
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
-            this.MaximizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(1298, 793);
             this.Name = "Main_Form";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_Form_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Main_Form_FormClosed);
             this.Load += new System.EventHandler(this.Main_Form_Load);
+            this.ResizeEnd += new System.EventHandler(this.Main_Form_ResizeEnd);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -1194,6 +1206,7 @@
             this.cMSStartStop.ResumeLayout(false);
             this.cMSChargerChannel.ResumeLayout(false);
             this.cMSChargerType.ResumeLayout(false);
+            this.groupBox4.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1201,7 +1214,6 @@
 
         #endregion
 
-        private System.Windows.Forms.RichTextBox rtbIncoming;
         public System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
@@ -1229,10 +1241,7 @@
         private System.Windows.Forms.ToolStripMenuItem batteriesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem customerBatteriesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem fastReadingsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem debugModeToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem3;
         private System.Windows.Forms.ToolStripMenuItem editTechniciansToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem testToolStripMenuItem;
         private System.Windows.Forms.GroupBox groupBox1;
@@ -1308,7 +1317,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
         private System.Windows.Forms.ToolStripMenuItem clearToolStripMenuItem2;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
-        private System.Windows.Forms.Button button5;
         private System.Windows.Forms.ToolStripMenuItem automaticallyConfigureChargerToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripMenuItem chargerConfigurationInterfaceToolStripMenuItem;
@@ -1317,6 +1325,9 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel3;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel4;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel5;
+        private System.Windows.Forms.ToolStripMenuItem editTestSettingsToolStripMenuItem;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.RichTextBox rtbIncoming;
     }
 }
 

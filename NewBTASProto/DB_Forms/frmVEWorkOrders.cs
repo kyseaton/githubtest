@@ -547,14 +547,15 @@ namespace NewBTASProto
                         "' WHERE WorkOrderID=" + current["WorkOrderID"].ToString();
                     OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
                     cmd.ExecuteNonQuery();
+                    MessageBox.Show(current["WorkOrderNumber"].ToString() + " has been updated.");
 
                 }
                 else
                 {
                     // we need to insert a new record...
                     // find the max value in the CustomerID column so we know what to assign to the new record
-                    string cmdStr = "INSERT INTO WorkOrders (WorkOrderID, WorkOrderNumber, DateReceived, PlaneType, TailNumber, TestRequested, DateCompleted, OrderStatus, Notes, BatteryModel, BatterySerialNumber, BatteryBCN, CustomerName, BID) " +
-                        "VALUES (" + (max + 1).ToString() + ",'" +
+                    string cmdStr = "INSERT INTO WorkOrders (WorkOrderNumber, DateReceived, PlaneType, TailNumber, TestRequested, DateCompleted, OrderStatus, Notes, BatteryModel, BatterySerialNumber, BatteryBCN, CustomerName, BID) " +
+                        "VALUES ('" +
                         textBox1.Text.Replace("'", "''") + "','" +
                         dateTimePicker1.Text + "','" +
                         textBox3.Text.Replace("'", "''") + "','" +
@@ -574,8 +575,7 @@ namespace NewBTASProto
                     // update the dataTable with the new customer ID also..
                     current[0] = max + 1;
                     max += 1;
-
-
+                    MessageBox.Show(textBox1.Text + " has been created.");
                 }
 
                 //now we are going to save the notes on the test page...

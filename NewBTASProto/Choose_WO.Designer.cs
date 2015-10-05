@@ -93,7 +93,7 @@
             this.WorkOrder.HeaderText = "Work Order";
             this.WorkOrder.Name = "WorkOrder";
             this.WorkOrder.ReadOnly = true;
-            this.WorkOrder.Width = 142;
+            this.WorkOrder.Width = 148;
             // 
             // Customer
             // 
@@ -101,7 +101,7 @@
             this.Customer.HeaderText = "Customer";
             this.Customer.Name = "Customer";
             this.Customer.ReadOnly = true;
-            this.Customer.Width = 142;
+            this.Customer.Width = 148;
             // 
             // DateReceived
             // 
@@ -109,7 +109,7 @@
             this.DateReceived.HeaderText = "Date Received";
             this.DateReceived.Name = "DateReceived";
             this.DateReceived.ReadOnly = true;
-            this.DateReceived.Width = 143;
+            this.DateReceived.Width = 149;
             // 
             // Choose_WO
             // 

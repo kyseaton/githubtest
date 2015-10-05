@@ -128,22 +128,28 @@ namespace NewBTASProto
                                     {
                                         if (testData.online == true)
                                         {
-                                            if (testData.faultStatus != "") { updateD(j, 11, testData.faultStatus); }
-                                            else if (testData.endStatus != "") { updateD(j, 11, testData.endStatus);}
-                                            else { updateD(j, 11, testData.runStatus); }
-                                            if ((bool)d.Rows[j][8]) { dataGridView1.Rows[j].Cells[8].Style.BackColor = Color.Green; }
+                                            if ((bool)d.Rows[j][8]) // here to solve timing mismatch
+                                            {
+                                                if (testData.faultStatus != "") { updateD(j, 11, testData.faultStatus); }
+                                                else if (testData.endStatus != "") { updateD(j, 11, testData.endStatus); }
+                                                else { updateD(j, 11, testData.runStatus); }
+                                                dataGridView1.Rows[j].Cells[8].Style.BackColor = Color.YellowGreen;
+                                            }
                                         }
-                                        else 
+                                        else if ((bool)d.Rows[j][8]) // here to solve timing mismatch
                                         {
-                                            updateD(j,11,"offline!");
-                                            if ((bool)d.Rows[j][8]) { dataGridView1.Rows[j].Cells[8].Style.BackColor = Color.Red; }
+                                            updateD(j, 11, "offline!");
+                                            dataGridView1.Rows[j].Cells[8].Style.BackColor = Color.Red;
                                         }
 
                                         // also update the type of charger being used
-                                        if (testData.boardID == 1) { updateD(j, 10, "ICA mini"); }
-                                        else if (testData.boardID == 6) { updateD(j, 10, "ICA SMC"); }
-                                        else if (testData.boardID == 8) { updateD(j, 10, "ICA SMC ED"); }
-                                        else if (testData.boardID == 6) { updateD(j, 10, "ICA SMini"); }
+                                        if ((bool)d.Rows[j][8]) // here to solve timing mismatch
+                                        {
+                                            if (testData.boardID == 1) { updateD(j, 10, "ICA mini"); }
+                                            else if (testData.boardID == 6) { updateD(j, 10, "ICA SMC"); }
+                                            else if (testData.boardID == 8) { updateD(j, 10, "ICA SMC ED"); }
+                                            else if (testData.boardID == 6) { updateD(j, 10, "ICA SMini"); }
+                                        }
                                         
                                         rtbIncoming.Text = j.ToString() + "  :  " + tempBuff;
                                         
@@ -173,8 +179,8 @@ namespace NewBTASProto
                                     else { throw ex; }
                                 }       // end catch
                             }       // end if
-                                
-                            else if(d.Rows[j][10].ToString().Contains("ICA")) 
+
+                            else if (d.Rows[j][10].ToString().Contains("ICA") || (bool) d.Rows[j][8] == false) 
                             {
                                 if ((string)d.Rows[j][11] != "")
                                 {
@@ -200,10 +206,13 @@ namespace NewBTASProto
                                     //A[1] has the terminal ID in it
                                     testData = new ICDataStore(A);
                                     // if we got one then we can determine that we have an ICA
-                                    if (testData.boardID == 1) { updateD(chanNum, 10, "ICA mini"); }
-                                    else if (testData.boardID == 6) { updateD(chanNum, 10, "ICA SMC"); }
-                                    else if (testData.boardID == 8) { updateD(chanNum, 10, "ICA SMC ED"); }
-                                    else if (testData.boardID == 6) { updateD(chanNum, 10, "ICA SMini"); }
+                                    if ((bool)d.Rows[chanNum][8]) // here to solve timing mismatch
+                                    {
+                                        if (testData.boardID == 1) { updateD(chanNum, 10, "ICA mini"); }
+                                        else if (testData.boardID == 6) { updateD(chanNum, 10, "ICA SMC"); }
+                                        else if (testData.boardID == 8) { updateD(chanNum, 10, "ICA SMC ED"); }
+                                        else if (testData.boardID == 6) { updateD(chanNum, 10, "ICA SMini"); }
+                                    }
                                     // and we don't need to check any more
                                     check = false;
                                     Thread.Sleep(200);
@@ -271,23 +280,34 @@ namespace NewBTASProto
                                             rtbIncoming.Text = "Critical  " + i.ToString() + "  :  " + tempBuff;
                                             if (testData.online == true)
                                             {
-                                                if (testData.faultStatus != "") { updateD(station, 11, testData.faultStatus); }
-                                                else if (testData.endStatus != "") { updateD(station, 11, testData.endStatus); }
-                                                else { updateD(station, 11, testData.runStatus);}
-                                                if ((bool)d.Rows[station][8]) { dataGridView1.Rows[station].Cells[8].Style.BackColor = Color.Green; }
+                                                if ((bool)d.Rows[station][8]) // here to solve timing mismatch
+                                                {
+                                                    if (testData.faultStatus != "") { updateD(station, 11, testData.faultStatus); }
+                                                    else if (testData.endStatus != "") { updateD(station, 11, testData.endStatus); }
+                                                    else { updateD(station, 11, testData.runStatus); }
+                                                    dataGridView1.Rows[station].Cells[8].Style.BackColor = Color.YellowGreen;
+                                                }
+                                            
                                             }
                                             else 
                                             {
-                                                updateD(station, 11, "offline!");
-                                                if ((bool)d.Rows[station][8]) { dataGridView1.Rows[station].Cells[8].Style.BackColor = Color.Red; }
+                                                if ((bool)d.Rows[station][8]) // here to solve timing mismatch
+                                                {
+                                                    updateD(station, 11, "offline!");
+                                                    if ((bool)d.Rows[station][8]) { dataGridView1.Rows[station].Cells[8].Style.BackColor = Color.Red; }
+                                                }
                             
                                             }
 
-                                            // also update the type of charger being used
-                                            if (testData.boardID == 1) { updateD(station, 10, "ICA mini"); }
-                                            else if (testData.boardID == 6) { updateD(station, 10, "ICA SMC"); }
-                                            else if (testData.boardID == 8) { updateD(station, 10, "ICA SMC ED"); }
-                                            else if (testData.boardID == 6) { updateD(station, 10, "ICA SMini"); }
+
+                                            if ((bool)d.Rows[station][8]) // here to solve timing mismatch
+                                            {
+                                                // also update the type of charger being used
+                                                if (testData.boardID == 1) { updateD(station, 10, "ICA mini"); }
+                                                else if (testData.boardID == 6) { updateD(station, 10, "ICA SMC"); }
+                                                else if (testData.boardID == 8) { updateD(station, 10, "ICA SMC ED"); }
+                                                else if (testData.boardID == 6) { updateD(station, 10, "ICA SMini"); }
+                                            }
 
                                         });
                                         Thread.Sleep(200);

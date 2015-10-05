@@ -253,6 +253,7 @@ namespace NewBTASProto
                         "' WHERE ID=" + current["ID"].ToString();
                     OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
                     cmd.ExecuteNonQuery();
+                    MessageBox.Show(current["OperatorName"].ToString() + "'s entry has been updated.");
 
                 }
                 else
@@ -273,6 +274,7 @@ namespace NewBTASProto
                         textBox1.Text + "')";
                     OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
                     cmd.ExecuteNonQuery();
+                    MessageBox.Show(textBox1.Text + " has been been added to the operator list.");
 
                     // update the dataTable with the new customer ID also..
                     current[0] = max + 1;

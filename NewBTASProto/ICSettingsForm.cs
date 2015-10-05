@@ -90,43 +90,92 @@ namespace NewBTASProto
 
             try
             {
-                comboBox1.SelectedIndex = ((Main_Form)this.Owner).dataGridView1.CurrentRow.Index;
-                comboBox2.Text = reverseTestMode[GlobalVars.ICSettings[comboBox1.SelectedIndex].KM1 - 48];
-                comboBox3.SelectedText = reverseAction[GlobalVars.ICSettings[comboBox1.SelectedIndex].KE3];
+                //save the current index
+                int selectedIndex = ((Main_Form)this.Owner).dataGridView1.CurrentRow.Index;
+                //now find out which (if any charger is associated with this station
+                int CID = 0;
+                if (((Main_Form)this.Owner).d.Rows[selectedIndex][9].ToString() == "") { comboBox1.SelectedIndex = 0; }
+                else if (((Main_Form)this.Owner).d.Rows[selectedIndex][9].ToString().Length == 3)
+                {
+                    CID = int.Parse(((Main_Form)this.Owner).d.Rows[selectedIndex][9].ToString().Substring(0, 1));
+                    comboBox1.SelectedIndex = CID;
+                }
+                else if (((Main_Form)this.Owner).d.Rows[selectedIndex][9].ToString().Length == 4)
+                {
+                    CID = int.Parse(((Main_Form)this.Owner).d.Rows[selectedIndex][9].ToString().Substring(0, 2));
+                    comboBox1.SelectedIndex = CID;
+                }
+                else
+                {
+                    CID = int.Parse(((Main_Form)this.Owner).d.Rows[selectedIndex][9].ToString());
+                    comboBox1.SelectedIndex = CID;
+                }
+
+
+                comboBox2.Text = reverseTestMode[GlobalVars.ICSettings[CID].KM1 - 48];
+                comboBox3.SelectedText = reverseAction[GlobalVars.ICSettings[CID].KE3];
                 // Primary Charge
                 //time
-                numericUpDown1.Value = GlobalVars.ICSettings[comboBox1.SelectedIndex].KM2 - 48;
-                numericUpDown2.Value = GlobalVars.ICSettings[comboBox1.SelectedIndex].KM3 - 48;
+                numericUpDown1.Value = GlobalVars.ICSettings[CID].KM2 - 48;
+                numericUpDown2.Value = GlobalVars.ICSettings[CID].KM3 - 48;
                 //current
-                remainder = ((float)(GlobalVars.ICSettings[comboBox1.SelectedIndex].KM5 - 48) / 10);
-                numericUpDown3.Value = (decimal) ((GlobalVars.ICSettings[comboBox1.SelectedIndex].KM4 - 48) * 10 + remainder);
+                if (((Main_Form)this.Owner).d.Rows[selectedIndex][10].ToString().Contains("mini"))
+                {
+                    remainder = ((float)(GlobalVars.ICSettings[CID].KM5 - 48) / 1000);
+                    numericUpDown3.Value = (decimal)((double)(GlobalVars.ICSettings[CID].KM4 - 48) / 10 + remainder);
+                }
+                else
+                {
+                    remainder = ((float)(GlobalVars.ICSettings[CID].KM5 - 48) / 10);
+                    numericUpDown3.Value = (decimal)((GlobalVars.ICSettings[CID].KM4 - 48) * 10 + remainder);
+                }
+
                 //voltage
-                remainder = ((float)(GlobalVars.ICSettings[comboBox1.SelectedIndex].KM7- 48) / 100 );
-                numericUpDown4.Value = (decimal) ((GlobalVars.ICSettings[comboBox1.SelectedIndex].KM6 - 48) + remainder);
+                remainder = ((float)(GlobalVars.ICSettings[CID].KM7- 48) / 100 );
+                numericUpDown4.Value = (decimal) ((GlobalVars.ICSettings[CID].KM6 - 48) + remainder);
                 //Secondary Charge
                 //time
-                numericUpDown8.Value = GlobalVars.ICSettings[comboBox1.SelectedIndex].KM8 - 48;
-                numericUpDown7.Value = GlobalVars.ICSettings[comboBox1.SelectedIndex].KM9 - 48;
+                numericUpDown8.Value = GlobalVars.ICSettings[CID].KM8 - 48;
+                numericUpDown7.Value = GlobalVars.ICSettings[CID].KM9 - 48;
                 //current
-                remainder = ((float)(GlobalVars.ICSettings[comboBox1.SelectedIndex].KM11 - 48) / 10);
-                numericUpDown6.Value = (decimal)((GlobalVars.ICSettings[comboBox1.SelectedIndex].KM10 - 48) * 10 + remainder);
+                //current
+                if (((Main_Form)this.Owner).d.Rows[selectedIndex][10].ToString().Contains("mini"))
+                {
+                    remainder = ((float)(GlobalVars.ICSettings[CID].KM11 - 48) / 1000);
+                    numericUpDown6.Value = (decimal)((double)(GlobalVars.ICSettings[CID].KM10 - 48) / 10 + remainder);
+                }
+                else
+                {
+                    remainder = ((float)(GlobalVars.ICSettings[CID].KM11 - 48) / 10);
+                    numericUpDown6.Value = (decimal)((GlobalVars.ICSettings[CID].KM10 - 48) * 10 + remainder);
+                }
+
                 //voltage
-                remainder = ((float)(GlobalVars.ICSettings[comboBox1.SelectedIndex].KM13 - 48) / 100);
-                numericUpDown5.Value = (decimal)((GlobalVars.ICSettings[comboBox1.SelectedIndex].KM12 - 48) + remainder);
+                remainder = ((float)(GlobalVars.ICSettings[CID].KM13 - 48) / 100);
+                numericUpDown5.Value = (decimal)((GlobalVars.ICSettings[CID].KM12 - 48) + remainder);
 
                 //Discharge
                 //time
-                numericUpDown12.Value = GlobalVars.ICSettings[comboBox1.SelectedIndex].KM14 - 48;
-                numericUpDown11.Value = GlobalVars.ICSettings[comboBox1.SelectedIndex].KM15 - 48;
+                numericUpDown12.Value = GlobalVars.ICSettings[CID].KM14 - 48;
+                numericUpDown11.Value = GlobalVars.ICSettings[CID].KM15 - 48;
                 //current
-                remainder = ((float)(GlobalVars.ICSettings[comboBox1.SelectedIndex].KM17 - 48) / 10);
-                numericUpDown10.Value = (decimal)((GlobalVars.ICSettings[comboBox1.SelectedIndex].KM16 - 48) * 10 + remainder);
+                if (((Main_Form)this.Owner).d.Rows[selectedIndex][10].ToString().Contains("mini"))
+                {
+                    remainder = ((float)(GlobalVars.ICSettings[CID].KM17 - 48) / 1000);
+                    numericUpDown10.Value = (decimal)((double)(GlobalVars.ICSettings[CID].KM16 - 48) / 10 + remainder);
+                }
+                else
+                {
+                    remainder = ((float)(GlobalVars.ICSettings[CID].KM17 - 48) / 10);
+                    numericUpDown10.Value = (decimal)((GlobalVars.ICSettings[CID].KM16 - 48) * 10 + remainder);
+                }
+
                 //voltage
-                remainder = ((float)(GlobalVars.ICSettings[comboBox1.SelectedIndex].KM19 - 48) / 100);
-                numericUpDown9.Value = (decimal)((GlobalVars.ICSettings[comboBox1.SelectedIndex].KM18 - 48) + remainder);
+                remainder = ((float)(GlobalVars.ICSettings[CID].KM19 - 48) / 100);
+                numericUpDown9.Value = (decimal)((GlobalVars.ICSettings[CID].KM18 - 48) + remainder);
                 //Ohms
-                remainder = ((float)(GlobalVars.ICSettings[comboBox1.SelectedIndex].KM21 - 48) / 100);
-                numericUpDown13.Value = (decimal)((GlobalVars.ICSettings[comboBox1.SelectedIndex].KM20 - 48) + remainder);
+                remainder = ((float)(GlobalVars.ICSettings[CID].KM21 - 48) / 100);
+                numericUpDown13.Value = (decimal)((GlobalVars.ICSettings[CID].KM20 - 48) + remainder);
 
             }
             catch (Exception ex)
@@ -142,6 +191,52 @@ namespace NewBTASProto
 
         private void button1_Click(object sender, EventArgs e)
         {
+            // first let's get the station number for the charger, so we can see what type it is.
+            int station = 99;
+            for(int i = 0; i < 16; i++)
+            {
+                // first check that we are not trying to parse nothing...
+                if (((Main_Form)this.Owner).d.Rows[i][9].ToString() != "")
+                {
+                    if (((Main_Form)this.Owner).d.Rows[i][9].ToString().Length == 3)
+                    {
+                        //do we have the correct station
+                        if (comboBox1.SelectedIndex == int.Parse(((Main_Form)this.Owner).d.Rows[i][9].ToString().Substring(0,1)))
+                        {
+                            station = i;
+                            break;
+                        }
+
+                    }// end 3 char if
+                    else if (((Main_Form)this.Owner).d.Rows[i][9].ToString().Length == 4)
+                    {
+                        //do we have the correct station
+                        if (comboBox1.SelectedIndex == int.Parse(((Main_Form)this.Owner).d.Rows[i][9].ToString().Substring(0,2)))
+                        {
+                            station = i;
+                            break;
+                        }
+                    }// end 4 char if
+                    else 
+                    {
+                        //do we have the correct station
+                        if (comboBox1.SelectedIndex == int.Parse(((Main_Form)this.Owner).d.Rows[i][9].ToString()))
+                        {
+                            station = i;
+                            break;
+                        }
+                    }// end standard if
+                }// end null check if
+
+            }// end for
+            if(station == 99)
+            {
+                //the station isn't there
+                MessageBox.Show("The charger ID you selected isn't valid");
+                return;
+            }
+            
+            
             // set KE1 to data
             GlobalVars.ICSettings[comboBox1.SelectedIndex].KE1 = (byte) 1;
             // update KM1
@@ -155,9 +250,21 @@ namespace NewBTASProto
 
             // Charge Current 1
             // update KM4
-             GlobalVars.ICSettings[comboBox1.SelectedIndex].KM4 = (byte)(numericUpDown3.Value / 10 + 48);
-            //update KM5
-            GlobalVars.ICSettings[comboBox1.SelectedIndex].KM5 = (byte)((numericUpDown3.Value % 10)*10 + 48);
+            if(((Main_Form)this.Owner).d.Rows[station][10].ToString().Contains("mini"))
+            {
+                //mini case
+                GlobalVars.ICSettings[comboBox1.SelectedIndex].KM4 = (byte)(numericUpDown3.Value * 10 + 48);
+                //update KM5
+                GlobalVars.ICSettings[comboBox1.SelectedIndex].KM5 = (byte)((0) + 48);
+            }
+            else
+            {
+                // all other cases
+                GlobalVars.ICSettings[comboBox1.SelectedIndex].KM4 = (byte)(numericUpDown3.Value / 10 + 48);
+                //update KM5
+                GlobalVars.ICSettings[comboBox1.SelectedIndex].KM5 = (byte)((numericUpDown3.Value % 10)*10 + 48);
+            }
+
 
             // Charge Voltage 1
             //update KM6
@@ -175,9 +282,21 @@ namespace NewBTASProto
 
             // Charge Current 2
             // update KM10
-            GlobalVars.ICSettings[comboBox1.SelectedIndex].KM10 = (byte)(numericUpDown6.Value / 10 + 48);
-            //update KM11
-            GlobalVars.ICSettings[comboBox1.SelectedIndex].KM11 = (byte)((numericUpDown6.Value % 10) * 10 + 48);
+            if (((Main_Form)this.Owner).d.Rows[station][10].ToString().Contains("mini"))
+            {
+                //mini case
+                GlobalVars.ICSettings[comboBox1.SelectedIndex].KM10 = (byte)(numericUpDown6.Value * 10 + 48);
+                //update KM11
+                GlobalVars.ICSettings[comboBox1.SelectedIndex].KM11 = (byte)((0) + 48);
+            }
+            else
+            {
+                // all other cases
+                GlobalVars.ICSettings[comboBox1.SelectedIndex].KM10 = (byte)(numericUpDown6.Value / 10 + 48);
+                //update KM11
+                GlobalVars.ICSettings[comboBox1.SelectedIndex].KM11 = (byte)((numericUpDown6.Value % 10) * 10 + 48);
+            }
+
 
             // Charge Voltage 2
             //update KM12
@@ -195,9 +314,20 @@ namespace NewBTASProto
 
             // Discharge Current
             // update KM16
-            GlobalVars.ICSettings[comboBox1.SelectedIndex].KM16 = (byte)(numericUpDown10.Value / 10 + 48);
-            //update KM17
-            GlobalVars.ICSettings[comboBox1.SelectedIndex].KM17 = (byte)((numericUpDown10.Value % 10) * 10 + 48);
+            if (((Main_Form)this.Owner).d.Rows[station][10].ToString().Contains("mini"))
+            {
+                //mini case
+                GlobalVars.ICSettings[comboBox1.SelectedIndex].KM16 = (byte)(numericUpDown10.Value * 1 + 48);
+                //update KM17
+                GlobalVars.ICSettings[comboBox1.SelectedIndex].KM17 = (byte)((numericUpDown10.Value % 1) * 100 + 48);
+            }
+            else
+            {
+                // all other cases
+                GlobalVars.ICSettings[comboBox1.SelectedIndex].KM16 = (byte)(numericUpDown10.Value / 10 + 48);
+                //update KM17
+                GlobalVars.ICSettings[comboBox1.SelectedIndex].KM17 = (byte)((numericUpDown10.Value % 10) * 10 + 48);
+            }
 
             // Discharge Voltage
             //update KM18

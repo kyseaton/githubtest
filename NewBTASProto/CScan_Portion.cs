@@ -45,6 +45,19 @@ namespace NewBTASProto
         int cell1 = 0;
         int type1 = 0;
 
+        // prevent double fill combobox threads with the variable...
+        // 99 is the start up value
+        int oldRow = 99;
+
+        //we are using this bool to say that we can go ahead and fill up the combo boxes
+        //set it true when we get a good read
+        //set if false otherwise
+
+        bool goodRead = false;
+
+        //to prevent plot gitter
+        bool lockUpdate = false;
+
 
         public void pollCScans()
         {
@@ -99,24 +112,27 @@ namespace NewBTASProto
 
                                     // send the polling command
                                     string outText;
-                                    if (GlobalVars.cHold[dataGridView1.CurrentRow.Index])
-                                    { outText = "~" + (dataGridView1.CurrentRow.Index + 16).ToString("00") + "L10Z"; }
+                                    int currentRow = dataGridView1.CurrentRow.Index;
+                                    if (GlobalVars.cHold[currentRow])
+                                    { outText = "~" + (currentRow + 16).ToString("00") + "L10Z"; }
                                     else
-                                    { outText = "~" + (dataGridView1.CurrentRow.Index + 16).ToString("00") + "L00Z"; }
+                                    { outText = "~" + (currentRow + 16).ToString("00") + "L00Z"; }
                                     CSCANComPort.Write(outText);
                                     // wait for a response
                                     
                                     tempBuff = CSCANComPort.ReadTo("Z");
                                     // close the comport
                                     CSCANComPort.Close();
+                                    //we got a good read...
+                                    goodRead = true;
                                     //do something with the new data
                                     char[] delims = { ' ' };
                                     string[] A = tempBuff.Split(delims);
                                     //A[1] has the terminal ID in it
                                     testData = new CScanDataStore(A);
-                                    GlobalVars.CScanData[dataGridView1.CurrentRow.Index] = testData;
+                                    GlobalVars.CScanData[currentRow] = testData;
 
-                                    if ((bool)d.Rows[dataGridView1.CurrentRow.Index][4] && tempClick == dataGridView1.CurrentRow.Index)  // test to see if we've clicked in the mean time...
+                                    if ((bool)d.Rows[currentRow][4] && tempClick == currentRow)  // test to see if we've clicked in the mean time...
                                     {
                                         
                                         //put this new data in the chart!
@@ -124,7 +140,7 @@ namespace NewBTASProto
                                         {
                                             
                                             // first set the cell to green
-                                            dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[4].Style.BackColor = Color.Green;
+                                            dataGridView1.Rows[currentRow].Cells[4].Style.BackColor = Color.Green;
 
                                             //update chart function
                                             updateChart(testData);
@@ -141,10 +157,27 @@ namespace NewBTASProto
                                             tempText += "Voltage Batt 2:  " + testData.VB2.ToString("00.00") + Environment.NewLine;
                                             tempText += "Voltage Batt 3:  " + testData.VB3.ToString("00.00") + Environment.NewLine;
                                             tempText += "Voltage Batt 4:  " + testData.VB4.ToString("00.00") + Environment.NewLine;
-                                            tempText += "Current#1:  " + testData.currentOne.ToString("00.00") + Environment.NewLine;
-                                            tempText += "Current#2:  " + testData.currentTwo.ToString("00.00") + Environment.NewLine;
+                                            // select which currents to display
+                                            if (testData.shuntCableType == "TEST BOX")
+                                            {
+                                                //dispaly both ...
+                                                tempText += "Current#1:  " + testData.currentOne.ToString("00.00") + Environment.NewLine;
+                                                tempText += "Current#2:  " + testData.currentTwo.ToString("00.00") + Environment.NewLine;
+                                            }
+                                            else if (GlobalVars.curr2Dis[currentRow]) 
+                                            {
+                                                // for the mini case (not currently working
+                                                tempText += "Current#2:  " + testData.currentTwo.ToString("00.00") + Environment.NewLine; 
+                                            }
+                                            else
+                                            {
+                                                // all other cases
+                                                tempText += "Current:  " + testData.currentOne.ToString("00.00") + Environment.NewLine;
+                                            }
+                                            
 
-                                            for (int i = 0; i < GlobalVars.CScanData[dataGridView1.CurrentRow.Index].cellsToDisplay; i++)
+
+                                            for (int i = 0; i < GlobalVars.CScanData[currentRow].cellsToDisplay; i++)
                                             {
                                                 tempText += "Cell #" + (i + 1).ToString() + ":  " + testData.orderedCells[i].ToString("0.000") + Environment.NewLine;
                                             }
@@ -254,30 +287,49 @@ namespace NewBTASProto
 
                                         ///////UPDATE CSCAN chargers here!////////////////////////////////////////////////////////
 
-                                        if ((bool)d.Rows[dataGridView1.CurrentRow.Index][8] &&
-                                            GlobalVars.CScanData[dataGridView1.CurrentRow.Index].connected &&
-                                            (d.Rows[dataGridView1.CurrentRow.Index][10].ToString() == "" || dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor != Color.Green || dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor != Color.Red))  // if a charger type isn't already there maybe we need to update with a CSCAN controlled charger...
+                                        currentRow = dataGridView1.CurrentRow.Index;
+
+                                        if ((bool)d.Rows[currentRow][8] &&
+                                            GlobalVars.CScanData[currentRow].connected &&
+                                            (d.Rows[currentRow][10].ToString() == "" || dataGridView1.Rows[currentRow].Cells[8].Style.BackColor != Color.Olive || dataGridView1.Rows[currentRow].Cells[8].Style.BackColor != Color.Red))  // if a charger type isn't already there maybe we need to update with a CSCAN controlled charger...
                                         {
                                             // we got a CSCAN connected charger...
-                                            updateD(dataGridView1.CurrentRow.Index, 10, "CCA");
-                                            if (GlobalVars.CScanData[dataGridView1.CurrentRow.Index].powerOn) { this.Invoke((MethodInvoker)delegate { dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.Green; }); }
-                                            else { this.Invoke((MethodInvoker)delegate { dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.Red; }); }
+                                            updateD(currentRow, 10, "CCA");
+                                            if (GlobalVars.CScanData[currentRow].powerOn) { this.Invoke((MethodInvoker)delegate { dataGridView1.Rows[currentRow].Cells[8].Style.BackColor = Color.Olive; }); }
+                                            else { this.Invoke((MethodInvoker)delegate { dataGridView1.Rows[currentRow].Cells[8].Style.BackColor = Color.Red; }); }
                                         }
                                         //
-                                        else if ((bool)d.Rows[dataGridView1.CurrentRow.Index][8] && GlobalVars.CScanData[dataGridView1.CurrentRow.Index].connected == false && d.Rows[dataGridView1.CurrentRow.Index][10].ToString() == "CCA")
+                                        else if ((bool)d.Rows[currentRow][8] && GlobalVars.CScanData[currentRow].connected == false && d.Rows[currentRow][10].ToString() == "CCA")
                                         {
-                                            updateD(dataGridView1.CurrentRow.Index, 10, "");
-                                            this.Invoke((MethodInvoker)delegate { dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.Gainsboro; });
+                                            updateD(currentRow, 10, "");
+                                            this.Invoke((MethodInvoker)delegate { dataGridView1.Rows[currentRow].Cells[8].Style.BackColor = Color.Gainsboro; });
                                         }
-                                        else if (dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor == Color.Green && GlobalVars.CScanData[dataGridView1.CurrentRow.Index].powerOn == false && d.Rows[dataGridView1.CurrentRow.Index][10].ToString() == "CCA")
+                                        else if (dataGridView1.Rows[currentRow].Cells[8].Style.BackColor == Color.Olive && GlobalVars.CScanData[currentRow].powerOn == false && d.Rows[currentRow][10].ToString() == "CCA")
                                         {
-                                            this.Invoke((MethodInvoker)delegate { dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.Red; });
+                                            this.Invoke((MethodInvoker)delegate { dataGridView1.Rows[currentRow].Cells[8].Style.BackColor = Color.Red; });
                                         }
-                                        else if (dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor == Color.Red && GlobalVars.CScanData[dataGridView1.CurrentRow.Index].powerOn && d.Rows[dataGridView1.CurrentRow.Index][10].ToString() == "CCA")
+                                        else if (dataGridView1.Rows[currentRow].Cells[8].Style.BackColor == Color.Red && GlobalVars.CScanData[currentRow].powerOn && d.Rows[currentRow][10].ToString() == "CCA")
                                         {
-                                            this.Invoke((MethodInvoker)delegate { dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.Green; });
+                                            this.Invoke((MethodInvoker)delegate { dataGridView1.Rows[currentRow].Cells[8].Style.BackColor = Color.Olive; });
                                         }
                                         
+                                    }
+
+                                    ///////If nothing else do we at least have a shunt???!////////////////////////////////////////////////////////
+
+                                    if ((bool)d.Rows[currentRow][8] && d.Rows[currentRow][10].ToString() == "" && GlobalVars.CScanData[currentRow].shuntCableType != "NONE")
+                                    {
+                                        updateD(currentRow, 10, "Shunt");
+                                        this.Invoke((MethodInvoker)delegate { dataGridView1.Rows[currentRow].Cells[8].Style.BackColor = Color.CadetBlue; });
+                                    }
+                                    else if ((bool)d.Rows[currentRow][8] && d.Rows[currentRow][10].ToString() == "Shunt" && GlobalVars.CScanData[currentRow].shuntCableType != "NONE")
+                                    {
+                                        this.Invoke((MethodInvoker)delegate { dataGridView1.Rows[currentRow].Cells[8].Style.BackColor = Color.CadetBlue; });
+                                    }
+                                    else if ((bool)d.Rows[currentRow][8] && d.Rows[currentRow][10].ToString() == "Shunt" && GlobalVars.CScanData[currentRow].shuntCableType == "NONE")
+                                    {
+                                        updateD(currentRow, 10, "");
+                                        this.Invoke((MethodInvoker)delegate { dataGridView1.Rows[currentRow].Cells[8].Style.BackColor = Color.Gainsboro; });
                                     }
                                 }
                                 catch (Exception ex)
@@ -344,7 +396,7 @@ namespace NewBTASProto
                                         CSCANComPort.Open();
                                         // send the polling command
                                         string outText;
-                                        if (GlobalVars.cHold[dataGridView1.CurrentRow.Index])
+                                        if (GlobalVars.cHold[j])
                                         { outText = "~" + (j + 16).ToString("00") + "L10Z"; }
                                         else
                                         { outText = "~" + (j + 16).ToString("00") + "L00Z"; }
@@ -375,11 +427,11 @@ namespace NewBTASProto
                                         {
                                             if ((bool)d.Rows[j][8] &&
                                                 GlobalVars.CScanData[j].connected &&
-                                                (d.Rows[j][10].ToString() == "" || dataGridView1.Rows[j].Cells[8].Style.BackColor != Color.Green || dataGridView1.Rows[j].Cells[8].Style.BackColor != Color.Red))  // if a charger type isn't already there maybe we need to update with a CSCAN controlled charger...
+                                                (d.Rows[j][10].ToString() == "" || dataGridView1.Rows[j].Cells[8].Style.BackColor != Color.Olive || dataGridView1.Rows[j].Cells[8].Style.BackColor != Color.Red))  // if a charger type isn't already there maybe we need to update with a CSCAN controlled charger...
                                             {
                                                 // we got a CSCAN connected charger...
                                                 updateD(j, 10, "CCA");
-                                                if (GlobalVars.CScanData[j].powerOn) { this.Invoke((MethodInvoker)delegate { dataGridView1.Rows[j].Cells[8].Style.BackColor = Color.Green; }); }
+                                                if (GlobalVars.CScanData[j].powerOn) { this.Invoke((MethodInvoker)delegate { dataGridView1.Rows[j].Cells[8].Style.BackColor = Color.Olive; }); }
                                                 else { this.Invoke((MethodInvoker)delegate { dataGridView1.Rows[j].Cells[8].Style.BackColor = Color.Red; }); }
                                             }
                                             //
@@ -388,14 +440,31 @@ namespace NewBTASProto
                                                 updateD(j, 10, "");
                                                 this.Invoke((MethodInvoker)delegate { dataGridView1.Rows[j].Cells[8].Style.BackColor = Color.Gainsboro; });
                                             }
-                                            else if (dataGridView1.Rows[j].Cells[8].Style.BackColor == Color.Green && GlobalVars.CScanData[j].powerOn == false && d.Rows[j][10].ToString() == "CCA")
+                                            else if (dataGridView1.Rows[j].Cells[8].Style.BackColor == Color.Olive && GlobalVars.CScanData[j].powerOn == false && d.Rows[j][10].ToString() == "CCA")
                                             {
                                                 this.Invoke((MethodInvoker)delegate { dataGridView1.Rows[j].Cells[8].Style.BackColor = Color.Red; });
                                             }
                                             else if (dataGridView1.Rows[j].Cells[8].Style.BackColor == Color.Red && GlobalVars.CScanData[j].powerOn && d.Rows[j][10].ToString() == "CCA")
                                             {
-                                                this.Invoke((MethodInvoker)delegate { dataGridView1.Rows[j].Cells[8].Style.BackColor = Color.Green; });
+                                                this.Invoke((MethodInvoker)delegate { dataGridView1.Rows[j].Cells[8].Style.BackColor = Color.Olive; });
                                             }
+                                        }
+
+                                        ///////If nothing else do we at least have a shunt???!////////////////////////////////////////////////////////
+                                        
+                                        if ((bool)d.Rows[j][8] && d.Rows[j][10].ToString() == "" && GlobalVars.CScanData[j].shuntCableType != "NONE")
+                                        {
+                                            updateD(j, 10, "Shunt");
+                                            this.Invoke((MethodInvoker)delegate { dataGridView1.Rows[j].Cells[8].Style.BackColor = Color.CadetBlue; });
+                                        }
+                                        else if ((bool)d.Rows[j][8] && d.Rows[j][10].ToString() == "Shunt" && GlobalVars.CScanData[j].shuntCableType != "NONE")
+                                        {
+                                            this.Invoke((MethodInvoker)delegate { dataGridView1.Rows[j].Cells[8].Style.BackColor = Color.CadetBlue; });
+                                        }
+                                        else if ((bool)d.Rows[j][8] && d.Rows[j][10].ToString() == "Shunt" && GlobalVars.CScanData[j].shuntCableType == "NONE")
+                                        {
+                                            updateD(j, 10, "");
+                                            this.Invoke((MethodInvoker)delegate { dataGridView1.Rows[j].Cells[8].Style.BackColor = Color.Gainsboro; });
                                         }
 
                                     }  // end try
@@ -448,10 +517,69 @@ namespace NewBTASProto
             //Replace based on values selected in radio1("Battery") or radio2 ("Cells")
             //and combo2 (Battery voltages) or combo3 (Cell voltages)
             //if that row is selected, update the chart portion
+            int station = dataGridView1.CurrentRow.Index;
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            if (station != testData.terminalID || lockUpdate)
+            {
+                // we got bad input data due to multithreading...
+                // or we are updating the combos..
+                return;
+            }
+            //special 4 batt case
+            else if ((comboBox2.Enabled == false || (radioButton2.Checked == true && comboBox3.Text == "Current Voltages")) && testData.CCID == 10)
+            {
+                //In this case we have a 4 Batt cable, but do not have a current test running.  We will display V1, V2, V3 and V4 on the main graph
+                chart1.Series.Clear();
+
+                var series1 = new System.Windows.Forms.DataVisualization.Charting.Series
+                {
+                    Name = "Series1",
+                    Color = System.Drawing.Color.Green,
+                    IsVisibleInLegend = false,
+                    IsXValueIndexed = true,
+                    ChartType = SeriesChartType.Column,
+                    BorderColor = System.Drawing.Color.DarkGray,
+                    BorderWidth = 1
+                };
+                this.chart1.Series.Add(series1);
+                chart1.ChartAreas[0].AxisX.Title = "Battery";
+                chart1.ChartAreas[0].AxisY.Title = "Voltage";
+
+                int type = 4;
+
+                if ((string)d.Rows[station][2] == "As Received" ||
+                    (string)d.Rows[station][2] == "Capacity-1" ||
+                    (string)d.Rows[station][2] == "Test" ||
+                    (string)d.Rows[station][2] == "Custom Cap")
+                {
+                    type = 2;
+                }
+                else if ((string)d.Rows[station][2] == "Discharge")
+                {
+                    type = 0;
+                }
+
+                series1.Points.AddXY(1, testData.VB1);
+                series1.Points[0].Color = pointColorMain(0, 1, testData.VB1, type);
+                series1.Points[0].Label = "VB1";
+                series1.Points.AddXY(2, testData.VB2);
+                series1.Points[1].Color = pointColorMain(0, 1, testData.VB2, type);
+                series1.Points[1].Label = "VB2";
+                series1.Points.AddXY(3, testData.VB3);
+                series1.Points[2].Color = pointColorMain(0, 1, testData.VB3, type);
+                series1.Points[2].Label = "VB3";
+                series1.Points.AddXY(4, testData.VB4);
+                series1.Points[3].Color = pointColorMain(0, 1, testData.VB4, type);
+                series1.Points[3].Label = "VB4";
+
+
+                chart1.Invalidate();
+                chart1.ChartAreas[0].RecalculateAxesScale();
+
+            }
             //Normal Cell Voltage Only Case:
-            if (comboBox2.Enabled == false || (radioButton2.Checked == true && comboBox3.Text == "Cell Voltages"))
+            else if (comboBox2.Enabled == false || (radioButton2.Checked == true && comboBox3.Text == "Cell Voltages"))
             {
                 chart1.Series.Clear();
                 
@@ -471,19 +599,19 @@ namespace NewBTASProto
 
                 int type = 4;
 
-                if ((string)d.Rows[dataGridView1.CurrentRow.Index][2] == "As Received" ||
-                    (string)d.Rows[dataGridView1.CurrentRow.Index][2] == "Capacity-1" ||
-                    (string)d.Rows[dataGridView1.CurrentRow.Index][2] == "Test" ||
-                    (string)d.Rows[dataGridView1.CurrentRow.Index][2] == "Custom Cap")
+                if ((string)d.Rows[station][2] == "As Received" ||
+                    (string)d.Rows[station][2] == "Capacity-1" ||
+                    (string)d.Rows[station][2] == "Test" ||
+                    (string)d.Rows[station][2] == "Custom Cap")
                 {
                     type = 2;
                 }
-                else if ((string)d.Rows[dataGridView1.CurrentRow.Index][2] == "Discharge")
+                else if ((string)d.Rows[station][2] == "Discharge")
                 {
                     type = 0;
                 }
 
-                for (int i = 0; i < GlobalVars.CScanData[dataGridView1.CurrentRow.Index].cellsToDisplay; i++)
+                for (int i = 0; i < GlobalVars.CScanData[station].cellsToDisplay; i++)
                 {
                     series1.Points.AddXY(i + 1, testData.orderedCells[i]);
                     // color test
@@ -569,10 +697,78 @@ namespace NewBTASProto
 
                     for (int i = 0; i < graphMainSet.Tables[0].Rows.Count; i++)
                     {
-                        series1.Points.AddXY((int)(double.Parse(graphMainSet.Tables[0].Rows[i][7].ToString()) * 1440), graphMainSet.Tables[0].Rows[i][q]);
+                        series1.Points.AddXY(Math.Round(double.Parse(graphMainSet.Tables[0].Rows[i][7].ToString()) * 1440), graphMainSet.Tables[0].Rows[i][q]);
                         // color test
                         series1.Points[i].Color = pointColorMain(technology1, cell1, double.Parse(graphMainSet.Tables[0].Rows[i][q].ToString()), type1);
                     }
+
+                                            // pad with zero Vals to help with the look of the plot...
+                        // first get the interval and total points
+                        int interval = 1;
+                        int points = 61;
+
+                        switch (d.Rows[station][2].ToString())
+                        {
+                            case "As Received":
+                                interval = 1 / 30;
+                                points = 3;
+                                break;
+                            case "Full Charge-6":
+                                interval = 5;
+                                points = 73;
+                                break;
+                            case "Full Charge-4":
+                                interval = 4;
+                                points = 61;
+                                break;
+                            case "Top Charge-4":
+                                interval = 4;
+                                points = 61;
+                                break;
+                            case "Top Charge-2":
+                                interval = 3;
+                                points = 41;
+                                break;
+                            case "Top Charge-1":
+                                interval = 1;
+                                points = 61;
+                                break;
+                            case "Constant Voltage":
+                                interval = 5;
+                                points = 73;
+                                break;
+                            case "Capacity-1":
+                                interval = 1;
+                                points = 61;
+                                break;
+                            case "Discharge":
+                                interval = 1;
+                                points = 61;
+                                break;
+                            case "Slow Charge-14":
+                                interval = 12;
+                                points = 73;
+                                break;
+                            case "SlowCharge-16":
+                                interval = 16;
+                                points = 61;
+                                break;
+                            default:
+                                //custom cap and charge get the default...
+                                //Custom Chg
+                                //Custom Cap
+                                break;
+                        }
+
+
+                        if (graphMainSet.Tables[0].Rows.Count <= points-1)
+                        {
+                            for (int i = graphMainSet.Tables[0].Rows.Count; i <= points-1; i++)
+                            {
+                                series1.Points.AddXY(i*interval, 0);
+                            }
+                        }
+            
 
                     chart1.Invalidate();
                     chart1.ChartAreas[0].RecalculateAxesScale();
@@ -589,6 +785,8 @@ namespace NewBTASProto
             {
                 try
                 {
+                    chart1.ChartAreas[0].AxisY.Title = "Voltage";
+                    chart1.ChartAreas[0].AxisX.Title = "Time";
                     int q;
                     // only do something if the radio button is selected
                     if (radioButton2.Checked == false || comboBox3.SelectedIndex < 0) { return; }
@@ -674,6 +872,7 @@ namespace NewBTASProto
                             break;
                         default:
                             q = 999;
+                            chart1.ChartAreas[0].AxisX.Title = "Cells";
                             break;
                     }
 
@@ -704,9 +903,75 @@ namespace NewBTASProto
                     {
                         for (int i = 0; i < graphMainSet.Tables[0].Rows.Count; i++)
                         {
-                            series1.Points.AddXY((int)(double.Parse(graphMainSet.Tables[0].Rows[i][7].ToString()) * 1440), graphMainSet.Tables[0].Rows[i][q]);
+                            series1.Points.AddXY(Math.Round(double.Parse(graphMainSet.Tables[0].Rows[i][7].ToString()) * 1440), graphMainSet.Tables[0].Rows[i][q]);
                             // color test
                             series1.Points[i].Color = pointColorMain(technology1, 1, double.Parse(graphMainSet.Tables[0].Rows[i][q].ToString()), type1);
+                        }
+                        // pad with zero Vals to help with the look of the plot...
+                        // first get the interval and total points
+                        int interval = 1;
+                        int points = 61;
+
+                        switch (d.Rows[station][2].ToString())
+                        {
+                            case "As Received":
+                                interval = 1 / 30;
+                                points = 3;
+                                break;
+                            case "Full Charge-6":
+                                interval = 5;
+                                points = 73;
+                                break;
+                            case "Full Charge-4":
+                                interval = 4;
+                                points = 61;
+                                break;
+                            case "Top Charge-4":
+                                interval = 4;
+                                points = 61;
+                                break;
+                            case "Top Charge-2":
+                                interval = 3;
+                                points = 41;
+                                break;
+                            case "Top Charge-1":
+                                interval = 1;
+                                points = 61;
+                                break;
+                            case "Constant Voltage":
+                                interval = 5;
+                                points = 73;
+                                break;
+                            case "Capacity-1":
+                                interval = 1;
+                                points = 61;
+                                break;
+                            case "Discharge":
+                                interval = 1;
+                                points = 61;
+                                break;
+                            case "Slow Charge-14":
+                                interval = 12;
+                                points = 73;
+                                break;
+                            case "SlowCharge-16":
+                                interval = 16;
+                                points = 61;
+                                break;
+                            default:
+                                //custom cap and charge get the default...
+                                //Custom Chg
+                                //Custom Cap
+                                break;
+                        }
+
+
+                        if (graphMainSet.Tables[0].Rows.Count <= points-1)
+                        {
+                            for (int i = graphMainSet.Tables[0].Rows.Count; i <= points-1; i++)
+                            {
+                                series1.Points.AddXY(i*interval, 0);
+                            }
                         }
                     }
 
@@ -882,23 +1147,24 @@ namespace NewBTASProto
 
         }
 
+        //stor the current test to compare to the old test
+        string oldTest = "Nada";
+
         private void fillPlotCombos(int currentRow)
         {
+            if (currentRow == oldRow && oldTest == d.Rows[currentRow][2].ToString())
+            {
+                return;
+            }
+
+            oldTest = d.Rows[currentRow][2].ToString();
+
             ThreadPool.QueueUserWorkItem(s =>
                 {
-                    Thread.Sleep(1);
-                    string workOrder;
-                    string testStep;
-
-                    try
-                    {
-                        workOrder = d.Rows[currentRow][1].ToString();
-                        testStep = d.Rows[currentRow][3].ToString();
-                    }// end try
-                    catch { return; }
- 
-                    //make sure we have the info with which to act on...
-                    if (workOrder == "" || testStep == "") 
+                    lockUpdate = true;
+                    // first things first
+                    // if the cscan isn't in use then lets just set the drop downs to the default and return...
+                    if ((bool) d.Rows[currentRow][4] == false)
                     {
                         this.Invoke((MethodInvoker)delegate()
                         {
@@ -907,14 +1173,84 @@ namespace NewBTASProto
                             comboBox3.Items.Clear();
                             radioButton1.Enabled = false;
                             radioButton2.Enabled = false;
-                            radioButton2.Checked = true;
+                            updateR2(true);
                             comboBox2.Enabled = false;
                             comboBox3.Enabled = false;
+                            radioButton2.Text = "Cells";
                             comboBox3.Items.Add("Cell Voltages");
-                            comboBox3.Text = "Cell Voltages";
-                            return;
+                            updateC3("Cell Voltages");
                         });
 
+                        oldRow = currentRow;
+                        lockUpdate = false;
+                        return;
+                    }
+
+
+
+
+
+                    //wait for a good read
+                    for (int waitCount = 0; goodRead == false; waitCount++)
+                    {
+                        if (waitCount > 100) { break; }
+                        Thread.Sleep(100);
+                    }
+                    string workOrder;
+                    string testStep;
+
+                    //this is here to stop double row fill operations..
+
+                    oldRow = currentRow;
+
+                    try
+                    {
+                        workOrder = d.Rows[currentRow][1].ToString();
+                        testStep = d.Rows[currentRow][3].ToString();
+                    }// end try
+                    catch 
+                    {
+                        lockUpdate = false;
+                        return; 
+                    }
+ 
+                    //make sure we have the info with which to act on...
+                    if (workOrder == "" || testStep == "")
+                    {
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            try
+                            {
+                                // just set to the cells readings..
+                                comboBox2.Items.Clear();
+                                comboBox3.Items.Clear();
+                                radioButton1.Enabled = false;
+                                radioButton2.Enabled = false;
+                                updateR2(true);
+                                comboBox2.Enabled = false;
+                                comboBox3.Enabled = false;
+                                if (GlobalVars.CScanData[currentRow] == null)
+                                {
+                                    radioButton2.Text = "Cells";
+                                    comboBox3.Items.Add("Cell Voltages");
+                                    updateC3("Cell Voltages");
+                                }
+                                else if (GlobalVars.CScanData[currentRow].CCID == 10)
+                                {
+                                    radioButton2.Text = "Cur Vs";
+                                    comboBox3.Items.Add("Current Voltages");
+                                    updateC3("Current Voltages");
+                                }
+                                else
+                                {
+                                    radioButton2.Text = "Cells";
+                                    comboBox3.Items.Add("Cell Voltages");
+                                    updateC3("Cell Voltages");
+                                }
+                            }// end try
+                            catch { }// end catch
+                        });
+                        lockUpdate = false;
                     }
                     else
                     {
@@ -923,325 +1259,351 @@ namespace NewBTASProto
                             comboBox2.Enabled = false;
                             comboBox3.Enabled = false;
                         });
-                        
+
                         // do it on a helper thread!
-                        
-                        Thread.Sleep(10);
+
                         // FIRST CLEAR THE OLD DATA SET!
                         graphMainSet.Clear();
                         // Open database containing all the battery data....
                         string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB";
-                    string strAccessSelect = @"SELECT * FROM ScanData WHERE BWO='" + workOrder + @"' AND STEP='" + Int32.Parse(testStep).ToString("00") + @"'";
+                        string strAccessSelect = @"SELECT * FROM ScanData WHERE BWO='" + workOrder + @"' AND STEP='" + Int32.Parse(testStep).ToString("00") + @"' ORDER BY RDG ASC";
 
-                    //Here is where I load the form wide dataset which will both let me fill in the rest of the combo boxes and the graphs!
-                    OleDbConnection myAccessConn = null;
-                    // try to open the DB
-                    try
-                    {
-                        myAccessConn = new OleDbConnection(strAccessConn);
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
-                        return;
-                    }
-                    //  now try to access it
-                    try
-                    {
-                        OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
-                        OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
-
-                        lock (dataBaseLock)
+                        //Here is where I load the form wide dataset which will both let me fill in the rest of the combo boxes and the graphs!
+                        OleDbConnection myAccessConn = null;
+                        // try to open the DB
+                        try
                         {
-                            myAccessConn.Open();
-                            myDataAdapter.Fill(graphMainSet, "ScanData");
+                            myAccessConn = new OleDbConnection(strAccessConn);
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                            lockUpdate = false;
+                            return;
+                        }
+                        //  now try to access it
+                        try
+                        {
+                            OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                            OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                            lock (dataBaseLock)
+                            {
+                                myAccessConn.Open();
+                                myDataAdapter.Fill(graphMainSet, "ScanData");
+                                myAccessConn.Close();
+                            }
+
+
+                        }
+                        catch (Exception ex)
+                        {
                             myAccessConn.Close();
+                            MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                            lockUpdate = false;
+                            return;
                         }
 
 
-                    }
-                    catch (Exception ex)
-                    {
-                        myAccessConn.Close();
-                        MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
-                        return;
-                    }
+                        //we also need to figure out the type of battery being charged
+                        // Open database containing all the battery data....
+                        strAccessSelect = @"SELECT StepNumber,TestName, Technology, CustomNoCells FROM Tests WHERE WorkOrderNumber='" + workOrder + @"'";
 
 
-                    //we also need to figure out the type of battery being charged
-                    // Open database containing all the battery data....
-                    strAccessSelect = @"SELECT StepNumber,TestName, Technology, CustomNoCells FROM Tests WHERE WorkOrderNumber='" + workOrder + @"'";
-
-
-                    DataSet testsPerformed = new DataSet();
-                    myAccessConn = null;
-                    // try to open the DB
-                    try
-                    {
-                        myAccessConn = new OleDbConnection(strAccessConn);
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
-                        return;
-                    }
-                    //  now try to access it
-                    try
-                    {
-                        OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
-                        OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
-
-                        lock (dataBaseLock)
+                        DataSet testsPerformed = new DataSet();
+                        myAccessConn = null;
+                        // try to open the DB
+                        try
                         {
-                            myAccessConn.Open();
-                            myDataAdapter.Fill(testsPerformed, "Tests");
+                            myAccessConn = new OleDbConnection(strAccessConn);
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                            lockUpdate = false;
+                            return;
+                        }
+                        //  now try to access it
+                        try
+                        {
+                            OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                            OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                            lock (dataBaseLock)
+                            {
+                                myAccessConn.Open();
+                                myDataAdapter.Fill(testsPerformed, "Tests");
+                                myAccessConn.Close();
+                            }
+
+                        }
+                        catch (Exception ex)
+                        {
                             myAccessConn.Close();
+                            MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                            lockUpdate = false;
+                            return;
                         }
 
-                    }
-                    catch (Exception ex)
-                    {
-                        myAccessConn.Close();
-                        MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
-                        return;
-                    }
-
-                    //For the colors!!!!
-                    try
-                    {
-                        technology1 = (int)testsPerformed.Tables["Tests"].Rows[1][2];
-                        if (Int32.Parse(testsPerformed.Tables["Tests"].Rows[1][3].ToString()) != 0) { cell1 = Int32.Parse(testsPerformed.Tables["Tests"].Rows[1][3].ToString()); }
-                        else { cell1 = GlobalVars.CScanData[currentRow].cellsToDisplay; }
-                        // The final step is to update the type of test that was selected
-                        if (d.Rows[currentRow][3].ToString().Contains("As Recieved")) { type1 = 1; }
-                        else if (d.Rows[currentRow][3].ToString().Contains("Discharge")) { type1 = 2; }
-                        else if (d.Rows[currentRow][3].ToString().Contains("Cap")) { type1 = 3; }
-                        else { type1 = 0; }
-                    }
-                    catch
-                    {
-                        // didn't work
-                        // clear the workorder
-                        updateD(currentRow, 1, "");
-                        return;
-                    }
-
-
-
-                    string cellCable =  GlobalVars.CScanData[currentRow].CCID.ToString();
-
-                    this.Invoke((MethodInvoker)delegate()
-                    {
-                        switch (cellCable)
+                        //For the colors!!!!
+                        try
                         {
-                            case "1":
-                                // Battery combobox
-                                comboBox2.Items.Clear();
-                                comboBox2.Text = "";
-                                comboBox2.Items.Add("Voltage");
-                                comboBox2.Items.Add("Current");
-                                comboBox2.Items.Add("Temperature 1");
-                                comboBox2.Items.Add("Temperature 2");
-                                comboBox2.Items.Add("Temperature 3");
-                                comboBox2.Items.Add("Temperature 4");
-                                // Cells combobox
-                                comboBox3.Items.Clear();
-                                comboBox3.Text = "";
-                                comboBox3.Items.Add("Cell Voltages");
-                                comboBox3.Items.Add("Cell 1");
-                                comboBox3.Items.Add("Cell 2");
-                                comboBox3.Items.Add("Cell 3");
-                                comboBox3.Items.Add("Cell 4");
-                                comboBox3.Items.Add("Cell 5");
-                                comboBox3.Items.Add("Cell 6");
-                                comboBox3.Items.Add("Cell 7");
-                                comboBox3.Items.Add("Cell 8");
-                                comboBox3.Items.Add("Cell 9");
-                                comboBox3.Items.Add("Cell 10");
-                                comboBox3.Items.Add("Cell 11");
-                                comboBox3.Items.Add("Cell 12");
-                                comboBox3.Items.Add("Cell 13");
-                                comboBox3.Items.Add("Cell 14");
-                                comboBox3.Items.Add("Cell 15");
-                                comboBox3.Items.Add("Cell 16");
-                                comboBox3.Items.Add("Cell 17");
-                                comboBox3.Items.Add("Cell 18");
-                                comboBox3.Items.Add("Cell 19");
-                                comboBox3.Items.Add("Cell 20");
-                                break;
-                            case "3":
-                                // Battery combobox
-                                comboBox2.Items.Clear();
-                                comboBox2.Text = "";
-                                comboBox2.Items.Add("Voltage 1");
-                                comboBox2.Items.Add("Voltage 2");
-                                comboBox2.Items.Add("Current");
-                                comboBox2.Items.Add("Temperature 1");
-                                comboBox2.Items.Add("Temperature 2");
-                                comboBox2.Items.Add("Temperature 3");
-                                comboBox2.Items.Add("Temperature 4");
-                                // Cells combobox
-                                comboBox3.Items.Clear();
-                                comboBox3.Text = "";
-                                comboBox3.Items.Add("Cell Voltages");
-                                comboBox3.Items.Add("Cell 1");
-                                comboBox3.Items.Add("Cell 2");
-                                comboBox3.Items.Add("Cell 3");
-                                comboBox3.Items.Add("Cell 4");
-                                comboBox3.Items.Add("Cell 5");
-                                comboBox3.Items.Add("Cell 6");
-                                comboBox3.Items.Add("Cell 7");
-                                comboBox3.Items.Add("Cell 8");
-                                comboBox3.Items.Add("Cell 9");
-                                comboBox3.Items.Add("Cell 10");
-                                comboBox3.Items.Add("Cell 11");
-                                comboBox3.Items.Add("Cell 12");
-                                comboBox3.Items.Add("Cell 13");
-                                comboBox3.Items.Add("Cell 14");
-                                comboBox3.Items.Add("Cell 15");
-                                comboBox3.Items.Add("Cell 16");
-                                comboBox3.Items.Add("Cell 17");
-                                comboBox3.Items.Add("Cell 18");
-                                comboBox3.Items.Add("Cell 19");
-                                comboBox3.Items.Add("Cell 20");
-                                comboBox3.Items.Add("Cell 21");
-                                comboBox3.Items.Add("Cell 22");
-                                break;
-                            case "4":
-                                // Battery combobox
-                                comboBox2.Items.Clear();
-                                comboBox2.Text = "";
-                                comboBox2.Items.Add("Voltage 1");
-                                comboBox2.Items.Add("Voltage 2");
-                                comboBox2.Items.Add("Voltage 3");
-                                comboBox2.Items.Add("Current");
-                                comboBox2.Items.Add("Temperature 1");
-                                comboBox2.Items.Add("Temperature 2");
-                                comboBox2.Items.Add("Temperature 3");
-                                comboBox2.Items.Add("Temperature 4");
-                                // Cells combobox
-                                comboBox3.Items.Clear();
-                                comboBox3.Text = "";
-                                comboBox3.Items.Add("Cell Voltages");
-                                comboBox3.Items.Add("Cell 1");
-                                comboBox3.Items.Add("Cell 2");
-                                comboBox3.Items.Add("Cell 3");
-                                comboBox3.Items.Add("Cell 4");
-                                comboBox3.Items.Add("Cell 5");
-                                comboBox3.Items.Add("Cell 6");
-                                comboBox3.Items.Add("Cell 7");
-                                comboBox3.Items.Add("Cell 8");
-                                comboBox3.Items.Add("Cell 9");
-                                comboBox3.Items.Add("Cell 10");
-                                comboBox3.Items.Add("Cell 11");
-                                comboBox3.Items.Add("Cell 12");
-                                comboBox3.Items.Add("Cell 13");
-                                comboBox3.Items.Add("Cell 14");
-                                comboBox3.Items.Add("Cell 15");
-                                comboBox3.Items.Add("Cell 16");
-                                comboBox3.Items.Add("Cell 17");
-                                comboBox3.Items.Add("Cell 18");
-                                comboBox3.Items.Add("Cell 19");
-                                comboBox3.Items.Add("Cell 20");
-                                comboBox3.Items.Add("Cell 21");
-                                break;
-                            case "21":
-                                // Battery combobox
-                                comboBox2.Items.Clear();
-                                comboBox2.Text = "";
-                                comboBox2.Items.Add("Voltage");
-                                comboBox2.Items.Add("Current");
-                                comboBox2.Items.Add("Temperature 1");
-                                comboBox2.Items.Add("Temperature 2");
-                                comboBox2.Items.Add("Temperature 3");
-                                comboBox2.Items.Add("Temperature 4");
-                                // Cells combobox
-                                comboBox3.Items.Clear();
-                                comboBox3.Text = "";
-                                comboBox3.Items.Add("Cell Voltages");
-                                comboBox3.Items.Add("Cell 1");
-                                comboBox3.Items.Add("Cell 2");
-                                comboBox3.Items.Add("Cell 3");
-                                comboBox3.Items.Add("Cell 4");
-                                comboBox3.Items.Add("Cell 5");
-                                comboBox3.Items.Add("Cell 6");
-                                comboBox3.Items.Add("Cell 7");
-                                comboBox3.Items.Add("Cell 8");
-                                comboBox3.Items.Add("Cell 9");
-                                comboBox3.Items.Add("Cell 10");
-                                comboBox3.Items.Add("Cell 11");
-                                comboBox3.Items.Add("Cell 12");
-                                comboBox3.Items.Add("Cell 13");
-                                comboBox3.Items.Add("Cell 14");
-                                comboBox3.Items.Add("Cell 15");
-                                comboBox3.Items.Add("Cell 16");
-                                comboBox3.Items.Add("Cell 17");
-                                comboBox3.Items.Add("Cell 18");
-                                comboBox3.Items.Add("Cell 19");
-                                comboBox3.Items.Add("Cell 20");
-                                comboBox3.Items.Add("Cell 21");
-                                break;
-                            default:
-                                // Battery combobox
-                                comboBox2.Items.Clear();
-                                comboBox2.Text = "";
-                                comboBox2.Items.Add("Voltage 1");
-                                comboBox2.Items.Add("Voltage 2");
-                                comboBox2.Items.Add("Voltage 3");
-                                comboBox2.Items.Add("Voltage 4");
-                                comboBox2.Items.Add("Current");
-                                comboBox2.Items.Add("Temperature 1");
-                                comboBox2.Items.Add("Temperature 2");
-                                comboBox2.Items.Add("Temperature 3");
-                                comboBox2.Items.Add("Temperature 4");
-                                // Cells combobox
-                                comboBox3.Items.Clear();
-                                comboBox3.Text = "";
-                                comboBox3.Items.Add("Cell Voltages");
-                                comboBox3.Items.Add("Cell 1");
-                                comboBox3.Items.Add("Cell 2");
-                                comboBox3.Items.Add("Cell 3");
-                                comboBox3.Items.Add("Cell 4");
-                                comboBox3.Items.Add("Cell 5");
-                                comboBox3.Items.Add("Cell 6");
-                                comboBox3.Items.Add("Cell 7");
-                                comboBox3.Items.Add("Cell 8");
-                                comboBox3.Items.Add("Cell 9");
-                                comboBox3.Items.Add("Cell 10");
-                                comboBox3.Items.Add("Cell 11");
-                                comboBox3.Items.Add("Cell 12");
-                                comboBox3.Items.Add("Cell 13");
-                                comboBox3.Items.Add("Cell 14");
-                                comboBox3.Items.Add("Cell 15");
-                                comboBox3.Items.Add("Cell 16");
-                                comboBox3.Items.Add("Cell 17");
-                                comboBox3.Items.Add("Cell 18");
-                                comboBox3.Items.Add("Cell 19");
-                                comboBox3.Items.Add("Cell 20");
-                                comboBox3.Items.Add("Cell 21");
-                                comboBox3.Items.Add("Cell 22");
-                                comboBox3.Items.Add("Cell 23");
-                                comboBox3.Items.Add("Cell 24");
-                                break;
-                        }// end switch
-
-                        radioButton1.Enabled = true;
-                        radioButton2.Enabled = true;
-                        // load saved values here!
-                        radioButton1.Checked = (bool) gs.Rows[currentRow][0];
-                        if (radioButton1.Checked == true)
-                        {
-                            comboBox2.Text = gs.Rows[currentRow][1].ToString();
-                            comboBox3.SelectedIndex = 0;
+                            technology1 = (int)testsPerformed.Tables["Tests"].Rows[1][2];
+                            if (Int32.Parse(testsPerformed.Tables["Tests"].Rows[1][3].ToString()) != 0) { cell1 = Int32.Parse(testsPerformed.Tables["Tests"].Rows[1][3].ToString()); }
+                            else { cell1 = GlobalVars.CScanData[currentRow].cellsToDisplay; }
+                            // The final step is to update the type of test that was selected
+                            if (d.Rows[currentRow][3].ToString().Contains("As Recieved")) { type1 = 1; }
+                            else if (d.Rows[currentRow][3].ToString().Contains("Discharge")) { type1 = 2; }
+                            else if (d.Rows[currentRow][3].ToString().Contains("Cap")) { type1 = 3; }
+                            else { type1 = 0; }
                         }
-                        else
+                        catch
                         {
-                            comboBox2.SelectedIndex = 0;
-                            comboBox3.Text = gs.Rows[currentRow][1].ToString();
+                            // didn't work
+                            // clear the workorder
+                            updateD(currentRow, 1, "");
+                            lockUpdate = false;
+                            return;
                         }
-                        comboBox2.Enabled = true;
-                        comboBox3.Enabled = true;
-                    });// end invoke
+
+
+
+                        string cellCable = GlobalVars.CScanData[currentRow].CCID.ToString();
+
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            switch (cellCable)
+                            {
+                                case "1":
+                                    // Battery combobox
+                                    comboBox2.Items.Clear();
+                                    comboBox2.Items.Add("Voltage");
+                                    comboBox2.Items.Add("Current");
+                                    comboBox2.Items.Add("Temperature 1");
+                                    comboBox2.Items.Add("Temperature 2");
+                                    comboBox2.Items.Add("Temperature 3");
+                                    comboBox2.Items.Add("Temperature 4");
+                                    // Cells combobox
+                                    comboBox3.Items.Clear();
+                                    comboBox3.Items.Add("Cell Voltages");
+                                    comboBox3.Items.Add("Cell 1");
+                                    comboBox3.Items.Add("Cell 2");
+                                    comboBox3.Items.Add("Cell 3");
+                                    comboBox3.Items.Add("Cell 4");
+                                    comboBox3.Items.Add("Cell 5");
+                                    comboBox3.Items.Add("Cell 6");
+                                    comboBox3.Items.Add("Cell 7");
+                                    comboBox3.Items.Add("Cell 8");
+                                    comboBox3.Items.Add("Cell 9");
+                                    comboBox3.Items.Add("Cell 10");
+                                    comboBox3.Items.Add("Cell 11");
+                                    comboBox3.Items.Add("Cell 12");
+                                    comboBox3.Items.Add("Cell 13");
+                                    comboBox3.Items.Add("Cell 14");
+                                    comboBox3.Items.Add("Cell 15");
+                                    comboBox3.Items.Add("Cell 16");
+                                    comboBox3.Items.Add("Cell 17");
+                                    comboBox3.Items.Add("Cell 18");
+                                    comboBox3.Items.Add("Cell 19");
+                                    comboBox3.Items.Add("Cell 20");
+                                    break;
+                                case "3":
+                                    // Battery combobox
+                                    comboBox2.Items.Clear();
+                                    comboBox2.Items.Add("Voltage 1");
+                                    comboBox2.Items.Add("Voltage 2");
+                                    comboBox2.Items.Add("Current");
+                                    comboBox2.Items.Add("Temperature 1");
+                                    comboBox2.Items.Add("Temperature 2");
+                                    comboBox2.Items.Add("Temperature 3");
+                                    comboBox2.Items.Add("Temperature 4");
+                                    // Cells combobox
+                                    comboBox3.Items.Clear();
+                                    comboBox3.Items.Add("Cell Voltages");
+                                    comboBox3.Items.Add("Cell 1");
+                                    comboBox3.Items.Add("Cell 2");
+                                    comboBox3.Items.Add("Cell 3");
+                                    comboBox3.Items.Add("Cell 4");
+                                    comboBox3.Items.Add("Cell 5");
+                                    comboBox3.Items.Add("Cell 6");
+                                    comboBox3.Items.Add("Cell 7");
+                                    comboBox3.Items.Add("Cell 8");
+                                    comboBox3.Items.Add("Cell 9");
+                                    comboBox3.Items.Add("Cell 10");
+                                    comboBox3.Items.Add("Cell 11");
+                                    comboBox3.Items.Add("Cell 12");
+                                    comboBox3.Items.Add("Cell 13");
+                                    comboBox3.Items.Add("Cell 14");
+                                    comboBox3.Items.Add("Cell 15");
+                                    comboBox3.Items.Add("Cell 16");
+                                    comboBox3.Items.Add("Cell 17");
+                                    comboBox3.Items.Add("Cell 18");
+                                    comboBox3.Items.Add("Cell 19");
+                                    comboBox3.Items.Add("Cell 20");
+                                    comboBox3.Items.Add("Cell 21");
+                                    comboBox3.Items.Add("Cell 22");
+                                    break;
+                                case "4":
+                                    // Battery combobox
+                                    comboBox2.Items.Clear();
+                                    comboBox2.Items.Add("Voltage 1");
+                                    comboBox2.Items.Add("Voltage 2");
+                                    comboBox2.Items.Add("Voltage 3");
+                                    comboBox2.Items.Add("Current");
+                                    comboBox2.Items.Add("Temperature 1");
+                                    comboBox2.Items.Add("Temperature 2");
+                                    comboBox2.Items.Add("Temperature 3");
+                                    comboBox2.Items.Add("Temperature 4");
+                                    // Cells combobox
+                                    comboBox3.Items.Clear();
+                                    comboBox3.Items.Add("Cell Voltages");
+                                    comboBox3.Items.Add("Cell 1");
+                                    comboBox3.Items.Add("Cell 2");
+                                    comboBox3.Items.Add("Cell 3");
+                                    comboBox3.Items.Add("Cell 4");
+                                    comboBox3.Items.Add("Cell 5");
+                                    comboBox3.Items.Add("Cell 6");
+                                    comboBox3.Items.Add("Cell 7");
+                                    comboBox3.Items.Add("Cell 8");
+                                    comboBox3.Items.Add("Cell 9");
+                                    comboBox3.Items.Add("Cell 10");
+                                    comboBox3.Items.Add("Cell 11");
+                                    comboBox3.Items.Add("Cell 12");
+                                    comboBox3.Items.Add("Cell 13");
+                                    comboBox3.Items.Add("Cell 14");
+                                    comboBox3.Items.Add("Cell 15");
+                                    comboBox3.Items.Add("Cell 16");
+                                    comboBox3.Items.Add("Cell 17");
+                                    comboBox3.Items.Add("Cell 18");
+                                    comboBox3.Items.Add("Cell 19");
+                                    comboBox3.Items.Add("Cell 20");
+                                    comboBox3.Items.Add("Cell 21");
+                                    break;
+                                case "10":
+                                    // Battery combobox
+                                    comboBox2.Items.Clear();
+                                    comboBox2.Items.Add("Voltage 1");
+                                    comboBox2.Items.Add("Voltage 2");
+                                    comboBox2.Items.Add("Voltage 3");
+                                    comboBox2.Items.Add("Voltage 4");
+                                    comboBox2.Items.Add("Current");
+                                    comboBox2.Items.Add("Temperature 1");
+                                    comboBox2.Items.Add("Temperature 2");
+                                    comboBox2.Items.Add("Temperature 3");
+                                    comboBox2.Items.Add("Temperature 4");
+                                    // Cells combobox
+                                    comboBox3.Items.Clear();
+                                    comboBox3.Items.Add("Current Voltages");
+                                    break;
+                                case "21":
+                                    // Battery combobox
+                                    comboBox2.Items.Clear();
+                                    comboBox2.Items.Add("Voltage");
+                                    comboBox2.Items.Add("Current");
+                                    comboBox2.Items.Add("Temperature 1");
+                                    comboBox2.Items.Add("Temperature 2");
+                                    comboBox2.Items.Add("Temperature 3");
+                                    comboBox2.Items.Add("Temperature 4");
+                                    // Cells combobox
+                                    comboBox3.Items.Clear();
+                                    comboBox3.Items.Add("Cell Voltages");
+                                    comboBox3.Items.Add("Cell 1");
+                                    comboBox3.Items.Add("Cell 2");
+                                    comboBox3.Items.Add("Cell 3");
+                                    comboBox3.Items.Add("Cell 4");
+                                    comboBox3.Items.Add("Cell 5");
+                                    comboBox3.Items.Add("Cell 6");
+                                    comboBox3.Items.Add("Cell 7");
+                                    comboBox3.Items.Add("Cell 8");
+                                    comboBox3.Items.Add("Cell 9");
+                                    comboBox3.Items.Add("Cell 10");
+                                    comboBox3.Items.Add("Cell 11");
+                                    comboBox3.Items.Add("Cell 12");
+                                    comboBox3.Items.Add("Cell 13");
+                                    comboBox3.Items.Add("Cell 14");
+                                    comboBox3.Items.Add("Cell 15");
+                                    comboBox3.Items.Add("Cell 16");
+                                    comboBox3.Items.Add("Cell 17");
+                                    comboBox3.Items.Add("Cell 18");
+                                    comboBox3.Items.Add("Cell 19");
+                                    comboBox3.Items.Add("Cell 20");
+                                    comboBox3.Items.Add("Cell 21");
+                                    break;
+                                default:
+                                    // Battery combobox
+                                    comboBox2.Items.Clear();
+                                    comboBox2.Items.Add("Voltage 1");
+                                    comboBox2.Items.Add("Voltage 2");
+                                    comboBox2.Items.Add("Voltage 3");
+                                    comboBox2.Items.Add("Voltage 4");
+                                    comboBox2.Items.Add("Current");
+                                    comboBox2.Items.Add("Temperature 1");
+                                    comboBox2.Items.Add("Temperature 2");
+                                    comboBox2.Items.Add("Temperature 3");
+                                    comboBox2.Items.Add("Temperature 4");
+                                    // Cells combobox
+                                    comboBox3.Items.Clear();
+                                    comboBox3.Items.Add("Cell Voltages");
+                                    comboBox3.Items.Add("Cell 1");
+                                    comboBox3.Items.Add("Cell 2");
+                                    comboBox3.Items.Add("Cell 3");
+                                    comboBox3.Items.Add("Cell 4");
+                                    comboBox3.Items.Add("Cell 5");
+                                    comboBox3.Items.Add("Cell 6");
+                                    comboBox3.Items.Add("Cell 7");
+                                    comboBox3.Items.Add("Cell 8");
+                                    comboBox3.Items.Add("Cell 9");
+                                    comboBox3.Items.Add("Cell 10");
+                                    comboBox3.Items.Add("Cell 11");
+                                    comboBox3.Items.Add("Cell 12");
+                                    comboBox3.Items.Add("Cell 13");
+                                    comboBox3.Items.Add("Cell 14");
+                                    comboBox3.Items.Add("Cell 15");
+                                    comboBox3.Items.Add("Cell 16");
+                                    comboBox3.Items.Add("Cell 17");
+                                    comboBox3.Items.Add("Cell 18");
+                                    comboBox3.Items.Add("Cell 19");
+                                    comboBox3.Items.Add("Cell 20");
+                                    comboBox3.Items.Add("Cell 21");
+                                    comboBox3.Items.Add("Cell 22");
+                                    comboBox3.Items.Add("Cell 23");
+                                    comboBox3.Items.Add("Cell 24");
+                                    break;
+                            }// end switch
+
+                            radioButton1.Enabled = true;
+                            radioButton2.Enabled = true;
+                            // load saved values here!
+                            updateR1((bool)gs.Rows[currentRow][0]);
+                            updateR2(!(bool)gs.Rows[currentRow][0]);
+                        });// end invoke
+
+                        //take a break
+                        Thread.Sleep(100);
+
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            if (radioButton1.Checked == true)
+                            {
+
+                                updateC2(gs.Rows[currentRow][1].ToString());
+                                comboBox3.SelectedIndex = 0;
+                                if (comboBox2.Text == "") { comboBox2.SelectedIndex = 0; }
+                            }
+                            else
+                            {
+                                comboBox2.SelectedIndex = 0;
+                                updateC3(gs.Rows[currentRow][1].ToString());
+                                if (comboBox3.Text == "") { comboBox3.SelectedIndex = 0; }
+                            }
+                            comboBox2.Enabled = true;
+                            comboBox3.Enabled = true;
+
+                            if (cellCable == "10") { radioButton2.Text = "Cur Vs"; }
+                            else { radioButton2.Text = "Cells"; }
+                            lockUpdate = false;
+
+                        });// end invoke
                     }// end else
                 });// end helper thread
             
@@ -1253,10 +1615,9 @@ namespace NewBTASProto
         {
             ThreadPool.QueueUserWorkItem(s =>
                {
-                   Thread.Sleep(5);
                    this.Invoke((MethodInvoker)delegate()
                    {
-                       gs.Rows[dataGridView1.CurrentRow.Index][0] = radioButton1.Checked;
+                       if (comboBox3.Text != "") { gs.Rows[dataGridView1.CurrentRow.Index][0] = radioButton1.Checked; }
                    });
                });
         }
@@ -1266,14 +1627,13 @@ namespace NewBTASProto
         {
             ThreadPool.QueueUserWorkItem(s =>
                {
-                   Thread.Sleep(5);
                    try
                    {
                        if (radioButton1.Checked == true)
                        {
                            this.Invoke((MethodInvoker)delegate()
                            {
-                               gs.Rows[dataGridView1.CurrentRow.Index][1] = comboBox2.Text;
+                               if (comboBox3.Text != "") { gs.Rows[dataGridView1.CurrentRow.Index][1] = comboBox2.Text; }
                            });
                        }
                    }
@@ -1285,19 +1645,61 @@ namespace NewBTASProto
         {
             ThreadPool.QueueUserWorkItem(s =>
                {
-                   Thread.Sleep(5);
                    try
                    {
+
                        if (radioButton1.Checked == false)
                        {
                            this.Invoke((MethodInvoker)delegate()
                            {
-                               gs.Rows[dataGridView1.CurrentRow.Index][1] = comboBox3.Text;
+                               if (comboBox3.Text != "") { gs.Rows[dataGridView1.CurrentRow.Index][1] = comboBox3.Text; }
                            });
                        }
                    }
                    catch { }
                });
         }
+
+        //////////////////////////////////////////////////////////////////////locking stuff////////////////////////////
+        private readonly object combo2Lock = new object();
+
+        private void updateC2(string inVal)
+        {
+            lock (combo2Lock)
+            {
+                comboBox2.Text = inVal;
+            }
+        }
+
+        private readonly object combo3Lock = new object();
+
+        private void updateC3(string inVal)
+        {
+            lock (combo3Lock)
+            {
+                comboBox3.Text = inVal;
+            }
+        }
+
+        private readonly object radio1Lock = new object();
+
+        private void updateR1(bool inVal)
+        {
+            lock (radio1Lock)
+            {
+                radioButton1.Checked = inVal;
+            }
+        }
+
+        private readonly object radio2Lock = new object();
+
+        private void updateR2(bool inVal)
+        {
+            lock (radio2Lock)
+            {
+                radioButton2.Checked = inVal;
+            }
+        }
+
     }
 }

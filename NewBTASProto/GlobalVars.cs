@@ -73,5 +73,19 @@ namespace NewBTASProto
             true,true,true,true,
             true,true,true,true};
 
+        /// <summary>
+        /// this array will determine if Current #2 value should be displayed
+        /// </summary>
+        public static bool[] curr2Dis = new bool[16] {
+            false,false,false,false,
+            false,false,false,false,
+            false,false,false,false,
+            false,false,false,false};
+
+        /// <summary>
+        /// this string holds the programversion text
+        /// </summary>
+        public static string programVersion = "6.0.0.34";
+
     }
 }
