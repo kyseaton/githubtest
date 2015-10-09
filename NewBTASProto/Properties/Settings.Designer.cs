@@ -32,5 +32,65 @@ namespace NewBTASProto.Properties {
                 return ((string)(this["BTS16NVConnectionString"]));
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1298")]
+        public int FormWidth {
+            get {
+                return ((int)(this["FormWidth"]));
+            }
+            set {
+                this["FormWidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("800")]
+        public int FormHeight {
+            get {
+                return ((int)(this["FormHeight"]));
+            }
+            set {
+                this["FormHeight"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int PositionX {
+            get {
+                return ((int)(this["PositionX"]));
+            }
+            set {
+                this["PositionX"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int PositionY {
+            get {
+                return ((int)(this["PositionY"]));
+            }
+            set {
+                this["PositionY"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool maximized {
+            get {
+                return ((bool)(this["maximized"]));
+            }
+            set {
+                this["maximized"] = value;
+            }
+        }
     }
 }

@@ -113,13 +113,20 @@ namespace NewBTASProto
                         return;
                     }
 
-                    //Now we need to add the records in!  ,,
-                    tempRow = workOrderList1.Tables["ScanData"].NewRow();
-                    tempRow["WorkOrderNumber"] = workOrderList2.Tables["ScanData"].Rows[0][0];
-                    tempRow["CustomerName"] = workOrderList2.Tables["ScanData"].Rows[0][1];
-                    tempRow["DateReceived"] = workOrderList2.Tables["ScanData"].Rows[0][2];
+                    try
+                    {
+                        //Now we need to add the records in!  ,,
+                        tempRow = workOrderList1.Tables["ScanData"].NewRow();
+                        tempRow["WorkOrderNumber"] = workOrderList2.Tables["ScanData"].Rows[0][0];
+                        tempRow["CustomerName"] = workOrderList2.Tables["ScanData"].Rows[0][1];
+                        tempRow["DateReceived"] = workOrderList2.Tables["ScanData"].Rows[0][2];
 
-                    workOrderList1.Tables["ScanData"].Rows.InsertAt(tempRow,0);
+                        workOrderList1.Tables["ScanData"].Rows.InsertAt(tempRow, 0);
+                    }
+                    catch
+                    {
+                        // do nothing for now...
+                    }
                 }
             }
             

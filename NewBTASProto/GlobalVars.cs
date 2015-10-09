@@ -85,7 +85,43 @@ namespace NewBTASProto
         /// <summary>
         /// this string holds the programversion text
         /// </summary>
-        public static string programVersion = "6.0.0.34";
+        public static string programVersion = "6.0.0.38";
+
+        /// <summary>
+        /// this is where we hold our notification service settings...
+        /// </summary>
+        public static string server;
+        public static string port;
+        public static string user;
+        public static string pass;
+
+        public static string recipients;
+
+        public static bool highLev;
+        public static bool medLev;
+        public static bool allLev;
+
+        public static bool stat0;
+        public static bool stat1;
+        public static bool stat2;
+        public static bool stat3;
+        public static bool stat4;
+        public static bool stat5;
+        public static bool stat6;
+        public static bool stat7;
+        public static bool stat8;
+        public static bool stat9;
+        public static bool stat10;
+        public static bool stat11;
+        public static bool stat12;
+        public static bool stat13;
+        public static bool stat14;
+        public static bool stat15;
+
+        public static bool all;
+
+        public static bool noteOn;
+        public static bool noteOff;
 
     }
 }

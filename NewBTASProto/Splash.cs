@@ -3,6 +3,8 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Data;
 using System.Data.OleDb;
+using System.Xml.Serialization;
+using System.IO;
 
 namespace NewBTASProto
 {
@@ -211,6 +213,63 @@ namespace NewBTASProto
             for (int num = 0; num < 16; num++)
             {
                 GlobalVars.ICSettings[num] = new ICSettingStore(num);
+            }
+
+            // this section will load the noteservice settings
+            //load the form settings
+            try
+            {
+                NoteSet settings;
+                XmlSerializer xs = new XmlSerializer(typeof(NoteSet));
+                using (FileStream fs = new FileStream("noteSet.xml", FileMode.Open))
+                {
+                    // This will read the XML from the file and create the new instance
+                    // of CustomerData
+                    settings = xs.Deserialize(fs) as NoteSet;
+                }
+
+                // If the customer data was successfully deserialized we can transfer
+                // the data from the instance to the form.
+                if (settings != null)
+                {
+                    GlobalVars.server = settings.server;
+                    GlobalVars.port = settings.port;
+                    GlobalVars.user = settings.user;
+                    GlobalVars.pass = settings.pass;
+
+                    GlobalVars.recipients = settings.recipients;
+                    
+                    GlobalVars.highLev = settings.highLev;
+                    GlobalVars.medLev = settings.medLev;
+                    GlobalVars.allLev = settings.allLev;
+
+                    GlobalVars.stat0 = settings.stat0;
+                    GlobalVars.stat1 = settings.stat1;
+                    GlobalVars.stat2 = settings.stat2;
+                    GlobalVars.stat3 = settings.stat3;
+                    GlobalVars.stat4 = settings.stat4;
+                    GlobalVars.stat5 = settings.stat5;
+                    GlobalVars.stat6 = settings.stat6;
+                    GlobalVars.stat7 = settings.stat7;
+                    GlobalVars.stat8 = settings.stat8;
+                    GlobalVars.stat9 = settings.stat9;
+                    GlobalVars.stat10 = settings.stat10;
+                    GlobalVars.stat11 = settings.stat11;
+                    GlobalVars.stat12 = settings.stat12;
+                    GlobalVars.stat13 = settings.stat13;
+                    GlobalVars.stat14 = settings.stat14;
+                    GlobalVars.stat15 = settings.stat15;
+
+                    GlobalVars.all = settings.all;
+
+                    GlobalVars.noteOn = settings.on;
+                    GlobalVars.noteOff = settings.off;
+
+                }
+            }// end try
+            catch
+            {
+                // do nothing...
             }
 
             

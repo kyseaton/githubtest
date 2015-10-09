@@ -133,7 +133,10 @@ namespace NewBTASProto
                                                 if (testData.faultStatus != "") { updateD(j, 11, testData.faultStatus); }
                                                 else if (testData.endStatus != "") { updateD(j, 11, testData.endStatus); }
                                                 else { updateD(j, 11, testData.runStatus); }
-                                                dataGridView1.Rows[j].Cells[8].Style.BackColor = Color.YellowGreen;
+                                                if (dataGridView1.Rows[j].Cells[4].Style.BackColor != Color.Red)
+                                                {
+                                                    dataGridView1.Rows[j].Cells[8].Style.BackColor = Color.YellowGreen;
+                                                }
                                             }
                                         }
                                         else if ((bool)d.Rows[j][8]) // here to solve timing mismatch
@@ -151,7 +154,7 @@ namespace NewBTASProto
                                             else if (testData.boardID == 6) { updateD(j, 10, "ICA SMini"); }
                                         }
                                         
-                                        rtbIncoming.Text = j.ToString() + "  :  " + tempBuff;
+                                        //rtbIncoming.Text = j.ToString() + "  :  " + tempBuff;
                                         
                                     });
 
@@ -172,7 +175,7 @@ namespace NewBTASProto
                                                 updateD(j, 11, "");
                                             }
                                             tempBuff = ICComPort.ReadExisting();
-                                            rtbIncoming.Text = "Com Error" + System.Environment.NewLine + tempBuff;
+                                            //rtbIncoming.Text = "Com Error" + System.Environment.NewLine + tempBuff;
                                         });
                                         Thread.Sleep(100);
                                     }
@@ -269,7 +272,8 @@ namespace NewBTASProto
                                             }
                                         }
 
-
+                                        //turn off the critical
+                                        criticalNum[i] = false;
                                         // we got a response so lets update the grid and the status box
                                         //A[1] has the terminal ID in it
                                         char[] delims = { ' ' };
@@ -277,7 +281,7 @@ namespace NewBTASProto
                                         testData = new ICDataStore(A);
                                         this.Invoke((MethodInvoker)delegate
                                         {
-                                            rtbIncoming.Text = "Critical  " + i.ToString() + "  :  " + tempBuff;
+                                            //rtbIncoming.Text = "Critical  " + i.ToString() + "  :  " + tempBuff;
                                             if (testData.online == true)
                                             {
                                                 if ((bool)d.Rows[station][8]) // here to solve timing mismatch
@@ -285,7 +289,10 @@ namespace NewBTASProto
                                                     if (testData.faultStatus != "") { updateD(station, 11, testData.faultStatus); }
                                                     else if (testData.endStatus != "") { updateD(station, 11, testData.endStatus); }
                                                     else { updateD(station, 11, testData.runStatus); }
-                                                    dataGridView1.Rows[station].Cells[8].Style.BackColor = Color.YellowGreen;
+                                                    if (dataGridView1.Rows[station].Cells[4].Style.BackColor != Color.Red)
+                                                    {
+                                                        dataGridView1.Rows[station].Cells[8].Style.BackColor = Color.YellowGreen;
+                                                    }
                                                 }
                                             
                                             }
@@ -316,6 +323,11 @@ namespace NewBTASProto
                                     {
                                         if (ex is System.TimeoutException)
                                         {
+                                            //if this charger is not part of a test, we need to turn off the critical...
+                                            if ((bool) d.Rows[i][5] == false)
+                                            {
+                                                criticalNum[i] = false;
+                                            }
                                             Thread.Sleep(100);
                                         }
                                         else { throw ex; }

@@ -11,6 +11,8 @@ using System.Windows.Forms;
 using System.IO.Ports;
 using System.Threading;
 using System.IO;
+using System.Net.Mail;
+
 
 
 namespace NewBTASProto
@@ -34,9 +36,14 @@ namespace NewBTASProto
                 InitializeTimers();
                 Scan();
 
-                GlobalVars.loading = false;
-                
+                SetChargersCriticalAtStart();
 
+                GlobalVars.loading = false;
+
+                this.Height = (int) Properties.Settings.Default.FormHeight;
+                this.Width = (int) Properties.Settings.Default.FormWidth;
+
+       
             }
             catch(Exception ex)
             {
@@ -44,6 +51,30 @@ namespace NewBTASProto
             }
 
 
+        }
+
+        private void SetChargersCriticalAtStart()
+        {
+            // loop through the grid and set chargers to critical (look for ICs) if they are assigned
+            for (int i = 0; i < 16; i++)
+            {
+                //if the charger is linked and there is a number assigned and not a slave make the charger critical
+                if ((bool)d.Rows[i][8] == true && d.Rows[i][9].ToString() != "" && !(d.Rows[i][9].ToString().Contains("s")))
+                {
+                    if (d.Rows[i][9].ToString().Length < 3)
+                    {
+                        criticalNum[int.Parse(d.Rows[i][9].ToString())] = true;
+                    }
+                    else if (d.Rows[i][9].ToString().Length == 3)
+                    {
+                        criticalNum[int.Parse(d.Rows[i][9].ToString().Substring(0,1))] = true;
+                    }
+                    else
+                    {
+                        criticalNum[int.Parse(d.Rows[i][9].ToString().Substring(0, 2))] = true;
+                    }
+                }
+            }
         }
 
 
@@ -498,6 +529,7 @@ namespace NewBTASProto
                     updateD(i, 5, false);
                     updateD(i, 6, "");
                     updateD(i, 7, "");
+                    updateD(i, 10, "");
                     updateD(i, 11, "");
                 }// end for
 
@@ -510,7 +542,22 @@ namespace NewBTASProto
                 gs.WriteXml(writer);
             }
             
+            //Save the current form width and height
+            if (this.WindowState == FormWindowState.Maximized)
+            {
+                Properties.Settings.Default.maximized = true;
+            }
+            else
+            {
+                Properties.Settings.Default.maximized = false;
+                Properties.Settings.Default.FormHeight = this.Height;
+                Properties.Settings.Default.FormWidth = this.Width;
+                Properties.Settings.Default.PositionX = this.Location.X;
+                Properties.Settings.Default.PositionY = this.Location.Y;
+            }
 
+            Properties.Settings.Default.Save();
+            
             // tell those threadpool work items to stop!!!!!
             try
             {
@@ -553,6 +600,15 @@ namespace NewBTASProto
         private void Main_Form_Load(object sender, EventArgs e)
         {
             dataGridView1.ClearSelection();
+            if ((bool)Properties.Settings.Default.maximized == true)
+            {
+                this.WindowState = FormWindowState.Maximized;
+            }
+            else
+            {
+                this.Location = new Point((int) Properties.Settings.Default.PositionX, (int)Properties.Settings.Default.PositionY);
+            }
+            
         }
 
         private void customChrgToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1680,19 +1736,318 @@ namespace NewBTASProto
 
         }
 
+        private void notificationServiceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormCollection fc = Application.OpenForms;
+
+            foreach (Form frm in fc)
+            {
+                if (frm is NoteServe)
+                {
+                    return;
+                }
+            }
+
+            NoteServe bn = new NoteServe();
+            bn.Show();
+
+        }
 
 
+        private void sendNote(int station, int priority, string message = "Event!")
+        {
+            // Message Center Portion of the code
+            rtbIncoming.Text = System.DateTime.Now.ToString() + ("  " + message + " (station " + station.ToString() + ")" + Environment.NewLine) + rtbIncoming.Text;
+
+            // is the note service still on?
+            if (GlobalVars.noteOn == false) { return; }
+
+            // test if the priority is being sent
+            // 1 is highpriority
+            // 2 is medium
+            // 3 is low
+
+            switch (priority)
+            {
+                case 1:
+                    break; // high priority messages always pass...
+                case 2:
+                    if (GlobalVars.medLev == true || GlobalVars.allLev == true) { break; } // medium make it through when medium or all is on
+                    else { return; }
+                case 3:
+                    if (GlobalVars.allLev == true) { break; }  // low only make it through when all is on
+                    else { return; }
+                default:
+                    return;
+            }// end station switch!
+
+            switch (station)
+            {
+                case 0:
+                    if (GlobalVars.stat0 == false) { return; }
+                    else { break; }
+                case 1:
+                    if (GlobalVars.stat1 == false) { return; }
+                    else { break; }
+                case 2:
+                    if (GlobalVars.stat2 == false) { return; }
+                    else { break; }
+                case 3:
+                    if (GlobalVars.stat3 == false) { return; }
+                    else { break; }
+                case 4:
+                    if (GlobalVars.stat4 == false) { return; }
+                    else { break; }
+                case 5:
+                    if (GlobalVars.stat5 == false) { return; }
+                    else { break; }
+                case 6:
+                    if (GlobalVars.stat6 == false) { return; }
+                    else { break; }
+                case 7:
+                    if (GlobalVars.stat7 == false) { return; }
+                    else { break; }
+                case 8:
+                    if (GlobalVars.stat8 == false) { return; }
+                    else { break; }
+                case 9:
+                    if (GlobalVars.stat9 == false) { return; }
+                    else { break; }
+                case 10:
+                    if (GlobalVars.stat10 == false) { return; }
+                    else { break; }
+                case 11:
+                    if (GlobalVars.stat11 == false) { return; }
+                    else { break; }
+                case 12:
+                    if (GlobalVars.stat12 == false) { return; }
+                    else { break; }
+                case 13:
+                    if (GlobalVars.stat13 == false) { return; }
+                    else { break; }
+                case 14:
+                    if (GlobalVars.stat14 == false) { return; }
+                    else { break; }
+                case 15:
+                    if (GlobalVars.stat15 == false) { return; }
+                    else { break; }
+                default:
+                    return;        
+            }// end station switch!
 
 
+            //we made it here, so let's send a message!!!!
+
+            // do everything on a helper thread...
+            ThreadPool.QueueUserWorkItem(s =>
+            {
+
+                try
+                {
+                    // Create a System.Net.Mail.MailMessage object
+                    MailMessage note = new MailMessage();
+
+                    // Add a recipients
+                    char[] delims = { ',' };
+                    foreach (string str in GlobalVars.recipients.Split(delims))
+                    {
+                        if (str != "")
+                        {
+                            note.To.Add(str.Trim());
+                        }
+                    }
+                    
+                    // Add a message subject
+                    note.Subject = "BTAS Message";
+
+                    // Add a message body
+                    note.Body = "BTAS Event (station " + station.ToString() + ") :" + message;
+
+                    // Create a System.Net.Mail.MailAddress object and 
+                    // set the sender email address and display name.
+                    note.From = new MailAddress(GlobalVars.user);
+
+                    // Create a System.Net.Mail.SmtpClient object
+                    // and set the SMTP host and port number
+                    SmtpClient smtp = new SmtpClient(GlobalVars.server, int.Parse(GlobalVars.port));
+
+                    // If your server requires authentication add the below code
+                    // =========================================================
+                    // Enable Secure Socket Layer (SSL) for connection encryption
+                    smtp.EnableSsl = true;
+
+                    // Do not send the DefaultCredentials with requests
+                    smtp.UseDefaultCredentials = false;
+
+                    // Create a System.Net.NetworkCredential object and set
+                    // the username and password required by your SMTP account
+                    smtp.Credentials = new System.Net.NetworkCredential(GlobalVars.user, GlobalVars.pass);
+                    // =========================================================
+
+                    // Send the message
+                    smtp.Send(note);
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.ToString());
+                }
+
+            });
+
+        }// end sendNote!
+
+        private void backupDatabaseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string folder = "";
+
+            if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
+            {
+                folder = folderBrowserDialog1.SelectedPath;
+                // Let the user know what happned!
+                try
+                {
+                    //try to copy the database from the appdata folder to the selected folder...
+
+                    File.Copy(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB", folder + @"\BTAS16NV_" + System.DateTime.Now.ToString("yyyyMMddHHmmssfff") + @".MDB");
+                    MessageBox.Show("Database was backed up to:  " + folder);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Database was not backed up!" + Environment.NewLine + ex.ToString());
+                }
+
+            }            
+
+        }// end backup database
+
+        private void button5_Click_1(object sender, EventArgs e)
+        {
+            rtbIncoming.Text = "";
+        }
+
+        private void restoreDatabaseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //first check if there is a test running and return if so
+            for (int i = 0; i < 16; i++)
+            {
+                if ((bool)d.Rows[i][5] || d.Rows[i][2].ToString() != "")
+                {
+                    MessageBox.Show("Please stop all tests and clear all workorders before restoring the database!");
+                    return;
+                }
+            }
+
+            string folder = "";
 
 
+            if (folderBrowserDialog2.ShowDialog() == DialogResult.OK)
+            {
+
+                //here we export the old DB
+                folder = folderBrowserDialog2.SelectedPath;
+                // Let the user know what happned!
+                try
+                {
+                    //try to copy the database from the appdata folder to the selected folder...
+
+                    File.Copy(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB", folder + @"\BTAS16NV_" + System.DateTime.Now.ToString("yyyyMMddHHmmssfff") + @".MDB");
+                    MessageBox.Show("Database was backed up to:  " + folder);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Database was not backed up!" + Environment.NewLine + ex.ToString());
+                    return;
+                }
+
+                string file;
+
+                //here we import the new DB
+                if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                {
+                    //here we export the old DB
+                    file = openFileDialog1.FileName;
+                    // Let the user know what happned!
+                    try
+                    {
+                        //try to copy the database from the appdata folder to the selected folder...
+
+                        File.Copy(file,Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB",true);
+                        MessageBox.Show("Selected database has been restored");
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Database was not restored!" + Environment.NewLine + ex.ToString());
+                        return;
+                    }
+                }
+
+            }// end if
+
+        }
+
+        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            PrintDialog MyPrintDialog = new PrintDialog();
+            if (MyPrintDialog.ShowDialog() == DialogResult.OK)
+            {
+                // do on a helper thread...
+                ThreadPool.QueueUserWorkItem(s =>
+                {
+                    System.Drawing.Printing.PrintDocument doc = new System.Drawing.Printing.PrintDocument();
+                    doc.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(doc_PrintPage);
+                    doc.DefaultPageSettings.Landscape = true;
+                    doc.Print();
+                });
+            }
+        }
+
+        private void doc_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
+        {
+            Bitmap bmp = new Bitmap(chart1.Width, chart1.Height, chart1.CreateGraphics());
+            this.Invoke((MethodInvoker)delegate()
+            {
+                chart1.DrawToBitmap(bmp, new Rectangle(0, 0, chart1.Width, chart1.Height));
+            });
+            RectangleF bounds = e.PageSettings.PrintableArea;
+            float factor = ((float)bounds.Height / (float)bmp.Width);
+            e.Graphics.DrawImage(bmp, bounds.Left, 100, (factor * bmp.Width), (factor * bmp.Height));
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            PrintDialog MyPrintDialog = new PrintDialog();
+            if (MyPrintDialog.ShowDialog() == DialogResult.OK)
+            {
+                // do on a helper thread...
+                ThreadPool.QueueUserWorkItem(s =>
+                {
+                    System.Drawing.Printing.PrintDocument doc = new System.Drawing.Printing.PrintDocument();
+                    doc.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(doc_PrintPage2);
+                    doc.DefaultPageSettings.Landscape = false;
+                    doc.Print();
+                });
+            }
+
+        }
+
+        private void doc_PrintPage2(object sender, System.Drawing.Printing.PrintPageEventArgs e)
+        {
+            Bitmap bmp = new Bitmap(label1.Width, label1.Height, label1.CreateGraphics());
+            this.Invoke((MethodInvoker)delegate()
+            {
+                label1.DrawToBitmap(bmp, new Rectangle(0, 0, label1.Width, label1.Height));
+            });
+            RectangleF bounds = e.PageSettings.PrintableArea;
+            float factor = ((float)bounds.Height / (float)bmp.Height);
+            e.Graphics.DrawImage(bmp, bounds.Left + 100, bounds.Top, (factor * bmp.Width), (factor * bmp.Height));
+        }
 
 
-
-  
-
-
-
-
-    }
+    }// end mainform class section...
 }

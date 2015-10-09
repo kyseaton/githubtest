@@ -34,7 +34,7 @@
             this.bindingNavigatorAddNewItem = new System.Windows.Forms.ToolStripButton();
             this.bindingNavigatorCountItem = new System.Windows.Forms.ToolStripLabel();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
-            this.toolStripCBCustomers = new System.Windows.Forms.ToolStripComboBox();
+            this.toolStripCBBats = new System.Windows.Forms.ToolStripComboBox();
             this.bindingNavigatorSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.bindingNavigatorMoveFirstItem = new System.Windows.Forms.ToolStripButton();
             this.bindingNavigatorMovePreviousItem = new System.Windows.Forms.ToolStripButton();
@@ -495,7 +495,7 @@
             this.bindingNavigator1.DeleteItem = null;
             this.bindingNavigator1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripLabel1,
-            this.toolStripCBCustomers,
+            this.toolStripCBBats,
             this.bindingNavigatorSeparator,
             this.bindingNavigatorMoveFirstItem,
             this.bindingNavigatorMovePreviousItem,
@@ -541,13 +541,13 @@
             this.toolStripLabel1.Text = "Battery Model";
             this.toolStripLabel1.Click += new System.EventHandler(this.toolStripLabel1_Click);
             // 
-            // toolStripCBCustomers
+            // toolStripCBBats
             // 
-            this.toolStripCBCustomers.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.toolStripCBCustomers.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
-            this.toolStripCBCustomers.Name = "toolStripCBCustomers";
-            this.toolStripCBCustomers.Size = new System.Drawing.Size(121, 25);
-            this.toolStripCBCustomers.SelectedIndexChanged += new System.EventHandler(this.toolStripCBCustomers_SelectedIndexChanged);
+            this.toolStripCBBats.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.toolStripCBBats.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.toolStripCBBats.Name = "toolStripCBBats";
+            this.toolStripCBBats.Size = new System.Drawing.Size(121, 25);
+            this.toolStripCBBats.SelectedIndexChanged += new System.EventHandler(this.toolStripCBCustomers_SelectedIndexChanged);
             // 
             // bindingNavigatorSeparator
             // 
@@ -4379,7 +4379,7 @@
         private System.Windows.Forms.ToolStripTextBox bindingNavigatorPositionItem;
         private System.Windows.Forms.ToolStripButton bindingNavigatorMoveNextItem;
         private System.Windows.Forms.ToolStripButton bindingNavigatorMoveLastItem;
-        private System.Windows.Forms.ToolStripComboBox toolStripCBCustomers;
+        private System.Windows.Forms.ToolStripComboBox toolStripCBBats;
         private System.Windows.Forms.TextBox textBox21;
         private System.Windows.Forms.TextBox textBox22;
         private System.Windows.Forms.TextBox textBox27;

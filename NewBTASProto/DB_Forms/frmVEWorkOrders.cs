@@ -510,6 +510,13 @@ namespace NewBTASProto
 
         private void saveToolStripButton_Click(object sender, EventArgs e)
         {
+
+            if (textBox1.Text.Contains(" "))
+            {
+                MessageBox.Show("Work order names cannot have spaces in them.  Please correct and press save again.");
+                return;
+            }
+
             try
             {
 
@@ -547,7 +554,19 @@ namespace NewBTASProto
                         "' WHERE WorkOrderID=" + current["WorkOrderID"].ToString();
                     OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
                     cmd.ExecuteNonQuery();
-                    MessageBox.Show(current["WorkOrderNumber"].ToString() + " has been updated.");
+
+                    // Also update the workorder number in the other tables!
+                    cmdStr = "UPDATE Tests SET WorkOrderNumber='" + textBox1.Text.Replace("'", "''") +"' WHERE WorkOrderNumber='" + current["WorkOrderNumber"].ToString() + "'";
+                    cmd = new OleDbCommand(cmdStr, conn);
+                    cmd.ExecuteNonQuery();
+
+                    cmdStr = "UPDATE ScanData SET BWO='" + textBox1.Text.Replace("'", "''") + "' WHERE BWO='" + current["WorkOrderNumber"].ToString() + "'";
+                    cmd = new OleDbCommand(cmdStr, conn);
+                    cmd.ExecuteNonQuery();
+
+                    //now update the combobox..
+                    toolStripCBWorkOrders.ComboBox.Text = textBox1.Text.Replace("'", "''");
+                    MessageBox.Show(textBox1.Text.Replace("'", "''") + " has been updated.");
 
                 }
                 else
@@ -704,6 +723,11 @@ namespace NewBTASProto
         }
 
         private void frmVEWorkOrders_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void bindingNavigatorMoveNextItem_Click(object sender, EventArgs e)
         {
 
         }

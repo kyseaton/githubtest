@@ -35,7 +35,7 @@
             this.bindingNavigatorAddNewItem = new System.Windows.Forms.ToolStripButton();
             this.bindingNavigatorCountItem = new System.Windows.Forms.ToolStripLabel();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
-            this.toolStripCBCustomers = new System.Windows.Forms.ToolStripComboBox();
+            this.toolStripCBTechs = new System.Windows.Forms.ToolStripComboBox();
             this.bindingNavigatorSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.bindingNavigatorMoveFirstItem = new System.Windows.Forms.ToolStripButton();
             this.bindingNavigatorMovePreviousItem = new System.Windows.Forms.ToolStripButton();
@@ -66,7 +66,7 @@
             this.bindingNavigator1.DeleteItem = null;
             this.bindingNavigator1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripLabel1,
-            this.toolStripCBCustomers,
+            this.toolStripCBTechs,
             this.bindingNavigatorSeparator,
             this.bindingNavigatorMoveFirstItem,
             this.bindingNavigatorMovePreviousItem,
@@ -111,14 +111,14 @@
             this.toolStripLabel1.Text = "Technician";
             this.toolStripLabel1.Click += new System.EventHandler(this.toolStripLabel1_Click);
             // 
-            // toolStripCBCustomers
+            // toolStripCBTechs
             // 
-            this.toolStripCBCustomers.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.toolStripCBCustomers.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
-            this.toolStripCBCustomers.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.toolStripCBCustomers.Name = "toolStripCBCustomers";
-            this.toolStripCBCustomers.Size = new System.Drawing.Size(121, 25);
-            this.toolStripCBCustomers.SelectedIndexChanged += new System.EventHandler(this.toolStripCBCustomers_SelectedIndexChanged);
+            this.toolStripCBTechs.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.toolStripCBTechs.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.toolStripCBTechs.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.toolStripCBTechs.Name = "toolStripCBTechs";
+            this.toolStripCBTechs.Size = new System.Drawing.Size(121, 25);
+            this.toolStripCBTechs.SelectedIndexChanged += new System.EventHandler(this.toolStripCBCustomers_SelectedIndexChanged);
             // 
             // bindingNavigatorSeparator
             // 
@@ -235,7 +235,7 @@
             this.MaximizeBox = false;
             this.Name = "frmVETechs";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "View, Edit and Add Customers";
+            this.Text = "View, Edit and Add Technicians";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmVETechs_FormClosed);
             ((System.ComponentModel.ISupportInitialize)(this.bindingNavigator1)).EndInit();
             this.bindingNavigator1.ResumeLayout(false);
@@ -259,7 +259,7 @@
         private System.Windows.Forms.ToolStripTextBox bindingNavigatorPositionItem;
         private System.Windows.Forms.ToolStripButton bindingNavigatorMoveNextItem;
         private System.Windows.Forms.ToolStripButton bindingNavigatorMoveLastItem;
-        private System.Windows.Forms.ToolStripComboBox toolStripCBCustomers;
+        private System.Windows.Forms.ToolStripComboBox toolStripCBTechs;
         private System.Windows.Forms.ToolStripButton bindingNavigatorDeleteItem;
         private System.Windows.Forms.ToolStripLabel toolStripLabel1;
         private System.Windows.Forms.Label label1;

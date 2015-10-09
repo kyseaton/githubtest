@@ -85,7 +85,7 @@
             this.MaximizeBox = false;
             this.Name = "Business_Name";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Enter Business Name";
+            this.Text = "Notification Service";
             this.ResumeLayout(false);
             this.PerformLayout();
 

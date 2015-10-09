@@ -219,7 +219,7 @@ namespace NewBTASProto
             #endregion
 
             #region setup the combo box
-            ComboBox CustomerCB = toolStripCBCustomers.ComboBox;
+            ComboBox CustomerCB = toolStripCBBats.ComboBox;
             CustomerCB.DisplayMember = "BatteryModel";
             CustomerCB.DataSource = bindingSource1;
 
@@ -557,6 +557,19 @@ namespace NewBTASProto
                         "' WHERE RecordID=" + current["RecordID"].ToString();
                     OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
                     cmd.ExecuteNonQuery();
+
+                    // Also update the model in the other tables!
+                    cmdStr = "UPDATE Batteries SET BatteryModel='" + textBox2.Text.Replace("'", "''") + "' WHERE BatteryModel='" + current["BatteryModel"].ToString() + "'";
+                    cmd = new OleDbCommand(cmdStr, conn);
+                    cmd.ExecuteNonQuery();
+
+                    cmdStr = "UPDATE WorkOrders SET BatteryModel='" + textBox2.Text.Replace("'", "''") + "' WHERE BatteryModel='" + current["BatteryModel"].ToString() + "'";
+                    cmd = new OleDbCommand(cmdStr, conn);
+                    cmd.ExecuteNonQuery();
+                    
+                    //now force an update on the binding by moving one ahead and then back...
+                    toolStripCBBats.ComboBox.Text = textBox2.Text.Replace("'", "''");
+
                     MessageBox.Show("Battery model " + textBox2.Text + "'s entry has been updated.");
 
                 }

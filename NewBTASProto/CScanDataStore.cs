@@ -164,6 +164,9 @@ namespace NewBTASProto
                 case 4:
                     shuntCableType = "200mA";
                     break;
+                case 5:
+                    shuntCableType = "2A / 10A";
+                    break;
                 case 7:
                     shuntCableType = "TEST BOX";
                     break;
@@ -229,6 +232,9 @@ namespace NewBTASProto
                 case 2:
                 case 3:
                 case 4:
+                    currentTwo *= KT;
+                    break;
+                case 5:
                     currentTwo *= KT;
                     break;
                 case 7:

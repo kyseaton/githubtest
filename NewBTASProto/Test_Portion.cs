@@ -28,6 +28,7 @@ namespace NewBTASProto
 
         private void RunTest()
         {
+            
             ///
             /// General Structure:
             /// 
@@ -57,6 +58,9 @@ namespace NewBTASProto
             int station = dataGridView1.CurrentRow.Index;
             int Cstation = 0;
             bool isASlave = false;
+
+            //here for testing the not system
+            sendNote(station,3,"Test Initiated");
 
             if (d.Rows[station][9].ToString() == "") { ;}  // do nothing if there is no assigned charger id
             else if (d.Rows[station][9].ToString().Length > 2)  // this is the case where we have a master and slave config

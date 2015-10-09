@@ -273,7 +273,20 @@ namespace NewBTASProto
                         "' WHERE CustomerID=" + current["CustomerID"].ToString();
                     OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
                     cmd.ExecuteNonQuery();
-                    MessageBox.Show(current["CustomerName"].ToString() + "'s entry has been updated.");
+
+                    // Also update the customer name in the other tables!
+                    cmdStr = "UPDATE WorkOrders SET CustomerName='" + textBox1.Text.Replace("'", "''") + "' WHERE CustomerName='" + current["CustomerName"].ToString() + "'";
+                    cmd = new OleDbCommand(cmdStr, conn);
+                    cmd.ExecuteNonQuery();
+
+                    cmdStr = "UPDATE Batteries SET CustomerName='" + textBox1.Text.Replace("'", "''") + "' WHERE CustomerName='" + current["CustomerName"].ToString() + "'";
+                    cmd = new OleDbCommand(cmdStr, conn);
+                    cmd.ExecuteNonQuery();
+
+                    //now force an update on the binding by moving one ahead and then back...
+                    toolStripCBCustomers.ComboBox.Text = textBox1.Text.Replace("'", "''");
+
+                    MessageBox.Show(textBox1.Text.Replace("'", "''") + "'s entry has been updated.");
 
                 }
                 else

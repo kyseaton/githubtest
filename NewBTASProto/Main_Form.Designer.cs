@@ -41,16 +41,19 @@
             this.restoreDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.workOrdersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.customerBatteriesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.customersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.batteriesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.customersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.customerBatteriesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.workOrdersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.highlightCurrentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.automaticallyConfigureChargerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.chargerConfigurationInterfaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editTestSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.notificationServiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.selectTemperatureUnitsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.centigradeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -61,10 +64,12 @@
             this.bussinessNameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.editTechniciansToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripMenuItem();
             this.etcToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.test3ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem24 = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.programVersionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
@@ -145,7 +150,11 @@
             this.toolStripMenuItem23 = new System.Windows.Forms.ToolStripSeparator();
             this.clearToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.button5 = new System.Windows.Forms.Button();
             this.rtbIncoming = new System.Windows.Forms.RichTextBox();
+            this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+            this.folderBrowserDialog2 = new System.Windows.Forms.FolderBrowserDialog();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -191,13 +200,17 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.workOrdersToolStripMenuItem,
-            this.customerBatteriesToolStripMenuItem,
-            this.customersToolStripMenuItem,
+            this.toolStripMenuItem1,
             this.batteriesToolStripMenuItem,
+            this.customersToolStripMenuItem,
+            this.customerBatteriesToolStripMenuItem,
+            this.workOrdersToolStripMenuItem,
+            this.toolStripMenuItem3,
             this.toolsToolStripMenuItem,
             this.optionsToolStripMenuItem,
+            this.toolStripMenuItem6,
             this.etcToolStripMenuItem,
+            this.toolStripMenuItem24,
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -237,12 +250,14 @@
             this.backupDatabaseToolStripMenuItem.Name = "backupDatabaseToolStripMenuItem";
             this.backupDatabaseToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
             this.backupDatabaseToolStripMenuItem.Text = "Backup Database";
+            this.backupDatabaseToolStripMenuItem.Click += new System.EventHandler(this.backupDatabaseToolStripMenuItem_Click);
             // 
             // restoreDatabaseToolStripMenuItem
             // 
             this.restoreDatabaseToolStripMenuItem.Name = "restoreDatabaseToolStripMenuItem";
             this.restoreDatabaseToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
             this.restoreDatabaseToolStripMenuItem.Text = "Restore Database";
+            this.restoreDatabaseToolStripMenuItem.Click += new System.EventHandler(this.restoreDatabaseToolStripMenuItem_Click);
             // 
             // toolStripSeparator4
             // 
@@ -256,26 +271,13 @@
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
-            // workOrdersToolStripMenuItem
+            // toolStripMenuItem1
             // 
-            this.workOrdersToolStripMenuItem.Name = "workOrdersToolStripMenuItem";
-            this.workOrdersToolStripMenuItem.Size = new System.Drawing.Size(131, 20);
-            this.workOrdersToolStripMenuItem.Text = "Manage Work Orders";
-            this.workOrdersToolStripMenuItem.Click += new System.EventHandler(this.workOrdersToolStripMenuItem_Click);
-            // 
-            // customerBatteriesToolStripMenuItem
-            // 
-            this.customerBatteriesToolStripMenuItem.Name = "customerBatteriesToolStripMenuItem";
-            this.customerBatteriesToolStripMenuItem.Size = new System.Drawing.Size(165, 20);
-            this.customerBatteriesToolStripMenuItem.Text = "Manage Customer Batteries";
-            this.customerBatteriesToolStripMenuItem.Click += new System.EventHandler(this.customerBatteriesToolStripMenuItem_Click);
-            // 
-            // customersToolStripMenuItem
-            // 
-            this.customersToolStripMenuItem.Name = "customersToolStripMenuItem";
-            this.customersToolStripMenuItem.Size = new System.Drawing.Size(122, 20);
-            this.customersToolStripMenuItem.Text = "Manage Customers";
-            this.customersToolStripMenuItem.Click += new System.EventHandler(this.customersToolStripMenuItem_Click);
+            this.toolStripMenuItem1.AutoSize = false;
+            this.toolStripMenuItem1.Enabled = false;
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(6, 20);
+            this.toolStripMenuItem1.Text = "|";
             // 
             // batteriesToolStripMenuItem
             // 
@@ -284,6 +286,35 @@
             this.batteriesToolStripMenuItem.Text = "Manage Battery Models";
             this.batteriesToolStripMenuItem.Click += new System.EventHandler(this.batteriesToolStripMenuItem_Click);
             // 
+            // customersToolStripMenuItem
+            // 
+            this.customersToolStripMenuItem.Name = "customersToolStripMenuItem";
+            this.customersToolStripMenuItem.Size = new System.Drawing.Size(122, 20);
+            this.customersToolStripMenuItem.Text = "Manage Customers";
+            this.customersToolStripMenuItem.Click += new System.EventHandler(this.customersToolStripMenuItem_Click);
+            // 
+            // customerBatteriesToolStripMenuItem
+            // 
+            this.customerBatteriesToolStripMenuItem.Name = "customerBatteriesToolStripMenuItem";
+            this.customerBatteriesToolStripMenuItem.Size = new System.Drawing.Size(165, 20);
+            this.customerBatteriesToolStripMenuItem.Text = "Manage Customer Batteries";
+            this.customerBatteriesToolStripMenuItem.Click += new System.EventHandler(this.customerBatteriesToolStripMenuItem_Click);
+            // 
+            // workOrdersToolStripMenuItem
+            // 
+            this.workOrdersToolStripMenuItem.Name = "workOrdersToolStripMenuItem";
+            this.workOrdersToolStripMenuItem.Size = new System.Drawing.Size(131, 20);
+            this.workOrdersToolStripMenuItem.Text = "Manage Work Orders";
+            this.workOrdersToolStripMenuItem.Click += new System.EventHandler(this.workOrdersToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem3
+            // 
+            this.toolStripMenuItem3.AutoSize = false;
+            this.toolStripMenuItem3.Enabled = false;
+            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(6, 20);
+            this.toolStripMenuItem3.Text = "|";
+            // 
             // toolsToolStripMenuItem
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -291,7 +322,8 @@
             this.automaticallyConfigureChargerToolStripMenuItem,
             this.toolStripSeparator5,
             this.chargerConfigurationInterfaceToolStripMenuItem,
-            this.editTestSettingsToolStripMenuItem});
+            this.editTestSettingsToolStripMenuItem,
+            this.notificationServiceToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
@@ -328,6 +360,13 @@
             this.editTestSettingsToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
             this.editTestSettingsToolStripMenuItem.Text = "Edit Custom Test Settings";
             this.editTestSettingsToolStripMenuItem.Click += new System.EventHandler(this.editTestSettingsToolStripMenuItem_Click);
+            // 
+            // notificationServiceToolStripMenuItem
+            // 
+            this.notificationServiceToolStripMenuItem.Name = "notificationServiceToolStripMenuItem";
+            this.notificationServiceToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
+            this.notificationServiceToolStripMenuItem.Text = "Notification Service";
+            this.notificationServiceToolStripMenuItem.Click += new System.EventHandler(this.notificationServiceToolStripMenuItem_Click);
             // 
             // optionsToolStripMenuItem
             // 
@@ -406,6 +445,14 @@
             this.editTechniciansToolStripMenuItem.Text = "Edit Technicians";
             this.editTechniciansToolStripMenuItem.Click += new System.EventHandler(this.editTechniciansToolStripMenuItem_Click);
             // 
+            // toolStripMenuItem6
+            // 
+            this.toolStripMenuItem6.AutoSize = false;
+            this.toolStripMenuItem6.Enabled = false;
+            this.toolStripMenuItem6.Name = "toolStripMenuItem6";
+            this.toolStripMenuItem6.Size = new System.Drawing.Size(6, 20);
+            this.toolStripMenuItem6.Text = "|";
+            // 
             // etcToolStripMenuItem
             // 
             this.etcToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -434,6 +481,14 @@
             this.test3ToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
             this.test3ToolStripMenuItem.Text = "Plots";
             this.test3ToolStripMenuItem.Click += new System.EventHandler(this.test3ToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem24
+            // 
+            this.toolStripMenuItem24.AutoSize = false;
+            this.toolStripMenuItem24.Enabled = false;
+            this.toolStripMenuItem24.Name = "toolStripMenuItem24";
+            this.toolStripMenuItem24.Size = new System.Drawing.Size(6, 20);
+            this.toolStripMenuItem24.Text = "|";
             // 
             // helpToolStripMenuItem
             // 
@@ -470,7 +525,7 @@
             this.toolStripStatusLabel3,
             this.toolStripStatusLabel4,
             this.toolStripStatusLabel5});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 733);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 740);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(1282, 22);
             this.statusStrip1.SizingGrip = false;
@@ -518,7 +573,7 @@
             this.groupBox1.ForeColor = System.Drawing.SystemColors.ControlText;
             this.groupBox1.Location = new System.Drawing.Point(1035, 90);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(235, 640);
+            this.groupBox1.Size = new System.Drawing.Size(235, 647);
             this.groupBox1.TabIndex = 26;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "REAL TIME DATA";
@@ -532,18 +587,19 @@
             this.label1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label1.Location = new System.Drawing.Point(6, 16);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(223, 579);
+            this.label1.Size = new System.Drawing.Size(223, 596);
             this.label1.TabIndex = 34;
             // 
             // button2
             // 
             this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.Location = new System.Drawing.Point(160, 605);
+            this.button2.Location = new System.Drawing.Point(154, 618);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 0;
             this.button2.Text = "Print";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // groupBox2
             // 
@@ -621,7 +677,7 @@
             // 
             this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(616, 28);
+            this.comboBox1.Location = new System.Drawing.Point(616, 27);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(135, 21);
             this.comboBox1.TabIndex = 8;
@@ -724,7 +780,7 @@
             this.groupBox3.Controls.Add(this.chart1);
             this.groupBox3.Location = new System.Drawing.Point(12, 443);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(708, 287);
+            this.groupBox3.Size = new System.Drawing.Size(708, 294);
             this.groupBox3.TabIndex = 28;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "GRAPHICAL DATA";
@@ -781,6 +837,7 @@
             this.button4.TabIndex = 31;
             this.button4.Text = "Print";
             this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // chart1
             // 
@@ -800,7 +857,7 @@
             series1.ChartArea = "ChartArea1";
             series1.Name = "Series1";
             this.chart1.Series.Add(series1);
-            this.chart1.Size = new System.Drawing.Size(696, 239);
+            this.chart1.Size = new System.Drawing.Size(696, 246);
             this.chart1.TabIndex = 30;
             this.chart1.Text = "chart1";
             // 
@@ -1149,13 +1206,25 @@
             // 
             this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox4.Controls.Add(this.button5);
             this.groupBox4.Controls.Add(this.rtbIncoming);
             this.groupBox4.Location = new System.Drawing.Point(726, 443);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(303, 287);
+            this.groupBox4.Size = new System.Drawing.Size(303, 294);
             this.groupBox4.TabIndex = 29;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "MESSAGE CENTER";
+            // 
+            // button5
+            // 
+            this.button5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button5.Location = new System.Drawing.Point(222, 265);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(75, 23);
+            this.button5.TabIndex = 3;
+            this.button5.Text = "Clear";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click_1);
             // 
             // rtbIncoming
             // 
@@ -1163,16 +1232,29 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.rtbIncoming.Location = new System.Drawing.Point(6, 13);
             this.rtbIncoming.Name = "rtbIncoming";
-            this.rtbIncoming.Size = new System.Drawing.Size(291, 268);
+            this.rtbIncoming.Size = new System.Drawing.Size(291, 246);
             this.rtbIncoming.TabIndex = 2;
             this.rtbIncoming.Text = "";
+            // 
+            // folderBrowserDialog1
+            // 
+            this.folderBrowserDialog1.Description = "Where to you want to save the DataBase Backup?";
+            // 
+            // folderBrowserDialog2
+            // 
+            this.folderBrowserDialog2.Description = "Step 1. Please select a place to backup the current Database.";
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
+            this.openFileDialog1.Title = "Step 2.  Now select the Database to restore.";
             // 
             // Main_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(1282, 755);
+            this.ClientSize = new System.Drawing.Size(1282, 762);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
@@ -1183,7 +1265,7 @@
             this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
-            this.MinimumSize = new System.Drawing.Size(1298, 793);
+            this.MinimumSize = new System.Drawing.Size(270, 500);
             this.Name = "Main_Form";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_Form_FormClosing);
@@ -1328,6 +1410,15 @@
         private System.Windows.Forms.ToolStripMenuItem editTestSettingsToolStripMenuItem;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.RichTextBox rtbIncoming;
+        private System.Windows.Forms.ToolStripMenuItem notificationServiceToolStripMenuItem;
+        private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
+        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog2;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem3;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem6;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem24;
     }
 }
 

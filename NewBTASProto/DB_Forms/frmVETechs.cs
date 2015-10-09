@@ -78,7 +78,7 @@ namespace NewBTASProto
             #endregion
 
             #region setup the combo box
-            ComboBox CustomerCB = toolStripCBCustomers.ComboBox;
+            ComboBox CustomerCB = toolStripCBTechs.ComboBox;
             CustomerCB.DisplayMember = "OperatorName";
             CustomerCB.DataSource = bindingSource1;
 
@@ -253,7 +253,10 @@ namespace NewBTASProto
                         "' WHERE ID=" + current["ID"].ToString();
                     OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
                     cmd.ExecuteNonQuery();
-                    MessageBox.Show(current["OperatorName"].ToString() + "'s entry has been updated.");
+
+                    //now force an update on the binding by moving one ahead and then back...
+                    toolStripCBTechs.ComboBox.Text = textBox1.Text.Replace("'", "''");
+                    MessageBox.Show(textBox1.Text.Replace("'", "''") + "'s entry has been updated.");
 
                 }
                 else

@@ -164,22 +164,32 @@ namespace NewBTASProto
                                                 tempText += "Current#1:  " + testData.currentOne.ToString("00.00") + Environment.NewLine;
                                                 tempText += "Current#2:  " + testData.currentTwo.ToString("00.00") + Environment.NewLine;
                                             }
-                                            else if (GlobalVars.curr2Dis[currentRow]) 
+                                            //if we have a mini that is charging...
+                                            else if (d.Rows[currentRow][10].ToString().Contains("mini") && !(d.Rows[currentRow][2].ToString().Contains("Cap") || d.Rows[currentRow][2].ToString().Contains("Discharge"))) 
                                             {
                                                 // for the mini case (not currently working
-                                                tempText += "Current#2:  " + testData.currentTwo.ToString("00.00") + Environment.NewLine; 
+                                                tempText += "Current:  " + testData.currentTwo.ToString("00.00") + Environment.NewLine; 
                                             }
                                             else
                                             {
                                                 // all other cases
                                                 tempText += "Current:  " + testData.currentOne.ToString("00.00") + Environment.NewLine;
                                             }
-                                            
 
 
-                                            for (int i = 0; i < GlobalVars.CScanData[currentRow].cellsToDisplay; i++)
+                                            if (GlobalVars.Pos2Neg == false)
                                             {
-                                                tempText += "Cell #" + (i + 1).ToString() + ":  " + testData.orderedCells[i].ToString("0.000") + Environment.NewLine;
+                                                for (int i = 0; i < GlobalVars.CScanData[currentRow].cellsToDisplay; i++)
+                                                {
+                                                    tempText += "Cell #" + (i + 1).ToString() + ":  " + testData.orderedCells[i].ToString("0.000") + Environment.NewLine;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                for (int i = 0; i < GlobalVars.CScanData[currentRow].cellsToDisplay; i++)
+                                                {
+                                                    tempText += "Cell #" + (i + 1).ToString() + ":  " + testData.orderedCells[GlobalVars.CScanData[currentRow].cellsToDisplay - i - 1].ToString("0.000") + Environment.NewLine;
+                                                }
                                             }
 
                                             // WE need to display open when we get -99, cold for -98, hot for -97 and shorted for -96
@@ -343,6 +353,7 @@ namespace NewBTASProto
                                             {
 
                                                 dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[4].Style.BackColor = Color.Red;
+                                                dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.Gainsboro;
                                                 chart1.Series.Clear();
                                                 chart1.Invalidate();
                                                 LockWindowUpdate(this.Handle);
@@ -479,6 +490,8 @@ namespace NewBTASProto
                                                 {
                                                     // set the cell to green
                                                     dataGridView1.Rows[j].Cells[4].Style.BackColor = Color.Red;
+                                                    dataGridView1.Rows[j].Cells[8].Style.BackColor = Color.Gainsboro;
+
                                                 });
                                             }
                                         }  // end if
@@ -613,9 +626,18 @@ namespace NewBTASProto
 
                 for (int i = 0; i < GlobalVars.CScanData[station].cellsToDisplay; i++)
                 {
-                    series1.Points.AddXY(i + 1, testData.orderedCells[i]);
-                    // color test
-                    series1.Points[i].Color = pointColorMain(0, 1, testData.orderedCells[i], type);
+                    if (GlobalVars.Pos2Neg == false)
+                    {
+                        series1.Points.AddXY(i + 1, testData.orderedCells[i]);
+                        // color test
+                        series1.Points[i].Color = pointColorMain(0, 1, testData.orderedCells[i], type);
+                    }
+                    else
+                    {
+                        series1.Points.AddXY(i + 1, testData.orderedCells[GlobalVars.CScanData[station].cellsToDisplay - i - 1]);
+                        // color test
+                        series1.Points[i].Color = pointColorMain(0, 1, testData.orderedCells[GlobalVars.CScanData[station].cellsToDisplay - i - 1], type);
+                    }
                 }
                 chart1.Invalidate();
                 chart1.ChartAreas[0].RecalculateAxesScale();
@@ -1360,8 +1382,22 @@ namespace NewBTASProto
                         catch
                         {
                             // didn't work
-                            // clear the workorder
-                            updateD(currentRow, 1, "");
+                            // just set the defaults...
+                            this.Invoke((MethodInvoker)delegate()
+                            {
+                                // just set to the cells readings..
+                                comboBox2.Items.Clear();
+                                comboBox3.Items.Clear();
+                                radioButton1.Enabled = false;
+                                radioButton2.Enabled = false;
+                                updateR2(true);
+                                comboBox2.Enabled = false;
+                                comboBox3.Enabled = false;
+                                radioButton2.Text = "Cells";
+                                comboBox3.Items.Add("Cell Voltages");
+                                updateC3("Cell Voltages");
+                            });
+
                             lockUpdate = false;
                             return;
                         }

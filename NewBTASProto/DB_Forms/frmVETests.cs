@@ -83,7 +83,7 @@ namespace NewBTASProto
             #endregion
 
             #region setup the combo box
-            ComboBox CustomerCB = toolStripCBCustomers.ComboBox;
+            ComboBox CustomerCB = toolStripCBTests.ComboBox;
             CustomerCB.DisplayMember = "TESTNAME";
             CustomerCB.DataSource = bindingSource1;
 

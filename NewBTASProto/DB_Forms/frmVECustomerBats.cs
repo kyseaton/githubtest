@@ -426,7 +426,16 @@ namespace NewBTASProto
                         "' WHERE BID=" + current["BID"].ToString();
                     OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
                     cmd.ExecuteNonQuery();
-                    MessageBox.Show("Battery serial number " + current["BatterySerialNumber"].ToString() + "'s entry has been updated.");
+
+                    // Also update the serial number in the other workOrders table!
+                    cmdStr = "UPDATE WorkOrders SET BatterySerialNumber='" + textBox3.Text.Replace("'", "''") + "' WHERE BatterySerialNumber='" + current["BatterySerialNumber"].ToString() + "'";
+                    cmd = new OleDbCommand(cmdStr, conn);
+                    cmd.ExecuteNonQuery();
+                    
+                    //now force an update on the binding by moving one ahead and then back...
+                    toolStripCBSerNum.ComboBox.Text = textBox3.Text.Replace("'", "''");
+
+                    MessageBox.Show("Battery serial number " + textBox3.Text.Replace("'", "''") + "'s entry has been updated.");
 
                 }
                 else
