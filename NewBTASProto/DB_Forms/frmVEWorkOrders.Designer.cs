@@ -144,6 +144,7 @@
             this.bindingNavigatorAddNewItem.RightToLeftAutoMirrorImage = true;
             this.bindingNavigatorAddNewItem.Size = new System.Drawing.Size(23, 22);
             this.bindingNavigatorAddNewItem.Text = "Add new";
+            this.bindingNavigatorAddNewItem.Click += new System.EventHandler(this.bindingNavigatorAddNewItem_Click);
             // 
             // bindingNavigatorCountItem
             // 
@@ -166,9 +167,8 @@
             this.toolStripCBWorkOrderStatus.Items.AddRange(new object[] {
             "Open",
             "Closed",
-            "Active",
-            "Hidden",
-            "All"});
+            "Open and Closed",
+            "Active"});
             this.toolStripCBWorkOrderStatus.Name = "toolStripCBWorkOrderStatus";
             this.toolStripCBWorkOrderStatus.Size = new System.Drawing.Size(121, 25);
             this.toolStripCBWorkOrderStatus.SelectedIndexChanged += new System.EventHandler(this.toolStripCBWorkOrderStatus_SelectedIndexChanged);
@@ -219,6 +219,7 @@
             this.toolStripCBWorkOrders.Name = "toolStripCBWorkOrders";
             this.toolStripCBWorkOrders.Size = new System.Drawing.Size(121, 25);
             this.toolStripCBWorkOrders.SelectedIndexChanged += new System.EventHandler(this.toolStripCBWorkOrders_SelectedIndexChanged);
+            this.toolStripCBWorkOrders.TextChanged += new System.EventHandler(this.toolStripCBWorkOrders_TextChanged);
             // 
             // bindingNavigatorSeparator
             // 
@@ -233,6 +234,7 @@
             this.bindingNavigatorMoveFirstItem.RightToLeftAutoMirrorImage = true;
             this.bindingNavigatorMoveFirstItem.Size = new System.Drawing.Size(23, 22);
             this.bindingNavigatorMoveFirstItem.Text = "Move first";
+            this.bindingNavigatorMoveFirstItem.Click += new System.EventHandler(this.bindingNavigatorMoveFirstItem_Click);
             // 
             // bindingNavigatorMovePreviousItem
             // 
@@ -242,6 +244,7 @@
             this.bindingNavigatorMovePreviousItem.RightToLeftAutoMirrorImage = true;
             this.bindingNavigatorMovePreviousItem.Size = new System.Drawing.Size(23, 22);
             this.bindingNavigatorMovePreviousItem.Text = "Move previous";
+            this.bindingNavigatorMovePreviousItem.Click += new System.EventHandler(this.bindingNavigatorMovePreviousItem_Click);
             // 
             // bindingNavigatorPositionItem
             // 
@@ -296,7 +299,7 @@
             this.textBox1.Location = new System.Drawing.Point(123, 39);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(147, 20);
-            this.textBox1.TabIndex = 0;
+            this.textBox1.TabIndex = 1;
             // 
             // label1
             // 
@@ -357,14 +360,14 @@
             this.textBox3.Location = new System.Drawing.Point(123, 91);
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(147, 20);
-            this.textBox3.TabIndex = 2;
+            this.textBox3.TabIndex = 3;
             // 
             // textBox4
             // 
             this.textBox4.Location = new System.Drawing.Point(123, 117);
             this.textBox4.Name = "textBox4";
             this.textBox4.Size = new System.Drawing.Size(147, 20);
-            this.textBox4.TabIndex = 3;
+            this.textBox4.TabIndex = 4;
             // 
             // comboBox1
             // 
@@ -384,6 +387,7 @@
             this.textBox8.ReadOnly = true;
             this.textBox8.Size = new System.Drawing.Size(147, 20);
             this.textBox8.TabIndex = 9;
+            this.textBox8.TabStop = false;
             // 
             // comboBox3
             // 
@@ -397,7 +401,7 @@
             this.comboBox3.Location = new System.Drawing.Point(123, 143);
             this.comboBox3.Name = "comboBox3";
             this.comboBox3.Size = new System.Drawing.Size(147, 21);
-            this.comboBox3.TabIndex = 4;
+            this.comboBox3.TabIndex = 5;
             // 
             // label9
             // 
@@ -424,6 +428,7 @@
             this.textBox10.ReadOnly = true;
             this.textBox10.Size = new System.Drawing.Size(147, 20);
             this.textBox10.TabIndex = 10;
+            this.textBox10.TabStop = false;
             // 
             // textBox11
             // 
@@ -432,6 +437,7 @@
             this.textBox11.ReadOnly = true;
             this.textBox11.Size = new System.Drawing.Size(147, 20);
             this.textBox11.TabIndex = 11;
+            this.textBox11.TabStop = false;
             // 
             // textBox12
             // 
@@ -439,7 +445,7 @@
             this.textBox12.Multiline = true;
             this.textBox12.Name = "textBox12";
             this.textBox12.Size = new System.Drawing.Size(443, 188);
-            this.textBox12.TabIndex = 7;
+            this.textBox12.TabIndex = 12;
             // 
             // label11
             // 
@@ -533,15 +539,11 @@
             // 
             this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Items.AddRange(new object[] {
-            "Open",
-            "Closed",
-            "Hidden",
-            "Active"});
             this.comboBox2.Location = new System.Drawing.Point(123, 196);
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(147, 21);
-            this.comboBox2.TabIndex = 6;
+            this.comboBox2.TabIndex = 7;
+            this.comboBox2.SelectedValueChanged += new System.EventHandler(this.comboBox2_SelectedValueChanged);
             // 
             // dateTimePicker1
             // 
@@ -549,7 +551,7 @@
             this.dateTimePicker1.Location = new System.Drawing.Point(123, 65);
             this.dateTimePicker1.Name = "dateTimePicker1";
             this.dateTimePicker1.Size = new System.Drawing.Size(147, 20);
-            this.dateTimePicker1.TabIndex = 1;
+            this.dateTimePicker1.TabIndex = 2;
             // 
             // dateTimePicker2
             // 
@@ -557,7 +559,7 @@
             this.dateTimePicker2.Location = new System.Drawing.Point(123, 170);
             this.dateTimePicker2.Name = "dateTimePicker2";
             this.dateTimePicker2.Size = new System.Drawing.Size(147, 20);
-            this.dateTimePicker2.TabIndex = 5;
+            this.dateTimePicker2.TabIndex = 6;
             // 
             // button1
             // 
@@ -565,6 +567,7 @@
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(94, 23);
             this.button1.TabIndex = 32;
+            this.button1.TabStop = false;
             this.button1.Text = "Delete Last Test";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
@@ -617,7 +620,7 @@
             this.MaximizeBox = false;
             this.Name = "frmVEWorkOrders";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "View and Edit Work Orders";
+            this.Text = "View, Edit and Add Work Orders";
             this.Load += new System.EventHandler(this.frmVEWorkOrders_Load);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingNavigator1)).EndInit();

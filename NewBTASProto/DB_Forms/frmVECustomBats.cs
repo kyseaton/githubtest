@@ -41,7 +41,7 @@ namespace NewBTASProto
             string strAccessSelect;
             // Open database containing all the battery data....
 
-            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB";
+            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
             strAccessSelect = @"SELECT * FROM BatteriesCustom ORDER BY BatteryModel ASC";
 
             CustomBats = new DataSet();
@@ -92,8 +92,6 @@ namespace NewBTASProto
             textBox6.DataBindings.Add("Text", bindingSource1, "VOLT");
             textBox7.DataBindings.Add("Text", bindingSource1, "NCELLS");
             textBox8.DataBindings.Add("Text", bindingSource1, "CAP");
-            textBox9.DataBindings.Add("Text", bindingSource1, "CELL");
-            textBox10.DataBindings.Add("Text", bindingSource1, "CPN");
             textBox21.DataBindings.Add("Text", bindingSource1, "BCVMIN");
             textBox22.DataBindings.Add("Text", bindingSource1, "BCVMAX");
             textBox23.DataBindings.Add("Text", bindingSource1, "COT");
@@ -355,7 +353,7 @@ namespace NewBTASProto
                 if (MessageBox.Show("Are you sure you want to remove this battery from the data base?", "Delete Record", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     // set up the db Connection
-                    string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB";
+                    string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
                     OleDbConnection conn = new OleDbConnection(connectionString);
                     conn.Open();
 
@@ -390,6 +388,318 @@ namespace NewBTASProto
 
         private void saveToolStripButton_Click_1(object sender, EventArgs e)
         {
+            //to get around the new entry issue...
+            if (bindingNavigator1.BindingSource.Position == -1)
+            {
+                string temp1 = textBox2.Text;
+                string temp2 = textBox1.Text;
+                string temp3 = textBox3.Text;
+                string temp4 = comboBox13.Text;
+
+                string temp5 = textBox6.Text;
+                string temp6 = textBox7.Text;
+                string temp7 = textBox8.Text;
+
+                string temp10 = textBox27.Text;
+                string temp11 = textBox28.Text;
+                string temp12 = textBox29.Text;
+
+                string temp13 = textBox21.Text;
+                string temp14 = textBox22.Text;
+                string temp15 = textBox23.Text;
+
+                string temp16 = textBox36.Text;
+
+                string temp17 = comboBox2.Text;
+
+                decimal temp18 = numericUpDown1.Value;
+                decimal temp19 = numericUpDown2.Value;
+                decimal temp20 = numericUpDown3.Value;
+                decimal temp21 = numericUpDown4.Value;
+
+                decimal temp22 = numericUpDown8.Value;
+                decimal temp23 = numericUpDown7.Value;
+                decimal temp24 = numericUpDown6.Value;
+                decimal temp25 = numericUpDown5.Value;
+
+                string temp26 = comboBox1.Text;
+
+                decimal temp27 = numericUpDown16.Value;
+                decimal temp28 = numericUpDown15.Value;
+                decimal temp29 = numericUpDown14.Value;
+                decimal temp30 = numericUpDown13.Value;
+
+                decimal temp31 = numericUpDown12.Value;
+                decimal temp32 = numericUpDown11.Value;
+                decimal temp33 = numericUpDown10.Value;
+                decimal temp34 = numericUpDown9.Value;
+
+                string temp35 = comboBox3.Text;
+
+                decimal temp36 = numericUpDown24.Value;
+                decimal temp37 = numericUpDown23.Value;
+                decimal temp38 = numericUpDown22.Value;
+                decimal temp39 = numericUpDown21.Value;
+
+                decimal temp40 = numericUpDown20.Value;
+                decimal temp41 = numericUpDown19.Value;
+                decimal temp42 = numericUpDown18.Value;
+                decimal temp43 = numericUpDown17.Value;
+
+                string temp44 = comboBox4.Text;
+
+                decimal temp45 = numericUpDown32.Value;
+                decimal temp46 = numericUpDown31.Value;
+                decimal temp47 = numericUpDown30.Value;
+                decimal temp48 = numericUpDown29.Value;
+
+                decimal temp49 = numericUpDown28.Value;
+                decimal temp50 = numericUpDown27.Value;
+                decimal temp51 = numericUpDown26.Value;
+                decimal temp52 = numericUpDown25.Value;
+
+                string temp53 = comboBox5.Text;
+
+                decimal temp54 = numericUpDown40.Value;
+                decimal temp55 = numericUpDown39.Value;
+                decimal temp56 = numericUpDown38.Value;
+                decimal temp57 = numericUpDown37.Value;
+
+                decimal temp58 = numericUpDown36.Value;
+                decimal temp59 = numericUpDown35.Value;
+                decimal temp60 = numericUpDown34.Value;
+                decimal temp61 = numericUpDown33.Value;
+
+                string temp62 = comboBox12.Text;
+
+                decimal temp63 = numericUpDown87.Value;
+                decimal temp64 = numericUpDown86.Value;
+                decimal temp65 = numericUpDown85.Value;
+                decimal temp66 = numericUpDown84.Value;
+
+                decimal temp67 = numericUpDown83.Value;
+                decimal temp68 = numericUpDown82.Value;
+                decimal temp69 = numericUpDown81.Value;
+                decimal temp70 = numericUpDown80.Value;
+
+                string temp71 = comboBox6.Text;
+
+                decimal temp72 = numericUpDown45.Value;
+                decimal temp73 = numericUpDown44.Value;
+                decimal temp74 = numericUpDown43.Value;
+                decimal temp75 = numericUpDown42.Value;
+                decimal temp76 = numericUpDown41.Value;
+
+                string temp77 = comboBox7.Text;
+
+                decimal temp78 = numericUpDown50.Value;
+                decimal temp79 = numericUpDown49.Value;
+                decimal temp80 = numericUpDown48.Value;
+                decimal temp81 = numericUpDown47.Value;
+                decimal temp82 = numericUpDown46.Value;
+
+                string temp83 = comboBox9.Text;
+
+                decimal temp84 = numericUpDown63.Value;
+                decimal temp85 = numericUpDown62.Value;
+                decimal temp86 = numericUpDown61.Value;
+                decimal temp87 = numericUpDown60.Value;
+
+                decimal temp88 = numericUpDown59.Value;
+                decimal temp89 = numericUpDown58.Value;
+                decimal temp90 = numericUpDown57.Value;
+                decimal temp101 = numericUpDown56.Value;
+
+                string temp91 = comboBox10.Text;
+
+                decimal temp92 = numericUpDown71.Value;
+                decimal temp93 = numericUpDown70.Value;
+                decimal temp94 = numericUpDown69.Value;
+                decimal temp95 = numericUpDown68.Value;
+
+                decimal temp96 = numericUpDown67.Value;
+                decimal temp97 = numericUpDown66.Value;
+                decimal temp98 = numericUpDown65.Value;
+                decimal temp99 = numericUpDown64.Value;
+
+                string temp100 = comboBox11.Text;
+
+                decimal temp102 = numericUpDown79.Value;
+                decimal temp103 = numericUpDown78.Value;
+                decimal temp104 = numericUpDown77.Value;
+                decimal temp105 = numericUpDown76.Value;
+
+                decimal temp106 = numericUpDown75.Value;
+                decimal temp107 = numericUpDown74.Value;
+                decimal temp108 = numericUpDown73.Value;
+                decimal temp109 = numericUpDown72.Value;
+
+                string temp110 = comboBox8.Text;
+
+                decimal temp111 = numericUpDown55.Value;
+                decimal temp112 = numericUpDown54.Value;
+                decimal temp113 = numericUpDown53.Value;
+                decimal temp114 = numericUpDown52.Value;
+                decimal temp115 = numericUpDown51.Value;
+                
+                bindingNavigator1.BindingSource.AddNew();
+                bindingNavigator1.BindingSource.Position = 0;
+
+                textBox2.Text = temp1;
+                textBox1.Text = temp2;
+                textBox3.Text = temp3;
+                comboBox13.Text = temp4;
+
+                textBox6.Text = temp5;
+                textBox7.Text = temp6;
+                textBox8.Text = temp7;
+
+                textBox27.Text = temp10;
+                textBox28.Text = temp11;
+                textBox29.Text = temp12;
+
+                textBox21.Text = temp13;
+                textBox22.Text = temp14;
+                textBox23.Text = temp15;
+
+                textBox36.Text = temp16;
+
+                comboBox2.Text = temp17;
+
+                numericUpDown1.Value = temp18;
+                numericUpDown2.Value = temp19;
+                numericUpDown3.Value = temp20;
+                numericUpDown4.Value = temp21;
+
+                numericUpDown8.Value = temp22;
+                numericUpDown7.Value = temp23;
+                numericUpDown6.Value = temp24;
+                numericUpDown5.Value = temp25;
+
+                comboBox1.Text = temp26;
+
+                numericUpDown16.Value = temp27;
+                numericUpDown15.Value = temp28;
+                numericUpDown14.Value = temp29;
+                numericUpDown13.Value = temp30;
+
+                numericUpDown12.Value = temp31;
+                numericUpDown11.Value = temp32;
+                numericUpDown10.Value = temp33;
+                numericUpDown9.Value = temp34;
+
+                comboBox3.Text = temp35;
+
+                numericUpDown24.Value = temp36;
+                numericUpDown23.Value = temp37;
+                numericUpDown22.Value = temp38;
+                numericUpDown21.Value = temp39;
+
+                numericUpDown20.Value = temp40;
+                numericUpDown19.Value = temp41;
+                numericUpDown18.Value = temp42;
+                numericUpDown17.Value = temp43;
+
+                comboBox4.Text = temp44;
+
+                numericUpDown32.Value = temp45;
+                numericUpDown31.Value = temp46;
+                numericUpDown30.Value = temp47;
+                numericUpDown29.Value = temp48;
+
+                numericUpDown28.Value = temp49;
+                numericUpDown27.Value = temp50;
+                numericUpDown26.Value = temp51;
+                numericUpDown25.Value = temp52;
+
+                comboBox5.Text = temp53;
+
+                numericUpDown40.Value = temp54;
+                numericUpDown39.Value = temp55;
+                numericUpDown38.Value = temp56;
+                numericUpDown37.Value = temp57;
+
+                numericUpDown36.Value = temp58;
+                numericUpDown35.Value = temp59;
+                numericUpDown34.Value = temp60;
+                numericUpDown33.Value = temp61;
+
+                comboBox12.Text = temp62;
+
+                numericUpDown87.Value = temp63;
+                numericUpDown86.Value = temp64;
+                numericUpDown85.Value = temp65;
+                numericUpDown84.Value = temp66;
+
+                numericUpDown83.Value = temp67;
+                numericUpDown82.Value = temp68;
+                numericUpDown81.Value = temp69;
+                numericUpDown80.Value = temp70;
+
+                comboBox6.Text = temp71;
+
+                numericUpDown45.Value = temp72;
+                numericUpDown44.Value = temp73;
+                numericUpDown43.Value = temp74;
+                numericUpDown42.Value = temp75;
+                numericUpDown41.Value = temp76;
+
+                comboBox7.Text = temp77;
+
+                numericUpDown50.Value = temp78;
+                numericUpDown49.Value = temp79;
+                numericUpDown48.Value = temp80;
+                numericUpDown47.Value = temp81;
+                numericUpDown46.Value = temp82;
+
+                comboBox9.Text = temp83;
+
+                numericUpDown63.Value = temp84;
+                numericUpDown62.Value = temp85;
+                numericUpDown61.Value = temp86;
+                numericUpDown60.Value = temp87;
+
+                numericUpDown59.Value = temp88;
+                numericUpDown58.Value = temp89;
+                numericUpDown57.Value = temp90;
+                numericUpDown56.Value = temp101;
+
+                comboBox10.Text = temp91;
+
+                numericUpDown71.Value = temp92;
+                numericUpDown70.Value = temp93;
+                numericUpDown69.Value = temp94;
+                numericUpDown68.Value = temp95;
+
+                numericUpDown67.Value = temp96;
+                numericUpDown66.Value = temp97;
+                numericUpDown65.Value = temp98;
+                numericUpDown64.Value = temp99;
+
+                comboBox11.Text = temp100;
+
+                numericUpDown79.Value = temp102;
+                numericUpDown78.Value = temp103;
+                numericUpDown77.Value = temp104;
+                numericUpDown76.Value = temp105;
+
+                numericUpDown75.Value = temp106;
+                numericUpDown74.Value = temp107;
+                numericUpDown73.Value = temp108;
+                numericUpDown72.Value = temp109;
+
+                comboBox8.Text = temp110;
+
+                numericUpDown55.Value = temp111;
+                numericUpDown54.Value = temp112;
+                numericUpDown53.Value = temp113;
+                numericUpDown52.Value = temp114;
+                numericUpDown51.Value = temp115;
+
+            }
+
+
+
             try
             {
                 //we need to make sure all of the tabs have been "show"n first
@@ -411,7 +721,7 @@ namespace NewBTASProto
                 
 
                 // set up the db Connection
-                string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB";
+                string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
                 OleDbConnection conn = new OleDbConnection(connectionString);
                 conn.Open();
 
@@ -433,8 +743,6 @@ namespace NewBTASProto
                         "', VOLT='" + textBox6.Text.Replace("'", "''") +
                         "', NCELLS='" + textBox7.Text.Replace("'", "''") +
                         "', CAP='" + textBox8.Text.Replace("'", "''") +
-                        "', CELL='" + textBox9.Text.Replace("'", "''") +
-                        "', CPN='" + textBox10.Text.Replace("'", "''") +
                         "', BCVMIN='" + textBox21.Text.Replace("'", "''") +
                         "', BCVMAX='" + textBox22.Text.Replace("'", "''") +
                         "', COT='" + textBox23.Text.Replace("'", "''") +
@@ -586,7 +894,7 @@ namespace NewBTASProto
                     {
                         max = 0;
                     }
-                    string cmdStr = "INSERT INTO BatteriesCustom (RecordID, BMFR, BatteryModel, BPN, BTECH, VOLT, NCELLS, CAP, CELL, CPN, " +
+                    string cmdStr = "INSERT INTO BatteriesCustom (RecordID, BMFR, BatteryModel, BPN, BTECH, VOLT, NCELLS, CAP, " +
                        "BCVMIN, BCVMAX, COT, CCVMMIN, CCVMAX, CCAPV, NOTES, " +
                        "[T1Mode], T1Time1Hr, T1Time1Min, T1Curr1, T1Volts1, T1Time2Hr, T1Time2Min, T1Curr2, T1Volts2, " +
                        "[T2Mode], T2Time1Hr, T2Time1Min, T2Curr1, T2Volts1, T2Time2Hr, T2Time2Min, T2Curr2, T2Volts2, " +
@@ -608,8 +916,6 @@ namespace NewBTASProto
                         textBox6.Text.Replace("'", "''") + "','" +
                         textBox7.Text.Replace("'", "''") + "','" +
                         textBox8.Text.Replace("'", "''") + "','" +
-                        textBox9.Text.Replace("'", "''") + "','" +
-                        textBox10.Text.Replace("'", "''") + "','" +
                         textBox21.Text.Replace("'", "''") + "','" +
                         textBox22.Text.Replace("'", "''") + "','" +
                         textBox23.Text.Replace("'", "''") + "','" +
@@ -738,6 +1044,7 @@ namespace NewBTASProto
                     // update the dataTable with the new record ID also..
                     current[0] = max + 1;
 
+                    bindingNavigatorAddNewItem.Enabled = true;
 
                 }
             }// end try
@@ -1092,28 +1399,89 @@ namespace NewBTASProto
             if (comboBox13.Text == "Sealed Lead Acid")
             {
                 label6.Visible = false;
-                label8.Visible = false;
-                label10.Visible = false;
                 groupBox7.Visible = false;
                 textBox7.Visible = false;
-                textBox9.Visible = false;
-                textBox10.Visible = false;
             }
             else
             {
                 label6.Visible = true;
-                label8.Visible = true;
-                label10.Visible = true;
                 groupBox7.Visible = true;
                 textBox7.Visible = true;
-                textBox9.Visible = true;
-                textBox10.Visible = true;
             }
         }
 
         private void numericUpDown8_ValueChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void bindingNavigatorAddNewItem_Click(object sender, EventArgs e)
+        {
+            bindingNavigatorAddNewItem.Enabled = false;
+        }
+
+        private void bindingNavigatorMovePreviousItem_Click(object sender, EventArgs e)
+        {
+            //remove the new record if there is one..
+            if (bindingNavigatorAddNewItem.Enabled == false)
+            {
+                CustomBats.Tables[0].Rows[CustomBats.Tables[0].Rows.Count - 1].Delete();
+                bindingNavigatorAddNewItem.Enabled = true;
+            }
+        }
+
+        private void bindingNavigatorMoveFirstItem_Click(object sender, EventArgs e)
+        {
+            //remove the new record if there is one..
+            if (bindingNavigatorAddNewItem.Enabled == false)
+            {
+                CustomBats.Tables[0].Rows[CustomBats.Tables[0].Rows.Count - 1].Delete();
+                bindingNavigatorAddNewItem.Enabled = true;
+            }
+        }
+
+        private void bindingNavigatorPositionItem_LocationChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void bindingNavigatorPositionItem_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void bindingNavigator1_LocationChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                //remove the new record if there is one..
+                if (bindingNavigatorAddNewItem.Enabled == false)
+                {
+                    CustomBats.Tables[0].Rows[CustomBats.Tables[0].Rows.Count - 1].Delete();
+                    bindingNavigatorAddNewItem.Enabled = true;
+                }
+            }
+            catch
+            {
+                //do nothing
+            }
+        }
+
+        private void toolStripCBBats_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                //remove the new record if there is one..
+                if (bindingNavigatorAddNewItem.Enabled == false)
+                {
+                    CustomBats.Tables[0].Rows[CustomBats.Tables[0].Rows.Count - 1].Delete();
+                    bindingNavigatorAddNewItem.Enabled = true;
+                }
+            }
+            catch
+            {
+                //do nothing
+            }
         }
         
     }

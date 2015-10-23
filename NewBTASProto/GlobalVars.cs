@@ -85,7 +85,7 @@ namespace NewBTASProto
         /// <summary>
         /// this string holds the programversion text
         /// </summary>
-        public static string programVersion = "6.0.0.38";
+        public static string programVersion = "6.0.0.48";
 
         /// <summary>
         /// this is where we hold our notification service settings...
@@ -122,6 +122,13 @@ namespace NewBTASProto
 
         public static bool noteOn;
         public static bool noteOff;
+
+        /// <summary>
+        /// masterFiller Vars
+        /// </summary>
+        public static bool checkMasterFiller = false;
+
+        public static string[] MFData = new string[30];
 
     }
 }

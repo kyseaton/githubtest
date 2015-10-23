@@ -61,7 +61,7 @@ namespace NewBTASProto
 
         private void InitializeGrid()
         {
-            #region Column Values
+
             // BTAS columns
             columnNames.Add("DT#");
             columnNames.Add("Work Order");
@@ -105,7 +105,7 @@ namespace NewBTASProto
             {
                 d.TableName = "main_grid";
                 //System.IO.FileStream streamRead = new System.IO.FileStream(@"C:\Users\Kyle\Documents\Visual Studio 2013\Projects\NewBTASProto\main_grid.xml", System.IO.FileMode.Open, System.IO.FileAccess.Read);
-                d.ReadXml("../main_grid.xml");
+                d.ReadXml(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\main_grid.xml");
                 //streamRead.Close();
 
                 if (d.Rows.Count == 1)
@@ -195,8 +195,6 @@ namespace NewBTASProto
             {
                 dataGridView1.Rows[j].Cells[4].Style.BackColor = Color.Gainsboro;
             }
-            #endregion
-
 
         }
 
@@ -212,16 +210,63 @@ namespace NewBTASProto
                 {
                     updateD(e.RowIndex,e.ColumnIndex,false);
                     dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor = Color.Gainsboro;
+                    if (!d.Rows[e.RowIndex][9].ToString().Contains("S"))            // we don't have a slave...
+                    {
+                        dataGridView1.Rows[e.RowIndex].Cells[8].Style.BackColor = Color.Gainsboro;
+                        updateD(e.RowIndex, 10, "");
+                        updateD(e.RowIndex, 11, "");
+                    }
 
+                    if (d.Rows[e.RowIndex][9].ToString().Contains("M"))            // we have a master!
+                    {
+                        //find the slave and clear it also..
+                        string temp = d.Rows[e.RowIndex][9].ToString().Replace("-M", "");
+
+                        for (int i = 0; i < 16; i++)
+                        {
+                            if (d.Rows[i][9].ToString().Contains(temp) && d.Rows[i][9].ToString().Contains("S"))
+                            {
+                                //found the slave
+                                dataGridView1.Rows[i].Cells[8].Style.BackColor = Color.Gainsboro;
+                                updateD(i, 10, "");
+                                updateD(i, 11, "");
+                                break;
+                            }
+                        }
+                    }
                 }
                 else 
                 {
                     updateD(e.RowIndex,e.ColumnIndex,true);
                     dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor = Color.Red;
+                    if (d.Rows[e.RowIndex][9].ToString() != "" && !d.Rows[e.RowIndex][9].ToString().Contains("S"))
+                    {
+                        if (d.Rows[e.RowIndex][9].ToString().Length <= 2)
+                        {
+                            int chargerID = Convert.ToInt32(d.Rows[e.RowIndex][9]);
+                            checkForIC(chargerID, e.RowIndex);
+                        }
+                        else if (d.Rows[e.RowIndex][9].ToString().Length == 3)
+                        {
+                            int chargerID = Convert.ToInt32(d.Rows[e.RowIndex][9].ToString().Substring(0, 1));
+                            checkForIC(chargerID, e.RowIndex);
+                        }
+                        else
+                        {
+                            int chargerID = Convert.ToInt32(d.Rows[e.RowIndex][9].ToString().Substring(0, 2));
+                            checkForIC(chargerID, e.RowIndex);
+                        }
+                    }
                 }
             }
             else if (e.ColumnIndex == 5)
             {
+                if (d.Rows[e.RowIndex][9].ToString().Contains("S"))
+                {
+                    // don't do anything with the slaves...
+                    return;
+                }
+
                 if ((bool) d.Rows[e.RowIndex][e.ColumnIndex] == true)
                 {
                     startNewTestToolStripMenuItem.Enabled = false;
@@ -245,16 +290,59 @@ namespace NewBTASProto
             }
             else if (e.ColumnIndex == 8 && (bool)d.Rows[e.RowIndex][5] != true)
             {
-                if ((bool)d.Rows[e.RowIndex][e.ColumnIndex])
+                if (d.Rows[e.RowIndex][9].ToString().Contains("S"))
+                {
+                    // don't do anything with the slaves...
+                    return;
+                }
+                else if ((bool)d.Rows[e.RowIndex][e.ColumnIndex])
                 {
                     updateD(e.RowIndex,e.ColumnIndex,false);
                     updateD(e.RowIndex, 10, "");
                     updateD(e.RowIndex, 11, "");
                     dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor = Color.Gainsboro;
+                    
+                    // also update the slave (if we have a master...)
+                    if (d.Rows[e.RowIndex][9].ToString().Contains("M"))
+                    {
+                        //find the slave
+                        string temp = d.Rows[e.RowIndex][9].ToString().Replace("-M", "");
+
+                        for (int i = 0; i < 16; i++)
+                        {
+                            if (d.Rows[i][9].ToString().Contains(temp) && d.Rows[i][9].ToString().Contains("S"))
+                            {
+                                //found the slave
+                                updateD(i, 8, false);
+                                updateD(i, 10, "");
+                                updateD(i, 11, "");
+                                dataGridView1.Rows[i].Cells[8].Style.BackColor = Color.LightSteelBlue;
+                                break;
+                            }
+                        }
+                    }
+
                 }
                 else
                 {
                     updateD(e.RowIndex,e.ColumnIndex,true);
+                    // also update the slave (if we have a master...)
+                    if (d.Rows[e.RowIndex][9].ToString().Contains("M"))
+                    {
+                        //find the slave
+                        string temp = d.Rows[e.RowIndex][9].ToString().Replace("-M", "");
+
+                        for (int i = 0; i < 16; i++)
+                        {
+                            if (d.Rows[i][9].ToString().Contains(temp) && d.Rows[i][9].ToString().Contains("S"))
+                            {
+                                //found the slave
+                                updateD(i, 8, true);
+                                break;
+                            }
+                        }
+                    }
+
                     if ((string) d.Rows[e.RowIndex][9] == "")
                     {
                         MessageBox.Show("You Still Need to Select a Charger ID Number");
@@ -263,8 +351,7 @@ namespace NewBTASProto
                     {
                         int chargerID = 0;
 
-                        if (d.Rows[e.RowIndex][9].ToString() == "") { ;}  // do nothing if there is no assigned charger id
-                        else if (d.Rows[e.RowIndex][9].ToString().Length > 2)  // this is the case where we have a master and slave config
+                        if (d.Rows[e.RowIndex][9].ToString().Length > 2)  // this is the case where we have a master and slave config
                         {
                             // we have a master slave charger
                             // split into 3 and 4 digit case
@@ -310,11 +397,28 @@ namespace NewBTASProto
                     switch (e.ColumnIndex)
                     {
                         case 1:
+                            FormCollection fc = Application.OpenForms;
+                            foreach (Form frm in fc)
+                            {
+                                if (frm is Choose_WO)
+                                {
+                                    if (frm.WindowState == FormWindowState.Minimized)
+                                    {
+                                        frm.WindowState = FormWindowState.Normal;
+                                    }
+                                    return;
+                                }
+                            }
                             Choose_WO cwo = new Choose_WO(dataGridView1.CurrentRow.Index, (string)d.Rows[dataGridView1.CurrentRow.Index][1]);
                             cwo.Owner = this;
                             cwo.Show();
                             break;
                         case 2:
+                            if (d.Rows[e.RowIndex][9].ToString().Contains("S"))
+                            {
+                                // don't do anything with the slaves...
+                                return;
+                            }
                             cMSTestType.Show(Cursor.Position);
                             break;
                         case 9:
@@ -378,7 +482,7 @@ namespace NewBTASProto
                 //name the table
                 gs.TableName = "graph_set";
                 //now read in what we got!
-                gs.ReadXml("../graph_set.xml");
+                gs.ReadXml(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\graph_set.xml");
 
                 // do we have a good datatable?
                 if (gs.Rows.Count == 1)

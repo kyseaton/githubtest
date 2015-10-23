@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ICSettingsForm));
             this.button1 = new System.Windows.Forms.Button();
             this.comboBox3 = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -97,7 +98,7 @@
             this.button1.Location = new System.Drawing.Point(493, 275);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(149, 23);
-            this.button1.TabIndex = 4;
+            this.button1.TabIndex = 16;
             this.button1.Text = "Apply Settings";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
@@ -113,7 +114,7 @@
             this.comboBox3.Location = new System.Drawing.Point(441, 400);
             this.comboBox3.Name = "comboBox3";
             this.comboBox3.Size = new System.Drawing.Size(201, 21);
-            this.comboBox3.TabIndex = 6;
+            this.comboBox3.TabIndex = 17;
             // 
             // label3
             // 
@@ -129,7 +130,7 @@
             this.button2.Location = new System.Drawing.Point(524, 427);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(118, 23);
-            this.button2.TabIndex = 7;
+            this.button2.TabIndex = 18;
             this.button2.Text = "Apply Action";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
@@ -152,7 +153,7 @@
             this.groupBox1.Location = new System.Drawing.Point(325, 64);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(317, 205);
-            this.groupBox1.TabIndex = 35;
+            this.groupBox1.TabIndex = 5;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Discharge";
             // 
@@ -167,7 +168,7 @@
             this.numericUpDown13.Location = new System.Drawing.Point(110, 171);
             this.numericUpDown13.Name = "numericUpDown13";
             this.numericUpDown13.Size = new System.Drawing.Size(201, 20);
-            this.numericUpDown13.TabIndex = 62;
+            this.numericUpDown13.TabIndex = 15;
             // 
             // label25
             // 
@@ -198,7 +199,7 @@
             this.numericUpDown9.Location = new System.Drawing.Point(110, 127);
             this.numericUpDown9.Name = "numericUpDown9";
             this.numericUpDown9.Size = new System.Drawing.Size(201, 20);
-            this.numericUpDown9.TabIndex = 59;
+            this.numericUpDown9.TabIndex = 14;
             // 
             // label18
             // 
@@ -229,21 +230,21 @@
             this.numericUpDown10.Location = new System.Drawing.Point(110, 85);
             this.numericUpDown10.Name = "numericUpDown10";
             this.numericUpDown10.Size = new System.Drawing.Size(201, 20);
-            this.numericUpDown10.TabIndex = 56;
+            this.numericUpDown10.TabIndex = 13;
             // 
             // numericUpDown11
             // 
             this.numericUpDown11.Location = new System.Drawing.Point(110, 43);
             this.numericUpDown11.Name = "numericUpDown11";
             this.numericUpDown11.Size = new System.Drawing.Size(201, 20);
-            this.numericUpDown11.TabIndex = 55;
+            this.numericUpDown11.TabIndex = 12;
             // 
             // numericUpDown12
             // 
             this.numericUpDown12.Location = new System.Drawing.Point(110, 18);
             this.numericUpDown12.Name = "numericUpDown12";
             this.numericUpDown12.Size = new System.Drawing.Size(201, 20);
-            this.numericUpDown12.TabIndex = 54;
+            this.numericUpDown12.TabIndex = 11;
             // 
             // label20
             // 
@@ -296,7 +297,7 @@
             this.groupBox2.Location = new System.Drawing.Point(15, 290);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(307, 165);
-            this.groupBox2.TabIndex = 36;
+            this.groupBox2.TabIndex = 4;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Secondary Charge";
             // 
@@ -311,7 +312,7 @@
             this.numericUpDown5.Location = new System.Drawing.Point(100, 130);
             this.numericUpDown5.Name = "numericUpDown5";
             this.numericUpDown5.Size = new System.Drawing.Size(201, 20);
-            this.numericUpDown5.TabIndex = 45;
+            this.numericUpDown5.TabIndex = 10;
             // 
             // label11
             // 
@@ -342,21 +343,21 @@
             this.numericUpDown6.Location = new System.Drawing.Point(100, 88);
             this.numericUpDown6.Name = "numericUpDown6";
             this.numericUpDown6.Size = new System.Drawing.Size(201, 20);
-            this.numericUpDown6.TabIndex = 42;
+            this.numericUpDown6.TabIndex = 9;
             // 
             // numericUpDown7
             // 
             this.numericUpDown7.Location = new System.Drawing.Point(100, 46);
             this.numericUpDown7.Name = "numericUpDown7";
             this.numericUpDown7.Size = new System.Drawing.Size(201, 20);
-            this.numericUpDown7.TabIndex = 41;
+            this.numericUpDown7.TabIndex = 8;
             // 
             // numericUpDown8
             // 
             this.numericUpDown8.Location = new System.Drawing.Point(100, 21);
             this.numericUpDown8.Name = "numericUpDown8";
             this.numericUpDown8.Size = new System.Drawing.Size(201, 20);
-            this.numericUpDown8.TabIndex = 40;
+            this.numericUpDown8.TabIndex = 7;
             // 
             // label13
             // 
@@ -409,7 +410,7 @@
             this.groupBox3.Location = new System.Drawing.Point(15, 119);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(307, 165);
-            this.groupBox3.TabIndex = 46;
+            this.groupBox3.TabIndex = 3;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Primary Charge";
             // 
@@ -424,7 +425,7 @@
             this.numericUpDown4.Location = new System.Drawing.Point(100, 128);
             this.numericUpDown4.Name = "numericUpDown4";
             this.numericUpDown4.Size = new System.Drawing.Size(201, 20);
-            this.numericUpDown4.TabIndex = 33;
+            this.numericUpDown4.TabIndex = 6;
             // 
             // label8
             // 
@@ -455,21 +456,21 @@
             this.numericUpDown3.Location = new System.Drawing.Point(100, 86);
             this.numericUpDown3.Name = "numericUpDown3";
             this.numericUpDown3.Size = new System.Drawing.Size(201, 20);
-            this.numericUpDown3.TabIndex = 30;
+            this.numericUpDown3.TabIndex = 5;
             // 
             // numericUpDown2
             // 
             this.numericUpDown2.Location = new System.Drawing.Point(100, 44);
             this.numericUpDown2.Name = "numericUpDown2";
             this.numericUpDown2.Size = new System.Drawing.Size(201, 20);
-            this.numericUpDown2.TabIndex = 29;
+            this.numericUpDown2.TabIndex = 4;
             // 
             // numericUpDown1
             // 
             this.numericUpDown1.Location = new System.Drawing.Point(100, 19);
             this.numericUpDown1.Name = "numericUpDown1";
             this.numericUpDown1.Size = new System.Drawing.Size(201, 20);
-            this.numericUpDown1.TabIndex = 28;
+            this.numericUpDown1.TabIndex = 3;
             // 
             // label7
             // 
@@ -513,7 +514,7 @@
             this.groupBox4.Location = new System.Drawing.Point(15, 64);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(304, 49);
-            this.groupBox4.TabIndex = 47;
+            this.groupBox4.TabIndex = 2;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Mode";
             // 
@@ -533,7 +534,7 @@
             this.comboBox2.Location = new System.Drawing.Point(97, 19);
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(201, 21);
-            this.comboBox2.TabIndex = 5;
+            this.comboBox2.TabIndex = 2;
             // 
             // groupBox5
             // 
@@ -541,7 +542,7 @@
             this.groupBox5.Location = new System.Drawing.Point(18, 12);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(304, 49);
-            this.groupBox5.TabIndex = 48;
+            this.groupBox5.TabIndex = 1;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Charger ID";
             // 
@@ -568,7 +569,7 @@
             this.comboBox1.Location = new System.Drawing.Point(97, 13);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(201, 21);
-            this.comboBox1.TabIndex = 2;
+            this.comboBox1.TabIndex = 1;
             // 
             // ICSettingsForm
             // 
@@ -584,6 +585,7 @@
             this.Controls.Add(this.comboBox3);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.button1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ICSettingsForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Change Intelligent Charger Settings";

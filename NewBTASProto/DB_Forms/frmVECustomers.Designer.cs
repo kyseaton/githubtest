@@ -73,14 +73,14 @@
             this.textBox1.Location = new System.Drawing.Point(105, 34);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(336, 20);
-            this.textBox1.TabIndex = 0;
+            this.textBox1.TabIndex = 1;
             // 
             // textBox2
             // 
             this.textBox2.Location = new System.Drawing.Point(105, 60);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(336, 20);
-            this.textBox2.TabIndex = 1;
+            this.textBox2.TabIndex = 2;
             // 
             // bindingNavigator1
             // 
@@ -142,6 +142,7 @@
             this.toolStripCBCustomers.Name = "toolStripCBCustomers";
             this.toolStripCBCustomers.Size = new System.Drawing.Size(121, 25);
             this.toolStripCBCustomers.SelectedIndexChanged += new System.EventHandler(this.toolStripCBCustomers_SelectedIndexChanged);
+            this.toolStripCBCustomers.TextChanged += new System.EventHandler(this.toolStripCBCustomers_TextChanged);
             // 
             // bindingNavigatorSeparator
             // 
@@ -156,6 +157,7 @@
             this.bindingNavigatorMoveFirstItem.RightToLeftAutoMirrorImage = true;
             this.bindingNavigatorMoveFirstItem.Size = new System.Drawing.Size(23, 22);
             this.bindingNavigatorMoveFirstItem.Text = "Move first";
+            this.bindingNavigatorMoveFirstItem.Click += new System.EventHandler(this.bindingNavigatorMoveFirstItem_Click);
             // 
             // bindingNavigatorMovePreviousItem
             // 
@@ -165,6 +167,7 @@
             this.bindingNavigatorMovePreviousItem.RightToLeftAutoMirrorImage = true;
             this.bindingNavigatorMovePreviousItem.Size = new System.Drawing.Size(23, 22);
             this.bindingNavigatorMovePreviousItem.Text = "Move previous";
+            this.bindingNavigatorMovePreviousItem.Click += new System.EventHandler(this.bindingNavigatorMovePreviousItem_Click);
             // 
             // bindingNavigatorPositionItem
             // 
@@ -312,21 +315,21 @@
             this.textBox3.Location = new System.Drawing.Point(105, 86);
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(336, 20);
-            this.textBox3.TabIndex = 12;
+            this.textBox3.TabIndex = 3;
             // 
             // textBox4
             // 
             this.textBox4.Location = new System.Drawing.Point(105, 112);
             this.textBox4.Name = "textBox4";
             this.textBox4.Size = new System.Drawing.Size(336, 20);
-            this.textBox4.TabIndex = 13;
+            this.textBox4.TabIndex = 4;
             // 
             // textBox5
             // 
             this.textBox5.Location = new System.Drawing.Point(105, 138);
             this.textBox5.Name = "textBox5";
             this.textBox5.Size = new System.Drawing.Size(129, 20);
-            this.textBox5.TabIndex = 14;
+            this.textBox5.TabIndex = 5;
             this.textBox5.Leave += new System.EventHandler(this.textBox5_Leave);
             // 
             // textBox6
@@ -334,21 +337,21 @@
             this.textBox6.Location = new System.Drawing.Point(105, 164);
             this.textBox6.Name = "textBox6";
             this.textBox6.Size = new System.Drawing.Size(129, 20);
-            this.textBox6.TabIndex = 15;
+            this.textBox6.TabIndex = 6;
             // 
             // textBox7
             // 
             this.textBox7.Location = new System.Drawing.Point(105, 190);
             this.textBox7.Name = "textBox7";
             this.textBox7.Size = new System.Drawing.Size(336, 20);
-            this.textBox7.TabIndex = 16;
+            this.textBox7.TabIndex = 7;
             // 
             // textBox8
             // 
             this.textBox8.Location = new System.Drawing.Point(105, 216);
             this.textBox8.Name = "textBox8";
             this.textBox8.Size = new System.Drawing.Size(336, 20);
-            this.textBox8.TabIndex = 17;
+            this.textBox8.TabIndex = 8;
             // 
             // textBox9
             // 
@@ -356,7 +359,7 @@
             this.textBox9.Multiline = true;
             this.textBox9.Name = "textBox9";
             this.textBox9.Size = new System.Drawing.Size(336, 155);
-            this.textBox9.TabIndex = 18;
+            this.textBox9.TabIndex = 9;
             // 
             // label10
             // 

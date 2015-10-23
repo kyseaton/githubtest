@@ -33,7 +33,7 @@ namespace NewBTASProto
             string strAccessSelect;
             // Open database containing all the battery data....
 
-            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB";
+            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
             strAccessSelect = @"SELECT * FROM Operators ORDER BY OperatorName ASC";
 
             Operators = new DataSet();
@@ -191,7 +191,7 @@ namespace NewBTASProto
                 if (MessageBox.Show("Are you sure you want to remove this Technician?", "Delete Record", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     // set up the db Connection
-                    string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB";
+                    string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
                     OleDbConnection conn = new OleDbConnection(connectionString);
                     conn.Open();
 
@@ -226,11 +226,21 @@ namespace NewBTASProto
 
         private void saveToolStripButton_Click(object sender, EventArgs e)
         {
+            if (bindingNavigator1.BindingSource.Position == -1)
+            {
+                string temp1 = textBox1.Text;
+
+                bindingNavigator1.BindingSource.AddNew();
+                bindingNavigator1.BindingSource.Position = 0;
+
+                textBox1.Text = temp1;
+            }
+
             try
             {
 
                 // set up the db Connection
-                string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB";
+                string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
                 OleDbConnection conn = new OleDbConnection(connectionString);
                 conn.Open();
 
@@ -280,22 +290,77 @@ namespace NewBTASProto
                     MessageBox.Show(textBox1.Text + " has been been added to the operator list.");
 
                     // update the dataTable with the new customer ID also..
-                    current[0] = max + 1;
-
-
+                    current[0] = max + 1; 
                 }
+
+                bindingNavigatorAddNewItem.Enabled = true;
             }// end try
             catch(Exception ex)
             {
                 MessageBox.Show(ex.ToString());
             }
 
-
         }
 
         private void frmVETechs_FormClosed(object sender, FormClosedEventArgs e)
         {
             ((Main_Form)this.Owner).Initialize_Operators_CB();
+        }
+
+        private void bindingNavigatorAddNewItem_Click(object sender, EventArgs e)
+        {
+            bindingNavigatorAddNewItem.Enabled = false;
+        }
+
+        private void bindingNavigatorMovePreviousItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                //remove the new record if there is one..
+                if (bindingNavigatorAddNewItem.Enabled == false)
+                {
+                    Operators.Tables[0].Rows[Operators.Tables[0].Rows.Count - 1].Delete();
+                    bindingNavigatorAddNewItem.Enabled = true;
+                }
+            }
+            catch
+            {
+                //do nothing
+            }
+        }
+
+        private void bindingNavigatorMoveFirstItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                //remove the new record if there is one..
+                if (bindingNavigatorAddNewItem.Enabled == false)
+                {
+                    Operators.Tables[0].Rows[Operators.Tables[0].Rows.Count - 1].Delete();
+                    bindingNavigatorAddNewItem.Enabled = true;
+                }
+            }
+            catch
+            {
+                //do nothing
+            }
+        }
+
+        private void toolStripCBTechs_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                //remove the new record if there is one..
+                if (bindingNavigatorAddNewItem.Enabled == false)
+                {
+                    Operators.Tables[0].Rows[Operators.Tables[0].Rows.Count - 1].Delete();
+                    bindingNavigatorAddNewItem.Enabled = true;
+                }
+            }
+            catch
+            {
+                //do nothing
+            }
         }
     }
 }

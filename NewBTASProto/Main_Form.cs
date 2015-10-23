@@ -28,6 +28,7 @@ namespace NewBTASProto
             {
                 SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
                 InitializeComponent();
+                
                 Initialize_Menus_Tools();
                 Initialize_Operators_CB();
                 Initialize_Graph_Settings();
@@ -87,7 +88,7 @@ namespace NewBTASProto
             string strAccessConn;
             string strAccessSelect;
             // Open database containing all the battery data....
-            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB";
+            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
             strAccessSelect = @"SELECT * FROM Operators";
             OleDbConnection myAccessConn;
             DataSet operators = new DataSet();
@@ -185,7 +186,7 @@ namespace NewBTASProto
             string strAccessConn;
             string strUpdateCMD;
             // Open database containing all the battery data....
-            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB";
+            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
             strUpdateCMD = "UPDATE Options SET Degree='" + (GlobalVars.useF ? "F." : "C.") + "', CellOrder='" + (GlobalVars.Pos2Neg ? "Pos. to Neg." : "Neg. to Pos.") + "', BusinessName='"+ GlobalVars.businessName+"';";
             OleDbConnection myAccessConn;
 
@@ -304,6 +305,10 @@ namespace NewBTASProto
             {
                 if (frm is Business_Name)
                 {
+                    if (frm.WindowState == FormWindowState.Minimized)
+                    {
+                        frm.WindowState = FormWindowState.Normal;
+                    }
                     return;
                 }
             }
@@ -372,11 +377,14 @@ namespace NewBTASProto
         internal void updateWOC(int channel, string workOrder)
         {
             updateD(channel,1,workOrder);
-            // clear the grid
-            updateD(channel, 2, "");
-            updateD(channel, 3, "");
-            updateD(channel, 6, "");
-            updateD(channel, 7, "");
+            // clear the grid (if it's not on a slave channel...
+            if (!d.Rows[channel][9].ToString().Contains("S"))
+            {
+                updateD(channel, 2, "");
+                updateD(channel, 3, "");
+                updateD(channel, 6, "");
+                updateD(channel, 7, "");
+            }
             // also re set the combos...
             fillPlotCombos(channel);
         }
@@ -522,7 +530,7 @@ namespace NewBTASProto
 
 
             //save the grid for the next time we restart
-            using (StreamWriter writer = new StreamWriter("../main_grid.xml",false))
+            using (StreamWriter writer = new StreamWriter(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\main_grid.xml",false))
             {
                 for (int i = 0; i < 16; i++)
                 {
@@ -537,7 +545,7 @@ namespace NewBTASProto
             }
 
             //save the grid for the next time we restart
-            using (StreamWriter writer = new StreamWriter("../graph_set.xml", false))
+            using (StreamWriter writer = new StreamWriter(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\graph_set.xml", false))
             {
                 gs.WriteXml(writer);
             }
@@ -618,6 +626,23 @@ namespace NewBTASProto
             updateD(dataGridView1.CurrentRow.Index, 6, "");
             updateD(dataGridView1.CurrentRow.Index, 7, "");
             fillPlotCombos(dataGridView1.CurrentRow.Index);
+
+            // also update the slave (if we have a master...)
+            if (d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Contains("M"))
+            {
+                //find the slave
+                string temp = d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Replace("-M", "");
+                for (int i = 0; i < 16; i++)
+                {
+                    if (d.Rows[i][9].ToString().Contains(temp) && d.Rows[i][9].ToString().Contains("S"))
+                    {
+                        updateD(i, 2, "Custom Chg");
+                        updateD(i, 3, "");
+                        updateD(i, 6, "");
+                        updateD(i, 7, "");
+                    }
+                }
+            }
         }
 
         private void asReceivedToolStripMenuItem_Click(object sender, EventArgs e)
@@ -627,6 +652,24 @@ namespace NewBTASProto
             updateD(dataGridView1.CurrentRow.Index, 6, "");
             updateD(dataGridView1.CurrentRow.Index, 7, "");
             fillPlotCombos(dataGridView1.CurrentRow.Index);
+
+            // also update the slave (if we have a master...)
+            if (d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Contains("M"))
+            {
+                //find the slave
+                string temp = d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Replace("-M", "");
+                for (int i = 0; i < 16; i++)
+                {
+                    if (d.Rows[i][9].ToString().Contains(temp) && d.Rows[i][9].ToString().Contains("S"))
+                    {
+                        updateD(i, 2, "As Received");
+                        updateD(i, 3, "");
+                        updateD(i, 6, "");
+                        updateD(i, 7, "");
+                    }
+                }
+            }
+
         }
 
         private void fullChargeToolStripMenuItem_Click(object sender, EventArgs e)
@@ -636,6 +679,24 @@ namespace NewBTASProto
             updateD(dataGridView1.CurrentRow.Index, 6, "");
             updateD(dataGridView1.CurrentRow.Index, 7, "");
             fillPlotCombos(dataGridView1.CurrentRow.Index);
+
+            // also update the slave (if we have a master...)
+            if (d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Contains("M"))
+            {
+                //find the slave
+                string temp = d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Replace("-M", "");
+                for (int i = 0; i < 16; i++)
+                {
+                    if (d.Rows[i][9].ToString().Contains(temp) && d.Rows[i][9].ToString().Contains("S"))
+                    {
+                        updateD(i, 2, "Full Charge-6");
+                        updateD(i, 3, "");
+                        updateD(i, 6, "");
+                        updateD(i, 7, "");
+                    }
+                }
+            }
+
         }
 
         private void fullCharge4ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -645,6 +706,23 @@ namespace NewBTASProto
             updateD(dataGridView1.CurrentRow.Index, 6, "");
             updateD(dataGridView1.CurrentRow.Index, 7, "");
             fillPlotCombos(dataGridView1.CurrentRow.Index);
+
+            // also update the slave (if we have a master...)
+            if (d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Contains("M"))
+            {
+                //find the slave
+                string temp = d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Replace("-M", "");
+                for (int i = 0; i < 16; i++)
+                {
+                    if (d.Rows[i][9].ToString().Contains(temp) && d.Rows[i][9].ToString().Contains("S"))
+                    {
+                        updateD(i, 2, "Full Charge-4");
+                        updateD(i, 3, "");
+                        updateD(i, 6, "");
+                        updateD(i, 7, "");
+                    }
+                }
+            }
         }
 
         private void topCharge4ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -654,6 +732,23 @@ namespace NewBTASProto
             updateD(dataGridView1.CurrentRow.Index, 6, "");
             updateD(dataGridView1.CurrentRow.Index, 7, "");
             fillPlotCombos(dataGridView1.CurrentRow.Index);
+
+            // also update the slave (if we have a master...)
+            if (d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Contains("M"))
+            {
+                //find the slave
+                string temp = d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Replace("-M", "");
+                for (int i = 0; i < 16; i++)
+                {
+                    if (d.Rows[i][9].ToString().Contains(temp) && d.Rows[i][9].ToString().Contains("S"))
+                    {
+                        updateD(i, 2, "Top Charge-4");
+                        updateD(i, 3, "");
+                        updateD(i, 6, "");
+                        updateD(i, 7, "");
+                    }
+                }
+            }
         }
 
         private void topCharge2ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -663,6 +758,23 @@ namespace NewBTASProto
             updateD(dataGridView1.CurrentRow.Index, 6, "");
             updateD(dataGridView1.CurrentRow.Index, 7, "");
             fillPlotCombos(dataGridView1.CurrentRow.Index);
+
+            // also update the slave (if we have a master...)
+            if (d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Contains("M"))
+            {
+                //find the slave
+                string temp = d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Replace("-M", "");
+                for (int i = 0; i < 16; i++)
+                {
+                    if (d.Rows[i][9].ToString().Contains(temp) && d.Rows[i][9].ToString().Contains("S"))
+                    {
+                        updateD(i, 2, "Top Charge-2");
+                        updateD(i, 3, "");
+                        updateD(i, 6, "");
+                        updateD(i, 7, "");
+                    }
+                }
+            }
         }
 
         private void topCharge1ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -672,6 +784,23 @@ namespace NewBTASProto
             updateD(dataGridView1.CurrentRow.Index, 6, "");
             updateD(dataGridView1.CurrentRow.Index, 7, "");
             fillPlotCombos(dataGridView1.CurrentRow.Index);
+
+            // also update the slave (if we have a master...)
+            if (d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Contains("M"))
+            {
+                //find the slave
+                string temp = d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Replace("-M", "");
+                for (int i = 0; i < 16; i++)
+                {
+                    if (d.Rows[i][9].ToString().Contains(temp) && d.Rows[i][9].ToString().Contains("S"))
+                    {
+                        updateD(i, 2, "Top Charge-1");
+                        updateD(i, 3, "");
+                        updateD(i, 6, "");
+                        updateD(i, 7, "");
+                    }
+                }
+            }
         }
 
         private void capacity1ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -681,6 +810,23 @@ namespace NewBTASProto
             updateD(dataGridView1.CurrentRow.Index, 6, "");
             updateD(dataGridView1.CurrentRow.Index, 7, "");
             fillPlotCombos(dataGridView1.CurrentRow.Index);
+
+            // also update the slave (if we have a master...)
+            if (d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Contains("M"))
+            {
+                //find the slave
+                string temp = d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Replace("-M", "");
+                for (int i = 0; i < 16; i++)
+                {
+                    if (d.Rows[i][9].ToString().Contains(temp) && d.Rows[i][9].ToString().Contains("S"))
+                    {
+                        updateD(i, 2, "Capacity-1");
+                        updateD(i, 3, "");
+                        updateD(i, 6, "");
+                        updateD(i, 7, "");
+                    }
+                }
+            }
         }
 
         private void dischargeToolStripMenuItem_Click(object sender, EventArgs e)
@@ -690,6 +836,23 @@ namespace NewBTASProto
             updateD(dataGridView1.CurrentRow.Index, 6, "");
             updateD(dataGridView1.CurrentRow.Index, 7, "");
             fillPlotCombos(dataGridView1.CurrentRow.Index);
+
+            // also update the slave (if we have a master...)
+            if (d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Contains("M"))
+            {
+                //find the slave
+                string temp = d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Replace("-M", "");
+                for (int i = 0; i < 16; i++)
+                {
+                    if (d.Rows[i][9].ToString().Contains(temp) && d.Rows[i][9].ToString().Contains("S"))
+                    {
+                        updateD(i, 2, "Discharge");
+                        updateD(i, 3, "");
+                        updateD(i, 6, "");
+                        updateD(i, 7, "");
+                    }
+                }
+            }
         }
 
         private void slowCharge14ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -698,6 +861,23 @@ namespace NewBTASProto
             updateD(dataGridView1.CurrentRow.Index, 6, "");
             updateD(dataGridView1.CurrentRow.Index, 7, "");
             fillPlotCombos(dataGridView1.CurrentRow.Index);
+
+            // also update the slave (if we have a master...)
+            if (d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Contains("M"))
+            {
+                //find the slave
+                string temp = d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Replace("-M", "");
+                for (int i = 0; i < 16; i++)
+                {
+                    if (d.Rows[i][9].ToString().Contains(temp) && d.Rows[i][9].ToString().Contains("S"))
+                    {
+                        updateD(i, 2, "Slow Charge-14");
+                        updateD(i, 3, "");
+                        updateD(i, 6, "");
+                        updateD(i, 7, "");
+                    }
+                }
+            }
         }
 
         private void slowCharge16ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -707,6 +887,23 @@ namespace NewBTASProto
             updateD(dataGridView1.CurrentRow.Index, 6, "");
             updateD(dataGridView1.CurrentRow.Index, 7, "");
             fillPlotCombos(dataGridView1.CurrentRow.Index);
+
+            // also update the slave (if we have a master...)
+            if (d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Contains("M"))
+            {
+                //find the slave
+                string temp = d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Replace("-M", "");
+                for (int i = 0; i < 16; i++)
+                {
+                    if (d.Rows[i][9].ToString().Contains(temp) && d.Rows[i][9].ToString().Contains("S"))
+                    {
+                        updateD(i, 2, "Slow Charge-16");
+                        updateD(i, 3, "");
+                        updateD(i, 6, "");
+                        updateD(i, 7, "");
+                    }
+                }
+            }
         }
 
         private void testToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -716,6 +913,23 @@ namespace NewBTASProto
             updateD(dataGridView1.CurrentRow.Index, 6, "");
             updateD(dataGridView1.CurrentRow.Index, 7, "");
             fillPlotCombos(dataGridView1.CurrentRow.Index);
+
+            // also update the slave (if we have a master...)
+            if (d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Contains("M"))
+            {
+                //find the slave
+                string temp = d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Replace("-M", "");
+                for (int i = 0; i < 16; i++)
+                {
+                    if (d.Rows[i][9].ToString().Contains(temp) && d.Rows[i][9].ToString().Contains("S"))
+                    {
+                        updateD(i, 2, "Test");
+                        updateD(i, 3, "");
+                        updateD(i, 6, "");
+                        updateD(i, 7, "");
+                    }
+                }
+            }
         }
 
         private void customCapToolStripMenuItem_Click(object sender, EventArgs e)
@@ -725,6 +939,23 @@ namespace NewBTASProto
             updateD(dataGridView1.CurrentRow.Index, 6, "");
             updateD(dataGridView1.CurrentRow.Index, 7, "");
             fillPlotCombos(dataGridView1.CurrentRow.Index);
+
+            // also update the slave (if we have a master...)
+            if (d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Contains("M"))
+            {
+                //find the slave
+                string temp = d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Replace("-M", "");
+                for (int i = 0; i < 16; i++)
+                {
+                    if (d.Rows[i][9].ToString().Contains(temp) && d.Rows[i][9].ToString().Contains("S"))
+                    {
+                        updateD(i, 2, "Custom Cap");
+                        updateD(i, 3, "");
+                        updateD(i, 6, "");
+                        updateD(i, 7, "");
+                    }
+                }
+            }
         }
 
         private void constantVoltageToolStripMenuItem_Click(object sender, EventArgs e)
@@ -734,6 +965,23 @@ namespace NewBTASProto
             updateD(dataGridView1.CurrentRow.Index, 6, "");
             updateD(dataGridView1.CurrentRow.Index, 7, "");
             fillPlotCombos(dataGridView1.CurrentRow.Index);
+
+            // also update the slave (if we have a master...)
+            if (d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Contains("M"))
+            {
+                //find the slave
+                string temp = d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Replace("-M", "");
+                for (int i = 0; i < 16; i++)
+                {
+                    if (d.Rows[i][9].ToString().Contains(temp) && d.Rows[i][9].ToString().Contains("S"))
+                    {
+                        updateD(i, 2, "Constant Voltage");
+                        updateD(i, 3, "");
+                        updateD(i, 6, "");
+                        updateD(i, 7, "");
+                    }
+                }
+            }
         }
 
         private void clearToolStripMenuItem2_Click(object sender, EventArgs e)
@@ -743,6 +991,23 @@ namespace NewBTASProto
             updateD(dataGridView1.CurrentRow.Index, 6, "");
             updateD(dataGridView1.CurrentRow.Index, 7, "");
             fillPlotCombos(dataGridView1.CurrentRow.Index);
+
+            // also update the slave (if we have a master...)
+            if (d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Contains("M"))
+            {
+                //find the slave
+                string temp = d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Replace("-M", "");
+                for (int i = 0; i < 16; i++)
+                {
+                    if (d.Rows[i][9].ToString().Contains(temp) && d.Rows[i][9].ToString().Contains("S"))
+                    {
+                        updateD(i, 2, "");
+                        updateD(i, 3, "");
+                        updateD(i, 6, "");
+                        updateD(i, 7, "");
+                    }
+                }
+            }
         }
 
         private void clearToolStripMenuItem_Click(object sender, EventArgs e)
@@ -752,6 +1017,10 @@ namespace NewBTASProto
             
             // we always clear the current one..
             updateD(dataGridView1.CurrentRow.Index,9, "");
+            // also change the grid color
+            dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.Aquamarine;
+            dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.Gainsboro;
+            dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.Gainsboro;
 
             //make sure we clear the current test
             updateD(dataGridView1.CurrentRow.Index, 3, "");
@@ -866,8 +1135,21 @@ namespace NewBTASProto
                     updateD(i,9,"0-M");
                     // and the current one the slave
                     updateD(dataGridView1.CurrentRow.Index,9,"0-S");
+                    // also change the grid color
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.LightSteelBlue;
                     // Now disable adding another...
                     toolStripMenuItem7.Enabled = false;
+                    // also syncronyze them
+                    d.Rows[dataGridView1.CurrentRow.Index][8] = d.Rows[i][8];
+                    d.Rows[dataGridView1.CurrentRow.Index][2] = d.Rows[i][2];
+                    d.Rows[dataGridView1.CurrentRow.Index][10] = d.Rows[i][10];
+                    d.Rows[dataGridView1.CurrentRow.Index][11] = d.Rows[i][11];
+                    if (dataGridView1.Rows[i].Cells[8].Style.BackColor != Color.Gainsboro)
+                    {
+                        dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = dataGridView1.Rows[i].Cells[8].Style.BackColor;
+                    }
                     return;
                 }
             }
@@ -899,8 +1181,21 @@ namespace NewBTASProto
                     updateD(i,9, "1-M");
                     // and the current one the slave
                     updateD(dataGridView1.CurrentRow.Index,9, "1-S");
+                    // also change the grid color
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.LightSteelBlue;
                     // Now disable adding another...
                     toolStripMenuItem8.Enabled = false;
+                    // also syncronyze them
+                    d.Rows[dataGridView1.CurrentRow.Index][8] = d.Rows[i][8];
+                    d.Rows[dataGridView1.CurrentRow.Index][2] = d.Rows[i][2];
+                    d.Rows[dataGridView1.CurrentRow.Index][10] = d.Rows[i][10];
+                    d.Rows[dataGridView1.CurrentRow.Index][11] = d.Rows[i][11];
+                    if (dataGridView1.Rows[i].Cells[8].Style.BackColor != Color.Gainsboro)
+                    {
+                        dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = dataGridView1.Rows[i].Cells[8].Style.BackColor;
+                    }
                     return;
                 }
             }
@@ -931,8 +1226,21 @@ namespace NewBTASProto
                     updateD(i,9,"2-M");
                     // and the current one the slave
                     updateD(dataGridView1.CurrentRow.Index,9, "2-S");
+                    // also change the grid color
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.LightSteelBlue;
                     // Now disable adding another...
                     toolStripMenuItem9.Enabled = false;
+                    // also syncronyze them
+                    d.Rows[dataGridView1.CurrentRow.Index][8] = d.Rows[i][8];
+                    d.Rows[dataGridView1.CurrentRow.Index][2] = d.Rows[i][2];
+                    d.Rows[dataGridView1.CurrentRow.Index][10] = d.Rows[i][10];
+                    d.Rows[dataGridView1.CurrentRow.Index][11] = d.Rows[i][11];
+                    if (dataGridView1.Rows[i].Cells[8].Style.BackColor != Color.Gainsboro)
+                    {
+                        dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = dataGridView1.Rows[i].Cells[8].Style.BackColor;
+                    }
                     return;
                 }
             }
@@ -963,8 +1271,21 @@ namespace NewBTASProto
                     updateD(i,9, "3-M");
                     // and the current one the slave
                     updateD(dataGridView1.CurrentRow.Index,9, "3-S");
+                    // also change the grid color
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.LightSteelBlue;
                     // Now disable adding another...
                     toolStripMenuItem10.Enabled = false;
+                    // also syncronyze them
+                    d.Rows[dataGridView1.CurrentRow.Index][8] = d.Rows[i][8];
+                    d.Rows[dataGridView1.CurrentRow.Index][2] = d.Rows[i][2];
+                    d.Rows[dataGridView1.CurrentRow.Index][10] = d.Rows[i][10];
+                    d.Rows[dataGridView1.CurrentRow.Index][11] = d.Rows[i][11];
+                    if (dataGridView1.Rows[i].Cells[8].Style.BackColor != Color.Gainsboro)
+                    {
+                        dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = dataGridView1.Rows[i].Cells[8].Style.BackColor;
+                    }
                     return;
                 }
             }
@@ -995,8 +1316,22 @@ namespace NewBTASProto
                     updateD(i,9, "4-M");
                     // and the current one the slave
                     updateD(dataGridView1.CurrentRow.Index,9, "4-S");
+                    // also change the grid color
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.LightSteelBlue;
                     // Now disable adding another...
                     toolStripMenuItem11.Enabled = false;
+                    // also syncronyze them
+                    d.Rows[dataGridView1.CurrentRow.Index][8] = d.Rows[i][8];
+                    d.Rows[dataGridView1.CurrentRow.Index][2] = d.Rows[i][2];
+                    d.Rows[dataGridView1.CurrentRow.Index][10] = d.Rows[i][10];
+                    d.Rows[dataGridView1.CurrentRow.Index][11] = d.Rows[i][11];
+                    if (dataGridView1.Rows[i].Cells[8].Style.BackColor != Color.Gainsboro)
+                    {
+                        dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = dataGridView1.Rows[i].Cells[8].Style.BackColor;
+                    }
+                    
                     return;
                 }
             }
@@ -1027,8 +1362,21 @@ namespace NewBTASProto
                     updateD(i,9, "5-M");
                     // and the current one the slave
                     updateD(dataGridView1.CurrentRow.Index,9, "5-S");
+                    // also change the grid color
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.LightSteelBlue;
                     // Now disable adding another...
                     toolStripMenuItem12.Enabled = false;
+                    // also syncronyze them
+                    d.Rows[dataGridView1.CurrentRow.Index][8] = d.Rows[i][8];
+                    d.Rows[dataGridView1.CurrentRow.Index][2] = d.Rows[i][2];
+                    d.Rows[dataGridView1.CurrentRow.Index][10] = d.Rows[i][10];
+                    d.Rows[dataGridView1.CurrentRow.Index][11] = d.Rows[i][11];
+                    if (dataGridView1.Rows[i].Cells[8].Style.BackColor != Color.Gainsboro)
+                    {
+                        dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = dataGridView1.Rows[i].Cells[8].Style.BackColor;
+                    }
                     return;
                 }
             }
@@ -1059,8 +1407,21 @@ namespace NewBTASProto
                     updateD(i,9, "6-M");
                     // and the current one the slave
                     updateD(dataGridView1.CurrentRow.Index,9, "6-S");
+                    // also change the grid color
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.LightSteelBlue;
                     // Now disable adding another...
                     toolStripMenuItem13.Enabled = false;
+                    // also syncronyze them
+                    d.Rows[dataGridView1.CurrentRow.Index][8] = d.Rows[i][8];
+                    d.Rows[dataGridView1.CurrentRow.Index][2] = d.Rows[i][2];
+                    d.Rows[dataGridView1.CurrentRow.Index][10] = d.Rows[i][10];
+                    d.Rows[dataGridView1.CurrentRow.Index][11] = d.Rows[i][11];
+                    if (dataGridView1.Rows[i].Cells[8].Style.BackColor != Color.Gainsboro)
+                    {
+                        dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = dataGridView1.Rows[i].Cells[8].Style.BackColor;
+                    }
                     return;
                 }
             }
@@ -1091,8 +1452,21 @@ namespace NewBTASProto
                     updateD(i,9, "7-M");
                     // and the current one the slave
                     updateD(dataGridView1.CurrentRow.Index,9, "7-S");
+                    // also change the grid color
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.LightSteelBlue;
                     // Now disable adding another...
                     toolStripMenuItem14.Enabled = false;
+                    // also syncronyze them
+                    d.Rows[dataGridView1.CurrentRow.Index][8] = d.Rows[i][8];
+                    d.Rows[dataGridView1.CurrentRow.Index][2] = d.Rows[i][2];
+                    d.Rows[dataGridView1.CurrentRow.Index][10] = d.Rows[i][10];
+                    d.Rows[dataGridView1.CurrentRow.Index][11] = d.Rows[i][11];
+                    if (dataGridView1.Rows[i].Cells[8].Style.BackColor != Color.Gainsboro)
+                    {
+                        dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = dataGridView1.Rows[i].Cells[8].Style.BackColor;
+                    }
                     return;
                 }
             }
@@ -1123,8 +1497,21 @@ namespace NewBTASProto
                     updateD(i,9, "8-M");
                     // and the current one the slave
                     updateD(dataGridView1.CurrentRow.Index,9, "8-S");
+                    // also change the grid color
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.LightSteelBlue;
                     // Now disable adding another...
                     toolStripMenuItem15.Enabled = false;
+                    // also syncronyze them
+                    d.Rows[dataGridView1.CurrentRow.Index][8] = d.Rows[i][8];
+                    d.Rows[dataGridView1.CurrentRow.Index][2] = d.Rows[i][2];
+                    d.Rows[dataGridView1.CurrentRow.Index][10] = d.Rows[i][10];
+                    d.Rows[dataGridView1.CurrentRow.Index][11] = d.Rows[i][11];
+                    if (dataGridView1.Rows[i].Cells[8].Style.BackColor != Color.Gainsboro)
+                    {
+                        dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = dataGridView1.Rows[i].Cells[8].Style.BackColor;
+                    }
                     return;
                 }
             }
@@ -1155,8 +1542,21 @@ namespace NewBTASProto
                     updateD(i,9, "9-M");
                     // and the current one the slave
                     updateD(dataGridView1.CurrentRow.Index,9, "9-S");
+                    // also change the grid color
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.LightSteelBlue;
                     // Now disable adding another...
                     toolStripMenuItem16.Enabled = false;
+                    // also syncronyze them
+                    d.Rows[dataGridView1.CurrentRow.Index][8] = d.Rows[i][8];
+                    d.Rows[dataGridView1.CurrentRow.Index][2] = d.Rows[i][2];
+                    d.Rows[dataGridView1.CurrentRow.Index][10] = d.Rows[i][10];
+                    d.Rows[dataGridView1.CurrentRow.Index][11] = d.Rows[i][11];
+                    if (dataGridView1.Rows[i].Cells[8].Style.BackColor != Color.Gainsboro)
+                    {
+                        dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = dataGridView1.Rows[i].Cells[8].Style.BackColor;
+                    }
                     return;
                 }
             }
@@ -1187,8 +1587,21 @@ namespace NewBTASProto
                     updateD(i,9, "10-M");
                     // and the current one the slave
                     updateD(dataGridView1.CurrentRow.Index,9, "10-S");
+                    // also change the grid color
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.LightSteelBlue;
                     // Now disable adding another...
                     toolStripMenuItem17.Enabled = false;
+                    // also syncronyze them
+                    d.Rows[dataGridView1.CurrentRow.Index][8] = d.Rows[i][8];
+                    d.Rows[dataGridView1.CurrentRow.Index][2] = d.Rows[i][2];
+                    d.Rows[dataGridView1.CurrentRow.Index][10] = d.Rows[i][10];
+                    d.Rows[dataGridView1.CurrentRow.Index][11] = d.Rows[i][11];
+                    if (dataGridView1.Rows[i].Cells[8].Style.BackColor != Color.Gainsboro)
+                    {
+                        dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = dataGridView1.Rows[i].Cells[8].Style.BackColor;
+                    }
                     return;
                 }
             }
@@ -1219,8 +1632,21 @@ namespace NewBTASProto
                     updateD(i,9, "11-M");
                     // and the current one the slave
                     updateD(dataGridView1.CurrentRow.Index,9, "11-S");
+                    // also change the grid color
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.LightSteelBlue;
                     // Now disable adding another...
                     toolStripMenuItem18.Enabled = false;
+                    // also syncronyze them
+                    d.Rows[dataGridView1.CurrentRow.Index][8] = d.Rows[i][8];
+                    d.Rows[dataGridView1.CurrentRow.Index][2] = d.Rows[i][2];
+                    d.Rows[dataGridView1.CurrentRow.Index][10] = d.Rows[i][10];
+                    d.Rows[dataGridView1.CurrentRow.Index][11] = d.Rows[i][11];
+                    if (dataGridView1.Rows[i].Cells[8].Style.BackColor != Color.Gainsboro)
+                    {
+                        dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = dataGridView1.Rows[i].Cells[8].Style.BackColor;
+                    }
                     return;
                 }
             }
@@ -1251,8 +1677,21 @@ namespace NewBTASProto
                     updateD(i,9, "12-M");
                     // and the current one the slave
                     updateD(dataGridView1.CurrentRow.Index,9, "12-S");
+                    // also change the grid color
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.LightSteelBlue;
                     // Now disable adding another...
                     toolStripMenuItem19.Enabled = false;
+                    // also syncronyze them
+                    d.Rows[dataGridView1.CurrentRow.Index][8] = d.Rows[i][8];
+                    d.Rows[dataGridView1.CurrentRow.Index][2] = d.Rows[i][2];
+                    d.Rows[dataGridView1.CurrentRow.Index][10] = d.Rows[i][10];
+                    d.Rows[dataGridView1.CurrentRow.Index][11] = d.Rows[i][11];
+                    if (dataGridView1.Rows[i].Cells[8].Style.BackColor != Color.Gainsboro)
+                    {
+                        dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = dataGridView1.Rows[i].Cells[8].Style.BackColor;
+                    }
                     return;
                 }
             }
@@ -1283,8 +1722,21 @@ namespace NewBTASProto
                     updateD(i,9, "13-M");
                     // and the current one the slave
                     updateD(dataGridView1.CurrentRow.Index,9, "13-S");
+                    // also change the grid color
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.LightSteelBlue;
                     // Now disable adding another...
                     toolStripMenuItem20.Enabled = false;
+                    // also syncronyze them
+                    d.Rows[dataGridView1.CurrentRow.Index][8] = d.Rows[i][8];
+                    d.Rows[dataGridView1.CurrentRow.Index][2] = d.Rows[i][2];
+                    d.Rows[dataGridView1.CurrentRow.Index][10] = d.Rows[i][10];
+                    d.Rows[dataGridView1.CurrentRow.Index][11] = d.Rows[i][11];
+                    if (dataGridView1.Rows[i].Cells[8].Style.BackColor != Color.Gainsboro)
+                    {
+                        dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = dataGridView1.Rows[i].Cells[8].Style.BackColor;
+                    }
                     return;
                 }
             }
@@ -1315,8 +1767,21 @@ namespace NewBTASProto
                     updateD(i,9, "14-M");
                     // and the current one the slave
                     updateD(dataGridView1.CurrentRow.Index,9, "14-S");
+                    // also change the grid color
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.LightSteelBlue;
                     // Now disable adding another...
                     toolStripMenuItem21.Enabled = false;
+                    // also syncronyze them
+                    d.Rows[dataGridView1.CurrentRow.Index][8] = d.Rows[i][8];
+                    d.Rows[dataGridView1.CurrentRow.Index][2] = d.Rows[i][2];
+                    d.Rows[dataGridView1.CurrentRow.Index][10] = d.Rows[i][10];
+                    d.Rows[dataGridView1.CurrentRow.Index][11] = d.Rows[i][11];
+                    if (dataGridView1.Rows[i].Cells[8].Style.BackColor != Color.Gainsboro)
+                    {
+                        dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = dataGridView1.Rows[i].Cells[8].Style.BackColor;
+                    }
                     return;
                 }
             }
@@ -1347,8 +1812,21 @@ namespace NewBTASProto
                     updateD(i,9, "15-M");
                     // and the current one the slave
                     updateD(dataGridView1.CurrentRow.Index,9, "15-S");
+                    // also change the grid color
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.LightSteelBlue;
                     // Now disable adding another...
                     toolStripMenuItem22.Enabled = false;
+                    // also syncronyze them
+                    d.Rows[dataGridView1.CurrentRow.Index][8] = d.Rows[i][8];
+                    d.Rows[dataGridView1.CurrentRow.Index][2] = d.Rows[i][2];
+                    d.Rows[dataGridView1.CurrentRow.Index][10] = d.Rows[i][10];
+                    d.Rows[dataGridView1.CurrentRow.Index][11] = d.Rows[i][11];
+                    if (dataGridView1.Rows[i].Cells[8].Style.BackColor != Color.Gainsboro)
+                    {
+                        dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = dataGridView1.Rows[i].Cells[8].Style.BackColor;
+                    }
                     return;
                 }
             }
@@ -1463,12 +1941,6 @@ namespace NewBTASProto
         {
         }
 
-        private void viewEditDeleteCustomersToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            frmVECustomers f2 = new frmVECustomers();
-            f2.Show();
-        }
-
         private void customersToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FormCollection fc = Application.OpenForms;
@@ -1477,10 +1949,16 @@ namespace NewBTASProto
             {
                 if (frm is frmVECustomers)
                 {
+                    if (frm.WindowState == FormWindowState.Minimized)
+                    {
+                        frm.WindowState = FormWindowState.Normal;
+                    }
+                    frm.BringToFront();
                     return;
                 }
             }
             frmVECustomers f2 = new frmVECustomers();
+            f2.Owner = this;
             f2.Show();
         }
 
@@ -1494,6 +1972,10 @@ namespace NewBTASProto
             {
                 if (frm is frmVETechs)
                 {
+                    if (frm.WindowState == FormWindowState.Minimized)
+                    {
+                        frm.WindowState = FormWindowState.Normal;
+                    }
                     return;
                 }
             }
@@ -1511,10 +1993,15 @@ namespace NewBTASProto
             {
                 if (frm is frmVECustomBats)
                 {
+                    if (frm.WindowState == FormWindowState.Minimized)
+                    {
+                        frm.WindowState = FormWindowState.Normal;
+                    }
                     return;
                 }
             }
             frmVECustomBats f2 = new frmVECustomBats();
+            f2.Owner = this;
             f2.Show();
         }
 
@@ -1526,10 +2013,15 @@ namespace NewBTASProto
             {
                 if (frm is frmVECustomerBats)
                 {
+                    if (frm.WindowState == FormWindowState.Minimized)
+                    {
+                        frm.WindowState = FormWindowState.Normal;
+                    }
                     return;
                 }
             }
             frmVECustomerBats f2 = new frmVECustomerBats();
+            f2.Owner = this;
             f2.Show();
 
         }
@@ -1542,10 +2034,15 @@ namespace NewBTASProto
             {
                 if (frm is frmVECustomBats)
                 {
+                    if (frm.WindowState == FormWindowState.Minimized)
+                    {
+                        frm.WindowState = FormWindowState.Normal;
+                    }
                     return;
                 }
             }
             frmVECustomBats f2 = new frmVECustomBats();
+            f2.Owner = this;
             f2.Show();
         }
 
@@ -1557,10 +2054,15 @@ namespace NewBTASProto
             {
                 if (frm is frmVEWorkOrders)
                 {
+                    if (frm.WindowState == FormWindowState.Minimized)
+                    {
+                        frm.WindowState = FormWindowState.Normal;
+                    }
                     return;
                 }
             }
             frmVEWorkOrders f2 = new frmVEWorkOrders();
+            f2.Owner = this;
             f2.Show();
         }
 
@@ -1572,6 +2074,10 @@ namespace NewBTASProto
             {
                 if (frm is ComportSettings)
                 {
+                    if (frm.WindowState == FormWindowState.Minimized)
+                    {
+                        frm.WindowState = FormWindowState.Normal;
+                    }
                     return;
                 }
             }
@@ -1589,6 +2095,10 @@ namespace NewBTASProto
             {
                 if (frm is ICSettingsForm)
                 {
+                    if (frm.WindowState == FormWindowState.Minimized)
+                    {
+                        frm.WindowState = FormWindowState.Normal;
+                    }
                     return;
                 }
             }
@@ -1620,6 +2130,10 @@ namespace NewBTASProto
             {
                 if (frm is ICSettingsForm)
                 {
+                    if (frm.WindowState == FormWindowState.Minimized)
+                    {
+                        frm.WindowState = FormWindowState.Normal;
+                    }
                     return;
                 }
             }
@@ -1696,10 +2210,15 @@ namespace NewBTASProto
             {
                 if (frm is frmVETests)
                 {
+                    if (frm.WindowState == FormWindowState.Minimized)
+                    {
+                        frm.WindowState = FormWindowState.Normal;
+                    }
                     return;
                 }
             }
             frmVETests f2 = new frmVETests();
+            f2.Owner = this;
             f2.Show();
         }
 
@@ -1711,11 +2230,16 @@ namespace NewBTASProto
             {
                 if (frm is Program_Version)
                 {
+                    if (frm.WindowState == FormWindowState.Minimized)
+                    {
+                        frm.WindowState = FormWindowState.Normal;
+                    }
                     return;
                 }
             }
 
             Program_Version bn = new Program_Version();
+            bn.Owner = this;
             bn.Show();
         }
 
@@ -1727,11 +2251,16 @@ namespace NewBTASProto
             {
                 if (frm is Help)
                 {
+                    if (frm.WindowState == FormWindowState.Minimized)
+                    {
+                        frm.WindowState = FormWindowState.Normal;
+                    }
                     return;
                 }
             }
 
             Help bn = new Help();
+            bn.Owner = this;
             bn.Show();
 
         }
@@ -1744,11 +2273,16 @@ namespace NewBTASProto
             {
                 if (frm is NoteServe)
                 {
+                    if (frm.WindowState == FormWindowState.Minimized)
+                    {
+                        frm.WindowState = FormWindowState.Normal;
+                    }
                     return;
                 }
             }
 
             NoteServe bn = new NoteServe();
+            bn.Owner = this;
             bn.Show();
 
         }
@@ -1909,7 +2443,7 @@ namespace NewBTASProto
                 {
                     //try to copy the database from the appdata folder to the selected folder...
 
-                    File.Copy(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB", folder + @"\BTAS16NV_" + System.DateTime.Now.ToString("yyyyMMddHHmmssfff") + @".MDB");
+                    File.Copy(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB", folder + @"\BTAS16NV_" + System.DateTime.Now.ToString("yyyyMMddHHmmssfff") + @".MDB");
                     MessageBox.Show("Database was backed up to:  " + folder);
                 }
                 catch (Exception ex)
@@ -1923,7 +2457,7 @@ namespace NewBTASProto
 
         private void button5_Click_1(object sender, EventArgs e)
         {
-            rtbIncoming.Text = "";
+            
         }
 
         private void restoreDatabaseToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1951,7 +2485,7 @@ namespace NewBTASProto
                 {
                     //try to copy the database from the appdata folder to the selected folder...
 
-                    File.Copy(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB", folder + @"\BTAS16NV_" + System.DateTime.Now.ToString("yyyyMMddHHmmssfff") + @".MDB");
+                    File.Copy(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB", folder + @"\BTAS16NV_" + System.DateTime.Now.ToString("yyyyMMddHHmmssfff") + @".MDB");
                     MessageBox.Show("Database was backed up to:  " + folder);
                 }
                 catch (Exception ex)
@@ -1972,7 +2506,7 @@ namespace NewBTASProto
                     {
                         //try to copy the database from the appdata folder to the selected folder...
 
-                        File.Copy(file,Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB",true);
+                        File.Copy(file,Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB",true);
                         MessageBox.Show("Selected database has been restored");
                     }
                     catch (Exception ex)
@@ -1993,18 +2527,7 @@ namespace NewBTASProto
 
         private void button4_Click(object sender, EventArgs e)
         {
-            PrintDialog MyPrintDialog = new PrintDialog();
-            if (MyPrintDialog.ShowDialog() == DialogResult.OK)
-            {
-                // do on a helper thread...
-                ThreadPool.QueueUserWorkItem(s =>
-                {
-                    System.Drawing.Printing.PrintDocument doc = new System.Drawing.Printing.PrintDocument();
-                    doc.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(doc_PrintPage);
-                    doc.DefaultPageSettings.Landscape = true;
-                    doc.Print();
-                });
-            }
+
         }
 
         private void doc_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
@@ -2021,18 +2544,7 @@ namespace NewBTASProto
 
         private void button2_Click(object sender, EventArgs e)
         {
-            PrintDialog MyPrintDialog = new PrintDialog();
-            if (MyPrintDialog.ShowDialog() == DialogResult.OK)
-            {
-                // do on a helper thread...
-                ThreadPool.QueueUserWorkItem(s =>
-                {
-                    System.Drawing.Printing.PrintDocument doc = new System.Drawing.Printing.PrintDocument();
-                    doc.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(doc_PrintPage2);
-                    doc.DefaultPageSettings.Landscape = false;
-                    doc.Print();
-                });
-            }
+
 
         }
 
@@ -2048,6 +2560,114 @@ namespace NewBTASProto
             e.Graphics.DrawImage(bmp, bounds.Left + 100, bounds.Top, (factor * bmp.Width), (factor * bmp.Height));
         }
 
+        private void printToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PrintDialog MyPrintDialog = new PrintDialog();
+            if (MyPrintDialog.ShowDialog() == DialogResult.OK)
+            {
+                // do on a helper thread...
+                ThreadPool.QueueUserWorkItem(s =>
+                {
+                    System.Drawing.Printing.PrintDocument doc = new System.Drawing.Printing.PrintDocument();
+                    doc.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(doc_PrintPage);
+                    doc.DefaultPageSettings.Landscape = true;
+                    doc.Print();
+                });
+            }
+        }
+
+        private void chart1_Click(object sender, EventArgs e)
+        {
+            MouseEventArgs inClick = (MouseEventArgs)e;
+
+            if (inClick.Button == MouseButtons.Right)
+            {
+                contextMenuStripGraphPrint.Show(Cursor.Position);
+            }
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+            MouseEventArgs inClick = (MouseEventArgs)e;
+
+            if (inClick.Button == MouseButtons.Right)
+            {
+                contextMenuStripTextPrint.Show(Cursor.Position);
+            }
+        }
+
+        private void toolStripMenuItem25_Click(object sender, EventArgs e)
+        {
+            PrintDialog MyPrintDialog = new PrintDialog();
+            if (MyPrintDialog.ShowDialog() == DialogResult.OK)
+            {
+                // do on a helper thread...
+                ThreadPool.QueueUserWorkItem(s =>
+                {
+                    System.Drawing.Printing.PrintDocument doc = new System.Drawing.Printing.PrintDocument();
+                    doc.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(doc_PrintPage2);
+                    doc.DefaultPageSettings.Landscape = false;
+                    doc.Print();
+                });
+            }
+        }
+
+        private void toolStripMenuItem26_Click(object sender, EventArgs e)
+        {
+            rtbIncoming.Text = "";
+        }
+
+        private void rtbIncoming_Click(object sender, EventArgs e)
+        {
+            MouseEventArgs inClick = (MouseEventArgs) e;
+
+            if (inClick.Button == MouseButtons.Right)
+            {
+                contextMenuStripClear.Show(Cursor.Position);
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            FormCollection fc = Application.OpenForms;
+
+            foreach (Form frm in fc)
+            {
+                if (frm is MasterFillerInterface)
+                {
+                    if (frm.WindowState == FormWindowState.Minimized)
+                    {
+                        frm.WindowState = FormWindowState.Normal;
+                    }
+                    frm.BringToFront();
+                    return;
+                }
+            }
+            MasterFillerInterface f2 = new MasterFillerInterface(dataGridView1.CurrentRow.Index,d.Rows[dataGridView1.CurrentRow.Index][1].ToString());
+            f2.Owner = this;
+            f2.Show();
+        }
+
+        private void cMSTestType_Opening(object sender, CancelEventArgs e)
+        {
+
+        }
+
+        private void Main_Form_Shown(object sender, EventArgs e)
+        {
+            //finnally reformat the slave row so that cols 2,5,8 are lightsteelblue..
+            for (int i = 0; i < 16; i++)
+            {
+                if (d.Rows[i][9].ToString().Contains("S"))
+                {
+                    dataGridView1.Rows[i].Cells[2].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[i].Cells[5].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[i].Cells[8].Style.BackColor = Color.LightSteelBlue;
+                }
+            }
+        }
+
 
     }// end mainform class section...
+
 }

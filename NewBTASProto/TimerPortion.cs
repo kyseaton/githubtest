@@ -79,7 +79,7 @@ namespace NewBTASProto
             }
             catch
             {
-                label8.Text = "Check Coms!";
+                label8.Text = "Check Comports' Settings";
                 label8.Visible = true;
                 //MessageBox.Show("There is a Comport configuration issue.  Please check the Data Hub connections and the ComPort Settings");
                 return;

@@ -15,6 +15,7 @@ namespace NewBTASProto
 
         public Splash()
         {
+            //if (System.Diagnostics.Process.GetProcessesByName(System.IO.Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Length > 0) System.Diagnostics.Process.GetCurrentProcess().Kill();
             InitializeComponent();
         }
 
@@ -27,7 +28,7 @@ namespace NewBTASProto
             // create the connection
             try
             {
-                strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB";
+                strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
                 myAccessConn = new OleDbConnection(strAccessConn);
             }
             catch (Exception ex)
@@ -57,7 +58,7 @@ namespace NewBTASProto
                     //make the DB folder
                     try
                     {
-                        System.IO.Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB");
+                        System.IO.Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB");
                     }
                     catch
                     {
@@ -67,7 +68,7 @@ namespace NewBTASProto
                     //now copy the file over
                     try
                     {
-                        System.IO.File.WriteAllBytes(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB", Properties.Resources.BTS16NV_clean);
+                        System.IO.File.WriteAllBytes(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB", Properties.Resources.BTS16NV_clean);
                     }
                     catch (Exception ex)
                     {
@@ -304,6 +305,7 @@ namespace NewBTASProto
 
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Splash));
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -325,6 +327,7 @@ namespace NewBTASProto
             this.ClientSize = new System.Drawing.Size(490, 285);
             this.Controls.Add(this.pictureBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
             this.Name = "Splash";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -355,7 +358,7 @@ namespace NewBTASProto
             //// create the connection
             //try
             //{
-            //    strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB";
+            //    strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
             //    myAccessConn = new OleDbConnection(strAccessConn);
             //}
             //catch (Exception ex)

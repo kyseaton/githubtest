@@ -82,7 +82,6 @@
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.button2 = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label11 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
@@ -103,7 +102,6 @@
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.button4 = new System.Windows.Forms.Button();
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.cMSTestType = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.asReceivedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -150,11 +148,16 @@
             this.toolStripMenuItem23 = new System.Windows.Forms.ToolStripSeparator();
             this.clearToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.button5 = new System.Windows.Forms.Button();
-            this.rtbIncoming = new System.Windows.Forms.RichTextBox();
+            this.rtbIncoming = new System.Windows.Forms.Label();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.folderBrowserDialog2 = new System.Windows.Forms.FolderBrowserDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.contextMenuStripGraphPrint = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.printToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextMenuStripTextPrint = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripMenuItem25 = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextMenuStripClear = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripMenuItem26 = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -168,6 +171,9 @@
             this.cMSChargerChannel.SuspendLayout();
             this.cMSChargerType.SuspendLayout();
             this.groupBox4.SuspendLayout();
+            this.contextMenuStripGraphPrint.SuspendLayout();
+            this.contextMenuStripTextPrint.SuspendLayout();
+            this.contextMenuStripClear.SuspendLayout();
             this.SuspendLayout();
             // 
             // dataGridView1
@@ -568,7 +574,6 @@
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Controls.Add(this.button2);
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox1.ForeColor = System.Drawing.SystemColors.ControlText;
             this.groupBox1.Location = new System.Drawing.Point(1035, 90);
@@ -587,19 +592,9 @@
             this.label1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label1.Location = new System.Drawing.Point(6, 16);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(223, 596);
+            this.label1.Size = new System.Drawing.Size(223, 625);
             this.label1.TabIndex = 34;
-            // 
-            // button2
-            // 
-            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.Location = new System.Drawing.Point(154, 618);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 0;
-            this.button2.Text = "Print";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // groupBox2
             // 
@@ -662,6 +657,7 @@
             this.button3.TabIndex = 10;
             this.button3.Text = "Water Level";
             this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // button1
             // 
@@ -696,22 +692,23 @@
             // label8
             // 
             this.label8.BackColor = System.Drawing.Color.Red;
-            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label8.Location = new System.Drawing.Point(413, 12);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(134, 38);
             this.label8.TabIndex = 6;
+            this.label8.Text = "Check Comports\' Settings";
             this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.label8.Visible = false;
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Lucida Console", 22F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.Font = new System.Drawing.Font("Eras Bold ITC", 21F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.label7.Location = new System.Drawing.Point(268, 19);
+            this.label7.Location = new System.Drawing.Point(268, 15);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(139, 30);
+            this.label7.Size = new System.Drawing.Size(134, 33);
             this.label7.TabIndex = 5;
             this.label7.Text = "BTAS-16";
             // 
@@ -776,7 +773,6 @@
             this.groupBox3.Controls.Add(this.comboBox2);
             this.groupBox3.Controls.Add(this.radioButton2);
             this.groupBox3.Controls.Add(this.radioButton1);
-            this.groupBox3.Controls.Add(this.button4);
             this.groupBox3.Controls.Add(this.chart1);
             this.groupBox3.Location = new System.Drawing.Point(12, 443);
             this.groupBox3.Name = "groupBox3";
@@ -828,17 +824,6 @@
             this.radioButton1.UseVisualStyleBackColor = true;
             this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
             // 
-            // button4
-            // 
-            this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button4.Location = new System.Drawing.Point(627, 13);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(75, 23);
-            this.button4.TabIndex = 31;
-            this.button4.Text = "Print";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
-            // 
             // chart1
             // 
             this.chart1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -860,6 +845,7 @@
             this.chart1.Size = new System.Drawing.Size(696, 246);
             this.chart1.TabIndex = 30;
             this.chart1.Text = "chart1";
+            this.chart1.Click += new System.EventHandler(this.chart1_Click);
             // 
             // cMSTestType
             // 
@@ -881,6 +867,7 @@
             this.clearToolStripMenuItem2});
             this.cMSTestType.Name = "cMSTestType";
             this.cMSTestType.Size = new System.Drawing.Size(166, 318);
+            this.cMSTestType.Opening += new System.ComponentModel.CancelEventHandler(this.cMSTestType_Opening);
             // 
             // asReceivedToolStripMenuItem
             // 
@@ -1206,7 +1193,6 @@
             // 
             this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox4.Controls.Add(this.button5);
             this.groupBox4.Controls.Add(this.rtbIncoming);
             this.groupBox4.Location = new System.Drawing.Point(726, 443);
             this.groupBox4.Name = "groupBox4";
@@ -1215,26 +1201,18 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "MESSAGE CENTER";
             // 
-            // button5
-            // 
-            this.button5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button5.Location = new System.Drawing.Point(222, 265);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(75, 23);
-            this.button5.TabIndex = 3;
-            this.button5.Text = "Clear";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click_1);
-            // 
             // rtbIncoming
             // 
-            this.rtbIncoming.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.rtbIncoming.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.rtbIncoming.Location = new System.Drawing.Point(6, 13);
+            this.rtbIncoming.BackColor = System.Drawing.SystemColors.Window;
+            this.rtbIncoming.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.rtbIncoming.Location = new System.Drawing.Point(6, 16);
             this.rtbIncoming.Name = "rtbIncoming";
-            this.rtbIncoming.Size = new System.Drawing.Size(291, 246);
-            this.rtbIncoming.TabIndex = 2;
-            this.rtbIncoming.Text = "";
+            this.rtbIncoming.Size = new System.Drawing.Size(291, 272);
+            this.rtbIncoming.TabIndex = 36;
+            this.rtbIncoming.Click += new System.EventHandler(this.rtbIncoming_Click);
             // 
             // folderBrowserDialog1
             // 
@@ -1248,6 +1226,48 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             this.openFileDialog1.Title = "Step 2.  Now select the Database to restore.";
+            // 
+            // contextMenuStripGraphPrint
+            // 
+            this.contextMenuStripGraphPrint.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.printToolStripMenuItem});
+            this.contextMenuStripGraphPrint.Name = "contextMenuStripGraphPrint";
+            this.contextMenuStripGraphPrint.Size = new System.Drawing.Size(105, 26);
+            // 
+            // printToolStripMenuItem
+            // 
+            this.printToolStripMenuItem.Name = "printToolStripMenuItem";
+            this.printToolStripMenuItem.Size = new System.Drawing.Size(104, 22);
+            this.printToolStripMenuItem.Text = "Print?";
+            this.printToolStripMenuItem.Click += new System.EventHandler(this.printToolStripMenuItem_Click);
+            // 
+            // contextMenuStripTextPrint
+            // 
+            this.contextMenuStripTextPrint.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem25});
+            this.contextMenuStripTextPrint.Name = "contextMenuStripGraphPrint";
+            this.contextMenuStripTextPrint.Size = new System.Drawing.Size(105, 26);
+            // 
+            // toolStripMenuItem25
+            // 
+            this.toolStripMenuItem25.Name = "toolStripMenuItem25";
+            this.toolStripMenuItem25.Size = new System.Drawing.Size(104, 22);
+            this.toolStripMenuItem25.Text = "Print?";
+            this.toolStripMenuItem25.Click += new System.EventHandler(this.toolStripMenuItem25_Click);
+            // 
+            // contextMenuStripClear
+            // 
+            this.contextMenuStripClear.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem26});
+            this.contextMenuStripClear.Name = "contextMenuStripGraphPrint";
+            this.contextMenuStripClear.Size = new System.Drawing.Size(107, 26);
+            // 
+            // toolStripMenuItem26
+            // 
+            this.toolStripMenuItem26.Name = "toolStripMenuItem26";
+            this.toolStripMenuItem26.Size = new System.Drawing.Size(106, 22);
+            this.toolStripMenuItem26.Text = "Clear?";
+            this.toolStripMenuItem26.Click += new System.EventHandler(this.toolStripMenuItem26_Click);
             // 
             // Main_Form
             // 
@@ -1271,6 +1291,7 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_Form_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Main_Form_FormClosed);
             this.Load += new System.EventHandler(this.Main_Form_Load);
+            this.Shown += new System.EventHandler(this.Main_Form_Shown);
             this.ResizeEnd += new System.EventHandler(this.Main_Form_ResizeEnd);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.menuStrip1.ResumeLayout(false);
@@ -1289,6 +1310,9 @@
             this.cMSChargerChannel.ResumeLayout(false);
             this.cMSChargerType.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
+            this.contextMenuStripGraphPrint.ResumeLayout(false);
+            this.contextMenuStripTextPrint.ResumeLayout(false);
+            this.contextMenuStripClear.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1327,7 +1351,6 @@
         private System.Windows.Forms.ToolStripMenuItem editTechniciansToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem testToolStripMenuItem;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Button button2;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.PictureBox pictureBox1;
@@ -1350,7 +1373,6 @@
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.RadioButton radioButton2;
         private System.Windows.Forms.RadioButton radioButton1;
-        private System.Windows.Forms.Button button4;
         private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
         private System.Windows.Forms.ComboBox comboBox3;
         private System.Windows.Forms.ComboBox comboBox2;
@@ -1409,16 +1431,21 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel5;
         private System.Windows.Forms.ToolStripMenuItem editTestSettingsToolStripMenuItem;
         private System.Windows.Forms.GroupBox groupBox4;
-        private System.Windows.Forms.RichTextBox rtbIncoming;
         private System.Windows.Forms.ToolStripMenuItem notificationServiceToolStripMenuItem;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
-        private System.Windows.Forms.Button button5;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog2;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem3;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem6;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem24;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripGraphPrint;
+        private System.Windows.Forms.ToolStripMenuItem printToolStripMenuItem;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripTextPrint;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem25;
+        private System.Windows.Forms.Label rtbIncoming;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripClear;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem26;
     }
 }
 

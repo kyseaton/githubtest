@@ -37,7 +37,7 @@ namespace NewBTASProto
             string strAccessSelect;
             // Open database containing all the battery data....
 
-            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB";
+            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
             strAccessSelect = @"SELECT WorkOrderID,WorkOrderNumber,DateReceived,PlaneType,TailNumber,TestRequested,DateCompleted,OrderStatus,Notes,Batteries.BatteryModel,Batteries.BatterySerialNumber,Batteries.BatteryBCN,Batteries.CustomerName" +
                 @" FROM WorkOrders LEFT JOIN Batteries ON WorkOrders.BID=Batteries.BID WHERE OrderStatus='Open' ORDER BY WorkOrders.WorkOrderNumber ASC";
             
@@ -113,7 +113,7 @@ namespace NewBTASProto
 
             // Open database containing all the customer names data....
 
-            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB";
+            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
             strAccessSelect = @"SELECT CustomerName FROM CUSTOMERS ORDER BY CustomerName ASC";
 
             DataSet Custs = new DataSet();
@@ -163,7 +163,7 @@ namespace NewBTASProto
 
             // Open database containing all the customer names data....
 
-            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB";
+            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
             strAccessSelect = @"SELECT BatterySerialNumber FROM Batteries ORDER BY BatterySerialNumber ASC";
 
             DataSet Serials = new DataSet();
@@ -214,7 +214,7 @@ namespace NewBTASProto
 
             //set the max
 
-            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB";
+            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
             strAccessSelect = @"SELECT WorkOrderID FROM WorkOrders";
 
             DataSet countSet = new DataSet();
@@ -323,7 +323,7 @@ namespace NewBTASProto
             string strAccessConn;
             string strAccessSelect;
 
-            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB";
+            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
             strAccessSelect = @"SELECT * FROM Batteries Where BatterySerialNumber='" + comboBox1.Text + @"' ORDER BY BatterySerialNumber ASC";
 
             DataSet Serials = new DataSet();
@@ -375,7 +375,7 @@ namespace NewBTASProto
             string strAccessSelect;
             // Open database containing all the battery data....
 
-            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB";
+            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
             strAccessSelect = @"SELECT StepNumber,TestName,Notes FROM Tests WHERE WorkOrderNumber='" + toolStripCBWorkOrders.Text + @"' ORDER BY StepNumber ASC";
 
             
@@ -433,22 +433,22 @@ namespace NewBTASProto
             string strAccessSelect;
             // Open database containing all the battery data....
 
-            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB";
+            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
 
             // show everything
-            if ( toolStripCBWorkOrderStatus.Text == "All" && toolStripCBCustomers.Text == "" && toolStripCBSerialNums.Text == "")
+            if (toolStripCBWorkOrderStatus.Text == "Open and Closed" && toolStripCBCustomers.Text == "" && toolStripCBSerialNums.Text == "")
             {
                 strAccessSelect = @"SELECT WorkOrderID,WorkOrderNumber,DateReceived,PlaneType,TailNumber,TestRequested,DateCompleted,OrderStatus,Notes,Batteries.BatteryModel,Batteries.BatterySerialNumber,Batteries.BatteryBCN,Batteries.CustomerName" +
-                @" FROM WorkOrders LEFT JOIN Batteries ON WorkOrders.BID=Batteries.BID ORDER BY WorkOrders.WorkOrderNumber ASC";
+                @" FROM WorkOrders LEFT JOIN Batteries ON WorkOrders.BID=Batteries.BID WHERE OrderStatus <> 'Active' ORDER BY WorkOrders.WorkOrderNumber ASC";
             }
             else
             {
                 strAccessSelect = @"SELECT WorkOrderID,WorkOrderNumber,DateReceived,PlaneType,TailNumber,TestRequested,DateCompleted,OrderStatus,Notes,Batteries.BatteryModel,Batteries.BatterySerialNumber,Batteries.BatteryBCN,Batteries.CustomerName" +
-                @" FROM WorkOrders LEFT JOIN Batteries ON WorkOrders.BID=Batteries.BID WHERE " + 
-                (toolStripCBWorkOrderStatus.Text != "All" ? ("OrderStatus='" + toolStripCBWorkOrderStatus.Text + "' " ) : " ") +
-                (toolStripCBWorkOrderStatus.Text != "All" && toolStripCBCustomers.Text != "" ? (" AND ") : " ") +
+                @" FROM WorkOrders LEFT JOIN Batteries ON WorkOrders.BID=Batteries.BID WHERE " +
+                (toolStripCBWorkOrderStatus.Text != "Open and Closed" ? ("OrderStatus='" + toolStripCBWorkOrderStatus.Text + "' ") : "OrderStatus <> 'Active' AND ") +
+                (toolStripCBWorkOrderStatus.Text != "Open and Closed" && toolStripCBCustomers.Text != "" ? (" AND ") : " ") +
                 (toolStripCBCustomers.Text != "" ? ("Batteries.CustomerName='" + toolStripCBCustomers.Text.Replace("'", "''") + "' ") : " ") +
-                ((toolStripCBCustomers.Text != "" && toolStripCBSerialNums.Text != "") || (toolStripCBWorkOrderStatus.Text != "All" && toolStripCBSerialNums.Text != "") ? (" AND ") : " ") +
+                ((toolStripCBCustomers.Text != "" && toolStripCBSerialNums.Text != "") || (toolStripCBWorkOrderStatus.Text != "Open and Closed" && toolStripCBSerialNums.Text != "") ? (" AND ") : " ") +
                 (toolStripCBSerialNums.Text != "" ? ("Batteries.BatterySerialNumber='" + toolStripCBSerialNums.Text.Replace("'", "''") + "' ") : " ") +
                 @" ORDER BY WorkOrders.WorkOrderNumber ASC";
             }
@@ -476,16 +476,15 @@ namespace NewBTASProto
                 myAccessConn.Open();
                 myDataAdapter.Fill(WorkOrders);
 
+                myAccessConn.Close();
+                loadTests();
+                if (comboBox2.Text != "Active" && toolStripCBWorkOrderStatus.Text != "Active") { bindingNavigatorAddNewItem.Enabled = true; }
+
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
                 return;
-            }
-            finally
-            {
-                myAccessConn.Close();
-                loadTests();
             }
 
             #endregion
@@ -495,6 +494,82 @@ namespace NewBTASProto
 
         private void toolStripCBWorkOrderStatus_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (toolStripCBWorkOrderStatus.Text == "Active")
+            {
+                if (comboBox2.Items.Contains("Open")) { comboBox2.Items.Remove("Open"); }
+                if (comboBox2.Items.Contains("Closed")) { comboBox2.Items.Remove("Closed"); }
+                if (!comboBox2.Items.Contains("Active")) { comboBox2.Items.Add("Active"); }
+            }
+            else
+            {
+                if (!comboBox2.Items.Contains("Open")) { comboBox2.Items.Add("Open"); }
+                if (!comboBox2.Items.Contains("Closed")) { comboBox2.Items.Add("Closed"); }
+                if (comboBox2.Items.Contains("Active")) { comboBox2.Items.Remove("Active"); }
+            }
+
+            if (toolStripCBWorkOrderStatus.Text == "Closed")
+            {
+                //disable everything
+                textBox1.Enabled = false;
+                dateTimePicker1.Enabled = false;
+                textBox3.Enabled = false;
+                textBox4.Enabled = false;
+                comboBox3.Enabled = false;
+                dateTimePicker2.Enabled = false;
+                textBox12.Enabled = false;
+                comboBox1.Enabled = false;
+                textBox8.Enabled = false;
+                textBox10.Enabled = false;
+                textBox11.Enabled = false;
+                button1.Enabled = false;
+                comboBox2.Enabled = true;
+                saveToolStripButton.Enabled = true;
+                bindingNavigatorDeleteItem.Enabled = true;
+                bindingNavigatorAddNewItem.Enabled = true;
+
+            }
+            else if (toolStripCBWorkOrderStatus.Text == "Active")
+            {
+                //disable everything
+                textBox1.Enabled = false;
+                dateTimePicker1.Enabled = false;
+                textBox3.Enabled = false;
+                textBox4.Enabled = false;
+                comboBox3.Enabled = false;
+                dateTimePicker2.Enabled = false;
+                textBox12.Enabled = false;
+                comboBox1.Enabled = false;
+                textBox8.Enabled = false;
+                textBox10.Enabled = false;
+                textBox11.Enabled = false;
+                button1.Enabled = false;
+                comboBox2.Enabled = false;
+                saveToolStripButton.Enabled = false;
+                bindingNavigatorDeleteItem.Enabled = false;
+                bindingNavigatorAddNewItem.Enabled = false;
+            }
+            else
+            {
+                //enable everything
+                textBox1.Enabled = true;
+                dateTimePicker1.Enabled = true;
+                textBox3.Enabled = true;
+                textBox4.Enabled = true;
+                comboBox3.Enabled = true;
+                dateTimePicker2.Enabled = true;
+                textBox12.Enabled = true;
+                comboBox1.Enabled = true;
+                textBox8.Enabled = true;
+                textBox10.Enabled = true;
+                textBox11.Enabled = true;
+                button1.Enabled = true;
+                comboBox2.Enabled = true;
+                saveToolStripButton.Enabled = true;
+                bindingNavigatorDeleteItem.Enabled = true;
+                bindingNavigatorAddNewItem.Enabled = true;
+
+            }
+
             UpdateView();
         }
 
@@ -510,18 +585,119 @@ namespace NewBTASProto
 
         private void saveToolStripButton_Click(object sender, EventArgs e)
         {
+            if (bindingNavigator1.BindingSource.Position == -1)
+            {
+                string temp1 = textBox1.Text;
+                string temp2 = dateTimePicker1.Text;
+                string temp3 = textBox3.Text;
+                string temp4 = textBox4.Text;
+                string temp5 = comboBox3.Text;
+                string temp6 = dateTimePicker2.Text;
+                string temp7 = comboBox2.Text;
+                string temp8 = textBox12.Text;
+                string temp9 = comboBox1.Text;
+                string temp10 = textBox8.Text;
+                string temp11 = textBox10.Text;
+                string temp12 = textBox11.Text;
 
-            if (textBox1.Text.Contains(" "))
+                bindingNavigator1.BindingSource.AddNew();
+                bindingNavigator1.BindingSource.Position = 0;
+
+                textBox1.Text = temp1;
+                dateTimePicker1.Text = temp2;
+                textBox3.Text = temp3;
+                textBox4.Text = temp4;
+                comboBox3.Text = temp5;
+                dateTimePicker2.Text = temp6;
+                comboBox2.Text = temp7;
+                textBox12.Text = temp8;
+                comboBox1.Text = temp9;
+                textBox8.Text = temp10;
+                textBox10.Text = temp11;
+                textBox11.Text = temp12;
+
+                comboBox2.Text = "Open";
+            }
+
+            int origPos = bindingNavigator1.BindingSource.Position;
+
+            if (!comboBox1.Items.Contains(comboBox1.Text))
+            {
+                MessageBox.Show("The selected battery serial number is not in the database.");
+                return;
+            }
+            else if (comboBox1.Text == "")
+            {
+                MessageBox.Show("Please select a battery serial number.");
+                return;
+            }
+
+            else if (textBox1.Text.Contains(" "))
             {
                 MessageBox.Show("Work order names cannot have spaces in them.  Please correct and press save again.");
                 return;
             }
+            else if (comboBox2.Text =="Open")
+            {
+                DataRowView current = (DataRowView)bindingSource1.Current;
 
+                // we also need to check to see if the battery is already associated with an open order!
+                string strAccessConn;
+                string strAccessSelect;
+                // Open database containing all the battery data....
+
+                strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+
+                strAccessSelect = @"SELECT OrderStatus,Batteries.BatterySerialNumber" +
+                    @" FROM WorkOrders LEFT JOIN Batteries ON WorkOrders.BID=Batteries.BID WHERE OrderStatus <> 'Closed' AND WorkOrderNumber <> '" + current["WorkOrderNumber"] + "'";
+
+                DataSet Bats = new DataSet();
+                OleDbConnection myAccessConn = null;
+                // try to open the DB
+                try
+                {
+                    myAccessConn = new OleDbConnection(strAccessConn);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                    return;
+                }
+                //  now try to access it
+                try
+                {
+                    OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                    OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                    myAccessConn.Open();
+                    myDataAdapter.Fill(Bats);
+                    bindingNavigatorAddNewItem.Enabled = true;
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                    return;
+                }
+                finally
+                {
+                    myAccessConn.Close();
+                }
+
+                DataRow[] foundRows = Bats.Tables[0].Select("BatterySerialNumber = '" + comboBox1.Text + "'");
+
+                if (foundRows.Length != 0)
+                {
+                    MessageBox.Show("That battery is already assigned to an Open order");
+                    return;
+                }
+            }
+            
             try
             {
 
                 // set up the db Connection
-                string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB";
+                string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
                 OleDbConnection conn = new OleDbConnection(connectionString);
                 conn.Open();
 
@@ -621,7 +797,14 @@ namespace NewBTASProto
 
                     }
                 }
+
                 conn.Close();
+                bindingNavigatorAddNewItem.Enabled = true;
+                UpdateView();
+                if (bindingSource1.Count > 1)
+                {
+                    bindingSource1.Position = origPos;
+                }
 
             }// end try
             catch (Exception ex)
@@ -637,7 +820,7 @@ namespace NewBTASProto
                 if (MessageBox.Show("Are you sure you want to remove this work order?", "Delete Record", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     // set up the db Connection
-                    string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB";
+                    string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
                     OleDbConnection conn = new OleDbConnection(connectionString);
                     conn.Open();
 
@@ -672,6 +855,7 @@ namespace NewBTASProto
                         MessageBox.Show("That record was not in the DB. You must save it in order to delete it.");
                     }
                     conn.Close();
+                    UpdateView();
 
                 }
             }
@@ -696,7 +880,7 @@ namespace NewBTASProto
                 else if (MessageBox.Show("Are you sure you want to remove this test?", "Delete Record", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     // set up the db Connection
-                    string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB";
+                    string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
                     OleDbConnection conn = new OleDbConnection(connectionString);
                     conn.Open();
 
@@ -730,6 +914,131 @@ namespace NewBTASProto
         private void bindingNavigatorMoveNextItem_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void comboBox2_SelectedValueChanged(object sender, EventArgs e)
+        {
+            if (comboBox2.Text == "Closed")
+            {
+                //disable everything
+                textBox1.Enabled = false;
+                dateTimePicker1.Enabled = false;
+                textBox3.Enabled = false;
+                textBox4.Enabled = false;
+                comboBox3.Enabled = false;
+                dateTimePicker2.Enabled = false;
+                textBox12.Enabled = false;
+                comboBox1.Enabled = false;
+                textBox8.Enabled = false;
+                textBox10.Enabled = false;
+                textBox11.Enabled = false;
+                button1.Enabled = false;
+                comboBox2.Enabled = true;
+                saveToolStripButton.Enabled = true;
+                bindingNavigatorDeleteItem.Enabled = true;
+                bindingNavigatorAddNewItem.Enabled = true;
+
+            }
+            else if (comboBox2.Text == "Active")
+            {
+                //disable everything
+                textBox1.Enabled = false;
+                dateTimePicker1.Enabled = false;
+                textBox3.Enabled = false;
+                textBox4.Enabled = false;
+                comboBox3.Enabled = false;
+                dateTimePicker2.Enabled = false;
+                textBox12.Enabled = false;
+                comboBox1.Enabled = false;
+                textBox8.Enabled = false;
+                textBox10.Enabled = false;
+                textBox11.Enabled = false;
+                button1.Enabled = false;
+                comboBox2.Enabled = false;
+                saveToolStripButton.Enabled = false;
+                bindingNavigatorDeleteItem.Enabled = false;
+                bindingNavigatorAddNewItem.Enabled = false;
+            }
+            else
+            {
+                //enable everything
+                textBox1.Enabled = true;
+                dateTimePicker1.Enabled = true;
+                textBox3.Enabled = true;
+                textBox4.Enabled = true;
+                comboBox3.Enabled = true;
+                dateTimePicker2.Enabled = true;
+                textBox12.Enabled = true;
+                comboBox1.Enabled = true;
+                textBox8.Enabled = true;
+                textBox10.Enabled = true;
+                textBox11.Enabled = true;
+                button1.Enabled = true;
+                comboBox2.Enabled = true;
+                saveToolStripButton.Enabled = true;
+                bindingNavigatorDeleteItem.Enabled = true;
+                bindingNavigatorAddNewItem.Enabled = true;
+
+            }
+
+        }
+
+        private void bindingNavigatorAddNewItem_Click(object sender, EventArgs e)
+        {
+            bindingNavigatorAddNewItem.Enabled = false;
+            comboBox2.Text = "Open";
+        }
+
+        private void bindingNavigatorMovePreviousItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                //remove the new record if there is one..
+                if (bindingNavigatorAddNewItem.Enabled == false && comboBox2.Text != "Active")
+                {
+                    WorkOrders.Tables[0].Rows[WorkOrders.Tables[0].Rows.Count - 1].Delete();
+                    bindingNavigatorAddNewItem.Enabled = true;
+                }
+            }
+            catch
+            {
+                //do nothing
+            }
+        }
+
+        private void bindingNavigatorMoveFirstItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                //remove the new record if there is one..
+                if (bindingNavigatorAddNewItem.Enabled == false && comboBox2.Text != "Active")
+                {
+                    WorkOrders.Tables[0].Rows[WorkOrders.Tables[0].Rows.Count - 1].Delete();
+                    bindingNavigatorAddNewItem.Enabled = true;
+                }
+            }
+            catch
+            {
+                //do nothing
+            }
+
+        }
+
+        private void toolStripCBWorkOrders_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                //remove the new record if there is one..
+                if (bindingNavigatorAddNewItem.Enabled == false && comboBox2.Text != "Active")
+                {
+                    WorkOrders.Tables[0].Rows[WorkOrders.Tables[0].Rows.Count - 1].Delete();
+                    bindingNavigatorAddNewItem.Enabled = true;
+                }
+            }
+            catch
+            {
+                //do nothing
+            }
         }
 
     }

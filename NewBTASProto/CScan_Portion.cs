@@ -84,14 +84,19 @@ namespace NewBTASProto
                 CancellationToken token = (CancellationToken)s;
                 Thread.Sleep(1500);
 
+                int slaveRow;
+
                 while (true)
                 {
+                    
                     // this function consists of a while loop that is going to run until the thread is cancelled
                     try
                     {
 
                         for (int j = 0; j < 16; j++)
                         {
+
+
                             //pause for a little each time
                             Thread.Sleep(50);
 
@@ -134,11 +139,11 @@ namespace NewBTASProto
 
                                     if ((bool)d.Rows[currentRow][4] && tempClick == currentRow)  // test to see if we've clicked in the mean time...
                                     {
-                                        
+
                                         //put this new data in the chart!
                                         this.Invoke((MethodInvoker)delegate
                                         {
-                                            
+
                                             // first set the cell to green
                                             dataGridView1.Rows[currentRow].Cells[4].Style.BackColor = Color.Green;
 
@@ -165,10 +170,10 @@ namespace NewBTASProto
                                                 tempText += "Current#2:  " + testData.currentTwo.ToString("00.00") + Environment.NewLine;
                                             }
                                             //if we have a mini that is charging...
-                                            else if (d.Rows[currentRow][10].ToString().Contains("mini") && !(d.Rows[currentRow][2].ToString().Contains("Cap") || d.Rows[currentRow][2].ToString().Contains("Discharge"))) 
+                                            else if (d.Rows[currentRow][10].ToString().Contains("mini") && !(d.Rows[currentRow][2].ToString().Contains("Cap") || d.Rows[currentRow][2].ToString().Contains("Discharge")))
                                             {
-                                                // for the mini case (not currently working
-                                                tempText += "Current:  " + testData.currentTwo.ToString("00.00") + Environment.NewLine; 
+                                                // for the mini case
+                                                tempText += "Current:  " + testData.currentTwo.ToString("00.00") + Environment.NewLine;
                                             }
                                             else
                                             {
@@ -283,7 +288,7 @@ namespace NewBTASProto
                                                     tempText += "Ambient Temp:  " + testData.TP5.ToString("00.0") + Environment.NewLine;
                                                     break;
                                             }
-                                            
+
                                             tempText += "Reference:  " + testData.ref95V.ToString("0.000") + Environment.NewLine;
                                             tempText += "Program Version " + testData.programVersion;
 
@@ -299,60 +304,196 @@ namespace NewBTASProto
 
                                         currentRow = dataGridView1.CurrentRow.Index;
 
-                                        if ((bool)d.Rows[currentRow][8] &&
+                                        // also look for a slave row
+                                        slaveRow = -1;
+                                        if (d.Rows[currentRow][9].ToString().Length > 2 && d.Rows[currentRow][9].ToString().Contains("M"))
+                                        {
+                                            // we have a master
+                                            string temp = d.Rows[currentRow][9].ToString().Replace("-M", "");
+                                            for (int q = 0; q < 16; q++)
+                                            {
+                                                if (d.Rows[q][9].ToString().Contains(temp) && d.Rows[q][9].ToString().Contains("S") && (bool) d.Rows[q][8])
+                                                {
+                                                    slaveRow = q;
+                                                    break;
+                                                }
+                                            }
+                                        }
+
+                                        if ((bool)d.Rows[currentRow][4] &&
+                                            (bool)d.Rows[currentRow][8] &&
+                                            !d.Rows[currentRow][9].ToString().Contains("S") &&
                                             GlobalVars.CScanData[currentRow].connected &&
                                             (d.Rows[currentRow][10].ToString() == "" || dataGridView1.Rows[currentRow].Cells[8].Style.BackColor != Color.Olive || dataGridView1.Rows[currentRow].Cells[8].Style.BackColor != Color.Red))  // if a charger type isn't already there maybe we need to update with a CSCAN controlled charger...
                                         {
                                             // we got a CSCAN connected charger...
                                             updateD(currentRow, 10, "CCA");
-                                            if (GlobalVars.CScanData[currentRow].powerOn) { this.Invoke((MethodInvoker)delegate { dataGridView1.Rows[currentRow].Cells[8].Style.BackColor = Color.Olive; }); }
-                                            else { this.Invoke((MethodInvoker)delegate { dataGridView1.Rows[currentRow].Cells[8].Style.BackColor = Color.Red; }); }
+                                            if (slaveRow > -1)
+                                            {
+                                                updateD(slaveRow, 10, "CCA");
+                                            }
+                                            if (GlobalVars.CScanData[currentRow].powerOn) 
+                                            { 
+                                                this.Invoke((MethodInvoker)delegate 
+                                                {
+                                                    dataGridView1.Rows[currentRow].Cells[8].Style.BackColor = Color.Olive;
+                                                    if (slaveRow > -1)
+                                                    {
+                                                        dataGridView1.Rows[slaveRow].Cells[8].Style.BackColor = Color.Olive;
+                                                    }
+                                                }); 
+                                            }
+                                            else
+                                            {
+                                                this.Invoke((MethodInvoker)delegate 
+                                                { 
+                                                    dataGridView1.Rows[currentRow].Cells[8].Style.BackColor = Color.Red;
+                                                    if (slaveRow > -1)
+                                                    {
+                                                        dataGridView1.Rows[slaveRow].Cells[8].Style.BackColor = Color.Red;
+                                                    }
+                                                });
+                                                updateD(currentRow, 11, "Power Off");
+                                                if (slaveRow > -1)
+                                                {
+                                                    updateD(slaveRow, 11, "Power Off");
+                                                }
+                                            }
                                         }
                                         //
-                                        else if ((bool)d.Rows[currentRow][8] && GlobalVars.CScanData[currentRow].connected == false && d.Rows[currentRow][10].ToString() == "CCA")
+                                        else if ((bool)d.Rows[currentRow][8] && GlobalVars.CScanData[currentRow].connected == false && !d.Rows[currentRow][9].ToString().Contains("S") && d.Rows[currentRow][10].ToString() == "CCA")
                                         {
                                             updateD(currentRow, 10, "");
-                                            this.Invoke((MethodInvoker)delegate { dataGridView1.Rows[currentRow].Cells[8].Style.BackColor = Color.Gainsboro; });
+                                            if (slaveRow > -1)
+                                            {
+                                                updateD(slaveRow, 10, "");
+                                            }
+                                            this.Invoke((MethodInvoker)delegate
+                                            { 
+                                                dataGridView1.Rows[currentRow].Cells[8].Style.BackColor = Color.Gainsboro;
+                                                if (slaveRow > -1)
+                                                {
+                                                    dataGridView1.Rows[slaveRow].Cells[8].Style.BackColor = Color.LightSteelBlue;
+                                                }
+                                            });
                                         }
-                                        else if (dataGridView1.Rows[currentRow].Cells[8].Style.BackColor == Color.Olive && GlobalVars.CScanData[currentRow].powerOn == false && d.Rows[currentRow][10].ToString() == "CCA")
+                                        else if (dataGridView1.Rows[currentRow].Cells[8].Style.BackColor == Color.Olive && GlobalVars.CScanData[currentRow].powerOn == false && !d.Rows[currentRow][9].ToString().Contains("S") && d.Rows[currentRow][10].ToString() == "CCA")
                                         {
-                                            this.Invoke((MethodInvoker)delegate { dataGridView1.Rows[currentRow].Cells[8].Style.BackColor = Color.Red; });
+                                            this.Invoke((MethodInvoker)delegate 
+                                            { 
+                                                dataGridView1.Rows[currentRow].Cells[8].Style.BackColor = Color.Red;
+                                                if (slaveRow > -1)
+                                                {
+                                                    dataGridView1.Rows[slaveRow].Cells[8].Style.BackColor = Color.Red;
+                                                }
+                                            });
+                                            updateD(currentRow, 11, "Power Off");
+                                            if (slaveRow > -1)
+                                            {
+                                                updateD(slaveRow, 11, "Power Off");
+                                            }
                                         }
-                                        else if (dataGridView1.Rows[currentRow].Cells[8].Style.BackColor == Color.Red && GlobalVars.CScanData[currentRow].powerOn && d.Rows[currentRow][10].ToString() == "CCA")
+                                        else if (dataGridView1.Rows[currentRow].Cells[8].Style.BackColor == Color.Red && GlobalVars.CScanData[currentRow].powerOn && !d.Rows[currentRow][9].ToString().Contains("S") && d.Rows[currentRow][10].ToString() == "CCA")
                                         {
-                                            this.Invoke((MethodInvoker)delegate { dataGridView1.Rows[currentRow].Cells[8].Style.BackColor = Color.Olive; });
+                                            this.Invoke((MethodInvoker)delegate 
+                                            { 
+                                                dataGridView1.Rows[currentRow].Cells[8].Style.BackColor = Color.Olive;
+                                                if (slaveRow > -1)
+                                                {
+                                                    dataGridView1.Rows[slaveRow].Cells[8].Style.BackColor = Color.Olive;
+                                                }
+                                            });
                                         }
-                                        
-                                    }
 
-                                    ///////If nothing else do we at least have a shunt???!////////////////////////////////////////////////////////
 
-                                    if ((bool)d.Rows[currentRow][8] && d.Rows[currentRow][10].ToString() == "" && GlobalVars.CScanData[currentRow].shuntCableType != "NONE")
-                                    {
-                                        updateD(currentRow, 10, "Shunt");
-                                        this.Invoke((MethodInvoker)delegate { dataGridView1.Rows[currentRow].Cells[8].Style.BackColor = Color.CadetBlue; });
+
+                                        ///////If nothing else do we at least have a shunt???!////////////////////////////////////////////////////////
+
+                                        if ((bool)d.Rows[currentRow][4] && (bool)d.Rows[currentRow][8] && d.Rows[currentRow][10].ToString() == "" && !d.Rows[currentRow][9].ToString().Contains("S") && GlobalVars.CScanData[currentRow].shuntCableType != "NONE")
+                                        {
+                                            updateD(currentRow, 10, "Shunt");
+                                            if (slaveRow > -1)
+                                            {
+                                                updateD(slaveRow, 10, "Shunt");
+                                            }
+                                            this.Invoke((MethodInvoker)delegate 
+                                            { 
+                                                dataGridView1.Rows[currentRow].Cells[8].Style.BackColor = Color.CadetBlue;
+                                                if (slaveRow > -1)
+                                                {
+                                                    dataGridView1.Rows[slaveRow].Cells[8].Style.BackColor = Color.CadetBlue;
+                                                }
+                                            });
+                                        }
+                                        else if ((bool)d.Rows[currentRow][4] && (bool)d.Rows[currentRow][8] && d.Rows[currentRow][10].ToString() == "Shunt" && !d.Rows[currentRow][9].ToString().Contains("S") && GlobalVars.CScanData[currentRow].shuntCableType != "NONE")
+                                        {
+                                            this.Invoke((MethodInvoker)delegate 
+                                            { 
+                                                dataGridView1.Rows[currentRow].Cells[8].Style.BackColor = Color.CadetBlue;
+                                                if (slaveRow > -1)
+                                                {
+                                                    dataGridView1.Rows[slaveRow].Cells[8].Style.BackColor = Color.CadetBlue;
+                                                }
+                                            });
+                                        }
+                                        else if ((bool)d.Rows[currentRow][4] && (bool)d.Rows[currentRow][8] && d.Rows[currentRow][10].ToString() == "Shunt" && !d.Rows[currentRow][9].ToString().Contains("S") && GlobalVars.CScanData[currentRow].shuntCableType == "NONE")
+                                        {
+                                            updateD(currentRow, 10, "");
+                                            if (slaveRow > -1)
+                                            {
+                                                updateD(slaveRow, 10, "");
+                                            }
+                                            this.Invoke((MethodInvoker)delegate 
+                                            { 
+                                                dataGridView1.Rows[currentRow].Cells[8].Style.BackColor = Color.Gainsboro;
+                                                if (slaveRow > -1)
+                                                {
+                                                    dataGridView1.Rows[slaveRow].Cells[8].Style.BackColor = Color.LightSteelBlue;
+                                                }
+                                            });
+                                        }
+
+                                        /////////////Update the Run/Hold status of CCA chargers../////////////////////////////////////////////////////////
+                                        if (d.Rows[currentRow][10].ToString().Contains("CCA") && !d.Rows[currentRow][9].ToString().Contains("S"))
+                                        {
+                                            if (GlobalVars.CScanData[currentRow].powerOn == false)
+                                            {
+                                                updateD(currentRow, 11, "Power Off");
+                                                if (slaveRow > -1)
+                                                {
+                                                    updateD(slaveRow, 11, "Power Off");
+                                                }
+                                            }
+                                            else
+                                            {
+                                                updateD(currentRow, 11, (GlobalVars.cHold[currentRow] ? "HOLD" : "RUN"));
+                                                if (slaveRow > -1)
+                                                {
+                                                    updateD(slaveRow, 11, (GlobalVars.cHold[currentRow] ? "HOLD" : "RUN"));
+                                                }
+                                            }
+                                        }
+                                        else if (d.Rows[currentRow][10].ToString().Contains("Shunt") && !d.Rows[currentRow][9].ToString().Contains("S"))
+                                        {
+                                            updateD(currentRow, 11, "");
+                                            if (slaveRow > -1)
+                                            {
+                                                updateD(slaveRow, 11, "");
+                                            }
+                                        }
+
                                     }
-                                    else if ((bool)d.Rows[currentRow][8] && d.Rows[currentRow][10].ToString() == "Shunt" && GlobalVars.CScanData[currentRow].shuntCableType != "NONE")
-                                    {
-                                        this.Invoke((MethodInvoker)delegate { dataGridView1.Rows[currentRow].Cells[8].Style.BackColor = Color.CadetBlue; });
-                                    }
-                                    else if ((bool)d.Rows[currentRow][8] && d.Rows[currentRow][10].ToString() == "Shunt" && GlobalVars.CScanData[currentRow].shuntCableType == "NONE")
-                                    {
-                                        updateD(currentRow, 10, "");
-                                        this.Invoke((MethodInvoker)delegate { dataGridView1.Rows[currentRow].Cells[8].Style.BackColor = Color.Gainsboro; });
-                                    }
-                                }
+                                }// end try
                                 catch (Exception ex)
                                 {
                                     if (ex is System.TimeoutException)
                                     {
                                         // make sure there haven't been any clicks in the mean time...
-                                        if ((bool)d.Rows[j][4] && tempClick == dataGridView1.CurrentRow.Index)
+                                        if ((bool)d.Rows[tempClick][4] && tempClick == dataGridView1.CurrentRow.Index)
                                         {
                                             this.Invoke((MethodInvoker)delegate
                                             {
-
-                                                dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[4].Style.BackColor = Color.Red;
+                                                if ((bool)d.Rows[tempClick][4] == true) { dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[4].Style.BackColor = Color.Red; }
                                                 dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.Gainsboro;
                                                 chart1.Series.Clear();
                                                 chart1.Invalidate();
@@ -434,50 +575,188 @@ namespace NewBTASProto
                                         }  // end if
 
                                         ///////UPDATE CSCAN chargers here!////////////////////////////////////////////////////////
-                                        if ((bool)d.Rows[j][4])
+
+                                        // first look for a slave row
+                                        // also look for a slave row
+                                        slaveRow = -1;
+                                        if (d.Rows[j][9].ToString().Length > 2 && d.Rows[j][9].ToString().Contains("M"))
                                         {
-                                            if ((bool)d.Rows[j][8] &&
+                                            string temp = d.Rows[j][9].ToString().Replace("-M", "");
+
+                                            // we have a master
+                                            for (int q = 0; q < 16; q++)
+                                            {
+                                                if (d.Rows[q][9].ToString().Contains(temp) && d.Rows[q][9].ToString().Contains("S") && (bool) d.Rows[q][8])
+                                                {
+                                                    slaveRow = q;
+                                                    break;
+                                                }
+                                            }
+                                        }
+
+                                        if ((bool)d.Rows[j][4] && !d.Rows[j][9].ToString().Contains("S"))
+                                        {
+                                            if ((bool)d.Rows[j][4] &&
+                                                (bool)d.Rows[j][8] &&
                                                 GlobalVars.CScanData[j].connected &&
                                                 (d.Rows[j][10].ToString() == "" || dataGridView1.Rows[j].Cells[8].Style.BackColor != Color.Olive || dataGridView1.Rows[j].Cells[8].Style.BackColor != Color.Red))  // if a charger type isn't already there maybe we need to update with a CSCAN controlled charger...
                                             {
                                                 // we got a CSCAN connected charger...
                                                 updateD(j, 10, "CCA");
-                                                if (GlobalVars.CScanData[j].powerOn) { this.Invoke((MethodInvoker)delegate { dataGridView1.Rows[j].Cells[8].Style.BackColor = Color.Olive; }); }
-                                                else { this.Invoke((MethodInvoker)delegate { dataGridView1.Rows[j].Cells[8].Style.BackColor = Color.Red; }); }
+                                                if (slaveRow > -1)
+                                                {
+                                                    updateD(slaveRow, 10, "CCA");
+                                                }
+                                                if (GlobalVars.CScanData[j].powerOn) 
+                                                { 
+                                                    this.Invoke((MethodInvoker)delegate 
+                                                    {
+                                                        dataGridView1.Rows[j].Cells[8].Style.BackColor = Color.Olive;
+                                                        if (slaveRow > -1)
+                                                        {
+                                                            dataGridView1.Rows[slaveRow].Cells[8].Style.BackColor = Color.Olive;
+                                                        }
+                                                    }); 
+                                                }
+                                                else 
+                                                { 
+                                                    this.Invoke((MethodInvoker)delegate 
+                                                    { 
+                                                        dataGridView1.Rows[j].Cells[8].Style.BackColor = Color.Red;
+                                                        if (slaveRow > -1)
+                                                        {
+                                                            dataGridView1.Rows[slaveRow].Cells[8].Style.BackColor = Color.Red;
+                                                        }
+                                                    });
+                                                    updateD(j, 11, "Power Off");
+                                                    if (slaveRow > -1)
+                                                    {
+                                                        updateD(slaveRow, 11, "Power Off");
+                                                    }
+                                                }
                                             }
                                             //
-                                            else if ((bool)d.Rows[j][8] && GlobalVars.CScanData[j].connected == false && d.Rows[j][10].ToString() == "CCA")
+                                            else if ((bool)d.Rows[j][8] && GlobalVars.CScanData[j].connected == false && d.Rows[j][10].ToString() == "CCA" && !d.Rows[j][9].ToString().Contains("S"))
                                             {
                                                 updateD(j, 10, "");
-                                                this.Invoke((MethodInvoker)delegate { dataGridView1.Rows[j].Cells[8].Style.BackColor = Color.Gainsboro; });
+                                                if (slaveRow > -1)
+                                                {
+                                                    updateD(slaveRow, 10, "");
+                                                }
+                                                this.Invoke((MethodInvoker)delegate 
+                                                { 
+                                                    dataGridView1.Rows[j].Cells[8].Style.BackColor = Color.Gainsboro;
+                                                    if (slaveRow > -1)
+                                                    {
+                                                        dataGridView1.Rows[slaveRow].Cells[8].Style.BackColor = Color.LightSteelBlue;
+                                                    }
+                                                });
                                             }
-                                            else if (dataGridView1.Rows[j].Cells[8].Style.BackColor == Color.Olive && GlobalVars.CScanData[j].powerOn == false && d.Rows[j][10].ToString() == "CCA")
+                                            else if (dataGridView1.Rows[j].Cells[8].Style.BackColor == Color.Olive && GlobalVars.CScanData[j].powerOn == false && d.Rows[j][10].ToString() == "CCA" && !d.Rows[j][9].ToString().Contains("S"))
                                             {
-                                                this.Invoke((MethodInvoker)delegate { dataGridView1.Rows[j].Cells[8].Style.BackColor = Color.Red; });
+                                                this.Invoke((MethodInvoker)delegate 
+                                                { 
+                                                    dataGridView1.Rows[j].Cells[8].Style.BackColor = Color.Red;
+                                                    if (slaveRow > -1)
+                                                    {
+                                                        dataGridView1.Rows[slaveRow].Cells[8].Style.BackColor = Color.Red;
+                                                    }
+                                                });
+
+                                                updateD(j, 11, "Power Off");
+                                                if (slaveRow > -1)
+                                                {
+                                                    updateD(slaveRow, 11, "Power Off");
+                                                }
                                             }
-                                            else if (dataGridView1.Rows[j].Cells[8].Style.BackColor == Color.Red && GlobalVars.CScanData[j].powerOn && d.Rows[j][10].ToString() == "CCA")
+                                            else if (dataGridView1.Rows[j].Cells[8].Style.BackColor == Color.Red && GlobalVars.CScanData[j].powerOn && d.Rows[j][10].ToString() == "CCA" && !d.Rows[j][9].ToString().Contains("S"))
                                             {
-                                                this.Invoke((MethodInvoker)delegate { dataGridView1.Rows[j].Cells[8].Style.BackColor = Color.Olive; });
+                                                this.Invoke((MethodInvoker)delegate 
+                                                { 
+                                                    dataGridView1.Rows[j].Cells[8].Style.BackColor = Color.Olive;
+                                                    if (slaveRow > -1)
+                                                    {
+                                                        dataGridView1.Rows[slaveRow].Cells[8].Style.BackColor = Color.Olive;
+                                                    }
+                                                });
                                             }
                                         }
 
                                         ///////If nothing else do we at least have a shunt???!////////////////////////////////////////////////////////
-                                        
-                                        if ((bool)d.Rows[j][8] && d.Rows[j][10].ToString() == "" && GlobalVars.CScanData[j].shuntCableType != "NONE")
+
+                                        if ((bool)d.Rows[j][4] && (bool)d.Rows[j][8] && d.Rows[j][10].ToString() == "" && GlobalVars.CScanData[j].shuntCableType != "NONE" && !d.Rows[j][9].ToString().Contains("S"))
                                         {
                                             updateD(j, 10, "Shunt");
-                                            this.Invoke((MethodInvoker)delegate { dataGridView1.Rows[j].Cells[8].Style.BackColor = Color.CadetBlue; });
+                                            if (slaveRow > -1)
+                                            {
+                                                updateD(slaveRow, 10, "Shunt");
+                                            }
+                                            this.Invoke((MethodInvoker)delegate 
+                                            { 
+                                                dataGridView1.Rows[j].Cells[8].Style.BackColor = Color.CadetBlue;
+                                                if (slaveRow > -1)
+                                                {
+                                                    dataGridView1.Rows[slaveRow].Cells[8].Style.BackColor = Color.CadetBlue;
+                                                }
+                                            });
                                         }
-                                        else if ((bool)d.Rows[j][8] && d.Rows[j][10].ToString() == "Shunt" && GlobalVars.CScanData[j].shuntCableType != "NONE")
+                                        else if ((bool)d.Rows[j][4] && (bool)d.Rows[j][8] && d.Rows[j][10].ToString() == "Shunt" && GlobalVars.CScanData[j].shuntCableType != "NONE" && !d.Rows[j][9].ToString().Contains("S"))
                                         {
-                                            this.Invoke((MethodInvoker)delegate { dataGridView1.Rows[j].Cells[8].Style.BackColor = Color.CadetBlue; });
+                                            this.Invoke((MethodInvoker)delegate 
+                                            { 
+                                                dataGridView1.Rows[j].Cells[8].Style.BackColor = Color.CadetBlue;
+                                                if (slaveRow > -1)
+                                                {
+                                                    dataGridView1.Rows[slaveRow].Cells[8].Style.BackColor = Color.CadetBlue;
+                                                }
+                                            });
                                         }
-                                        else if ((bool)d.Rows[j][8] && d.Rows[j][10].ToString() == "Shunt" && GlobalVars.CScanData[j].shuntCableType == "NONE")
+                                        else if ((bool)d.Rows[j][4] && (bool)d.Rows[j][8] && d.Rows[j][10].ToString() == "Shunt" && GlobalVars.CScanData[j].shuntCableType == "NONE" && !d.Rows[j][9].ToString().Contains("S"))
                                         {
                                             updateD(j, 10, "");
-                                            this.Invoke((MethodInvoker)delegate { dataGridView1.Rows[j].Cells[8].Style.BackColor = Color.Gainsboro; });
+                                            if (slaveRow > -1)
+                                            {
+                                                updateD(slaveRow, 10, "");
+                                            }
+                                            this.Invoke((MethodInvoker)delegate 
+                                            { 
+                                                dataGridView1.Rows[j].Cells[8].Style.BackColor = Color.Gainsboro;
+                                                if (slaveRow > -1)
+                                                {
+                                                    dataGridView1.Rows[slaveRow].Cells[8].Style.BackColor = Color.LightSteelBlue;
+                                                }
+                                            });
                                         }
 
+                                        /////////////Update the Run/Hold status of CCA chargers../////////////////////////////////////////////////////////
+                                        if (d.Rows[j][10].ToString().Contains("CCA") && !d.Rows[j][9].ToString().Contains("S"))
+                                        {
+                                            if (GlobalVars.CScanData[j].powerOn == false)
+                                            {
+                                                updateD(j, 11, "Power Off");
+                                                if (slaveRow > -1)
+                                                {
+                                                    updateD(slaveRow, 11, "Power Off");
+                                                }
+                                            }
+                                            else
+                                            {
+                                                updateD(j, 11, (GlobalVars.cHold[j] ? "HOLD" : "RUN"));
+                                                if (slaveRow > -1)
+                                                {
+                                                    updateD(slaveRow, 11, (GlobalVars.cHold[j] ? "HOLD" : "RUN"));
+                                                }
+                                            }
+                                            
+                                        }
+                                        else if (d.Rows[j][10].ToString().Contains("Shunt") && !d.Rows[j][9].ToString().Contains("S"))
+                                        {
+                                            updateD(j, 11, "");
+                                            if (slaveRow > -1)
+                                            {
+                                                updateD(slaveRow, 11, "");
+                                            }
+                                        }
                                     }  // end try
                                     catch (Exception ex)
                                     {
@@ -489,9 +768,8 @@ namespace NewBTASProto
                                                 this.Invoke((MethodInvoker)delegate
                                                 {
                                                     // set the cell to green
-                                                    dataGridView1.Rows[j].Cells[4].Style.BackColor = Color.Red;
+                                                    if ((bool)d.Rows[j][4]){dataGridView1.Rows[j].Cells[4].Style.BackColor = Color.Red;}
                                                     dataGridView1.Rows[j].Cells[8].Style.BackColor = Color.Gainsboro;
-
                                                 });
                                             }
                                         }  // end if
@@ -1108,9 +1386,9 @@ namespace NewBTASProto
                     break;
                 // this is for charging Nicads
                 case 4:
-                    Min1 = 0.1;
-                    Min2 = 1.2;
-                    Min3 = 1.25;
+                    //Min1 = 0.1;
+                    //Min2 = 1.2;
+                    //Min3 = 1.25;
                     break;
                 default:
                     break;
@@ -1287,7 +1565,7 @@ namespace NewBTASProto
                         // FIRST CLEAR THE OLD DATA SET!
                         graphMainSet.Clear();
                         // Open database containing all the battery data....
-                        string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB";
+                        string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
                         string strAccessSelect = @"SELECT * FROM ScanData WHERE BWO='" + workOrder + @"' AND STEP='" + Int32.Parse(testStep).ToString("00") + @"' ORDER BY RDG ASC";
 
                         //Here is where I load the form wide dataset which will both let me fill in the rest of the combo boxes and the graphs!

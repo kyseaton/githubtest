@@ -51,13 +51,13 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.label9 = new System.Windows.Forms.Label();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.textBox4 = new System.Windows.Forms.TextBox();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
+            this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.bindingNavigator1)).BeginInit();
             this.bindingNavigator1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
@@ -97,6 +97,7 @@
             this.bindingNavigator1.TabIndex = 2;
             this.bindingNavigator1.Text = "bindingNavigator1";
             this.bindingNavigator1.RefreshItems += new System.EventHandler(this.bindingNavigator1_RefreshItems);
+            this.bindingNavigator1.TextChanged += new System.EventHandler(this.bindingNavigator1_TextChanged);
             this.bindingNavigator1.Layout += new System.Windows.Forms.LayoutEventHandler(this.bindingNavigator1_Layout);
             // 
             // bindingNavigatorAddNewItem
@@ -162,6 +163,7 @@
             this.toolStripCBSerNum.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.toolStripCBSerNum.Name = "toolStripCBSerNum";
             this.toolStripCBSerNum.Size = new System.Drawing.Size(121, 25);
+            this.toolStripCBSerNum.TextChanged += new System.EventHandler(this.toolStripCBSerNum_TextChanged);
             // 
             // bindingNavigatorSeparator
             // 
@@ -176,6 +178,7 @@
             this.bindingNavigatorMoveFirstItem.RightToLeftAutoMirrorImage = true;
             this.bindingNavigatorMoveFirstItem.Size = new System.Drawing.Size(23, 22);
             this.bindingNavigatorMoveFirstItem.Text = "Move first";
+            this.bindingNavigatorMoveFirstItem.Click += new System.EventHandler(this.bindingNavigatorMoveFirstItem_Click);
             // 
             // bindingNavigatorMovePreviousItem
             // 
@@ -185,6 +188,7 @@
             this.bindingNavigatorMovePreviousItem.RightToLeftAutoMirrorImage = true;
             this.bindingNavigatorMovePreviousItem.Size = new System.Drawing.Size(23, 22);
             this.bindingNavigatorMovePreviousItem.Text = "Move previous";
+            this.bindingNavigatorMovePreviousItem.Click += new System.EventHandler(this.bindingNavigatorMovePreviousItem_Click);
             // 
             // bindingNavigatorPositionItem
             // 
@@ -261,18 +265,6 @@
             this.label3.TabIndex = 5;
             this.label3.Text = "Battery Serial Number:  ";
             // 
-            // bindingSource1
-            // 
-            this.bindingSource1.AddingNew += new System.ComponentModel.AddingNewEventHandler(this.bindingSource1_AddingNew);
-            this.bindingSource1.BindingComplete += new System.Windows.Forms.BindingCompleteEventHandler(this.bindingSource1_BindingComplete);
-            this.bindingSource1.DataError += new System.Windows.Forms.BindingManagerDataErrorEventHandler(this.bindingSource1_DataError);
-            this.bindingSource1.DataSourceChanged += new System.EventHandler(this.bindingSource1_DataSourceChanged);
-            this.bindingSource1.DataMemberChanged += new System.EventHandler(this.bindingSource1_DataMemberChanged);
-            this.bindingSource1.CurrentChanged += new System.EventHandler(this.bindingSource1_CurrentChanged);
-            this.bindingSource1.CurrentItemChanged += new System.EventHandler(this.bindingSource1_CurrentItemChanged);
-            this.bindingSource1.ListChanged += new System.ComponentModel.ListChangedEventHandler(this.bindingSource1_ListChanged);
-            this.bindingSource1.PositionChanged += new System.EventHandler(this.bindingSource1_PositionChanged);
-            // 
             // label9
             // 
             this.label9.AutoSize = true;
@@ -287,7 +279,7 @@
             this.textBox3.Location = new System.Drawing.Point(151, 36);
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(336, 20);
-            this.textBox3.TabIndex = 3;
+            this.textBox3.TabIndex = 1;
             // 
             // textBox4
             // 
@@ -303,7 +295,7 @@
             this.comboBox1.Location = new System.Drawing.Point(151, 62);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(336, 21);
-            this.comboBox1.TabIndex = 1;
+            this.comboBox1.TabIndex = 2;
             // 
             // comboBox2
             // 
@@ -312,7 +304,7 @@
             this.comboBox2.Location = new System.Drawing.Point(151, 88);
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(336, 21);
-            this.comboBox2.TabIndex = 2;
+            this.comboBox2.TabIndex = 3;
             this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
             // 
             // label4
@@ -322,6 +314,18 @@
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(878, 2);
             this.label4.TabIndex = 12;
+            // 
+            // bindingSource1
+            // 
+            this.bindingSource1.AddingNew += new System.ComponentModel.AddingNewEventHandler(this.bindingSource1_AddingNew);
+            this.bindingSource1.BindingComplete += new System.Windows.Forms.BindingCompleteEventHandler(this.bindingSource1_BindingComplete);
+            this.bindingSource1.DataError += new System.Windows.Forms.BindingManagerDataErrorEventHandler(this.bindingSource1_DataError);
+            this.bindingSource1.DataSourceChanged += new System.EventHandler(this.bindingSource1_DataSourceChanged);
+            this.bindingSource1.DataMemberChanged += new System.EventHandler(this.bindingSource1_DataMemberChanged);
+            this.bindingSource1.CurrentChanged += new System.EventHandler(this.bindingSource1_CurrentChanged);
+            this.bindingSource1.CurrentItemChanged += new System.EventHandler(this.bindingSource1_CurrentItemChanged);
+            this.bindingSource1.ListChanged += new System.ComponentModel.ListChangedEventHandler(this.bindingSource1_ListChanged);
+            this.bindingSource1.PositionChanged += new System.EventHandler(this.bindingSource1_PositionChanged);
             // 
             // frmVECustomerBats
             // 

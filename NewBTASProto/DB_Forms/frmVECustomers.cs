@@ -33,7 +33,7 @@ namespace NewBTASProto
             string strAccessSelect;
             // Open database containing all the battery data....
 
-            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB";
+            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
             strAccessSelect = @"SELECT * FROM CUSTOMERS ORDER BY CustomerName ASC";
 
             Customers = new DataSet();
@@ -203,7 +203,7 @@ namespace NewBTASProto
                 if (MessageBox.Show("Are you sure you want to remove this customer?", "Delete Record", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     // set up the db Connection
-                    string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB";
+                    string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
                     OleDbConnection conn = new OleDbConnection(connectionString);
                     conn.Open();
 
@@ -238,11 +238,36 @@ namespace NewBTASProto
 
         private void saveToolStripButton_Click(object sender, EventArgs e)
         {
+            if (bindingNavigator1.BindingSource.Position == -1)
+            {
+                string temp1 = textBox1.Text;
+                string temp2 = textBox2.Text;
+                string temp3 = textBox3.Text;
+                string temp4 = textBox4.Text;
+                string temp5 = textBox5.Text;
+                string temp6 = textBox6.Text;
+                string temp7 = textBox7.Text;
+                string temp8 = textBox8.Text;
+
+                bindingNavigator1.BindingSource.AddNew();
+                bindingNavigator1.BindingSource.Position = 0;
+
+                textBox1.Text = temp1;
+                textBox2.Text = temp2;
+                textBox3.Text = temp3;
+                textBox4.Text = temp4;
+                textBox5.Text = temp5;
+                textBox6.Text = temp6;
+                textBox7.Text = temp7;
+                textBox8.Text = temp8;
+
+            }
+
             try
             {
 
                 // set up the db Connection
-                string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DB\BTS16NV.MDB";
+                string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
                 OleDbConnection conn = new OleDbConnection(connectionString);
                 conn.Open();
 
@@ -320,7 +345,7 @@ namespace NewBTASProto
                     // update the dataTable with the new customer ID also..
                     current[0] = max + 1;
 
-
+                    bindingNavigatorAddNewItem.Enabled = true;
                 }
             }// end try
             catch(Exception ex)
@@ -333,7 +358,58 @@ namespace NewBTASProto
 
         private void bindingNavigatorAddNewItem_Click(object sender, EventArgs e)
         {
+            bindingNavigatorAddNewItem.Enabled = false;
+        }
 
+        private void bindingNavigatorMoveFirstItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                //remove the new record if there is one..
+                if (bindingNavigatorAddNewItem.Enabled == false)
+                {
+                    Customers.Tables[0].Rows[Customers.Tables[0].Rows.Count - 1].Delete();
+                    bindingNavigatorAddNewItem.Enabled = true;
+                }
+            }
+            catch
+            {
+                //do nothing
+            }
+        }
+
+        private void bindingNavigatorMovePreviousItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                //remove the new record if there is one..
+                if (bindingNavigatorAddNewItem.Enabled == false)
+                {
+                    Customers.Tables[0].Rows[Customers.Tables[0].Rows.Count - 1].Delete();
+                    bindingNavigatorAddNewItem.Enabled = true;
+                }
+            }
+            catch
+            {
+                //do nothing
+            }
+        }
+
+        private void toolStripCBCustomers_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                //remove the new record if there is one..
+                if (bindingNavigatorAddNewItem.Enabled == false)
+                {
+                    Customers.Tables[0].Rows[Customers.Tables[0].Rows.Count - 1].Delete();
+                    bindingNavigatorAddNewItem.Enabled = true;
+                }
+            }
+            catch
+            {
+                //do nothing
+            }
         }
     }
 }

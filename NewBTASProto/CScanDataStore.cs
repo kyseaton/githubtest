@@ -141,7 +141,13 @@ namespace NewBTASProto
                     cellCableType = "2X11 Cable";
                     cellsToDisplay = 22;
                     break;
+                case 21:
+                    cellCableType = "21 C Cable";
+                    cellsToDisplay = 21;
+                    break;
                 default:
+                    cellCableType = "Unknown Cable";
+                    cellsToDisplay = 24;
                     break;
             }
 
