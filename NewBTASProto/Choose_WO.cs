@@ -58,9 +58,12 @@ namespace NewBTASProto
                 OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
                 OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
 
-                myAccessConn.Open();
-                myDataAdapter.Fill(workOrderList1, "ScanData");
-
+                lock (Main_Form.dataBaseLock)
+                {
+                    myAccessConn.Open();
+                    myDataAdapter.Fill(workOrderList1, "ScanData");
+                    myAccessConn.Close();
+                }
             }
             catch (Exception ex)
             {
@@ -69,7 +72,7 @@ namespace NewBTASProto
             }
             finally
             {
-                myAccessConn.Close();
+
             }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -103,9 +106,12 @@ namespace NewBTASProto
                         OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
                         OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
 
-                        myAccessConn.Open();
-                        myDataAdapter.Fill(workOrderList2, "ScanData");
-
+                        lock (Main_Form.dataBaseLock)
+                        {
+                            myAccessConn.Open();
+                            myDataAdapter.Fill(workOrderList2, "ScanData");
+                            myAccessConn.Close();
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -129,8 +135,7 @@ namespace NewBTASProto
                     }
                 }
             }
-            
-            myAccessConn.Close();    
+              
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -152,7 +157,6 @@ namespace NewBTASProto
             // set up the db Connection
             string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
             OleDbConnection conn = new OleDbConnection(connectionString);
-            conn.Open();
 
             string cmdStr = "";
             OleDbCommand cmd;
@@ -161,7 +165,12 @@ namespace NewBTASProto
             {
                 cmdStr = "UPDATE WorkOrders SET OrderStatus='Open' WHERE WorkOrderNumber='" + oldWO + "'";
                 cmd = new OleDbCommand(cmdStr, conn);
-                cmd.ExecuteNonQuery();
+                lock (Main_Form.dataBaseLock)
+                {
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                    conn.Close();
+                }
             }
 
             //Update the DB to show that the new Work Orders are now active
@@ -174,13 +183,17 @@ namespace NewBTASProto
                     MessageBox.Show("Maximum of 3 Work Orders Per Channel!");
                     break;
                 }
-                temp += dataGridView1[0, row.Index].Value + " ";
+                temp = dataGridView1[0, row.Index].Value + " " + temp;
                 cmdStr = "UPDATE WorkOrders SET OrderStatus='Active' WHERE WorkOrderNumber='" + dataGridView1[0, row.Index].Value + "'";
                 cmd = new OleDbCommand(cmdStr, conn);
-                cmd.ExecuteNonQuery();
+                lock (Main_Form.dataBaseLock)
+                {
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                    conn.Close();
+                }
             }
 
-            conn.Close();
 
             ((Main_Form)this.Owner).updateWOC(selectedChannel,temp);
             this.Dispose();
@@ -192,7 +205,6 @@ namespace NewBTASProto
             // set up the db Connection
             string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
             OleDbConnection conn = new OleDbConnection(connectionString);
-            conn.Open();
 
             string cmdStr = "";
             OleDbCommand cmd;
@@ -201,10 +213,13 @@ namespace NewBTASProto
             {
                 cmdStr = "UPDATE WorkOrders SET OrderStatus='Open' WHERE WorkOrderNumber='" + oldWO + "'";
                 cmd = new OleDbCommand(cmdStr, conn);
-                cmd.ExecuteNonQuery();
+                lock (Main_Form.dataBaseLock)
+                {
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                    conn.Close();
+                }
             }
-
-            conn.Close();
 
 
             //listBox1.ClearSelected();
@@ -223,7 +238,6 @@ namespace NewBTASProto
             // set up the db Connection
             string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
             OleDbConnection conn = new OleDbConnection(connectionString);
-            conn.Open();
 
             string cmdStr = "";
             OleDbCommand cmd;
@@ -232,7 +246,12 @@ namespace NewBTASProto
             {
                 cmdStr = "UPDATE WorkOrders SET OrderStatus='Open' WHERE WorkOrderNumber='" + oldWO + "'";
                 cmd = new OleDbCommand(cmdStr, conn);
-                cmd.ExecuteNonQuery();
+                lock (Main_Form.dataBaseLock)
+                {
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                    conn.Close();
+                }
             }
 
             //Update the DB to show that the new Work Orders are now active
@@ -248,10 +267,14 @@ namespace NewBTASProto
                 temp += dataGridView1[0, row.Index].Value + " ";
                 cmdStr = "UPDATE WorkOrders SET OrderStatus='Active' WHERE WorkOrderNumber='" + dataGridView1[0, row.Index].Value + "'";
                 cmd = new OleDbCommand(cmdStr, conn);
-                cmd.ExecuteNonQuery();
+                lock (Main_Form.dataBaseLock)
+                {
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                    conn.Close();
+                }
             }
 
-            conn.Close();
 
             ((Main_Form)this.Owner).updateWOC(selectedChannel, temp);
             this.Dispose();

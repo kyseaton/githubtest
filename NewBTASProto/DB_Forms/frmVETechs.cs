@@ -54,8 +54,12 @@ namespace NewBTASProto
                 OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
                 OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
 
-                myAccessConn.Open();
-                myDataAdapter.Fill(Operators);
+                lock (Main_Form.dataBaseLock)
+                {
+                    myAccessConn.Open();
+                    myDataAdapter.Fill(Operators);
+                    myAccessConn.Close();
+                }
 
             }
             catch (Exception ex)
@@ -65,7 +69,7 @@ namespace NewBTASProto
             }
             finally
             {
-                myAccessConn.Close();
+
             }
 
             // Set the DataSource to the DataSet, and the DataMember
@@ -193,7 +197,6 @@ namespace NewBTASProto
                     // set up the db Connection
                     string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
                     OleDbConnection conn = new OleDbConnection(connectionString);
-                    conn.Open();
 
                     //get the current row
                     DataRowView current = (DataRowView)bindingSource1.Current;
@@ -206,7 +209,12 @@ namespace NewBTASProto
 
                         string cmdStr = "DELETE FROM Operators WHERE ID=" + current["ID"].ToString();
                         OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
-                        cmd.ExecuteNonQuery();
+                        lock (Main_Form.dataBaseLock)
+                        {
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                            conn.Close();
+                        }
 
                         // Also update the binding source
                         Operators.Tables[0].Rows[bindingNavigator1.BindingSource.Position].Delete();
@@ -242,7 +250,6 @@ namespace NewBTASProto
                 // set up the db Connection
                 string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
                 OleDbConnection conn = new OleDbConnection(connectionString);
-                conn.Open();
 
                 //MAKE SURE YOU SELECT THE CURRENT ROW FOR DOUBLE SAVES!!!!!!!!!!!!!!!!!
 
@@ -262,7 +269,12 @@ namespace NewBTASProto
                     string cmdStr = "UPDATE Operators SET OperatorName='" + textBox1.Text.Replace("'", "''") +
                         "' WHERE ID=" + current["ID"].ToString();
                     OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
-                    cmd.ExecuteNonQuery();
+                    lock (Main_Form.dataBaseLock)
+                    {
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                        conn.Close();
+                    }
 
                     //now force an update on the binding by moving one ahead and then back...
                     toolStripCBTechs.ComboBox.Text = textBox1.Text.Replace("'", "''");
@@ -286,7 +298,12 @@ namespace NewBTASProto
                         "VALUES (" + (max + 1).ToString() + ",'" +
                         textBox1.Text + "')";
                     OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
-                    cmd.ExecuteNonQuery();
+                    lock (Main_Form.dataBaseLock)
+                    {
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                        conn.Close();
+                    }
                     MessageBox.Show(textBox1.Text + " has been been added to the operator list.");
 
                     // update the dataTable with the new customer ID also..

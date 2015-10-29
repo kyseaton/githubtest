@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             Microsoft.Reporting.WinForms.ReportDataSource reportDataSource1 = new Microsoft.Reporting.WinForms.ReportDataSource();
             Microsoft.Reporting.WinForms.ReportDataSource reportDataSource2 = new Microsoft.Reporting.WinForms.ReportDataSource();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Reports_Form));
             this.myDatatableBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.DataSet1 = new NewBTASProto.DataSet1();
             this.MetaDataBindingSource = new System.Windows.Forms.BindingSource(this.components);
@@ -191,9 +192,11 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.comboBox2);
             this.Controls.Add(this.comboBox1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Reports_Form";
             this.Text = "Reports";
             this.Load += new System.EventHandler(this.Reports_Form_Load);
+            this.Shown += new System.EventHandler(this.Reports_Form_Shown);
             this.SizeChanged += new System.EventHandler(this.Reports_Form_SizeChanged);
             ((System.ComponentModel.ISupportInitialize)(this.myDatatableBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DataSet1)).EndInit();

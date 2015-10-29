@@ -13,6 +13,15 @@ namespace NewBTASProto
         private PictureBox pictureBox1;
         Timer tmr;
 
+        bool licGood = false;
+        // here are the valid licence numbers
+        static int[] lics = new int[3] {
+            1111111,
+            2222222,
+            3333333
+        };
+
+
         public Splash()
         {
             //if (System.Diagnostics.Process.GetProcessesByName(System.IO.Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Length > 0) System.Diagnostics.Process.GetCurrentProcess().Kill();
@@ -287,6 +296,37 @@ namespace NewBTASProto
             //starts the timer
             tmr.Start();
             tmr.Tick += tmr_Tick;
+
+            //load the licence xml file and comare it to the licence list
+            DataTable lic = new DataTable();
+            try
+            {
+                //create the columns
+                lic.Columns.Add("num", typeof(int));
+                //name the table
+                lic.TableName = "lic_file";
+                //now read in what we got!
+                lic.ReadXml(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\lic_file.xml");
+
+                //now try to compare the lic # to the approved list...
+                foreach (int posLic in lics)
+                {
+                    if (posLic == (int) lic.Rows[0][0])
+                    {
+                        licGood = true;
+                        break;
+                    }
+                }// end foreach
+            }
+            catch
+            {
+                //the licence file is not there!
+                lic.Clear();
+                licGood = false;
+            }
+
+
+
         }
 
 
@@ -295,6 +335,13 @@ namespace NewBTASProto
         {
             //after 3 sec stop the timer
             tmr.Stop();
+
+            if (licGood == false)
+            {
+                //Ask for a licence number here!
+
+            }
+
             //display mainform
             Main_Form mf = new Main_Form();
             // update the options menu

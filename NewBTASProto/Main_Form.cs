@@ -32,6 +32,7 @@ namespace NewBTASProto
                 Initialize_Menus_Tools();
                 Initialize_Operators_CB();
                 Initialize_Graph_Settings();
+                Initialize_PCI_Settings();
 
                 InitializeGrid();
                 InitializeTimers();
@@ -109,8 +110,12 @@ namespace NewBTASProto
                 OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
                 OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
 
-                myAccessConn.Open();
-                myDataAdapter.Fill(operators, "Operators");
+                lock (dataBaseLock)
+                {
+                    myAccessConn.Open();
+                    myDataAdapter.Fill(operators, "Operators");
+                    myAccessConn.Close();
+                }
 
             }
             catch (Exception ex)
@@ -120,7 +125,7 @@ namespace NewBTASProto
             }
             finally
             {
-                myAccessConn.Close();
+                
             }
 
             this.comboBox1.DisplayMember = "OperatorName";
@@ -163,14 +168,18 @@ namespace NewBTASProto
 
         private void test3ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Graphics_Form gf = new Graphics_Form();
+            Graphics_Form gf = new Graphics_Form(d.Rows[dataGridView1.CurrentRow.Index][3].ToString(), d.Rows[dataGridView1.CurrentRow.Index][1].ToString());
+            gf.Owner = this;
             gf.Show();
    
         }
 
         private void testToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Reports_Form rf = new Reports_Form();
+
+
+            Reports_Form rf = new Reports_Form(d.Rows[dataGridView1.CurrentRow.Index][3].ToString(), d.Rows[dataGridView1.CurrentRow.Index][1].ToString());
+            rf.Owner = this;
             rf.Show();
         }
 
@@ -205,8 +214,11 @@ namespace NewBTASProto
             {
                 OleDbCommand myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
 
-                myAccessConn.Open();
-                myAccessCommand.ExecuteNonQuery();
+                lock (dataBaseLock)
+                {
+                    myAccessConn.Open();
+                    myAccessCommand.ExecuteNonQuery();
+                }
 
             }
             catch (Exception ex)
@@ -230,9 +242,11 @@ namespace NewBTASProto
             {
                 OleDbCommand myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
 
-                myAccessConn.Open();
-                myAccessCommand.ExecuteNonQuery();
-
+                lock (dataBaseLock)
+                {
+                    myAccessConn.Open();
+                    myAccessCommand.ExecuteNonQuery();
+                }
             }
             catch (Exception ex)
             {
@@ -255,9 +269,11 @@ namespace NewBTASProto
             {
                 OleDbCommand myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
 
-                myAccessConn.Open();
-                myAccessCommand.ExecuteNonQuery();
-
+                lock (dataBaseLock)
+                {
+                    myAccessConn.Open();
+                    myAccessCommand.ExecuteNonQuery();
+                }
             }
             catch (Exception ex)
             {
@@ -280,9 +296,11 @@ namespace NewBTASProto
             {
                 OleDbCommand myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
 
-                myAccessConn.Open();
-                myAccessCommand.ExecuteNonQuery();
-
+                lock (dataBaseLock)
+                {
+                    myAccessConn.Open();
+                    myAccessCommand.ExecuteNonQuery();
+                }
             }
             catch (Exception ex)
             {
@@ -292,7 +310,10 @@ namespace NewBTASProto
 
             finally
             {
-                myAccessConn.Close();
+                lock (dataBaseLock)
+                {
+                    myAccessConn.Close();
+                }
             }
 
         }
@@ -385,8 +406,158 @@ namespace NewBTASProto
                 updateD(channel, 6, "");
                 updateD(channel, 7, "");
             }
+            if (d.Rows[channel][9].ToString().Contains("M"))
+            {
+                // find the slave and update it also!
+                //find the slave
+                string temp = d.Rows[channel][9].ToString().Replace("-M", "");
+                for (int i = 0; i < 16; i++)
+                {
+                    if (d.Rows[i][9].ToString().Contains(temp) && d.Rows[i][9].ToString().Contains("S"))
+                    {
+                        updateD(i, 2, "");
+                        updateD(i, 3, "");
+                        updateD(i, 6, "");
+                        updateD(i, 7, "");
+                    }
+                }
+
+            }
+
             // also re set the combos...
             fillPlotCombos(channel);
+
+            // finally we need to update the pci datatable
+            if (workOrder != "")
+            {
+                //split off the first work order if we have multiple ones..
+                string tempWOS = workOrder;
+                char[] delims = { ' ' };
+                string[] A = tempWOS.Split(delims);
+                workOrder = A[0];
+
+                DataSet batData = new DataSet();
+
+                // find out the nominal voltage 
+                // first get the battery Model from the work order..
+                // Open database containing all the battery data....
+                string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                string strAccessSelect = @"SELECT BatteryModel FROM WorkOrders WHERE WorkOrderNumber='" + workOrder.Trim() + @"'";
+
+                OleDbConnection myAccessConn = null;
+                // try to open the DB
+                try
+                {
+                    myAccessConn = new OleDbConnection(strAccessConn);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                    return;
+                }
+                //  now try to access it
+                try
+                {
+                    OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                    OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                    lock (dataBaseLock)
+                    {
+                        myAccessConn.Open();
+                        myDataAdapter.Fill(batData, "Bat");
+                        myAccessConn.Close();
+                    }
+
+
+                }
+                catch (Exception ex)
+                {
+                    myAccessConn.Close();
+                    MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                    return;
+                }
+
+                //Now we have the battery Model...
+                pci.Rows[channel][0] = batData.Tables[0].Rows[0][0].ToString();
+
+                // Lets get the nominal voltage!
+                strAccessSelect = @"SELECT BTECH,VOLT,NCELLS,BCVMIN,BCVMAX,CCVMMIN,CCVMAX,CCAPV FROM BatteriesCustom WHERE BatteryModel='" + batData.Tables[0].Rows[0][0].ToString() + @"'";
+                batData = new DataSet();
+                //  now try to access it
+
+                try
+                {
+                    OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                    OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                    lock (dataBaseLock)
+                    {
+                        myAccessConn.Open();
+                        myDataAdapter.Fill(batData, "Bat");
+                        myAccessConn.Close();
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    myAccessConn.Close();
+                    MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                    return;
+                }
+
+                // we should have the data!
+                // now put it into the the pci!
+                if (batData.Tables[0].Rows[0][0].ToString() != "")
+                {
+                    pci.Rows[channel][1] = batData.Tables[0].Rows[0][0].ToString();
+                }
+                if (batData.Tables[0].Rows[0][1].ToString() != "")
+                {
+                    pci.Rows[channel][2] = float.Parse(batData.Tables[0].Rows[0][1].ToString());
+                }
+                if (batData.Tables[0].Rows[0][2].ToString() != "")
+                {
+                    pci.Rows[channel][3] = int.Parse(batData.Tables[0].Rows[0][2].ToString()); 
+                }
+                if (batData.Tables[0].Rows[0][3].ToString() != "")
+                {
+                    pci.Rows[channel][4] = float.Parse(batData.Tables[0].Rows[0][3].ToString());
+                }
+                if (batData.Tables[0].Rows[0][4].ToString() != "")
+                {
+                    pci.Rows[channel][5] = float.Parse(batData.Tables[0].Rows[0][4].ToString());
+                }
+                if (batData.Tables[0].Rows[0][5].ToString() != "")
+                {
+                    pci.Rows[channel][6] = float.Parse(batData.Tables[0].Rows[0][5].ToString());
+                }
+                else if (batData.Tables[0].Rows[0][5].ToString() == "" && batData.Tables[0].Rows[0][0].ToString() == "NiCd ULM")
+                {
+                    pci.Rows[channel][6] = 1.82;
+                }
+                if (batData.Tables[0].Rows[0][6].ToString() != "")
+                {
+                    pci.Rows[channel][7] = float.Parse(batData.Tables[0].Rows[0][6].ToString());
+                }
+                if (batData.Tables[0].Rows[0][7].ToString() != "")
+                {
+                    pci.Rows[channel][8] = float.Parse(batData.Tables[0].Rows[0][7].ToString());
+                }
+            }
+            else
+            {
+                // we don't have a workorder
+                // reset to default...
+                pci.Rows[channel][0] = "None";
+                pci.Rows[channel][1] = "NiCd";
+                pci.Rows[channel][2] = 24;         // negative 1 is the default...
+                pci.Rows[channel][3] = -1;         // negative 1 is the default...
+                pci.Rows[channel][4] = -1;         // negative 1 is the default...
+                pci.Rows[channel][5] = -1;         // negative 1 is the default...
+                pci.Rows[channel][6] = -1;         // negative 1 is the default...
+                pci.Rows[channel][7] = 1.75;         // negative 1 is the default...
+                pci.Rows[channel][8] = -1;         // negative 1 is the default...
+            }
         }
 
 
@@ -482,7 +653,134 @@ namespace NewBTASProto
                     }
                 });
 
-                //reenable the button before exit
+                bool foundOne = false;
+                // let's see if we found any!
+                for (int i = 0; i < 16; i++)
+                {
+                    if ((bool)d.Rows[i][4])
+                    {
+                        foundOne = true;
+                        break;
+                    }
+                }
+
+                if (!foundOne)
+                {
+                    // flip the comms!
+                    // stop all of the scanning threads
+                    try
+                    {
+                        cPollIC.Cancel();
+                        cPollCScans.Cancel();
+                        sequentialScanT.Cancel();
+
+                        cPollIC.Dispose();
+                        cPollCScans.Dispose();
+                        sequentialScanT.Dispose();
+                    }
+                    catch (Exception ex)
+                    {
+                        if (ex is NullReferenceException || ex is ObjectDisposedException)
+                        {
+
+                        }
+                        else
+                        {
+                            throw ex;
+                        }
+                    }
+
+
+                    // close the comms
+                    CSCANComPort.Close();
+                    ICComPort.Close();
+
+                    //Update the Globals
+                    string temp = GlobalVars.CSCANComPort;
+                    GlobalVars.CSCANComPort = GlobalVars.ICComPort;
+                    GlobalVars.ICComPort = temp;
+
+                    //Start the threads back up
+                    Scan();
+
+                    //rerun the same code...
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        // start by disabling the button while we look for stations
+                        button1.Enabled = false;
+                        // also disable the grid, so the user cannot interfere with the search
+                        dataGridView1.Enabled = false;
+                        //select the first row as your selected cell
+                        dataGridView1.CurrentCell = dataGridView1.Rows[0].Cells[0];
+                        dataGridView1.ClearSelection();
+                    });
+                    Thread.Sleep(500);
+
+                    // turn on all of the in use buttons
+                    for (int i = 0; i < 16; i++)
+                    {
+                        this.Invoke((MethodInvoker)delegate
+                        {
+                            updateD(i, 4, true);
+                            dataGridView1.Rows[i].Cells[4].Style.BackColor = Color.Red;
+                        });
+                    }
+                    // here is the for loop we'll use to look for cscans
+                    for (int i = 0; i < 15; i++)
+                    {
+
+                        this.Invoke((MethodInvoker)delegate
+                        {
+                            dataGridView1.CurrentCell = dataGridView1.Rows[i].Cells[0];
+                            dataGridView1.ClearSelection();
+                        });
+
+                        //give it time to check the channel
+                        Thread.Sleep(900);
+
+                        // move the current channel
+                        this.Invoke((MethodInvoker)delegate
+                        {
+                            dataGridView1.CurrentCell = dataGridView1.Rows[i + 1].Cells[0];
+                            dataGridView1.ClearSelection();
+                        });
+
+                        // wait again
+                        Thread.Sleep(100);
+                        this.Invoke((MethodInvoker)delegate
+                        {
+                            if (dataGridView1.Rows[i].Cells[4].Style.BackColor == Color.Red)
+                            {
+                                updateD(i, 4, false);
+                                dataGridView1.Rows[i].Cells[4].Style.BackColor = Color.Gainsboro;
+                            }
+                        });
+                    }
+
+                    //Finally take care of the last channel
+                    //give it time to check the channel
+                    Thread.Sleep(900);
+
+                    // move back to channel 0
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        dataGridView1.CurrentCell = dataGridView1.Rows[0].Cells[0];
+                        dataGridView1.ClearSelection();
+                    });
+
+                    // wait again
+                    Thread.Sleep(100);
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        if (dataGridView1.Rows[15].Cells[4].Style.BackColor == Color.Red)
+                        {
+                            updateD(15, 4, false);
+                            dataGridView1.Rows[15].Cells[4].Style.BackColor = Color.Gainsboro;
+                        }
+                    });
+                }// end if
+
+                    //reenable the button before exit
                 this.Invoke((MethodInvoker)delegate
                 {
                     // start by disabling the button while we look for stations
@@ -548,6 +846,12 @@ namespace NewBTASProto
             using (StreamWriter writer = new StreamWriter(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\graph_set.xml", false))
             {
                 gs.WriteXml(writer);
+            }
+
+            //save the pci grid for the next time we restart
+            using (StreamWriter writer = new StreamWriter(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\pci_set.xml", false))
+            {
+                pci.WriteXml(writer);
             }
             
             //Save the current form width and height
@@ -1012,21 +1316,44 @@ namespace NewBTASProto
 
         private void clearToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            correctMasterSlave();
+            // first update the slave colors (if we have a master...)
+            if (d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Contains("M"))
+            {
+                //find the slave
+                string temp = d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Replace("-M", "");
+                for (int i = 0; i < 16; i++)
+                {
+                    if (d.Rows[i][9].ToString().Contains(temp) && d.Rows[i][9].ToString().Contains("S"))
+                    {
+                        // also change the grid color
+                        dataGridView1.Rows[i].Cells[2].Style.BackColor = Color.Aquamarine;
+                        dataGridView1.Rows[i].Cells[5].Style.BackColor = Color.Gainsboro;
+                        dataGridView1.Rows[i].Cells[8].Style.BackColor = Color.Gainsboro;
+                        dataGridView1.Rows[i].Cells[12].Style.BackColor = Color.LightSkyBlue;
+                    }
+                }
+            }
+            else if (d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Contains("S"))
+            {
+                // also change the grid color
+                dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.Aquamarine;
+                dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.Gainsboro;
+                dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.Gainsboro;
+                dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[12].Style.BackColor = Color.LightSkyBlue;
+                updateD(dataGridView1.CurrentRow.Index, 12, false);
+            }
 
-            
+            //Now onto the normal stuff...
+            correctMasterSlave();
             // we always clear the current one..
             updateD(dataGridView1.CurrentRow.Index,9, "");
-            // also change the grid color
-            dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.Aquamarine;
-            dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.Gainsboro;
-            dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.Gainsboro;
 
             //make sure we clear the current test
             updateD(dataGridView1.CurrentRow.Index, 3, "");
             updateD(dataGridView1.CurrentRow.Index, 6, "");
             updateD(dataGridView1.CurrentRow.Index, 7, "");
             fillPlotCombos(dataGridView1.CurrentRow.Index);
+
 
         }
 
@@ -1139,10 +1466,12 @@ namespace NewBTASProto
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.LightSteelBlue;
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.LightSteelBlue;
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[12].Style.BackColor = Color.LightSteelBlue;
                     // Now disable adding another...
                     toolStripMenuItem7.Enabled = false;
                     // also syncronyze them
                     d.Rows[dataGridView1.CurrentRow.Index][8] = d.Rows[i][8];
+                    d.Rows[dataGridView1.CurrentRow.Index][12] = d.Rows[i][12];
                     d.Rows[dataGridView1.CurrentRow.Index][2] = d.Rows[i][2];
                     d.Rows[dataGridView1.CurrentRow.Index][10] = d.Rows[i][10];
                     d.Rows[dataGridView1.CurrentRow.Index][11] = d.Rows[i][11];
@@ -1185,10 +1514,12 @@ namespace NewBTASProto
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.LightSteelBlue;
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.LightSteelBlue;
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[12].Style.BackColor = Color.LightSteelBlue;
                     // Now disable adding another...
                     toolStripMenuItem8.Enabled = false;
                     // also syncronyze them
                     d.Rows[dataGridView1.CurrentRow.Index][8] = d.Rows[i][8];
+                    d.Rows[dataGridView1.CurrentRow.Index][12] = d.Rows[i][12];
                     d.Rows[dataGridView1.CurrentRow.Index][2] = d.Rows[i][2];
                     d.Rows[dataGridView1.CurrentRow.Index][10] = d.Rows[i][10];
                     d.Rows[dataGridView1.CurrentRow.Index][11] = d.Rows[i][11];
@@ -1230,10 +1561,12 @@ namespace NewBTASProto
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.LightSteelBlue;
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.LightSteelBlue;
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[12].Style.BackColor = Color.LightSteelBlue;
                     // Now disable adding another...
                     toolStripMenuItem9.Enabled = false;
                     // also syncronyze them
                     d.Rows[dataGridView1.CurrentRow.Index][8] = d.Rows[i][8];
+                    d.Rows[dataGridView1.CurrentRow.Index][12] = d.Rows[i][12];
                     d.Rows[dataGridView1.CurrentRow.Index][2] = d.Rows[i][2];
                     d.Rows[dataGridView1.CurrentRow.Index][10] = d.Rows[i][10];
                     d.Rows[dataGridView1.CurrentRow.Index][11] = d.Rows[i][11];
@@ -1275,10 +1608,12 @@ namespace NewBTASProto
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.LightSteelBlue;
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.LightSteelBlue;
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[12].Style.BackColor = Color.LightSteelBlue;
                     // Now disable adding another...
                     toolStripMenuItem10.Enabled = false;
                     // also syncronyze them
                     d.Rows[dataGridView1.CurrentRow.Index][8] = d.Rows[i][8];
+                    d.Rows[dataGridView1.CurrentRow.Index][12] = d.Rows[i][12];
                     d.Rows[dataGridView1.CurrentRow.Index][2] = d.Rows[i][2];
                     d.Rows[dataGridView1.CurrentRow.Index][10] = d.Rows[i][10];
                     d.Rows[dataGridView1.CurrentRow.Index][11] = d.Rows[i][11];
@@ -1320,10 +1655,12 @@ namespace NewBTASProto
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.LightSteelBlue;
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.LightSteelBlue;
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[12].Style.BackColor = Color.LightSteelBlue;
                     // Now disable adding another...
                     toolStripMenuItem11.Enabled = false;
                     // also syncronyze them
                     d.Rows[dataGridView1.CurrentRow.Index][8] = d.Rows[i][8];
+                    d.Rows[dataGridView1.CurrentRow.Index][12] = d.Rows[i][12];
                     d.Rows[dataGridView1.CurrentRow.Index][2] = d.Rows[i][2];
                     d.Rows[dataGridView1.CurrentRow.Index][10] = d.Rows[i][10];
                     d.Rows[dataGridView1.CurrentRow.Index][11] = d.Rows[i][11];
@@ -1366,10 +1703,12 @@ namespace NewBTASProto
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.LightSteelBlue;
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.LightSteelBlue;
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[12].Style.BackColor = Color.LightSteelBlue;
                     // Now disable adding another...
                     toolStripMenuItem12.Enabled = false;
                     // also syncronyze them
                     d.Rows[dataGridView1.CurrentRow.Index][8] = d.Rows[i][8];
+                    d.Rows[dataGridView1.CurrentRow.Index][12] = d.Rows[i][12];
                     d.Rows[dataGridView1.CurrentRow.Index][2] = d.Rows[i][2];
                     d.Rows[dataGridView1.CurrentRow.Index][10] = d.Rows[i][10];
                     d.Rows[dataGridView1.CurrentRow.Index][11] = d.Rows[i][11];
@@ -1411,10 +1750,12 @@ namespace NewBTASProto
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.LightSteelBlue;
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.LightSteelBlue;
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[12].Style.BackColor = Color.LightSteelBlue;
                     // Now disable adding another...
                     toolStripMenuItem13.Enabled = false;
                     // also syncronyze them
                     d.Rows[dataGridView1.CurrentRow.Index][8] = d.Rows[i][8];
+                    d.Rows[dataGridView1.CurrentRow.Index][12] = d.Rows[i][12];
                     d.Rows[dataGridView1.CurrentRow.Index][2] = d.Rows[i][2];
                     d.Rows[dataGridView1.CurrentRow.Index][10] = d.Rows[i][10];
                     d.Rows[dataGridView1.CurrentRow.Index][11] = d.Rows[i][11];
@@ -1456,10 +1797,12 @@ namespace NewBTASProto
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.LightSteelBlue;
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.LightSteelBlue;
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[12].Style.BackColor = Color.LightSteelBlue;
                     // Now disable adding another...
                     toolStripMenuItem14.Enabled = false;
                     // also syncronyze them
                     d.Rows[dataGridView1.CurrentRow.Index][8] = d.Rows[i][8];
+                    d.Rows[dataGridView1.CurrentRow.Index][12] = d.Rows[i][12];
                     d.Rows[dataGridView1.CurrentRow.Index][2] = d.Rows[i][2];
                     d.Rows[dataGridView1.CurrentRow.Index][10] = d.Rows[i][10];
                     d.Rows[dataGridView1.CurrentRow.Index][11] = d.Rows[i][11];
@@ -1501,10 +1844,12 @@ namespace NewBTASProto
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.LightSteelBlue;
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.LightSteelBlue;
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[12].Style.BackColor = Color.LightSteelBlue;
                     // Now disable adding another...
                     toolStripMenuItem15.Enabled = false;
                     // also syncronyze them
                     d.Rows[dataGridView1.CurrentRow.Index][8] = d.Rows[i][8];
+                    d.Rows[dataGridView1.CurrentRow.Index][12] = d.Rows[i][12];
                     d.Rows[dataGridView1.CurrentRow.Index][2] = d.Rows[i][2];
                     d.Rows[dataGridView1.CurrentRow.Index][10] = d.Rows[i][10];
                     d.Rows[dataGridView1.CurrentRow.Index][11] = d.Rows[i][11];
@@ -1546,10 +1891,12 @@ namespace NewBTASProto
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.LightSteelBlue;
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.LightSteelBlue;
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[12].Style.BackColor = Color.LightSteelBlue;
                     // Now disable adding another...
                     toolStripMenuItem16.Enabled = false;
                     // also syncronyze them
                     d.Rows[dataGridView1.CurrentRow.Index][8] = d.Rows[i][8];
+                    d.Rows[dataGridView1.CurrentRow.Index][12] = d.Rows[i][12];
                     d.Rows[dataGridView1.CurrentRow.Index][2] = d.Rows[i][2];
                     d.Rows[dataGridView1.CurrentRow.Index][10] = d.Rows[i][10];
                     d.Rows[dataGridView1.CurrentRow.Index][11] = d.Rows[i][11];
@@ -1591,10 +1938,12 @@ namespace NewBTASProto
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.LightSteelBlue;
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.LightSteelBlue;
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[12].Style.BackColor = Color.LightSteelBlue;
                     // Now disable adding another...
                     toolStripMenuItem17.Enabled = false;
                     // also syncronyze them
                     d.Rows[dataGridView1.CurrentRow.Index][8] = d.Rows[i][8];
+                    d.Rows[dataGridView1.CurrentRow.Index][12] = d.Rows[i][12];
                     d.Rows[dataGridView1.CurrentRow.Index][2] = d.Rows[i][2];
                     d.Rows[dataGridView1.CurrentRow.Index][10] = d.Rows[i][10];
                     d.Rows[dataGridView1.CurrentRow.Index][11] = d.Rows[i][11];
@@ -1636,10 +1985,12 @@ namespace NewBTASProto
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.LightSteelBlue;
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.LightSteelBlue;
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[12].Style.BackColor = Color.LightSteelBlue;
                     // Now disable adding another...
                     toolStripMenuItem18.Enabled = false;
                     // also syncronyze them
                     d.Rows[dataGridView1.CurrentRow.Index][8] = d.Rows[i][8];
+                    d.Rows[dataGridView1.CurrentRow.Index][8] = d.Rows[i][12];
                     d.Rows[dataGridView1.CurrentRow.Index][2] = d.Rows[i][2];
                     d.Rows[dataGridView1.CurrentRow.Index][10] = d.Rows[i][10];
                     d.Rows[dataGridView1.CurrentRow.Index][11] = d.Rows[i][11];
@@ -1681,10 +2032,12 @@ namespace NewBTASProto
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.LightSteelBlue;
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.LightSteelBlue;
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[12].Style.BackColor = Color.LightSteelBlue;
                     // Now disable adding another...
                     toolStripMenuItem19.Enabled = false;
                     // also syncronyze them
                     d.Rows[dataGridView1.CurrentRow.Index][8] = d.Rows[i][8];
+                    d.Rows[dataGridView1.CurrentRow.Index][12] = d.Rows[i][12];
                     d.Rows[dataGridView1.CurrentRow.Index][2] = d.Rows[i][2];
                     d.Rows[dataGridView1.CurrentRow.Index][10] = d.Rows[i][10];
                     d.Rows[dataGridView1.CurrentRow.Index][11] = d.Rows[i][11];
@@ -1726,10 +2079,12 @@ namespace NewBTASProto
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.LightSteelBlue;
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.LightSteelBlue;
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[12].Style.BackColor = Color.LightSteelBlue;
                     // Now disable adding another...
                     toolStripMenuItem20.Enabled = false;
                     // also syncronyze them
                     d.Rows[dataGridView1.CurrentRow.Index][8] = d.Rows[i][8];
+                    d.Rows[dataGridView1.CurrentRow.Index][12] = d.Rows[i][12];
                     d.Rows[dataGridView1.CurrentRow.Index][2] = d.Rows[i][2];
                     d.Rows[dataGridView1.CurrentRow.Index][10] = d.Rows[i][10];
                     d.Rows[dataGridView1.CurrentRow.Index][11] = d.Rows[i][11];
@@ -1771,10 +2126,12 @@ namespace NewBTASProto
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.LightSteelBlue;
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.LightSteelBlue;
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[12].Style.BackColor = Color.LightSteelBlue;
                     // Now disable adding another...
                     toolStripMenuItem21.Enabled = false;
                     // also syncronyze them
                     d.Rows[dataGridView1.CurrentRow.Index][8] = d.Rows[i][8];
+                    d.Rows[dataGridView1.CurrentRow.Index][12] = d.Rows[i][12];
                     d.Rows[dataGridView1.CurrentRow.Index][2] = d.Rows[i][2];
                     d.Rows[dataGridView1.CurrentRow.Index][10] = d.Rows[i][10];
                     d.Rows[dataGridView1.CurrentRow.Index][11] = d.Rows[i][11];
@@ -1816,10 +2173,13 @@ namespace NewBTASProto
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.LightSteelBlue;
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.LightSteelBlue;
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[12].Style.BackColor = Color.LightSteelBlue;
+
                     // Now disable adding another...
                     toolStripMenuItem22.Enabled = false;
                     // also syncronyze them
                     d.Rows[dataGridView1.CurrentRow.Index][8] = d.Rows[i][8];
+                    d.Rows[dataGridView1.CurrentRow.Index][12] = d.Rows[i][12];
                     d.Rows[dataGridView1.CurrentRow.Index][2] = d.Rows[i][2];
                     d.Rows[dataGridView1.CurrentRow.Index][10] = d.Rows[i][10];
                     d.Rows[dataGridView1.CurrentRow.Index][11] = d.Rows[i][11];
@@ -1904,6 +2264,21 @@ namespace NewBTASProto
         {
             //clear the E-time to set the test to a new test
             updateD(dataGridView1.CurrentRow.Index, 6, "");
+            if (d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Contains("M"))
+            {
+                // we need to find the slave and clear it also...
+                string temp = d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Replace("-M", "");
+
+                for (int i = 0; i < 16; i++)
+                {
+                    if (d.Rows[i][9].ToString().Contains(temp) && d.Rows[i][9].ToString().Contains("S"))
+                    {
+                        //found the slave
+                        updateD(i, 6, "");
+                        break;
+                    }
+                }
+            }
             // we will run the tests on a helper thread
             // helper thread code is located in Test_Portion.cs
             RunTest();
@@ -2120,6 +2495,8 @@ namespace NewBTASProto
                 automaticallyConfigureChargerToolStripMenuItem.Checked = false;
                 GlobalVars.autoConfig = false;
             }
+
+            dataGridView1_Resize(this, null);
         }
 
         private void chargerConfigurationInterfaceToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2176,29 +2553,60 @@ namespace NewBTASProto
         {
             int cumWidth = 0;
             //Scale the columns to the new width!
-            dataGridView1.Columns[0].Width = (40 * dataGridView1.Width) / 1017;
-            cumWidth += (40 * dataGridView1.Width) / 1017;
-            dataGridView1.Columns[1].Width = (180 * dataGridView1.Width) / 1017;
-            cumWidth += (180 * dataGridView1.Width) / 1017;
-            dataGridView1.Columns[2].Width = (140 * dataGridView1.Width) / 1017;
-            cumWidth += (140 * dataGridView1.Width) / 1017;
-            dataGridView1.Columns[3].Width = (40 * dataGridView1.Width) / 1017;
-            cumWidth += (40 * dataGridView1.Width) / 1017;
-            dataGridView1.Columns[4].Width = (44 * dataGridView1.Width) / 1017;
-            cumWidth += (44 * dataGridView1.Width) / 1017;
-            dataGridView1.Columns[5].Width = (44 * dataGridView1.Width) / 1017;
-            cumWidth += (44 * dataGridView1.Width) / 1017;
-            dataGridView1.Columns[6].Width = (100 * dataGridView1.Width) / 1017;
-            cumWidth += (100 * dataGridView1.Width) / 1017;
-            dataGridView1.Columns[7].Width = (120 * dataGridView1.Width) / 1017;
-            cumWidth += (120 * dataGridView1.Width) / 1017;
-            dataGridView1.Columns[8].Width = (60 * dataGridView1.Width) / 1017;
-            cumWidth += (60 * dataGridView1.Width) / 1017;
-            dataGridView1.Columns[9].Width = (50 * dataGridView1.Width) / 1017;
-            cumWidth += (50 * dataGridView1.Width) / 1017;
-            dataGridView1.Columns[10].Width = (78 * dataGridView1.Width) / 1017;
-            cumWidth += (78 * dataGridView1.Width) / 1017;
-            dataGridView1.Columns[11].Width = (dataGridView1.Width - 43) - cumWidth;
+            if (GlobalVars.autoConfig)
+            {
+                dataGridView1.Columns[0].Width = (40 * dataGridView1.Width) / 1057;
+                cumWidth += (40 * dataGridView1.Width) / 1057;
+                dataGridView1.Columns[1].Width = (180 * dataGridView1.Width) / 1057;
+                cumWidth += (180 * dataGridView1.Width) / 1057;
+                dataGridView1.Columns[2].Width = (140 * dataGridView1.Width) / 1057;
+                cumWidth += (140 * dataGridView1.Width) / 1057;
+                dataGridView1.Columns[3].Width = (40 * dataGridView1.Width) / 1057;
+                cumWidth += (40 * dataGridView1.Width) / 1057;
+                dataGridView1.Columns[4].Width = (44 * dataGridView1.Width) / 1057;
+                cumWidth += (44 * dataGridView1.Width) / 1057;
+                dataGridView1.Columns[5].Width = (44 * dataGridView1.Width) / 1057;
+                cumWidth += (44 * dataGridView1.Width) / 1057;
+                dataGridView1.Columns[6].Width = (100 * dataGridView1.Width) / 1057;
+                cumWidth += (100 * dataGridView1.Width) / 1057;
+                dataGridView1.Columns[7].Width = (120 * dataGridView1.Width) / 1057;
+                cumWidth += (120 * dataGridView1.Width) / 1057;
+                dataGridView1.Columns[8].Width = (60 * dataGridView1.Width) / 1057;
+                cumWidth += (60 * dataGridView1.Width) / 1057;
+                dataGridView1.Columns[9].Width = (50 * dataGridView1.Width) / 1057;
+                cumWidth += (50 * dataGridView1.Width) / 1057;
+                dataGridView1.Columns[10].Width = (78 * dataGridView1.Width) / 1057;
+                cumWidth += (78 * dataGridView1.Width) / 1057;
+                dataGridView1.Columns[11].Width = (78 * dataGridView1.Width) / 1057;
+                cumWidth += (78 * dataGridView1.Width) / 1057;
+                dataGridView1.Columns[12].Width = (dataGridView1.Width - 43) - cumWidth;
+            }
+            else
+            {
+                dataGridView1.Columns[0].Width = (40 * dataGridView1.Width) / 1017;
+                cumWidth += (40 * dataGridView1.Width) / 1017;
+                dataGridView1.Columns[1].Width = (180 * dataGridView1.Width) / 1017;
+                cumWidth += (180 * dataGridView1.Width) / 1017;
+                dataGridView1.Columns[2].Width = (140 * dataGridView1.Width) / 1017;
+                cumWidth += (140 * dataGridView1.Width) / 1017;
+                dataGridView1.Columns[3].Width = (40 * dataGridView1.Width) / 1017;
+                cumWidth += (40 * dataGridView1.Width) / 1017;
+                dataGridView1.Columns[4].Width = (44 * dataGridView1.Width) / 1017;
+                cumWidth += (44 * dataGridView1.Width) / 1017;
+                dataGridView1.Columns[5].Width = (44 * dataGridView1.Width) / 1017;
+                cumWidth += (44 * dataGridView1.Width) / 1017;
+                dataGridView1.Columns[6].Width = (100 * dataGridView1.Width) / 1017;
+                cumWidth += (100 * dataGridView1.Width) / 1017;
+                dataGridView1.Columns[7].Width = (120 * dataGridView1.Width) / 1017;
+                cumWidth += (120 * dataGridView1.Width) / 1017;
+                dataGridView1.Columns[8].Width = (60 * dataGridView1.Width) / 1017;
+                cumWidth += (60 * dataGridView1.Width) / 1017;
+                dataGridView1.Columns[9].Width = (50 * dataGridView1.Width) / 1017;
+                cumWidth += (50 * dataGridView1.Width) / 1017;
+                dataGridView1.Columns[10].Width = (78 * dataGridView1.Width) / 1017;
+                cumWidth += (78 * dataGridView1.Width) / 1017;
+                dataGridView1.Columns[11].Width = (dataGridView1.Width - 43) - cumWidth;
+            }
 
         }
 
@@ -2663,8 +3071,11 @@ namespace NewBTASProto
                     dataGridView1.Rows[i].Cells[2].Style.BackColor = Color.LightSteelBlue;
                     dataGridView1.Rows[i].Cells[5].Style.BackColor = Color.LightSteelBlue;
                     dataGridView1.Rows[i].Cells[8].Style.BackColor = Color.LightSteelBlue;
+                    dataGridView1.Rows[i].Cells[12].Style.BackColor = Color.LightSteelBlue;
                 }
             }
+
+            dataGridView1_Resize(this, null);
         }
 
 

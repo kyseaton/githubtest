@@ -21,10 +21,17 @@ namespace NewBTASProto
         DataSet reportSet = new DataSet();
         DataSet testsPerformed = new DataSet();
 
+        string curStep = "";
+        string curWorkOrder = "";
+        bool startup = true;
 
-        public Reports_Form()
+
+        public Reports_Form(string currentStep = "", string currentWorkOrder = "")
         {
             InitializeComponent();
+
+            curStep = currentStep;
+            curWorkOrder = currentWorkOrder;
         }
 
         private void Reports_Form_Load(object sender, EventArgs e)
@@ -97,9 +104,13 @@ namespace NewBTASProto
                 OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
                 OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
 
-                myAccessConn.Open();
-                myDataAdapter.Fill(workOrderList1, "ScanData");
-                myDataAdapter.Fill(workOrderList2, "ScanData");
+                lock (Main_Form.dataBaseLock)
+                {
+                    myAccessConn.Open();
+                    myDataAdapter.Fill(workOrderList1, "ScanData");
+                    myDataAdapter.Fill(workOrderList2, "ScanData");
+                    myAccessConn.Close();
+                }
 
             }
             catch (Exception ex)
@@ -109,7 +120,6 @@ namespace NewBTASProto
             }
             finally
             {
-                myAccessConn.Close();
             }
 
             DataRow emptyRow1 = workOrderList1.Tables["ScanData"].NewRow();
@@ -122,6 +132,29 @@ namespace NewBTASProto
 
             // remember to clear everything!
             this.comboBox2.DataSource = null;
+
+            if (startup)
+            {
+                //Now set the comboboxes to the current station and workorder...
+
+                // we need to split up the work orders if we have multiple work orders on a single line...
+                string tempWOS = curWorkOrder;
+                char[] delims = { ' ' };
+                string[] A = tempWOS.Split(delims);
+                curWorkOrder = A[0];
+
+                comboBox1.Text = curWorkOrder.Trim();
+                //comboBox1_SelectedValueChanged(this, null);
+
+
+                startup = false;
+                comboBox2.SelectedIndex = comboBox2.FindString(curStep);
+
+                if (curStep != "" && curWorkOrder != "")
+                {
+                    comboBox3.SelectedIndex = 0;
+                }
+            }
         }
 
         private void comboBox1_SelectedValueChanged(object sender, EventArgs e)
@@ -139,7 +172,7 @@ namespace NewBTASProto
             {
                 // Open database containing all the battery data....
                 string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
-                string strAccessSelect = @"SELECT * FROM Tests WHERE WorkOrderNumber='" + comboBox1.Text + @"'";
+                string strAccessSelect = @"SELECT * FROM Tests WHERE WorkOrderNumber='" + comboBox1.Text + @"' ORDER BY StepNumber ASC";
 
                 OleDbConnection myAccessConn = null;
                 // try to open the DB
@@ -158,8 +191,12 @@ namespace NewBTASProto
                     OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
                     OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
 
-                    myAccessConn.Open();
-                    myDataAdapter.Fill(testsPerformed, "Tests");
+                    lock (Main_Form.dataBaseLock)
+                    {
+                        myAccessConn.Open();
+                        myDataAdapter.Fill(testsPerformed, "Tests");
+                        myAccessConn.Close();
+                    }
 
                 }
                 catch (Exception ex)
@@ -169,7 +206,7 @@ namespace NewBTASProto
                 }
                 finally
                 {
-                    myAccessConn.Close();
+                    
                 }
 
                 try
@@ -266,8 +303,12 @@ namespace NewBTASProto
                     OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
                     OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
 
-                    myAccessConn.Open();
-                    myDataAdapter.Fill(reportSet, "ScanData");
+                    lock (Main_Form.dataBaseLock)
+                    {
+                        myAccessConn.Open();
+                        myDataAdapter.Fill(reportSet, "ScanData");
+                        myAccessConn.Close();
+                    }
 
                 }
                 catch (Exception ex)
@@ -277,7 +318,7 @@ namespace NewBTASProto
                 }
                 finally
                 {
-                    myAccessConn.Close();
+                    
                 }
             }
 
@@ -367,8 +408,12 @@ namespace NewBTASProto
                     OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
                     OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
 
-                    myAccessConn.Open();
-                    myDataAdapter.Fill(reportSet, "ScanData");
+                    lock (Main_Form.dataBaseLock)
+                    {
+                        myAccessConn.Open();
+                        myDataAdapter.Fill(reportSet, "ScanData");
+                        myAccessConn.Close();
+                    }
 
                 }
                 catch (Exception ex)
@@ -378,7 +423,7 @@ namespace NewBTASProto
                 }
                 finally
                 {
-                    myAccessConn.Close();
+                    
                 }
             }
 
@@ -467,9 +512,12 @@ namespace NewBTASProto
                     OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
                     OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
 
-                    myAccessConn.Open();
-                    myDataAdapter.Fill(reportSet, "ScanData");
-
+                    lock (Main_Form.dataBaseLock)
+                    {
+                        myAccessConn.Open();
+                        myDataAdapter.Fill(reportSet, "ScanData");
+                        myAccessConn.Close();
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -478,7 +526,7 @@ namespace NewBTASProto
                 }
                 finally
                 {
-                    myAccessConn.Close();
+                    
                 }
                 //  Here is where we do the Cell voltage PASS/FAIL determinations
 
@@ -614,9 +662,12 @@ namespace NewBTASProto
                     OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
                     OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
 
-                    myAccessConn.Open();
-                    myDataAdapter.Fill(reportSet, "ScanData");
-
+                    lock (Main_Form.dataBaseLock)
+                    {
+                        myAccessConn.Open();
+                        myDataAdapter.Fill(reportSet, "ScanData");
+                        myAccessConn.Close();
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -625,7 +676,7 @@ namespace NewBTASProto
                 }
                 finally
                 {
-                    myAccessConn.Close();
+                    
                 }
 
 
@@ -644,8 +695,8 @@ namespace NewBTASProto
                         break;
                     case "3":
                         // update the cells value
-                        if (GlobalVars.Pos2Neg == true) { this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.CellDataPN22.rdlc"; }
-                        else { this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.CellDataNP22.rdlc"; }
+                        if (GlobalVars.Pos2Neg == true) { this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.CellDataPN11.rdlc"; }
+                        else { this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.CellDataNP11.rdlc"; }
                         break;
                     case "4":
                         // update the cells value
@@ -659,8 +710,8 @@ namespace NewBTASProto
                         break;
                     default:
                         // update the cells value
-                        if (GlobalVars.Pos2Neg == true) { this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.CellDataPN20.rdlc"; }
-                        else { this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.CellDataNP20.rdlc"; }
+                        if (GlobalVars.Pos2Neg == true) { this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.CellDataPN24.rdlc"; }
+                        else { this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.CellDataNP24.rdlc"; }
                         break;
                 }// end switch
 
@@ -729,9 +780,12 @@ namespace NewBTASProto
                     OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
                     OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
 
-                    myAccessConn.Open();
-                    myDataAdapter.Fill(reportSet, "ScanData");
-
+                    lock (Main_Form.dataBaseLock)
+                    {
+                        myAccessConn.Open();
+                        myDataAdapter.Fill(reportSet, "ScanData");
+                        myAccessConn.Close();
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -740,7 +794,7 @@ namespace NewBTASProto
                 }
                 finally
                 {
-                    myAccessConn.Close();
+
                 }
 
 
@@ -856,6 +910,11 @@ namespace NewBTASProto
         {
             reportViewer.Width = this.Width - 43;
             reportViewer.Height = this.Height - 106;
+        }
+
+        private void Reports_Form_Shown(object sender, EventArgs e)
+        {
+
         }
 
 

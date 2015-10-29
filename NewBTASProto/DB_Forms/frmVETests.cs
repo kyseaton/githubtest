@@ -54,9 +54,12 @@ namespace NewBTASProto
                 OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
                 OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
 
-                myAccessConn.Open();
-                myDataAdapter.Fill(Customers);
-
+                lock (Main_Form.dataBaseLock)
+                {
+                    myAccessConn.Open();
+                    myDataAdapter.Fill(Customers);
+                    myAccessConn.Close();
+                }
             }
             catch (Exception ex)
             {
@@ -65,7 +68,7 @@ namespace NewBTASProto
             }
             finally
             {
-                myAccessConn.Close();
+                
             }
 
 
@@ -143,7 +146,6 @@ namespace NewBTASProto
                 // set up the db Connection
                 string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
                 OleDbConnection conn = new OleDbConnection(connectionString);
-                conn.Open();
 
                 //MAKE SURE YOU SELECT THE CURRENT ROW FOR DOUBLE SAVES!!!!!!!!!!!!!!!!!
 
@@ -165,7 +167,12 @@ namespace NewBTASProto
                         "' WHERE TESTID=" + current["TESTID"].ToString();
 
                     OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
-                    cmd.ExecuteNonQuery();
+                    lock (Main_Form.dataBaseLock)
+                    {
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                        conn.Close();
+                    }
                     MessageBox.Show(current["TESTID"].ToString() + " has been updated.");
 
                 }

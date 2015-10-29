@@ -22,7 +22,7 @@ namespace NewBTASProto
 
         public CancellationTokenSource[] cRunTest = new CancellationTokenSource[16];
 
-        private readonly object dataBaseLock = new object();
+        public static readonly object dataBaseLock = new object();
 
         //vars for recording in sc
 
@@ -104,6 +104,28 @@ namespace NewBTASProto
             
             cRunTest[station] = new CancellationTokenSource();
 
+            // we need to split up the work orders if we have multiple work orders on a single line...
+            string tempWOS = d.Rows[station][1].ToString();
+            char[] delims = { ' ' };
+            string[] A = tempWOS.Split(delims);
+            string MWO1 = A[0];
+            string MWO2 = "";
+            string MWO3 = "";
+            if (A.Length > 2) { MWO2 = A[1]; }
+            if (A.Length > 3) { MWO3 = A[2]; }
+
+            string SWO1 = "";
+            string SWO2 = "";
+            string SWO3 = "";
+            if (slaveRow != -1)
+            {
+                tempWOS = d.Rows[slaveRow][1].ToString();
+                A = tempWOS.Split(delims);
+                SWO1 = A[0];
+                if (A.Length > 2) { SWO2 = A[1]; }
+                if (A.Length > 3) { SWO3 = A[2]; }
+            }
+            
             // Everything is going to be done on a helper thread
             ThreadPool.QueueUserWorkItem(s =>
             {
@@ -141,9 +163,72 @@ namespace NewBTASProto
                     MessageBox.Show("CScan is not connected to a cells Cable.  Please connect a cells cable to this CSCAN to run a test.");
                     return;
                 }
+                    // check if we have the right cells cable for multiple work orders on one cscan...
+                else if (MWO2 != "" && MWO3 == "" && GlobalVars.CScanData[station].CCID != 3)
+                {
+                    // we need to make sure the master has a 2x11 to continue
+                    MessageBox.Show("You have two work orders assocaited with the master CScan, but do not have a 2X11 cable connected to it.  In order to record two work orders with one CScan you must use a 2X11 cable.");
+                    return;
+                }
+                else if (MWO2 != "" && MWO3 != "" && GlobalVars.CScanData[station].CCID != 4)
+                {
+                    // we need to make sure the master has a 2x11 to continue
+                    MessageBox.Show("You have three work orders assocaited with the master CScan, but do not have a 3X7 cable connected to it.  In order to record three work orders with one CScan you must use a 3X7 cable.");
+                    return;
+                }
+                else if (MWO2 == "" && GlobalVars.CScanData[station].CCID == 3)
+                {
+                    // warn the user that if they use a 2X11 cable with only one work order that the data associated with the second battery will be lost
+                    DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "Are you sure you want to continue? You have one work order assocaited with the master CScan, but have a 2X11 cable connected to it.  In order to record the data from all 22 channels you will need to add an additional workorder to this station.", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
+                    if (dialogResult == DialogResult.No)
+                    {
+                        return;
+                    }
+                }
+                else if ((MWO2 == "" || MWO3 == "") && GlobalVars.CScanData[station].CCID == 4)
+                {
+                    // warn the user that if they use a 3x7 cable with only one or two work orders that the data associated with the second or third battery will be lost
+                    DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "Are you sure you want to continue? You have less than 3 work orders assocaited with the master CScan, but have a 3X7 cable connected to it.  In order to record the data from all 21 channels you will need to add an additional workorder(s) to this station.", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
+                    if (dialogResult == DialogResult.No)
+                    {
+                        return;
+                    }
+                }
+                
+                
+                //2x11 case
+                if (GlobalVars.CScanData[station].CCID == 3 && (int)pci.Rows[station][3] != (GlobalVars.CScanData[station].cellsToDisplay/2))
+                {
+                    // warn the user that the number of cells set in the database does not match the work order...
+                    DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The number of cells the battery contains does not match the cells cable currently being used.  Do you want to continue?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
+                    if (dialogResult == DialogResult.No)
+                    {
+                        return;
+                    }
+                }
+                //3X7 case
+                if (GlobalVars.CScanData[station].CCID == 3 && (int)pci.Rows[station][3] != (GlobalVars.CScanData[station].cellsToDisplay / 3))
+                {
+                    // warn the user that the number of cells set in the database does not match the work order...
+                    DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The number of cells the battery contains does not match the cells cable currently being used.  Do you want to continue?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
+                    if (dialogResult == DialogResult.No)
+                    {
+                        return;
+                    }
+                }
+                //general case
+                else if (pci.Rows[station][1].ToString().Contains("NiCd") && (int)pci.Rows[station][3] != GlobalVars.CScanData[station].cellsToDisplay)
+                {
+                    // warn the user that the number of cells set in the database does not match the work order...
+                    DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The number of cells the battery contains does not match the cells cable currently being used.  Do you want to continue?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
+                    if (dialogResult == DialogResult.No)
+                    {
+                        return;
+                    }
+                }
 
                 // may also need to check some of this for the slave
-                if (MasterSlaveTest)
+                else if (MasterSlaveTest)
                 {
                     if ((string)d.Rows[slaveRow][1] == "")
                     {
@@ -160,28 +245,150 @@ namespace NewBTASProto
                         MessageBox.Show("Slave CScan is not currently connected.  Please Check Connection.");
                         return;
                     }
-                    else if (GlobalVars.CScanData[station].cellCableType == "NONE")
+                    else if (GlobalVars.CScanData[slaveRow].cellCableType == "NONE")
                     {
                         MessageBox.Show("Slave CScan is not connected to a cells Cable.  Please connect a cells cable to this CSCAN to run a test with it.");
+                        return;
+                    }
+                    // check if we have the right cells cable for multiple work orders on one cscan...
+                    else if (SWO2 != "" && SWO3 == "" && GlobalVars.CScanData[slaveRow].CCID != 3)
+                    {
+                        // we need to make sure the master has a 2x11 to continue
+                        MessageBox.Show("You have two work orders assocaited with the slave CScan, but do not have a 2X11 cable connected to it.  In order to record two work orders with one CScan you must use a 2X11 cable.");
+                        return;
+                    }
+                    else if (SWO2 != "" && SWO3 != "" && GlobalVars.CScanData[slaveRow].CCID != 4)
+                    {
+                        // we need to make sure the master has a 2x11 to continue
+                        MessageBox.Show("You have three work orders assocaited with the slave CScan, but do not have a 3X7 cable connected to it.  In order to record three work orders with one CScan you must use a 3X7 cable.");
+                        return;
+                    }
+                    else if (SWO2 == "" && GlobalVars.CScanData[slaveRow].CCID == 3)
+                    {
+                        // warn the user that if they use a 2X11 cable with only one work order that the data associated with the second battery will be lost
+                        DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "Are you sure you want to continue? You have one work order assocaited with the slave CScan, but have a 2X11 cable connected to it.  In order to record the data from all 22 channels you will need to add an additional workorder to this station.", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
+                        if (dialogResult == DialogResult.No)
+                        {
+                            return;
+                        }
+                    }
+                    else if ((SWO2 == "" || SWO3 == "") && GlobalVars.CScanData[slaveRow].CCID == 4)
+                    {
+                        // warn the user that if they use a 3x7 cable with only one or two work orders that the data associated with the second or third battery will be lost
+                        DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "Are you sure you want to continue? You have less than 3 work orders assocaited with the slave CScan, but have a 3X7 cable connected to it.  In order to record the data from all 21 channels you will need to add an additional workorder(s) to this station.", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
+                        if (dialogResult == DialogResult.No)
+                        {
+                            return;
+                        }
+                    }
+
+                    //2x11 case
+                    if (GlobalVars.CScanData[slaveRow].CCID == 3 && (int)pci.Rows[slaveRow][3] != (GlobalVars.CScanData[slaveRow].cellsToDisplay / 2))
+                    {
+                        // warn the user that the number of cells set in the database does not match the work order...
+                        DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The number of cells the battery connected to the slave CSCAN contains does not match the cells cable currently being used.  Do you want to continue?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
+                        if (dialogResult == DialogResult.No)
+                        {
+                            return;
+                        }
+                    }
+                    //3X7 case
+                    if (GlobalVars.CScanData[slaveRow].CCID == 3 && (int)pci.Rows[slaveRow][3] != (GlobalVars.CScanData[slaveRow].cellsToDisplay / 3))
+                    {
+                        // warn the user that the number of cells set in the database does not match the work order...
+                        DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The number of cells the battery connected to the slave CSCAN contains does not match the cells cable currently being used.  Do you want to continue?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
+                        if (dialogResult == DialogResult.No)
+                        {
+                            return;
+                        }
+                    }
+                    //general case
+                    else if (pci.Rows[slaveRow][1].ToString().Contains("NiCd") && (int)pci.Rows[slaveRow][3] != GlobalVars.CScanData[slaveRow].cellsToDisplay)
+                    {
+                        // warn the user that the number of cells set in the database does not match the work order...
+                        DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The number of cells the battery connected to the slave CSCAN contains does not match the cells cable currently being used.  Do you want to continue?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
+                        if (dialogResult == DialogResult.No)
+                        {
+                            return;
+                        }
+                    }
+
+                    // check that the batteries are the same model!
+                    // need to create a db connection
+                    try
+                    {
+                        strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                        myAccessConn = new OleDbConnection(strAccessConn);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                        return;
+                    }
+
+
+                    // Now i need to pull in the model values for both work orders...
+                    // Need to think about expanding this to the possible 6 batteries....
+                    try
+                    {
+                        // get the battery serial model
+                        strAccessSelect = @"SELECT BatteryModel FROM WorkOrders WHERE WorkOrderNumber='" + MWO1 + "';";
+                        DataSet batMod1 = new DataSet();
+                        OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                        OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                        lock (dataBaseLock)
+                        {
+                            myAccessConn.Open();
+                            myDataAdapter.Fill(batMod1, "workOrder");
+                            myAccessConn.Close();
+                        }
+                        // get the battery serial model
+                        strAccessSelect = @"SELECT BatteryModel FROM WorkOrders WHERE WorkOrderNumber='" + SWO1 + "';";
+                        DataSet batMod2 = new DataSet();
+                        myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                        myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                        lock (dataBaseLock)
+                        {
+                            myAccessConn.Open();
+                            myDataAdapter.Fill(batMod2, "workOrder");
+                            myAccessConn.Close();
+                        }
+
+                        // we got both so let's compare!
+                        if (batMod1.Tables[0].Rows[0][0].ToString() != batMod2.Tables[0].Rows[0][0].ToString())
+                        {
+                            DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The Master and Slave battery models do not match. Are you sure you want to proceed with the test?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
+                            if (dialogResult == DialogResult.No)
+                            {
+                                return;
+                            }
+                        }
+
+                    }
+                    catch(Exception ex)
+                    {
+                        MessageBox.Show("Error: Failed to pull data in from the Database. \n" + ex.Message);
                         return;
                     }
                 }
 
                 //I removed this because the charger present will determine how the test is run...
                 // also need to check if an intelligent charger is connected for autoconfig
-                //else if (GlobalVars.autoConfig == true && d.Rows[station][10].ToString().Contains("ICA") && (string)d.Rows[station][2] != "As Received")
+                //else if (GlobalVars.autoConfig == true && d.Rows[station][9].ToString().Contains("ICA") && (string)d.Rows[station][2] != "As Received")
                 //{
                 //    MessageBox.Show("Auto Configure is turned on, but there is no intelligent charger detected.  Please connect an intelligent charger or turn Auto Configure off in the tools menu.");
                 //     return;
                 //}
 
-                else if (GlobalVars.autoConfig == true && (string)d.Rows[station][11] == "offline!" && (string)d.Rows[station][2] != "As Received" && d.Rows[station][10].ToString().Contains("ICA"))
+                if (GlobalVars.autoConfig == true && (bool) d.Rows[station][12] && (string)d.Rows[station][11] == "offline!" && (string)d.Rows[station][2] != "As Received" && d.Rows[station][10].ToString().Contains("ICA"))
                 {
                     MessageBox.Show("Auto Configure is turned on, but the Intelligent Charger is set to be offline.  Please turn Auto Configure off in the tools menu or set the charger to be online by pressing the following key sequence on the charger: FUNC, 1, 1 and ENTER.");
                     return;
                 }
 
-                else if (((bool)d.Rows[station][8] == false || d.Rows[station][10].ToString() == "") && (string)d.Rows[station][2] != "As Received")
+                else if (((bool)d.Rows[station][8] == false || d.Rows[station][9].ToString() == "") && (string)d.Rows[station][2] != "As Received")
                 {
                     // we don't have a charger linked. Do we still want to continue...
                     MessageBox.Show("There is no charger link established.  You mush have a charger or shunt to run any test other than 'As Received'");
@@ -199,6 +406,7 @@ namespace NewBTASProto
                         criticalNum[Cstation] = true;
                         // now we need to reset the charger
                         updateD(station, 7, "Stopping Charger!");
+                        if (MasterSlaveTest) { updateD(slaveRow, 7, "Stopping Charger!"); }
                         // set KE1 to 2 ("command")
                         GlobalVars.ICSettings[Cstation].KE1 = (byte)2;
                         // set KE3 to stop
@@ -249,21 +457,20 @@ namespace NewBTASProto
                 #region if we are doing the autoconfig, let's get the charger settings in order and then loaded into the charger! (case 2 only)
 
                 // we'll tell the charger what to do! (if we have an IC and the user wants us to...)
-                if (GlobalVars.autoConfig && d.Rows[station][10].ToString().Contains("ICA") && (string)d.Rows[station][2] != "As Received")
+                if (GlobalVars.autoConfig && (bool)d.Rows[station][12] && d.Rows[station][10].ToString().Contains("ICA") && (string)d.Rows[station][2] != "As Received")
                 {
 
                     // GENERAL PROCEDURE
                     // We are going to look up the settings
                     // Tell the User to confirm the settings (later only let them directly change them
                     // Then load them into the charger
-                     
 
                     // first we need to pull in the settings from the DB
                     //  open the db and pull in the options table
                     try
                     {
                         // get the battery serial model
-                        strAccessSelect = @"SELECT * FROM WorkOrders WHERE WorkOrderNumber='" + d.Rows[station][1].ToString() + "';";
+                        strAccessSelect = @"SELECT * FROM WorkOrders WHERE WorkOrderNumber='" + MWO1 + "';";
                         DataSet workOrder = new DataSet();
                         OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
                         OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
@@ -863,7 +1070,11 @@ namespace NewBTASProto
                 #endregion
 
                 int stepNum;
+                int stepNum2 = 0;
+                int stepNum3 = 0;
                 int slaveStepNum = 0;
+                int slaveStepNum2 = 0;
+                int slaveStepNum3 = 0;
 
                 //check if this is a new test first! Also check if the this is a master slave test and the two rows are out of sink...
                 if ((string)d.Rows[station][6] == "" || (MasterSlaveTest && d.Rows[station][6].ToString() != d.Rows[slaveRow][6].ToString()))
@@ -876,7 +1087,7 @@ namespace NewBTASProto
                     //  open the db and pull in the options table
                     try
                     {
-                        strAccessSelect = @"SELECT * FROM Tests WHERE WorkOrderNumber='" + d.Rows[station][1].ToString() + "' ORDER BY StepNumber DESC;";
+                        strAccessSelect = @"SELECT * FROM Tests WHERE WorkOrderNumber='" + MWO1 + "' ORDER BY StepNumber DESC;";
                         DataSet tests = new DataSet();
                         OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
                         OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
@@ -895,6 +1106,54 @@ namespace NewBTASProto
                         else
                         {
                             stepNum = int.Parse((string)tests.Tables[0].Rows[0][4]) + 1;
+                        }
+
+                        if (MWO2 != "")
+                        {
+                            strAccessSelect = @"SELECT * FROM Tests WHERE WorkOrderNumber='" + MWO2 + "' ORDER BY StepNumber DESC;";
+                            tests = new DataSet();
+                            myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                            myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                            lock (dataBaseLock)
+                            {
+                                myAccessConn.Open();
+                                myDataAdapter.Fill(tests, "Tests");
+                                myAccessConn.Close();
+                            }
+
+                            if (tests.Tables[0].Rows.Count == 0)
+                            {
+                                stepNum2 = 1;
+                            }
+                            else
+                            {
+                                stepNum2 = int.Parse((string)tests.Tables[0].Rows[0][4]) + 1;
+                            }
+                        }
+
+                        if (MWO3 != "")
+                        {
+                            strAccessSelect = @"SELECT * FROM Tests WHERE WorkOrderNumber='" + MWO3 + "' ORDER BY StepNumber DESC;";
+                            tests = new DataSet();
+                            myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                            myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                            lock (dataBaseLock)
+                            {
+                                myAccessConn.Open();
+                                myDataAdapter.Fill(tests, "Tests");
+                                myAccessConn.Close();
+                            }
+
+                            if (tests.Tables[0].Rows.Count == 0)
+                            {
+                                stepNum3 = 1;
+                            }
+                            else
+                            {
+                                stepNum3 = int.Parse((string)tests.Tables[0].Rows[0][4]) + 1;
+                            }
                         }
 
 
@@ -916,7 +1175,7 @@ namespace NewBTASProto
                         //  open the db and pull in the options table
                         try
                         {
-                            strAccessSelect = @"SELECT * FROM Tests WHERE WorkOrderNumber='" + d.Rows[slaveRow][1].ToString() + "' ORDER BY StepNumber DESC;";
+                            strAccessSelect = @"SELECT * FROM Tests WHERE WorkOrderNumber='" + SWO1 + "' ORDER BY StepNumber DESC;";
                             DataSet tests = new DataSet();
                             OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
                             OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
@@ -935,6 +1194,54 @@ namespace NewBTASProto
                             else
                             {
                                 slaveStepNum = int.Parse((string)tests.Tables[0].Rows[0][4]) + 1;
+                            }
+
+                            if (SWO2 != "")
+                            {
+                                strAccessSelect = @"SELECT * FROM Tests WHERE WorkOrderNumber='" + SWO2 + "' ORDER BY StepNumber DESC;";
+                                tests = new DataSet();
+                                myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                                myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                                lock (dataBaseLock)
+                                {
+                                    myAccessConn.Open();
+                                    myDataAdapter.Fill(tests, "Tests");
+                                    myAccessConn.Close();
+                                }
+
+                                if (tests.Tables[0].Rows.Count == 0)
+                                {
+                                    slaveStepNum2 = 1;
+                                }
+                                else
+                                {
+                                    slaveStepNum2 = int.Parse((string)tests.Tables[0].Rows[0][4]) + 1;
+                                }
+                            }
+
+                            if (SWO3 != "")
+                            {
+                                strAccessSelect = @"SELECT * FROM Tests WHERE WorkOrderNumber='" + SWO3 + "' ORDER BY StepNumber DESC;";
+                                tests = new DataSet();
+                                myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                                myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                                lock (dataBaseLock)
+                                {
+                                    myAccessConn.Open();
+                                    myDataAdapter.Fill(tests, "Tests");
+                                    myAccessConn.Close();
+                                }
+
+                                if (tests.Tables[0].Rows.Count == 0)
+                                {
+                                    slaveStepNum3 = 1;
+                                }
+                                else
+                                {
+                                    slaveStepNum3 = int.Parse((string)tests.Tables[0].Rows[0][4]) + 1;
+                                }
                             }
 
 
@@ -968,10 +1275,10 @@ namespace NewBTASProto
                     {
                         string strUpdateCMD = "INSERT INTO Tests (WorkOrderId,WorkOrderNumber,AggrWorkOrders,StepNumber,[TestName],Readings,[Interval]," +
                             "StationNumber,Charger,DateStarted,DateCompleted,Technician,TerminalID,CellCableID,ShuntCableID,TempCableID,TerminalNumber," +
-                            "Technology,CustomNoCells,BATNUMCABLE10) "
+                            "BATNUMCABLE10) "
                             + "VALUES ('" +
                             "0" + "','" +                                                          //WorkOrderID (don't care..)
-                            d.Rows[station][1].ToString().Trim() + "','" +                         //WorkOrderNumber
+                            MWO1.Trim() + "','" +                         //WorkOrderNumber
                             "" + "','" +                                                           //AggrWorkOrders
                             stepNum.ToString("00") + "','" +                                       //StepNumber
                             d.Rows[station][2].ToString() + "','" +                                //TestName
@@ -987,8 +1294,6 @@ namespace NewBTASProto
                             GlobalVars.CScanData[station].SHCID.ToString() + "','" +               //shunt cable ID
                             GlobalVars.CScanData[station].TCAB.ToString() + "','" +                //temp cable ID
                             d.Rows[station][9].ToString() + "','" +                                //charger ID (Terminal Number)
-                            GlobalVars.CScanData[station].technology.ToString() + "','" +          //technology
-                            GlobalVars.CScanData[station].customNoCells.ToString() + "','" +       //CustomNoCells
                             GlobalVars.CScanData[station].batNumCable10.ToString() +               //BATNUMCABLE10
                             "');";
 
@@ -1000,6 +1305,80 @@ namespace NewBTASProto
                             myAccessConn.Open();
                             myAccessCommand.ExecuteNonQuery();
                             myAccessConn.Close();
+                        }
+
+                        if (MWO2 != "")
+                        {
+                            strUpdateCMD = "INSERT INTO Tests (WorkOrderId,WorkOrderNumber,AggrWorkOrders,StepNumber,[TestName],Readings,[Interval]," +
+                            "StationNumber,Charger,DateStarted,DateCompleted,Technician,TerminalID,CellCableID,ShuntCableID,TempCableID,TerminalNumber," +
+                            "BATNUMCABLE10) "
+                            + "VALUES ('" +
+                            "0" + "','" +                                                           //WorkOrderID (don't care..)
+                            MWO2.Trim() + "','" +                                                   //WorkOrderNumber
+                            "" + "','" +                                                            //AggrWorkOrders
+                            stepNum2.ToString("00") + "','" +                                       //StepNumber
+                            d.Rows[station][2].ToString() + "','" +                                 //TestName
+                            readings.ToString() + "','" +                                           //Reading
+                            (interval * 1000).ToString() + "','" +                                  //interval in msec
+                            station.ToString() + "','" +                                            // station number
+                            d.Rows[station][10].ToString() + "',#" +                                // charger type
+                            DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "#,#" +                  // start date
+                            DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "#,'" +                  // date completed
+                            comboText + "','" +                                                     // technician
+                            (GlobalVars.CScanData[station].terminalID + 216).ToString() + "','" +   //terminal ID
+                            GlobalVars.CScanData[station].CCID.ToString() + "','" +                 //cells cable ID
+                            GlobalVars.CScanData[station].SHCID.ToString() + "','" +                //shunt cable ID
+                            GlobalVars.CScanData[station].TCAB.ToString() + "','" +                 //temp cable ID
+                            d.Rows[station][9].ToString() + "','" +                                 //charger ID (Terminal Number)
+                            GlobalVars.CScanData[station].batNumCable10.ToString() +                //BATNUMCABLE10
+                            "');";
+
+
+                            myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
+
+                            lock (dataBaseLock)
+                            {
+                                myAccessConn.Open();
+                                myAccessCommand.ExecuteNonQuery();
+                                myAccessConn.Close();
+                            }
+                        }
+
+                        if (MWO3 != "")
+                        {
+                            strUpdateCMD = "INSERT INTO Tests (WorkOrderId,WorkOrderNumber,AggrWorkOrders,StepNumber,[TestName],Readings,[Interval]," +
+                            "StationNumber,Charger,DateStarted,DateCompleted,Technician,TerminalID,CellCableID,ShuntCableID,TempCableID,TerminalNumber," +
+                            "BATNUMCABLE10) "
+                            + "VALUES ('" +
+                            "0" + "','" +                                                           //WorkOrderID (don't care..)
+                            MWO3.Trim() + "','" +                                                   //WorkOrderNumber
+                            "" + "','" +                                                            //AggrWorkOrders
+                            stepNum3.ToString("00") + "','" +                                       //StepNumber
+                            d.Rows[station][2].ToString() + "','" +                                 //TestName
+                            readings.ToString() + "','" +                                           //Reading
+                            (interval * 1000).ToString() + "','" +                                  //interval in msec
+                            station.ToString() + "','" +                                            // station number
+                            d.Rows[station][10].ToString() + "',#" +                                // charger type
+                            DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "#,#" +                  // start date
+                            DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "#,'" +                  // date completed
+                            comboText + "','" +                                                     // technician
+                            (GlobalVars.CScanData[station].terminalID + 216).ToString() + "','" +   //terminal ID
+                            GlobalVars.CScanData[station].CCID.ToString() + "','" +                 //cells cable ID
+                            GlobalVars.CScanData[station].SHCID.ToString() + "','" +                //shunt cable ID
+                            GlobalVars.CScanData[station].TCAB.ToString() + "','" +                 //temp cable ID
+                            d.Rows[station][9].ToString() + "','" +                                 //charger ID (Terminal Number)
+                            GlobalVars.CScanData[station].batNumCable10.ToString() +                //BATNUMCABLE10
+                            "');";
+
+
+                            myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
+
+                            lock (dataBaseLock)
+                            {
+                                myAccessConn.Open();
+                                myAccessCommand.ExecuteNonQuery();
+                                myAccessConn.Close();
+                            }
                         }
 
                     }
@@ -1024,10 +1403,10 @@ namespace NewBTASProto
                         {
                             string strUpdateCMD = "INSERT INTO Tests (WorkOrderId,WorkOrderNumber,AggrWorkOrders,StepNumber,[TestName],Readings,[Interval]," +
                                 "StationNumber,Charger,DateStarted,DateCompleted,Technician,TerminalID,CellCableID,ShuntCableID,TempCableID,TerminalNumber," +
-                                "Technology,CustomNoCells,BATNUMCABLE10) "
+                                "BATNUMCABLE10) "
                                 + "VALUES ('" +
                                 "0" + "','" +                                                          //WorkOrderID (don't care..)
-                                d.Rows[slaveRow][1].ToString().Trim() + "','" +                         //WorkOrderNumber
+                                SWO1.Trim() + "','" +                         //WorkOrderNumber
                                 "" + "','" +                                                           //AggrWorkOrders
                                 slaveStepNum.ToString("00") + "','" +                                       //StepNumber
                                 d.Rows[slaveRow][2].ToString() + "','" +                                //TestName
@@ -1043,8 +1422,6 @@ namespace NewBTASProto
                                 GlobalVars.CScanData[slaveRow].SHCID.ToString() + "','" +               //shunt cable ID
                                 GlobalVars.CScanData[slaveRow].TCAB.ToString() + "','" +                //temp cable ID
                                 d.Rows[slaveRow][9].ToString() + "','" +                                //charger ID (Terminal Number)
-                                GlobalVars.CScanData[slaveRow].technology.ToString() + "','" +          //technology
-                                GlobalVars.CScanData[slaveRow].customNoCells.ToString() + "','" +       //CustomNoCells
                                 GlobalVars.CScanData[slaveRow].batNumCable10.ToString() +               //BATNUMCABLE10
                                 "');";
 
@@ -1056,6 +1433,80 @@ namespace NewBTASProto
                                 myAccessConn.Open();
                                 myAccessCommand.ExecuteNonQuery();
                                 myAccessConn.Close();
+                            }
+
+                            if (SWO2 != "")
+                            {
+                                strUpdateCMD = "INSERT INTO Tests (WorkOrderId,WorkOrderNumber,AggrWorkOrders,StepNumber,[TestName],Readings,[Interval]," +
+                                "StationNumber,Charger,DateStarted,DateCompleted,Technician,TerminalID,CellCableID,ShuntCableID,TempCableID,TerminalNumber," +
+                                "BATNUMCABLE10) "
+                                + "VALUES ('" +
+                                "0" + "','" +                                                           //WorkOrderID (don't care..)
+                                SWO2.Trim() + "','" +                                                   //WorkOrderNumber
+                                "" + "','" +                                                            //AggrWorkOrders
+                                slaveStepNum2.ToString("00") + "','" +                                  //StepNumber
+                                d.Rows[slaveRow][2].ToString() + "','" +                                //TestName
+                                readings.ToString() + "','" +                                           //Reading
+                                (interval * 1000).ToString() + "','" +                                  //interval in msec
+                                slaveRow.ToString() + "','" +                                           // slaveRow number
+                                d.Rows[slaveRow][10].ToString() + "',#" +                               // charger type
+                                DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "#,#" +                  // start date
+                                DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "#,'" +                  // date completed
+                                comboText + "','" +                                                     // technician
+                                (GlobalVars.CScanData[slaveRow].terminalID + 216).ToString() + "','" +  //terminal ID
+                                GlobalVars.CScanData[slaveRow].CCID.ToString() + "','" +                //cells cable ID
+                                GlobalVars.CScanData[slaveRow].SHCID.ToString() + "','" +               //shunt cable ID
+                                GlobalVars.CScanData[slaveRow].TCAB.ToString() + "','" +                //temp cable ID
+                                d.Rows[slaveRow][9].ToString() + "','" +                                //charger ID (Terminal Number)
+                                GlobalVars.CScanData[slaveRow].batNumCable10.ToString() +               //BATNUMCABLE10
+                                "');";
+
+
+                                myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
+
+                                lock (dataBaseLock)
+                                {
+                                    myAccessConn.Open();
+                                    myAccessCommand.ExecuteNonQuery();
+                                    myAccessConn.Close();
+                                }
+                            }
+
+                            if (SWO3 != "")
+                            {
+                                strUpdateCMD = "INSERT INTO Tests (WorkOrderId,WorkOrderNumber,AggrWorkOrders,StepNumber,[TestName],Readings,[Interval]," +
+                                "StationNumber,Charger,DateStarted,DateCompleted,Technician,TerminalID,CellCableID,ShuntCableID,TempCableID,TerminalNumber," +
+                                "BATNUMCABLE10) "
+                                + "VALUES ('" +
+                                "0" + "','" +                                                           //WorkOrderID (don't care..)
+                                SWO3.Trim() + "','" +                                                   //WorkOrderNumber
+                                "" + "','" +                                                            //AggrWorkOrders
+                                slaveStepNum3.ToString("00") + "','" +                                  //StepNumber
+                                d.Rows[slaveRow][2].ToString() + "','" +                                //TestName
+                                readings.ToString() + "','" +                                           //Reading
+                                (interval * 1000).ToString() + "','" +                                  //interval in msec
+                                slaveRow.ToString() + "','" +                                           // slaveRow number
+                                d.Rows[slaveRow][10].ToString() + "',#" +                               // charger type
+                                DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "#,#" +                  // start date
+                                DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "#,'" +                  // date completed
+                                comboText + "','" +                                                     // technician
+                                (GlobalVars.CScanData[slaveRow].terminalID + 216).ToString() + "','" +  //terminal ID
+                                GlobalVars.CScanData[slaveRow].CCID.ToString() + "','" +                //cells cable ID
+                                GlobalVars.CScanData[slaveRow].SHCID.ToString() + "','" +               //shunt cable ID
+                                GlobalVars.CScanData[slaveRow].TCAB.ToString() + "','" +                //temp cable ID
+                                d.Rows[slaveRow][9].ToString() + "','" +                                //charger ID (Terminal Number)
+                                GlobalVars.CScanData[slaveRow].batNumCable10.ToString() +               //BATNUMCABLE10
+                                "');";
+
+
+                                myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
+
+                                lock (dataBaseLock)
+                                {
+                                    myAccessConn.Open();
+                                    myAccessCommand.ExecuteNonQuery();
+                                    myAccessConn.Close();
+                                }
                             }
 
                         }
@@ -1083,12 +1534,136 @@ namespace NewBTASProto
                 {
                     //get the current step number from d
                     stepNum = int.Parse((string) d.Rows[station][3]);
+
+                    if (MWO2 != "")
+                    {
+                        try
+                        {
+                            strAccessSelect = @"SELECT * FROM Tests WHERE WorkOrderNumber='" + MWO2 + "' ORDER BY StepNumber DESC;";
+                            DataSet tests = new DataSet();
+                            OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                            OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                            lock (dataBaseLock)
+                            {
+                                myAccessConn.Open();
+                                myDataAdapter.Fill(tests, "Tests");
+                                myAccessConn.Close();
+                            }
+
+                            if (tests.Tables[0].Rows.Count == 0)
+                            {
+                                stepNum2 = 1;
+                            }
+                            else
+                            {
+                                stepNum2 = int.Parse((string)tests.Tables[0].Rows[0][4]) + 1;
+                            }
+
+                            if (MWO3 != "")
+                            {
+                                strAccessSelect = @"SELECT * FROM Tests WHERE WorkOrderNumber='" + MWO3 + "' ORDER BY StepNumber DESC;";
+                                tests = new DataSet();
+                                myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                                myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                                lock (dataBaseLock)
+                                {
+                                    myAccessConn.Open();
+                                    myDataAdapter.Fill(tests, "Tests");
+                                    myAccessConn.Close();
+                                }
+
+                                if (tests.Tables[0].Rows.Count == 0)
+                                {
+                                    stepNum3 = 1;
+                                }
+                                else
+                                {
+                                    stepNum3 = int.Parse((string)tests.Tables[0].Rows[0][4]) + 1;
+                                }
+                            }
+
+
+                        }
+                        catch (Exception ex)
+                        {
+                            myAccessConn.Close();
+                            MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                            updateD(station, 5, false);
+                            if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                            return;
+                        }
+                    }
+
+
+                    //do we need to do the same for the slave?
                     if (MasterSlaveTest)
                     {
                         slaveStepNum = int.Parse((string)d.Rows[slaveRow][3]);
+
+                        // Now we'll look up the current test number and increment the new step number/////////////////////////////////////////////////////
+                        //  open the db and pull in the options table
+                        try
+                        {
+                            strAccessSelect = @"SELECT * FROM Tests WHERE WorkOrderNumber='" + SWO2 + "' ORDER BY StepNumber DESC;";
+                            DataSet tests = new DataSet();
+                            OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                            OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                            lock (dataBaseLock)
+                            {
+                                myAccessConn.Open();
+                                myDataAdapter.Fill(tests, "Tests");
+                                myAccessConn.Close();
+                            }
+
+                            if (tests.Tables[0].Rows.Count == 0)
+                            {
+                                slaveStepNum2 = 1;
+                            }
+                            else
+                            {
+                                slaveStepNum2 = int.Parse((string)tests.Tables[0].Rows[0][4]) + 1;
+                            }
+
+                            if (SWO3 != "")
+                            {
+                                strAccessSelect = @"SELECT * FROM Tests WHERE WorkOrderNumber='" + SWO3 + "' ORDER BY StepNumber DESC;";
+                                tests = new DataSet();
+                                myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                                myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                                lock (dataBaseLock)
+                                {
+                                    myAccessConn.Open();
+                                    myDataAdapter.Fill(tests, "Tests");
+                                    myAccessConn.Close();
+                                }
+
+                                if (tests.Tables[0].Rows.Count == 0)
+                                {
+                                    slaveStepNum3 = 1;
+                                }
+                                else
+                                {
+                                    slaveStepNum3 = int.Parse((string)tests.Tables[0].Rows[0][4]) + 1;
+                                }
+                            }
+
+                        }
+                        catch (Exception ex)
+                        {
+                            myAccessConn.Close();
+                            MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                            updateD(station, 5, false);
+                            if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                            return;
+                        }
                     }
                 }
 
+                // We should be ready to go at this point!
                 // and indicate that the test is starting
                 updateD(station,7,"Starting Test");
                 if(MasterSlaveTest){updateD(slaveRow,7,"Starting Test");}
@@ -1106,98 +1681,284 @@ namespace NewBTASProto
 
 
                 // OK now we'll tell the charger to startup (if we need to!)/////////////////////////////////////////////////////////////////////////////////////
-                if ((string)d.Rows[station][2] == "As Received")
+                if (d.Rows[station][2].ToString() == "As Received")
                 {
                     // nothing to do! if it's an "As Received" or we are running the test on a slave charger... 
                 }
                 else if (d.Rows[station][10].ToString().Contains("ICA"))
                 {
+#region             mode test
+                    // we need to check that we are in the correct mode for the test...
+                    string temp = GlobalVars.ICData[Cstation].testMode.ToString();
+                    switch (d.Rows[station][2].ToString())
+                    {
+                        case "As Received":
+                            // we should never get here..
+                            break;
+                        case "Full Charge-6":
+                        case "Full Charge-4":
+                            if (!(temp.Contains("20") || temp.Contains("21")))
+                            {
+                                DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The charger doesn't seem to be set up for a Full Charge. Are you sure you want to proceed with the test?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
+                                if (dialogResult == DialogResult.No)
+                                {
+                                    updateD(station, 5, false);
+                                    if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                                    updateD(station, 7, "");
+                                    if (MasterSlaveTest) { updateD(slaveRow, 7, ""); }
+                                    //update the gui
+                                    this.Invoke((MethodInvoker)delegate()
+                                    {
+                                        startNewTestToolStripMenuItem.Enabled = true;
+                                        resumeTestToolStripMenuItem.Enabled = true;
+                                        stopTestToolStripMenuItem.Enabled = false;
+                                    });
+                                    return;
+                                }  // end if
+
+                            } // end if
+                            break;
+                        case "Top Charge-4":
+                        case "Top Charge-2":
+                        case "Top Charge-1":
+                            if (!(temp.Contains("10") || temp.Contains("11")))
+                            {
+                                DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The charger doesn't seem to be set up for Top Charge. Are you sure you want to proceed with the test?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
+                                if (dialogResult == DialogResult.No)
+                                {
+                                    updateD(station, 5, false);
+                                    if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                                    updateD(station, 7, "");
+                                    if (MasterSlaveTest) { updateD(slaveRow, 7, ""); }
+                                    //update the gui
+                                    this.Invoke((MethodInvoker)delegate()
+                                    {
+                                        startNewTestToolStripMenuItem.Enabled = true;
+                                        resumeTestToolStripMenuItem.Enabled = true;
+                                        stopTestToolStripMenuItem.Enabled = false;
+                                    });
+                                    return;
+                                }  // end if
+                            } // end if
+                            break;
+                        case "Constant Voltage":
+                            if (!temp.Contains("12"))
+                            {
+                                DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The charger doesn't seem to be set up for Constant Voltage. Are you sure you want to proceed with the test?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
+                                if (dialogResult == DialogResult.No)
+                                {
+                                    updateD(station, 5, false);
+                                    if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                                    updateD(station, 7, "");
+                                    if (MasterSlaveTest) { updateD(slaveRow, 7, ""); }
+                                    //update the gui
+                                    this.Invoke((MethodInvoker)delegate()
+                                    {
+                                        startNewTestToolStripMenuItem.Enabled = true;
+                                        resumeTestToolStripMenuItem.Enabled = true;
+                                        stopTestToolStripMenuItem.Enabled = false;
+                                    });
+                                    return;
+                                }  // end if
+                            } // end if
+                            break;
+                        case "Capacity-1":
+                            if (!(temp.Contains("31") || temp.Contains("32")))
+                            {
+                                DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The charger doesn't seem to be set up for a Capacity test. Are you sure you want to proceed with the test?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
+                                if (dialogResult == DialogResult.No)
+                                {
+                                    updateD(station, 5, false);
+                                    if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                                    updateD(station, 7, "");
+                                    if (MasterSlaveTest) { updateD(slaveRow, 7, ""); }
+                                    //update the gui
+                                    this.Invoke((MethodInvoker)delegate()
+                                    {
+                                        startNewTestToolStripMenuItem.Enabled = true;
+                                        resumeTestToolStripMenuItem.Enabled = true;
+                                        stopTestToolStripMenuItem.Enabled = false;
+                                    });
+                                    return;
+                                }  // end if
+                            } // end if
+                            break;
+                        case "Discharge":
+                            if (!temp.Contains("32"))
+                            {
+                                DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The charger doesn't seem to be set up for Discharge. Are you sure you want to proceed with the test?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
+                                if (dialogResult == DialogResult.No)
+                                {
+                                    updateD(station, 5, false);
+                                    if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                                    updateD(station, 7, "");
+                                    if (MasterSlaveTest) { updateD(slaveRow, 7, ""); }
+                                    //update the gui
+                                    this.Invoke((MethodInvoker)delegate()
+                                    {
+                                        startNewTestToolStripMenuItem.Enabled = true;
+                                        resumeTestToolStripMenuItem.Enabled = true;
+                                        stopTestToolStripMenuItem.Enabled = false;
+                                    });
+                                    return;
+                                }  // end if
+                            } // end if
+                            break;
+                        case "Slow Charge-14":
+                        case "Slow Charge-16":
+                            if (!(temp.Contains("10") || temp.Contains("11")))
+                            {
+                                DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The charger doesn't seem to be set up for Slow Charge. Are you sure you want to proceed with the test?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
+                                if (dialogResult == DialogResult.No)
+                                {
+                                    updateD(station, 5, false);
+                                    if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                                    updateD(station, 7, "");
+                                    if (MasterSlaveTest) { updateD(slaveRow, 7, ""); }
+                                    //update the gui
+                                    this.Invoke((MethodInvoker)delegate()
+                                    {
+                                        startNewTestToolStripMenuItem.Enabled = true;
+                                        resumeTestToolStripMenuItem.Enabled = true;
+                                        stopTestToolStripMenuItem.Enabled = false;
+                                    });
+                                    return;
+                                }  // end if
+                            } // end if
+                            break;
+                        case "Custom Chg":
+                            if (!(temp.Contains("10") || temp.Contains("11") || temp.Contains("12") || temp.Contains("20") || temp.Contains("21")))
+                            {
+                                DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The charger doesn't seem to be set up for a Custom Charge. Are you sure you want to proceed with the test?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
+                                if (dialogResult == DialogResult.No)
+                                {
+                                    updateD(station, 5, false);
+                                    if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                                    updateD(station, 7, "");
+                                    if (MasterSlaveTest) { updateD(slaveRow, 7, ""); }
+                                    //update the gui
+                                    this.Invoke((MethodInvoker)delegate()
+                                    {
+                                        startNewTestToolStripMenuItem.Enabled = true;
+                                        resumeTestToolStripMenuItem.Enabled = true;
+                                        stopTestToolStripMenuItem.Enabled = false;
+                                    });
+                                    return;
+                                }  // end if
+                            } // end if
+                            break;
+                        case "Custom Cap":
+                            if (!(temp.Contains("30") || temp.Contains("31") || temp.Contains("32")))
+                            {
+                                DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The charger doesn't seem to be set up for a Custom Capacity test. Are you sure you want to proceed with the test?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
+                                if (dialogResult == DialogResult.No)
+                                {
+                                    updateD(station, 5, false);
+                                    if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                                    updateD(station, 7, "");
+                                    if (MasterSlaveTest) { updateD(slaveRow, 7, ""); }
+                                    //update the gui
+                                    this.Invoke((MethodInvoker)delegate()
+                                    {
+                                        startNewTestToolStripMenuItem.Enabled = true;
+                                        resumeTestToolStripMenuItem.Enabled = true;
+                                        stopTestToolStripMenuItem.Enabled = false;
+                                    });
+                                    return;
+                                }  // end if
+                            } // end if
+                            break;
+                        default:
+                            break;
+                    }
+#endregion              
                     // we have an intelligent charger
-                        //make sure the charger has priority
-                        criticalNum[Cstation] = true;
+                    //make sure the charger has priority
+                    criticalNum[Cstation] = true;
 
-                        // If we are in hold and we are starting a new test we need to reset before starting!
-                        if ((string)d.Rows[station][11] != "RESET" && (string)d.Rows[station][6] == "")
-                        {
-                            // now we need to reset the charger
-                            updateD(station, 7, "Resetting Charger");
-                            if (MasterSlaveTest) { updateD(slaveRow, 7, "Resetting Charger"); }
-                            // set KE1 to 2 ("command")
-                            GlobalVars.ICSettings[Cstation].KE1 = (byte)2;
-                            // set KE3 to RESET
-                            GlobalVars.ICSettings[Cstation].KE3 = (byte)3;
-                            //Update the output string value
-                            GlobalVars.ICSettings[Cstation].UpdateOutText();
-                            //now we are going to create a thread to set KE1 back to data mode after 15 seconds
-                            for (int i = 0; i < 3; i++)
-                            {
-                                Thread.Sleep(1000);
-                                if (GlobalVars.ICData[Cstation].runStatus != "HOLD") 
-                                {
-                                    break; 
-                                }
-                            }
-                            updateD(station, 7, "Resetting Charger");
-                            if (MasterSlaveTest) { updateD(slaveRow, 7, "Resetting Charger"); }
-                            // set KE1 to 1 ("query")
-                            GlobalVars.ICSettings[Cstation].KE1 = (byte)0;
-                            //Update the output string value
-                            GlobalVars.ICSettings[Cstation].UpdateOutText();
-                            //now we are going to create a thread to set KE1 back to data mode after 15 seconds
-                            for (int i = 0; i < 15; i++)
-                            {
-                                Thread.Sleep(1000);
-                                if (GlobalVars.ICData[Cstation].runStatus != "HOLD")
-                                {
-                                    break;
-                                }
-                            }
-
-                        }
-
-                        // we are not in hold and we had a fault that we needed to clear...
-                        else if ((string)d.Rows[station][11] != "HOLD" && (string)d.Rows[station][6] != "")
-                        {
-                            // we are resuming after a fault has been corrected..
-                            // now we need to reset the charger
-                            updateD(station, 7, "Clearing Charger");
-                            if (MasterSlaveTest) { updateD(slaveRow, 7, "Clearing Charger"); }
-                            // set KE1 to 2 ("command")
-                            GlobalVars.ICSettings[Cstation].KE1 = (byte)2;
-                            // set KE3 to stop
-                            GlobalVars.ICSettings[Cstation].KE3 = (byte)0;
-                            //Update the output string value
-                            GlobalVars.ICSettings[Cstation].UpdateOutText();
-                            //now we are going to create a thread to set KE1 back to data mode after 5 seconds
-                            Thread.Sleep(5000);
-                            // set KE1 to 1 ("query")
-                            GlobalVars.ICSettings[Cstation].KE1 = (byte)0;
-                            //Update the output string value
-                            GlobalVars.ICSettings[Cstation].UpdateOutText();
-
-                        }
-                    
-
-                        updateD(station, 7, "Telling Charger to Run");
-                        if (MasterSlaveTest) { updateD(slaveRow, 7, "Telling Charger to Run"); }
+                    // If we are in hold and we are starting a new test we need to reset before starting!
+                    if ((string)d.Rows[station][11] != "RESET" && (string)d.Rows[station][6] == "")
+                    {
+                        // now we need to reset the charger
+                        updateD(station, 7, "Resetting Charger");
+                        if (MasterSlaveTest) { updateD(slaveRow, 7, "Resetting Charger"); }
                         // set KE1 to 2 ("command")
                         GlobalVars.ICSettings[Cstation].KE1 = (byte)2;
-                        // set KE3 to run
-                        GlobalVars.ICSettings[Cstation].KE3 = (byte)1;
-                        //Update the output string value
-                        GlobalVars.ICSettings[Cstation].UpdateOutText();
-                        //now we are going to create a thread to set KE1 back to data mode after 15 seconds
-                        Thread.Sleep(5000);
-                        // set KE1 to 1 ("query")
-                        GlobalVars.ICSettings[Cstation].KE1 = (byte)0;
-                        // set KE3 to 0 ("query")
+                        // set KE3 to RESET
                         GlobalVars.ICSettings[Cstation].KE3 = (byte)3;
                         //Update the output string value
                         GlobalVars.ICSettings[Cstation].UpdateOutText();
-                        Thread.Sleep(5000);
+                        //now we are going to create a thread to set KE1 back to data mode after 15 seconds
+                        for (int i = 0; i < 3; i++)
+                        {
+                            Thread.Sleep(1000);
+                            if (GlobalVars.ICData[Cstation].runStatus != "HOLD") 
+                            {
+                                break; 
+                            }
+                        }
+                        updateD(station, 7, "Resetting Charger");
+                        if (MasterSlaveTest) { updateD(slaveRow, 7, "Resetting Charger"); }
+                        // set KE1 to 1 ("query")
+                        GlobalVars.ICSettings[Cstation].KE1 = (byte)0;
+                        //Update the output string value
+                        GlobalVars.ICSettings[Cstation].UpdateOutText();
+                        //now we are going to create a thread to set KE1 back to data mode after 15 seconds
+                        for (int i = 0; i < 15; i++)
+                        {
+                            Thread.Sleep(1000);
+                            if (GlobalVars.ICData[Cstation].runStatus != "HOLD")
+                            {
+                                break;
+                            }
+                        }
 
-                        //make sure the charger has priority
-                        criticalNum[Cstation] = false;
+                    }
+
+                    // we are not in hold and we had a fault that we needed to clear...
+                    else if ((string)d.Rows[station][11] != "HOLD" && (string)d.Rows[station][6] != "")
+                    {
+                        // we are resuming after a fault has been corrected..
+                        // now we need to reset the charger
+                        updateD(station, 7, "Clearing Charger");
+                        if (MasterSlaveTest) { updateD(slaveRow, 7, "Clearing Charger"); }
+                        // set KE1 to 2 ("command")
+                        GlobalVars.ICSettings[Cstation].KE1 = (byte)2;
+                        // set KE3 to stop
+                        GlobalVars.ICSettings[Cstation].KE3 = (byte)0;
+                        //Update the output string value
+                        GlobalVars.ICSettings[Cstation].UpdateOutText();
+                        //now we are going to create a thread to set KE1 back to data mode after 5 seconds
+                        Thread.Sleep(5000);
+                        // set KE1 to 1 ("query")
+                        GlobalVars.ICSettings[Cstation].KE1 = (byte)0;
+                        //Update the output string value
+                        GlobalVars.ICSettings[Cstation].UpdateOutText();
+
+                    }
+                    
+
+                    updateD(station, 7, "Telling Charger to Run");
+                    if (MasterSlaveTest) { updateD(slaveRow, 7, "Telling Charger to Run"); }
+                    // set KE1 to 2 ("command")
+                    GlobalVars.ICSettings[Cstation].KE1 = (byte)2;
+                    // set KE3 to run
+                    GlobalVars.ICSettings[Cstation].KE3 = (byte)1;
+                    //Update the output string value
+                    GlobalVars.ICSettings[Cstation].UpdateOutText();
+                    //now we are going to create a thread to set KE1 back to data mode after 15 seconds
+                    Thread.Sleep(5000);
+                    // set KE1 to 1 ("query")
+                    GlobalVars.ICSettings[Cstation].KE1 = (byte)0;
+                    // set KE3 to 0 ("query")
+                    GlobalVars.ICSettings[Cstation].KE3 = (byte)3;
+                    //Update the output string value
+                    GlobalVars.ICSettings[Cstation].UpdateOutText();
+                    Thread.Sleep(5000);
+
+                    //make sure the charger has priority
+                    criticalNum[Cstation] = false;
+
                 }// end else if for ICs...
                 else if (d.Rows[station][10].ToString().Contains("CCA"))
                 {
@@ -1217,6 +1978,8 @@ namespace NewBTASProto
                         #region cancel block
                         if (token.IsCancellationRequested)
                         {
+
+                            
                             //clear values from d
                             updateD(station, 7, ("Cancelled"));
                             if (MasterSlaveTest) { updateD(slaveRow, 7, "Cancelled"); }
@@ -1226,6 +1989,7 @@ namespace NewBTASProto
                             //update the gui
                             this.Invoke((MethodInvoker)delegate()
                             {
+                                sendNote(station, 3, "Test Cancelled");
                                 startNewTestToolStripMenuItem.Enabled = true;
                                 resumeTestToolStripMenuItem.Enabled = true;
                                 stopTestToolStripMenuItem.Enabled = false;
@@ -1299,7 +2063,7 @@ namespace NewBTASProto
                                 "CEL01,CEL02,CEL03,CEL04,CEL05,CEL06,CEL07,CEL08,CEL09,CEL10,CEL11,CEL12,CEL13,CEL14,CEL15,CEL16,CEL17,CEL18,CEL19,CEL20,CEL21,CEL22,CEL23,CEL24," +
                                 "BT1,BT2,BT3,BT4,BT5,BT6,CGND1,CGND2,REF,GND,FV,MSV,PSV) "
                                 + "VALUES (" + station.ToString() + ",'" +                            //station number
-                                d.Rows[station][1].ToString().Trim() + "','" +                          //WorkOrderNumber
+                                MWO1.Trim() + "','" +                          //WorkOrderNumber
                                 stepNum.ToString("00") + "'," +                                            //StepNumber
                                 currentReading.ToString() + ",#" +                                     //ReadingNumber
                                 DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "#,'" +                  //date
@@ -1360,6 +2124,212 @@ namespace NewBTASProto
                                 myAccessConn.Close();
                             }
 
+                            if (MWO2 != "" && MWO3 == "")
+                            {
+                                // this is the case where the second work order is the bottom 11 cells of a 2X11 cable...
+                                strUpdateCMD = "INSERT INTO ScanData (Station,BWO,STEP,RDG,[DATE],QS1,CTR,ETIME,CUR1,CUR2,VB1,VB2,VB3,VB4," +
+                                "CEL01,CEL02,CEL03,CEL04,CEL05,CEL06,CEL07,CEL08,CEL09,CEL10,CEL11,CEL12,CEL13,CEL14,CEL15,CEL16,CEL17,CEL18,CEL19,CEL20,CEL21,CEL22,CEL23,CEL24," +
+                                "BT1,BT2,BT3,BT4,BT5,BT6,CGND1,CGND2,REF,GND,FV,MSV,PSV) "
+                                + "VALUES (" + station.ToString() + ",'" +                            //station number
+                                MWO2.Trim() + "','" +                          //WorkOrderNumber
+                                stepNum2.ToString("00") + "'," +                                            //StepNumber
+                                currentReading.ToString() + ",#" +                                     //ReadingNumber
+                                DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "#,'" +                  //date
+                                GlobalVars.CScanData[station].QS1.ToString() + "','" +                  //QS1
+                                GlobalVars.CScanData[station].CTR.ToString() + "','" +                  //CTR
+                                temp.TotalDays.ToString("0.00000") + "','" +                                      //time elapsed in days
+                                GlobalVars.CScanData[station].currentOne.ToString("0.0") + "','" +           //CUR1
+                                GlobalVars.CScanData[station].currentTwo.ToString("0.0") + "','" +           //CUR2
+                                GlobalVars.CScanData[station].VB1.ToString("0.00") + "','" +                  //VB1
+                                GlobalVars.CScanData[station].VB2.ToString("0.00") + "','" +                  //VB2
+                                GlobalVars.CScanData[station].VB3.ToString("0.00") + "','" +                  //VB3
+                                GlobalVars.CScanData[station].VB4.ToString("0.00") + "','" +                  //VB4
+                                GlobalVars.CScanData[station].orderedCells[11].ToString("0.000") + "','" +      //CEL01
+                                GlobalVars.CScanData[station].orderedCells[12].ToString("0.000") + "','" +      //CEL02
+                                GlobalVars.CScanData[station].orderedCells[13].ToString("0.000") + "','" +      //CEL03
+                                GlobalVars.CScanData[station].orderedCells[14].ToString("0.000") + "','" +      //CEL04
+                                GlobalVars.CScanData[station].orderedCells[15].ToString("0.000") + "','" +      //CEL05
+                                GlobalVars.CScanData[station].orderedCells[16].ToString("0.000") + "','" +      //CEL06
+                                GlobalVars.CScanData[station].orderedCells[17].ToString("0.000") + "','" +      //CEL07
+                                GlobalVars.CScanData[station].orderedCells[18].ToString("0.000") + "','" +      //CEL08
+                                GlobalVars.CScanData[station].orderedCells[19].ToString("0.000") + "','" +      //CEL09
+                                GlobalVars.CScanData[station].orderedCells[20].ToString("0.000") + "','" +      //CEL10
+                                GlobalVars.CScanData[station].orderedCells[21].ToString("0.000") + "','" +     //CEL11
+                                GlobalVars.CScanData[station].orderedCells[0].ToString("0.000") + "','" +     //CEL12
+                                GlobalVars.CScanData[station].orderedCells[1].ToString("0.000") + "','" +     //CEL13
+                                GlobalVars.CScanData[station].orderedCells[2].ToString("0.000") + "','" +     //CEL14
+                                GlobalVars.CScanData[station].orderedCells[3].ToString("0.000") + "','" +     //CEL15
+                                GlobalVars.CScanData[station].orderedCells[4].ToString("0.000") + "','" +     //CEL16
+                                GlobalVars.CScanData[station].orderedCells[5].ToString("0.000") + "','" +     //CEL17
+                                GlobalVars.CScanData[station].orderedCells[6].ToString("0.000") + "','" +     //CEL18
+                                GlobalVars.CScanData[station].orderedCells[7].ToString("0.000") + "','" +     //CEL19
+                                GlobalVars.CScanData[station].orderedCells[8].ToString("0.000") + "','" +     //CEL20
+                                GlobalVars.CScanData[station].orderedCells[9].ToString("0.000") + "','" +     //CEL21
+                                GlobalVars.CScanData[station].orderedCells[10].ToString("0.000") + "','" +     //CEL22
+                                GlobalVars.CScanData[station].orderedCells[22].ToString("0.000") + "','" +     //CEL23
+                                GlobalVars.CScanData[station].orderedCells[23].ToString("0.000") + "','" +     //CEL24
+                                GlobalVars.CScanData[station].TP1.ToString("0.0") + "','" +                  //TP1
+                                GlobalVars.CScanData[station].TP2.ToString("0.0") + "','" +                  //TP2
+                                GlobalVars.CScanData[station].TP3.ToString("0.0") + "','" +                  //TP3
+                                GlobalVars.CScanData[station].TP4.ToString("0.0") + "','" +                  //TP4
+                                GlobalVars.CScanData[station].TP5.ToString("0.0") + "','" +                  //TP5
+                                "0.0" + "','" +                                                         //TP6
+                                GlobalVars.CScanData[station].cellGND1.ToString("0.000") + "','" +             //CGND1
+                                GlobalVars.CScanData[station].cellGND2.ToString("0.000") + "','" +             //CGND2
+                                GlobalVars.CScanData[station].ref95V.ToString("0.000") + "','" +               //ref
+                                GlobalVars.CScanData[station].ch0GND.ToString("0.000") + "','" +               //GND
+                                GlobalVars.CScanData[station].plus5V.ToString("0.000") + "','" +              //FV
+                                GlobalVars.CScanData[station].minus15.ToString("0.00") + "','" +              //MSV
+                                GlobalVars.CScanData[station].plus15.ToString("0.00") +                       //PSV
+                                "');";
+
+                                myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
+
+                                lock (dataBaseLock)
+                                {
+                                    myAccessConn.Open();
+                                    myAccessCommand.ExecuteNonQuery();
+                                    myAccessConn.Close();
+                                }
+                            }
+                            else if (MWO2 != "")
+                            {
+                                // this is the case where the second work order is the middle 7 cells of a 3X7 cable...
+                                strUpdateCMD = "INSERT INTO ScanData (Station,BWO,STEP,RDG,[DATE],QS1,CTR,ETIME,CUR1,CUR2,VB1,VB2,VB3,VB4," +
+                                "CEL01,CEL02,CEL03,CEL04,CEL05,CEL06,CEL07,CEL08,CEL09,CEL10,CEL11,CEL12,CEL13,CEL14,CEL15,CEL16,CEL17,CEL18,CEL19,CEL20,CEL21,CEL22,CEL23,CEL24," +
+                                "BT1,BT2,BT3,BT4,BT5,BT6,CGND1,CGND2,REF,GND,FV,MSV,PSV) "
+                                + "VALUES (" + station.ToString() + ",'" +                            //station number
+                                MWO2.Trim() + "','" +                          //WorkOrderNumber
+                                stepNum2.ToString("00") + "'," +                                            //StepNumber
+                                currentReading.ToString() + ",#" +                                     //ReadingNumber
+                                DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "#,'" +                  //date
+                                GlobalVars.CScanData[station].QS1.ToString() + "','" +                  //QS1
+                                GlobalVars.CScanData[station].CTR.ToString() + "','" +                  //CTR
+                                temp.TotalDays.ToString("0.00000") + "','" +                                      //time elapsed in days
+                                GlobalVars.CScanData[station].currentOne.ToString("0.0") + "','" +           //CUR1
+                                GlobalVars.CScanData[station].currentTwo.ToString("0.0") + "','" +           //CUR2
+                                GlobalVars.CScanData[station].VB1.ToString("0.00") + "','" +                  //VB1
+                                GlobalVars.CScanData[station].VB2.ToString("0.00") + "','" +                  //VB2
+                                GlobalVars.CScanData[station].VB3.ToString("0.00") + "','" +                  //VB3
+                                GlobalVars.CScanData[station].VB4.ToString("0.00") + "','" +                  //VB4
+                                GlobalVars.CScanData[station].orderedCells[7].ToString("0.000") + "','" +      //CEL01
+                                GlobalVars.CScanData[station].orderedCells[8].ToString("0.000") + "','" +      //CEL02
+                                GlobalVars.CScanData[station].orderedCells[9].ToString("0.000") + "','" +      //CEL03
+                                GlobalVars.CScanData[station].orderedCells[10].ToString("0.000") + "','" +      //CEL04
+                                GlobalVars.CScanData[station].orderedCells[11].ToString("0.000") + "','" +      //CEL05
+                                GlobalVars.CScanData[station].orderedCells[12].ToString("0.000") + "','" +      //CEL06
+                                GlobalVars.CScanData[station].orderedCells[13].ToString("0.000") + "','" +      //CEL07
+                                GlobalVars.CScanData[station].orderedCells[14].ToString("0.000") + "','" +      //CEL08
+                                GlobalVars.CScanData[station].orderedCells[15].ToString("0.000") + "','" +      //CEL09
+                                GlobalVars.CScanData[station].orderedCells[16].ToString("0.000") + "','" +      //CEL10
+                                GlobalVars.CScanData[station].orderedCells[17].ToString("0.000") + "','" +     //CEL11
+                                GlobalVars.CScanData[station].orderedCells[18].ToString("0.000") + "','" +     //CEL12
+                                GlobalVars.CScanData[station].orderedCells[19].ToString("0.000") + "','" +     //CEL13
+                                GlobalVars.CScanData[station].orderedCells[20].ToString("0.000") + "','" +     //CEL14
+                                GlobalVars.CScanData[station].orderedCells[21].ToString("0.000") + "','" +     //CEL15
+                                GlobalVars.CScanData[station].orderedCells[22].ToString("0.000") + "','" +     //CEL16
+                                GlobalVars.CScanData[station].orderedCells[23].ToString("0.000") + "','" +     //CEL17
+                                GlobalVars.CScanData[station].orderedCells[0].ToString("0.000") + "','" +     //CEL18
+                                GlobalVars.CScanData[station].orderedCells[1].ToString("0.000") + "','" +     //CEL19
+                                GlobalVars.CScanData[station].orderedCells[2].ToString("0.000") + "','" +     //CEL20
+                                GlobalVars.CScanData[station].orderedCells[3].ToString("0.000") + "','" +     //CEL21
+                                GlobalVars.CScanData[station].orderedCells[4].ToString("0.000") + "','" +     //CEL22
+                                GlobalVars.CScanData[station].orderedCells[5].ToString("0.000") + "','" +     //CEL23
+                                GlobalVars.CScanData[station].orderedCells[6].ToString("0.000") + "','" +     //CEL24
+                                GlobalVars.CScanData[station].TP1.ToString("0.0") + "','" +                  //TP1
+                                GlobalVars.CScanData[station].TP2.ToString("0.0") + "','" +                  //TP2
+                                GlobalVars.CScanData[station].TP3.ToString("0.0") + "','" +                  //TP3
+                                GlobalVars.CScanData[station].TP4.ToString("0.0") + "','" +                  //TP4
+                                GlobalVars.CScanData[station].TP5.ToString("0.0") + "','" +                  //TP5
+                                "0.0" + "','" +                                                         //TP6
+                                GlobalVars.CScanData[station].cellGND1.ToString("0.000") + "','" +             //CGND1
+                                GlobalVars.CScanData[station].cellGND2.ToString("0.000") + "','" +             //CGND2
+                                GlobalVars.CScanData[station].ref95V.ToString("0.000") + "','" +               //ref
+                                GlobalVars.CScanData[station].ch0GND.ToString("0.000") + "','" +               //GND
+                                GlobalVars.CScanData[station].plus5V.ToString("0.000") + "','" +              //FV
+                                GlobalVars.CScanData[station].minus15.ToString("0.00") + "','" +              //MSV
+                                GlobalVars.CScanData[station].plus15.ToString("0.00") +                       //PSV
+                                "');";
+
+                                myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
+
+                                lock (dataBaseLock)
+                                {
+                                    myAccessConn.Open();
+                                    myAccessCommand.ExecuteNonQuery();
+                                    myAccessConn.Close();
+                                }
+                            }
+
+                            if (MWO3 != "")
+                            {
+                                // this is the case where the third work order is the last 7 cells of a 3X7 cable...
+                                strUpdateCMD = "INSERT INTO ScanData (Station,BWO,STEP,RDG,[DATE],QS1,CTR,ETIME,CUR1,CUR2,VB1,VB2,VB3,VB4," +
+                                "CEL01,CEL02,CEL03,CEL04,CEL05,CEL06,CEL07,CEL08,CEL09,CEL10,CEL11,CEL12,CEL13,CEL14,CEL15,CEL16,CEL17,CEL18,CEL19,CEL20,CEL21,CEL22,CEL23,CEL24," +
+                                "BT1,BT2,BT3,BT4,BT5,BT6,CGND1,CGND2,REF,GND,FV,MSV,PSV) "
+                                + "VALUES (" + station.ToString() + ",'" +                            //station number
+                                MWO3.Trim() + "','" +                          //WorkOrderNumber
+                                stepNum3.ToString("00") + "'," +                                            //StepNumber
+                                currentReading.ToString() + ",#" +                                     //ReadingNumber
+                                DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "#,'" +                  //date
+                                GlobalVars.CScanData[station].QS1.ToString() + "','" +                  //QS1
+                                GlobalVars.CScanData[station].CTR.ToString() + "','" +                  //CTR
+                                temp.TotalDays.ToString("0.00000") + "','" +                                      //time elapsed in days
+                                GlobalVars.CScanData[station].currentOne.ToString("0.0") + "','" +           //CUR1
+                                GlobalVars.CScanData[station].currentTwo.ToString("0.0") + "','" +           //CUR2
+                                GlobalVars.CScanData[station].VB1.ToString("0.00") + "','" +                  //VB1
+                                GlobalVars.CScanData[station].VB2.ToString("0.00") + "','" +                  //VB2
+                                GlobalVars.CScanData[station].VB3.ToString("0.00") + "','" +                  //VB3
+                                GlobalVars.CScanData[station].VB4.ToString("0.00") + "','" +                  //VB4
+                                GlobalVars.CScanData[station].orderedCells[14].ToString("0.000") + "','" +      //CEL01
+                                GlobalVars.CScanData[station].orderedCells[15].ToString("0.000") + "','" +      //CEL02
+                                GlobalVars.CScanData[station].orderedCells[16].ToString("0.000") + "','" +      //CEL03
+                                GlobalVars.CScanData[station].orderedCells[17].ToString("0.000") + "','" +      //CEL04
+                                GlobalVars.CScanData[station].orderedCells[18].ToString("0.000") + "','" +      //CEL05
+                                GlobalVars.CScanData[station].orderedCells[19].ToString("0.000") + "','" +      //CEL06
+                                GlobalVars.CScanData[station].orderedCells[20].ToString("0.000") + "','" +      //CEL07
+                                GlobalVars.CScanData[station].orderedCells[21].ToString("0.000") + "','" +      //CEL08
+                                GlobalVars.CScanData[station].orderedCells[22].ToString("0.000") + "','" +      //CEL09
+                                GlobalVars.CScanData[station].orderedCells[23].ToString("0.000") + "','" +      //CEL10
+                                GlobalVars.CScanData[station].orderedCells[0].ToString("0.000") + "','" +     //CEL11
+                                GlobalVars.CScanData[station].orderedCells[1].ToString("0.000") + "','" +     //CEL12
+                                GlobalVars.CScanData[station].orderedCells[2].ToString("0.000") + "','" +     //CEL13
+                                GlobalVars.CScanData[station].orderedCells[3].ToString("0.000") + "','" +     //CEL14
+                                GlobalVars.CScanData[station].orderedCells[4].ToString("0.000") + "','" +     //CEL15
+                                GlobalVars.CScanData[station].orderedCells[5].ToString("0.000") + "','" +     //CEL16
+                                GlobalVars.CScanData[station].orderedCells[6].ToString("0.000") + "','" +     //CEL17
+                                GlobalVars.CScanData[station].orderedCells[7].ToString("0.000") + "','" +     //CEL18
+                                GlobalVars.CScanData[station].orderedCells[8].ToString("0.000") + "','" +     //CEL19
+                                GlobalVars.CScanData[station].orderedCells[9].ToString("0.000") + "','" +     //CEL20
+                                GlobalVars.CScanData[station].orderedCells[10].ToString("0.000") + "','" +     //CEL21
+                                GlobalVars.CScanData[station].orderedCells[11].ToString("0.000") + "','" +     //CEL22
+                                GlobalVars.CScanData[station].orderedCells[12].ToString("0.000") + "','" +     //CEL23
+                                GlobalVars.CScanData[station].orderedCells[13].ToString("0.000") + "','" +     //CEL24
+                                GlobalVars.CScanData[station].TP1.ToString("0.0") + "','" +                  //TP1
+                                GlobalVars.CScanData[station].TP2.ToString("0.0") + "','" +                  //TP2
+                                GlobalVars.CScanData[station].TP3.ToString("0.0") + "','" +                  //TP3
+                                GlobalVars.CScanData[station].TP4.ToString("0.0") + "','" +                  //TP4
+                                GlobalVars.CScanData[station].TP5.ToString("0.0") + "','" +                  //TP5
+                                "0.0" + "','" +                                                         //TP6
+                                GlobalVars.CScanData[station].cellGND1.ToString("0.000") + "','" +             //CGND1
+                                GlobalVars.CScanData[station].cellGND2.ToString("0.000") + "','" +             //CGND2
+                                GlobalVars.CScanData[station].ref95V.ToString("0.000") + "','" +               //ref
+                                GlobalVars.CScanData[station].ch0GND.ToString("0.000") + "','" +               //GND
+                                GlobalVars.CScanData[station].plus5V.ToString("0.000") + "','" +              //FV
+                                GlobalVars.CScanData[station].minus15.ToString("0.00") + "','" +              //MSV
+                                GlobalVars.CScanData[station].plus15.ToString("0.00") +                       //PSV
+                                "');";
+
+                                myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
+
+                                lock (dataBaseLock)
+                                {
+                                    myAccessConn.Open();
+                                    myAccessCommand.ExecuteNonQuery();
+                                    myAccessConn.Close();
+                                }
+                            }
+
                             //also insert the slave reading is need be...
                             if (MasterSlaveTest)
                             {
@@ -1368,15 +2338,15 @@ namespace NewBTASProto
                                     "CEL01,CEL02,CEL03,CEL04,CEL05,CEL06,CEL07,CEL08,CEL09,CEL10,CEL11,CEL12,CEL13,CEL14,CEL15,CEL16,CEL17,CEL18,CEL19,CEL20,CEL21,CEL22,CEL23,CEL24," +
                                     "BT1,BT2,BT3,BT4,BT5,BT6,CGND1,CGND2,REF,GND,FV,MSV,PSV) "
                                     + "VALUES (" + slaveRow.ToString() + ",'" +                            //slaveRow number
-                                    d.Rows[slaveRow][1].ToString().Trim() + "','" +                          //WorkOrderNumber
+                                    SWO1.Trim() + "','" +                          //WorkOrderNumber
                                     slaveStepNum.ToString("00") + "'," +                                            //StepNumber
                                     currentReading.ToString() + ",#" +                                     //ReadingNumber
                                     DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "#,'" +                  //date
                                     GlobalVars.CScanData[slaveRow].QS1.ToString() + "','" +                  //QS1
                                     GlobalVars.CScanData[slaveRow].CTR.ToString() + "','" +                  //CTR
                                     temp.TotalDays.ToString("0.00000") + "','" +                                      //time elapsed in days
-                                    GlobalVars.CScanData[slaveRow].currentOne.ToString("0.0") + "','" +           //CUR1
-                                    GlobalVars.CScanData[slaveRow].currentTwo.ToString("0.0") + "','" +           //CUR2
+                                    GlobalVars.CScanData[station].currentOne.ToString("0.0") + "','" +           //CUR1  (pulled from master CSCAN)
+                                    GlobalVars.CScanData[station].currentTwo.ToString("0.0") + "','" +           //CUR2  
                                     GlobalVars.CScanData[slaveRow].VB1.ToString("0.00") + "','" +                  //VB1
                                     GlobalVars.CScanData[slaveRow].VB2.ToString("0.00") + "','" +                  //VB2
                                     GlobalVars.CScanData[slaveRow].VB3.ToString("0.00") + "','" +                  //VB3
@@ -1405,11 +2375,11 @@ namespace NewBTASProto
                                     GlobalVars.CScanData[slaveRow].orderedCells[21].ToString("0.000") + "','" +     //CEL22
                                     GlobalVars.CScanData[slaveRow].orderedCells[22].ToString("0.000") + "','" +     //CEL23
                                     GlobalVars.CScanData[slaveRow].orderedCells[23].ToString("0.000") + "','" +     //CEL24
-                                    GlobalVars.CScanData[slaveRow].TP1.ToString("0.0") + "','" +                  //TP1
-                                    GlobalVars.CScanData[slaveRow].TP2.ToString("0.0") + "','" +                  //TP2
-                                    GlobalVars.CScanData[slaveRow].TP3.ToString("0.0") + "','" +                  //TP3
-                                    GlobalVars.CScanData[slaveRow].TP4.ToString("0.0") + "','" +                  //TP4
-                                    GlobalVars.CScanData[slaveRow].TP5.ToString("0.0") + "','" +                  //TP5
+                                    GlobalVars.CScanData[station].TP1.ToString("0.0") + "','" +                  //TP1  (pulled from master CSCAN)
+                                    GlobalVars.CScanData[station].TP2.ToString("0.0") + "','" +                  //TP2  (pulled from master CSCAN)
+                                    GlobalVars.CScanData[station].TP3.ToString("0.0") + "','" +                  //TP3  (pulled from master CSCAN)
+                                    GlobalVars.CScanData[station].TP4.ToString("0.0") + "','" +                  //TP4  (pulled from master CSCAN)
+                                    GlobalVars.CScanData[station].TP5.ToString("0.0") + "','" +                  //TP5  (pulled from master CSCAN)
                                     "0.0" + "','" +                                                         //TP6
                                     GlobalVars.CScanData[slaveRow].cellGND1.ToString("0.000") + "','" +             //CGND1
                                     GlobalVars.CScanData[slaveRow].cellGND2.ToString("0.000") + "','" +             //CGND2
@@ -1427,9 +2397,216 @@ namespace NewBTASProto
                                     myAccessConn.Open();
                                     myAccessCommand.ExecuteNonQuery();
                                     myAccessConn.Close();
+                                } // end lock
+
+                                if (SWO2 != "" && SWO3 == "")
+                                {
+                                    // this is the case where the second work order is the bottom 11 cells of a 2X11 cable...
+                                    strUpdateCMD = "INSERT INTO ScanData (Station,BWO,STEP,RDG,[DATE],QS1,CTR,ETIME,CUR1,CUR2,VB1,VB2,VB3,VB4," +
+                                        "CEL01,CEL02,CEL03,CEL04,CEL05,CEL06,CEL07,CEL08,CEL09,CEL10,CEL11,CEL12,CEL13,CEL14,CEL15,CEL16,CEL17,CEL18,CEL19,CEL20,CEL21,CEL22,CEL23,CEL24," +
+                                        "BT1,BT2,BT3,BT4,BT5,BT6,CGND1,CGND2,REF,GND,FV,MSV,PSV) "
+                                        + "VALUES (" + station.ToString() + ",'" +                            //station number
+                                        SWO2.Trim() + "','" +                          //WorkOrderNumber
+                                        slaveStepNum2.ToString("00") + "'," +                                            //StepNumber
+                                        currentReading.ToString() + ",#" +                                     //ReadingNumber
+                                        DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "#,'" +                  //date
+                                        GlobalVars.CScanData[station].QS1.ToString() + "','" +                  //QS1
+                                        GlobalVars.CScanData[station].CTR.ToString() + "','" +                  //CTR
+                                        temp.TotalDays.ToString("0.00000") + "','" +                                      //time elapsed in days
+                                        GlobalVars.CScanData[station].currentOne.ToString("0.0") + "','" +           //CUR1
+                                        GlobalVars.CScanData[station].currentTwo.ToString("0.0") + "','" +           //CUR2
+                                        GlobalVars.CScanData[slaveRow].VB1.ToString("0.00") + "','" +                  //VB1
+                                        GlobalVars.CScanData[slaveRow].VB2.ToString("0.00") + "','" +                  //VB2
+                                        GlobalVars.CScanData[slaveRow].VB3.ToString("0.00") + "','" +                  //VB3
+                                        GlobalVars.CScanData[slaveRow].VB4.ToString("0.00") + "','" +                  //VB4
+                                        GlobalVars.CScanData[slaveRow].orderedCells[11].ToString("0.000") + "','" +      //CEL01
+                                        GlobalVars.CScanData[slaveRow].orderedCells[12].ToString("0.000") + "','" +      //CEL02
+                                        GlobalVars.CScanData[slaveRow].orderedCells[13].ToString("0.000") + "','" +      //CEL03
+                                        GlobalVars.CScanData[slaveRow].orderedCells[14].ToString("0.000") + "','" +      //CEL04
+                                        GlobalVars.CScanData[slaveRow].orderedCells[15].ToString("0.000") + "','" +      //CEL05
+                                        GlobalVars.CScanData[slaveRow].orderedCells[16].ToString("0.000") + "','" +      //CEL06
+                                        GlobalVars.CScanData[slaveRow].orderedCells[17].ToString("0.000") + "','" +      //CEL07
+                                        GlobalVars.CScanData[slaveRow].orderedCells[18].ToString("0.000") + "','" +      //CEL08
+                                        GlobalVars.CScanData[slaveRow].orderedCells[19].ToString("0.000") + "','" +      //CEL09
+                                        GlobalVars.CScanData[slaveRow].orderedCells[20].ToString("0.000") + "','" +      //CEL10
+                                        GlobalVars.CScanData[slaveRow].orderedCells[21].ToString("0.000") + "','" +     //CEL11
+                                        GlobalVars.CScanData[slaveRow].orderedCells[0].ToString("0.000") + "','" +     //CEL12
+                                        GlobalVars.CScanData[slaveRow].orderedCells[1].ToString("0.000") + "','" +     //CEL13
+                                        GlobalVars.CScanData[slaveRow].orderedCells[2].ToString("0.000") + "','" +     //CEL14
+                                        GlobalVars.CScanData[slaveRow].orderedCells[3].ToString("0.000") + "','" +     //CEL15
+                                        GlobalVars.CScanData[slaveRow].orderedCells[4].ToString("0.000") + "','" +     //CEL16
+                                        GlobalVars.CScanData[slaveRow].orderedCells[5].ToString("0.000") + "','" +     //CEL17
+                                        GlobalVars.CScanData[slaveRow].orderedCells[6].ToString("0.000") + "','" +     //CEL18
+                                        GlobalVars.CScanData[slaveRow].orderedCells[7].ToString("0.000") + "','" +     //CEL19
+                                        GlobalVars.CScanData[slaveRow].orderedCells[8].ToString("0.000") + "','" +     //CEL20
+                                        GlobalVars.CScanData[slaveRow].orderedCells[9].ToString("0.000") + "','" +     //CEL21
+                                        GlobalVars.CScanData[slaveRow].orderedCells[10].ToString("0.000") + "','" +     //CEL22
+                                        GlobalVars.CScanData[slaveRow].orderedCells[22].ToString("0.000") + "','" +     //CEL23
+                                        GlobalVars.CScanData[slaveRow].orderedCells[23].ToString("0.000") + "','" +     //CEL24
+                                        GlobalVars.CScanData[station].TP1.ToString("0.0") + "','" +                  //TP1
+                                        GlobalVars.CScanData[station].TP2.ToString("0.0") + "','" +                  //TP2
+                                        GlobalVars.CScanData[station].TP3.ToString("0.0") + "','" +                  //TP3
+                                        GlobalVars.CScanData[station].TP4.ToString("0.0") + "','" +                  //TP4
+                                        GlobalVars.CScanData[station].TP5.ToString("0.0") + "','" +                  //TP5
+                                        "0.0" + "','" +                                                         //TP6
+                                        GlobalVars.CScanData[slaveRow].cellGND1.ToString("0.000") + "','" +             //CGND1
+                                        GlobalVars.CScanData[slaveRow].cellGND2.ToString("0.000") + "','" +             //CGND2
+                                        GlobalVars.CScanData[slaveRow].ref95V.ToString("0.000") + "','" +               //ref
+                                        GlobalVars.CScanData[slaveRow].ch0GND.ToString("0.000") + "','" +               //GND
+                                        GlobalVars.CScanData[slaveRow].plus5V.ToString("0.000") + "','" +              //FV
+                                        GlobalVars.CScanData[slaveRow].minus15.ToString("0.00") + "','" +              //MSV
+                                        GlobalVars.CScanData[slaveRow].plus15.ToString("0.00") +                       //PSV
+                                        "');";
+
+                                    myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
+
+                                    lock (dataBaseLock)
+                                    {
+                                        myAccessConn.Open();
+                                        myAccessCommand.ExecuteNonQuery();
+                                        myAccessConn.Close();
+                                    }
+                                }
+                                else if (SWO2 != "")
+                                {
+                                    // this is the case where the second work order is the middle 7 cells of a 3X7 cable...
+                                    strUpdateCMD = "INSERT INTO ScanData (Station,BWO,STEP,RDG,[DATE],QS1,CTR,ETIME,CUR1,CUR2,VB1,VB2,VB3,VB4," +
+                                    "CEL01,CEL02,CEL03,CEL04,CEL05,CEL06,CEL07,CEL08,CEL09,CEL10,CEL11,CEL12,CEL13,CEL14,CEL15,CEL16,CEL17,CEL18,CEL19,CEL20,CEL21,CEL22,CEL23,CEL24," +
+                                    "BT1,BT2,BT3,BT4,BT5,BT6,CGND1,CGND2,REF,GND,FV,MSV,PSV) "
+                                    + "VALUES (" + slaveRow.ToString() + ",'" +                            //station number
+                                    SWO2.Trim() + "','" +                          //WorkOrderNumber
+                                    slaveStepNum2.ToString("00") + "'," +                                            //StepNumber
+                                    currentReading.ToString() + ",#" +                                     //ReadingNumber
+                                    DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "#,'" +                  //date
+                                    GlobalVars.CScanData[slaveRow].QS1.ToString() + "','" +                  //QS1
+                                    GlobalVars.CScanData[slaveRow].CTR.ToString() + "','" +                  //CTR
+                                    temp.TotalDays.ToString("0.00000") + "','" +                                      //time elapsed in days
+                                    GlobalVars.CScanData[station].currentOne.ToString("0.0") + "','" +           //CUR1
+                                    GlobalVars.CScanData[station].currentTwo.ToString("0.0") + "','" +           //CUR2
+                                    GlobalVars.CScanData[slaveRow].VB1.ToString("0.00") + "','" +                  //VB1
+                                    GlobalVars.CScanData[slaveRow].VB2.ToString("0.00") + "','" +                  //VB2
+                                    GlobalVars.CScanData[slaveRow].VB3.ToString("0.00") + "','" +                  //VB3
+                                    GlobalVars.CScanData[slaveRow].VB4.ToString("0.00") + "','" +                  //VB4
+                                    GlobalVars.CScanData[slaveRow].orderedCells[7].ToString("0.000") + "','" +      //CEL01
+                                    GlobalVars.CScanData[slaveRow].orderedCells[8].ToString("0.000") + "','" +      //CEL02
+                                    GlobalVars.CScanData[slaveRow].orderedCells[9].ToString("0.000") + "','" +      //CEL03
+                                    GlobalVars.CScanData[slaveRow].orderedCells[10].ToString("0.000") + "','" +      //CEL04
+                                    GlobalVars.CScanData[slaveRow].orderedCells[11].ToString("0.000") + "','" +      //CEL05
+                                    GlobalVars.CScanData[slaveRow].orderedCells[12].ToString("0.000") + "','" +      //CEL06
+                                    GlobalVars.CScanData[slaveRow].orderedCells[13].ToString("0.000") + "','" +      //CEL07
+                                    GlobalVars.CScanData[slaveRow].orderedCells[14].ToString("0.000") + "','" +      //CEL08
+                                    GlobalVars.CScanData[slaveRow].orderedCells[15].ToString("0.000") + "','" +      //CEL09
+                                    GlobalVars.CScanData[slaveRow].orderedCells[16].ToString("0.000") + "','" +      //CEL10
+                                    GlobalVars.CScanData[slaveRow].orderedCells[17].ToString("0.000") + "','" +     //CEL11
+                                    GlobalVars.CScanData[slaveRow].orderedCells[18].ToString("0.000") + "','" +     //CEL12
+                                    GlobalVars.CScanData[slaveRow].orderedCells[19].ToString("0.000") + "','" +     //CEL13
+                                    GlobalVars.CScanData[slaveRow].orderedCells[20].ToString("0.000") + "','" +     //CEL14
+                                    GlobalVars.CScanData[slaveRow].orderedCells[21].ToString("0.000") + "','" +     //CEL15
+                                    GlobalVars.CScanData[slaveRow].orderedCells[22].ToString("0.000") + "','" +     //CEL16
+                                    GlobalVars.CScanData[slaveRow].orderedCells[23].ToString("0.000") + "','" +     //CEL17
+                                    GlobalVars.CScanData[slaveRow].orderedCells[0].ToString("0.000") + "','" +     //CEL18
+                                    GlobalVars.CScanData[slaveRow].orderedCells[1].ToString("0.000") + "','" +     //CEL19
+                                    GlobalVars.CScanData[slaveRow].orderedCells[2].ToString("0.000") + "','" +     //CEL20
+                                    GlobalVars.CScanData[slaveRow].orderedCells[3].ToString("0.000") + "','" +     //CEL21
+                                    GlobalVars.CScanData[slaveRow].orderedCells[4].ToString("0.000") + "','" +     //CEL22
+                                    GlobalVars.CScanData[slaveRow].orderedCells[5].ToString("0.000") + "','" +     //CEL23
+                                    GlobalVars.CScanData[slaveRow].orderedCells[6].ToString("0.000") + "','" +     //CEL24
+                                    GlobalVars.CScanData[station].TP1.ToString("0.0") + "','" +                  //TP1
+                                    GlobalVars.CScanData[station].TP2.ToString("0.0") + "','" +                  //TP2
+                                    GlobalVars.CScanData[station].TP3.ToString("0.0") + "','" +                  //TP3
+                                    GlobalVars.CScanData[station].TP4.ToString("0.0") + "','" +                  //TP4
+                                    GlobalVars.CScanData[station].TP5.ToString("0.0") + "','" +                  //TP5
+                                    "0.0" + "','" +                                                         //TP6
+                                    GlobalVars.CScanData[slaveRow].cellGND1.ToString("0.000") + "','" +             //CGND1
+                                    GlobalVars.CScanData[slaveRow].cellGND2.ToString("0.000") + "','" +             //CGND2
+                                    GlobalVars.CScanData[slaveRow].ref95V.ToString("0.000") + "','" +               //ref
+                                    GlobalVars.CScanData[slaveRow].ch0GND.ToString("0.000") + "','" +               //GND
+                                    GlobalVars.CScanData[slaveRow].plus5V.ToString("0.000") + "','" +              //FV
+                                    GlobalVars.CScanData[slaveRow].minus15.ToString("0.00") + "','" +              //MSV
+                                    GlobalVars.CScanData[slaveRow].plus15.ToString("0.00") +                       //PSV
+                                    "');";
+
+                                    myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
+
+                                    lock (dataBaseLock)
+                                    {
+                                        myAccessConn.Open();
+                                        myAccessCommand.ExecuteNonQuery();
+                                        myAccessConn.Close();
+                                    }
                                 }
 
-                            }
+                                if (MWO3 != "")
+                                {
+                                    // this is the case where the third work order is the last 7 cells of a 3X7 cable...
+                                    strUpdateCMD = "INSERT INTO ScanData (Station,BWO,STEP,RDG,[DATE],QS1,CTR,ETIME,CUR1,CUR2,VB1,VB2,VB3,VB4," +
+                                    "CEL01,CEL02,CEL03,CEL04,CEL05,CEL06,CEL07,CEL08,CEL09,CEL10,CEL11,CEL12,CEL13,CEL14,CEL15,CEL16,CEL17,CEL18,CEL19,CEL20,CEL21,CEL22,CEL23,CEL24," +
+                                    "BT1,BT2,BT3,BT4,BT5,BT6,CGND1,CGND2,REF,GND,FV,MSV,PSV) "
+                                    + "VALUES (" + slaveRow.ToString() + ",'" +                            //station number
+                                    SWO3.Trim() + "','" +                          //WorkOrderNumber
+                                    slaveStepNum3.ToString("00") + "'," +                                            //StepNumber
+                                    currentReading.ToString() + ",#" +                                     //ReadingNumber
+                                    DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "#,'" +                  //date
+                                    GlobalVars.CScanData[slaveRow].QS1.ToString() + "','" +                  //QS1
+                                    GlobalVars.CScanData[slaveRow].CTR.ToString() + "','" +                  //CTR
+                                    temp.TotalDays.ToString("0.00000") + "','" +                                      //time elapsed in days
+                                    GlobalVars.CScanData[station].currentOne.ToString("0.0") + "','" +           //CUR1
+                                    GlobalVars.CScanData[station].currentTwo.ToString("0.0") + "','" +           //CUR2
+                                    GlobalVars.CScanData[slaveRow].VB1.ToString("0.00") + "','" +                  //VB1
+                                    GlobalVars.CScanData[slaveRow].VB2.ToString("0.00") + "','" +                  //VB2
+                                    GlobalVars.CScanData[slaveRow].VB3.ToString("0.00") + "','" +                  //VB3
+                                    GlobalVars.CScanData[slaveRow].VB4.ToString("0.00") + "','" +                  //VB4
+                                    GlobalVars.CScanData[slaveRow].orderedCells[14].ToString("0.000") + "','" +      //CEL01
+                                    GlobalVars.CScanData[slaveRow].orderedCells[15].ToString("0.000") + "','" +      //CEL02
+                                    GlobalVars.CScanData[slaveRow].orderedCells[16].ToString("0.000") + "','" +      //CEL03
+                                    GlobalVars.CScanData[slaveRow].orderedCells[17].ToString("0.000") + "','" +      //CEL04
+                                    GlobalVars.CScanData[slaveRow].orderedCells[18].ToString("0.000") + "','" +      //CEL05
+                                    GlobalVars.CScanData[slaveRow].orderedCells[19].ToString("0.000") + "','" +      //CEL06
+                                    GlobalVars.CScanData[slaveRow].orderedCells[20].ToString("0.000") + "','" +      //CEL07
+                                    GlobalVars.CScanData[slaveRow].orderedCells[21].ToString("0.000") + "','" +      //CEL08
+                                    GlobalVars.CScanData[slaveRow].orderedCells[22].ToString("0.000") + "','" +      //CEL09
+                                    GlobalVars.CScanData[slaveRow].orderedCells[23].ToString("0.000") + "','" +      //CEL10
+                                    GlobalVars.CScanData[slaveRow].orderedCells[0].ToString("0.000") + "','" +     //CEL11
+                                    GlobalVars.CScanData[slaveRow].orderedCells[1].ToString("0.000") + "','" +     //CEL12
+                                    GlobalVars.CScanData[slaveRow].orderedCells[2].ToString("0.000") + "','" +     //CEL13
+                                    GlobalVars.CScanData[slaveRow].orderedCells[3].ToString("0.000") + "','" +     //CEL14
+                                    GlobalVars.CScanData[slaveRow].orderedCells[4].ToString("0.000") + "','" +     //CEL15
+                                    GlobalVars.CScanData[slaveRow].orderedCells[5].ToString("0.000") + "','" +     //CEL16
+                                    GlobalVars.CScanData[slaveRow].orderedCells[6].ToString("0.000") + "','" +     //CEL17
+                                    GlobalVars.CScanData[slaveRow].orderedCells[7].ToString("0.000") + "','" +     //CEL18
+                                    GlobalVars.CScanData[slaveRow].orderedCells[8].ToString("0.000") + "','" +     //CEL19
+                                    GlobalVars.CScanData[slaveRow].orderedCells[9].ToString("0.000") + "','" +     //CEL20
+                                    GlobalVars.CScanData[slaveRow].orderedCells[10].ToString("0.000") + "','" +     //CEL21
+                                    GlobalVars.CScanData[slaveRow].orderedCells[11].ToString("0.000") + "','" +     //CEL22
+                                    GlobalVars.CScanData[slaveRow].orderedCells[12].ToString("0.000") + "','" +     //CEL23
+                                    GlobalVars.CScanData[slaveRow].orderedCells[13].ToString("0.000") + "','" +     //CEL24
+                                    GlobalVars.CScanData[station].TP1.ToString("0.0") + "','" +                  //TP1
+                                    GlobalVars.CScanData[station].TP2.ToString("0.0") + "','" +                  //TP2
+                                    GlobalVars.CScanData[station].TP3.ToString("0.0") + "','" +                  //TP3
+                                    GlobalVars.CScanData[station].TP4.ToString("0.0") + "','" +                  //TP4
+                                    GlobalVars.CScanData[station].TP5.ToString("0.0") + "','" +                  //TP5
+                                    "0.0" + "','" +                                                         //TP6
+                                    GlobalVars.CScanData[slaveRow].cellGND1.ToString("0.000") + "','" +             //CGND1
+                                    GlobalVars.CScanData[slaveRow].cellGND2.ToString("0.000") + "','" +             //CGND2
+                                    GlobalVars.CScanData[slaveRow].ref95V.ToString("0.000") + "','" +               //ref
+                                    GlobalVars.CScanData[slaveRow].ch0GND.ToString("0.000") + "','" +               //GND
+                                    GlobalVars.CScanData[slaveRow].plus5V.ToString("0.000") + "','" +              //FV
+                                    GlobalVars.CScanData[slaveRow].minus15.ToString("0.00") + "','" +              //MSV
+                                    GlobalVars.CScanData[slaveRow].plus15.ToString("0.00") +                       //PSV
+                                    "');";
+
+                                    myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
+
+                                    lock (dataBaseLock)
+                                    {
+                                        myAccessConn.Open();
+                                        myAccessCommand.ExecuteNonQuery();
+                                        myAccessConn.Close();
+                                    }
+
+                                }  // end if
+
+                            } // end if
 
                             //if this is the first scan we also need to rerun fill plot combos and we are still on the station...
                             if (firstRun && station == dataGridView1.CurrentRow.Index)
@@ -1445,7 +2622,7 @@ namespace NewBTASProto
                                 DataRow newRow = graphMainSet.Tables[0].NewRow();
 
                                 newRow["Station"] = station.ToString();
-                                newRow["BWO"] = d.Rows[station][1].ToString().Trim();
+                                newRow["BWO"] = MWO1.Trim();
                                 newRow["STEP"] = stepNum.ToString("00");
                                 newRow["RDG"] = currentReading.ToString();
                                 newRow["DATE"] = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
@@ -1512,15 +2689,15 @@ namespace NewBTASProto
                                 DataRow newRow = graphMainSet.Tables[0].NewRow();
 
                                 newRow["Station"] = slaveRow.ToString();
-                                newRow["BWO"] = d.Rows[slaveRow][1].ToString().Trim();
+                                newRow["BWO"] = SWO1.Trim();
                                 newRow["STEP"] = stepNum.ToString("00");
                                 newRow["RDG"] = currentReading.ToString();
                                 newRow["DATE"] = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                                 newRow["QS1"] = GlobalVars.CScanData[slaveRow].QS1.ToString();
                                 newRow["CTR"] = GlobalVars.CScanData[slaveRow].CTR.ToString();
                                 newRow["ETIME"] = temp.TotalDays.ToString("0.00000");
-                                newRow["CUR1"] = GlobalVars.CScanData[slaveRow].currentOne.ToString("0.0");
-                                newRow["CUR2"] = GlobalVars.CScanData[slaveRow].currentTwo.ToString("0.0");
+                                newRow["CUR1"] = GlobalVars.CScanData[station].currentOne.ToString("0.0");
+                                newRow["CUR2"] = GlobalVars.CScanData[station].currentTwo.ToString("0.0");
                                 newRow["VB1"] = GlobalVars.CScanData[slaveRow].VB1.ToString("0.00");
                                 newRow["VB2"] = GlobalVars.CScanData[slaveRow].VB2.ToString("0.00");
                                 newRow["VB3"] = GlobalVars.CScanData[slaveRow].VB3.ToString("0.00");
@@ -1549,11 +2726,11 @@ namespace NewBTASProto
                                 newRow["CEL22"] = GlobalVars.CScanData[slaveRow].orderedCells[21].ToString("0.000");
                                 newRow["CEL23"] = GlobalVars.CScanData[slaveRow].orderedCells[22].ToString("0.000");
                                 newRow["CEL24"] = GlobalVars.CScanData[slaveRow].orderedCells[23].ToString("0.000");
-                                newRow["BT1"] = GlobalVars.CScanData[slaveRow].TP1.ToString("0.0");
-                                newRow["BT2"] = GlobalVars.CScanData[slaveRow].TP2.ToString("0.0");
-                                newRow["BT3"] = GlobalVars.CScanData[slaveRow].TP3.ToString("0.0");
-                                newRow["BT4"] = GlobalVars.CScanData[slaveRow].TP4.ToString("0.0");
-                                newRow["BT5"] = GlobalVars.CScanData[slaveRow].TP5.ToString("0.0");
+                                newRow["BT1"] = GlobalVars.CScanData[station].TP1.ToString("0.0");
+                                newRow["BT2"] = GlobalVars.CScanData[station].TP2.ToString("0.0");
+                                newRow["BT3"] = GlobalVars.CScanData[station].TP3.ToString("0.0");
+                                newRow["BT4"] = GlobalVars.CScanData[station].TP4.ToString("0.0");
+                                newRow["BT5"] = GlobalVars.CScanData[station].TP5.ToString("0.0");
                                 newRow["BT6"] = "0.0";
                                 newRow["CGND1"] = GlobalVars.CScanData[slaveRow].cellGND1.ToString("0.000");
                                 newRow["CGND2"] = GlobalVars.CScanData[slaveRow].cellGND2.ToString("0.000");
@@ -1597,7 +2774,7 @@ namespace NewBTASProto
                     }
                     oldETime = eTimeS;
 
-                    #region Here is where wer are going to look for charging issues!
+                    #region Here is where we are going to look for charging issues!
                     //Lets test for a charger issue now
                     // there are going to be three sections, IC section, CCA section and shunt section
                     if (d.Rows[station][10].ToString().Contains("ICA"))
@@ -1635,6 +2812,7 @@ namespace NewBTASProto
                                         //check for a cancel
                                         if (token.IsCancellationRequested)
                                         {
+                                            
                                             //clear values from d
                                             updateD(station, 7, ("Read " + (currentReading - 1).ToString() + " of " + readings.ToString()));
                                             if (MasterSlaveTest) { updateD(slaveRow, 7, ("Read " + (currentReading - 1).ToString() + " of " + readings.ToString())); }
@@ -1644,6 +2822,7 @@ namespace NewBTASProto
                                             //update the gui
                                             this.Invoke((MethodInvoker)delegate()
                                             {
+                                                sendNote(station, 3, "Test Cancelled");
                                                 startNewTestToolStripMenuItem.Enabled = true;
                                                 resumeTestToolStripMenuItem.Enabled = true;
                                                 stopTestToolStripMenuItem.Enabled = false;
@@ -1695,6 +2874,7 @@ namespace NewBTASProto
                                 {
                                     // end the test!
                                     //clear values from d
+                                    
                                     updateD(station, 7, ("FAILED ON " + (currentReading - 1).ToString() + " of " + readings.ToString()));
                                     if (MasterSlaveTest) { updateD(slaveRow, 7, ("FAILED ON " + (currentReading - 1).ToString() + " of " + readings.ToString())); }
                                     updateD(station, 5, false);
@@ -1703,6 +2883,7 @@ namespace NewBTASProto
                                     //update the gui
                                     this.Invoke((MethodInvoker)delegate()
                                     {
+                                        sendNote(station, 3, "Test failed");
                                         startNewTestToolStripMenuItem.Enabled = true;
                                         resumeTestToolStripMenuItem.Enabled = true;
                                         stopTestToolStripMenuItem.Enabled = false;
@@ -1734,6 +2915,7 @@ namespace NewBTASProto
                     #region cancel block
                     if (token.IsCancellationRequested)
                     {
+                        
                         if ((string)d.Rows[station][2] == "As Received")
                         {
                             //nothing to do here...
@@ -1775,6 +2957,7 @@ namespace NewBTASProto
                         //update the gui
                         this.Invoke((MethodInvoker)delegate()
                         {
+                            sendNote(station, 3, "Test Cancelled");
                             startNewTestToolStripMenuItem.Enabled = true;
                             resumeTestToolStripMenuItem.Enabled = true;
                             stopTestToolStripMenuItem.Enabled = false;
@@ -1828,6 +3011,7 @@ namespace NewBTASProto
                 //update the gui
                 this.Invoke((MethodInvoker)delegate()
                 {
+                    sendNote(station, 3, "Test Complete");
                     startNewTestToolStripMenuItem.Enabled = true;
                     resumeTestToolStripMenuItem.Enabled = false;
                     stopTestToolStripMenuItem.Enabled = false;

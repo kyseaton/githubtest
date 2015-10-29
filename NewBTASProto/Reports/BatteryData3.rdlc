@@ -723,7 +723,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!BT1.Value</Value>
+                              <Value>= IIf(First(Fields!gUseF.Value, "MetaData"), Fields!BT1.Value * 1.8 + 32, Fields!BT1.Value)</Value>
                               <Style>
                                 <FontFamily>Lucida Sans</FontFamily>
                                 <FontSize>9pt</FontSize>
@@ -756,7 +756,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!BT2.Value</Value>
+                              <Value>= IIf(First(Fields!gUseF.Value, "MetaData"), Fields!BT2.Value * 1.8 + 32, Fields!BT2.Value)</Value>
                               <Style>
                                 <FontFamily>Lucida Sans</FontFamily>
                                 <FontSize>9pt</FontSize>
@@ -789,7 +789,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!BT3.Value</Value>
+                              <Value>= IIf(First(Fields!gUseF.Value, "MetaData"), Fields!BT3.Value * 1.8 + 32, Fields!BT3.Value)</Value>
                               <Style>
                                 <FontFamily>Lucida Sans</FontFamily>
                                 <FontSize>9pt</FontSize>
@@ -822,7 +822,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!BT4.Value</Value>
+                              <Value>= IIf(First(Fields!gUseF.Value, "MetaData"), Fields!BT4.Value * 1.8 + 32, Fields!BT4.Value)</Value>
                               <Style>
                                 <FontFamily>Lucida Sans</FontFamily>
                                 <FontSize>9pt</FontSize>
@@ -888,7 +888,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!BT5.Value</Value>
+                              <Value>= IIf(First(Fields!gUseF.Value, "MetaData"), Fields!BT5.Value * 1.8 + 32, Fields!BT5.Value)</Value>
                               <Style>
                                 <FontFamily>Lucida Sans</FontFamily>
                                 <FontSize>9pt</FontSize>

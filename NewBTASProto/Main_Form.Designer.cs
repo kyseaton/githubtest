@@ -337,40 +337,40 @@
             // highlightCurrentToolStripMenuItem
             // 
             this.highlightCurrentToolStripMenuItem.Name = "highlightCurrentToolStripMenuItem";
-            this.highlightCurrentToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
+            this.highlightCurrentToolStripMenuItem.Size = new System.Drawing.Size(290, 22);
             this.highlightCurrentToolStripMenuItem.Text = "Highlight Current";
             this.highlightCurrentToolStripMenuItem.Click += new System.EventHandler(this.highlightCurrentToolStripMenuItem_Click);
             // 
             // automaticallyConfigureChargerToolStripMenuItem
             // 
             this.automaticallyConfigureChargerToolStripMenuItem.Name = "automaticallyConfigureChargerToolStripMenuItem";
-            this.automaticallyConfigureChargerToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
-            this.automaticallyConfigureChargerToolStripMenuItem.Text = "Automatically Configure Charger";
+            this.automaticallyConfigureChargerToolStripMenuItem.Size = new System.Drawing.Size(290, 22);
+            this.automaticallyConfigureChargerToolStripMenuItem.Text = "Enable Automatic Charger Configuration";
             this.automaticallyConfigureChargerToolStripMenuItem.Click += new System.EventHandler(this.automaticallyConfigureChargerToolStripMenuItem_Click);
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(246, 6);
+            this.toolStripSeparator5.Size = new System.Drawing.Size(287, 6);
             // 
             // chargerConfigurationInterfaceToolStripMenuItem
             // 
             this.chargerConfigurationInterfaceToolStripMenuItem.Name = "chargerConfigurationInterfaceToolStripMenuItem";
-            this.chargerConfigurationInterfaceToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
+            this.chargerConfigurationInterfaceToolStripMenuItem.Size = new System.Drawing.Size(290, 22);
             this.chargerConfigurationInterfaceToolStripMenuItem.Text = "Charger Configuration Interface";
             this.chargerConfigurationInterfaceToolStripMenuItem.Click += new System.EventHandler(this.chargerConfigurationInterfaceToolStripMenuItem_Click);
             // 
             // editTestSettingsToolStripMenuItem
             // 
             this.editTestSettingsToolStripMenuItem.Name = "editTestSettingsToolStripMenuItem";
-            this.editTestSettingsToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
+            this.editTestSettingsToolStripMenuItem.Size = new System.Drawing.Size(290, 22);
             this.editTestSettingsToolStripMenuItem.Text = "Edit Custom Test Settings";
             this.editTestSettingsToolStripMenuItem.Click += new System.EventHandler(this.editTestSettingsToolStripMenuItem_Click);
             // 
             // notificationServiceToolStripMenuItem
             // 
             this.notificationServiceToolStripMenuItem.Name = "notificationServiceToolStripMenuItem";
-            this.notificationServiceToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
+            this.notificationServiceToolStripMenuItem.Size = new System.Drawing.Size(290, 22);
             this.notificationServiceToolStripMenuItem.Text = "Notification Service";
             this.notificationServiceToolStripMenuItem.Click += new System.EventHandler(this.notificationServiceToolStripMenuItem_Click);
             // 

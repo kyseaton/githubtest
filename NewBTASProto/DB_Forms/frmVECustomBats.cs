@@ -31,6 +31,7 @@ namespace NewBTASProto
             bindingNavigator1.BindingSource = bindingSource1;
             bindingNavigator1.Select();
             SetupForms();
+            bindingNavigator1.CausesValidation = true;
         }
         private void LoadData()
         {
@@ -62,9 +63,12 @@ namespace NewBTASProto
                 OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
                 OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
 
-                myAccessConn.Open();
-                myDataAdapter.Fill(CustomBats);
-
+                lock (Main_Form.dataBaseLock)
+                {
+                    myAccessConn.Open();
+                    myDataAdapter.Fill(CustomBats);
+                    myAccessConn.Close();
+                }
             }
             catch (Exception ex)
             {
@@ -73,7 +77,7 @@ namespace NewBTASProto
             }
             finally
             {
-                myAccessConn.Close();
+                
             }
 
 
@@ -355,7 +359,7 @@ namespace NewBTASProto
                     // set up the db Connection
                     string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
                     OleDbConnection conn = new OleDbConnection(connectionString);
-                    conn.Open();
+
 
                     //get the current row
                     DataRowView current = (DataRowView)bindingSource1.Current;
@@ -368,7 +372,12 @@ namespace NewBTASProto
 
                         string cmdStr = "DELETE FROM BatteriesCustom WHERE RecordID=" + current["RecordID"].ToString();
                         OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
-                        cmd.ExecuteNonQuery();
+                        lock (Main_Form.dataBaseLock)
+                        {
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                            conn.Close();
+                        }
 
                         // Also update the binding source
                         CustomBats.Tables[0].Rows[bindingNavigator1.BindingSource.Position].Delete();
@@ -389,6 +398,7 @@ namespace NewBTASProto
         private void saveToolStripButton_Click_1(object sender, EventArgs e)
         {
             //to get around the new entry issue...
+            #region empty database work around...
             if (bindingNavigator1.BindingSource.Position == -1)
             {
                 string temp1 = textBox2.Text;
@@ -697,13 +707,12 @@ namespace NewBTASProto
                 numericUpDown51.Value = temp115;
 
             }
-
-
+            #endregion
 
             try
             {
                 //we need to make sure all of the tabs have been "show"n first
-                //this is because the binding source doesn't update until the tap has been selected, which was killing saved values!
+                //this is because the binding source doesn't update until the tab has been selected, which was killing saved values!
                 int selected = tabControl1.SelectedIndex;
                 LockWindowUpdate(this.Handle);
                 foreach (TabPage tp in tabControl1.TabPages)
@@ -723,7 +732,6 @@ namespace NewBTASProto
                 // set up the db Connection
                 string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
                 OleDbConnection conn = new OleDbConnection(connectionString);
-                conn.Open();
 
                 //MAKE SURE YOU SELECT THE CURRENT ROW FOR DOUBLE SAVES!!!!!!!!!!!!!!!!!
 
@@ -864,20 +872,53 @@ namespace NewBTASProto
                         // finished with inputs!
                         "' WHERE RecordID=" + current["RecordID"].ToString();
                     OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
-                    cmd.ExecuteNonQuery();
+                    lock (Main_Form.dataBaseLock)
+                    {
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                        conn.Close();
+                    }
 
                     // Also update the model in the other tables!
                     cmdStr = "UPDATE Batteries SET BatteryModel='" + textBox2.Text.Replace("'", "''") + "' WHERE BatteryModel='" + current["BatteryModel"].ToString() + "'";
                     cmd = new OleDbCommand(cmdStr, conn);
-                    cmd.ExecuteNonQuery();
+                    lock (Main_Form.dataBaseLock)
+                    {
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                        conn.Close();
+                    }
 
                     cmdStr = "UPDATE WorkOrders SET BatteryModel='" + textBox2.Text.Replace("'", "''") + "' WHERE BatteryModel='" + current["BatteryModel"].ToString() + "'";
                     cmd = new OleDbCommand(cmdStr, conn);
-                    cmd.ExecuteNonQuery();
-                    
+                    lock (Main_Form.dataBaseLock)
+                    {
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                        conn.Close();
+                    }
+
+                    // Also update the pci dataTable!
+                    for (int i = 0; i < 16; i++)
+                    {
+                        if (((Main_Form)this.Owner).pci.Rows[i][0].ToString() == current["BatteryModel"].ToString())
+                        {
+                            //update the four rows and then break...
+                            ((Main_Form)this.Owner).pci.Rows[i][0] = textBox2.Text.Replace("'", "''");
+                            if (comboBox13.Text.Replace("'", "''") != "") { ((Main_Form)this.Owner).pci.Rows[i][1] = comboBox13.Text.Replace("'", "''"); }
+                            if (textBox6.Text.Replace("'", "''") != "") { ((Main_Form)this.Owner).pci.Rows[i][2] = textBox6.Text.Replace("'", "''"); }      // negative 1 is the default...
+                            if (textBox7.Text.Replace("'", "''") != "") { ((Main_Form)this.Owner).pci.Rows[i][3] = textBox7.Text.Replace("'", "''"); }        // negative 1 is the default...
+                            if (textBox21.Text.Replace("'", "''") != "") { ((Main_Form)this.Owner).pci.Rows[i][4] = textBox21.Text.Replace("'", "''"); }        // negative 1 is the default...
+                            if (textBox22.Text.Replace("'", "''") != "") { ((Main_Form)this.Owner).pci.Rows[i][5] = textBox22.Text.Replace("'", "''"); }        // 24 is the default...
+                            if (textBox27.Text.Replace("'", "''") != "") { ((Main_Form)this.Owner).pci.Rows[i][6] = textBox27.Text.Replace("'", "''"); }        // negative 1 is the default...
+                            if (textBox28.Text.Replace("'", "''") != "") { ((Main_Form)this.Owner).pci.Rows[i][7] = textBox28.Text.Replace("'", "''"); }        // 1.75 is the default...
+                            if (textBox29.Text.Replace("'", "''") != "") { ((Main_Form)this.Owner).pci.Rows[i][8] = textBox29.Text.Replace("'", "''"); }        // negative 1 is the default...
+                        }
+                    }
+
                     //now force an update on the binding by moving one ahead and then back...
                     toolStripCBBats.ComboBox.Text = textBox2.Text.Replace("'", "''");
-
+                   
                     MessageBox.Show("Battery model " + textBox2.Text + "'s entry has been updated.");
 
                 }
@@ -1038,7 +1079,12 @@ namespace NewBTASProto
                         + "')";
 
                     OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
-                    cmd.ExecuteNonQuery();
+                    lock (Main_Form.dataBaseLock)
+                    {
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                        conn.Close();
+                    }
                     MessageBox.Show("Battery model " + textBox2.Text + "'s entry has been created.");
 
                     // update the dataTable with the new record ID also..
@@ -1401,12 +1447,20 @@ namespace NewBTASProto
                 label6.Visible = false;
                 groupBox7.Visible = false;
                 textBox7.Visible = false;
+                label32.Visible = true;
+                label33.Visible = true;
+                textBox21.Visible = true;
+                textBox22.Visible = true;
             }
             else
             {
                 label6.Visible = true;
                 groupBox7.Visible = true;
                 textBox7.Visible = true;
+                label32.Visible = false;
+                label33.Visible = false;
+                textBox21.Visible = false;
+                textBox22.Visible = false;
             }
         }
 
@@ -1422,12 +1476,14 @@ namespace NewBTASProto
 
         private void bindingNavigatorMovePreviousItem_Click(object sender, EventArgs e)
         {
+            
             //remove the new record if there is one..
             if (bindingNavigatorAddNewItem.Enabled == false)
             {
                 CustomBats.Tables[0].Rows[CustomBats.Tables[0].Rows.Count - 1].Delete();
                 bindingNavigatorAddNewItem.Enabled = true;
             }
+
         }
 
         private void bindingNavigatorMoveFirstItem_Click(object sender, EventArgs e)
@@ -1482,6 +1538,27 @@ namespace NewBTASProto
             {
                 //do nothing
             }
+        }
+
+        private void frmVECustomBats_Shown(object sender, EventArgs e)
+        {
+
+        }
+
+        private void bindingNavigator1_Validating(object sender, CancelEventArgs e)
+        {
+
+            // check if there are any changes!
+            if (true)
+            {
+                // warn the user that they made some unsaved changes
+                DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "Looks like you made some changes.  Do you want to save them before moving?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
+                if (dialogResult == DialogResult.Yes)
+                {
+                    //save
+                }
+            }
+
         }
         
     }

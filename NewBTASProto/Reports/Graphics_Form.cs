@@ -22,20 +22,38 @@ namespace NewBTASProto
         DataSet graph2Set = new DataSet();
 
         //When the type of battery the technology is retrieved store it here
-        int technology1 = 0;
+        string technology1 = "NiCd";
+        string technology2 = "NiCd";
+
+        string type1 = "";
+        string type2 = "";
+
         int cell1 = 0;
-        int type1 = 0;
-        int technology2 = 0;
         int cell2 = 0;
-        int type2 = 0;
+
         Title tt1 = new Title();
         Title tt2 = new Title();
 
-        private readonly object dataBaseLock = new object();
+        string batMod1;
+        string batMod2;
 
-        public Graphics_Form()
+        float NomV1;
+        float NomV2;
+
+        float CellV1;
+        float CellV2;
+
+        string curStep = "";
+        string curWorkOrder = "";
+        bool startup = true;
+        bool startup2 = true;
+
+        public Graphics_Form(string currentStep = "", string currentWorkOrder = "")
         {
             InitializeComponent();
+
+            curStep = currentStep;
+            curWorkOrder = currentWorkOrder;
         }
 
         private void Graphics_Form_Load(object sender, EventArgs e)
@@ -130,7 +148,7 @@ namespace NewBTASProto
                     OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
                     OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
 
-                    lock (dataBaseLock)
+                    lock (Main_Form.dataBaseLock)
                     {
                         myAccessConn.Open();
                         myDataAdapter.Fill(workOrderList1, "ScanData");
@@ -174,6 +192,27 @@ namespace NewBTASProto
 
                     comboBox1.Enabled = true;
                     comboBox3.Enabled = true;
+
+                    if (startup)
+                    {
+                        //Now set the comboboxes to the current station and workorder...
+
+                        // we need to split up the work orders if we have multiple work orders on a single line...
+                        string tempWOS = curWorkOrder;
+                        char[] delims = { ' ' };
+                        string[] A = tempWOS.Split(delims);
+                        curWorkOrder = A[0];
+
+                        comboBox1.Text = curWorkOrder.Trim();
+                        comboBox3.Text = curWorkOrder.Trim();
+                        //comboBox1_SelectedValueChanged(this, null);
+
+                        if (curStep == "")
+                        {
+                            startup = false;
+                            startup2 = false;
+                        }
+                    }
                 });
 
             }); // end thread
@@ -210,7 +249,7 @@ namespace NewBTASProto
 
                     // Open database containing all the battery data....
                     string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
-                    string strAccessSelect = @"SELECT StepNumber,TestName, Technology, CustomNoCells FROM Tests WHERE WorkOrderNumber='" + combo1Text + @"'";
+                    string strAccessSelect = @"SELECT StepNumber,TestName, Technology, CustomNoCells FROM Tests WHERE WorkOrderNumber='" + combo1Text + @"' ORDER BY StepNumber ASC";
 
 
                     DataSet testsPerformed = new DataSet();
@@ -231,7 +270,7 @@ namespace NewBTASProto
                         OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
                         OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
 
-                        lock (dataBaseLock)
+                        lock (Main_Form.dataBaseLock)
                         {
                             myAccessConn.Open();
                             myDataAdapter.Fill(testsPerformed, "Tests");
@@ -260,10 +299,15 @@ namespace NewBTASProto
                             this.comboBox2.DataSource = testsPerformed.Tables["Tests"];
 
                             comboBox2.Enabled = true;
+
+                            if (startup)
+                            {
+                                comboBox2.SelectedIndex = comboBox2.FindString(curStep);
+                            }
                         });
 
                         // update the technology var
-                        technology1 = (int)testsPerformed.Tables["Tests"].Rows[1][2];
+                        //technology1 = testsPerformed.Tables["Tests"].Rows[1][2].ToString();
                         if (Int32.Parse(testsPerformed.Tables["Tests"].Rows[1][3].ToString()) != 0) { cell1 = Int32.Parse(testsPerformed.Tables["Tests"].Rows[1][3].ToString()); }
                     }
                     catch (Exception ex)
@@ -305,7 +349,7 @@ namespace NewBTASProto
 
                     // Open database containing all the battery data....
                     string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
-                    string strAccessSelect = @"SELECT StepNumber,TestName, Technology, CustomNoCells FROM Tests WHERE WorkOrderNumber='" + combo3Text + @"'";
+                    string strAccessSelect = @"SELECT StepNumber,TestName, Technology, CustomNoCells FROM Tests WHERE WorkOrderNumber='" + combo3Text + @"' ORDER BY StepNumber ASC";
 
 
                     DataSet testsPerformed = new DataSet();
@@ -326,7 +370,7 @@ namespace NewBTASProto
                         OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
                         OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
 
-                        lock (dataBaseLock)
+                        lock (Main_Form.dataBaseLock)
                         {
                             myAccessConn.Open();
                             myDataAdapter.Fill(testsPerformed, "Tests");
@@ -356,11 +400,16 @@ namespace NewBTASProto
                             this.comboBox4.DataSource = testsPerformed.Tables["Tests"];
 
                             comboBox4.Enabled = true;
+
+                            if (startup2)
+                            {
+                                comboBox4.SelectedIndex = comboBox4.FindString(curStep);
+                            }
                         });
 
                         // update the technology var
-                        technology2 = (int)testsPerformed.Tables["Tests"].Rows[1][2];
-                        if (Int32.Parse(testsPerformed.Tables["Tests"].Rows[1][3].ToString()) != 0) { cell2 = Int32.Parse(testsPerformed.Tables["Tests"].Rows[1][3].ToString()); }
+                        //technology2 = testsPerformed.Tables["Tests"].Rows[1][2].ToString();
+                        //if (Int32.Parse(testsPerformed.Tables["Tests"].Rows[1][3].ToString()) != 0) { cell2 = Int32.Parse(testsPerformed.Tables["Tests"].Rows[1][3].ToString()); }
                     }
                     catch (Exception ex)
                     {
@@ -416,7 +465,7 @@ namespace NewBTASProto
                         OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
                         OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
 
-                        lock (dataBaseLock)
+                        lock (Main_Form.dataBaseLock)
                         {
                             myAccessConn.Open();
                             myDataAdapter.Fill(graph1Set, "ScanData");
@@ -457,7 +506,7 @@ namespace NewBTASProto
                         OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
                         OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
 
-                        lock (dataBaseLock)
+                        lock (Main_Form.dataBaseLock)
                         {
                             myAccessConn.Open();
                             myDataAdapter.Fill(lookForCable, "Tests");
@@ -680,15 +729,120 @@ namespace NewBTASProto
                                 break;
                         }// end switch
 
+                        // Now we need to look up some additional info in the Battery table for the graphs....
+                        // first get the battry Model...
+                        strAccessSelect = @"SELECT BatteryModel FROM WorkOrders WHERE WorkOrderNumber='" + combo1Text + @"'";
+                        DataSet wo = new DataSet();
+
+                        myAccessConn = null;
+                        // try to open the DB
+                        try
+                        {
+                            myAccessConn = new OleDbConnection(strAccessConn);
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                            return;
+                        }
+                        // try to open the DB
+                        //  now try to access it
+                        try
+                        {
+                            OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                            OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                            lock (Main_Form.dataBaseLock)
+                            {
+                                myAccessConn.Open();
+                                myDataAdapter.Fill(wo, "WO");
+                                myAccessConn.Close();
+                            }
+
+                        }
+                        catch (Exception ex)
+                        {
+                            myAccessConn.Close();
+                            MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                            return;
+                        }
+
+                        batMod1 = wo.Tables[0].Rows[0][0].ToString();
+
+
+                        //Now get the nominal voltage and the cell voltage level...
+                        strAccessSelect = @"SELECT VOLT,CCVMAX,BTECH,NCELLS FROM BatteriesCustom WHERE BatteryModel='" + batMod1 + @"'";
+                        DataSet batInfo = new DataSet();
+                        
+                        // try to open the DB
+                        //  now try to access it
+                        try
+                        {
+                            OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                            OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                            lock (Main_Form.dataBaseLock)
+                            {
+                                myAccessConn.Open();
+                                myDataAdapter.Fill(batInfo, "Bat");
+                                myAccessConn.Close();
+                            }
+
+                        }
+                        catch (Exception ex)
+                        {
+                            myAccessConn.Close();
+                            MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                            return;
+                        }
+
+                        try
+                        {
+                            NomV1 = float.Parse(batInfo.Tables[0].Rows[0][0].ToString());
+                        }
+                        catch
+                        {
+                            NomV1 = 24;
+                        }
+                        try
+                        {
+                            CellV1 = float.Parse(batInfo.Tables[0].Rows[0][1].ToString());
+                        }
+                        catch
+                        {
+                            CellV1 = (float) 1.75;
+                        }
+                        try
+                        {
+                            technology1 = batInfo.Tables[0].Rows[0][2].ToString();
+                        }
+                        catch
+                        {
+                            technology1 = "NiCd";
+                        }
+                        try
+                        {
+                            if (batInfo.Tables[0].Rows[0][3].ToString() != "")
+                            {
+                                cell1 = int.Parse(batInfo.Tables[0].Rows[0][3].ToString());
+                            }
+                        }
+                        catch
+                        {
+                            //leave as is...
+                        }
 
                         // The final step is to update the type of test that was selected
-                        if (comboBox2.Text.Contains("As Recieved")) { type1 = 1; }
-                        else if (comboBox2.Text.Contains("Discharge")) { type1 = 2; }
-                        else if (comboBox2.Text.Contains("Capacity")) { type1 = 3; }
-                        else { type1 = 0; }
+                        type1 = comboBox2.Text;
 
                         comboBox5.Enabled = true;
                         comboBox6.Enabled = true;
+
+                        if (startup)
+                        {
+                            startup = false;
+                            comboBox5.SelectedIndex = 0;
+                        }
                     });// end invoke
                 });// end helper thread
             }
@@ -737,7 +891,7 @@ namespace NewBTASProto
                         OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
                         OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
 
-                        lock (dataBaseLock)
+                        lock (Main_Form.dataBaseLock)
                         {
                             myAccessConn.Open();
                             myDataAdapter.Fill(graph2Set, "ScanData");
@@ -778,7 +932,7 @@ namespace NewBTASProto
                         OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
                         OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
 
-                        lock (dataBaseLock)
+                        lock (Main_Form.dataBaseLock)
                         {
                             myAccessConn.Open();
                             myDataAdapter.Fill(lookForCable, "Tests");
@@ -1001,16 +1155,130 @@ namespace NewBTASProto
                                 break;
                         }// end switch
 
+                        // Now we need to look up some additional info in the Battery table for the graphs....
+                        // first get the battry Model...
+                        strAccessSelect = @"SELECT BatteryModel FROM WorkOrders WHERE WorkOrderNumber='" + combo3Text + @"'";
+                        DataSet wo = new DataSet();
+                        myAccessConn = null;
+                        // try to open the DB
+                        try
+                        {
+                            myAccessConn = new OleDbConnection(strAccessConn);
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                            return;
+                        }
+                        // try to open the DB
+                        //  now try to access it
+                        try
+                        {
+                            OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                            OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
 
+                            lock (Main_Form.dataBaseLock)
+                            {
+                                myAccessConn.Open();
+                                myDataAdapter.Fill(wo, "WO");
+                                myAccessConn.Close();
+                            }
+
+                        }
+                        catch (Exception ex)
+                        {
+                            myAccessConn.Close();
+                            MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                            return;
+                        }
+
+                        batMod2 = wo.Tables[0].Rows[0][0].ToString();
+
+
+                        //Now get the nominal voltage and the cell voltage level...
+                        strAccessSelect = @"SELECT VOLT,CCVMAX,BTECH,NCELLS FROM BatteriesCustom WHERE BatteryModel='" + batMod2 + @"'";
+                        DataSet batInfo = new DataSet();
+                        myAccessConn = null;
+                        // try to open the DB
+                        try
+                        {
+                            myAccessConn = new OleDbConnection(strAccessConn);
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                            return;
+                        }
+                        // try to open the DB
+                        //  now try to access it
+                        try
+                        {
+                            OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                            OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                            lock (Main_Form.dataBaseLock)
+                            {
+                                myAccessConn.Open();
+                                myDataAdapter.Fill(batInfo, "Bat");
+                                myAccessConn.Close();
+                            }
+
+                        }
+                        catch (Exception ex)
+                        {
+                            myAccessConn.Close();
+                            MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                            return;
+                        }
+
+                        try
+                        {
+                            NomV2 = float.Parse(batInfo.Tables[0].Rows[0][0].ToString());
+                        }
+                        catch 
+                        {
+                            NomV2 = 24;
+                        }
+                        try
+                        {
+                            CellV2 = float.Parse(batInfo.Tables[0].Rows[0][1].ToString());
+                        }
+                        catch
+                        {
+                            CellV2 = (float) 1.75;
+                        }
+                        try
+                        {
+                            technology2 = batInfo.Tables[0].Rows[0][2].ToString();
+                        }
+                        catch
+                        {
+                            technology2 = "NiCd";
+                        }
+                        try
+                        {
+                            if (batInfo.Tables[0].Rows[0][3].ToString() != "")
+                            {
+                                cell2 = int.Parse(batInfo.Tables[0].Rows[0][3].ToString());
+                            }
+                        }
+                        catch
+                        {
+                            //leave as is...
+                        }
 
                         // The final step is to update the type of test that was selected
-                        if (comboBox4.Text.Contains("As Recieved")) { type2 = 1; }
-                        else if (comboBox4.Text.Contains("Discharge")) { type2 = 2; }
-                        else if (comboBox4.Text.Contains("Capacity")) { type2 = 3; }
-                        else { type2 = 0; }
+                        type2 = comboBox4.Text;
 
                         comboBox7.Enabled = true;
                         comboBox8.Enabled = true;
+
+
+                        if (startup2)
+                        {
+                            startup2 = false;
+                            comboBox7.SelectedIndex = 0;
+                        }
                     });// end invoke
                 });// end helper thread
             }
@@ -1240,7 +1508,7 @@ namespace NewBTASProto
         /// <param name="Value">the reading value to assign a color to</param>
         /// <param name="type">Indicates if the plot is a Charge, Discharge, Capacity, or As Received plot</param>
         /// <returns></returns>
-        private Color pointColor(int tech, int Cells, double Value, int type)
+        private Color pointColor(string tech, int Cells, double Value, string type)
         {
             if (radioButton1.Checked == true)
             {
@@ -1252,105 +1520,104 @@ namespace NewBTASProto
                     case "Temperature 2":
                     case "Temperature 3":
                     case "Temperature 4":
-                        return System.Drawing.Color.Orange;
+                        return System.Drawing.Color.LightSeaGreen;
                     default:
                         break;
                 }
             }
 
+            // test_type is the type of test we are generating the colors for
+
+            // Three types of batteries (NiCd, SLA and NiCd ULM) and two directions (charge discharge)
+
             // normal vented NiCds
-            double Min1 = 0.25;
-            double Min2 = 1.5;
-            double Min3 = 1.55;
-            double Min4 = 1.7;
-            double Max = 1.75;
+            double Min1 = 0;
+            double Min2 = 0;
+            double Min3 = 0;
+            double Min4 = 0;
+            double Max = 0;
 
-            // special case for cable 10, sealed NiCds
-            if (tech == 1)
+            switch (tech)
             {
-                Min1 = 0.25;
-                Min2 = 1.45;
-                Min3 = 1.5;
-                Min4 = 1.65;
-                Max = 1.7;
+                case "NiCd":
+                    // Discharge
+                    if (type.Contains("As Received") || type.Contains("Capacity-1") || type.Contains("Discharge") || type.Contains("Custom Cap") || type == "")
+                    {
+                        Min4 = 1 * Cells;
+                        Max = 1.05 * Cells;
+
+                        if (Value > Max) { return Color.Green; }
+                        else if (Value > Min4) { return Color.Orange; }
+                        else { return Color.Red; }
+
+                    }
+                    // Charge
+                    else
+                    {
+                        Min1 = 0.25 * Cells;
+                        Min2 = 1.5 * Cells;
+                        Min3 = 1.55 * Cells;
+                        Max = CellV1 * Cells;
+
+                        if (Value > Max) { return Color.Red; }
+                        else if (Value > Min3) { return Color.Green; }
+                        else if (Value > Min2) { return Color.Orange; }
+                        else if (Value > Min1) { return Color.Yellow; }
+                        else { return Color.Red; }
+                    }
+                case "Sealed Lead Acid":
+                    // Discharge
+                    if (type.Contains("As Received") || type.Contains("Capacity-1") || type.Contains("Discharge") || type.Contains("Custom Cap") || type == "")
+                    {
+
+                        Min4 = (20 / 24) * NomV1;
+                        Max = (21 / 24) * NomV1;
+
+                        if (Value > Max) { return Color.Green; }
+                        else if (Value > Min4) { return Color.Orange; }
+                        else { return Color.Red; }
+
+                    }
+                    // Charge
+                    else
+                    {
+                        // always Blue!
+                        return Color.Blue;
+                    }
+                case "NiCd ULM":
+                    // Discharge
+                    if (type.Contains("As Received") || type.Contains("Capacity-1") || type.Contains("Discharge") || type.Contains("Custom Cap") || type == "")
+                    {
+                        Min4 = 1 * Cells;
+                        Max = 1.05 * Cells;
+
+                        if (Value > Max) { return Color.Green; }
+                        else if (Value > Min4) { return Color.Orange; }
+                        else { return Color.Red; }
+
+                    }
+                    // Charge
+                    else
+                    {
+                        Min1 = 0.25 * Cells;
+                        Min2 = 1.5 * Cells;
+                        Min3 = 1.55 * Cells;
+                        Max = ((-1 == CellV1) ? 1.82 : CellV1) * Cells;
+
+                        if (Value > Max) { return Color.Red; }
+                        else if (Value > Min3) { return Color.Green; }
+                        else if (Value > Min2) { return Color.Orange; }
+                        else if (Value > Min1) { return Color.Yellow; }
+                        else { return Color.Red; }
+                    }
             }
 
-            // these are the discharging cases...
-            switch (type)
-            {
-                
-                // these are the As Recieved color setting    
-                case 1:
-                    Min1 = 0.1;
-                    Min2 = 1.2;
-                    Min3 = 1.25;
-                    Min4 = 1.25;
-                    break;
-                // these are the Discharge settings
-                case 2:
-                    Min1 = 0;
-                    Min2 = 0.5;
-                    Min3 = 0.5;
-                    Min4 = 0.5;
-                    break;
-                // these are the Capacity
-                case 3:
-                    Min1 = 1;
-                    Min2 = 1;
-                    Min3 = 1.05;
-                    Min4 = 11.7;
-                    Max = 1.25;
-                    break;
-                default:
-                    break;
-            }
-
-            // scale the limits for the number of cells in the battery
-            Min1 *= Cells;
-            Min2 *= Cells;
-            Min3 *= Cells;
-            Min4 *= Cells;
-            Max *= Cells;
-
-
-
-            // with all of that said, let's start picking colors!
-            // this is for all charging operations not involving lead acid
-            if (tech != 2 && type == 0)
-            {
-                if (Value < Min2) { return System.Drawing.Color.Yellow; }
-                else if (Value >= Min2 && Value < Min3) { return System.Drawing.Color.Orange; }
-                else if (Value >= Min3 && Value < Min4) { return System.Drawing.Color.Green; }
-                else if (Value >= Min4 && Value < Max) { return System.Drawing.Color.Blue; }
-                else { return System.Drawing.Color.Red; }
-            }
-            // lead acid case
-            else if(type == 0)
-            {
-                return System.Drawing.Color.Orange;
-            }
-            // this is for the Capacity test, Discharge and As Recieved
-            else if (tech != 2)
-            {
-                if (Value < Min1) { return System.Drawing.Color.Red; }
-                else if (Value < Min2) { return System.Drawing.Color.Yellow; }
-                else if (Value < Min3) { return System.Drawing.Color.Orange; }
-                else if (Value < Min4) { return System.Drawing.Color.Green; }
-                else if (Value < Min2) { return System.Drawing.Color.Orange; }
-            }
-            //Finally the lead acid Capacity test, Discharge and As Recieved case
-            else
-            {
-                if (Value > Cells * 1.75) { return System.Drawing.Color.Green; }
-                else if (Value >= Cells * 1.67) { return System.Drawing.Color.Orange; }
-                return System.Drawing.Color.Red; 
-            }
-
-            return System.Drawing.Color.Green;
+            // we'll return a purple if everything goes wrong
+            return System.Drawing.Color.Purple;
 
 
         }
-        private Color pointColor2(int tech, int Cells, double Value, int type)
+        private Color pointColor2(string tech, int Cells, double Value, string type)
         {
             if (radioButton3.Checked == true)
             {
@@ -1368,95 +1635,94 @@ namespace NewBTASProto
                 }
             }
 
+            // test_type is the type of test we are generating the colors for
+
+            // Three types of batteries (NiCd, SLA and NiCd ULM) and two directions (charge discharge)
+
             // normal vented NiCds
-            double Min1 = 0.25;
-            double Min2 = 1.5;
-            double Min3 = 1.55;
-            double Min4 = 1.7;
-            double Max = 1.75;
+            double Min1 = 0;
+            double Min2 = 0;
+            double Min3 = 0;
+            double Min4 = 0;
+            double Max = 0;
 
-            // special case for cable 10, sealed NiCds
-            if (tech == 1)
+            switch (tech)
             {
-                Min1 = 0.25;
-                Min2 = 1.45;
-                Min3 = 1.5;
-                Min4 = 1.65;
-                Max = 1.7;
+                case "NiCd":
+                    // Discharge
+                    if (type.Contains("As Received") || type.Contains("Capacity-1") || type.Contains("Discharge") || type.Contains("Custom Cap") || type == "")
+                    {
+                        Min4 = 1 * Cells;
+                        Max = 1.05 * Cells;
+
+                        if (Value > Max) { return Color.Green; }
+                        else if (Value > Min4) { return Color.Orange; }
+                        else { return Color.Red; }
+
+                    }
+                    // Charge
+                    else
+                    {
+                        Min1 = 0.25 * Cells;
+                        Min2 = 1.5 * Cells;
+                        Min3 = 1.55 * Cells;
+                        Max = CellV2 * Cells;
+
+                        if (Value > Max) { return Color.Red; }
+                        else if (Value > Min3) { return Color.Green; }
+                        else if (Value > Min2) { return Color.Orange; }
+                        else if (Value > Min1) { return Color.Yellow; }
+                        else { return Color.Red; }
+                    }
+                case "Sealed Lead Acid":
+                    // Discharge
+                    if (type.Contains("As Received") || type.Contains("Capacity-1") || type.Contains("Discharge") || type.Contains("Custom Cap") || type == "")
+                    {
+
+                        Min4 = (20 / 24) * NomV2;
+                        Max = (21 / 24) * NomV2;
+
+                        if (Value > Max) { return Color.Green; }
+                        else if (Value > Min4) { return Color.Orange; }
+                        else { return Color.Red; }
+
+                    }
+                    // Charge
+                    else
+                    {
+                        // always Blue!
+                        return Color.Blue;
+                    }
+                case "NiCd ULM":
+                    // Discharge
+                    if (type.Contains("As Received") || type.Contains("Capacity-1") || type.Contains("Discharge") || type.Contains("Custom Cap") || type == "")
+                    {
+                        Min4 = 1 * Cells;
+                        Max = 1.05 * Cells;
+
+                        if (Value > Max) { return Color.Green; }
+                        else if (Value > Min4) { return Color.Orange; }
+                        else { return Color.Red; }
+
+                    }
+                    // Charge
+                    else
+                    {
+                        Min1 = 0.25 * Cells;
+                        Min2 = 1.5 * Cells;
+                        Min3 = 1.55 * Cells;
+                        Max = CellV2 * Cells;
+
+                        if (Value > Max) { return Color.Red; }
+                        else if (Value > Min3) { return Color.Green; }
+                        else if (Value > Min2) { return Color.Orange; }
+                        else if (Value > Min1) { return Color.Yellow; }
+                        else { return Color.Red; }
+                    }
             }
 
-            // these are the discharging cases...
-            switch (type)
-            {
-
-                // these are the As Recieved color setting    
-                case 1:
-                    Min1 = 0.1;
-                    Min2 = 1.2;
-                    Min3 = 1.25;
-                    Min4 = 1.25;
-                    break;
-                // these are the Discharge settings
-                case 2:
-                    Min1 = 0;
-                    Min2 = 0.5;
-                    Min3 = 0.5;
-                    Min4 = 0.5;
-                    break;
-                // these are the Capacity
-                case 3:
-                    Min1 = 1;
-                    Min2 = 1;
-                    Min3 = 1.05;
-                    Min4 = 11.7;
-                    Max = 1.25;
-                    break;
-                default:
-                    break;
-            }
-
-            // scale the limits for the number of cells in the battery
-            Min1 *= Cells;
-            Min2 *= Cells;
-            Min3 *= Cells;
-            Min4 *= Cells;
-            Max *= Cells;
-
-
-
-            // with all of that said, let's start picking colors!
-            // this is for all charging operations not involving lead acid
-            if (tech != 2 && type == 0)
-            {
-                if (Value < Min2) { return System.Drawing.Color.Yellow; }
-                else if (Value >= Min2 && Value < Min3) { return System.Drawing.Color.Orange; }
-                else if (Value >= Min3 && Value < Min4) { return System.Drawing.Color.Green; }
-                else if (Value >= Min4 && Value < Max) { return System.Drawing.Color.Blue; }
-                else { return System.Drawing.Color.Red; }
-            }
-            // lead acid case
-            else if (type == 0)
-            {
-                return System.Drawing.Color.Orange;
-            }
-            // this is for the Capacity test, Discharge and As Recieved
-            else if (tech != 2)
-            {
-                if (Value < Min1) { return System.Drawing.Color.Red; }
-                else if (Value < Min2) { return System.Drawing.Color.Yellow; }
-                else if (Value < Min3) { return System.Drawing.Color.Orange; }
-                else if (Value < Min4) { return System.Drawing.Color.Green; }
-                else if (Value < Min2) { return System.Drawing.Color.Orange; }
-            }
-            //Finally the lead acid Capacity test, Discharge and As Recieved case
-            else
-            {
-                if (Value > Cells * 1.75) { return System.Drawing.Color.Green; }
-                else if (Value >= Cells * 1.67) { return System.Drawing.Color.Orange; }
-                return System.Drawing.Color.Red;
-            }
-
-            return System.Drawing.Color.Green;
+            // we'll return a purple if everything goes wrong
+            return System.Drawing.Color.Purple;
 
 
         }

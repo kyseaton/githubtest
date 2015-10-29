@@ -6,79 +6,82 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>0.24149in</Width>
+              <Width>0.26131in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.56612in</Width>
+              <Width>0.58383in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.35455in</Width>
+              <Width>0.3275in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.35385in</Width>
+              <Width>0.3275in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.35455in</Width>
+              <Width>0.3275in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.35385in</Width>
+              <Width>0.3275in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.35455in</Width>
+              <Width>0.3275in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.35385in</Width>
+              <Width>0.3275in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.35455in</Width>
+              <Width>0.3275in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.35385in</Width>
+              <Width>0.3275in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.35455in</Width>
+              <Width>0.3275in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.35385in</Width>
+              <Width>0.3275in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.35455in</Width>
+              <Width>0.3275in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.09992in</Width>
+              <Width>0.3275in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.35385in</Width>
+              <Width>0.3275in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.35455in</Width>
+              <Width>0.3275in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.35385in</Width>
+              <Width>0.3275in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.35455in</Width>
+              <Width>0.3275in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.35385in</Width>
+              <Width>0.3275in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.35455in</Width>
+              <Width>0.3275in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.35385in</Width>
+              <Width>0.3275in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.35455in</Width>
+              <Width>0.3275in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.35385in</Width>
+              <Width>0.3275in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.35455in</Width>
+              <Width>0.3275in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.35385in</Width>
+              <Width>0.3275in</Width>
+            </TablixColumn>
+            <TablixColumn>
+              <Width>0.3275in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -516,39 +519,6 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox7">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value />
-                              <Style>
-                                <FontFamily>Lucida Sans</FontFamily>
-                                <FontSize>8pt</FontSize>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style />
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>Textbox7</rd:DefaultName>
-                      <Style>
-                        <Border>
-                          <Color>LightGrey</Color>
-                          <Style>Solid</Style>
-                        </Border>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell>
-                  <CellContents>
                     <Textbox Name="Textbox39">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
@@ -556,7 +526,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>C01</Value>
+                              <Value>C12</Value>
                               <Style>
                                 <FontFamily>Lucida Sans</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -589,7 +559,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>C02</Value>
+                              <Value>C13</Value>
                               <Style>
                                 <FontFamily>Lucida Sans</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -622,7 +592,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>C03</Value>
+                              <Value>C14</Value>
                               <Style>
                                 <FontFamily>Lucida Sans</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -655,7 +625,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>C04</Value>
+                              <Value>C15</Value>
                               <Style>
                                 <FontFamily>Lucida Sans</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -688,7 +658,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>C05</Value>
+                              <Value>C16</Value>
                               <Style>
                                 <FontFamily>Lucida Sans</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -721,7 +691,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>C06</Value>
+                              <Value>C17</Value>
                               <Style>
                                 <FontFamily>Lucida Sans</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -754,7 +724,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>C07</Value>
+                              <Value>C18</Value>
                               <Style>
                                 <FontFamily>Lucida Sans</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -787,7 +757,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>C08</Value>
+                              <Value>C19</Value>
                               <Style>
                                 <FontFamily>Lucida Sans</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -820,7 +790,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>C09</Value>
+                              <Value>C20</Value>
                               <Style>
                                 <FontFamily>Lucida Sans</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -853,7 +823,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>C10</Value>
+                              <Value>C21</Value>
                               <Style>
                                 <FontFamily>Lucida Sans</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -879,14 +849,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox59">
+                    <Textbox Name="Textbox5">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>C11</Value>
+                              <Value>C22</Value>
                               <Style>
                                 <FontFamily>Lucida Sans</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -896,7 +866,73 @@
                           <Style />
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox59</rd:DefaultName>
+                      <rd:DefaultName>Textbox5</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Color>LightGrey</Color>
+                          <Style>Solid</Style>
+                        </Border>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox9">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>C23</Value>
+                              <Style>
+                                <FontFamily>Lucida Sans</FontFamily>
+                                <FontSize>8pt</FontSize>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style />
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox9</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Color>LightGrey</Color>
+                          <Style>Solid</Style>
+                        </Border>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox23">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>C24</Value>
+                              <Style>
+                                <FontFamily>Lucida Sans</FontFamily>
+                                <FontSize>8pt</FontSize>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style />
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox23</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -990,10 +1026,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Format(CDbl(Fields!CEL01.Value),"0.00")</Value>
+                              <Value>=Format(CDbl(Fields!CEL24.Value),"0.00")</Value>
                               <Style>
                                 <FontFamily>Lucida Sans</FontFamily>
-                                <FontSize>8pt</FontSize>
+                                <FontSize>7pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1023,10 +1059,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Format(CDbl(Fields!CEL02.Value),"0.00")</Value>
+                              <Value>=Format(CDbl(Fields!CEL23.Value),"0.00")</Value>
                               <Style>
                                 <FontFamily>Lucida Sans</FontFamily>
-                                <FontSize>8pt</FontSize>
+                                <FontSize>7pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1056,10 +1092,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Format(CDbl(Fields!CEL03.Value),"0.00")</Value>
+                              <Value>=Format(CDbl(Fields!CEL22.Value),"0.00")</Value>
                               <Style>
                                 <FontFamily>Lucida Sans</FontFamily>
-                                <FontSize>8pt</FontSize>
+                                <FontSize>7pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1089,10 +1125,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Format(CDbl(Fields!CEL04.Value),"0.00")</Value>
+                              <Value>=Format(CDbl(Fields!CEL21.Value),"0.00")</Value>
                               <Style>
                                 <FontFamily>Lucida Sans</FontFamily>
-                                <FontSize>8pt</FontSize>
+                                <FontSize>7pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1122,10 +1158,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Format(CDbl(Fields!CEL05.Value),"0.00")</Value>
+                              <Value>=Format(CDbl(Fields!CEL20.Value),"0.00")</Value>
                               <Style>
                                 <FontFamily>Lucida Sans</FontFamily>
-                                <FontSize>8pt</FontSize>
+                                <FontSize>7pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1155,10 +1191,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Format(CDbl(Fields!CEL06.Value),"0.00")</Value>
+                              <Value>=Format(CDbl(Fields!CEL19.Value),"0.00")</Value>
                               <Style>
                                 <FontFamily>Lucida Sans</FontFamily>
-                                <FontSize>8pt</FontSize>
+                                <FontSize>7pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1188,10 +1224,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Format(CDbl(Fields!CEL07.Value),"0.00")</Value>
+                              <Value>=Format(CDbl(Fields!CEL18.Value),"0.00")</Value>
                               <Style>
                                 <FontFamily>Lucida Sans</FontFamily>
-                                <FontSize>8pt</FontSize>
+                                <FontSize>7pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1221,10 +1257,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Format(CDbl(Fields!CEL08.Value),"0.00")</Value>
+                              <Value>=Format(CDbl(Fields!CEL17.Value),"0.00")</Value>
                               <Style>
                                 <FontFamily>Lucida Sans</FontFamily>
-                                <FontSize>8pt</FontSize>
+                                <FontSize>7pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1254,10 +1290,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Format(CDbl(Fields!CEL09.Value),"0.00")</Value>
+                              <Value>=Format(CDbl(Fields!CEL16.Value),"0.00")</Value>
                               <Style>
                                 <FontFamily>Lucida Sans</FontFamily>
-                                <FontSize>8pt</FontSize>
+                                <FontSize>7pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1287,10 +1323,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Format(CDbl(Fields!CEL10.Value),"0.00")</Value>
+                              <Value>=Format(CDbl(Fields!CEL15.Value),"0.00")</Value>
                               <Style>
                                 <FontFamily>Lucida Sans</FontFamily>
-                                <FontSize>8pt</FontSize>
+                                <FontSize>7pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1320,10 +1356,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Format(CDbl(Fields!CEL11.Value),"0.00")</Value>
+                              <Value>=Format(CDbl(Fields!CEL14.Value),"0.00")</Value>
                               <Style>
                                 <FontFamily>Lucida Sans</FontFamily>
-                                <FontSize>8pt</FontSize>
+                                <FontSize>7pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1331,39 +1367,6 @@
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>CEL11</rd:DefaultName>
-                      <Style>
-                        <Border>
-                          <Color>LightGrey</Color>
-                          <Style>Solid</Style>
-                        </Border>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="Textbox9">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value />
-                              <Style>
-                                <FontFamily>Lucida Sans</FontFamily>
-                                <FontSize>8pt</FontSize>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style />
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>Textbox9</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -1389,7 +1392,7 @@
                               <Value>=Format(CDbl(Fields!CEL13.Value),"0.00")</Value>
                               <Style>
                                 <FontFamily>Lucida Sans</FontFamily>
-                                <FontSize>8pt</FontSize>
+                                <FontSize>7pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1419,10 +1422,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Format(CDbl(Fields!CEL14.Value),"0.00")</Value>
+                              <Value>=Format(CDbl(Fields!CEL12.Value),"0.00")</Value>
                               <Style>
                                 <FontFamily>Lucida Sans</FontFamily>
-                                <FontSize>8pt</FontSize>
+                                <FontSize>7pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1452,10 +1455,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Format(CDbl(Fields!CEL15.Value),"0.00")</Value>
+                              <Value>=Format(CDbl(Fields!CEL11.Value),"0.00")</Value>
                               <Style>
                                 <FontFamily>Lucida Sans</FontFamily>
-                                <FontSize>8pt</FontSize>
+                                <FontSize>7pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1485,10 +1488,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Format(CDbl(Fields!CEL16.Value),"0.00")</Value>
+                              <Value>=Format(CDbl(Fields!CEL10.Value),"0.00")</Value>
                               <Style>
                                 <FontFamily>Lucida Sans</FontFamily>
-                                <FontSize>8pt</FontSize>
+                                <FontSize>7pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1518,10 +1521,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Format(CDbl(Fields!CEL17.Value),"0.00")</Value>
+                              <Value>=Format(CDbl(Fields!CEL09.Value),"0.00")</Value>
                               <Style>
                                 <FontFamily>Lucida Sans</FontFamily>
-                                <FontSize>8pt</FontSize>
+                                <FontSize>7pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1551,10 +1554,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Format(CDbl(Fields!CEL18.Value),"0.00")</Value>
+                              <Value>=Format(CDbl(Fields!CEL08.Value),"0.00")</Value>
                               <Style>
                                 <FontFamily>Lucida Sans</FontFamily>
-                                <FontSize>8pt</FontSize>
+                                <FontSize>7pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1584,10 +1587,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Format(CDbl(Fields!CEL19.Value),"0.00")</Value>
+                              <Value>=Format(CDbl(Fields!CEL07.Value),"0.00")</Value>
                               <Style>
                                 <FontFamily>Lucida Sans</FontFamily>
-                                <FontSize>8pt</FontSize>
+                                <FontSize>7pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1617,10 +1620,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Format(CDbl(Fields!CEL20.Value),"0.00")</Value>
+                              <Value>=Format(CDbl(Fields!CEL06.Value),"0.00")</Value>
                               <Style>
                                 <FontFamily>Lucida Sans</FontFamily>
-                                <FontSize>8pt</FontSize>
+                                <FontSize>7pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1650,10 +1653,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Format(CDbl(Fields!CEL21.Value),"0.00")</Value>
+                              <Value>=Format(CDbl(Fields!CEL05.Value),"0.00")</Value>
                               <Style>
                                 <FontFamily>Lucida Sans</FontFamily>
-                                <FontSize>8pt</FontSize>
+                                <FontSize>7pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1683,10 +1686,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Format(CDbl(Fields!CEL22.Value),"0.00")</Value>
+                              <Value>=Format(CDbl(Fields!CEL04.Value),"0.00")</Value>
                               <Style>
                                 <FontFamily>Lucida Sans</FontFamily>
-                                <FontSize>8pt</FontSize>
+                                <FontSize>7pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1709,24 +1712,90 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="CEL22">
+                    <Textbox Name="Textbox7">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Format(CDbl(Fields!CEL23.Value),"0.00")</Value>
+                              <Value>=Format(CDbl(Fields!CEL03.Value),"0.00")</Value>
                               <Style>
                                 <FontFamily>Lucida Sans</FontFamily>
-                                <FontSize>8pt</FontSize>
+                                <FontSize>7pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
                           <Style />
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>CEL22</rd:DefaultName>
+                      <rd:DefaultName>Textbox7</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Color>LightGrey</Color>
+                          <Style>Solid</Style>
+                        </Border>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox21">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=Format(CDbl(Fields!CEL02.Value),"0.00")</Value>
+                              <Style>
+                                <FontFamily>Lucida Sans</FontFamily>
+                                <FontSize>7pt</FontSize>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style />
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox21</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Color>LightGrey</Color>
+                          <Style>Solid</Style>
+                        </Border>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox25">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=Format(CDbl(Fields!CEL01.Value),"0.00")</Value>
+                              <Style>
+                                <FontFamily>Lucida Sans</FontFamily>
+                                <FontSize>7pt</FontSize>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style />
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox25</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -1771,6 +1840,7 @@
             <TablixMember />
             <TablixMember />
             <TablixMember />
+            <TablixMember />
           </TablixMembers>
         </TablixColumnHierarchy>
         <TablixRowHierarchy>
@@ -1788,7 +1858,7 @@
         <DataSetName>reportSet</DataSetName>
         <Left>0.00917in</Left>
         <Height>0.40624in</Height>
-        <Width>8.69993in</Width>
+        <Width>8.70514in</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1800,7 +1870,7 @@
     <Height>0.40624in</Height>
     <Style />
   </Body>
-  <Width>8.70917in</Width>
+  <Width>8.71431in</Width>
   <Page>
     <PageHeader>
       <Height>1.25in</Height>

@@ -55,9 +55,12 @@ namespace NewBTASProto
                 OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
                 OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
 
-                myAccessConn.Open();
-                myDataAdapter.Fill(Bats);
-
+                lock (Main_Form.dataBaseLock)
+                {
+                    myAccessConn.Open();
+                    myDataAdapter.Fill(Bats);
+                    myAccessConn.Close();
+                }
             }
             catch (Exception ex)
             {
@@ -66,7 +69,7 @@ namespace NewBTASProto
             }
             finally
             {
-                myAccessConn.Close();
+
             }
 
 
@@ -117,9 +120,12 @@ namespace NewBTASProto
                 OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
                 OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
 
-                myAccessConn.Open();
-                myDataAdapter.Fill(Custs);
-
+                lock (Main_Form.dataBaseLock)
+                {
+                    myAccessConn.Open();
+                    myDataAdapter.Fill(Custs);
+                    myAccessConn.Close();
+                }
             }
             catch (Exception ex)
             {
@@ -128,7 +134,7 @@ namespace NewBTASProto
             }
             finally
             {
-                myAccessConn.Close();
+                
             }
 
             List<string> Customers =  Custs.Tables[0].AsEnumerable().Select(x => x[0].ToString()).Distinct().ToList();
@@ -162,10 +168,12 @@ namespace NewBTASProto
             {
                 OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
                 OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
-
-                myAccessConn.Open();
-                myDataAdapter.Fill(BatsList);
-
+                lock (Main_Form.dataBaseLock)
+                {
+                    myAccessConn.Open();
+                    myDataAdapter.Fill(BatsList);
+                    myAccessConn.Close();
+                }
             }
             catch (Exception ex)
             {
@@ -174,7 +182,7 @@ namespace NewBTASProto
             }
             finally
             {
-                myAccessConn.Close();
+
             }
 
             List<string> Mods = BatsList.Tables[0].AsEnumerable().Select(x => x[0].ToString()).Distinct().ToList();
@@ -319,9 +327,12 @@ namespace NewBTASProto
                 OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
                 OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
 
-                myAccessConn.Open();
-                myDataAdapter.Fill(Bats);
-
+                lock (Main_Form.dataBaseLock)
+                {
+                    myAccessConn.Open();
+                    myDataAdapter.Fill(Bats);
+                    myAccessConn.Close();
+                }
             }
             catch (Exception ex)
             {
@@ -330,7 +341,7 @@ namespace NewBTASProto
             }
             finally
             {
-                myAccessConn.Close();
+
             }
 
 
@@ -353,7 +364,6 @@ namespace NewBTASProto
                     // set up the db Connection
                     string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
                     OleDbConnection conn = new OleDbConnection(connectionString);
-                    conn.Open();
 
                     //get the current row
                     DataRowView current = (DataRowView)bindingSource1.Current;
@@ -366,7 +376,12 @@ namespace NewBTASProto
 
                         string cmdStr = "DELETE FROM Batteries WHERE BID=" + current["BID"].ToString();
                         OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
-                        cmd.ExecuteNonQuery();
+                        lock (Main_Form.dataBaseLock)
+                        {
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                            conn.Close();
+                        }
 
                         // Also update the binding source
                         Bats.Tables[0].Rows[bindingNavigator1.BindingSource.Position].Delete();
@@ -376,7 +391,6 @@ namespace NewBTASProto
                     {
                         MessageBox.Show("That record was not in the DB. You must save it in order to delete it.");
                     }
-                    conn.Close();
                 }
             }
             catch(Exception ex)
@@ -416,7 +430,6 @@ namespace NewBTASProto
                 // set up the db Connection
                 string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
                 OleDbConnection conn = new OleDbConnection(connectionString);
-                conn.Open();
 
                 //MAKE SURE YOU SELECT THE CURRENT ROW FOR DOUBLE SAVES!!!!!!!!!!!!!!!!!
 
@@ -440,12 +453,32 @@ namespace NewBTASProto
                         "', BatteryBCN='" + textBox4.Text.Replace("'", "''") +
                         "' WHERE BID=" + current["BID"].ToString();
                     OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
-                    cmd.ExecuteNonQuery();
+                    lock (Main_Form.dataBaseLock)
+                    {
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                        conn.Close();
+                    }
 
                     // Also update the serial number in the other workOrders table!
                     cmdStr = "UPDATE WorkOrders SET BatterySerialNumber='" + textBox3.Text.Replace("'", "''") + "' WHERE BatterySerialNumber='" + current["BatterySerialNumber"].ToString() + "'";
                     cmd = new OleDbCommand(cmdStr, conn);
-                    cmd.ExecuteNonQuery();
+                    lock (Main_Form.dataBaseLock)
+                    {
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                        conn.Close();
+                    }
+
+                    // Also update the serial number in the other workOrders table!
+                    cmdStr = "UPDATE WorkOrders SET BatteryModel='" + comboBox2.Text.Replace("'", "''") + "' WHERE BatterySerialNumber='" + current["BatterySerialNumber"].ToString() + "'";
+                    cmd = new OleDbCommand(cmdStr, conn);
+                    lock (Main_Form.dataBaseLock)
+                    {
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                        conn.Close();
+                    }
                     
                     //now force an update on the binding by moving one ahead and then back...
                     toolStripCBSerNum.ComboBox.Text = textBox3.Text.Replace("'", "''");
@@ -465,8 +498,14 @@ namespace NewBTASProto
                         textBox3.Text.Replace("'", "''") + "','" +
                         textBox4.Text.Replace("'", "''") + "')";
                     OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
-                    cmd.ExecuteNonQuery();
-                    MessageBox.Show("Battery serial number " + textBox3.Text + "'s entry has been created.");
+
+                    lock (Main_Form.dataBaseLock)
+                    {
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                        conn.Close();
+                    }
+                        MessageBox.Show("Battery serial number " + textBox3.Text + "'s entry has been created.");
 
                     // update the dataTable with the new customer ID also..
                     current[0] = max;
@@ -475,19 +514,6 @@ namespace NewBTASProto
 
                 }
 
-                conn.Close();
-
-                // finally figure out if the bat is a standard or custom one
-                // set up the db Connection
-      
-                conn = new OleDbConnection(connectionString);
-                conn.Open();
-
-                // see if there is a record in the standard database
-
-                //string cmdStr = "Select count(*) from CUSTOMERS where CustomerID=" + current["CustomerID"].ToString(); //get the existence of the record as count
-                //OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
-                //int count = (int)cmd.ExecuteScalar();
 
             }// end try
             catch(Exception ex)

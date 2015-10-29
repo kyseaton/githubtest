@@ -43,200 +43,207 @@ namespace NewBTASProto
         // the constructor pulls in the data and stores it in the familiar A
         public ICDataStore(string[] ICDATA)
         {
-            terminalID = int.Parse(ICDATA[1]) - 100;
-            boardID = int.Parse(ICDATA[2]) - 1000;
-            PV1 = int.Parse(ICDATA[3]) - 1000;
-            PV2 = int.Parse(ICDATA[4]) - 1000;
-            CTR = int.Parse(ICDATA[7]) - 1000;
-            WDO = char.Parse(ICDATA[8]);
-            QS1 = int.Parse(ICDATA[5]) - 1000;
-            QS2 = int.Parse(ICDATA[6]) - 1000;
-            refVolt = (float.Parse(ICDATA[9]) - 1000) / 1000;
-
-            if (boardID < 2)
+            try
             {
-                battCurrent = (float.Parse(ICDATA[10]) - 1000) / 1000;
+                terminalID = int.Parse(ICDATA[1]) - 100;
+                boardID = int.Parse(ICDATA[2]) - 1000;
+                PV1 = int.Parse(ICDATA[3]) - 1000;
+                PV2 = int.Parse(ICDATA[4]) - 1000;
+                CTR = int.Parse(ICDATA[7]) - 1000;
+                WDO = char.Parse(ICDATA[8]);
+                QS1 = int.Parse(ICDATA[5]) - 1000;
+                QS2 = int.Parse(ICDATA[6]) - 1000;
+                refVolt = (float.Parse(ICDATA[10]) - 1000) / 1000;
+
+                if (boardID < 2)
+                {
+                    battCurrent = (float.Parse(ICDATA[10]) - 1000) / 1000;
+                }
+                else
+                {
+                    battCurrent = (float.Parse(ICDATA[10]) - 1000);
+                }
+
+                battVoltage = (float.Parse(ICDATA[12]) - 1000) / 10;
+                ACVoltage = int.Parse(ICDATA[12]) - 1000;
+                backupBattVolt = (float.Parse(ICDATA[13]) - 1000) / 100;
+                BT1 = (float.Parse(ICDATA[14]) - 1000) / 10;
+                BT2 = (float.Parse(ICDATA[15]) - 1000) / 10;
+                BT3 = (float.Parse(ICDATA[16]) - 1000) / 10;
+                BT4 = (float.Parse(ICDATA[17]) - 1000) / 10;
+                AmbientTemp = (float.Parse(ICDATA[18]) - 1000) / 10;
+                HSTemp1 = (float.Parse(ICDATA[19]) - 1000) / 4;
+                HSTemp2 = (float.Parse(ICDATA[20]) - 1000) / 4;
+                AuxIn = int.Parse(ICDATA[21]) - 1000;
+
+                if ((QS1 & 0x01) == 1)
+                {
+                    online = true;
+                }
+                else
+                {
+                    online = false;
+                }
+
+                //run status
+
+                switch ((QS1 & 0x06) >> 1)
+                {
+                    case 0:
+                        runStatus = "RESET";
+                        break;
+                    case 1:
+                        runStatus = "RUN";
+                        break;
+                    case 2:
+                        runStatus = "HOLD";
+                        break;
+                    case 3:
+                        runStatus = "END";
+                        break;
+                }   // end runStatus Switch
+
+                //Fault status
+
+                switch ((QS1 & 0x38) >> 3)
+                {
+                    case 0:
+                        faultStatus = "";
+                        break;
+                    case 1:
+                        faultStatus = "Power Fail";
+                        break;
+                    case 2:
+                        faultStatus = "Limiter";
+                        break;
+                    case 3:
+                        faultStatus = "Low AC";
+                        break;
+                    case 4:
+                        faultStatus = "AOV";
+                        break;
+                    case 5:
+                        faultStatus = "OverHeat";
+                        break;
+                    case 6:
+                        faultStatus = "OverTemp";
+                        break;
+                    case 7:
+                        faultStatus = "Overvoltage";
+                        break;
+                }   // end faultStatus Switch
+
+                //end status
+
+                switch ((QS1 & 0xC0) >> 6)
+                {
+                    case 0:
+                        endStatus = "";
+                        break;
+                    case 1:
+                        endStatus = "Current Fault";
+                        break;
+                    case 2:
+                        endStatus = "Peak End";
+                        break;
+                    case 3:
+                        endStatus = "Cap Fail";
+                        break;
+                }   // end endStatus Switch
+
+                //test mode
+
+                switch (QS2 & 0x0F)
+                {
+                    case 0:
+                        testMode = "None";
+                        break;
+                    case 1:
+                        testMode = "10 - Single Rate";
+                        break;
+                    case 2:
+                        testMode = "11 - Peak";
+                        break;
+                    case 3:
+                        testMode = "12 - Float";
+                        break;
+                    case 4:
+                        testMode = "20 - Dual Rate";
+                        break;
+                    case 5:
+                        testMode = "21 - Dual + Peak Xfr";
+                        break;
+                    case 6:
+                        testMode = "30 - Full Discharge";
+                        break;
+                    case 7:
+                        testMode = "31 - Cap Test";
+                        break;
+                    case 8:
+                        testMode = "32 - CRD Cap Test";
+                        break;
+                }   // end testMode Switch
+
+                //test mode
+
+                switch (QS2 & 0xF0 >> 4)
+                {
+                    case 0:
+                        availabilityStatus = "Enabled";
+                        break;
+                    case 1:
+                        availabilityStatus = "Disabled";
+                        break;
+                    case 2:
+                        availabilityStatus = "x2x";
+                        break;
+                    case 3:
+                        availabilityStatus = "x3x";
+                        break;
+                    case 4:
+                        availabilityStatus = "x4x";
+                        break;
+                    case 5:
+                        availabilityStatus = "x5x";
+                        break;
+                    case 6:
+                        availabilityStatus = "x6x";
+                        break;
+                    case 7:
+                        availabilityStatus = "x7x";
+                        break;
+                    case 8:
+                        availabilityStatus = "x8x";
+                        break;
+                    case 9:
+                        availabilityStatus = "x9x";
+                        break;
+                    case 10:
+                        availabilityStatus = "x10x";
+                        break;
+                    case 11:
+                        availabilityStatus = "x11x";
+                        break;
+                    case 12:
+                        availabilityStatus = "x12x";
+                        break;
+                    case 13:
+                        availabilityStatus = "x13x";
+                        break;
+                    case 14:
+                        availabilityStatus = "x14x";
+                        break;
+                    case 15:
+                        availabilityStatus = "x15x";
+                        break;
+                }   // end availabilityStatus Switch
+
             }
-            else
+            catch
             {
-                battCurrent = (float.Parse(ICDATA[10]) - 1000);
+                // something went wrong.  pretend you had a comport time out...
+                throw new System.TimeoutException();
             }
-
-            battVoltage = (float.Parse(ICDATA[11]) - 1000) / 10;
-            ACVoltage = int.Parse(ICDATA[12]) - 1000;
-            backupBattVolt = (float.Parse(ICDATA[13]) - 1000) / 100;
-            BT1 = (float.Parse(ICDATA[14]) - 1000) / 10;
-            BT2 = (float.Parse(ICDATA[15]) - 1000) / 10;
-            BT3 = (float.Parse(ICDATA[16]) - 1000) / 10;
-            BT4 = (float.Parse(ICDATA[17]) - 1000) / 10;
-            AmbientTemp = (float.Parse(ICDATA[18]) - 1000) / 10;
-            HSTemp1 = (float.Parse(ICDATA[19]) - 1000) / 4;
-            HSTemp2 = (float.Parse(ICDATA[20]) - 1000) / 4;
-            AuxIn = int.Parse(ICDATA[21]) - 1000;
-            
-            if((QS1 & 0x01) == 1)
-            {
-                online = true;
-            }
-            else
-            {
-                online = false;
-            }
-            
-            //run status
-            
-            switch ((QS1 & 0x06) >> 1)
-            {
-                case 0:
-                    runStatus = "RESET";
-                    break;
-                case 1:
-                    runStatus = "RUN";
-                    break;
-                case 2:
-                    runStatus = "HOLD";
-                    break;
-                case 3:
-                    runStatus = "END";
-                    break;
-            }   // end runStatus Switch
-
-            //Fault status
-
-            switch ((QS1 & 0x38) >> 3)
-            {
-                case 0:
-                    faultStatus = "";
-                    break;
-                case 1:
-                    faultStatus = "Power Fail";
-                    break;
-                case 2:
-                    faultStatus = "Limiter";
-                    break;
-                case 3:
-                    faultStatus = "Low AC";
-                    break;
-                case 4:
-                    faultStatus = "AOV";
-                    break;
-                case 5:
-                    faultStatus = "OverHeat";
-                    break;
-                case 6:
-                    faultStatus = "OverTemp";
-                    break;
-                case 7:
-                    faultStatus = "Overvoltage";
-                    break;
-            }   // end faultStatus Switch
-
-            //end status
-
-            switch ((QS1 & 0xC0) >> 6)
-            {
-                case 0:
-                    endStatus = "";
-                    break;
-                case 1:
-                    endStatus = "Current Fault";
-                    break;
-                case 2:
-                    endStatus = "Peak End";
-                    break;
-                case 3:
-                    endStatus = "Cap Fail";
-                    break;
-            }   // end endStatus Switch
-
-            //test mode
-
-            switch (QS2 & 0x0F)
-            {
-                case 0:
-                    testMode = "None";
-                    break;
-                case 1:
-                    testMode = "10 - Single Rate";
-                    break;
-                case 2:
-                    testMode = "11 - Peak";
-                    break;
-                case 3:
-                    testMode = "12 - Float";
-                    break;
-                case 4:
-                    testMode = "20 - Dual Rate";
-                    break;
-                case 5:
-                    testMode = "21 - Dual + Peak Xfr";
-                    break;
-                case 6:
-                    testMode = "30 - Full Discharge";
-                    break;
-                case 7:
-                    testMode = "31 - Cap Test";
-                    break;
-                case 8:
-                    testMode = "32 - CRD Cap Test";
-                    break;
-            }   // end testMode Switch
-
-            //test mode
-
-            switch (QS2 & 0xF0 >> 4)
-            {
-                case 0:
-                    availabilityStatus = "Enabled";
-                    break;
-                case 1:
-                    availabilityStatus = "Disabled";
-                    break;
-                case 2:
-                    availabilityStatus = "x2x";
-                    break;
-                case 3:
-                    availabilityStatus = "x3x";
-                    break;
-                case 4:
-                    availabilityStatus = "x4x";
-                    break;
-                case 5:
-                    availabilityStatus = "x5x";
-                    break;
-                case 6:
-                    availabilityStatus = "x6x";
-                    break;
-                case 7:
-                    availabilityStatus = "x7x";
-                    break;
-                case 8:
-                    availabilityStatus = "x8x";
-                    break;
-                case 9:
-                    availabilityStatus = "x9x";
-                    break;
-                case 10:
-                    availabilityStatus = "x10x";
-                    break;
-                case 11:
-                    availabilityStatus = "x11x";
-                    break;
-                case 12:
-                    availabilityStatus = "x12x";
-                    break;
-                case 13:
-                    availabilityStatus = "x13x";
-                    break;
-                case 14:
-                    availabilityStatus = "x14x";
-                    break;
-                case 15:
-                    availabilityStatus = "x15x";
-                    break;
-            }   // end availabilityStatus Switch
-
-
         }
 
         public ICDataStore()

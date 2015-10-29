@@ -54,9 +54,12 @@ namespace NewBTASProto
                 OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
                 OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
 
-                myAccessConn.Open();
-                myDataAdapter.Fill(Customers);
-
+                lock (Main_Form.dataBaseLock)
+                {
+                    myAccessConn.Open();
+                    myDataAdapter.Fill(Customers);
+                    myAccessConn.Close();
+                }
             }
             catch (Exception ex)
             {
@@ -65,7 +68,7 @@ namespace NewBTASProto
             }
             finally
             {
-                myAccessConn.Close();
+                
             }
 
 
@@ -205,7 +208,6 @@ namespace NewBTASProto
                     // set up the db Connection
                     string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
                     OleDbConnection conn = new OleDbConnection(connectionString);
-                    conn.Open();
 
                     //get the current row
                     DataRowView current = (DataRowView)bindingSource1.Current;
@@ -218,7 +220,12 @@ namespace NewBTASProto
 
                         string cmdStr = "DELETE FROM CUSTOMERS WHERE CustomerID=" + current["CustomerID"].ToString();
                         OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
-                        cmd.ExecuteNonQuery();
+                        lock (Main_Form.dataBaseLock)
+                        {
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                            conn.Close();
+                        }
 
                         // Also update the binding source
                         Customers.Tables[0].Rows[bindingNavigator1.BindingSource.Position].Delete();
@@ -269,7 +276,6 @@ namespace NewBTASProto
                 // set up the db Connection
                 string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
                 OleDbConnection conn = new OleDbConnection(connectionString);
-                conn.Open();
 
                 //MAKE SURE YOU SELECT THE CURRENT ROW FOR DOUBLE SAVES!!!!!!!!!!!!!!!!!
 
@@ -297,16 +303,31 @@ namespace NewBTASProto
                         "', Notes='" + textBox9.Text.Replace("'", "''") +
                         "' WHERE CustomerID=" + current["CustomerID"].ToString();
                     OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
-                    cmd.ExecuteNonQuery();
+                    lock (Main_Form.dataBaseLock)
+                    {
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                        conn.Close();
+                    }
 
                     // Also update the customer name in the other tables!
                     cmdStr = "UPDATE WorkOrders SET CustomerName='" + textBox1.Text.Replace("'", "''") + "' WHERE CustomerName='" + current["CustomerName"].ToString() + "'";
                     cmd = new OleDbCommand(cmdStr, conn);
-                    cmd.ExecuteNonQuery();
+                    lock (Main_Form.dataBaseLock)
+                    {
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                        conn.Close();
+                    }
 
                     cmdStr = "UPDATE Batteries SET CustomerName='" + textBox1.Text.Replace("'", "''") + "' WHERE CustomerName='" + current["CustomerName"].ToString() + "'";
                     cmd = new OleDbCommand(cmdStr, conn);
-                    cmd.ExecuteNonQuery();
+                    lock (Main_Form.dataBaseLock)
+                    {
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                        conn.Close();
+                    }
 
                     //now force an update on the binding by moving one ahead and then back...
                     toolStripCBCustomers.ComboBox.Text = textBox1.Text.Replace("'", "''");
@@ -339,7 +360,12 @@ namespace NewBTASProto
                         textBox8.Text.Replace("'", "''") + "','" +
                         textBox9.Text.Replace("'", "''") + "')";
                     OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
-                    cmd.ExecuteNonQuery();
+                    lock (Main_Form.dataBaseLock)
+                    {
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                        conn.Close();
+                    }
                     MessageBox.Show(textBox1.Text + " has been added as a customer.");
 
                     // update the dataTable with the new customer ID also..

@@ -30,6 +30,9 @@ namespace NewBTASProto
         // Create graph settings table
         DataTable gs = new DataTable();
 
+        // and the p(oint) c(olor) i(nformation) table
+        public DataTable pci = new DataTable();
+
 
         /// <summary>
         /// This method builds the BTAS table
@@ -52,7 +55,7 @@ namespace NewBTASProto
                 object[] temp = this.channelArray[i];
 
                 // Add each item to the cells in the column.
-                for (int a = 0; a < 12; a++)
+                for (int a = 0; a < 13; a++)
                 {
                     updateD(i,a,temp[a]);
                 }
@@ -75,6 +78,7 @@ namespace NewBTASProto
             columnNames.Add("Chgr ID");
             columnNames.Add("Chgr Type");
             columnNames.Add("Chgr Status");
+            columnNames.Add("Auto Config");
 
             // Create the columns using the columnNames list
             for (int i = 0; i < this.columnNames.Count; i++)
@@ -83,7 +87,7 @@ namespace NewBTASProto
                 string name = this.columnNames[i];
 
                 // Add the program name to our columns.
-                if (name.ToString() == "In Use" || name.ToString() == "Record" || name.ToString() == "Link Chgr")
+                if (name.ToString() == "In Use" || name.ToString() == "Record" || name.ToString() == "Link Chgr" || name.ToString() == "Auto Config")
                 {
                     d.Columns.Add(name, typeof(bool));
                 }
@@ -97,7 +101,7 @@ namespace NewBTASProto
             // Create the empty set of arrays to represent the 16 channels
             for (int i = 0; i < 16; i++)
             {
-                channelArray.Add(new object[12] { i, "", "", "", 0, 0, "", "", 0, "", "", "" });
+                channelArray.Add(new object[13] { i, "", "", "", 0, 0, "", "", 0, "", "", "", 0 });
             }
 
             // Render the DataGridView.
@@ -122,7 +126,7 @@ namespace NewBTASProto
             dataGridView1.DataSource = d;
 
             // change settings for the individual columns
-            for (int i = 0; i < 12; i++)
+            for (int i = 0; i < 13; i++)
             {
                 // these settings apply to every column
                 dataGridView1.Columns[i].SortMode = DataGridViewColumnSortMode.NotSortable;
@@ -179,6 +183,10 @@ namespace NewBTASProto
                     case 11:
                         dataGridView1.Columns[i].Width = 78;
                         dataGridView1.Columns[i].DefaultCellStyle.BackColor = Color.Gainsboro;
+                        break;
+                    case 12:
+                        dataGridView1.Columns[i].Width = 60;
+                        dataGridView1.Columns[i].DefaultCellStyle.BackColor = Color.LightSkyBlue;
                         break;
                 }
 
@@ -379,6 +387,51 @@ namespace NewBTASProto
                 }
 
             }
+            else if (e.ColumnIndex == 12 && (bool)d.Rows[e.RowIndex][5] != true)
+            {
+                if (d.Rows[e.RowIndex][9].ToString().Contains("S"))
+                {
+                    //don't update the slave...
+                    return;
+                }
+                else if (d.Rows[e.RowIndex][9].ToString().Contains("M"))
+                {
+                    //find the slave
+                    string temp = d.Rows[e.RowIndex][9].ToString().Replace("-M", "");
+
+                    for (int i = 0; i < 16; i++)
+                    {
+                        if (d.Rows[i][9].ToString().Contains(temp) && d.Rows[i][9].ToString().Contains("S"))
+                        {
+                            //found the slave
+                            if ((bool)d.Rows[e.RowIndex][e.ColumnIndex])
+                            {
+                                updateD(e.RowIndex, e.ColumnIndex, false);
+                                updateD(i, 12, false);
+                            }
+                            else
+                            {
+                                updateD(e.RowIndex, e.ColumnIndex, true);
+                                updateD(i, 12, true);
+                            }
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    //normal case...
+                    if ((bool)d.Rows[e.RowIndex][e.ColumnIndex])
+                    {
+                        updateD(e.RowIndex, e.ColumnIndex, false);
+                    }
+                    else
+                    {
+                        updateD(e.RowIndex, e.ColumnIndex, true);
+                    }
+                }
+
+            }
 
             dataGridView1.ClearSelection();
         }
@@ -508,6 +561,75 @@ namespace NewBTASProto
                 }
             }
             
+        }
+
+        private void Initialize_PCI_Settings()
+        {
+            try
+            {
+                //create the columns
+                pci.Columns.Add("bat", typeof(string));
+                pci.Columns.Add("tech", typeof(string));
+                pci.Columns.Add("NomV", typeof(float));
+                pci.Columns.Add("NCells", typeof(int));
+                pci.Columns.Add("BCVMIN", typeof(float));
+                pci.Columns.Add("BCVMAX", typeof(float));
+                pci.Columns.Add("CCVMMIN", typeof(float));
+                pci.Columns.Add("CCVMAX", typeof(float));
+                pci.Columns.Add("CCAPV", typeof(float));
+
+                //name the table
+                pci.TableName = "pci_set";
+                //now read in what we got!
+                pci.ReadXml(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\pci_set.xml");
+
+                // do we have a good datatable? Lets do some basic checks...
+                if (pci.Rows.Count != 16 ||
+                    pci.Rows[0][0].ToString() == "" ||
+                    pci.Rows[0][1].ToString() == "" ||
+                    pci.Rows[0][2].ToString() == "" ||
+                    pci.Rows[0][3].ToString() == "" || 
+                    pci.Rows[0][4].ToString() == "" ||
+                    pci.Rows[0][5].ToString() == "" ||
+                    pci.Rows[0][6].ToString() == "" ||
+                    pci.Rows[0][7].ToString() == "" ||
+                    pci.Rows[0][8].ToString() == "")
+                {
+                    pci.Clear();
+                    for (int i = 0; i < 16; i++)
+                    {
+                        pci.Rows.Add();
+                        pci.Rows[i][0] = "None";
+                        pci.Rows[i][1] = "NiCd";
+                        pci.Rows[i][2] = 24;         // negative 1 is the default...
+                        pci.Rows[i][3] = -1;         // negative 1 is the default...
+                        pci.Rows[i][4] = -1;         // negative 1 is the default...
+                        pci.Rows[i][5] = -1;         // negative 1 is the default...
+                        pci.Rows[i][6] = -1;         // negative 1 is the default...
+                        pci.Rows[i][7] = 1.75;         // negative 1 is the default...
+                        pci.Rows[i][8] = -1;         // negative 1 is the default...
+                    }
+                }
+            }
+            catch
+            {
+                //  we need to set the table up to be a null value table...
+                pci.Clear();
+                for (int i = 0; i < 16; i++)
+                {
+                    pci.Rows.Add();
+                    pci.Rows[i][0] = "None";
+                    pci.Rows[i][1] = "NiCd";
+                    pci.Rows[i][2] = 24;         // negative 1 is the default...
+                    pci.Rows[i][3] = -1;         // negative 1 is the default...
+                    pci.Rows[i][4] = -1;         // negative 1 is the default...
+                    pci.Rows[i][5] = -1;         // negative 1 is the default...
+                    pci.Rows[i][6] = -1;         // negative 1 is the default...
+                    pci.Rows[i][7] = 1.75;         // negative 1 is the default...
+                    pci.Rows[i][8] = -1;         // negative 1 is the default...
+                }
+            }
+
         }
 
     }

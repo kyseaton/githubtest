@@ -40,11 +40,6 @@ namespace NewBTASProto
         public CancellationTokenSource cPollCScans;
         public CancellationTokenSource sequentialScanT;
 
-        //Graph variables
-        int technology1 = 0;
-        int cell1 = 0;
-        int type1 = 0;
-
         // prevent double fill combobox threads with the variable...
         // 99 is the start up value
         int oldRow = 99;
@@ -158,10 +153,10 @@ namespace NewBTASProto
                                             tempText += "Temp. Cable:  " + (3 - testData.TCAB).ToString() + "   (" + testData.tempPlateType + ")" + Environment.NewLine;
                                             tempText += "Cells Cable:  " + testData.CCID.ToString() + "   (" + testData.cellCableType + ")" + Environment.NewLine;
                                             tempText += "Shunt Cable:  " + testData.SHCID.ToString() + "   (" + testData.shuntCableType + ")" + Environment.NewLine;
-                                            tempText += "Voltage Batt 1:  " + testData.VB1.ToString("00.00") + Environment.NewLine;
-                                            tempText += "Voltage Batt 2:  " + testData.VB2.ToString("00.00") + Environment.NewLine;
-                                            tempText += "Voltage Batt 3:  " + testData.VB3.ToString("00.00") + Environment.NewLine;
-                                            tempText += "Voltage Batt 4:  " + testData.VB4.ToString("00.00") + Environment.NewLine;
+                                            tempText += "Voltage Batt 1:  " + (GlobalVars.useF ? ConvertCelsiusToFahrenheit(testData.VB1).ToString("00.00") : testData.VB1.ToString("00.00")) + Environment.NewLine;
+                                            tempText += "Voltage Batt 2:  " + (GlobalVars.useF ? ConvertCelsiusToFahrenheit(testData.VB2).ToString("00.00") : testData.VB2.ToString("00.00")) + Environment.NewLine;
+                                            tempText += "Voltage Batt 3:  " + (GlobalVars.useF ? ConvertCelsiusToFahrenheit(testData.VB3).ToString("00.00") : testData.VB3.ToString("00.00")) + Environment.NewLine;
+                                            tempText += "Voltage Batt 4:  " + (GlobalVars.useF ? ConvertCelsiusToFahrenheit(testData.VB4).ToString("00.00") : testData.VB4.ToString("00.00")) + Environment.NewLine;
                                             // select which currents to display
                                             if (testData.shuntCableType == "TEST BOX")
                                             {
@@ -213,7 +208,7 @@ namespace NewBTASProto
                                                     tempText += "Temp Plate 1:  Shorted" + Environment.NewLine;
                                                     break;
                                                 default:
-                                                    tempText += "Temp Plate 1:  " + testData.TP1.ToString("00.0") + Environment.NewLine;
+                                                    tempText += "Temp Plate 1:  " + (GlobalVars.useF ? ConvertCelsiusToFahrenheit(testData.TP1).ToString("00.00") : testData.TP1.ToString("00.0")) + Environment.NewLine;
                                                     break;
                                             }
                                             switch (Convert.ToInt16(testData.TP2))
@@ -231,7 +226,7 @@ namespace NewBTASProto
                                                     tempText += "Temp Plate 2:  Shorted" + Environment.NewLine;
                                                     break;
                                                 default:
-                                                    tempText += "Temp Plate 2:  " + testData.TP2.ToString("00.0") + Environment.NewLine;
+                                                    tempText += "Temp Plate 2:  " + (GlobalVars.useF ? ConvertCelsiusToFahrenheit(testData.TP2).ToString("00.00") : testData.TP2.ToString("00.0")) + Environment.NewLine;
                                                     break;
                                             }
                                             switch (Convert.ToInt16(testData.TP3))
@@ -249,7 +244,7 @@ namespace NewBTASProto
                                                     tempText += "Temp Plate 3:  Shorted" + Environment.NewLine;
                                                     break;
                                                 default:
-                                                    tempText += "Temp Plate 3:  " + testData.TP3.ToString("00.0") + Environment.NewLine;
+                                                    tempText += "Temp Plate 3:  " + (GlobalVars.useF ? ConvertCelsiusToFahrenheit(testData.TP3).ToString("00.00") : testData.TP3.ToString("00.0")) + Environment.NewLine;
                                                     break;
                                             }
                                             switch (Convert.ToInt16(testData.TP4))
@@ -267,7 +262,7 @@ namespace NewBTASProto
                                                     tempText += "Temp Plate 4:  Shorted" + Environment.NewLine;
                                                     break;
                                                 default:
-                                                    tempText += "Temp Plate 4:  " + testData.TP1.ToString("00.0") + Environment.NewLine;
+                                                    tempText += "Temp Plate 4:  " + (GlobalVars.useF ? ConvertCelsiusToFahrenheit(testData.TP4).ToString("00.00") : testData.TP4.ToString("00.0")) + Environment.NewLine;
                                                     break;
                                             }
                                             switch (Convert.ToInt16(testData.TP5))
@@ -285,7 +280,7 @@ namespace NewBTASProto
                                                     tempText += "Ambient Temp:  Shorted" + Environment.NewLine;
                                                     break;
                                                 default:
-                                                    tempText += "Ambient Temp:  " + testData.TP5.ToString("00.0") + Environment.NewLine;
+                                                    tempText += "Ambient Temp:  " + (GlobalVars.useF ? ConvertCelsiusToFahrenheit(testData.TP5).ToString("00.00") : testData.TP5.ToString("00.0")) + Environment.NewLine;
                                                     break;
                                             }
 
@@ -293,8 +288,6 @@ namespace NewBTASProto
                                             tempText += "Program Version " + testData.programVersion;
 
                                             LockWindowUpdate(label1.Handle);
-                                            //label1.Text = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\n\rXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXXXX";
-                                            //Thread.Sleep(2000);
                                             label1.Text = tempText;
                                             LockWindowUpdate(IntPtr.Zero);
 
@@ -810,6 +803,17 @@ namespace NewBTASProto
             //if that row is selected, update the chart portion
             int station = dataGridView1.CurrentRow.Index;
 
+            int Cells;
+
+            if ((int)pci.Rows[station][3] == -1)
+            {
+                Cells = GlobalVars.CScanData[station].cellsToDisplay;
+            }
+            else
+            {
+                Cells = (int)pci.Rows[station][3];
+            }
+
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             if (station != testData.terminalID || lockUpdate)
             {
@@ -837,31 +841,17 @@ namespace NewBTASProto
                 chart1.ChartAreas[0].AxisX.Title = "Battery";
                 chart1.ChartAreas[0].AxisY.Title = "Voltage";
 
-                int type = 4;
-
-                if ((string)d.Rows[station][2] == "As Received" ||
-                    (string)d.Rows[station][2] == "Capacity-1" ||
-                    (string)d.Rows[station][2] == "Test" ||
-                    (string)d.Rows[station][2] == "Custom Cap")
-                {
-                    type = 2;
-                }
-                else if ((string)d.Rows[station][2] == "Discharge")
-                {
-                    type = 0;
-                }
-
                 series1.Points.AddXY(1, testData.VB1);
-                series1.Points[0].Color = pointColorMain(0, 1, testData.VB1, type);
+                series1.Points[0].Color = pointColorMain(station, testData.VB1, true);
                 series1.Points[0].Label = "VB1";
                 series1.Points.AddXY(2, testData.VB2);
-                series1.Points[1].Color = pointColorMain(0, 1, testData.VB2, type);
+                series1.Points[1].Color = pointColorMain(station,testData.VB2, true);
                 series1.Points[1].Label = "VB2";
                 series1.Points.AddXY(3, testData.VB3);
-                series1.Points[2].Color = pointColorMain(0, 1, testData.VB3, type);
+                series1.Points[2].Color = pointColorMain(station, testData.VB3, true);
                 series1.Points[2].Label = "VB3";
                 series1.Points.AddXY(4, testData.VB4);
-                series1.Points[3].Color = pointColorMain(0, 1, testData.VB4, type);
+                series1.Points[3].Color = pointColorMain(station, testData.VB4, true);
                 series1.Points[3].Label = "VB4";
 
 
@@ -902,19 +892,82 @@ namespace NewBTASProto
                     type = 0;
                 }
 
-                for (int i = 0; i < GlobalVars.CScanData[station].cellsToDisplay; i++)
+                //special cable cases first...
+                if (GlobalVars.CScanData[station].CCID == 3)
                 {
-                    if (GlobalVars.Pos2Neg == false)
+                    // this is the 2X 11 cable
+                    for (int i = 0; i < Cells; i++)
                     {
-                        series1.Points.AddXY(i + 1, testData.orderedCells[i]);
-                        // color test
-                        series1.Points[i].Color = pointColorMain(0, 1, testData.orderedCells[i], type);
+                        if (GlobalVars.Pos2Neg == false)
+                        {
+                            series1.Points.AddXY(i % 11  + 1, testData.orderedCells[i]);
+                            // color test
+                            series1.Points[i].Color = pointColorMain(station, testData.orderedCells[i], true);
+                            if (i == 10)
+                            {
+                                // add a blank point
+                                series1.Points.AddXY(" ",0);
+                            }
+                        }
+                        else
+                        {
+                            series1.Points.AddXY(i % 11 + 1, testData.orderedCells[Cells - i - 1]);
+                            // color test
+                            series1.Points[i].Color = pointColorMain(station, testData.orderedCells[Cells - i - 1], true);
+                            if (i == 6 || i == 13)
+                            {
+                                // add a blank point
+                                series1.Points.AddXY(" ", 0);
+                            }
+                        }
                     }
-                    else
+                }
+                else if (GlobalVars.CScanData[station].CCID == 4)
+                {
+                    // this is the 3X7 cable
+                    for (int i = 0; i < Cells; i++)
                     {
-                        series1.Points.AddXY(i + 1, testData.orderedCells[GlobalVars.CScanData[station].cellsToDisplay - i - 1]);
-                        // color test
-                        series1.Points[i].Color = pointColorMain(0, 1, testData.orderedCells[GlobalVars.CScanData[station].cellsToDisplay - i - 1], type);
+                        if (GlobalVars.Pos2Neg == false)
+                        {
+                            series1.Points.AddXY(i % 7 + 1, testData.orderedCells[i]);
+                            // color test
+                            series1.Points[i].Color = pointColorMain(station, testData.orderedCells[i], true);
+                            if (i == 10)
+                            {
+                                // add a blank point
+                                series1.Points.AddXY(" ", 0);
+                            }
+                        }
+                        else
+                        {
+                            series1.Points.AddXY(i % 7 + 1, testData.orderedCells[Cells - i - 1]);
+                            // color test
+                            series1.Points[i].Color = pointColorMain(station, testData.orderedCells[Cells - i - 1], true);
+                            if (i == 6 || i == 13)
+                            {
+                                // add a blank point
+                                series1.Points.AddXY(" ", 0);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    //  all other cases...
+                    for (int i = 0; i < Cells; i++)
+                    {
+                        if (GlobalVars.Pos2Neg == false)
+                        {
+                            series1.Points.AddXY(i + 1, testData.orderedCells[i]);
+                            // color test
+                            series1.Points[i].Color = pointColorMain(station, testData.orderedCells[i], true);
+                        }
+                        else
+                        {
+                            series1.Points.AddXY(i + 1, testData.orderedCells[Cells - i - 1]);
+                            // color test
+                            series1.Points[i].Color = pointColorMain(station, testData.orderedCells[Cells - i - 1], true);
+                        }
                     }
                 }
                 chart1.Invalidate();
@@ -999,7 +1052,20 @@ namespace NewBTASProto
                     {
                         series1.Points.AddXY(Math.Round(double.Parse(graphMainSet.Tables[0].Rows[i][7].ToString()) * 1440), graphMainSet.Tables[0].Rows[i][q]);
                         // color test
-                        series1.Points[i].Color = pointColorMain(technology1, cell1, double.Parse(graphMainSet.Tables[0].Rows[i][q].ToString()), type1);
+                        if (q == 8 || q == 7)
+                        {
+                            //current
+                            series1.Points[i].Color = Color.Blue;
+                        }
+                        else if (q > 37 && q < 42)
+                        {
+                            //temp
+                            series1.Points[i].Color = Color.LightSeaGreen;
+                        }
+                        else
+                        {
+                            series1.Points[i].Color = pointColorMain(station, double.Parse(graphMainSet.Tables[0].Rows[i][q].ToString()), false);
+                        }
                     }
 
                                             // pad with zero Vals to help with the look of the plot...
@@ -1189,14 +1255,15 @@ namespace NewBTASProto
                         BorderWidth = 1
                     };
                     this.chart1.Series.Add(series1);
+            
 
                     if (q == 999)
                     {
-                        for (int i = 0; i < cell1; i++)
+                        for (int i = 0; i < Cells; i++)
                         {
                             series1.Points.AddXY(i + 1, graphMainSet.Tables[0].Rows[graphMainSet.Tables[0].Rows.Count - 1][i + 14]);
                             // color test
-                            series1.Points[i].Color = pointColorMain(technology1, 1, double.Parse(graphMainSet.Tables[0].Rows[graphMainSet.Tables[0].Rows.Count - 1][i + 14].ToString()), type1);
+                            series1.Points[i].Color = pointColorMain(station, double.Parse(graphMainSet.Tables[0].Rows[graphMainSet.Tables[0].Rows.Count - 1][i + 14].ToString()), true);
                         }
                     }
                     else
@@ -1205,7 +1272,7 @@ namespace NewBTASProto
                         {
                             series1.Points.AddXY(Math.Round(double.Parse(graphMainSet.Tables[0].Rows[i][7].ToString()) * 1440), graphMainSet.Tables[0].Rows[i][q]);
                             // color test
-                            series1.Points[i].Color = pointColorMain(technology1, 1, double.Parse(graphMainSet.Tables[0].Rows[i][q].ToString()), type1);
+                            series1.Points[i].Color = pointColorMain(station, double.Parse(graphMainSet.Tables[0].Rows[i][q].ToString()), true);
                         }
                         // pad with zero Vals to help with the look of the plot...
                         // first get the interval and total points
@@ -1338,116 +1405,137 @@ namespace NewBTASProto
 
         }
 
-        private Color pointColorMain(int tech, int Cells, double Value, int type)
+        private Color pointColorMain(int station, double Value, bool singleCell)
         {
 
+            if (radioButton1.Checked == true)
+            {
+                switch (comboBox2.Text)
+                {
+                    case "Current":
+                        return System.Drawing.Color.Blue;
+                    case "Temperature 1":
+                    case "Temperature 2":
+                    case "Temperature 3":
+                    case "Temperature 4":
+                        return System.Drawing.Color.LightSeaGreen;
+                    default:
+                        break;
+                }
+            }
+
+            // we use station to look at the particular channel we are working with
+            int Cells;
+            if (singleCell) 
+            {
+                Cells = 1; 
+            }
+            else 
+            {
+                if ((int)pci.Rows[station][3] == -1)
+                {
+                    Cells = GlobalVars.CScanData[station].cellsToDisplay;
+                }
+                else
+                {
+                    Cells = (int)pci.Rows[station][3];
+                }
+            }
+
+            string tech = pci.Rows[station][1].ToString();
+            string test_type = d.Rows[station][2].ToString();
+
+            // test_type is the type of test we are generating the colors for
+
+            // Three types of batteries (NiCd, SLA and NiCd ULM) and two directions (charge discharge)
+
             // normal vented NiCds
-            double Min1 = 0.25;
-            double Min2 = 1.5;
-            double Min3 = 1.55;
-            double Min4 = 1.7;
-            double Max = 1.75;
+            double Min1 = 0;
+            double Min2 = 0;
+            double Min3 = 0;
+            double Min4 = 0;
+            double Max = 0;
 
-            // special case for cable 10, sealed NiCds
-            if (tech == 1)
+            switch (tech)
             {
-                Min1 = 0.25;
-                Min2 = 1.45;
-                Min3 = 1.5;
-                Min4 = 1.65;
-                Max = 1.7;
+                case "NiCd":
+                    // Discharge
+                    if (test_type == "As Received" || test_type == "Capacity-1" || test_type == "Discharge" || test_type == "Custom Cap" || test_type == "")
+                    {
+                        Min4 = 1 * Cells;
+                        Max = 1.05 * Cells;
+
+                        if (Value > Max) { return Color.Green; }
+                        else if (Value > Min4) { return Color.Orange; }
+                        else { return Color.Red; }
+
+                    }
+                    // Charge
+                    else
+                    {
+                        Min1 = 0.25 * Cells;
+                        Min2 = 1.5 * Cells;
+                        Min3 = 1.55 * Cells;
+                        Max = ((-1 == (float)pci.Rows[station][7]) ? 1.75 : (float)pci.Rows[station][7]) * Cells;
+
+                        if (Value > Max) { return Color.Red; }
+                        else if (Value > Min3) { return Color.Green; }
+                        else if (Value > Min2) { return Color.Orange; }
+                        else if (Value > Min1) { return Color.Yellow; }
+                        else { return Color.Red; }
+                    }
+                case "Sealed Lead Acid":
+                    // Discharge
+                    if (test_type == "As Received" || test_type == "Capacity-1" || test_type == "Discharge" || test_type == "Custom Cap" || test_type == "")
+                    {
+
+                        Min4 = (20 / 24) * (float)pci.Rows[station][2];
+                        Max = (21/24) * (float) pci.Rows[station][2];
+
+                        if (Value > Max) { return Color.Green; }
+                        else if (Value > Min4) { return Color.Orange; }
+                        else { return Color.Red; }
+
+                    }
+                    // Charge
+                    else
+                    {
+                        // always Blue!
+                        return Color.Blue;
+                    }
+                case "NiCd ULM":
+                    // Discharge
+                    if (test_type == "As Received" || test_type == "Capacity-1" || test_type == "Discharge" || test_type == "Custom Cap" || test_type == "")
+                    {
+                        Min4 = 1 * Cells;
+                        Max = 1.05 * Cells;
+
+                        if (Value > Max) { return Color.Green; }
+                        else if (Value > Min4) { return Color.Orange; }
+                        else { return Color.Red; }
+
+                    }
+                    // Charge
+                    else
+                    {
+                        Min1 = 0.25 * Cells;
+                        Min2 = 1.5 * Cells;
+                        Min3 = 1.55 * Cells;
+                        Max = ((-1 == (float)pci.Rows[station][7]) ? 1.82 : (float)pci.Rows[station][7]) * Cells;
+
+                        if (Value > Max) { return Color.Red; }
+                        else if (Value > Min3) { return Color.Green; }
+                        else if (Value > Min2) { return Color.Orange; }
+                        else if (Value > Min1) { return Color.Yellow; }
+                        else { return Color.Red; }
+                    }
             }
 
-            // these are the discharging cases...
-            switch (type)
-            {
-
-                // these are the As Recieved color setting    
-                case 1:
-                    Min1 = 0.1;
-                    Min2 = 1.2;
-                    Min3 = 1.25;
-                    Min4 = 1.25;
-                    break;
-                // these are the Discharge settings
-                case 2:
-                    Min1 = 0;
-                    Min2 = 0.5;
-                    Min3 = 0.5;
-                    Min4 = 0.5;
-                    break;
-                // these are the Capacity
-                case 3:
-                    Min1 = 1;
-                    Min2 = 1;
-                    Min3 = 1.05;
-                    Min4 = 11.7;
-                    Max = 1.25;
-                    break;
-                // this is for charging Nicads
-                case 4:
-                    //Min1 = 0.1;
-                    //Min2 = 1.2;
-                    //Min3 = 1.25;
-                    break;
-                default:
-                    break;
-            }
-
-            // scale the limits for the number of cells in the battery
-            Min1 *= Cells;
-            Min2 *= Cells;
-            Min3 *= Cells;
-            Min4 *= Cells;
-            Max *= Cells;
-
-
-
-            // with all of that said, let's start picking colors!
-            if (type == 4)
-            {
-                if (Value > Min3) { return System.Drawing.Color.Red; }
-                else if (Value > Min2) { return System.Drawing.Color.Orange; }
-                else if (Value > Min1) { return System.Drawing.Color.Green; }
-                else { return System.Drawing.Color.Blue; }
-            }
-            // this is for all charging operations not involving lead acid
-            else if (tech != 2 && type == 0)
-            {
-                if (Value < Min2) { return System.Drawing.Color.Yellow; }
-                else if (Value >= Min2 && Value < Min3) { return System.Drawing.Color.Orange; }
-                else if (Value >= Min3 && Value < Min4) { return System.Drawing.Color.Green; }
-                else if (Value >= Min4 && Value < Max) { return System.Drawing.Color.Blue; }
-                else { return System.Drawing.Color.Red; }
-            }
-            // lead acid case
-            else if (type == 0)
-            {
-                return System.Drawing.Color.Orange;
-            }
-            // this is for the Capacity test, Discharge and As Recieved
-            else if (tech != 2)
-            {
-                if (Value < Min1) { return System.Drawing.Color.Red; }
-                else if (Value < Min2) { return System.Drawing.Color.Yellow; }
-                else if (Value < Min3) { return System.Drawing.Color.Orange; }
-                else if (Value < Min4) { return System.Drawing.Color.Green; }
-                else if (Value < Min2) { return System.Drawing.Color.Orange; }
-            }
-            //Finally the lead acid Capacity test, Discharge and As Recieved case
-            else
-            {
-                if (Value > Cells * 1.75) { return System.Drawing.Color.Green; }
-                else if (Value >= Cells * 1.67) { return System.Drawing.Color.Orange; }
-                return System.Drawing.Color.Red;
-            }
-
-            return System.Drawing.Color.Green;
-
-
+            // we'll return a purple if everything goes wrong
+            return System.Drawing.Color.Purple;
         }
 
-        //stor the current test to compare to the old test
+        //store the current test to compare to the old test
         string oldTest = "Nada";
 
         private void fillPlotCombos(int currentRow)
@@ -1505,7 +1593,10 @@ namespace NewBTASProto
 
                     try
                     {
-                        workOrder = d.Rows[currentRow][1].ToString();
+                        string tempWOS = d.Rows[currentRow][1].ToString();
+                        char[] delims = { ' ' };
+                        string[] A = tempWOS.Split(delims);
+                        workOrder = A[0];
                         testStep = d.Rows[currentRow][3].ToString();
                     }// end try
                     catch 
@@ -1600,82 +1691,6 @@ namespace NewBTASProto
                         {
                             myAccessConn.Close();
                             MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
-                            lockUpdate = false;
-                            return;
-                        }
-
-
-                        //we also need to figure out the type of battery being charged
-                        // Open database containing all the battery data....
-                        strAccessSelect = @"SELECT StepNumber,TestName, Technology, CustomNoCells FROM Tests WHERE WorkOrderNumber='" + workOrder + @"'";
-
-
-                        DataSet testsPerformed = new DataSet();
-                        myAccessConn = null;
-                        // try to open the DB
-                        try
-                        {
-                            myAccessConn = new OleDbConnection(strAccessConn);
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
-                            lockUpdate = false;
-                            return;
-                        }
-                        //  now try to access it
-                        try
-                        {
-                            OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
-                            OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
-
-                            lock (dataBaseLock)
-                            {
-                                myAccessConn.Open();
-                                myDataAdapter.Fill(testsPerformed, "Tests");
-                                myAccessConn.Close();
-                            }
-
-                        }
-                        catch (Exception ex)
-                        {
-                            myAccessConn.Close();
-                            MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
-                            lockUpdate = false;
-                            return;
-                        }
-
-                        //For the colors!!!!
-                        try
-                        {
-                            technology1 = (int)testsPerformed.Tables["Tests"].Rows[1][2];
-                            if (Int32.Parse(testsPerformed.Tables["Tests"].Rows[1][3].ToString()) != 0) { cell1 = Int32.Parse(testsPerformed.Tables["Tests"].Rows[1][3].ToString()); }
-                            else { cell1 = GlobalVars.CScanData[currentRow].cellsToDisplay; }
-                            // The final step is to update the type of test that was selected
-                            if (d.Rows[currentRow][3].ToString().Contains("As Recieved")) { type1 = 1; }
-                            else if (d.Rows[currentRow][3].ToString().Contains("Discharge")) { type1 = 2; }
-                            else if (d.Rows[currentRow][3].ToString().Contains("Cap")) { type1 = 3; }
-                            else { type1 = 0; }
-                        }
-                        catch
-                        {
-                            // didn't work
-                            // just set the defaults...
-                            this.Invoke((MethodInvoker)delegate()
-                            {
-                                // just set to the cells readings..
-                                comboBox2.Items.Clear();
-                                comboBox3.Items.Clear();
-                                radioButton1.Enabled = false;
-                                radioButton2.Enabled = false;
-                                updateR2(true);
-                                comboBox2.Enabled = false;
-                                comboBox3.Enabled = false;
-                                radioButton2.Text = "Cells";
-                                comboBox3.Items.Add("Cell Voltages");
-                                updateC3("Cell Voltages");
-                            });
-
                             lockUpdate = false;
                             return;
                         }
@@ -2013,6 +2028,11 @@ namespace NewBTASProto
             {
                 radioButton2.Checked = inVal;
             }
+        }
+
+        private static double ConvertCelsiusToFahrenheit(double c)
+        {
+            return ((9.0 / 5.0) * c) + 32;
         }
 
     }

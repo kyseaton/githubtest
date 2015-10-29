@@ -514,6 +514,7 @@
             this.bindingNavigator1.Text = "bindingNavigator1";
             this.bindingNavigator1.RefreshItems += new System.EventHandler(this.bindingNavigator1_RefreshItems);
             this.bindingNavigator1.LocationChanged += new System.EventHandler(this.bindingNavigator1_LocationChanged);
+            this.bindingNavigator1.Validating += new System.ComponentModel.CancelEventHandler(this.bindingNavigator1_Validating);
             // 
             // bindingNavigatorAddNewItem
             // 
@@ -4164,6 +4165,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "View, Edit and Add Batteries";
             this.Load += new System.EventHandler(this.frmVECustomBats_Load);
+            this.Shown += new System.EventHandler(this.frmVECustomBats_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.bindingNavigator1)).EndInit();
             this.bindingNavigator1.ResumeLayout(false);
             this.bindingNavigator1.PerformLayout();
