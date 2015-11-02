@@ -916,7 +916,7 @@ namespace NewBTASProto
             {
                 this.WindowState = FormWindowState.Maximized;
             }
-            else
+            else if(Properties.Settings.Default.PositionX > 100 && Properties.Settings.Default.PositionY > 100)
             {
                 this.Location = new Point((int) Properties.Settings.Default.PositionX, (int)Properties.Settings.Default.PositionY);
             }
