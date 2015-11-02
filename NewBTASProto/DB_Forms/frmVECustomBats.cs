@@ -24,6 +24,162 @@ namespace NewBTASProto
 
         DataSet CustomBats;
 
+        string currentButton = "";
+
+        int currentPosition;
+
+        //current data..
+        string curTemp1;
+        string curTemp2;
+        string curTemp3;
+        string curTemp4;
+
+        string curTemp5;
+        string curTemp6;
+        string curTemp7;
+
+        string curTemp10;
+        string curTemp11;
+        string curTemp12;
+
+        string curTemp13;
+        string curTemp14;
+        string curTemp15;
+
+        string curTemp16;
+
+        string curTemp17;
+
+        decimal curTemp18;
+        decimal curTemp19;
+        decimal curTemp20;
+        decimal curTemp21;
+
+        decimal curTemp22;
+        decimal curTemp23;
+        decimal curTemp24;
+        decimal curTemp25;
+
+        string curTemp26;
+
+        decimal curTemp27;
+        decimal curTemp28;
+        decimal curTemp29;
+        decimal curTemp30;
+
+        decimal curTemp31;
+        decimal curTemp32;
+        decimal curTemp33;
+        decimal curTemp34;
+
+        string curTemp35;
+
+        decimal curTemp36;
+        decimal curTemp37;
+        decimal curTemp38;
+        decimal curTemp39;
+
+        decimal curTemp40;
+        decimal curTemp41;
+        decimal curTemp42;
+        decimal curTemp43;
+
+        string curTemp44;
+
+        decimal curTemp45;
+        decimal curTemp46;
+        decimal curTemp47;
+        decimal curTemp48;
+
+        decimal curTemp49;
+        decimal curTemp50;
+        decimal curTemp51;
+        decimal curTemp52;
+
+        string curTemp53;
+
+        decimal curTemp54;
+        decimal curTemp55;
+        decimal curTemp56;
+        decimal curTemp57;
+
+        decimal curTemp58;
+        decimal curTemp59;
+        decimal curTemp60;
+        decimal curTemp61;
+
+        string curTemp62;
+
+        decimal curTemp63;
+        decimal curTemp64;
+        decimal curTemp65;
+        decimal curTemp66;
+
+        decimal curTemp67;
+        decimal curTemp68;
+        decimal curTemp69;
+        decimal curTemp70;
+
+        string curTemp71;
+
+        decimal curTemp72;
+        decimal curTemp73;
+        decimal curTemp74;
+        decimal curTemp75;
+        decimal curTemp76;
+
+        string curTemp77;
+
+        decimal curTemp78;
+        decimal curTemp79;
+        decimal curTemp80;
+        decimal curTemp81;
+        decimal curTemp82;
+
+        string curTemp83;
+
+        decimal curTemp84;
+        decimal curTemp85;
+        decimal curTemp86;
+        decimal curTemp87;
+
+        decimal curTemp88;
+        decimal curTemp89;
+        decimal curTemp90;
+        decimal curTemp101;
+
+        string curTemp91;
+
+        decimal curTemp92;
+        decimal curTemp93;
+        decimal curTemp94;
+        decimal curTemp95;
+
+        decimal curTemp96;
+        decimal curTemp97;
+        decimal curTemp98;
+        decimal curTemp99;
+
+        string curTemp100;
+
+        decimal curTemp102;
+        decimal curTemp103;
+        decimal curTemp104;
+        decimal curTemp105;
+
+        decimal curTemp106;
+        decimal curTemp107;
+        decimal curTemp108;
+        decimal curTemp109;
+
+        string curTemp110;
+
+        decimal curTemp111;
+        decimal curTemp112;
+        decimal curTemp113;
+        decimal curTemp114;
+        decimal curTemp115;
+
         public frmVECustomBats()
         {
             InitializeComponent();
@@ -31,7 +187,8 @@ namespace NewBTASProto
             bindingNavigator1.BindingSource = bindingSource1;
             bindingNavigator1.Select();
             SetupForms();
-            bindingNavigator1.CausesValidation = true;
+            updateCurVals();
+            Inhibit = false;
         }
         private void LoadData()
         {
@@ -302,10 +459,224 @@ namespace NewBTASProto
 
         }
 
+
+
         private void bindingSource1_PositionChanged(object sender, EventArgs e)
         {
+            // if move back is true go back to the old position
+            if (moveBack && !Inhibit)
+            {
+                moveBack = false;
+                return;
+            }
 
+            if (bindingNavigator1.BindingSource.Position != currentPosition)
+            {
+                //we need to make sure all of the tabs have been "show"n first
+                //this is because the binding source doesn't update until the tab has been selected, which was killing saved values!
+                int selected = tabControl1.SelectedIndex;
+                LockWindowUpdate(this.Handle);
+                foreach (TabPage tp in tabControl1.TabPages)
+                {
+                    tp.Show();
+                }
+
+
+                tabControl1.SelectTab(0);
+                this.BeginInvoke(new Action(() =>
+                {
+                    tabControl1.SelectTab(selected);
+                    LockWindowUpdate(IntPtr.Zero);
+                }));
+
+                updateCurVals();
+            }
         }
+
+        // we use this bool to allow us to allow the databinding indext to be changed...
+        bool Inhibit = true;
+        bool moveBack = true;
+        private void toolStripCBCustomers_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //if (currentPosition == bindingNavigator1.BindingSource.Position) { return; }
+
+            if (Inhibit) { return; }
+
+            //Validate before moving
+            if (ValidateIt())
+            {
+                Inhibit = true;
+                // move back
+                if (toolStripCBBats.SelectedIndex == currentPosition)
+                {
+                    moveBack = true;
+                }
+                // don't move
+                else
+                {
+                    toolStripCBBats.SelectedIndex = currentPosition;
+                }
+                Inhibit = false;
+            }
+        }
+
+        private void updateCurVals()
+        {
+            currentPosition = bindingNavigator1.BindingSource.Position;
+            // update the current vars....
+            //current data..
+            curTemp1 = textBox2.Text;
+            curTemp2 = textBox1.Text;
+            curTemp3 = textBox3.Text;
+            curTemp4 = comboBox13.Text;
+
+            curTemp5 = textBox6.Text;
+            curTemp6 = textBox7.Text;
+            curTemp7 = textBox8.Text;
+
+            curTemp10 = textBox27.Text;
+            curTemp11 = textBox28.Text;
+            curTemp12 = textBox29.Text;
+
+            curTemp13 = textBox21.Text;
+            curTemp14 = textBox22.Text;
+            curTemp15 = textBox23.Text;
+
+            curTemp16 = textBox36.Text;
+
+            curTemp17 = comboBox2.Text;
+
+            curTemp18 = numericUpDown1.Value;
+            curTemp19 = numericUpDown2.Value;
+            curTemp20 = numericUpDown3.Value;
+            curTemp21 = numericUpDown4.Value;
+
+            curTemp22 = numericUpDown8.Value;
+            curTemp23 = numericUpDown7.Value;
+            curTemp24 = numericUpDown6.Value;
+            curTemp25 = numericUpDown5.Value;
+
+            curTemp26 = comboBox1.Text;
+
+            curTemp27 = numericUpDown16.Value;
+            curTemp28 = numericUpDown15.Value;
+            curTemp29 = numericUpDown14.Value;
+            curTemp30 = numericUpDown13.Value;
+
+            curTemp31 = numericUpDown12.Value;
+            curTemp32 = numericUpDown11.Value;
+            curTemp33 = numericUpDown10.Value;
+            curTemp34 = numericUpDown9.Value;
+
+            curTemp35 = comboBox3.Text;
+
+            curTemp36 = numericUpDown24.Value;
+            curTemp37 = numericUpDown23.Value;
+            curTemp38 = numericUpDown22.Value;
+            curTemp39 = numericUpDown21.Value;
+
+            curTemp40 = numericUpDown20.Value;
+            curTemp41 = numericUpDown19.Value;
+            curTemp42 = numericUpDown18.Value;
+            curTemp43 = numericUpDown17.Value;
+
+            curTemp44 = comboBox4.Text;
+
+            curTemp45 = numericUpDown32.Value;
+            curTemp46 = numericUpDown31.Value;
+            curTemp47 = numericUpDown30.Value;
+            curTemp48 = numericUpDown29.Value;
+
+            curTemp49 = numericUpDown28.Value;
+            curTemp50 = numericUpDown27.Value;
+            curTemp51 = numericUpDown26.Value;
+            curTemp52 = numericUpDown25.Value;
+
+            curTemp53 = comboBox5.Text;
+
+            curTemp54 = numericUpDown40.Value;
+            curTemp55 = numericUpDown39.Value;
+            curTemp56 = numericUpDown38.Value;
+            curTemp57 = numericUpDown37.Value;
+
+            curTemp58 = numericUpDown36.Value;
+            curTemp59 = numericUpDown35.Value;
+            curTemp60 = numericUpDown34.Value;
+            curTemp61 = numericUpDown33.Value;
+
+            curTemp62 = comboBox12.Text;
+
+            curTemp63 = numericUpDown87.Value;
+            curTemp64 = numericUpDown86.Value;
+            curTemp65 = numericUpDown85.Value;
+            curTemp66 = numericUpDown84.Value;
+
+            curTemp67 = numericUpDown83.Value;
+            curTemp68 = numericUpDown82.Value;
+            curTemp69 = numericUpDown81.Value;
+            curTemp70 = numericUpDown80.Value;
+
+            curTemp71 = comboBox6.Text;
+
+            curTemp72 = numericUpDown45.Value;
+            curTemp73 = numericUpDown44.Value;
+            curTemp74 = numericUpDown43.Value;
+            curTemp75 = numericUpDown42.Value;
+            curTemp76 = numericUpDown41.Value;
+
+            curTemp77 = comboBox7.Text;
+
+            curTemp78 = numericUpDown50.Value;
+            curTemp79 = numericUpDown49.Value;
+            curTemp80 = numericUpDown48.Value;
+            curTemp81 = numericUpDown47.Value;
+            curTemp82 = numericUpDown46.Value;
+
+            curTemp83 = comboBox9.Text;
+
+            curTemp84 = numericUpDown63.Value;
+            curTemp85 = numericUpDown62.Value;
+            curTemp86 = numericUpDown61.Value;
+            curTemp87 = numericUpDown60.Value;
+
+            curTemp88 = numericUpDown59.Value;
+            curTemp89 = numericUpDown58.Value;
+            curTemp90 = numericUpDown57.Value;
+            curTemp101 = numericUpDown56.Value;
+
+            curTemp91 = comboBox10.Text;
+
+            curTemp92 = numericUpDown71.Value;
+            curTemp93 = numericUpDown70.Value;
+            curTemp94 = numericUpDown69.Value;
+            curTemp95 = numericUpDown68.Value;
+
+            curTemp96 = numericUpDown67.Value;
+            curTemp97 = numericUpDown66.Value;
+            curTemp98 = numericUpDown65.Value;
+            curTemp99 = numericUpDown64.Value;
+
+            curTemp100 = comboBox11.Text;
+
+            curTemp102 = numericUpDown79.Value;
+            curTemp103 = numericUpDown78.Value;
+            curTemp104 = numericUpDown77.Value;
+            curTemp105 = numericUpDown76.Value;
+
+            curTemp106 = numericUpDown75.Value;
+            curTemp107 = numericUpDown74.Value;
+            curTemp108 = numericUpDown73.Value;
+            curTemp109 = numericUpDown72.Value;
+
+            curTemp110 = comboBox8.Text;
+
+            curTemp111 = numericUpDown55.Value;
+            curTemp112 = numericUpDown54.Value;
+            curTemp113 = numericUpDown53.Value;
+            curTemp114 = numericUpDown52.Value;
+            curTemp115 = numericUpDown51.Value;
+        }
+        
 
         private void toolStripLabel1_Click(object sender, EventArgs e)
         {
@@ -317,11 +688,7 @@ namespace NewBTASProto
 
         }
 
-        private void toolStripCBCustomers_SelectedIndexChanged(object sender, EventArgs e)
-        {
-           //this didn't work...
-           // bindingNavigator1.BindingSource.Position = toolStripCBCustomers.SelectedIndex;
-        }
+
 
         private void bindingNavigatorDeleteItem_Click(object sender, EventArgs e)
         {
@@ -1548,16 +1915,220 @@ namespace NewBTASProto
         private void bindingNavigator1_Validating(object sender, CancelEventArgs e)
         {
 
-            // check if there are any changes!
-            if (true)
+        }
+
+        private bool ValidateIt()
+        {
+            // do we need to validate?
+
+            if (textBox2.Text != curTemp1 ||
+                textBox1.Text != curTemp2 ||
+                textBox3.Text != curTemp3 ||
+                comboBox13.Text != curTemp4 ||
+
+                textBox6.Text != curTemp5 ||
+                textBox7.Text != curTemp6 ||
+                textBox8.Text != curTemp7 ||
+
+                textBox27.Text != curTemp10 ||
+                textBox28.Text != curTemp11 ||
+                textBox29.Text != curTemp12 ||
+
+                textBox21.Text != curTemp13 ||
+                textBox22.Text != curTemp14 ||
+                textBox23.Text != curTemp15 ||
+
+                textBox36.Text != curTemp16 ||
+
+                comboBox2.Text != curTemp17 ||
+
+                numericUpDown1.Value != curTemp18 ||
+                numericUpDown2.Value != curTemp19 ||
+                numericUpDown3.Value != curTemp20 ||
+                numericUpDown4.Value != curTemp21 ||
+
+                numericUpDown8.Value != curTemp22 ||
+                numericUpDown7.Value != curTemp23 ||
+                numericUpDown6.Value != curTemp24 ||
+                numericUpDown5.Value != curTemp25 ||
+
+                comboBox1.Text != curTemp26 ||
+
+                numericUpDown16.Value != curTemp27 ||
+                numericUpDown15.Value != curTemp28 ||
+                numericUpDown14.Value != curTemp29 ||
+                numericUpDown13.Value != curTemp30 ||
+
+                numericUpDown12.Value != curTemp31 ||
+                numericUpDown11.Value != curTemp32 ||
+                numericUpDown10.Value != curTemp33 ||
+                numericUpDown9.Value != curTemp34 ||
+
+                comboBox3.Text != curTemp35 ||
+
+                numericUpDown24.Value != curTemp36 ||
+                numericUpDown23.Value != curTemp37 ||
+                numericUpDown22.Value != curTemp38 ||
+                numericUpDown21.Value != curTemp39 ||
+
+                numericUpDown20.Value != curTemp40 ||
+                numericUpDown19.Value != curTemp41 ||
+                numericUpDown18.Value != curTemp42 ||
+                numericUpDown17.Value != curTemp43 ||
+
+                comboBox4.Text != curTemp44 ||
+
+                numericUpDown32.Value != curTemp45 ||
+                numericUpDown31.Value != curTemp46 ||
+                numericUpDown30.Value != curTemp47 ||
+                numericUpDown29.Value != curTemp48 ||
+
+                numericUpDown28.Value != curTemp49 ||
+                numericUpDown27.Value != curTemp50 ||
+                numericUpDown26.Value != curTemp51 ||
+                numericUpDown25.Value != curTemp52 ||
+
+                comboBox5.Text != curTemp53 ||
+                numericUpDown40.Value != curTemp54 ||
+                numericUpDown39.Value != curTemp55 ||
+                numericUpDown38.Value != curTemp56 ||
+                numericUpDown37.Value != curTemp57 ||
+
+                numericUpDown36.Value != curTemp58 ||
+                numericUpDown35.Value != curTemp59 ||
+                numericUpDown34.Value != curTemp60 ||
+                numericUpDown33.Value != curTemp61 ||
+
+                comboBox12.Text != curTemp62 ||
+
+                numericUpDown87.Value != curTemp63 ||
+                numericUpDown86.Value != curTemp64 ||
+                numericUpDown85.Value != curTemp65 ||
+                numericUpDown84.Value != curTemp66 ||
+
+                numericUpDown83.Value != curTemp67 ||
+                numericUpDown82.Value != curTemp68 ||
+                numericUpDown81.Value != curTemp69 ||
+                numericUpDown80.Value != curTemp70 ||
+
+                comboBox6.Text != curTemp71 ||
+
+                numericUpDown45.Value != curTemp72 ||
+                numericUpDown44.Value != curTemp73 ||
+                numericUpDown43.Value != curTemp74 ||
+                numericUpDown42.Value != curTemp75 ||
+                numericUpDown41.Value != curTemp76 ||
+
+                comboBox7.Text != curTemp77 ||
+
+                numericUpDown50.Value != curTemp78 ||
+                numericUpDown49.Value != curTemp79 ||
+                numericUpDown48.Value != curTemp80 ||
+                numericUpDown47.Value != curTemp81 ||
+                numericUpDown46.Value != curTemp82 ||
+
+                comboBox9.Text != curTemp83 ||
+
+                numericUpDown63.Value != curTemp84 ||
+                numericUpDown62.Value != curTemp85 ||
+                numericUpDown61.Value != curTemp86 ||
+                numericUpDown60.Value != curTemp87 ||
+
+                numericUpDown59.Value != curTemp88 ||
+                numericUpDown58.Value != curTemp89 ||
+                numericUpDown57.Value != curTemp90 ||
+                numericUpDown56.Value != curTemp101 ||
+
+                comboBox10.Text != curTemp91 ||
+
+                numericUpDown71.Value != curTemp92 ||
+                numericUpDown70.Value != curTemp93 ||
+                numericUpDown69.Value != curTemp94 ||
+                numericUpDown68.Value != curTemp95 ||
+
+                numericUpDown67.Value != curTemp96 ||
+                numericUpDown66.Value != curTemp97 ||
+                numericUpDown65.Value != curTemp98 ||
+                numericUpDown64.Value != curTemp99 ||
+
+                comboBox11.Text != curTemp100 ||
+
+                numericUpDown79.Value != curTemp102 ||
+                numericUpDown78.Value != curTemp103 ||
+                numericUpDown77.Value != curTemp104 ||
+                numericUpDown76.Value != curTemp105 ||
+
+                numericUpDown75.Value != curTemp106 ||
+                numericUpDown74.Value != curTemp107 ||
+                numericUpDown73.Value != curTemp108 ||
+                numericUpDown72.Value != curTemp109 ||
+
+                comboBox8.Text != curTemp110 ||
+
+                numericUpDown55.Value != curTemp111 ||
+                numericUpDown54.Value != curTemp112 ||
+                numericUpDown53.Value != curTemp113 ||
+                numericUpDown52.Value != curTemp114 ||
+                numericUpDown51.Value != curTemp115)
             {
-                // warn the user that they made some unsaved changes
-                DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "Looks like you made some changes.  Do you want to save them before moving?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
-                if (dialogResult == DialogResult.Yes)
+                // they don't match!
+                // ask if the user is sure that they want to continue...
+                DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "Looks like this record has been updated without being saved.  Are you sure you want to navigate away without saving?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
+                if (dialogResult == DialogResult.No)
                 {
-                    //save
+                    return true;
                 }
             }
+            return false;
+        }
+
+        private void bindingNavigatorMovePreviousItem_MouseDown(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void bindingNavigatorMoveFirstItem_MouseDown(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void bindingNavigatorPositionItem_MouseDown(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void bindingNavigatorMoveNextItem_MouseDown(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void bindingNavigatorMoveLastItem_MouseDown(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void bindingNavigatorAddNewItem_MouseDown(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void bindingNavigatorDeleteItem_MouseDown(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void saveToolStripButton_MouseDown(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void frmVECustomBats_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Inhibit = true;
+        }
+
+        private void bindingNavigator1_MouseDown(object sender, MouseEventArgs e)
+        {
 
         }
         

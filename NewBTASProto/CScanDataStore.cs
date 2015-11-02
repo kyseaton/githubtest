@@ -196,8 +196,8 @@ namespace NewBTASProto
             //+5V  = subQNEG(A[8]) * KV
             plus5V = subQNEG(CDATA[8]) * KV;
 
-            //ACMEtemp = (A[10] - 1000) * KV
-            ACMETempSen = Int32.Parse(CDATA[10]) - 1000 * KV;
+            //ACMEtemp = (A[9] - 1000) * KV
+            ACMETempSen = Int32.Parse(CDATA[9]) - 1000 * KV;
 
             //Current #1 = subANEG(A[10]) and then needs to be scalled for the shunt cable being used
             currentOne = subQNEG(CDATA[10]);
@@ -212,8 +212,8 @@ namespace NewBTASProto
                     break;
             }
 
-            // VB4 = subQNEG(A[12]) * KB
-            VB4 = subQNEG(CDATA[12]) * KB;
+            // VB4 = subQNEG(A[11]) * KB
+            VB4 = subQNEG(CDATA[11]) * KB;
             // VB3 = subQNEG(A[12]) * KB
             VB3 = subQNEG(CDATA[12]) * KB;
             // VB2 = subQNEG(A[13]) * KB

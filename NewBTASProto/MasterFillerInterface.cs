@@ -155,9 +155,9 @@ namespace NewBTASProto
                         textBox2.Text = ((int.Parse(GlobalVars.MFData[6]) - 100) % 255).ToString();
                         textBox3.Text = ((int.Parse(GlobalVars.MFData[7]) - 100) % 255).ToString();
                         textBox4.Text = ((int.Parse(GlobalVars.MFData[8]) - 100) % 255).ToString();
-                        textBox5.Text = ((int.Parse(GlobalVars.MFData[10]) - 100) % 255).ToString();
+                        textBox5.Text = ((int.Parse(GlobalVars.MFData[9]) - 100) % 255).ToString();
                         textBox6.Text = ((int.Parse(GlobalVars.MFData[10]) - 100) % 255).ToString();
-                        textBox7.Text = ((int.Parse(GlobalVars.MFData[12]) - 100) % 255).ToString();
+                        textBox7.Text = ((int.Parse(GlobalVars.MFData[11]) - 100) % 255).ToString();
                         textBox8.Text = ((int.Parse(GlobalVars.MFData[12]) - 100) % 255).ToString();
                         textBox9.Text = ((int.Parse(GlobalVars.MFData[13]) - 100) % 255).ToString();
                         textBox10.Text = ((int.Parse(GlobalVars.MFData[14]) - 100) % 255).ToString();
@@ -215,9 +215,9 @@ namespace NewBTASProto
                 ((int.Parse(GlobalVars.MFData[6]) - 100) % 255).ToString() + "," +      //Cell2
                 ((int.Parse(GlobalVars.MFData[7]) - 100) % 255).ToString() + "," +      //Cell3
                 ((int.Parse(GlobalVars.MFData[8]) - 100) % 255).ToString() + "," +      //Cell4
-                ((int.Parse(GlobalVars.MFData[10]) - 100) % 255).ToString() + "," +      //Cell5
+                ((int.Parse(GlobalVars.MFData[9]) - 100) % 255).ToString() + "," +      //Cell5
                 ((int.Parse(GlobalVars.MFData[10]) - 100) % 255).ToString() + "," +     //Cell6
-                ((int.Parse(GlobalVars.MFData[12]) - 100) % 255).ToString() + "," +     //Cell7
+                ((int.Parse(GlobalVars.MFData[11]) - 100) % 255).ToString() + "," +     //Cell7
                 ((int.Parse(GlobalVars.MFData[12]) - 100) % 255).ToString() + "," +     //Cell8
                 ((int.Parse(GlobalVars.MFData[13]) - 100) % 255).ToString() + "," +     //Cell9
                 ((int.Parse(GlobalVars.MFData[14]) - 100) % 255).ToString() + "," +     //Cell10

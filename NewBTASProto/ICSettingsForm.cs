@@ -94,20 +94,20 @@ namespace NewBTASProto
                 int selectedIndex = ((Main_Form)this.Owner).dataGridView1.CurrentRow.Index;
                 //now find out which (if any charger is associated with this station
                 int CID = 0;
-                if (((Main_Form)this.Owner).d.Rows[selectedIndex][10].ToString() == "") { comboBox1.SelectedIndex = 0; }
-                else if (((Main_Form)this.Owner).d.Rows[selectedIndex][10].ToString().Length == 3)
+                if (((Main_Form)this.Owner).d.Rows[selectedIndex][9].ToString() == "") { comboBox1.SelectedIndex = 0; }
+                else if (((Main_Form)this.Owner).d.Rows[selectedIndex][9].ToString().Length == 3)
                 {
-                    CID = int.Parse(((Main_Form)this.Owner).d.Rows[selectedIndex][10].ToString().Substring(0, 1));
+                    CID = int.Parse(((Main_Form)this.Owner).d.Rows[selectedIndex][9].ToString().Substring(0, 1));
                     comboBox1.SelectedIndex = CID;
                 }
                 else if (((Main_Form)this.Owner).d.Rows[selectedIndex][10].ToString().Length == 4)
                 {
-                    CID = int.Parse(((Main_Form)this.Owner).d.Rows[selectedIndex][10].ToString().Substring(0, 2));
+                    CID = int.Parse(((Main_Form)this.Owner).d.Rows[selectedIndex][9].ToString().Substring(0, 2));
                     comboBox1.SelectedIndex = CID;
                 }
                 else
                 {
-                    CID = int.Parse(((Main_Form)this.Owner).d.Rows[selectedIndex][10].ToString());
+                    CID = int.Parse(((Main_Form)this.Owner).d.Rows[selectedIndex][9].ToString());
                     comboBox1.SelectedIndex = CID;
                 }
 
@@ -196,22 +196,22 @@ namespace NewBTASProto
             for(int i = 0; i < 16; i++)
             {
                 // first check that we are not trying to parse nothing...
-                if (((Main_Form)this.Owner).d.Rows[i][10].ToString() != "")
+                if (((Main_Form)this.Owner).d.Rows[i][9].ToString() != "")
                 {
-                    if (((Main_Form)this.Owner).d.Rows[i][10].ToString().Length == 3)
+                    if (((Main_Form)this.Owner).d.Rows[i][9].ToString().Length == 3)
                     {
                         //do we have the correct station
-                        if (comboBox1.SelectedIndex == int.Parse(((Main_Form)this.Owner).d.Rows[i][10].ToString().Substring(0,1)))
+                        if (comboBox1.SelectedIndex == int.Parse(((Main_Form)this.Owner).d.Rows[i][9].ToString().Substring(0,1)))
                         {
                             station = i;
                             break;
                         }
 
                     }// end 3 char if
-                    else if (((Main_Form)this.Owner).d.Rows[i][10].ToString().Length == 4)
+                    else if (((Main_Form)this.Owner).d.Rows[i][9].ToString().Length == 4)
                     {
                         //do we have the correct station
-                        if (comboBox1.SelectedIndex == int.Parse(((Main_Form)this.Owner).d.Rows[i][10].ToString().Substring(0,2)))
+                        if (comboBox1.SelectedIndex == int.Parse(((Main_Form)this.Owner).d.Rows[i][9].ToString().Substring(0,2)))
                         {
                             station = i;
                             break;
@@ -220,7 +220,7 @@ namespace NewBTASProto
                     else 
                     {
                         //do we have the correct station
-                        if (comboBox1.SelectedIndex == int.Parse(((Main_Form)this.Owner).d.Rows[i][10].ToString()))
+                        if (comboBox1.SelectedIndex == int.Parse(((Main_Form)this.Owner).d.Rows[i][9].ToString()))
                         {
                             station = i;
                             break;

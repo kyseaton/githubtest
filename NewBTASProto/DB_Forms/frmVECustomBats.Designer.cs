@@ -514,6 +514,7 @@
             this.bindingNavigator1.Text = "bindingNavigator1";
             this.bindingNavigator1.RefreshItems += new System.EventHandler(this.bindingNavigator1_RefreshItems);
             this.bindingNavigator1.LocationChanged += new System.EventHandler(this.bindingNavigator1_LocationChanged);
+            this.bindingNavigator1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.bindingNavigator1_MouseDown);
             this.bindingNavigator1.Validating += new System.ComponentModel.CancelEventHandler(this.bindingNavigator1_Validating);
             // 
             // bindingNavigatorAddNewItem
@@ -525,6 +526,7 @@
             this.bindingNavigatorAddNewItem.Size = new System.Drawing.Size(23, 22);
             this.bindingNavigatorAddNewItem.Text = "Add new";
             this.bindingNavigatorAddNewItem.Click += new System.EventHandler(this.bindingNavigatorAddNewItem_Click);
+            this.bindingNavigatorAddNewItem.MouseDown += new System.Windows.Forms.MouseEventHandler(this.bindingNavigatorAddNewItem_MouseDown);
             // 
             // bindingNavigatorCountItem
             // 
@@ -563,6 +565,7 @@
             this.bindingNavigatorMoveFirstItem.Size = new System.Drawing.Size(23, 22);
             this.bindingNavigatorMoveFirstItem.Text = "Move first";
             this.bindingNavigatorMoveFirstItem.Click += new System.EventHandler(this.bindingNavigatorMoveFirstItem_Click);
+            this.bindingNavigatorMoveFirstItem.MouseDown += new System.Windows.Forms.MouseEventHandler(this.bindingNavigatorMoveFirstItem_MouseDown);
             // 
             // bindingNavigatorMovePreviousItem
             // 
@@ -573,6 +576,7 @@
             this.bindingNavigatorMovePreviousItem.Size = new System.Drawing.Size(23, 22);
             this.bindingNavigatorMovePreviousItem.Text = "Move previous";
             this.bindingNavigatorMovePreviousItem.Click += new System.EventHandler(this.bindingNavigatorMovePreviousItem_Click);
+            this.bindingNavigatorMovePreviousItem.MouseDown += new System.Windows.Forms.MouseEventHandler(this.bindingNavigatorMovePreviousItem_MouseDown);
             // 
             // bindingNavigatorPositionItem
             // 
@@ -583,6 +587,7 @@
             this.bindingNavigatorPositionItem.Text = "0";
             this.bindingNavigatorPositionItem.ToolTipText = "Current position";
             this.bindingNavigatorPositionItem.LocationChanged += new System.EventHandler(this.bindingNavigatorPositionItem_LocationChanged);
+            this.bindingNavigatorPositionItem.MouseDown += new System.Windows.Forms.MouseEventHandler(this.bindingNavigatorPositionItem_MouseDown);
             this.bindingNavigatorPositionItem.TextChanged += new System.EventHandler(this.bindingNavigatorPositionItem_TextChanged);
             // 
             // bindingNavigatorMoveNextItem
@@ -593,6 +598,7 @@
             this.bindingNavigatorMoveNextItem.RightToLeftAutoMirrorImage = true;
             this.bindingNavigatorMoveNextItem.Size = new System.Drawing.Size(23, 22);
             this.bindingNavigatorMoveNextItem.Text = "Move next";
+            this.bindingNavigatorMoveNextItem.MouseDown += new System.Windows.Forms.MouseEventHandler(this.bindingNavigatorMoveNextItem_MouseDown);
             // 
             // bindingNavigatorMoveLastItem
             // 
@@ -602,6 +608,7 @@
             this.bindingNavigatorMoveLastItem.RightToLeftAutoMirrorImage = true;
             this.bindingNavigatorMoveLastItem.Size = new System.Drawing.Size(23, 22);
             this.bindingNavigatorMoveLastItem.Text = "Move last";
+            this.bindingNavigatorMoveLastItem.MouseDown += new System.Windows.Forms.MouseEventHandler(this.bindingNavigatorMoveLastItem_MouseDown);
             // 
             // bindingNavigatorDeleteItem
             // 
@@ -612,6 +619,7 @@
             this.bindingNavigatorDeleteItem.Size = new System.Drawing.Size(23, 22);
             this.bindingNavigatorDeleteItem.Text = "Delete";
             this.bindingNavigatorDeleteItem.Click += new System.EventHandler(this.bindingNavigatorDeleteItem_Click_1);
+            this.bindingNavigatorDeleteItem.MouseDown += new System.Windows.Forms.MouseEventHandler(this.bindingNavigatorDeleteItem_MouseDown);
             // 
             // saveToolStripButton
             // 
@@ -622,6 +630,7 @@
             this.saveToolStripButton.Size = new System.Drawing.Size(23, 22);
             this.saveToolStripButton.Text = "&Save";
             this.saveToolStripButton.Click += new System.EventHandler(this.saveToolStripButton_Click_1);
+            this.saveToolStripButton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.saveToolStripButton_MouseDown);
             // 
             // textBox21
             // 
@@ -4164,6 +4173,7 @@
             this.Name = "frmVECustomBats";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "View, Edit and Add Batteries";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmVECustomBats_FormClosing);
             this.Load += new System.EventHandler(this.frmVECustomBats_Load);
             this.Shown += new System.EventHandler(this.frmVECustomBats_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.bindingNavigator1)).EndInit();
