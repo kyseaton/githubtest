@@ -231,7 +231,7 @@ namespace NewBTASProto
             {
                 NoteSet settings;
                 XmlSerializer xs = new XmlSerializer(typeof(NoteSet));
-                using (FileStream fs = new FileStream("noteSet.xml", FileMode.Open))
+                using (FileStream fs = new FileStream(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\noteSet.xml", FileMode.Open))
                 {
                     // This will read the XML from the file and create the new instance
                     // of CustomerData

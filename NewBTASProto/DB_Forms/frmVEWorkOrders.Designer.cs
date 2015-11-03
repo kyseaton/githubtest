@@ -135,6 +135,9 @@
             this.bindingNavigator1.Size = new System.Drawing.Size(1093, 25);
             this.bindingNavigator1.TabIndex = 2;
             this.bindingNavigator1.Text = "bindingNavigator1";
+            this.bindingNavigator1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.bindingNavigator1_ItemClicked);
+            this.bindingNavigator1.TextChanged += new System.EventHandler(this.bindingNavigator1_TextChanged);
+            this.bindingNavigator1.Validating += new System.ComponentModel.CancelEventHandler(this.bindingNavigator1_Validating);
             // 
             // bindingNavigatorAddNewItem
             // 
@@ -172,6 +175,9 @@
             this.toolStripCBWorkOrderStatus.Name = "toolStripCBWorkOrderStatus";
             this.toolStripCBWorkOrderStatus.Size = new System.Drawing.Size(121, 25);
             this.toolStripCBWorkOrderStatus.SelectedIndexChanged += new System.EventHandler(this.toolStripCBWorkOrderStatus_SelectedIndexChanged);
+            this.toolStripCBWorkOrderStatus.Enter += new System.EventHandler(this.toolStripCBWorkOrderStatus_Enter);
+            this.toolStripCBWorkOrderStatus.Leave += new System.EventHandler(this.toolStripCBWorkOrderStatus_Leave);
+            this.toolStripCBWorkOrderStatus.TextChanged += new System.EventHandler(this.toolStripCBWorkOrderStatus_TextChanged);
             // 
             // toolStripLabel4
             // 
@@ -186,6 +192,9 @@
             this.toolStripCBCustomers.Name = "toolStripCBCustomers";
             this.toolStripCBCustomers.Size = new System.Drawing.Size(121, 25);
             this.toolStripCBCustomers.SelectedIndexChanged += new System.EventHandler(this.toolStripCBCustomers_SelectedIndexChanged);
+            this.toolStripCBCustomers.Enter += new System.EventHandler(this.toolStripCBCustomers_Enter);
+            this.toolStripCBCustomers.Leave += new System.EventHandler(this.toolStripCBCustomers_Leave);
+            this.toolStripCBCustomers.TextChanged += new System.EventHandler(this.toolStripCBCustomers_TextChanged);
             // 
             // toolStripLabel3
             // 
@@ -200,6 +209,9 @@
             this.toolStripCBSerialNums.Name = "toolStripCBSerialNums";
             this.toolStripCBSerialNums.Size = new System.Drawing.Size(121, 25);
             this.toolStripCBSerialNums.SelectedIndexChanged += new System.EventHandler(this.toolStripCBSerialNums_SelectedIndexChanged);
+            this.toolStripCBSerialNums.Enter += new System.EventHandler(this.toolStripCBSerialNums_Enter);
+            this.toolStripCBSerialNums.Leave += new System.EventHandler(this.toolStripCBSerialNums_Leave);
+            this.toolStripCBSerialNums.TextChanged += new System.EventHandler(this.toolStripCBSerialNums_TextChanged);
             // 
             // toolStripSeparator2
             // 
@@ -219,6 +231,8 @@
             this.toolStripCBWorkOrders.Name = "toolStripCBWorkOrders";
             this.toolStripCBWorkOrders.Size = new System.Drawing.Size(121, 25);
             this.toolStripCBWorkOrders.SelectedIndexChanged += new System.EventHandler(this.toolStripCBWorkOrders_SelectedIndexChanged);
+            this.toolStripCBWorkOrders.Enter += new System.EventHandler(this.toolStripCBWorkOrders_Enter);
+            this.toolStripCBWorkOrders.Leave += new System.EventHandler(this.toolStripCBWorkOrders_Leave);
             this.toolStripCBWorkOrders.TextChanged += new System.EventHandler(this.toolStripCBWorkOrders_TextChanged);
             // 
             // bindingNavigatorSeparator
@@ -621,6 +635,7 @@
             this.Name = "frmVEWorkOrders";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "View, Edit and Add Work Orders";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmVEWorkOrders_FormClosing);
             this.Load += new System.EventHandler(this.frmVEWorkOrders_Load);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingNavigator1)).EndInit();

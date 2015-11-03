@@ -24,9 +24,6 @@ namespace NewBTASProto
 
         DataSet CustomBats;
 
-        string currentButton = "";
-
-        int currentPosition;
 
         //current data..
         string curTemp1;
@@ -187,8 +184,11 @@ namespace NewBTASProto
             bindingNavigator1.BindingSource = bindingSource1;
             bindingNavigator1.Select();
             SetupForms();
-            updateCurVals();
+            
+            bindingNavigator1.CausesValidation = true;
+            
             Inhibit = false;
+            InhibitCB = false;
         }
         private void LoadData()
         {
@@ -463,66 +463,37 @@ namespace NewBTASProto
 
         private void bindingSource1_PositionChanged(object sender, EventArgs e)
         {
-            // if move back is true go back to the old position
-            if (moveBack && !Inhibit)
-            {
-                moveBack = false;
-                return;
-            }
-
-            if (bindingNavigator1.BindingSource.Position != currentPosition)
-            {
-                //we need to make sure all of the tabs have been "show"n first
-                //this is because the binding source doesn't update until the tab has been selected, which was killing saved values!
-                int selected = tabControl1.SelectedIndex;
-                LockWindowUpdate(this.Handle);
-                foreach (TabPage tp in tabControl1.TabPages)
-                {
-                    tp.Show();
-                }
-
-
-                tabControl1.SelectTab(0);
-                this.BeginInvoke(new Action(() =>
-                {
-                    tabControl1.SelectTab(selected);
-                    LockWindowUpdate(IntPtr.Zero);
-                }));
-
-                updateCurVals();
-            }
+            updateCurVals();
         }
 
         // we use this bool to allow us to allow the databinding indext to be changed...
         bool Inhibit = true;
-        bool moveBack = true;
+        bool InhibitCB = true;
+
         private void toolStripCBCustomers_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //if (currentPosition == bindingNavigator1.BindingSource.Position) { return; }
-
-            if (Inhibit) { return; }
+            if (InhibitCB) { return; }
 
             //Validate before moving
             if (ValidateIt())
             {
-                Inhibit = true;
+                InhibitCB = true;
                 // move back
-                if (toolStripCBBats.SelectedIndex == currentPosition)
-                {
-                    moveBack = true;
-                }
-                // don't move
-                else
-                {
-                    toolStripCBBats.SelectedIndex = currentPosition;
-                }
-                Inhibit = false;
+                toolStripCBBats.SelectedIndex = bindingNavigator1.BindingSource.Position;
+                InhibitCB = false;
+
             }
+            else
+            {
+                InhibitCB = false;
+                updateCurVals();
+            }
+
         }
 
         private void updateCurVals()
         {
-            currentPosition = bindingNavigator1.BindingSource.Position;
+
             // update the current vars....
             //current data..
             curTemp1 = textBox2.Text;
@@ -764,6 +735,8 @@ namespace NewBTASProto
 
         private void saveToolStripButton_Click_1(object sender, EventArgs e)
         {
+            Inhibit = true;
+
             //to get around the new entry issue...
             #region empty database work around...
             if (bindingNavigator1.BindingSource.Position == -1)
@@ -1286,7 +1259,7 @@ namespace NewBTASProto
                     //now force an update on the binding by moving one ahead and then back...
                     toolStripCBBats.ComboBox.Text = textBox2.Text.Replace("'", "''");
                    
-                    MessageBox.Show("Battery model " + textBox2.Text + "'s entry has been updated.");
+                    MessageBox.Show(this,"Battery model " + textBox2.Text + "'s entry has been updated.");
 
                 }
                 else
@@ -1460,6 +1433,9 @@ namespace NewBTASProto
                     bindingNavigatorAddNewItem.Enabled = true;
 
                 }
+
+                // also update the current vals..
+                updateCurVals();
             }// end try
             catch (Exception ex)
             {
@@ -1523,16 +1499,6 @@ namespace NewBTASProto
 
             numericUpDown8.Value = (decimal) (temp / 60);
             numericUpDown7.Value = (decimal)(temp % 60);
-        }
-
-        private void frmVECustomBats_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
         }
 
         private void comboBox2_SelectedValueChanged(object sender, EventArgs e)
@@ -1838,14 +1804,17 @@ namespace NewBTASProto
 
         private void bindingNavigatorAddNewItem_Click(object sender, EventArgs e)
         {
-            bindingNavigatorAddNewItem.Enabled = false;
+            if (toolStripCBBats.Text == "")
+            {
+                bindingNavigatorAddNewItem.Enabled = false;
+            }
         }
 
         private void bindingNavigatorMovePreviousItem_Click(object sender, EventArgs e)
         {
             
             //remove the new record if there is one..
-            if (bindingNavigatorAddNewItem.Enabled == false)
+            if (bindingNavigatorAddNewItem.Enabled == false && bindingNavigator1.BindingSource.Position < CustomBats.Tables[0].Rows.Count)
             {
                 CustomBats.Tables[0].Rows[CustomBats.Tables[0].Rows.Count - 1].Delete();
                 bindingNavigatorAddNewItem.Enabled = true;
@@ -1856,7 +1825,7 @@ namespace NewBTASProto
         private void bindingNavigatorMoveFirstItem_Click(object sender, EventArgs e)
         {
             //remove the new record if there is one..
-            if (bindingNavigatorAddNewItem.Enabled == false)
+            if (bindingNavigatorAddNewItem.Enabled == false && bindingNavigator1.BindingSource.Position < CustomBats.Tables[0].Rows.Count)
             {
                 CustomBats.Tables[0].Rows[CustomBats.Tables[0].Rows.Count - 1].Delete();
                 bindingNavigatorAddNewItem.Enabled = true;
@@ -1878,7 +1847,7 @@ namespace NewBTASProto
             try
             {
                 //remove the new record if there is one..
-                if (bindingNavigatorAddNewItem.Enabled == false)
+                if (bindingNavigatorAddNewItem.Enabled == false && bindingNavigator1.BindingSource.Position < CustomBats.Tables[0].Rows.Count)
                 {
                     CustomBats.Tables[0].Rows[CustomBats.Tables[0].Rows.Count - 1].Delete();
                     bindingNavigatorAddNewItem.Enabled = true;
@@ -1895,7 +1864,7 @@ namespace NewBTASProto
             try
             {
                 //remove the new record if there is one..
-                if (bindingNavigatorAddNewItem.Enabled == false)
+                if (bindingNavigatorAddNewItem.Enabled == false && bindingNavigator1.BindingSource.Position < CustomBats.Tables[0].Rows.Count)
                 {
                     CustomBats.Tables[0].Rows[CustomBats.Tables[0].Rows.Count - 1].Delete();
                     bindingNavigatorAddNewItem.Enabled = true;
@@ -1909,11 +1878,26 @@ namespace NewBTASProto
 
         private void frmVECustomBats_Shown(object sender, EventArgs e)
         {
-
+            updateCurVals();
         }
 
         private void bindingNavigator1_Validating(object sender, CancelEventArgs e)
         {
+            if (Inhibit) { return; }
+
+            //Validate before moving
+            if (ValidateIt())
+            {
+                Inhibit = true;
+                // move back
+                e.Cancel = true;
+
+            }
+            else
+            {
+                Inhibit = true;
+                updateCurVals();
+            }
 
         }
 
@@ -2073,7 +2057,7 @@ namespace NewBTASProto
             {
                 // they don't match!
                 // ask if the user is sure that they want to continue...
-                DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "Looks like this record has been updated without being saved.  Are you sure you want to navigate away without saving?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
+                DialogResult dialogResult = MessageBox.Show(this, "Looks like this record has been updated without being saved.  Are you sure you want to navigate away without saving?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
                 if (dialogResult == DialogResult.No)
                 {
                     return true;
@@ -2124,10 +2108,39 @@ namespace NewBTASProto
 
         private void frmVECustomBats_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Inhibit = true;
+
+            //Validate before moving
+            if (ValidateIt())
+            {
+                Inhibit = true;
+                // move back
+                e.Cancel = true;
+            }
+            else
+            {
+                InhibitCB = true;
+                Inhibit = true;
+            }
+
         }
 
         private void bindingNavigator1_MouseDown(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void bindingNavigator1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            Inhibit = false;
+            bindingNavigator1.Focus();
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox1_Leave(object sender, EventArgs e)
         {
 
         }

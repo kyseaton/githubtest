@@ -25,7 +25,7 @@ namespace NewBTASProto
             {
                 NoteSet settings;
                 XmlSerializer xs = new XmlSerializer(typeof(NoteSet));
-                using (FileStream fs = new FileStream("noteSet.xml", FileMode.Open))
+                using (FileStream fs = new FileStream(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\noteSet.xml", FileMode.Open))
                 {
                     // This will read the XML from the file and create the new instance
                     // of CustomerData
@@ -133,7 +133,7 @@ namespace NewBTASProto
 
             //Create and XmlSerializer to serialize the data to a file
             XmlSerializer xs = new XmlSerializer(typeof(NoteSet));
-            using (FileStream fs = new FileStream("noteSet.xml", FileMode.Create))
+            using (FileStream fs = new FileStream(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\noteSet.xml", FileMode.Create))
             {
                 xs.Serialize(fs, settings);
             }
@@ -232,6 +232,7 @@ namespace NewBTASProto
 
                     // Send the message
                     smtp.Send(message);
+                    MessageBox.Show("Test Message Sent!");
 
                 }
                 catch (Exception ex)

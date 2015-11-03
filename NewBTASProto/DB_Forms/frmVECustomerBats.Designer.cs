@@ -97,8 +97,10 @@
             this.bindingNavigator1.TabIndex = 2;
             this.bindingNavigator1.Text = "bindingNavigator1";
             this.bindingNavigator1.RefreshItems += new System.EventHandler(this.bindingNavigator1_RefreshItems);
+            this.bindingNavigator1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.bindingNavigator1_ItemClicked_1);
             this.bindingNavigator1.TextChanged += new System.EventHandler(this.bindingNavigator1_TextChanged);
             this.bindingNavigator1.Layout += new System.Windows.Forms.LayoutEventHandler(this.bindingNavigator1_Layout);
+            this.bindingNavigator1.Validating += new System.ComponentModel.CancelEventHandler(this.bindingNavigator1_Validating_1);
             // 
             // bindingNavigatorAddNewItem
             // 
@@ -129,7 +131,11 @@
             this.toolStripCBCustomers.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.toolStripCBCustomers.Name = "toolStripCBCustomers";
             this.toolStripCBCustomers.Size = new System.Drawing.Size(121, 25);
+            this.toolStripCBCustomers.DropDown += new System.EventHandler(this.toolStripCBCustomers_DropDown);
             this.toolStripCBCustomers.SelectedIndexChanged += new System.EventHandler(this.toolStripCBCustomers_SelectedIndexChanged);
+            this.toolStripCBCustomers.Enter += new System.EventHandler(this.toolStripCBCustomers_Enter);
+            this.toolStripCBCustomers.Leave += new System.EventHandler(this.toolStripCBCustomers_Leave);
+            this.toolStripCBCustomers.TextChanged += new System.EventHandler(this.toolStripCBCustomers_TextChanged);
             // 
             // toolStripLabel3
             // 
@@ -143,7 +149,11 @@
             this.toolStripCBBatMod.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.toolStripCBBatMod.Name = "toolStripCBBatMod";
             this.toolStripCBBatMod.Size = new System.Drawing.Size(121, 25);
+            this.toolStripCBBatMod.DropDown += new System.EventHandler(this.toolStripCBBatMod_DropDown);
             this.toolStripCBBatMod.SelectedIndexChanged += new System.EventHandler(this.toolStripCBBatMod_SelectedIndexChanged);
+            this.toolStripCBBatMod.Enter += new System.EventHandler(this.toolStripCBBatMod_Enter);
+            this.toolStripCBBatMod.Leave += new System.EventHandler(this.toolStripCBBatMod_Leave);
+            this.toolStripCBBatMod.TextChanged += new System.EventHandler(this.toolStripCBBatMod_TextChanged);
             // 
             // toolStripSeparator1
             // 
@@ -163,6 +173,10 @@
             this.toolStripCBSerNum.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.toolStripCBSerNum.Name = "toolStripCBSerNum";
             this.toolStripCBSerNum.Size = new System.Drawing.Size(121, 25);
+            this.toolStripCBSerNum.DropDown += new System.EventHandler(this.toolStripCBSerNum_DropDown);
+            this.toolStripCBSerNum.SelectedIndexChanged += new System.EventHandler(this.toolStripCBSerNum_SelectedIndexChanged);
+            this.toolStripCBSerNum.Enter += new System.EventHandler(this.toolStripCBSerNum_Enter);
+            this.toolStripCBSerNum.Validating += new System.ComponentModel.CancelEventHandler(this.toolStripCBSerNum_Validating);
             this.toolStripCBSerNum.TextChanged += new System.EventHandler(this.toolStripCBSerNum_TextChanged);
             // 
             // bindingNavigatorSeparator
@@ -207,6 +221,7 @@
             this.bindingNavigatorMoveNextItem.RightToLeftAutoMirrorImage = true;
             this.bindingNavigatorMoveNextItem.Size = new System.Drawing.Size(23, 22);
             this.bindingNavigatorMoveNextItem.Text = "Move next";
+            this.bindingNavigatorMoveNextItem.Click += new System.EventHandler(this.bindingNavigatorMoveNextItem_Click);
             // 
             // bindingNavigatorMoveLastItem
             // 
@@ -349,6 +364,8 @@
             this.Name = "frmVECustomerBats";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "View, Edit and Add Customer Batteries";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmVECustomerBats_FormClosing_1);
+            this.Shown += new System.EventHandler(this.frmVECustomerBats_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.bindingNavigator1)).EndInit();
             this.bindingNavigator1.ResumeLayout(false);
             this.bindingNavigator1.PerformLayout();

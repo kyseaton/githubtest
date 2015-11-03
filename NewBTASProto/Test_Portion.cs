@@ -2807,7 +2807,7 @@ namespace NewBTASProto
                                     updateD(station, 7, "Waiting For Charger");
                                     if (MasterSlaveTest) { updateD(slaveRow, 7, "Waiting For Charger"); }
                                     // lets put things on pause and wait for the charger to come back
-                                    while ((string)d.Rows[station][11] != "HOLD")
+                                    while ((string)d.Rows[station][11] != "HOLD" && (string)d.Rows[station][11] != "RUN")
                                     {
                                         //check for a cancel
                                         if (token.IsCancellationRequested)
@@ -2838,7 +2838,7 @@ namespace NewBTASProto
                                     }
                                     // were back!
                                     //start the charger back up!
-                                    if ((string)d.Rows[station][9] != "" && (string)d.Rows[station][10] == "ICA" && (string)d.Rows[station][2] != "As Received")
+                                    if ((string)d.Rows[station][9] != "" && d.Rows[station][10].ToString().Contains("ICA") && (string)d.Rows[station][2] != "As Received" && (string)d.Rows[station][11] != "RUN")
                                     {
                                         //make sure the charger has priority
                                         criticalNum[Cstation] = true;
@@ -2866,8 +2866,8 @@ namespace NewBTASProto
                                     }
 
                                     stopwatch.Start();
-                                    updateD(station, 7, ("Reading " + currentReading.ToString() + " of " + readings.ToString()));
-                                    if (MasterSlaveTest) { updateD(slaveRow, 7, ("Reading " + currentReading.ToString() + " of " + readings.ToString())); }
+                                    updateD(station, 7, ("Reading " + (currentReading - 1).ToString() + " of " + readings.ToString()));
+                                    if (MasterSlaveTest) { updateD(slaveRow, 7, ("Reading " + (currentReading - 1).ToString() + " of " + readings.ToString())); }
 
                                 }// end power fail if
                                 else
@@ -2973,7 +2973,7 @@ namespace NewBTASProto
 
                 // We finished so let's clearn up!
                 // If we are running the charger tell it to stop and reset
-                if ((string)d.Rows[station][9] != "" && (string)d.Rows[station][10] == "ICA" && (string)d.Rows[station][2] != "As Received")
+                if ((string)d.Rows[station][9] != "" && d.Rows[station][10].ToString().Contains("ICA") && (string)d.Rows[station][2] != "As Received")
                 {
                     //make sure the charger has priority
                     criticalNum[Cstation] = true;

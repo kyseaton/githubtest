@@ -22,11 +22,31 @@ namespace NewBTASProto
         int max;
         string BID;
 
+        // current data
+        string curTemp1;
+        string curTemp2;
+        string curTemp3;
+        string curTemp4;
+        string curTemp5;
+        string curTemp6;
+        string curTemp7;
+        string curTemp8;
+        string curTemp9;
+        string curTemp10;
+        string curTemp11;
+        string curTemp12;
+
+        // we use this bool to allow us to allow the databinding indext to be changed...
+        bool Inhibit = true;
+        bool InhibitCB = true;
+
         public frmVEWorkOrders()
         {
             InitializeComponent();
             LoadData();
             bindingNavigator1.BindingSource = bindingSource1;
+
+            bindingNavigator1.CausesValidation = true;
         }
 
         private void LoadData()
@@ -318,7 +338,9 @@ namespace NewBTASProto
 
         private void bindingSource1_PositionChanged(object sender, EventArgs e)
         {
-
+            updateCurVals();
+            InhibitCB = false;
+            lastValid = false;
         }
 
         private void toolStripLabel1_Click(object sender, EventArgs e)
@@ -437,9 +459,58 @@ namespace NewBTASProto
 
         }
 
+
         private void toolStripCBWorkOrders_SelectedIndexChanged(object sender, EventArgs e)
         {
-            loadTests();
+            if (InhibitCB)
+            {
+                return;
+            }
+
+            //Validate before moving
+            if (ValidateIt())
+            {
+
+                // move back
+                InhibitCB = true;
+                toolStripCBWorkOrders.SelectedIndex = bindingNavigator1.BindingSource.Position;
+
+            }
+            else
+            {
+                loadTests();
+                updateCurVals();
+            }
+            InhibitCB = true;
+        }
+
+        private bool ValidateIt()
+        {
+            // do we need to validate?
+            if (curTemp1 != textBox1.Text ||
+                curTemp2 != dateTimePicker1.Text ||
+                curTemp3 != textBox3.Text ||
+                curTemp4 != textBox4.Text ||
+                curTemp5 != comboBox3.Text ||
+                curTemp6 != dateTimePicker2.Text ||
+                curTemp7 != comboBox2.Text ||
+                curTemp8 != textBox12.Text ||
+                curTemp9 != comboBox1.Text ||
+                curTemp10 != textBox8.Text ||
+                curTemp11 != textBox10.Text ||
+                curTemp12 != textBox11.Text)
+            {
+                // they don't match!
+                // ask if the user is sure that they want to continue...
+                DialogResult dialogResult = MessageBox.Show(this, "Looks like this record has been updated without being saved.  Are you sure you want to navigate away without saving?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
+                if (dialogResult == DialogResult.No)
+                {
+                    lastValid = false;
+                    return true;
+                }
+            }
+            lastValid = true;
+            return false;
         }
 
         private void UpdateView()
@@ -516,95 +587,163 @@ namespace NewBTASProto
 
         }
 
+        int oldPositionWOS = 0;
+
         private void toolStripCBWorkOrderStatus_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (toolStripCBWorkOrderStatus.Text == "Active")
+            if (InhibitCB)
             {
-                if (comboBox2.Items.Contains("Open")) { comboBox2.Items.Remove("Open"); }
-                if (comboBox2.Items.Contains("Closed")) { comboBox2.Items.Remove("Closed"); }
-                if (!comboBox2.Items.Contains("Active")) { comboBox2.Items.Add("Active"); }
+                return;
+            }
+
+            //Validate before moving
+            if (ValidateIt())
+            {
+                // move back
+                InhibitCB = true;
+                toolStripCBCustomers.SelectedIndex = oldPositionWOS;
             }
             else
             {
-                if (!comboBox2.Items.Contains("Open")) { comboBox2.Items.Add("Open"); }
-                if (!comboBox2.Items.Contains("Closed")) { comboBox2.Items.Add("Closed"); }
-                if (comboBox2.Items.Contains("Active")) { comboBox2.Items.Remove("Active"); }
-            }
-
-            if (toolStripCBWorkOrderStatus.Text == "Closed")
-            {
-                //disable everything
-                textBox1.Enabled = false;
-                dateTimePicker1.Enabled = false;
-                textBox3.Enabled = false;
-                textBox4.Enabled = false;
-                comboBox3.Enabled = false;
-                dateTimePicker2.Enabled = false;
-                textBox12.Enabled = false;
-                comboBox1.Enabled = false;
-                textBox8.Enabled = false;
-                textBox10.Enabled = false;
-                textBox11.Enabled = false;
-                button1.Enabled = false;
-                comboBox2.Enabled = true;
-                saveToolStripButton.Enabled = true;
-                bindingNavigatorDeleteItem.Enabled = true;
+                oldPositionWOS = toolStripCBCustomers.SelectedIndex;
                 bindingNavigatorAddNewItem.Enabled = true;
+                #region enable disable depending....
 
-            }
-            else if (toolStripCBWorkOrderStatus.Text == "Active")
-            {
-                //disable everything
-                textBox1.Enabled = false;
-                dateTimePicker1.Enabled = false;
-                textBox3.Enabled = false;
-                textBox4.Enabled = false;
-                comboBox3.Enabled = false;
-                dateTimePicker2.Enabled = false;
-                textBox12.Enabled = false;
-                comboBox1.Enabled = false;
-                textBox8.Enabled = false;
-                textBox10.Enabled = false;
-                textBox11.Enabled = false;
-                button1.Enabled = false;
-                comboBox2.Enabled = false;
-                saveToolStripButton.Enabled = false;
-                bindingNavigatorDeleteItem.Enabled = false;
-                bindingNavigatorAddNewItem.Enabled = false;
-            }
-            else
-            {
-                //enable everything
-                textBox1.Enabled = true;
-                dateTimePicker1.Enabled = true;
-                textBox3.Enabled = true;
-                textBox4.Enabled = true;
-                comboBox3.Enabled = true;
-                dateTimePicker2.Enabled = true;
-                textBox12.Enabled = true;
-                comboBox1.Enabled = true;
-                textBox8.Enabled = true;
-                textBox10.Enabled = true;
-                textBox11.Enabled = true;
-                button1.Enabled = true;
-                comboBox2.Enabled = true;
-                saveToolStripButton.Enabled = true;
-                bindingNavigatorDeleteItem.Enabled = true;
-                bindingNavigatorAddNewItem.Enabled = true;
+                if (toolStripCBWorkOrderStatus.Text == "Active")
+                {
+                    if (comboBox2.Items.Contains("Open")) { comboBox2.Items.Remove("Open"); }
+                    if (comboBox2.Items.Contains("Closed")) { comboBox2.Items.Remove("Closed"); }
+                    if (!comboBox2.Items.Contains("Active")) { comboBox2.Items.Add("Active"); }
+                }
+                else
+                {
+                    if (!comboBox2.Items.Contains("Open")) { comboBox2.Items.Add("Open"); }
+                    if (!comboBox2.Items.Contains("Closed")) { comboBox2.Items.Add("Closed"); }
+                    if (comboBox2.Items.Contains("Active")) { comboBox2.Items.Remove("Active"); }
+                }
 
-            }
+                if (toolStripCBWorkOrderStatus.Text == "Closed")
+                {
+                    //disable everything
+                    textBox1.Enabled = false;
+                    dateTimePicker1.Enabled = false;
+                    textBox3.Enabled = false;
+                    textBox4.Enabled = false;
+                    comboBox3.Enabled = false;
+                    dateTimePicker2.Enabled = false;
+                    textBox12.Enabled = false;
+                    comboBox1.Enabled = false;
+                    textBox8.Enabled = false;
+                    textBox10.Enabled = false;
+                    textBox11.Enabled = false;
+                    button1.Enabled = false;
+                    comboBox2.Enabled = true;
+                    saveToolStripButton.Enabled = true;
+                    bindingNavigatorDeleteItem.Enabled = true;
+                    bindingNavigatorAddNewItem.Enabled = true;
 
-            UpdateView();
+                }
+                else if (toolStripCBWorkOrderStatus.Text == "Active")
+                {
+                    //disable everything
+                    textBox1.Enabled = false;
+                    dateTimePicker1.Enabled = false;
+                    textBox3.Enabled = false;
+                    textBox4.Enabled = false;
+                    comboBox3.Enabled = false;
+                    dateTimePicker2.Enabled = false;
+                    textBox12.Enabled = false;
+                    comboBox1.Enabled = false;
+                    textBox8.Enabled = false;
+                    textBox10.Enabled = false;
+                    textBox11.Enabled = false;
+                    button1.Enabled = false;
+                    comboBox2.Enabled = false;
+                    saveToolStripButton.Enabled = false;
+                    bindingNavigatorDeleteItem.Enabled = false;
+                    bindingNavigatorAddNewItem.Enabled = false;
+                }
+                else
+                {
+                    //enable everything
+                    textBox1.Enabled = true;
+                    dateTimePicker1.Enabled = true;
+                    textBox3.Enabled = true;
+                    textBox4.Enabled = true;
+                    comboBox3.Enabled = true;
+                    dateTimePicker2.Enabled = true;
+                    textBox12.Enabled = true;
+                    comboBox1.Enabled = true;
+                    textBox8.Enabled = true;
+                    textBox10.Enabled = true;
+                    textBox11.Enabled = true;
+                    button1.Enabled = true;
+                    comboBox2.Enabled = true;
+                    saveToolStripButton.Enabled = true;
+                    bindingNavigatorDeleteItem.Enabled = true;
+                    bindingNavigatorAddNewItem.Enabled = true;
+
+                }
+
+                #endregion
+                UpdateView();
+                updateCurVals();
+            }
+            InhibitCB = true;
+
+
         }
+
+        int oldPositionCusts = 0;
 
         private void toolStripCBCustomers_SelectedIndexChanged(object sender, EventArgs e)
         {
-            UpdateView();
+            if (InhibitCB)
+            {
+                return;
+            }
+
+            //Validate before moving
+            if (ValidateIt())
+            {
+                // move back
+                InhibitCB = true;
+                toolStripCBCustomers.SelectedIndex = oldPositionCusts;
+            }
+            else
+            {
+                oldPositionCusts = toolStripCBCustomers.SelectedIndex;
+                bindingNavigatorAddNewItem.Enabled = true;
+                UpdateView();
+                updateCurVals();
+            }
+            InhibitCB = true;
         }
+
+        int oldPositionSerNums = 0;
 
         private void toolStripCBSerialNums_SelectedIndexChanged(object sender, EventArgs e)
         {
-            UpdateView();
+            if (InhibitCB)
+            {
+                return;
+            }
+
+            //Validate before moving
+            if (ValidateIt())
+            {
+                // move back
+                InhibitCB = true;
+                toolStripCBSerialNums.SelectedIndex = oldPositionSerNums;
+            }
+            else
+            {
+                oldPositionSerNums = toolStripCBSerialNums.SelectedIndex;
+                bindingNavigatorAddNewItem.Enabled = true;
+                UpdateView();
+                updateCurVals();
+            }
+            InhibitCB = true;
         }
 
         private void saveToolStripButton_Click(object sender, EventArgs e)
@@ -1069,6 +1208,8 @@ namespace NewBTASProto
         {
             bindingNavigatorAddNewItem.Enabled = false;
             comboBox2.Text = "Open";
+
+            lastValid = false;
         }
 
         private void bindingNavigatorMovePreviousItem_Click(object sender, EventArgs e)
@@ -1076,7 +1217,7 @@ namespace NewBTASProto
             try
             {
                 //remove the new record if there is one..
-                if (bindingNavigatorAddNewItem.Enabled == false && comboBox2.Text != "Active")
+                if (bindingNavigatorAddNewItem.Enabled == false && lastValid)
                 {
                     WorkOrders.Tables[0].Rows[WorkOrders.Tables[0].Rows.Count - 1].Delete();
                     bindingNavigatorAddNewItem.Enabled = true;
@@ -1093,7 +1234,7 @@ namespace NewBTASProto
             try
             {
                 //remove the new record if there is one..
-                if (bindingNavigatorAddNewItem.Enabled == false && comboBox2.Text != "Active")
+                if (bindingNavigatorAddNewItem.Enabled == false && lastValid)
                 {
                     WorkOrders.Tables[0].Rows[WorkOrders.Tables[0].Rows.Count - 1].Delete();
                     bindingNavigatorAddNewItem.Enabled = true;
@@ -1111,7 +1252,176 @@ namespace NewBTASProto
             try
             {
                 //remove the new record if there is one..
-                if (bindingNavigatorAddNewItem.Enabled == false && comboBox2.Text != "Active")
+                if (bindingNavigatorAddNewItem.Enabled == false && lastValid)
+                {
+                    WorkOrders.Tables[0].Rows[WorkOrders.Tables[0].Rows.Count - 1].Delete();
+                    bindingNavigatorAddNewItem.Enabled = true;
+                }
+            }
+            catch
+            {
+                //do nothing
+            }
+        }
+
+        private void updateCurVals()
+        {
+            // update the current vars....
+            //current data..
+            curTemp1 = textBox1.Text;
+            curTemp2 = dateTimePicker1.Text;
+            curTemp3 = textBox3.Text;
+            curTemp4 = textBox4.Text;
+            curTemp5 = comboBox3.Text;
+            curTemp6 = dateTimePicker2.Text;
+            curTemp7 = comboBox2.Text;
+            curTemp8 = textBox12.Text;
+            curTemp9 = comboBox1.Text;
+            curTemp10 = textBox8.Text;
+            curTemp11 = textBox10.Text;
+            curTemp12 = textBox11.Text;
+        }
+
+        bool lastValid = false;
+
+        private void bindingNavigator1_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                //remove the new record if there is one..
+                if (bindingNavigatorAddNewItem.Enabled == false && lastValid)
+                {
+                    WorkOrders.Tables[0].Rows[WorkOrders.Tables[0].Rows.Count - 1].Delete();
+                    bindingNavigatorAddNewItem.Enabled = true;
+                }
+            }
+            catch
+            {
+                //do nothing
+            }
+            
+        }
+
+        private void frmVEWorkOrders_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            //Validate before moving
+            if (ValidateIt())
+            {
+                Inhibit = true;
+                // move back
+                e.Cancel = true;
+            }
+            else
+            {
+                Inhibit = true;
+            }
+        }
+
+        private void bindingNavigator1_Validating(object sender, CancelEventArgs e)
+        {
+            if (Inhibit) { return; }
+
+            //Validate before moving
+            if (ValidateIt())
+            {
+                Inhibit = true;
+                // move back
+                e.Cancel = true;
+
+            }
+            else
+            {
+                Inhibit = true;
+                InhibitCB = true;
+            }
+        }
+
+        private void toolStripCBWorkOrderStatus_Enter(object sender, EventArgs e)
+        {
+            InhibitCB = false;
+        }
+
+        private void toolStripCBWorkOrderStatus_Leave(object sender, EventArgs e)
+        {
+            InhibitCB = true;
+        }
+
+        private void toolStripCBCustomers_Enter(object sender, EventArgs e)
+        {
+            InhibitCB = false;
+        }
+
+        private void toolStripCBCustomers_Leave(object sender, EventArgs e)
+        {
+            InhibitCB = true;
+        }
+
+        private void toolStripCBSerialNums_Enter(object sender, EventArgs e)
+        {
+            InhibitCB = false;
+        }
+
+        private void toolStripCBSerialNums_Leave(object sender, EventArgs e)
+        {
+            InhibitCB = true;
+        }
+
+        private void toolStripCBWorkOrders_Enter(object sender, EventArgs e)
+        {
+            InhibitCB = false;
+        }
+
+        private void toolStripCBWorkOrders_Leave(object sender, EventArgs e)
+        {
+            InhibitCB = true;
+        }
+
+        private void bindingNavigator1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            Inhibit = false;
+            bindingNavigator1.Focus();
+        }
+
+        private void toolStripCBSerialNums_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                //remove the new record if there is one..
+                if (bindingNavigatorAddNewItem.Enabled == false && lastValid)
+                {
+                    WorkOrders.Tables[0].Rows[WorkOrders.Tables[0].Rows.Count - 1].Delete();
+                    bindingNavigatorAddNewItem.Enabled = true;
+                }
+            }
+            catch
+            {
+                //do nothing
+            }
+        }
+
+        private void toolStripCBCustomers_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                //remove the new record if there is one..
+                if (bindingNavigatorAddNewItem.Enabled == false && lastValid)
+                {
+                    WorkOrders.Tables[0].Rows[WorkOrders.Tables[0].Rows.Count - 1].Delete();
+                    bindingNavigatorAddNewItem.Enabled = true;
+                }
+            }
+            catch
+            {
+                //do nothing
+            }
+        }
+
+        private void toolStripCBWorkOrderStatus_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                //remove the new record if there is one..
+                if (bindingNavigatorAddNewItem.Enabled == false && lastValid)
                 {
                     WorkOrders.Tables[0].Rows[WorkOrders.Tables[0].Rows.Count - 1].Delete();
                     bindingNavigatorAddNewItem.Enabled = true;

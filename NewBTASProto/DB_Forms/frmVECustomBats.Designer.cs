@@ -513,6 +513,7 @@
             this.bindingNavigator1.TabIndex = 2;
             this.bindingNavigator1.Text = "bindingNavigator1";
             this.bindingNavigator1.RefreshItems += new System.EventHandler(this.bindingNavigator1_RefreshItems);
+            this.bindingNavigator1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.bindingNavigator1_ItemClicked);
             this.bindingNavigator1.LocationChanged += new System.EventHandler(this.bindingNavigator1_LocationChanged);
             this.bindingNavigator1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.bindingNavigator1_MouseDown);
             this.bindingNavigator1.Validating += new System.ComponentModel.CancelEventHandler(this.bindingNavigator1_Validating);
@@ -689,6 +690,8 @@
             this.groupBox1.Size = new System.Drawing.Size(483, 145);
             this.groupBox1.TabIndex = 49;
             this.groupBox1.TabStop = false;
+            this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
+            this.groupBox1.Leave += new System.EventHandler(this.groupBox1_Leave);
             // 
             // comboBox13
             // 
@@ -4174,7 +4177,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "View, Edit and Add Batteries";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmVECustomBats_FormClosing);
-            this.Load += new System.EventHandler(this.frmVECustomBats_Load);
+            this.Load += new System.EventHandler(this.comboBox2_SelectedValueChanged);
             this.Shown += new System.EventHandler(this.frmVECustomBats_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.bindingNavigator1)).EndInit();
             this.bindingNavigator1.ResumeLayout(false);

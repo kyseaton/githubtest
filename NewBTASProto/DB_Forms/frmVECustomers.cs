@@ -18,11 +18,31 @@ namespace NewBTASProto
 
         DataSet Customers;
 
+        // we use this bool to allow us to allow the databinding indext to be changed...
+        bool Inhibit = true;
+        bool InhibitCB = true;
+
+        //current data..
+        string curTemp1;
+        string curTemp2;
+        string curTemp3;
+        string curTemp4;
+        string curTemp5;
+        string curTemp6;
+        string curTemp7;
+        string curTemp8;
+        
+
         public frmVECustomers()
         {
             InitializeComponent();
             LoadData();
             bindingNavigator1.BindingSource = bindingSource1;
+
+            bindingNavigator1.CausesValidation = true;
+
+            Inhibit = false;
+            InhibitCB = false;
         }
         private void LoadData()
         {
@@ -144,7 +164,7 @@ namespace NewBTASProto
 
         private void bindingSource1_PositionChanged(object sender, EventArgs e)
         {
-
+            updateCurVals();
         }
 
         private void toolStripLabel1_Click(object sender, EventArgs e)
@@ -195,8 +215,22 @@ namespace NewBTASProto
 
         private void toolStripCBCustomers_SelectedIndexChanged(object sender, EventArgs e)
         {
-           //this didn't work...
-           // bindingNavigator1.BindingSource.Position = toolStripCBCustomers.SelectedIndex;
+            if (InhibitCB) { return; }
+
+            //Validate before moving
+            if (ValidateIt())
+            {
+                InhibitCB = true;
+                // move back
+                toolStripCBCustomers.SelectedIndex = bindingNavigator1.BindingSource.Position;
+                InhibitCB = false;
+
+            }
+            else
+            {
+                InhibitCB = false;
+                updateCurVals();
+            }
         }
 
         private void bindingNavigatorDeleteItem_Click(object sender, EventArgs e)
@@ -384,7 +418,10 @@ namespace NewBTASProto
 
         private void bindingNavigatorAddNewItem_Click(object sender, EventArgs e)
         {
-            bindingNavigatorAddNewItem.Enabled = false;
+            if (toolStripCBCustomers.Text == "")
+            {
+                bindingNavigatorAddNewItem.Enabled = false;
+            }
         }
 
         private void bindingNavigatorMoveFirstItem_Click(object sender, EventArgs e)
@@ -392,7 +429,7 @@ namespace NewBTASProto
             try
             {
                 //remove the new record if there is one..
-                if (bindingNavigatorAddNewItem.Enabled == false)
+                if (bindingNavigatorAddNewItem.Enabled == false && bindingNavigator1.BindingSource.Position < Customers.Tables[0].Rows.Count)
                 {
                     Customers.Tables[0].Rows[Customers.Tables[0].Rows.Count - 1].Delete();
                     bindingNavigatorAddNewItem.Enabled = true;
@@ -409,7 +446,7 @@ namespace NewBTASProto
             try
             {
                 //remove the new record if there is one..
-                if (bindingNavigatorAddNewItem.Enabled == false)
+                if (bindingNavigatorAddNewItem.Enabled == false && bindingNavigator1.BindingSource.Position < Customers.Tables[0].Rows.Count)
                 {
                     Customers.Tables[0].Rows[Customers.Tables[0].Rows.Count - 1].Delete();
                     bindingNavigatorAddNewItem.Enabled = true;
@@ -423,10 +460,11 @@ namespace NewBTASProto
 
         private void toolStripCBCustomers_TextChanged(object sender, EventArgs e)
         {
+
             try
             {
                 //remove the new record if there is one..
-                if (bindingNavigatorAddNewItem.Enabled == false)
+                if (bindingNavigatorAddNewItem.Enabled == false && bindingNavigator1.BindingSource.Position < Customers.Tables[0].Rows.Count)
                 {
                     Customers.Tables[0].Rows[Customers.Tables[0].Rows.Count - 1].Delete();
                     bindingNavigatorAddNewItem.Enabled = true;
@@ -436,6 +474,107 @@ namespace NewBTASProto
             {
                 //do nothing
             }
+        }
+
+        private void bindingNavigator1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            Inhibit = false;
+            bindingNavigator1.Focus();
+        }
+
+        private void frmVECustomers_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            //Validate before moving
+            if (ValidateIt())
+            {
+                Inhibit = true;
+                // move back
+                e.Cancel = true;
+            }
+            else
+            {
+                Inhibit = true;
+                updateCurVals();
+            }
+        }
+
+        private bool ValidateIt()
+        {
+            // do we need to validate?
+
+            if ( curTemp1 != textBox1.Text ||
+                curTemp2 != textBox2.Text ||
+                curTemp3 != textBox3.Text ||
+                curTemp4 != textBox4.Text ||
+                curTemp5 != textBox5.Text ||
+                curTemp6 != textBox6.Text ||
+                curTemp7 != textBox7.Text ||
+                curTemp8 != textBox8.Text)
+            {
+                // they don't match!
+                // ask if the user is sure that they want to continue...
+                DialogResult dialogResult = MessageBox.Show(this, "Looks like this record has been updated without being saved.  Are you sure you want to navigate away without saving?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
+                if (dialogResult == DialogResult.No)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private void bindingNavigator1_Validating(object sender, CancelEventArgs e)
+        {
+            if (Inhibit) { return; }
+
+            //Validate before moving
+            if (ValidateIt())
+            {
+                Inhibit = true;
+                // move back
+                e.Cancel = true;
+
+            }
+            else
+            {
+                Inhibit = true;
+                updateCurVals();
+            }
+        }
+
+        private void frmVECustomers_Shown(object sender, EventArgs e)
+        {
+            updateCurVals();
+        }
+
+        private void bindingNavigator1_LocationChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                //remove the new record if there is one..
+                if (bindingNavigatorAddNewItem.Enabled == false && bindingNavigator1.BindingSource.Position < Customers.Tables[0].Rows.Count)
+                {
+                    Customers.Tables[0].Rows[Customers.Tables[0].Rows.Count - 1].Delete();
+                    bindingNavigatorAddNewItem.Enabled = true;
+                }
+            }
+            catch
+            {
+                //do nothing
+            }
+        }
+
+        private void updateCurVals()
+        {
+            // update the current vars....
+            //current data..
+            curTemp1 = textBox1.Text;
+            curTemp2 = textBox2.Text;
+            curTemp3 = textBox3.Text;
+            curTemp4 = textBox4.Text;
+            curTemp5 = textBox5.Text;
+            curTemp6 = textBox6.Text;
+            curTemp7 = textBox7.Text;
+            curTemp8 = textBox8.Text;
         }
     }
 }
