@@ -572,12 +572,19 @@ namespace NewBTASProto
         }
 
 
+        public CancellationTokenSource cFindStations = new CancellationTokenSource();
+
         private void button1_Click(object sender, EventArgs e)
         {
 
             // create a thread to go through and look for the stations, this way the UI will still work while the search is happening
             ThreadPool.QueueUserWorkItem(s =>
             {
+
+                // setup the canellation token
+                CancellationToken token = (CancellationToken)s;
+
+
                 this.Invoke((MethodInvoker)delegate
                     {
                         // start by disabling the button while we look for stations
@@ -588,7 +595,11 @@ namespace NewBTASProto
                         dataGridView1.CurrentCell = dataGridView1.Rows[0].Cells[0];
                         dataGridView1.ClearSelection();
                     });
-                Thread.Sleep(500);
+
+                Thread.Sleep(250);
+                if (token.IsCancellationRequested) { return; }
+                Thread.Sleep(250);
+                if (token.IsCancellationRequested) { return; }
 
                 // turn on all of the in use buttons
                 for (int i = 0; i < 16; i++)
@@ -610,7 +621,14 @@ namespace NewBTASProto
                     });
 
                     //give it time to check the channel
-                    Thread.Sleep(900);
+                    Thread.Sleep(250);
+                    if (token.IsCancellationRequested) { return; }
+                    Thread.Sleep(250);
+                    if (token.IsCancellationRequested) { return; }
+                    Thread.Sleep(250);
+                    if (token.IsCancellationRequested) { return; }
+                    Thread.Sleep(250);
+                    if (token.IsCancellationRequested) { return; }
 
                     // move the current channel
                     this.Invoke((MethodInvoker)delegate
@@ -633,7 +651,15 @@ namespace NewBTASProto
 
                 //Finally take care of the last channel
                 //give it time to check the channel
-                Thread.Sleep(900);
+
+                Thread.Sleep(250);
+                if (token.IsCancellationRequested) { return; }
+                Thread.Sleep(250);
+                if (token.IsCancellationRequested) { return; }
+                Thread.Sleep(250);
+                if (token.IsCancellationRequested) { return; }
+                Thread.Sleep(250);
+                if (token.IsCancellationRequested) { return; }
 
                 // move back to channel 0
                 this.Invoke((MethodInvoker)delegate
@@ -714,7 +740,12 @@ namespace NewBTASProto
                         dataGridView1.CurrentCell = dataGridView1.Rows[0].Cells[0];
                         dataGridView1.ClearSelection();
                     });
-                    Thread.Sleep(500);
+
+                    Thread.Sleep(250);
+                    if (token.IsCancellationRequested) { return; }
+                    Thread.Sleep(250);
+                    if (token.IsCancellationRequested) { return; }
+
 
                     // turn on all of the in use buttons
                     for (int i = 0; i < 16; i++)
@@ -736,7 +767,14 @@ namespace NewBTASProto
                         });
 
                         //give it time to check the channel
-                        Thread.Sleep(900);
+                        Thread.Sleep(250);
+                        if (token.IsCancellationRequested) { return; }
+                        Thread.Sleep(250);
+                        if (token.IsCancellationRequested) { return; }
+                        Thread.Sleep(250);
+                        if (token.IsCancellationRequested) { return; }
+                        Thread.Sleep(250);
+                        if (token.IsCancellationRequested) { return; }
 
                         // move the current channel
                         this.Invoke((MethodInvoker)delegate
@@ -759,7 +797,14 @@ namespace NewBTASProto
 
                     //Finally take care of the last channel
                     //give it time to check the channel
-                    Thread.Sleep(900);
+                    Thread.Sleep(250);
+                    if (token.IsCancellationRequested) { return; }
+                    Thread.Sleep(250);
+                    if (token.IsCancellationRequested) { return; }
+                    Thread.Sleep(250);
+                    if (token.IsCancellationRequested) { return; }
+                    Thread.Sleep(250);
+                    if (token.IsCancellationRequested) { return; }
 
                     // move back to channel 0
                     this.Invoke((MethodInvoker)delegate
@@ -789,7 +834,7 @@ namespace NewBTASProto
                     dataGridView1.Enabled = true;
                 });
 
-            });                     // end thread
+            },cFindStations.Token);                     // end thread
 
 
 
@@ -876,6 +921,7 @@ namespace NewBTASProto
                 cPollIC.Cancel();
                 cPollCScans.Cancel();
                 sequentialScanT.Cancel();
+                cFindStations.Cancel();
                 // make sure it takes...
                 Thread.Sleep(500);  
             }

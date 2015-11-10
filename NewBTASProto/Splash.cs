@@ -15,11 +15,13 @@ namespace NewBTASProto
 
         bool licGood = false;
         // here are the valid licence numbers
-        static int[] lics = new int[3] {
-            1111111,
-            2222222,
-            3333333
+        static string[] lics = new string[3] {
+            "1111111111",
+            "2222222222",
+            "3333333333"
         };
+        // this is the lic dataTable (here for its writexml and readxml methods
+        DataTable lic = new DataTable();
 
 
         public Splash()
@@ -298,20 +300,20 @@ namespace NewBTASProto
             tmr.Tick += tmr_Tick;
 
             //load the licence xml file and comare it to the licence list
-            DataTable lic = new DataTable();
+
             try
             {
                 //create the columns
-                lic.Columns.Add("num", typeof(int));
+                lic.Columns.Add("num", typeof(string));
                 //name the table
                 lic.TableName = "lic_file";
                 //now read in what we got!
                 lic.ReadXml(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\lic_file.xml");
 
                 //now try to compare the lic # to the approved list...
-                foreach (int posLic in lics)
+                foreach (string posLic in lics)
                 {
-                    if (posLic == (int) lic.Rows[0][0])
+                    if (posLic == lic.Rows[0][0].ToString())
                     {
                         licGood = true;
                         break;
@@ -339,6 +341,33 @@ namespace NewBTASProto
             if (licGood == false)
             {
                 //Ask for a licence number here!
+                
+                string temp = Microsoft.VisualBasic.Interaction.InputBox("The licence key wasn't found.  Please enter your licence key number.", "Licence not found!");
+
+                //check the number
+                //now try to compare the lic # to the approved list...
+                foreach (string posLic in lics)
+                {
+                    if (posLic == temp)
+                    {
+                        licGood = true;
+                        break;
+                    }
+                }// end foreach
+
+                // if the number is bad, we'll return
+                if(licGood == false)
+                {
+                    MessageBox.Show("Cannot continue without a good licence key.  Contact JFM if you need a valid licence key.");
+                    this.Dispose();
+                }
+                //otherwise let's write the number to file and continue
+                else
+                {
+                    lic.Rows.Add();
+                    lic.Rows[0][0] = temp;
+                    lic.WriteXml(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\lic_file.xml");
+                }
 
             }
 

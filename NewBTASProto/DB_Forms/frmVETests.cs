@@ -173,7 +173,6 @@ namespace NewBTASProto
                         cmd.ExecuteNonQuery();
                         conn.Close();
                     }
-                    MessageBox.Show(current["TESTID"].ToString() + " has been updated.");
 
                 }
                 else

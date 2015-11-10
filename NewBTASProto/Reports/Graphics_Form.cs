@@ -308,7 +308,7 @@ namespace NewBTASProto
 
                         // update the technology var
                         //technology1 = testsPerformed.Tables["Tests"].Rows[1][2].ToString();
-                        if (Int32.Parse(testsPerformed.Tables["Tests"].Rows[1][3].ToString()) != 0) { cell1 = Int32.Parse(testsPerformed.Tables["Tests"].Rows[1][3].ToString()); }
+                        if (testsPerformed.Tables["Tests"].Rows[1][3].ToString() != "") { cell1 = Int32.Parse(testsPerformed.Tables["Tests"].Rows[1][3].ToString()); }
                     }
                     catch (Exception ex)
                     {

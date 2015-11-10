@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -85,7 +86,7 @@ namespace NewBTASProto
                             ////////////////////////////////////////////NORMAL PRIORITY CHARGERS ARE CHECKED HERE///////////////////////
                             if ((bool)d.Rows[j][8] && (bool)d.Rows[j][4] && (string)d.Rows[j][9] != "" && !d.Rows[j][9].ToString().Contains("S") && d.Rows[j][10].ToString().Contains("ICA"))
                             {
-                                Thread.Sleep(600);
+                                Thread.Sleep(800);
                                 try
                                 {
                                     // control for master slave setup
@@ -300,7 +301,7 @@ namespace NewBTASProto
                                         if (testData.boardID == 1) { updateD(chanNum, 10, "ICA mini"); }
                                         else if (testData.boardID == 6) { updateD(chanNum, 10, "ICA SMC"); }
                                         else if (testData.boardID == 8) { updateD(chanNum, 10, "ICA SMC ED"); }
-                                        else if (testData.boardID == 4) { updateD(chanNum, 10, "ICA SMini"); }
+                                        else if (testData.boardID == 4) { updateD(chanNum, 10, "ICA SMI"); }
                                     }
                                     // and we don't need to check any more
                                     check = false;
@@ -323,6 +324,7 @@ namespace NewBTASProto
                                 slaveRow = -1;
                                 if (criticalNum[i] == true)
                                 {
+                                    Debug.Print("Station " + i.ToString() + " is critical");
                                     try
                                     {
                                         Thread.Sleep(500);
@@ -479,10 +481,10 @@ namespace NewBTASProto
                                                 }
                                                 else if (testData.boardID == 4) 
                                                 { 
-                                                    updateD(station, 10, "ICA SMini");
+                                                    updateD(station, 10, "ICA SMI");
                                                     if (slaveRow > -1)
                                                     {
-                                                        updateD(slaveRow, 10, "ICA SMini");
+                                                        updateD(slaveRow, 10, "ICA SMI");
                                                     }
                                                 }
                                             }
@@ -494,10 +496,12 @@ namespace NewBTASProto
                                     {
                                         if (ex is System.TimeoutException)
                                         {
-                                            //if this charger is not part of a test, we need to turn off the critical...
-                                            if ((bool) d.Rows[i][5] == false)
+                                            //if this charger is not part of a test and we've had three errors, we need to turn off the critical...
+                                            if (comErrorNum[i] < 3) { comErrorNum[i]++; }
+                                            if ((bool) d.Rows[i][5] == false && comErrorNum[i] ==3)
                                             {
                                                 criticalNum[i] = false;
+                                                comErrorNum[i] = 0;
                                             }
                                             Thread.Sleep(100);
                                         }
@@ -542,7 +546,7 @@ namespace NewBTASProto
                         if (token.IsCancellationRequested) return;
                         else
                         {
-                            MessageBox.Show(ex.ToString());
+                            //MessageBox.Show(ex.ToString());
                         }
                     }
 

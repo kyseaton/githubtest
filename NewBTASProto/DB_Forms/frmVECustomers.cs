@@ -406,7 +406,9 @@ namespace NewBTASProto
                     current[0] = max + 1;
 
                     bindingNavigatorAddNewItem.Enabled = true;
+                    
                 }
+                updateCurVals();
             }// end try
             catch(Exception ex)
             {

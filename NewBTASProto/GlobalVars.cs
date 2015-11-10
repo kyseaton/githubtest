@@ -85,7 +85,7 @@ namespace NewBTASProto
         /// <summary>
         /// this string holds the programversion text
         /// </summary>
-        public static string programVersion = "6.0.0.51";
+        public static string programVersion = "6.0.0.57";
 
         /// <summary>
         /// this is where we hold our notification service settings...

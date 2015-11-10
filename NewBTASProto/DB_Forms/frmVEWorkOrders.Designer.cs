@@ -393,6 +393,7 @@
             this.comboBox1.Size = new System.Drawing.Size(147, 21);
             this.comboBox1.TabIndex = 8;
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            this.comboBox1.Enter += new System.EventHandler(this.comboBox1_Enter);
             // 
             // textBox8
             // 
@@ -637,6 +638,7 @@
             this.Text = "View, Edit and Add Work Orders";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmVEWorkOrders_FormClosing);
             this.Load += new System.EventHandler(this.frmVEWorkOrders_Load);
+            this.Shown += new System.EventHandler(this.frmVEWorkOrders_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingNavigator1)).EndInit();
             this.bindingNavigator1.ResumeLayout(false);
