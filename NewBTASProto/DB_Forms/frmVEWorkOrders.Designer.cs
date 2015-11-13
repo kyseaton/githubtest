@@ -138,6 +138,7 @@
             this.bindingNavigator1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.bindingNavigator1_ItemClicked);
             this.bindingNavigator1.TextChanged += new System.EventHandler(this.bindingNavigator1_TextChanged);
             this.bindingNavigator1.Validating += new System.ComponentModel.CancelEventHandler(this.bindingNavigator1_Validating);
+            this.bindingNavigator1.Validated += new System.EventHandler(this.bindingNavigator1_Validated);
             // 
             // bindingNavigatorAddNewItem
             // 

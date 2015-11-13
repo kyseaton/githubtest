@@ -585,6 +585,7 @@
             this.Controls.Add(this.comboBox3);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.button1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ICSettingsForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;

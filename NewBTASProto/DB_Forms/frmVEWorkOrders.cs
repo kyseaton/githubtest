@@ -867,7 +867,75 @@ namespace NewBTASProto
                     MessageBox.Show("That battery is already assigned to an Open order");
                     return;
                 }
+
+                current = (DataRowView)bindingSource1.Current;
+
+            }// end else if
+
+          
+            // finally we need to check to see if the work order number is already in the system!
+            string strAccessConnWO;
+            string strAccessSelectWO;
+            // Open database containing all the battery data....
+
+            strAccessConnWO = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+            DataRowView currentWO = (DataRowView)bindingSource1.Current;
+            if (currentWO["WorkOrderID"].ToString() != "")
+            {
+                strAccessSelectWO = @"SELECT WorkOrderNumber FROM WorkOrders WHERE WorkOrderID <> " + currentWO["WorkOrderID"].ToString() + "";
             }
+            else
+            {
+                strAccessSelectWO = @"SELECT WorkOrderNumber FROM WorkOrders";
+            }
+
+            DataSet WOs = new DataSet();
+            OleDbConnection myAccessConnWO = null;
+            // try to open the DB
+            try
+            {
+                myAccessConnWO = new OleDbConnection(strAccessConnWO);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                Inhibit = true;
+                return;
+            }
+            //  now try to access it
+            try
+            {
+                OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelectWO, myAccessConnWO);
+                OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                lock (Main_Form.dataBaseLock)
+                {
+                    myAccessConnWO.Open();
+                    myDataAdapter.Fill(WOs);
+                    bindingNavigatorAddNewItem.Enabled = true;
+                    myAccessConnWO.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                Inhibit = true;
+                return;
+            }
+            finally
+            {
+
+            }
+
+            DataRow[] foundRowsWO = WOs.Tables[0].Select("WorkOrderNumber = '" + textBox1.Text + "'");
+
+            if (foundRowsWO.Length != 0)
+            {
+                Inhibit = true;
+                MessageBox.Show("That WorkOrder Number is already in the system!");
+                return;
+            }
+
             
             try
             {
@@ -978,11 +1046,15 @@ namespace NewBTASProto
 
                 //now we are going to save the notes on the test page...
                 //first test to see if we have any tests before continuing
-                if (testList.Tables[0].Rows.Count < 1) return;
+                if (testList.Tables[0].Rows.Count < 1)
+                {
+                    Inhibit = true;
+                    return;
+                }
                 else
                 {
                     dataGridView1.EndEdit();
-                    for (int i = 0; i < testList.Tables[0].Rows.Count; i++ )
+                    for (int i = 0; i < testList.Tables[0].Rows.Count; i++)
                     {
                         if (dataGridView1.Rows[i].Cells[2].Value.ToString().Replace("'", "''") != "")
                         {
@@ -1018,11 +1090,12 @@ namespace NewBTASProto
                     bindingSource1.Position = origPos;
                 }
 
-                
+                Inhibit = true;
 
             }// end try
             catch (Exception ex)
             {
+                Inhibit = true;
                 MessageBox.Show(ex.ToString());
             }
         }
@@ -1543,6 +1616,11 @@ namespace NewBTASProto
         private void comboBox1_Enter(object sender, EventArgs e)
         {
             Inhibit = true;
+        }
+
+        private void bindingNavigator1_Validated(object sender, EventArgs e)
+        {
+            updateCurVals();
         }
 
     }

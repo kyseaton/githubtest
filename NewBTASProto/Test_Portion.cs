@@ -160,6 +160,11 @@ namespace NewBTASProto
                     MessageBox.Show("CScan is not connected to a cells Cable.  Please connect a cells cable to this CSCAN to run a test.");
                     return;
                 }
+                else if (GlobalVars.CScanData[station].shuntCableType == "NONE")
+                {
+                    MessageBox.Show("CScan is not connected to a cells Shunt cable.  Please connect a shunt cable to this CSCAN to run a test.");
+                    return;
+                }
                     // check if we have the right cells cable for multiple work orders on one cscan...
                 else if (MWO2 != "" && MWO3 == "" && GlobalVars.CScanData[station].CCID != 3)
                 {
@@ -400,7 +405,6 @@ namespace NewBTASProto
                     DialogResult dialogResult = MessageBox.Show("The charger appears to already be running. Do you want to stop it now and proceed with the test?", "Click Yes to have the program stop the charger or No to do it manually", MessageBoxButtons.YesNo);
                     if (dialogResult == DialogResult.Yes)
                     {
-                        criticalNum[Cstation] = true;
                         // now we need to reset the charger
                         updateD(station, 7, "Stopping Charger!");
                         if (MasterSlaveTest) { updateD(slaveRow, 7, "Stopping Charger!"); }
@@ -410,6 +414,7 @@ namespace NewBTASProto
                         GlobalVars.ICSettings[Cstation].KE3 = (byte)2;
                         //Update the output string value
                         GlobalVars.ICSettings[Cstation].UpdateOutText();
+                        criticalNum[Cstation] = true;
                         //now we are going to create a thread to set KE1 back to data mode after 15 seconds
                         for (int i = 0; i < 15; i++)
                         {
@@ -420,7 +425,7 @@ namespace NewBTASProto
                         GlobalVars.ICSettings[Cstation].KE1 = (byte)0;
                         //Update the output string value
                         GlobalVars.ICSettings[Cstation].UpdateOutText();
-                        criticalNum[Cstation] = false;
+                        criticalNum[Cstation] = true;
                     }
                     else
                     {
@@ -450,6 +455,55 @@ namespace NewBTASProto
                 // we passed the tests so we'll check the box to indicate we are a go!
                 updateD(station, 5, true);
                 if (MasterSlaveTest) { updateD(slaveRow, 5, true); }
+
+                #region test startup wait (only for the ICAs...)
+                if (d.Rows[station][10].ToString().Contains("ICA"))
+                {
+                    if (readTLock() == true)
+                    {
+                        // we need to wait
+                        //let the user know and then poll tlock for a while...
+                        //update the GUI
+                        updateD(station, 7, "Test Start Wait");
+                        if (MasterSlaveTest) { updateD(slaveRow, 7, "Test Start Wait"); }
+
+                        while (readTLock() == true)
+                        {
+                            Thread.Sleep(200);
+                            //also look for a cancel...
+                            if (token.IsCancellationRequested)
+                            {
+
+
+                                //clear values from d
+                                updateD(station, 7, ("Cancelled"));
+                                if (MasterSlaveTest) { updateD(slaveRow, 7, "Cancelled"); }
+                                updateD(station, 5, false);
+                                if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+
+                                //update the gui
+                                this.Invoke((MethodInvoker)delegate()
+                                {
+                                    sendNote(station, 3, "Test Cancelled");
+                                    startNewTestToolStripMenuItem.Enabled = true;
+                                    resumeTestToolStripMenuItem.Enabled = true;
+                                    stopTestToolStripMenuItem.Enabled = false;
+                                });
+
+                                return;
+                            }
+
+                        }
+                    }
+
+                    //now we need to set tlock so that only one test starts at a time...
+
+                    setTLock();
+                    Thread.Sleep(5000);
+                }
+
+
+                #endregion
 
                 #region if we are doing the autoconfig, let's get the charger settings in order and then loaded into the charger! (case 2 only)
 
@@ -954,6 +1008,7 @@ namespace NewBTASProto
                             MessageBox.Show("Fail to pull the settings from the DataBase. \r\nPlease make sure you have the battery model setup for this test under the Manage Battery Models menu.");
                             updateD(station, 5, false);
                             if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                            clearTLock();
                             return;
                         }
 
@@ -1001,19 +1056,15 @@ namespace NewBTASProto
 
                         //Update the output string value
                         GlobalVars.ICSettings[Cstation].UpdateOutText();
+                        criticalNum[Cstation] = true;
                         updateD(station, 7, "Loading Settings");
                         if (MasterSlaveTest) { updateD(slaveRow, 7, "Loading Settings"); }
-
-                        //make sure the charger has priority
-                        criticalNum[Cstation] = true;
 
                         Thread.Sleep(5000);
                         // set KE1 to 0 ("data")
                         GlobalVars.ICSettings[Cstation].KE1 = (byte)0;
                         GlobalVars.ICSettings[Cstation].UpdateOutText();
-
-                        //turn off priority
-                        criticalNum[Cstation] = false;
+                        criticalNum[Cstation] = true;
 
                     } // end try
                     catch (Exception ex)
@@ -1023,6 +1074,7 @@ namespace NewBTASProto
                         // reset everything
                         updateD(station, 5, false);
                         if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                        clearTLock();
                         return;
                     } // end catch
 
@@ -1062,6 +1114,7 @@ namespace NewBTASProto
                     MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
                     updateD(station, 5, false);
                     if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                    clearTLock();
                     return;
                 }
                 #endregion
@@ -1161,6 +1214,7 @@ namespace NewBTASProto
                         MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
                         updateD(station, 5, false);
                         if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                        clearTLock();
                         return;
                     }
 
@@ -1249,6 +1303,7 @@ namespace NewBTASProto
                             MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
                             updateD(station, 5, false);
                             if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                            clearTLock();
                             return;
                         }
                     }
@@ -1385,6 +1440,7 @@ namespace NewBTASProto
                         MessageBox.Show("Error: Failed to store new data in the DataBase.\n" + ex.Message);
                         updateD(station, 5, false);
                         if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                        clearTLock();
                         return;
                     }
 
@@ -1513,6 +1569,7 @@ namespace NewBTASProto
                             MessageBox.Show("Error: Failed to store new data in the DataBase.\n" + ex.Message);
                             updateD(station, 5, false);
                             updateD(slaveRow, 5, false);
+                            clearTLock();
                             return;
                         }
 
@@ -1589,6 +1646,7 @@ namespace NewBTASProto
                             MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
                             updateD(station, 5, false);
                             if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                            clearTLock();
                             return;
                         }
                     }
@@ -1655,6 +1713,7 @@ namespace NewBTASProto
                             MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
                             updateD(station, 5, false);
                             if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                            clearTLock();
                             return;
                         }
                     }
@@ -1673,10 +1732,10 @@ namespace NewBTASProto
                 });
 
 
-                Thread.Sleep(2000);  // here so that we can actually see the grid update
 
 
-                #region timer start
+
+                #region timer setup
                 // We are now good to go on starting the test loop timer...
                 // going to do the timming with a stop watch
                 bool firstRun = true;  // so we know if we should call fillPlotCombos()
@@ -1710,6 +1769,8 @@ namespace NewBTASProto
 
                 TimeSpan eTime = new TimeSpan().Add(offset);
                 string eTimeS = eTime.ToString(@"hh\:mm\:ss");
+
+                Thread.Sleep(2000);  // here so that we can actually see the grid update
                 
 
                 #endregion
@@ -1754,6 +1815,7 @@ namespace NewBTASProto
                                         resumeTestToolStripMenuItem.Enabled = true;
                                         stopTestToolStripMenuItem.Enabled = false;
                                     });
+                                    clearTLock();
                                     return;
                                 }  // end if
 
@@ -1778,6 +1840,7 @@ namespace NewBTASProto
                                         resumeTestToolStripMenuItem.Enabled = true;
                                         stopTestToolStripMenuItem.Enabled = false;
                                     });
+                                    clearTLock();
                                     return;
                                 }  // end if
                             } // end if
@@ -1799,6 +1862,7 @@ namespace NewBTASProto
                                         resumeTestToolStripMenuItem.Enabled = true;
                                         stopTestToolStripMenuItem.Enabled = false;
                                     });
+                                    clearTLock();
                                     return;
                                 }  // end if
                             } // end if
@@ -1820,6 +1884,7 @@ namespace NewBTASProto
                                         resumeTestToolStripMenuItem.Enabled = true;
                                         stopTestToolStripMenuItem.Enabled = false;
                                     });
+                                    clearTLock();
                                     return;
                                 }  // end if
                             } // end if
@@ -1841,6 +1906,7 @@ namespace NewBTASProto
                                         resumeTestToolStripMenuItem.Enabled = true;
                                         stopTestToolStripMenuItem.Enabled = false;
                                     });
+                                    clearTLock();
                                     return;
                                 }  // end if
                             } // end if
@@ -1863,6 +1929,7 @@ namespace NewBTASProto
                                         resumeTestToolStripMenuItem.Enabled = true;
                                         stopTestToolStripMenuItem.Enabled = false;
                                     });
+                                    clearTLock();
                                     return;
                                 }  // end if
                             } // end if
@@ -1884,6 +1951,7 @@ namespace NewBTASProto
                                         resumeTestToolStripMenuItem.Enabled = true;
                                         stopTestToolStripMenuItem.Enabled = false;
                                     });
+                                    clearTLock();
                                     return;
                                 }  // end if
                             } // end if
@@ -1906,7 +1974,7 @@ namespace NewBTASProto
                                         stopTestToolStripMenuItem.Enabled = false;
                                         sendNote(station, 1, "Test Mode Incorrect");
                                     });
-                                    
+                                    clearTLock();
                                     return;
                                 }  // end if
                             } // end if
@@ -1916,13 +1984,11 @@ namespace NewBTASProto
                     }
 #endregion              
                     // we have an intelligent charger
-                    //make sure the charger has priority
-                    criticalNum[Cstation] = true;
 
                     // If we are in hold and we are starting a new test we need to reset before starting!
                     if ((string)d.Rows[station][11] != "RESET" && (string)d.Rows[station][6] == "")
                     {
-                        for (int j = 0; j < 3; j++)
+                        for (int j = 0; j < 10; j++)
                         {
                             // now we need to reset the charger
                             updateD(station, 7, "Resetting Charger");
@@ -1933,29 +1999,25 @@ namespace NewBTASProto
                             GlobalVars.ICSettings[Cstation].KE3 = (byte)3;
                             //Update the output string value
                             GlobalVars.ICSettings[Cstation].UpdateOutText();
+                            criticalNum[Cstation] = true;
                             //now we are going to create a thread to set KE1 back to data mode after 15 seconds
-                            for (int i = 0; i < 3; i++)
-                            {
-                                Thread.Sleep(1000);
-                                if (GlobalVars.ICData[Cstation].runStatus == "RESET")
-                                {
-                                    break;
-                                }
-                            }
+                            Thread.Sleep(5000);
                             // set KE1 to 1 ("query")
                             GlobalVars.ICSettings[Cstation].KE1 = (byte)0;
                             //Update the output string value
                             GlobalVars.ICSettings[Cstation].UpdateOutText();
+                            
                             //now we are going to create a thread to set KE1 back to data mode after 15 seconds
                             for (int i = 0; i < 15; i++)
                             {
+                                criticalNum[Cstation] = true;
                                 Thread.Sleep(1000);
-                                if (GlobalVars.ICData[Cstation].runStatus != "HOLD")
+                                if (d.Rows[station][11].ToString() == "RESET")
                                 {
                                     break;
                                 }
                             }
-                            if (GlobalVars.ICData[Cstation].runStatus == "RESET")
+                            if (d.Rows[station][11].ToString() == "RESET")
                             {
                                 break;
                             }
@@ -1976,12 +2038,14 @@ namespace NewBTASProto
                         GlobalVars.ICSettings[Cstation].KE3 = (byte)0;
                         //Update the output string value
                         GlobalVars.ICSettings[Cstation].UpdateOutText();
+                        criticalNum[Cstation] = true;
                         //now we are going to create a thread to set KE1 back to data mode after 5 seconds
                         Thread.Sleep(5000);
                         // set KE1 to 1 ("query")
                         GlobalVars.ICSettings[Cstation].KE1 = (byte)0;
                         //Update the output string value
                         GlobalVars.ICSettings[Cstation].UpdateOutText();
+                        criticalNum[Cstation] = true;
                         Thread.Sleep(5000);
 
                     }
@@ -1994,7 +2058,7 @@ namespace NewBTASProto
                     // maybe this will reduce the timing difference!
                     ThreadPool.QueueUserWorkItem(t =>
                     {
-                        for (int j = 0; j < 3; j++)
+                        for (int j = 0; j < 10; j++)
                         {
                             // set KE1 to 2 ("command")
                             GlobalVars.ICSettings[Cstation].KE1 = (byte)2;
@@ -2002,16 +2066,9 @@ namespace NewBTASProto
                             GlobalVars.ICSettings[Cstation].KE3 = (byte)1;
                             //Update the output string value
                             GlobalVars.ICSettings[Cstation].UpdateOutText();
+                            criticalNum[Cstation] = true;
+                            Thread.Sleep(3000);
                             //now we are going to create a thread to set KE1 back to data mode after 15 seconds
-                            for (int i = 0; i < 3; i++)
-                            {
-                                Thread.Sleep(1000);
-                                if (GlobalVars.ICData[Cstation].runStatus == "RUN")
-                                {
-                                    criticalNum[Cstation] = false;
-                                    break;
-                                }
-                            }
                             // set KE1 to 1 ("query")
                             GlobalVars.ICSettings[Cstation].KE1 = (byte)0;
                             // set KE3 to 0 ("query")
@@ -2020,19 +2077,17 @@ namespace NewBTASProto
                             GlobalVars.ICSettings[Cstation].UpdateOutText();
                             for (int i = 0; i < 3; i++)
                             {
+                                criticalNum[Cstation] = true;
                                 Thread.Sleep(1000);
-                                if (GlobalVars.ICData[Cstation].runStatus == "RUN")
+                                if (d.Rows[station][11].ToString() == "RUN")
                                 {
-                                    criticalNum[Cstation] = false;
                                     break;
                                 }
                             }
 
                             //make sure the charger has priority
-                            if (GlobalVars.ICData[Cstation].runStatus == "RUN")
+                            if (d.Rows[station][11].ToString() == "RUN")
                             {
-                                stopwatch.Start();
-                                criticalNum[Cstation] = false;
                                 break;
                             }
                         }
@@ -2040,8 +2095,8 @@ namespace NewBTASProto
                     });                     // end thread
 
                     // start timer now...
-                    Thread.Sleep(200);
-                    //stopwatch.Start();
+                    Thread.Sleep(1000);
+                    stopwatch.Start();
                     Thread.Sleep(200);
                     
 
@@ -2082,6 +2137,7 @@ namespace NewBTASProto
                                 stopTestToolStripMenuItem.Enabled = false;
                             });
 
+                            clearTLock();
                             return;
                         }
                         #endregion
@@ -2114,10 +2170,12 @@ namespace NewBTASProto
                         stopTestToolStripMenuItem.Enabled = false;
                     });
 
+                    clearTLock();
                     return;
                 }
 
                 bool startUpDelay = true;
+                clearTLock();
 
 
                 while (currentReading <= readings)
@@ -2859,11 +2917,12 @@ namespace NewBTASProto
 
                     #region Here is where we are going to look for charging issues!
                     //Lets test for a charger issue now
-                    // there are going to be three sections, IC section, CCA section and shunt section
+                    // there are going to be three sections, ICA section, CCA section and SHUNT section
                     if (d.Rows[station][10].ToString().Contains("ICA") && !startUpDelay)
-                    {  
-                        if(currentReading == readings && d.Rows[station][11].ToString() == "END")
+                    {
+                        if ((currentReading == readings || currentReading == readings + 1) && d.Rows[station][11].ToString() == "END")
                         {
+                            
                             // we are on the last reading.  Look out for the "END"...
                             // At the moment the test will just continue until the time is up...
                       
@@ -2917,9 +2976,6 @@ namespace NewBTASProto
                                                 stopTestToolStripMenuItem.Enabled = false;
                                             });
 
-                                            //return the charger to low priority
-                                            criticalNum[Cstation] = false;
-
                                             return;
                                         }
 
@@ -2941,6 +2997,7 @@ namespace NewBTASProto
                                         GlobalVars.ICSettings[Cstation].KE3 = (byte)1;
                                         //Update the output string value
                                         GlobalVars.ICSettings[Cstation].UpdateOutText();
+                                        criticalNum[Cstation] = true;
                                         //now we are going to create a thread to set KE1 back to data mode after 15 seconds
                                         Thread.Sleep(5000);
                                         // set KE1 to 1 ("query")
@@ -2949,10 +3006,8 @@ namespace NewBTASProto
                                         GlobalVars.ICSettings[Cstation].KE3 = (byte)3;
                                         //Update the output string value
                                         GlobalVars.ICSettings[Cstation].UpdateOutText();
+                                        criticalNum[Cstation] = true;
                                         Thread.Sleep(5000);
-
-                                        //make sure the charger has priority
-                                        criticalNum[Cstation] = false;
 
                                     });                     // end thread
 
@@ -2975,20 +3030,16 @@ namespace NewBTASProto
                                     //update the gui
                                     this.Invoke((MethodInvoker)delegate()
                                     {
-                                        sendNote(station, 3, "Test failed");
+                                        sendNote(station, 3, "Test failed. Charger Status:  " + d.Rows[station][11].ToString());
                                         startNewTestToolStripMenuItem.Enabled = true;
                                         resumeTestToolStripMenuItem.Enabled = true;
                                         stopTestToolStripMenuItem.Enabled = false;
                                     });
 
-                                    //return the charger to low priority
-                                    criticalNum[Cstation] = false;
 
                                     return;
                                 }// end test fail else
 
-                                //return the charger to low priority
-                                criticalNum[Cstation] = false;
                             }  // end still no run if
                         } // end no run if
                     }// end IC block
@@ -3146,10 +3197,10 @@ namespace NewBTASProto
                             GlobalVars.ICSettings[Cstation].KE3 = (byte)2;
                             //Update the output string value
                             GlobalVars.ICSettings[Cstation].UpdateOutText();
+                            criticalNum[Cstation] = true;
                             //now we are going to create a thread to set KE1 back to data mode after 15 seconds
                             Thread.Sleep(5000);
-                            //turn off priority
-                            criticalNum[Cstation] = false;
+                            
                         }
                         else if (d.Rows[station][10].ToString().Contains("CCA"))
                         {
@@ -3182,7 +3233,7 @@ namespace NewBTASProto
 
                     //every interval is defined in seconds to be safe, we'll test if we are at the correct interval every 200ms
                     Thread.Sleep(200);
-                    Debug.Print(GlobalVars.ICData[Cstation].CTR.ToString());
+                    
                 } // end main test loop...
 
 
@@ -3190,36 +3241,72 @@ namespace NewBTASProto
                 // If we are running the charger tell it to stop and reset
                 if ((string)d.Rows[station][9] != "" && d.Rows[station][10].ToString().Contains("ICA") && (string)d.Rows[station][2] != "As Received")
                 {
-                    //make sure the charger has priority
-                    criticalNum[Cstation] = true;
-
                     // now we need to stop the charger
                     updateD(station, 7, "Telling Charger to Stop");
                     if (MasterSlaveTest) { updateD(slaveRow, 7, "Telling Charger to Stop"); }
-                    // set KE1 to 2 ("command")
-                    GlobalVars.ICSettings[Cstation].KE1 = (byte)2;
-                    // set KE3 to stop
-                    GlobalVars.ICSettings[Cstation].KE3 = (byte)2;
-                    //Update the output string value
-                    GlobalVars.ICSettings[Cstation].UpdateOutText();
+                    for (int j = 0; j < 5; j++)
+                    {
+                        // set KE1 to 2 ("command")
+                        GlobalVars.ICSettings[Cstation].KE1 = (byte)2;
+                        // set KE3 to stop
+                        GlobalVars.ICSettings[Cstation].KE3 = (byte)2;
+                        //Update the output string value
+                        GlobalVars.ICSettings[Cstation].UpdateOutText();
+                        
+                        for (int i = 0; i < 15; i++)
+                        {
+                            criticalNum[Cstation] = true;
+                            Thread.Sleep(1000);
+                            if (d.Rows[station][11].ToString() == "HOLD" || d.Rows[station][11].ToString() == "END")
+                            {
+                                break;
+                            }
+                            
+                        }
+                        
+                        if (d.Rows[station][11].ToString() == "HOLD" || d.Rows[station][11].ToString() == "END")
+                        {
+                            break;
+                        }
+
+                    }
                     //now we are going to create a thread to set KE1 back to data mode after 15 seconds
-                    Thread.Sleep(5000);
                     // now we need to reset the charger
                     updateD(station, 7, "Resetting Charger");
                     if (MasterSlaveTest) { updateD(slaveRow, 7, "Resetting Charger"); }
-                    // set KE3 to RESET
-                    GlobalVars.ICSettings[Cstation].KE3 = (byte)3;
-                    //Update the output string value
-                    GlobalVars.ICSettings[Cstation].UpdateOutText();
-                    //now we are going to create a thread to set KE1 back to data mode after 15 seconds
-                    Thread.Sleep(5000);
-                    // set KE1 to 1 ("query")
-                    GlobalVars.ICSettings[Cstation].KE1 = (byte)0;
-                    //Update the output string value
-                    GlobalVars.ICSettings[Cstation].UpdateOutText();
 
-                    //turn off priority
-                    criticalNum[Cstation] = false;
+                    for (int j = 0; j < 5; j++)
+                    {
+
+                        // set KE1 to 2 ("command")
+                        GlobalVars.ICSettings[Cstation].KE1 = (byte)2;
+                        // set KE3 to RESET
+                        GlobalVars.ICSettings[Cstation].KE3 = (byte)3;
+                        //Update the output string value
+                        GlobalVars.ICSettings[Cstation].UpdateOutText();
+                        criticalNum[Cstation] = true;
+                        //now we are going to create a thread to set KE1 back to data mode after 15 seconds
+                        Thread.Sleep(5000);
+                        
+                        // set KE1 to 1 ("query")
+                        GlobalVars.ICSettings[Cstation].KE1 = (byte)0;
+                        //Update the output string value
+                        GlobalVars.ICSettings[Cstation].UpdateOutText();
+                        for (int i = 0; i < 5; i++)
+                        {
+                            criticalNum[Cstation] = true;
+                            Thread.Sleep(1000);
+                            if (d.Rows[station][11].ToString() == "RESET")
+                            {
+                                break;
+                            }
+
+                        }
+                        if (d.Rows[station][11].ToString() == "RESET")
+                        {
+                            break;
+                        }
+                    }
                 }
                 else if (d.Rows[station][10].ToString().Contains("CCA"))
                 {
@@ -3252,6 +3339,33 @@ namespace NewBTASProto
             },cRunTest[station].Token); // end thread
 
         }// end RunTest
+
+        private readonly object tLock = new object();
+        bool testLock = false;
+
+        private bool readTLock()
+        {
+            lock (tLock)
+            {
+                return testLock;
+            }
+        }
+
+        private void setTLock()
+        {
+            lock (tLock)
+            {
+                testLock = true;
+            }
+        }
+
+        private void clearTLock()
+        {
+            lock (tLock)
+            {
+                testLock = false;
+            }
+        }
 
     }
 }

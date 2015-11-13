@@ -187,8 +187,8 @@ namespace NewBTASProto
             
             bindingNavigator1.CausesValidation = true;
             
-            Inhibit = false;
-            InhibitCB = false;
+            //Inhibit = false;
+            //InhibitCB = false;
         }
         private void LoadData()
         {
