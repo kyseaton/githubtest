@@ -172,15 +172,15 @@
     <Compile Include="CScan_Portion.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="DataSet1.cs">
+    <None Include="DataSet1.cs">
       <DependentUpon>DataSet1.xsd</DependentUpon>
       <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="DataSet1.Designer.cs">
+    </None>
+    <None Include="DataSet1.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DataSet1.xsd</DependentUpon>
-    </Compile>
+    </None>
     <Compile Include="GlobalVars.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Test_Portion.cs">
@@ -225,46 +225,60 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="MasterFillerInterface.resx">
       <DependentUpon>MasterFillerInterface.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="NoteServe.resx">
       <DependentUpon>NoteServe.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Help.resx">
       <DependentUpon>Help.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Program_Version.resx">
       <DependentUpon>Program_Version.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ComportSettings.resx">
       <DependentUpon>ComportSettings.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Business_Name.resx">
       <DependentUpon>Business_Name.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Choose_WO.resx">
       <DependentUpon>Choose_WO.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="DB_Forms\frmVECustomerBats.resx">
       <DependentUpon>frmVECustomerBats.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="DB_Forms\frmVETests.resx">
       <DependentUpon>frmVETests.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="DB_Forms\frmVETechs.resx">
       <DependentUpon>frmVETechs.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="DB_Forms\frmVECustomBats.resx">
       <DependentUpon>frmVECustomBats.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="DB_Forms\frmVECustomers.resx">
       <DependentUpon>frmVECustomers.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="DB_Forms\frmVEWorkOrders.resx">
       <DependentUpon>frmVEWorkOrders.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ICSettingsForm.resx">
       <DependentUpon>ICSettingsForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Reports\waterLevel.rdlc" />
     <EmbeddedResource Include="Reports\CellDataNP7.rdlc" />
     <EmbeddedResource Include="Reports\CellDataPN7.rdlc" />
     <EmbeddedResource Include="Reports\CellDataPN11.rdlc" />
@@ -291,6 +305,7 @@
     <EmbeddedResource Include="Reports\BatteryData1.rdlc" />
     <EmbeddedResource Include="Main_Form.resx">
       <DependentUpon>Main_Form.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\Reports_Form.resx">
       <DependentUpon>Reports_Form.cs</DependentUpon>
@@ -318,10 +333,11 @@
     <None Include="DataSet1.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>DataSet1.Designer.cs</LastGenOutput>
+      <LastGenOutput>DataSet11.Designer.cs</LastGenOutput>
     </None>
     <None Include="DataSet1.xss">
       <DependentUpon>DataSet1.xsd</DependentUpon>
+      <SubType>Designer</SubType>
     </None>
     <None Include="NewBTASProto_TemporaryKey.pfx" />
     <None Include="Properties\PT_Sans-Narrow-Web-Regular.ttf" />
