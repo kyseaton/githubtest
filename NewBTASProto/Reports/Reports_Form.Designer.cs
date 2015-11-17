@@ -33,7 +33,6 @@
             Microsoft.Reporting.WinForms.ReportDataSource reportDataSource2 = new Microsoft.Reporting.WinForms.ReportDataSource();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Reports_Form));
             this.myDatatableBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.DataSet1 = new NewBTASProto.DataSet1();
             this.MetaDataBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.myDatatableDataTableBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.comboBox1 = new System.Windows.Forms.ComboBox();
@@ -47,29 +46,10 @@
             this.label1 = new System.Windows.Forms.Label();
             this.reportViewer = new Microsoft.Reporting.WinForms.ReportViewer();
             ((System.ComponentModel.ISupportInitialize)(this.myDatatableBindingSource)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.DataSet1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.MetaDataBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.myDatatableDataTableBindingSource)).BeginInit();
             this.SuspendLayout();
-            // 
-            // myDatatableBindingSource
-            // 
-            this.myDatatableBindingSource.DataMember = "myDatatable";
-            this.myDatatableBindingSource.DataSource = this.DataSet1;
-            // 
-            // DataSet1
-            // 
-            this.DataSet1.DataSetName = "DataSet1";
-            this.DataSet1.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
-            // 
-            // MetaDataBindingSource
-            // 
-            this.MetaDataBindingSource.DataMember = "MetaData";
-            this.MetaDataBindingSource.DataSource = this.DataSet1;
-            // 
-            // myDatatableDataTableBindingSource
-            // 
-            this.myDatatableDataTableBindingSource.DataSource = typeof(NewBTASProto.DataSet1.myDatatableDataTable);
+
             // 
             // comboBox1
             // 
@@ -199,7 +179,6 @@
             this.Shown += new System.EventHandler(this.Reports_Form_Shown);
             this.SizeChanged += new System.EventHandler(this.Reports_Form_SizeChanged);
             ((System.ComponentModel.ISupportInitialize)(this.myDatatableBindingSource)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.DataSet1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.MetaDataBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.myDatatableDataTableBindingSource)).EndInit();
             this.ResumeLayout(false);
@@ -219,7 +198,6 @@
         private System.Windows.Forms.ComboBox comboBox3;
         private System.Windows.Forms.Label label1;
         private Microsoft.Reporting.WinForms.ReportViewer reportViewer;
-        private DataSet1 DataSet1;
         private System.Windows.Forms.BindingSource myDatatableDataTableBindingSource;
         private System.Windows.Forms.BindingSource myDatatableBindingSource;
         private System.Windows.Forms.BindingSource MetaDataBindingSource;
