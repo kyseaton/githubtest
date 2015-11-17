@@ -302,14 +302,7 @@ namespace NewBTASProto
 
                             if (startup)
                             {
-                                try
-                                {
-                                    comboBox2.SelectedIndex = int.Parse(curStep);
-                                }
-                                catch
-                                {
-                                    //throw it out...
-                                }
+                                comboBox2.SelectedIndex = comboBox2.FindString(curStep);
                             }
                         });
 
@@ -410,14 +403,7 @@ namespace NewBTASProto
 
                             if (startup2)
                             {
-                                try
-                                {
-                                    comboBox4.SelectedIndex = int.Parse(curStep);
-                                }
-                                catch
-                                {
-
-                                }
+                                comboBox4.SelectedIndex = comboBox4.FindString(curStep);
                             }
                         });
 
@@ -459,7 +445,7 @@ namespace NewBTASProto
                     graph1Set.Clear();
                     // Open database containing all the battery data....
                     string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
-                    string strAccessSelect = @"SELECT * FROM ScanData WHERE BWO='" + combo1Text + @"' AND STEP='" + combo2Text.Substring(0, 2) + @"' ORDER BY RDG ASC";
+                    string strAccessSelect = @"SELECT * FROM ScanData WHERE BWO='" + combo1Text + @"' AND STEP='" + combo2Text.Substring(0, 2) + @"'";
 
                     //Here is where I load the form wide dataset which will both let me fill in the rest of the combo boxes and the graphs!
                     OleDbConnection myAccessConn = null;
@@ -885,7 +871,7 @@ namespace NewBTASProto
                     graph2Set.Clear();
                     // Open database containing all the battery data....
                     string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
-                    string strAccessSelect = @"SELECT * FROM ScanData WHERE BWO='" + combo3Text + @"' AND STEP='" + combo4Text.Substring(0, 2) + @"' ORDER BY RDG ASC";
+                    string strAccessSelect = @"SELECT * FROM ScanData WHERE BWO='" + combo3Text + @"' AND STEP='" + combo4Text.Substring(0, 2) + @"'";
 
                     //Here is where I load the form wide dataset which will both let me fill in the rest of the combo boxes and the graphs!
                     OleDbConnection myAccessConn = null;

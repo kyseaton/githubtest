@@ -148,14 +148,7 @@ namespace NewBTASProto
 
 
                 startup = false;
-                try
-                {
-                    comboBox2.SelectedIndex = int.Parse(curStep);
-                }
-                catch
-                {
-
-                }
+                comboBox2.SelectedIndex = comboBox2.FindString(curStep);
 
                 if (curStep != "" && curWorkOrder != "")
                 {
@@ -290,7 +283,7 @@ namespace NewBTASProto
                 reportSet.Clear();
                 // Open database containing all the battery data....
                 string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
-                string strAccessSelect = @"SELECT DATE FROM ScanData WHERE BWO='" + comboBox1.Text + "' ORDER BY RDG ASC";
+                string strAccessSelect = @"SELECT DATE FROM ScanData WHERE BWO='" + comboBox1.Text + "'";
 
                 //Here is where I load the form wide dataset which will both let me fill in the rest of the combo boxes and the graphs!
                 OleDbConnection myAccessConn = null;
@@ -395,7 +388,7 @@ namespace NewBTASProto
                 reportSet.Clear();
                 // Open database containing all the battery data....
                 string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
-                string strAccessSelect = @"SELECT DATE FROM ScanData WHERE BWO='" + comboBox1.Text + "' ORDER BY RDG ASC";
+                string strAccessSelect = @"SELECT DATE FROM ScanData WHERE BWO='" + comboBox1.Text +"'";
 
                 //Here is where I load the form wide dataset which will both let me fill in the rest of the combo boxes and the graphs!
                 OleDbConnection myAccessConn = null;
@@ -649,7 +642,7 @@ namespace NewBTASProto
                 reportSet.Clear();
                 // Open database containing all the battery data....
                 string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
-                string strAccessSelect = @"SELECT DATE,RDG,ETIME,CEL01,CEL02,CEL03,CEL04,CEL05,CEL06,CEL07,CEL08,CEL09,CEL10,CEL11,CEL12,CEL13,CEL14,CEL15,CEL16,CEL17,CEL18,CEL19,CEL20,CEL21,CEL22,CEL23,CEL24 FROM ScanData WHERE BWO='" + comboBox1.Text + @"' AND STEP='" + comboBox2.Text.Substring(0, 2) + @"' ORDER BY RDG ASC";
+                string strAccessSelect = @"SELECT DATE,RDG,ETIME,CEL01,CEL02,CEL03,CEL04,CEL05,CEL06,CEL07,CEL08,CEL09,CEL10,CEL11,CEL12,CEL13,CEL14,CEL15,CEL16,CEL17,CEL18,CEL19,CEL20,CEL21,CEL22,CEL23,CEL24 FROM ScanData WHERE BWO='" + comboBox1.Text + @"' AND STEP='" + comboBox2.Text.Substring(0, 2) + @"'";
 
                 //Here is where I load the form wide dataset which will both let me fill in the rest of the combo boxes and the graphs!
                 OleDbConnection myAccessConn = null;
@@ -767,7 +760,7 @@ namespace NewBTASProto
                 reportSet.Clear();
                 // Open database containing all the battery data....
                 string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
-                string strAccessSelect = @"SELECT RDG,DATE,ETIME,CUR1,VB1,VB2,VB3,VB4,BT1,BT2,BT3,BT4,REF,BT5 FROM ScanData WHERE BWO='" + comboBox1.Text + @"' AND STEP='" + comboBox2.Text.Substring(0, 2) + @"' ORDER BY RDG ASC";
+                string strAccessSelect = @"SELECT RDG,DATE,ETIME,CUR1,VB1,VB2,VB3,VB4,BT1,BT2,BT3,BT4,REF,BT5 FROM ScanData WHERE BWO='" + comboBox1.Text + @"' AND STEP='" + comboBox2.Text.Substring(0, 2) + @"'";
 
                 //Here is where I load the form wide dataset which will both let me fill in the rest of the combo boxes and the graphs!
                 OleDbConnection myAccessConn = null;
