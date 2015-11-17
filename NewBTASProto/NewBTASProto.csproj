@@ -182,6 +182,18 @@
       <DependentUpon>DataSet1.xsd</DependentUpon>
     </Compile>
     <Compile Include="GlobalVars.cs" />
+    <Compile Include="Reports\Battery_Reports.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Reports\Battery_Reports.Designer.cs">
+      <DependentUpon>Battery_Reports.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\WorkOrderReps.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Reports\WorkOrderReps.Designer.cs">
+      <DependentUpon>WorkOrderReps.cs</DependentUpon>
+    </Compile>
     <Compile Include="Settings.cs" />
     <Compile Include="Test_Portion.cs">
       <SubType>Form</SubType>
@@ -265,11 +277,20 @@
     <EmbeddedResource Include="ICSettingsForm.resx">
       <DependentUpon>ICSettingsForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Reports\WorkOrderSum.rdlc" />
     <EmbeddedResource Include="Reports\CellDataNP7.rdlc" />
     <EmbeddedResource Include="Reports\CellDataPN7.rdlc" />
     <EmbeddedResource Include="Reports\CellDataPN11.rdlc" />
     <EmbeddedResource Include="Reports\CellDataPN24.rdlc" />
     <EmbeddedResource Include="Reports\CellDataNP24.rdlc" />
+    <EmbeddedResource Include="Reports\Battery_Reports.resx">
+      <DependentUpon>Battery_Reports.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Battery_Report.rdlc" />
+    <EmbeddedResource Include="Reports\WorkOrderReps.resx">
+      <DependentUpon>WorkOrderReps.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\WaterLevel.rdlc" />
     <EmbeddedResource Include="Reports\WorkOrderSummary.rdlc" />
     <EmbeddedResource Include="Reports\WorkOrderLog.rdlc" />
     <EmbeddedResource Include="Reports\TestSummaryNP20.rdlc" />

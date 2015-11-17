@@ -32,9 +32,6 @@
             Microsoft.Reporting.WinForms.ReportDataSource reportDataSource1 = new Microsoft.Reporting.WinForms.ReportDataSource();
             Microsoft.Reporting.WinForms.ReportDataSource reportDataSource2 = new Microsoft.Reporting.WinForms.ReportDataSource();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Reports_Form));
-            this.myDatatableBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.MetaDataBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.myDatatableDataTableBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -45,11 +42,13 @@
             this.comboBox3 = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.reportViewer = new Microsoft.Reporting.WinForms.ReportViewer();
+            this.myDatatableBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.MetaDataBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.myDatatableDataTableBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.myDatatableBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.MetaDataBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.myDatatableDataTableBindingSource)).BeginInit();
             this.SuspendLayout();
-
             // 
             // comboBox1
             // 
@@ -95,12 +94,14 @@
             // checkBox2
             // 
             this.checkBox2.AutoSize = true;
+            this.checkBox2.Enabled = false;
             this.checkBox2.Location = new System.Drawing.Point(746, 27);
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(169, 17);
             this.checkBox2.TabIndex = 4;
             this.checkBox2.Text = "Include Archived Work Orders";
             this.checkBox2.UseVisualStyleBackColor = true;
+            this.checkBox2.Visible = false;
             this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
             // 
             // radioButton2
@@ -144,6 +145,9 @@
             // 
             // reportViewer
             // 
+            this.reportViewer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.reportViewer.Enabled = false;
             reportDataSource1.Name = "DataSet1";
             reportDataSource1.Value = this.myDatatableBindingSource;
@@ -174,7 +178,7 @@
             this.Controls.Add(this.comboBox1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Reports_Form";
-            this.Text = "Reports";
+            this.Text = "Test Reports";
             this.Load += new System.EventHandler(this.Reports_Form_Load);
             this.Shown += new System.EventHandler(this.Reports_Form_Shown);
             this.SizeChanged += new System.EventHandler(this.Reports_Form_SizeChanged);

@@ -209,17 +209,46 @@ namespace NewBTASProto
                     
                 }
 
+                // now we need to see if there were water level values recorded...
+                DataSet WaterLevel = new DataSet();
+                strAccessSelect = @"SELECT * FROM WaterLevel WHERE WorkOrderNumber='" + comboBox1.Text + @"' ORDER BY WLID ASC";
+                
+                try
+                {
+                    OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                    OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                    lock (Main_Form.dataBaseLock)
+                    {
+                        myAccessConn.Open();
+                        myDataAdapter.Fill(WaterLevel, "WaterLevel");
+                        myAccessConn.Close();
+                    }
+
+                }
+                catch
+                {
+                    // do nothing...
+                }
+
+
                 try
                 {
                     DataRow emptyRow1 = testsPerformed.Tables["Tests"].NewRow();
                     emptyRow1["TestName"] = "";
                     testsPerformed.Tables["Tests"].Rows.InsertAt(emptyRow1, 0);
+                    if (WaterLevel.Tables[0].Rows.Count > 0)
+                    {
+                        DataRow emptyRow2 = testsPerformed.Tables["Tests"].NewRow();
+                        emptyRow2["TestName"] = "Water Level";
+                        emptyRow2["StepNumber"] = "  ";
+                        testsPerformed.Tables["Tests"].Rows.InsertAt(emptyRow2, 1);
+                    }
                     testsPerformed.Tables["Tests"].Columns.Add("ForList", typeof(string), "StepNumber + ' - '+ TestName");
 
                     this.comboBox2.DisplayMember = "ForList";
                     this.comboBox2.ValueMember = "StepNumber";
                     this.comboBox2.DataSource = testsPerformed.Tables["Tests"];
-
                 }
                 catch(Exception ex)
                 {
@@ -237,6 +266,96 @@ namespace NewBTASProto
             // Clear the report type selection
             comboBox3.SelectedIndex = -1;
             // load data in the report specific methods below
+            if (comboBox2.Text == "   - Water Level")
+            {
+                //show the water level report...
+                waterLevelSummary();
+            }
+            
+        }
+
+        private void waterLevelSummary()
+        {
+            if (!(comboBox2.SelectedIndex < 1)) // make sure we have a selection to act on...
+            {
+                // we need a data set..
+                DataSet WaterLevels = new DataSet();
+                // Open database containing all the battery data....
+                string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                string strAccessSelect = @"SELECT WLID,WorkOrderNumber,Cell1,Cell2,Cell3,Cell4,Cell5,Cell6,Cell7,Cell8,Cell9,Cell10,Cell11,Cell12,Cell13,Cell14,Cell15,Cell16,Cell17,Cell18,Cell19,Cell20,Cell21,Cell22,Cell23,Cell24 FROM WaterLevel WHERE WorkOrderNumber='" + comboBox1.Text + @"'";
+
+                //Here is where I load the form wide dataset which will both let me fill in the rest of the combo boxes and the graphs!
+                OleDbConnection myAccessConn = null;
+                // try to open the DB
+                try
+                {
+                    myAccessConn = new OleDbConnection(strAccessConn);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                    return;
+                }
+                //  now try to access it
+                try
+                {
+                    OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                    OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                    lock (Main_Form.dataBaseLock)
+                    {
+                        myAccessConn.Open();
+                        myDataAdapter.Fill(WaterLevels, "WaterLevel");
+                        myAccessConn.Close();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                    return;
+                }
+                finally
+                {
+
+                }
+
+
+                // Now that we have the data in WaterLevels lets pass it over to the matching report
+                /*************************Load reportSet into reportSet  ************************/
+
+                // bind datatable to report viewer
+                this.reportViewer.Reset();
+                this.reportViewer.ProcessingMode = ProcessingMode.Local;
+
+                this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.WaterLevel.rdlc";
+                this.reportViewer.LocalReport.DataSources.Clear();
+                this.reportViewer.LocalReport.DataSources.Add(new ReportDataSource("DataSet1", WaterLevels.Tables[0]));
+
+                /*************************Load Global data into MetaData data Table ************************/
+                // create datatable
+                DataTable MetaDT = new DataTable("MetaData");
+
+                // add columns
+                MetaDT.Columns.Add("gBusinessName", typeof(string));
+                MetaDT.Columns.Add("gUseF", typeof(string));
+                MetaDT.Columns.Add("gPos2Neg", typeof(string));
+                MetaDT.Columns.Add("testComboName", typeof(string));
+                MetaDT.Columns.Add("cellsCable", typeof(string));
+                MetaDT.Columns.Add("shuntCable", typeof(string));
+                MetaDT.Columns.Add("tempCable", typeof(string));
+
+                // insert data rows
+                MetaDT.Rows.Add(GlobalVars.businessName, GlobalVars.useF, GlobalVars.Pos2Neg, comboBox2.Text, testsPerformed.Tables[0].Rows[comboBox2.SelectedIndex][15].ToString(), testsPerformed.Tables[0].Rows[comboBox2.SelectedIndex][16].ToString(), testsPerformed.Tables[0].Rows[comboBox2.SelectedIndex][17].ToString());
+
+                this.reportViewer.LocalReport.DataSources.Add(new ReportDataSource("DataSet2", MetaDT));
+                this.reportViewer.RefreshReport();
+
+                /*********************************************************/
+
+                // finally enable the reportview
+                reportViewer.Enabled = true;
+
+            }
         }
 
 
@@ -908,8 +1027,7 @@ namespace NewBTASProto
 
         private void Reports_Form_SizeChanged(object sender, EventArgs e)
         {
-            reportViewer.Width = this.Width - 43;
-            reportViewer.Height = this.Height - 106;
+
         }
 
         private void Reports_Form_Shown(object sender, EventArgs e)

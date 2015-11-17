@@ -3124,6 +3124,20 @@ namespace NewBTASProto
             dataGridView1_Resize(this, null);
         }
 
+        private void toolStripMenuItem27_Click(object sender, EventArgs e)
+        {
+            Battery_Reports brf = new Battery_Reports();
+            brf.Owner = this;
+            brf.Show();
+        }
+
+        private void toolStripMenuItem28_Click(object sender, EventArgs e)
+        {
+            WorkOrderReps worf = new WorkOrderReps();
+            worf.Owner = this;
+            worf.Show();
+        }
+
 
     }// end mainform class section...
 
