@@ -16,7 +16,7 @@ using System.Diagnostics;
 namespace NewBTASProto
 {
     public partial class Main_Form : Form
-        {
+    {
 
         string comboText;
 
@@ -28,7 +28,7 @@ namespace NewBTASProto
 
         private void RunTest()
         {
-            
+
             ///
             /// General Structure:
             /// 
@@ -54,10 +54,10 @@ namespace NewBTASProto
             ///  V
             ///  Shunt - Y - >  Start test when you see a current (case 5)
 
-            
+
             int station = dataGridView1.CurrentRow.Index;
             int Cstation = 0;
-            
+
             // gettting rid of isASlave
             //you can't run tests from a slave anymore..
             //bool isASlave = false;
@@ -98,7 +98,7 @@ namespace NewBTASProto
             {
                 Cstation = Convert.ToInt32(d.Rows[station][9]);
             }
-            
+
             cRunTest[station] = new CancellationTokenSource();
 
             // we need to split up the work orders if we have multiple work orders on a single line...
@@ -122,7 +122,7 @@ namespace NewBTASProto
                 if (A.Length > 2) { SWO2 = A[1]; }
                 if (A.Length > 3) { SWO3 = A[2]; }
             }
-            
+
             // Everything is going to be done on a helper thread
             ThreadPool.QueueUserWorkItem(s =>
             {
@@ -135,42 +135,47 @@ namespace NewBTASProto
 
                 #region startup checks (all cases)
                 // first we check if we have all the relavent options selected
-                if ((string) d.Rows[station][1] == "")
+                if ((string)d.Rows[station][1] == "")
                 {
-                    MessageBox.Show("Please Assign a Work Order");
+                    MessageBox.Show(new Form() { TopMost = true }, "Please Assign a Work Order");
                     return;
                 }
-                else if ((string) d.Rows[station][2] == "")
+                else if ((string)d.Rows[station][2] == "")
                 {
-                    MessageBox.Show("Please Select a Test Type.");
+                    MessageBox.Show(new Form() { TopMost = true }, "Please Select a Test Type.");
                     return;
                 }
                 else if ((bool)d.Rows[station][4] == false)
                 {
-                    MessageBox.Show("CScan is not In Use. Please Select it Before Proceeding.");
+                    MessageBox.Show(new Form() { TopMost = true }, "CScan is not In Use. Please Select it Before Proceeding.");
                     return;
                 }
                 else if (dataGridView1.Rows[station].Cells[4].Style.BackColor != Color.Green)
                 {
-                    MessageBox.Show("CScan is not currently connected.  Please Check Connection.");
+                    MessageBox.Show(new Form() { TopMost = true }, "CScan is not currently connected.  Please Check Connection.");
                     return;
                 }
                 else if (GlobalVars.CScanData[station].cellCableType == "NONE")
                 {
-                    MessageBox.Show("CScan is not connected to a cells Cable.  Please connect a cells cable to this CSCAN to run a test.");
+                    MessageBox.Show(new Form() { TopMost = true }, "CScan is not connected to a cells Cable.  Please connect a cells cable to this CSCAN to run a test.");
                     return;
                 }
-                    // check if we have the right cells cable for multiple work orders on one cscan...
+                else if (GlobalVars.CScanData[station].shuntCableType == "NONE")
+                {
+                    MessageBox.Show(new Form() { TopMost = true }, "CScan is not connected to a cells Shunt cable.  Please connect a shunt cable to this CSCAN to run a test.");
+                    return;
+                }
+                // check if we have the right cells cable for multiple work orders on one cscan...
                 else if (MWO2 != "" && MWO3 == "" && GlobalVars.CScanData[station].CCID != 3)
                 {
                     // we need to make sure the master has a 2x11 to continue
-                    MessageBox.Show("You have two work orders assocaited with the master CScan, but do not have a 2X11 cable connected to it.  In order to record two work orders with one CScan you must use a 2X11 cable.");
+                    MessageBox.Show(new Form() { TopMost = true }, "You have two work orders assocaited with the master CScan, but do not have a 2X11 cable connected to it.  In order to record two work orders with one CScan you must use a 2X11 cable.");
                     return;
                 }
                 else if (MWO2 != "" && MWO3 != "" && GlobalVars.CScanData[station].CCID != 4)
                 {
                     // we need to make sure the master has a 2x11 to continue
-                    MessageBox.Show("You have three work orders assocaited with the master CScan, but do not have a 3X7 cable connected to it.  In order to record three work orders with one CScan you must use a 3X7 cable.");
+                    MessageBox.Show(new Form() { TopMost = true }, "You have three work orders assocaited with the master CScan, but do not have a 3X7 cable connected to it.  In order to record three work orders with one CScan you must use a 3X7 cable.");
                     return;
                 }
                 else if (MWO2 == "" && GlobalVars.CScanData[station].CCID == 3)
@@ -191,10 +196,10 @@ namespace NewBTASProto
                         return;
                     }
                 }
-                
-                
+
+
                 //2x11 case
-                if (GlobalVars.CScanData[station].CCID == 3 && (int)pci.Rows[station][3] != (GlobalVars.CScanData[station].cellsToDisplay/2))
+                if (GlobalVars.CScanData[station].CCID == 3 && (int)pci.Rows[station][3] != (GlobalVars.CScanData[station].cellsToDisplay / 2) && (int)pci.Rows[station][3] != -1)
                 {
                     // warn the user that the number of cells set in the database does not match the work order...
                     DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The number of cells the battery contains does not match the cells cable currently being used.  Do you want to continue?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
@@ -204,7 +209,7 @@ namespace NewBTASProto
                     }
                 }
                 //3X7 case
-                if (GlobalVars.CScanData[station].CCID == 3 && (int)pci.Rows[station][3] != (GlobalVars.CScanData[station].cellsToDisplay / 3))
+                if (GlobalVars.CScanData[station].CCID == 3 && (int)pci.Rows[station][3] != (GlobalVars.CScanData[station].cellsToDisplay / 3) && (int)pci.Rows[station][3] != -1)
                 {
                     // warn the user that the number of cells set in the database does not match the work order...
                     DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The number of cells the battery contains does not match the cells cable currently being used.  Do you want to continue?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
@@ -214,7 +219,7 @@ namespace NewBTASProto
                     }
                 }
                 //general case
-                else if (pci.Rows[station][1].ToString().Contains("NiCd") && (int)pci.Rows[station][3] != GlobalVars.CScanData[station].cellsToDisplay)
+                else if (pci.Rows[station][1].ToString().Contains("NiCd") && (int)pci.Rows[station][3] != GlobalVars.CScanData[station].cellsToDisplay && (int)pci.Rows[station][3] != -1)
                 {
                     // warn the user that the number of cells set in the database does not match the work order...
                     DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The number of cells the battery contains does not match the cells cable currently being used.  Do you want to continue?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
@@ -229,35 +234,35 @@ namespace NewBTASProto
                 {
                     if ((string)d.Rows[slaveRow][1] == "")
                     {
-                        MessageBox.Show("Please Assign a Work Order to the Slave Channel");
+                        MessageBox.Show(new Form() { TopMost = true }, "Please Assign a Work Order to the Slave Channel");
                         return;
                     }
                     else if ((bool)d.Rows[slaveRow][4] == false)
                     {
-                        MessageBox.Show("The slave CScan is not In Use. Please make sure that is is In Use and connected before proceeding.");
+                        MessageBox.Show(new Form() { TopMost = true }, "The slave CScan is not In Use. Please make sure that is is In Use and connected before proceeding.");
                         return;
                     }
                     else if (dataGridView1.Rows[slaveRow].Cells[4].Style.BackColor != Color.Green)
                     {
-                        MessageBox.Show("Slave CScan is not currently connected.  Please Check Connection.");
+                        MessageBox.Show(new Form() { TopMost = true }, "Slave CScan is not currently connected.  Please Check Connection.");
                         return;
                     }
                     else if (GlobalVars.CScanData[slaveRow].cellCableType == "NONE")
                     {
-                        MessageBox.Show("Slave CScan is not connected to a cells Cable.  Please connect a cells cable to this CSCAN to run a test with it.");
+                        MessageBox.Show(new Form() { TopMost = true }, "Slave CScan is not connected to a cells Cable.  Please connect a cells cable to this CSCAN to run a test with it.");
                         return;
                     }
                     // check if we have the right cells cable for multiple work orders on one cscan...
                     else if (SWO2 != "" && SWO3 == "" && GlobalVars.CScanData[slaveRow].CCID != 3)
                     {
                         // we need to make sure the master has a 2x11 to continue
-                        MessageBox.Show("You have two work orders assocaited with the slave CScan, but do not have a 2X11 cable connected to it.  In order to record two work orders with one CScan you must use a 2X11 cable.");
+                        MessageBox.Show(new Form() { TopMost = true }, "You have two work orders assocaited with the slave CScan, but do not have a 2X11 cable connected to it.  In order to record two work orders with one CScan you must use a 2X11 cable.");
                         return;
                     }
                     else if (SWO2 != "" && SWO3 != "" && GlobalVars.CScanData[slaveRow].CCID != 4)
                     {
                         // we need to make sure the master has a 2x11 to continue
-                        MessageBox.Show("You have three work orders assocaited with the slave CScan, but do not have a 3X7 cable connected to it.  In order to record three work orders with one CScan you must use a 3X7 cable.");
+                        MessageBox.Show(new Form() { TopMost = true }, "You have three work orders assocaited with the slave CScan, but do not have a 3X7 cable connected to it.  In order to record three work orders with one CScan you must use a 3X7 cable.");
                         return;
                     }
                     else if (SWO2 == "" && GlobalVars.CScanData[slaveRow].CCID == 3)
@@ -280,7 +285,7 @@ namespace NewBTASProto
                     }
 
                     //2x11 case
-                    if (GlobalVars.CScanData[slaveRow].CCID == 3 && (int)pci.Rows[slaveRow][3] != (GlobalVars.CScanData[slaveRow].cellsToDisplay / 2))
+                    if (GlobalVars.CScanData[slaveRow].CCID == 3 && (int)pci.Rows[slaveRow][3] != (GlobalVars.CScanData[slaveRow].cellsToDisplay / 2) && (int)pci.Rows[station][3] != -1)
                     {
                         // warn the user that the number of cells set in the database does not match the work order...
                         DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The number of cells the battery connected to the slave CSCAN contains does not match the cells cable currently being used.  Do you want to continue?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
@@ -290,7 +295,7 @@ namespace NewBTASProto
                         }
                     }
                     //3X7 case
-                    if (GlobalVars.CScanData[slaveRow].CCID == 3 && (int)pci.Rows[slaveRow][3] != (GlobalVars.CScanData[slaveRow].cellsToDisplay / 3))
+                    if (GlobalVars.CScanData[slaveRow].CCID == 3 && (int)pci.Rows[slaveRow][3] != (GlobalVars.CScanData[slaveRow].cellsToDisplay / 3) && (int)pci.Rows[station][3] != -1)
                     {
                         // warn the user that the number of cells set in the database does not match the work order...
                         DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The number of cells the battery connected to the slave CSCAN contains does not match the cells cable currently being used.  Do you want to continue?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
@@ -300,7 +305,7 @@ namespace NewBTASProto
                         }
                     }
                     //general case
-                    else if (pci.Rows[slaveRow][1].ToString().Contains("NiCd") && (int)pci.Rows[slaveRow][3] != GlobalVars.CScanData[slaveRow].cellsToDisplay)
+                    else if (pci.Rows[slaveRow][1].ToString().Contains("NiCd") && (int)pci.Rows[slaveRow][3] != GlobalVars.CScanData[slaveRow].cellsToDisplay && (int)pci.Rows[station][3] != -1)
                     {
                         // warn the user that the number of cells set in the database does not match the work order...
                         DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The number of cells the battery connected to the slave CSCAN contains does not match the cells cable currently being used.  Do you want to continue?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
@@ -319,7 +324,7 @@ namespace NewBTASProto
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                        MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
                         return;
                     }
 
@@ -364,9 +369,9 @@ namespace NewBTASProto
                         }
 
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
-                        MessageBox.Show("Error: Failed to pull data in from the Database. \n" + ex.Message);
+                        MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to pull data in from the Database. \n" + ex.Message);
                         return;
                     }
                 }
@@ -375,20 +380,20 @@ namespace NewBTASProto
                 // also need to check if an intelligent charger is connected for autoconfig
                 //else if (GlobalVars.autoConfig == true && d.Rows[station][9].ToString().Contains("ICA") && (string)d.Rows[station][2] != "As Received")
                 //{
-                //    MessageBox.Show("Auto Configure is turned on, but there is no intelligent charger detected.  Please connect an intelligent charger or turn Auto Configure off in the tools menu.");
+                //    MessageBox.Show(new Form() { TopMost = true }, "Auto Configure is turned on, but there is no intelligent charger detected.  Please connect an intelligent charger or turn Auto Configure off in the tools menu.");
                 //     return;
                 //}
 
                 if ((string)d.Rows[station][11] == "offline!" && (string)d.Rows[station][2] != "As Received" && d.Rows[station][10].ToString().Contains("ICA"))
                 {
-                    MessageBox.Show("The Intelligent Charger is set to be offline.  Please set the charger to be online by pressing the following key sequence on the charger: FUNC, 1, 1 and ENTER.");
+                    MessageBox.Show(new Form() { TopMost = true }, "The Intelligent Charger is set to be offline.  Please set the charger to be online by pressing the following key sequence on the charger: FUNC, 1, 1 and ENTER.");
                     return;
                 }
 
                 else if (((bool)d.Rows[station][8] == false || d.Rows[station][9].ToString() == "" || d.Rows[station][10].ToString() == "") && (string)d.Rows[station][2] != "As Received")
                 {
                     // we don't have a charger linked. Do we still want to continue...
-                    MessageBox.Show("There is no charger link established.  You mush have a charger or shunt to run any test other than 'As Received'");
+                    MessageBox.Show(new Form() { TopMost = true }, "There is no charger link established.  You mush have a charger or shunt to run any test other than 'As Received'");
                     return;
                 }
 
@@ -397,10 +402,9 @@ namespace NewBTASProto
                 else if (d.Rows[station][11].ToString() == "RUN" && d.Rows[station][10].ToString().Contains("ICA"))
                 {
                     //looks like that charger is already running.  Lets ask the user if we should stop the charger or not.
-                    DialogResult dialogResult = MessageBox.Show("The charger appears to already be running. Do you want to stop it now and proceed with the test?", "Click Yes to have the program stop the charger or No to do it manually", MessageBoxButtons.YesNo);
+                    DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The charger appears to already be running. Do you want to stop it now and proceed with the test?", "Click Yes to have the program stop the charger or No to do it manually", MessageBoxButtons.YesNo);
                     if (dialogResult == DialogResult.Yes)
                     {
-                        criticalNum[Cstation] = true;
                         // now we need to reset the charger
                         updateD(station, 7, "Stopping Charger!");
                         if (MasterSlaveTest) { updateD(slaveRow, 7, "Stopping Charger!"); }
@@ -410,17 +414,18 @@ namespace NewBTASProto
                         GlobalVars.ICSettings[Cstation].KE3 = (byte)2;
                         //Update the output string value
                         GlobalVars.ICSettings[Cstation].UpdateOutText();
+                        criticalNum[Cstation] = true;
                         //now we are going to create a thread to set KE1 back to data mode after 15 seconds
                         for (int i = 0; i < 15; i++)
                         {
                             Thread.Sleep(1000);
-                            if (GlobalVars.ICData[Cstation].runStatus != "RUN"){ break; }
+                            if (GlobalVars.ICData[Cstation].runStatus != "RUN") { break; }
                         }
                         // set KE1 to 1 ("query")
                         GlobalVars.ICSettings[Cstation].KE1 = (byte)0;
                         //Update the output string value
                         GlobalVars.ICSettings[Cstation].UpdateOutText();
-                        criticalNum[Cstation] = false;
+                        criticalNum[Cstation] = true;
                     }
                     else
                     {
@@ -439,10 +444,10 @@ namespace NewBTASProto
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                    MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
                     return;
                 }
-                
+
                 #endregion
 
 
@@ -450,6 +455,55 @@ namespace NewBTASProto
                 // we passed the tests so we'll check the box to indicate we are a go!
                 updateD(station, 5, true);
                 if (MasterSlaveTest) { updateD(slaveRow, 5, true); }
+
+                #region test startup wait (only for the ICAs...)
+                if (d.Rows[station][10].ToString().Contains("ICA"))
+                {
+                    if (readTLock() == true)
+                    {
+                        // we need to wait
+                        //let the user know and then poll tlock for a while...
+                        //update the GUI
+                        updateD(station, 7, "Test Start Wait");
+                        if (MasterSlaveTest) { updateD(slaveRow, 7, "Test Start Wait"); }
+
+                        while (readTLock() == true)
+                        {
+                            Thread.Sleep(200);
+                            //also look for a cancel...
+                            if (token.IsCancellationRequested)
+                            {
+
+
+                                //clear values from d
+                                updateD(station, 7, ("Cancelled"));
+                                if (MasterSlaveTest) { updateD(slaveRow, 7, "Cancelled"); }
+                                updateD(station, 5, false);
+                                if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+
+                                //update the gui
+                                this.Invoke((MethodInvoker)delegate()
+                                {
+                                    sendNote(station, 3, "Test Cancelled");
+                                    startNewTestToolStripMenuItem.Enabled = true;
+                                    resumeTestToolStripMenuItem.Enabled = true;
+                                    stopTestToolStripMenuItem.Enabled = false;
+                                });
+
+                                return;
+                            }
+
+                        }
+                    }
+
+                    //now we need to set tlock so that only one test starts at a time...
+
+                    setTLock();
+                    Thread.Sleep(5000);
+                }
+
+
+                #endregion
 
                 #region if we are doing the autoconfig, let's get the charger settings in order and then loaded into the charger! (case 2 only)
 
@@ -497,7 +551,7 @@ namespace NewBTASProto
 
                         // now we can assign the battery settings to the GlobalVars.
                         // We will decide on the settings based on the test being performed...
-                        byte[] tempKMStore = new byte[21] {48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48}; // 21 values for the 21 KM params
+                        byte[] tempKMStore = new byte[21] { 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48 }; // 21 values for the 21 KM params
 
                         #region setting switch
                         try
@@ -518,7 +572,7 @@ namespace NewBTASProto
                                         tempKMStore[3] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][45].ToString()) / 10));             //top current byte
                                         tempKMStore[4] = (byte)(48 + 10 * (float.Parse(battery.Tables[0].Rows[0][45].ToString()) % 10));        //bottom current byte
                                     }
-                                        tempKMStore[5] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][46].ToString()) / 1));              //top voltage byte
+                                    tempKMStore[5] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][46].ToString()) / 1));              //top voltage byte
                                     tempKMStore[6] = (byte)(48 + 100 * (float.Parse(battery.Tables[0].Rows[0][46].ToString()) % 1));            //bottom current byte
 
                                     tempKMStore[7] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][47].ToString()));                          //time 2 hours
@@ -536,14 +590,14 @@ namespace NewBTASProto
                                     tempKMStore[11] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][50].ToString()) / 1));                 //top voltage 2 byte
                                     tempKMStore[12] = (byte)(48 + 100 * (float.Parse(battery.Tables[0].Rows[0][50].ToString()) % 1));           //bottom voltage 2 byte
 
-                                    tempKMStore[13] = (byte) 48;                                                                                //discharge time hours
-                                    tempKMStore[14] = (byte) 48;                                                                                //discharge time mins
-                                    tempKMStore[15] = (byte) 48;                                                                                //discharge current high byte
-                                    tempKMStore[16] = (byte) 48;                                                                                //discharge current low byte
-                                    tempKMStore[17] = (byte) 48;                                                                                //discharge voltage high byte
-                                    tempKMStore[18] = (byte) 48;                                                                                //discharge voltage low byte
-                                    tempKMStore[19] = (byte) 48;                                                                                //discharge resistance high byte
-                                    tempKMStore[20] = (byte) 48;                                                                                //discharge resistance low byte
+                                    tempKMStore[13] = (byte)48;                                                                                //discharge time hours
+                                    tempKMStore[14] = (byte)48;                                                                                //discharge time mins
+                                    tempKMStore[15] = (byte)48;                                                                                //discharge current high byte
+                                    tempKMStore[16] = (byte)48;                                                                                //discharge current low byte
+                                    tempKMStore[17] = (byte)48;                                                                                //discharge voltage high byte
+                                    tempKMStore[18] = (byte)48;                                                                                //discharge voltage low byte
+                                    tempKMStore[19] = (byte)48;                                                                                //discharge resistance high byte
+                                    tempKMStore[20] = (byte)48;                                                                                //discharge resistance low byte
                                     break;
                                 case "Full Charge-4":
                                     tempKMStore[0] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][52].ToString().Substring(0, 2)));          //mode
@@ -577,14 +631,14 @@ namespace NewBTASProto
                                     tempKMStore[11] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][60].ToString()) / 1));                 //top voltage 2 byte
                                     tempKMStore[12] = (byte)(48 + 100 * (float.Parse(battery.Tables[0].Rows[0][60].ToString()) % 1));           //bottom voltage 2 byte
 
-                                    tempKMStore[13] = (byte) 48;                                                                                //discharge time hours
-                                    tempKMStore[14] = (byte) 48;                                                                              //discharge time mins
-                                    tempKMStore[15] = (byte) 48;                                                                                //discharge current high byte
-                                    tempKMStore[16] = (byte) 48;                                                                                //discharge current low byte
-                                    tempKMStore[17] = (byte) 48;                                                                                //discharge voltage high byte
-                                    tempKMStore[18] = (byte) 48;                                                                                //discharge voltage low byte
-                                    tempKMStore[19] = (byte) 48;                                                                                //discharge resistance high byte
-                                    tempKMStore[20] = (byte) 48;                                                                                //discharge resistance low byte
+                                    tempKMStore[13] = (byte)48;                                                                                //discharge time hours
+                                    tempKMStore[14] = (byte)48;                                                                              //discharge time mins
+                                    tempKMStore[15] = (byte)48;                                                                                //discharge current high byte
+                                    tempKMStore[16] = (byte)48;                                                                                //discharge current low byte
+                                    tempKMStore[17] = (byte)48;                                                                                //discharge voltage high byte
+                                    tempKMStore[18] = (byte)48;                                                                                //discharge voltage low byte
+                                    tempKMStore[19] = (byte)48;                                                                                //discharge resistance high byte
+                                    tempKMStore[20] = (byte)48;                                                                                //discharge resistance low byte
                                     break;
                                 case "Top Charge-4":
                                     tempKMStore[0] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][62].ToString().Substring(0, 2)));          //mode
@@ -600,24 +654,24 @@ namespace NewBTASProto
                                         tempKMStore[3] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][65].ToString()) / 10));             //top current byte
                                         tempKMStore[4] = (byte)(48 + 10 * (float.Parse(battery.Tables[0].Rows[0][65].ToString()) % 10));        //bottom current byte
                                     }
-                                        tempKMStore[5] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][66].ToString()) / 1));              //top voltage byte
+                                    tempKMStore[5] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][66].ToString()) / 1));              //top voltage byte
                                     tempKMStore[6] = (byte)(48 + 100 * (float.Parse(battery.Tables[0].Rows[0][66].ToString()) % 1));            //bottom current byte
 
-                                    tempKMStore[7] = (byte) 48;                                                                                 //time 2 hours
-                                    tempKMStore[8] = (byte) 48;                                                                                 //time 2 mins
-                                    tempKMStore[9] = (byte) 48;                                                                                 //top current 2 byte
-                                    tempKMStore[10] = (byte) 48;                                                                                //bottom current 2 byte
-                                    tempKMStore[11] = (byte) 48;                                                                                //top voltage 2 byte
-                                    tempKMStore[12] = (byte) 48;                                                                                //bottom voltage 2 byte
+                                    tempKMStore[7] = (byte)48;                                                                                 //time 2 hours
+                                    tempKMStore[8] = (byte)48;                                                                                 //time 2 mins
+                                    tempKMStore[9] = (byte)48;                                                                                 //top current 2 byte
+                                    tempKMStore[10] = (byte)48;                                                                                //bottom current 2 byte
+                                    tempKMStore[11] = (byte)48;                                                                                //top voltage 2 byte
+                                    tempKMStore[12] = (byte)48;                                                                                //bottom voltage 2 byte
 
-                                    tempKMStore[13] = (byte) 48;                                                                                //discharge time hours
-                                    tempKMStore[14] = (byte) 48;                                                                                //discharge time mins
-                                    tempKMStore[15] = (byte) 48;                                                                                //discharge current high byte
-                                    tempKMStore[16] = (byte) 48;                                                                                //discharge current low byte
-                                    tempKMStore[17] = (byte) 48;                                                                                //discharge voltage high byte
-                                    tempKMStore[18] = (byte) 48;                                                                                //discharge voltage low byte
-                                    tempKMStore[19] = (byte) 48;                                                                                //discharge resistance high byte
-                                    tempKMStore[20] = (byte) 48;                                                                                //discharge resistance low byte
+                                    tempKMStore[13] = (byte)48;                                                                                //discharge time hours
+                                    tempKMStore[14] = (byte)48;                                                                                //discharge time mins
+                                    tempKMStore[15] = (byte)48;                                                                                //discharge current high byte
+                                    tempKMStore[16] = (byte)48;                                                                                //discharge current low byte
+                                    tempKMStore[17] = (byte)48;                                                                                //discharge voltage high byte
+                                    tempKMStore[18] = (byte)48;                                                                                //discharge voltage low byte
+                                    tempKMStore[19] = (byte)48;                                                                                //discharge resistance high byte
+                                    tempKMStore[20] = (byte)48;                                                                                //discharge resistance low byte
                                     break;
                                 case "Top Charge-2":
                                     tempKMStore[0] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][72].ToString().Substring(0, 2)));          //mode
@@ -636,21 +690,21 @@ namespace NewBTASProto
                                     tempKMStore[5] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][76].ToString()) / 1));                  //top voltage byte
                                     tempKMStore[6] = (byte)(48 + 100 * (float.Parse(battery.Tables[0].Rows[0][76].ToString()) % 1));            //bottom current byte
 
-                                    tempKMStore[7] = (byte) 48;                                                                                 //time 2 hours
-                                    tempKMStore[8] = (byte) 48;                                                                                 //time 2 mins
-                                    tempKMStore[9] = (byte) 48;                                                                                 //top current 2 byte
-                                    tempKMStore[10] = (byte) 48;                                                                                //bottom current 2 byte
-                                    tempKMStore[11] = (byte) 48;                                                                                //top voltage 2 byte
-                                    tempKMStore[12] = (byte) 48;                                                                                //bottom voltage 2 byte
+                                    tempKMStore[7] = (byte)48;                                                                                 //time 2 hours
+                                    tempKMStore[8] = (byte)48;                                                                                 //time 2 mins
+                                    tempKMStore[9] = (byte)48;                                                                                 //top current 2 byte
+                                    tempKMStore[10] = (byte)48;                                                                                //bottom current 2 byte
+                                    tempKMStore[11] = (byte)48;                                                                                //top voltage 2 byte
+                                    tempKMStore[12] = (byte)48;                                                                                //bottom voltage 2 byte
 
-                                    tempKMStore[13] = (byte) 48;                                                                                //discharge time hours
-                                    tempKMStore[14] = (byte) 48;                                                                                //discharge time mins
-                                    tempKMStore[15] = (byte) 48;                                                                                //discharge current high byte
-                                    tempKMStore[16] = (byte) 48;                                                                                //discharge current low byte
-                                    tempKMStore[17] = (byte) 48;                                                                                //discharge voltage high byte
-                                    tempKMStore[18] = (byte) 48;                                                                                //discharge voltage low byte
-                                    tempKMStore[19] = (byte) 48;                                                                                //discharge resistance high byte
-                                    tempKMStore[20] = (byte) 48;                                                                                //discharge resistance low byte
+                                    tempKMStore[13] = (byte)48;                                                                                //discharge time hours
+                                    tempKMStore[14] = (byte)48;                                                                                //discharge time mins
+                                    tempKMStore[15] = (byte)48;                                                                                //discharge current high byte
+                                    tempKMStore[16] = (byte)48;                                                                                //discharge current low byte
+                                    tempKMStore[17] = (byte)48;                                                                                //discharge voltage high byte
+                                    tempKMStore[18] = (byte)48;                                                                                //discharge voltage low byte
+                                    tempKMStore[19] = (byte)48;                                                                                //discharge resistance high byte
+                                    tempKMStore[20] = (byte)48;                                                                                //discharge resistance low byte
                                     break;
                                 case "Top Charge-1":
                                     tempKMStore[0] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][82].ToString().Substring(0, 2)));          //mode
@@ -669,37 +723,37 @@ namespace NewBTASProto
                                     tempKMStore[5] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][86].ToString()) / 1));                  //top voltage byte
                                     tempKMStore[6] = (byte)(48 + 100 * (float.Parse(battery.Tables[0].Rows[0][86].ToString()) % 1));            //bottom current byte
 
-                                    tempKMStore[7] = (byte) 48;                                                                                 //time 2 hours
-                                    tempKMStore[8] = (byte) 48;                                                                                 //time 2 mins
-                                    tempKMStore[9] = (byte) 48;                                                                                 //top current 2 byte
-                                    tempKMStore[10] = (byte) 48;                                                                                //bottom current 2 byte
-                                    tempKMStore[11] = (byte) 48;                                                                                //top voltage 2 byte
-                                    tempKMStore[12] = (byte) 48;                                                                                //bottom voltage 2 byte
+                                    tempKMStore[7] = (byte)48;                                                                                 //time 2 hours
+                                    tempKMStore[8] = (byte)48;                                                                                 //time 2 mins
+                                    tempKMStore[9] = (byte)48;                                                                                 //top current 2 byte
+                                    tempKMStore[10] = (byte)48;                                                                                //bottom current 2 byte
+                                    tempKMStore[11] = (byte)48;                                                                                //top voltage 2 byte
+                                    tempKMStore[12] = (byte)48;                                                                                //bottom voltage 2 byte
 
-                                    tempKMStore[13] = (byte) 48;                                                                                //discharge time hours
-                                    tempKMStore[14] = (byte) 48;                                                                                //discharge time mins
-                                    tempKMStore[15] = (byte) 48;                                                                                //discharge current high byte
-                                    tempKMStore[16] = (byte) 48;                                                                                //discharge current low byte
-                                    tempKMStore[17] = (byte) 48;                                                                                //discharge voltage high byte
-                                    tempKMStore[18] = (byte) 48;                                                                                //discharge voltage low byte
-                                    tempKMStore[19] = (byte) 48;                                                                                //discharge resistance high byte
-                                    tempKMStore[20] = (byte) 48;                                                                                //discharge resistance low byte
+                                    tempKMStore[13] = (byte)48;                                                                                //discharge time hours
+                                    tempKMStore[14] = (byte)48;                                                                                //discharge time mins
+                                    tempKMStore[15] = (byte)48;                                                                                //discharge current high byte
+                                    tempKMStore[16] = (byte)48;                                                                                //discharge current low byte
+                                    tempKMStore[17] = (byte)48;                                                                                //discharge voltage high byte
+                                    tempKMStore[18] = (byte)48;                                                                                //discharge voltage low byte
+                                    tempKMStore[19] = (byte)48;                                                                                //discharge resistance high byte
+                                    tempKMStore[20] = (byte)48;                                                                                //discharge resistance low byte
                                     break;
                                 case "Capacity-1":
                                     tempKMStore[0] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][92].ToString().Substring(0, 2)));          //mode
-                                    tempKMStore[1] = (byte) 48;                                                                                 //time hours
-                                    tempKMStore[2] = (byte) 48;                                                                                 //time mins
-                                    tempKMStore[3] = (byte) 48;                                                                                 //top current byte
-                                    tempKMStore[4] = (byte) 48;                                                                                 //bottom current byte
-                                    tempKMStore[5] = (byte) 48;                                                                                 //top voltage byte
-                                    tempKMStore[6] = (byte) 48;                                                                                 //bottom current byte
+                                    tempKMStore[1] = (byte)48;                                                                                 //time hours
+                                    tempKMStore[2] = (byte)48;                                                                                 //time mins
+                                    tempKMStore[3] = (byte)48;                                                                                 //top current byte
+                                    tempKMStore[4] = (byte)48;                                                                                 //bottom current byte
+                                    tempKMStore[5] = (byte)48;                                                                                 //top voltage byte
+                                    tempKMStore[6] = (byte)48;                                                                                 //bottom current byte
 
-                                    tempKMStore[7] = (byte) 48;                                                                                 //time 2 hours
-                                    tempKMStore[8] = (byte) 48;                                                                                 //time 2 mins
-                                    tempKMStore[9] = (byte) 48;                                                                                 //top current 2 byte
-                                    tempKMStore[10] = (byte) 48;                                                                                //bottom current 2 byte
-                                    tempKMStore[11] = (byte) 48;                                                                                //top voltage 2 byte
-                                    tempKMStore[12] = (byte) 48;                                                                                //bottom voltage 2 byte
+                                    tempKMStore[7] = (byte)48;                                                                                 //time 2 hours
+                                    tempKMStore[8] = (byte)48;                                                                                 //time 2 mins
+                                    tempKMStore[9] = (byte)48;                                                                                 //top current 2 byte
+                                    tempKMStore[10] = (byte)48;                                                                                //bottom current 2 byte
+                                    tempKMStore[11] = (byte)48;                                                                                //top voltage 2 byte
+                                    tempKMStore[12] = (byte)48;                                                                                //bottom voltage 2 byte
 
                                     tempKMStore[13] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][93].ToString()));                         //discharge time hours
                                     tempKMStore[14] = (byte)(48);                                                                           //discharge time mins
@@ -726,19 +780,19 @@ namespace NewBTASProto
                                     break;
                                 case "Discharge":
                                     tempKMStore[0] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][102].ToString().Substring(0, 2)));         //mode
-                                    tempKMStore[1] = (byte) 48;                                                                                 //time hours
-                                    tempKMStore[2] = (byte) 48;                                                                                 //time mins
-                                    tempKMStore[3] = (byte) 48;                                                                                 //top current byte
-                                    tempKMStore[4] = (byte) 48;                                                                                 //bottom current byte
-                                    tempKMStore[5] = (byte) 48;                                                                                 //top voltage byte
-                                    tempKMStore[6] = (byte) 48;                                                                                 //bottom current byte
+                                    tempKMStore[1] = (byte)48;                                                                                 //time hours
+                                    tempKMStore[2] = (byte)48;                                                                                 //time mins
+                                    tempKMStore[3] = (byte)48;                                                                                 //top current byte
+                                    tempKMStore[4] = (byte)48;                                                                                 //bottom current byte
+                                    tempKMStore[5] = (byte)48;                                                                                 //top voltage byte
+                                    tempKMStore[6] = (byte)48;                                                                                 //bottom current byte
 
-                                    tempKMStore[7] = (byte) 48;                                                                                 //time 2 hours
-                                    tempKMStore[8] = (byte) 48;                                                                                 //time 2 mins
-                                    tempKMStore[9] = (byte) 48;                                                                                 //top current 2 byte
-                                    tempKMStore[10] = (byte) 48;                                                                                //bottom current 2 byte
-                                    tempKMStore[11] = (byte) 48;                                                                                //top voltage 2 byte
-                                    tempKMStore[12] = (byte) 48;                                                                                //bottom voltage 2 byte
+                                    tempKMStore[7] = (byte)48;                                                                                 //time 2 hours
+                                    tempKMStore[8] = (byte)48;                                                                                 //time 2 mins
+                                    tempKMStore[9] = (byte)48;                                                                                 //top current 2 byte
+                                    tempKMStore[10] = (byte)48;                                                                                //bottom current 2 byte
+                                    tempKMStore[11] = (byte)48;                                                                                //top voltage 2 byte
+                                    tempKMStore[12] = (byte)48;                                                                                //bottom voltage 2 byte
 
                                     tempKMStore[13] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][103].ToString()));                        //discharge time hours
                                     tempKMStore[14] = (byte)(48);                                                                           //discharge time mins
@@ -752,10 +806,10 @@ namespace NewBTASProto
                                         tempKMStore[15] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][105].ToString()) / 10));           //discharge current high byte
                                         tempKMStore[16] = (byte)(48 + 10 * (float.Parse(battery.Tables[0].Rows[0][105].ToString()) % 10));      //discharge current low byte
                                     }
-                                    tempKMStore[17] = (byte) 48;                                                                                //discharge voltage high byte
-                                    tempKMStore[18] = (byte) 48;                                                                                //discharge voltage low byte
-                                    tempKMStore[19] = (byte) 48;                                                                                //discharge resistance high byte
-                                    tempKMStore[20] = (byte) 48;                                                                                //discharge resistance low byte
+                                    tempKMStore[17] = (byte)48;                                                                                //discharge voltage high byte
+                                    tempKMStore[18] = (byte)48;                                                                                //discharge voltage low byte
+                                    tempKMStore[19] = (byte)48;                                                                                //discharge resistance high byte
+                                    tempKMStore[20] = (byte)48;                                                                                //discharge resistance low byte
                                     break;
                                 case "Slow Charge-14":
                                     tempKMStore[0] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][112].ToString().Substring(0, 2)));         //mode
@@ -774,21 +828,21 @@ namespace NewBTASProto
                                     tempKMStore[5] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][116].ToString()) / 1));                 //top voltage byte
                                     tempKMStore[6] = (byte)(48 + 100 * (float.Parse(battery.Tables[0].Rows[0][116].ToString()) % 1));           //bottom current byte
 
-                                    tempKMStore[7] = (byte) 48;                                                                                 //time 2 hours
-                                    tempKMStore[8] = (byte) 48;                                                                                 //time 2 mins
-                                    tempKMStore[9] = (byte) 48;                                                                                 //top current 2 byte
-                                    tempKMStore[10] = (byte) 48;                                                                                //bottom current 2 byte
-                                    tempKMStore[11] = (byte) 48;                                                                                //top voltage 2 byte
-                                    tempKMStore[12] = (byte) 48;                                                                                //bottom voltage 2 byte
+                                    tempKMStore[7] = (byte)48;                                                                                 //time 2 hours
+                                    tempKMStore[8] = (byte)48;                                                                                 //time 2 mins
+                                    tempKMStore[9] = (byte)48;                                                                                 //top current 2 byte
+                                    tempKMStore[10] = (byte)48;                                                                                //bottom current 2 byte
+                                    tempKMStore[11] = (byte)48;                                                                                //top voltage 2 byte
+                                    tempKMStore[12] = (byte)48;                                                                                //bottom voltage 2 byte
 
-                                    tempKMStore[13] = (byte) 48;                                                                                //discharge time hours
-                                    tempKMStore[14] = (byte) 48;                                                                                //discharge time mins
-                                    tempKMStore[15] = (byte) 48;                                                                                //discharge current high byte
-                                    tempKMStore[16] = (byte) 48;                                                                                //discharge current low byte
-                                    tempKMStore[17] = (byte) 48;                                                                                //discharge voltage high byte
-                                    tempKMStore[18] = (byte) 48;                                                                                //discharge voltage low byte
-                                    tempKMStore[19] = (byte) 48;                                                                                //discharge resistance high byte
-                                    tempKMStore[20] = (byte) 48;                                                                                //discharge resistance low byte
+                                    tempKMStore[13] = (byte)48;                                                                                //discharge time hours
+                                    tempKMStore[14] = (byte)48;                                                                                //discharge time mins
+                                    tempKMStore[15] = (byte)48;                                                                                //discharge current high byte
+                                    tempKMStore[16] = (byte)48;                                                                                //discharge current low byte
+                                    tempKMStore[17] = (byte)48;                                                                                //discharge voltage high byte
+                                    tempKMStore[18] = (byte)48;                                                                                //discharge voltage low byte
+                                    tempKMStore[19] = (byte)48;                                                                                //discharge resistance high byte
+                                    tempKMStore[20] = (byte)48;                                                                                //discharge resistance low byte
                                     break;
                                 case "Slow Charge-16":
                                     tempKMStore[0] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][122].ToString().Substring(0, 2)));         //mode
@@ -807,21 +861,21 @@ namespace NewBTASProto
                                     tempKMStore[5] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][126].ToString()) / 1));                 //top voltage byte
                                     tempKMStore[6] = (byte)(48 + 100 * (float.Parse(battery.Tables[0].Rows[0][126].ToString()) % 1));           //bottom current byte
 
-                                    tempKMStore[7] = (byte) 48;                                                                                 //time 2 hours
-                                    tempKMStore[8] = (byte) 48;                                                                                 //time 2 mins
-                                    tempKMStore[9] = (byte) 48;                                                                                 //top current 2 byte
-                                    tempKMStore[10] = (byte) 48;                                                                                //bottom current 2 byte
-                                    tempKMStore[11] = (byte) 48;                                                                                //top voltage 2 byte
-                                    tempKMStore[12] = (byte) 48;                                                                                //bottom voltage 2 byte
+                                    tempKMStore[7] = (byte)48;                                                                                 //time 2 hours
+                                    tempKMStore[8] = (byte)48;                                                                                 //time 2 mins
+                                    tempKMStore[9] = (byte)48;                                                                                 //top current 2 byte
+                                    tempKMStore[10] = (byte)48;                                                                                //bottom current 2 byte
+                                    tempKMStore[11] = (byte)48;                                                                                //top voltage 2 byte
+                                    tempKMStore[12] = (byte)48;                                                                                //bottom voltage 2 byte
 
-                                    tempKMStore[13] = (byte) 48;                                                                                //discharge time hours
-                                    tempKMStore[14] = (byte) 48;                                                                                //discharge time mins
-                                    tempKMStore[15] = (byte) 48;                                                                                //discharge current high byte
-                                    tempKMStore[16] = (byte) 48;                                                                                //discharge current low byte
-                                    tempKMStore[17] = (byte) 48;                                                                                //discharge voltage high byte
-                                    tempKMStore[18] = (byte) 48;                                                                                //discharge voltage low byte
-                                    tempKMStore[19] = (byte) 48;                                                                                //discharge resistance high byte
-                                    tempKMStore[20] = (byte) 48;                                                                                //discharge resistance low byte
+                                    tempKMStore[13] = (byte)48;                                                                                //discharge time hours
+                                    tempKMStore[14] = (byte)48;                                                                                //discharge time mins
+                                    tempKMStore[15] = (byte)48;                                                                                //discharge current high byte
+                                    tempKMStore[16] = (byte)48;                                                                                //discharge current low byte
+                                    tempKMStore[17] = (byte)48;                                                                                //discharge voltage high byte
+                                    tempKMStore[18] = (byte)48;                                                                                //discharge voltage low byte
+                                    tempKMStore[19] = (byte)48;                                                                                //discharge resistance high byte
+                                    tempKMStore[20] = (byte)48;                                                                                //discharge resistance low byte
                                     break;
                                 case "Custom Chg":
                                     tempKMStore[0] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][132].ToString().Substring(0, 2)));         //mode
@@ -861,30 +915,30 @@ namespace NewBTASProto
                                         tempKMStore[12] = (byte)(48 + 100 * (float.Parse(battery.Tables[0].Rows[0][140].ToString()) % 1));      //bottom voltage 2 byte
                                     }
 
-                                    tempKMStore[13] = (byte) 48;                                                                                //discharge time hours
-                                    tempKMStore[14] = (byte) 48;                                                                                //discharge time mins
-                                    tempKMStore[15] = (byte) 48;                                                                                //discharge current high byte
-                                    tempKMStore[16] = (byte) 48;                                                                                //discharge current low byte
-                                    tempKMStore[17] = (byte) 48;                                                                                //discharge voltage high byte
-                                    tempKMStore[18] = (byte) 48;                                                                                //discharge voltage low byte
-                                    tempKMStore[19] = (byte) 48;                                                                                //discharge resistance high byte
-                                    tempKMStore[20] = (byte) 48;                                                                                //discharge resistance low byte
+                                    tempKMStore[13] = (byte)48;                                                                                //discharge time hours
+                                    tempKMStore[14] = (byte)48;                                                                                //discharge time mins
+                                    tempKMStore[15] = (byte)48;                                                                                //discharge current high byte
+                                    tempKMStore[16] = (byte)48;                                                                                //discharge current low byte
+                                    tempKMStore[17] = (byte)48;                                                                                //discharge voltage high byte
+                                    tempKMStore[18] = (byte)48;                                                                                //discharge voltage low byte
+                                    tempKMStore[19] = (byte)48;                                                                                //discharge resistance high byte
+                                    tempKMStore[20] = (byte)48;                                                                                //discharge resistance low byte
                                     break;
                                 case "Custom Cap":
                                     tempKMStore[0] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][142].ToString().Substring(0, 2)));         //mode
-                                    tempKMStore[1] = (byte) 48;                                                                                 //time hours
-                                    tempKMStore[2] = (byte) 48;                                                                                 //time mins
-                                    tempKMStore[3] = (byte) 48;                                                                                 //top current byte
-                                    tempKMStore[4] = (byte) 48;                                                                                 //bottom current byte
-                                    tempKMStore[5] = (byte) 48;                                                                                 //top voltage byte
-                                    tempKMStore[6] = (byte) 48;                                                                                 //bottom current byte
+                                    tempKMStore[1] = (byte)48;                                                                                 //time hours
+                                    tempKMStore[2] = (byte)48;                                                                                 //time mins
+                                    tempKMStore[3] = (byte)48;                                                                                 //top current byte
+                                    tempKMStore[4] = (byte)48;                                                                                 //bottom current byte
+                                    tempKMStore[5] = (byte)48;                                                                                 //top voltage byte
+                                    tempKMStore[6] = (byte)48;                                                                                 //bottom current byte
 
-                                    tempKMStore[7] = (byte) 48;                                                                                 //time 2 hours
-                                    tempKMStore[8] = (byte) 48;                                                                                 //time 2 mins
-                                    tempKMStore[9] = (byte) 48;                                                                                 //top current 2 byte
-                                    tempKMStore[10] = (byte) 48;                                                                                //bottom current 2 byte
-                                    tempKMStore[11] = (byte) 48;                                                                                //top voltage 2 byte
-                                    tempKMStore[12] = (byte) 48;                                                                                //bottom voltage 2 byte
+                                    tempKMStore[7] = (byte)48;                                                                                 //time 2 hours
+                                    tempKMStore[8] = (byte)48;                                                                                 //time 2 mins
+                                    tempKMStore[9] = (byte)48;                                                                                 //top current 2 byte
+                                    tempKMStore[10] = (byte)48;                                                                                //bottom current 2 byte
+                                    tempKMStore[11] = (byte)48;                                                                                //top voltage 2 byte
+                                    tempKMStore[12] = (byte)48;                                                                                //bottom voltage 2 byte
 
                                     tempKMStore[13] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][143].ToString()));                        //discharge time hours
                                     tempKMStore[14] = (byte)(48);                                                                           //discharge time mins
@@ -929,21 +983,21 @@ namespace NewBTASProto
                                     tempKMStore[5] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][156].ToString()) / 1));                 //top voltage byte
                                     tempKMStore[6] = (byte)(48 + 100 * (float.Parse(battery.Tables[0].Rows[0][156].ToString()) % 1));           //bottom voltage byte
 
-                                    tempKMStore[7] = (byte) 48;                                                                                 //time 2 hours
-                                    tempKMStore[8] = (byte) 48;                                                                                 //time 2 mins
-                                    tempKMStore[9] = (byte) 48;                                                                                 //top current 2 byte
-                                    tempKMStore[10] = (byte) 48;                                                                                //bottom current 2 byte
-                                    tempKMStore[11] = (byte) 48;                                                                                //top voltage 2 byte
-                                    tempKMStore[12] = (byte) 48;                                                                                //bottom voltage 2 byte
+                                    tempKMStore[7] = (byte)48;                                                                                 //time 2 hours
+                                    tempKMStore[8] = (byte)48;                                                                                 //time 2 mins
+                                    tempKMStore[9] = (byte)48;                                                                                 //top current 2 byte
+                                    tempKMStore[10] = (byte)48;                                                                                //bottom current 2 byte
+                                    tempKMStore[11] = (byte)48;                                                                                //top voltage 2 byte
+                                    tempKMStore[12] = (byte)48;                                                                                //bottom voltage 2 byte
 
-                                    tempKMStore[13] = (byte) 48;                                                                                //discharge time hours
-                                    tempKMStore[14] = (byte) 48;                                                                                //discharge time mins
-                                    tempKMStore[15] = (byte) 48;                                                                                //discharge current high byte
-                                    tempKMStore[16] = (byte) 48;                                                                                //discharge current low byte
-                                    tempKMStore[17] = (byte) 48;                                                                                //discharge voltage high byte
-                                    tempKMStore[18] = (byte) 48;                                                                                //discharge voltage low byte
-                                    tempKMStore[19] = (byte) 48;                                                                                //discharge resistance high byte
-                                    tempKMStore[20] = (byte) 48;                                                                                //discharge resistance low byte
+                                    tempKMStore[13] = (byte)48;                                                                                //discharge time hours
+                                    tempKMStore[14] = (byte)48;                                                                                //discharge time mins
+                                    tempKMStore[15] = (byte)48;                                                                                //discharge current high byte
+                                    tempKMStore[16] = (byte)48;                                                                                //discharge current low byte
+                                    tempKMStore[17] = (byte)48;                                                                                //discharge voltage high byte
+                                    tempKMStore[18] = (byte)48;                                                                                //discharge voltage low byte
+                                    tempKMStore[19] = (byte)48;                                                                                //discharge resistance high byte
+                                    tempKMStore[20] = (byte)48;                                                                                //discharge resistance low byte
                                     break;
                                 default:
                                     break;
@@ -951,9 +1005,10 @@ namespace NewBTASProto
                         }
                         catch
                         {
-                            MessageBox.Show("Fail to pull the settings from the DataBase. \r\nPlease make sure you have the battery model setup for this test under the Manage Battery Models menu.");
+                            MessageBox.Show(new Form() { TopMost = true }, "Fail to pull the settings from the DataBase. \r\nPlease make sure you have the battery model setup for this test under the Manage Battery Models menu.");
                             updateD(station, 5, false);
                             if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                            clearTLock();
                             return;
                         }
 
@@ -1001,28 +1056,25 @@ namespace NewBTASProto
 
                         //Update the output string value
                         GlobalVars.ICSettings[Cstation].UpdateOutText();
+                        criticalNum[Cstation] = true;
                         updateD(station, 7, "Loading Settings");
                         if (MasterSlaveTest) { updateD(slaveRow, 7, "Loading Settings"); }
-
-                        //make sure the charger has priority
-                        criticalNum[Cstation] = true;
 
                         Thread.Sleep(5000);
                         // set KE1 to 0 ("data")
                         GlobalVars.ICSettings[Cstation].KE1 = (byte)0;
                         GlobalVars.ICSettings[Cstation].UpdateOutText();
-
-                        //turn off priority
-                        criticalNum[Cstation] = false;
+                        criticalNum[Cstation] = true;
 
                     } // end try
                     catch (Exception ex)
                     {
                         myAccessConn.Close();
-                        MessageBox.Show("Error: Failed to Auto Load settings into the Charger.\n");
+                        MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to Auto Load settings into the Charger.\n");
                         // reset everything
                         updateD(station, 5, false);
                         if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                        clearTLock();
                         return;
                     } // end catch
 
@@ -1040,7 +1092,7 @@ namespace NewBTASProto
                 //  open the db and pull in the options table
                 try
                 {
-                    strAccessSelect = @"SELECT * FROM TestType WHERE TESTNAME='"+ d.Rows[station][2].ToString() +"';";
+                    strAccessSelect = @"SELECT * FROM TestType WHERE TESTNAME='" + d.Rows[station][2].ToString() + "';";
                     DataSet settings = new DataSet();
                     OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
                     OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
@@ -1051,17 +1103,18 @@ namespace NewBTASProto
                         myDataAdapter.Fill(settings, "TestType");
                         myAccessConn.Close();
                     }
-                    
-                    readings = (int) settings.Tables[0].Rows[0][3];
-                    interval = (int) settings.Tables[0].Rows[0][4];
+
+                    readings = (int)settings.Tables[0].Rows[0][3];
+                    interval = (int)settings.Tables[0].Rows[0][4];
 
                 }
                 catch (Exception ex)
                 {
                     myAccessConn.Close();
-                    MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                    MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
                     updateD(station, 5, false);
                     if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                    clearTLock();
                     return;
                 }
                 #endregion
@@ -1079,7 +1132,7 @@ namespace NewBTASProto
 
                     #region set up test number and ID
                     // Now we'll look up the current test number and increment the new step number/////////////////////////////////////////////////////
-                    
+
 
                     //  open the db and pull in the options table
                     try
@@ -1158,9 +1211,10 @@ namespace NewBTASProto
                     catch (Exception ex)
                     {
                         myAccessConn.Close();
-                        MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                        MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
                         updateD(station, 5, false);
                         if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                        clearTLock();
                         return;
                     }
 
@@ -1246,9 +1300,10 @@ namespace NewBTASProto
                         catch (Exception ex)
                         {
                             myAccessConn.Close();
-                            MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                            MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
                             updateD(station, 5, false);
                             if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                            clearTLock();
                             return;
                         }
                     }
@@ -1382,15 +1437,16 @@ namespace NewBTASProto
                     catch (Exception ex)
                     {
                         myAccessConn.Close();
-                        MessageBox.Show("Error: Failed to store new data in the DataBase.\n" + ex.Message);
+                        MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to store new data in the DataBase.\n" + ex.Message);
                         updateD(station, 5, false);
                         if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                        clearTLock();
                         return;
                     }
 
 
 
-                   //We made it to this point without errors, so we'll update the grid with the step number
+                    //We made it to this point without errors, so we'll update the grid with the step number
                     updateD(station, 3, stepNum.ToString());
 
                     // We need to do the same with the slave (if there is one)
@@ -1510,9 +1566,10 @@ namespace NewBTASProto
                         catch (Exception ex)
                         {
                             myAccessConn.Close();
-                            MessageBox.Show("Error: Failed to store new data in the DataBase.\n" + ex.Message);
+                            MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to store new data in the DataBase.\n" + ex.Message);
                             updateD(station, 5, false);
                             updateD(slaveRow, 5, false);
+                            clearTLock();
                             return;
                         }
 
@@ -1524,13 +1581,13 @@ namespace NewBTASProto
                     }
 
                 }// end if
-                    
+
                     #endregion
 
                 else    // We've got a resume!
                 {
                     //get the current step number from d
-                    stepNum = int.Parse((string) d.Rows[station][3]);
+                    stepNum = int.Parse((string)d.Rows[station][3]);
 
                     if (MWO2 != "")
                     {
@@ -1586,9 +1643,10 @@ namespace NewBTASProto
                         catch (Exception ex)
                         {
                             myAccessConn.Close();
-                            MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                            MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
                             updateD(station, 5, false);
                             if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                            clearTLock();
                             return;
                         }
                     }
@@ -1652,9 +1710,10 @@ namespace NewBTASProto
                         catch (Exception ex)
                         {
                             myAccessConn.Close();
-                            MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                            MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
                             updateD(station, 5, false);
                             if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                            clearTLock();
                             return;
                         }
                     }
@@ -1673,10 +1732,10 @@ namespace NewBTASProto
                 });
 
 
-                Thread.Sleep(2000);  // here so that we can actually see the grid update
 
 
-                #region timer start
+
+                #region timer setup
                 // We are now good to go on starting the test loop timer...
                 // going to do the timming with a stop watch
                 bool firstRun = true;  // so we know if we should call fillPlotCombos()
@@ -1702,7 +1761,7 @@ namespace NewBTASProto
                 {
                     updateD(station, 7, "Starting Test");
                     if (MasterSlaveTest) { updateD(slaveRow, 7, "Starting Test"); }
-                    this.Invoke((MethodInvoker)delegate(){sendNote(station, 3, "Test Initiated");});
+                    this.Invoke((MethodInvoker)delegate() { sendNote(station, 3, "Test Initiated"); });
                     //fresh test!
                     offset = new TimeSpan();
                     currentReading = 1;
@@ -1710,7 +1769,9 @@ namespace NewBTASProto
 
                 TimeSpan eTime = new TimeSpan().Add(offset);
                 string eTimeS = eTime.ToString(@"hh\:mm\:ss");
-                
+
+                Thread.Sleep(2000);  // here so that we can actually see the grid update
+
 
                 #endregion
 
@@ -1723,7 +1784,7 @@ namespace NewBTASProto
                 }
                 else if (d.Rows[station][10].ToString().Contains("ICA"))
                 {
-#region             mode test
+                    #region             mode test
                     //update the GUI and pause...
                     updateD(station, 7, "Confirming Settings");
                     if (MasterSlaveTest) { updateD(slaveRow, 7, "Confirming Settings"); }
@@ -1754,6 +1815,7 @@ namespace NewBTASProto
                                         resumeTestToolStripMenuItem.Enabled = true;
                                         stopTestToolStripMenuItem.Enabled = false;
                                     });
+                                    clearTLock();
                                     return;
                                 }  // end if
 
@@ -1778,6 +1840,7 @@ namespace NewBTASProto
                                         resumeTestToolStripMenuItem.Enabled = true;
                                         stopTestToolStripMenuItem.Enabled = false;
                                     });
+                                    clearTLock();
                                     return;
                                 }  // end if
                             } // end if
@@ -1799,6 +1862,7 @@ namespace NewBTASProto
                                         resumeTestToolStripMenuItem.Enabled = true;
                                         stopTestToolStripMenuItem.Enabled = false;
                                     });
+                                    clearTLock();
                                     return;
                                 }  // end if
                             } // end if
@@ -1820,6 +1884,7 @@ namespace NewBTASProto
                                         resumeTestToolStripMenuItem.Enabled = true;
                                         stopTestToolStripMenuItem.Enabled = false;
                                     });
+                                    clearTLock();
                                     return;
                                 }  // end if
                             } // end if
@@ -1841,6 +1906,7 @@ namespace NewBTASProto
                                         resumeTestToolStripMenuItem.Enabled = true;
                                         stopTestToolStripMenuItem.Enabled = false;
                                     });
+                                    clearTLock();
                                     return;
                                 }  // end if
                             } // end if
@@ -1863,6 +1929,7 @@ namespace NewBTASProto
                                         resumeTestToolStripMenuItem.Enabled = true;
                                         stopTestToolStripMenuItem.Enabled = false;
                                     });
+                                    clearTLock();
                                     return;
                                 }  // end if
                             } // end if
@@ -1884,6 +1951,7 @@ namespace NewBTASProto
                                         resumeTestToolStripMenuItem.Enabled = true;
                                         stopTestToolStripMenuItem.Enabled = false;
                                     });
+                                    clearTLock();
                                     return;
                                 }  // end if
                             } // end if
@@ -1906,7 +1974,7 @@ namespace NewBTASProto
                                         stopTestToolStripMenuItem.Enabled = false;
                                         sendNote(station, 1, "Test Mode Incorrect");
                                     });
-                                    
+                                    clearTLock();
                                     return;
                                 }  // end if
                             } // end if
@@ -1914,15 +1982,13 @@ namespace NewBTASProto
                         default:
                             break;
                     }
-#endregion              
+                    #endregion
                     // we have an intelligent charger
-                    //make sure the charger has priority
-                    criticalNum[Cstation] = true;
 
                     // If we are in hold and we are starting a new test we need to reset before starting!
                     if ((string)d.Rows[station][11] != "RESET" && (string)d.Rows[station][6] == "")
                     {
-                        for (int j = 0; j < 3; j++)
+                        for (int j = 0; j < 10; j++)
                         {
                             // now we need to reset the charger
                             updateD(station, 7, "Resetting Charger");
@@ -1933,29 +1999,25 @@ namespace NewBTASProto
                             GlobalVars.ICSettings[Cstation].KE3 = (byte)3;
                             //Update the output string value
                             GlobalVars.ICSettings[Cstation].UpdateOutText();
+                            criticalNum[Cstation] = true;
                             //now we are going to create a thread to set KE1 back to data mode after 15 seconds
-                            for (int i = 0; i < 3; i++)
-                            {
-                                Thread.Sleep(1000);
-                                if (GlobalVars.ICData[Cstation].runStatus == "RESET")
-                                {
-                                    break;
-                                }
-                            }
+                            Thread.Sleep(5000);
                             // set KE1 to 1 ("query")
                             GlobalVars.ICSettings[Cstation].KE1 = (byte)0;
                             //Update the output string value
                             GlobalVars.ICSettings[Cstation].UpdateOutText();
+
                             //now we are going to create a thread to set KE1 back to data mode after 15 seconds
                             for (int i = 0; i < 15; i++)
                             {
+                                criticalNum[Cstation] = true;
                                 Thread.Sleep(1000);
-                                if (GlobalVars.ICData[Cstation].runStatus != "HOLD")
+                                if (d.Rows[station][11].ToString() == "RESET")
                                 {
                                     break;
                                 }
                             }
-                            if (GlobalVars.ICData[Cstation].runStatus == "RESET")
+                            if (d.Rows[station][11].ToString() == "RESET")
                             {
                                 break;
                             }
@@ -1976,16 +2038,18 @@ namespace NewBTASProto
                         GlobalVars.ICSettings[Cstation].KE3 = (byte)0;
                         //Update the output string value
                         GlobalVars.ICSettings[Cstation].UpdateOutText();
+                        criticalNum[Cstation] = true;
                         //now we are going to create a thread to set KE1 back to data mode after 5 seconds
                         Thread.Sleep(5000);
                         // set KE1 to 1 ("query")
                         GlobalVars.ICSettings[Cstation].KE1 = (byte)0;
                         //Update the output string value
                         GlobalVars.ICSettings[Cstation].UpdateOutText();
+                        criticalNum[Cstation] = true;
                         Thread.Sleep(5000);
 
                     }
-                    
+
 
                     updateD(station, 7, "Telling Charger to Run");
                     if (MasterSlaveTest) { updateD(slaveRow, 7, "Telling Charger to Run"); }
@@ -1994,7 +2058,7 @@ namespace NewBTASProto
                     // maybe this will reduce the timing difference!
                     ThreadPool.QueueUserWorkItem(t =>
                     {
-                        for (int j = 0; j < 3; j++)
+                        for (int j = 0; j < 10; j++)
                         {
                             // set KE1 to 2 ("command")
                             GlobalVars.ICSettings[Cstation].KE1 = (byte)2;
@@ -2002,16 +2066,9 @@ namespace NewBTASProto
                             GlobalVars.ICSettings[Cstation].KE3 = (byte)1;
                             //Update the output string value
                             GlobalVars.ICSettings[Cstation].UpdateOutText();
+                            criticalNum[Cstation] = true;
+                            Thread.Sleep(3000);
                             //now we are going to create a thread to set KE1 back to data mode after 15 seconds
-                            for (int i = 0; i < 3; i++)
-                            {
-                                Thread.Sleep(1000);
-                                if (GlobalVars.ICData[Cstation].runStatus == "RUN")
-                                {
-                                    criticalNum[Cstation] = false;
-                                    break;
-                                }
-                            }
                             // set KE1 to 1 ("query")
                             GlobalVars.ICSettings[Cstation].KE1 = (byte)0;
                             // set KE3 to 0 ("query")
@@ -2020,19 +2077,17 @@ namespace NewBTASProto
                             GlobalVars.ICSettings[Cstation].UpdateOutText();
                             for (int i = 0; i < 3; i++)
                             {
+                                criticalNum[Cstation] = true;
                                 Thread.Sleep(1000);
-                                if (GlobalVars.ICData[Cstation].runStatus == "RUN")
+                                if (d.Rows[station][11].ToString() == "RUN")
                                 {
-                                    criticalNum[Cstation] = false;
                                     break;
                                 }
                             }
 
                             //make sure the charger has priority
-                            if (GlobalVars.ICData[Cstation].runStatus == "RUN")
+                            if (d.Rows[station][11].ToString() == "RUN")
                             {
-                                stopwatch.Start();
-                                criticalNum[Cstation] = false;
                                 break;
                             }
                         }
@@ -2040,10 +2095,10 @@ namespace NewBTASProto
                     });                     // end thread
 
                     // start timer now...
+                    Thread.Sleep(1000);
+                    stopwatch.Start();
                     Thread.Sleep(200);
-                    //stopwatch.Start();
-                    Thread.Sleep(200);
-                    
+
 
                 }// end else if for ICs...
                 else if (d.Rows[station][10].ToString().Contains("CCA"))
@@ -2082,6 +2137,7 @@ namespace NewBTASProto
                                 stopTestToolStripMenuItem.Enabled = false;
                             });
 
+                            clearTLock();
                             return;
                         }
                         #endregion
@@ -2098,7 +2154,7 @@ namespace NewBTASProto
                 else
                 {
                     // We don't have a charger linked ...
-                    MessageBox.Show("No Charger Detected!  Please check settings!");
+                    MessageBox.Show(new Form() { TopMost = true }, "No Charger Detected!  Please check settings!");
 
                     //clear values from d
                     updateD(station, 7, ("No Charger Detected!"));
@@ -2114,21 +2170,23 @@ namespace NewBTASProto
                         stopTestToolStripMenuItem.Enabled = false;
                     });
 
+                    clearTLock();
                     return;
                 }
 
                 bool startUpDelay = true;
+                clearTLock();
 
 
                 while (currentReading <= readings)
                 {
                     // check if we need to take a reading
-                    if (((currentReading - 1) * interval * 1000) < stopwatch.Elapsed.Add(offset).TotalMilliseconds )
+                    if (((currentReading - 1) * interval * 1000) < stopwatch.Elapsed.Add(offset).TotalMilliseconds)
                     {
                         //first record the elapsed amount of time
                         TimeSpan temp = stopwatch.Elapsed.Add(offset);
                         // update the grid
-                        updateD(station,7,("Reading " + currentReading.ToString() + " of " + readings.ToString()));
+                        updateD(station, 7, ("Reading " + currentReading.ToString() + " of " + readings.ToString()));
                         if (MasterSlaveTest) { updateD(slaveRow, 7, ("Reading " + currentReading.ToString() + " of " + readings.ToString())); }
 
                         #region save a scan to the DB
@@ -2824,7 +2882,7 @@ namespace NewBTASProto
                         catch (Exception ex)
                         {
                             myAccessConn.Close();
-                            MessageBox.Show("Error: Failed to store new data in the DataBase.\n" + ex.Message);
+                            MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to store new data in the DataBase.\n" + ex.Message);
                             updateD(station, 5, false);
                             if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
                             return;
@@ -2842,11 +2900,11 @@ namespace NewBTASProto
                     {
                         try
                         {
-                            updateD(station,6,eTimeS);
+                            updateD(station, 6, eTimeS);
                             if (MasterSlaveTest) { updateD(slaveRow, 6, eTimeS); }
                         }
                         catch { }
-                        
+
                     }
                     oldETime = eTimeS;
 
@@ -2859,14 +2917,15 @@ namespace NewBTASProto
 
                     #region Here is where we are going to look for charging issues!
                     //Lets test for a charger issue now
-                    // there are going to be three sections, IC section, CCA section and shunt section
+                    // there are going to be three sections, ICA section, CCA section and SHUNT section
                     if (d.Rows[station][10].ToString().Contains("ICA") && !startUpDelay)
-                    {  
-                        if(currentReading == readings && d.Rows[station][11].ToString() == "END")
+                    {
+                        if ((currentReading == readings || currentReading == readings + 1) && d.Rows[station][11].ToString() == "END")
                         {
+
                             // we are on the last reading.  Look out for the "END"...
                             // At the moment the test will just continue until the time is up...
-                      
+
                         }
                         else if ((string)d.Rows[station][11] != "RUN" && (string)d.Rows[station][2] != "As Received")
                         {
@@ -2882,7 +2941,7 @@ namespace NewBTASProto
 
                             //retest the "RUN"
                             if ((string)d.Rows[station][11] != "RUN")
-                            {     
+                            {
                                 updateD(station, 7, "Found Fault!");
                                 if (MasterSlaveTest) { updateD(slaveRow, 7, "Found Fault!"); }
                                 // we got an issue!
@@ -2901,7 +2960,7 @@ namespace NewBTASProto
                                         //check for a cancel
                                         if (token.IsCancellationRequested)
                                         {
-                                            
+
                                             //clear values from d
                                             updateD(station, 7, ("Read " + (currentReading - 1).ToString() + " of " + readings.ToString()));
                                             if (MasterSlaveTest) { updateD(slaveRow, 7, ("Read " + (currentReading - 1).ToString() + " of " + readings.ToString())); }
@@ -2916,9 +2975,6 @@ namespace NewBTASProto
                                                 resumeTestToolStripMenuItem.Enabled = true;
                                                 stopTestToolStripMenuItem.Enabled = false;
                                             });
-
-                                            //return the charger to low priority
-                                            criticalNum[Cstation] = false;
 
                                             return;
                                         }
@@ -2941,6 +2997,7 @@ namespace NewBTASProto
                                         GlobalVars.ICSettings[Cstation].KE3 = (byte)1;
                                         //Update the output string value
                                         GlobalVars.ICSettings[Cstation].UpdateOutText();
+                                        criticalNum[Cstation] = true;
                                         //now we are going to create a thread to set KE1 back to data mode after 15 seconds
                                         Thread.Sleep(5000);
                                         // set KE1 to 1 ("query")
@@ -2949,10 +3006,8 @@ namespace NewBTASProto
                                         GlobalVars.ICSettings[Cstation].KE3 = (byte)3;
                                         //Update the output string value
                                         GlobalVars.ICSettings[Cstation].UpdateOutText();
+                                        criticalNum[Cstation] = true;
                                         Thread.Sleep(5000);
-
-                                        //make sure the charger has priority
-                                        criticalNum[Cstation] = false;
 
                                     });                     // end thread
 
@@ -2966,7 +3021,7 @@ namespace NewBTASProto
                                 {
                                     // end the test!
                                     //clear values from d
-                                    
+
                                     updateD(station, 7, ("FAILED ON " + (currentReading - 1).ToString() + " of " + readings.ToString()));
                                     if (MasterSlaveTest) { updateD(slaveRow, 7, ("FAILED ON " + (currentReading - 1).ToString() + " of " + readings.ToString())); }
                                     updateD(station, 5, false);
@@ -2975,20 +3030,16 @@ namespace NewBTASProto
                                     //update the gui
                                     this.Invoke((MethodInvoker)delegate()
                                     {
-                                        sendNote(station, 3, "Test failed");
+                                        sendNote(station, 3, "Test failed. Charger Status:  " + d.Rows[station][11].ToString());
                                         startNewTestToolStripMenuItem.Enabled = true;
                                         resumeTestToolStripMenuItem.Enabled = true;
                                         stopTestToolStripMenuItem.Enabled = false;
                                     });
 
-                                    //return the charger to low priority
-                                    criticalNum[Cstation] = false;
 
                                     return;
                                 }// end test fail else
 
-                                //return the charger to low priority
-                                criticalNum[Cstation] = false;
                             }  // end still no run if
                         } // end no run if
                     }// end IC block
@@ -3094,7 +3145,7 @@ namespace NewBTASProto
                     {
                         // no test needed for now...
                     }
-                    else if(!startUpDelay)
+                    else if (!startUpDelay)
                     {
                         // we don't have a charger or a shunt anymore!!!!
                         // stop the test!
@@ -3120,7 +3171,7 @@ namespace NewBTASProto
                         return;
 
                     }
-                       
+
 
                     #endregion
 
@@ -3128,12 +3179,13 @@ namespace NewBTASProto
                     #region cancel block
                     if (token.IsCancellationRequested)
                     {
-                        
+
                         if ((string)d.Rows[station][2] == "As Received")
                         {
                             //nothing to do here...
                         }
-                        else if(d.Rows[station][10].ToString().Contains("ICA")){
+                        else if (d.Rows[station][10].ToString().Contains("ICA"))
+                        {
                             //make sure the charger has priority
                             criticalNum[Cstation] = true;
 
@@ -3146,10 +3198,10 @@ namespace NewBTASProto
                             GlobalVars.ICSettings[Cstation].KE3 = (byte)2;
                             //Update the output string value
                             GlobalVars.ICSettings[Cstation].UpdateOutText();
+                            criticalNum[Cstation] = true;
                             //now we are going to create a thread to set KE1 back to data mode after 15 seconds
                             Thread.Sleep(5000);
-                            //turn off priority
-                            criticalNum[Cstation] = false;
+
                         }
                         else if (d.Rows[station][10].ToString().Contains("CCA"))
                         {
@@ -3160,7 +3212,7 @@ namespace NewBTASProto
                         {
                             // Also nothing to do...
                         }
-                        
+
                         //clear values from d
                         updateD(station, 7, ("Read " + (currentReading - 1).ToString() + " of " + readings.ToString()));
                         if (MasterSlaveTest) { updateD(slaveRow, 7, ("Read " + (currentReading - 1).ToString() + " of " + readings.ToString())); }
@@ -3182,7 +3234,7 @@ namespace NewBTASProto
 
                     //every interval is defined in seconds to be safe, we'll test if we are at the correct interval every 200ms
                     Thread.Sleep(200);
-                    Debug.Print(GlobalVars.ICData[Cstation].CTR.ToString());
+
                 } // end main test loop...
 
 
@@ -3190,36 +3242,72 @@ namespace NewBTASProto
                 // If we are running the charger tell it to stop and reset
                 if ((string)d.Rows[station][9] != "" && d.Rows[station][10].ToString().Contains("ICA") && (string)d.Rows[station][2] != "As Received")
                 {
-                    //make sure the charger has priority
-                    criticalNum[Cstation] = true;
-
                     // now we need to stop the charger
                     updateD(station, 7, "Telling Charger to Stop");
                     if (MasterSlaveTest) { updateD(slaveRow, 7, "Telling Charger to Stop"); }
-                    // set KE1 to 2 ("command")
-                    GlobalVars.ICSettings[Cstation].KE1 = (byte)2;
-                    // set KE3 to stop
-                    GlobalVars.ICSettings[Cstation].KE3 = (byte)2;
-                    //Update the output string value
-                    GlobalVars.ICSettings[Cstation].UpdateOutText();
+                    for (int j = 0; j < 5; j++)
+                    {
+                        // set KE1 to 2 ("command")
+                        GlobalVars.ICSettings[Cstation].KE1 = (byte)2;
+                        // set KE3 to stop
+                        GlobalVars.ICSettings[Cstation].KE3 = (byte)2;
+                        //Update the output string value
+                        GlobalVars.ICSettings[Cstation].UpdateOutText();
+
+                        for (int i = 0; i < 15; i++)
+                        {
+                            criticalNum[Cstation] = true;
+                            Thread.Sleep(1000);
+                            if (d.Rows[station][11].ToString() == "HOLD" || d.Rows[station][11].ToString() == "END")
+                            {
+                                break;
+                            }
+
+                        }
+
+                        if (d.Rows[station][11].ToString() == "HOLD" || d.Rows[station][11].ToString() == "END")
+                        {
+                            break;
+                        }
+
+                    }
                     //now we are going to create a thread to set KE1 back to data mode after 15 seconds
-                    Thread.Sleep(5000);
                     // now we need to reset the charger
                     updateD(station, 7, "Resetting Charger");
                     if (MasterSlaveTest) { updateD(slaveRow, 7, "Resetting Charger"); }
-                    // set KE3 to RESET
-                    GlobalVars.ICSettings[Cstation].KE3 = (byte)3;
-                    //Update the output string value
-                    GlobalVars.ICSettings[Cstation].UpdateOutText();
-                    //now we are going to create a thread to set KE1 back to data mode after 15 seconds
-                    Thread.Sleep(5000);
-                    // set KE1 to 1 ("query")
-                    GlobalVars.ICSettings[Cstation].KE1 = (byte)0;
-                    //Update the output string value
-                    GlobalVars.ICSettings[Cstation].UpdateOutText();
 
-                    //turn off priority
-                    criticalNum[Cstation] = false;
+                    for (int j = 0; j < 5; j++)
+                    {
+
+                        // set KE1 to 2 ("command")
+                        GlobalVars.ICSettings[Cstation].KE1 = (byte)2;
+                        // set KE3 to RESET
+                        GlobalVars.ICSettings[Cstation].KE3 = (byte)3;
+                        //Update the output string value
+                        GlobalVars.ICSettings[Cstation].UpdateOutText();
+                        criticalNum[Cstation] = true;
+                        //now we are going to create a thread to set KE1 back to data mode after 15 seconds
+                        Thread.Sleep(5000);
+
+                        // set KE1 to 1 ("query")
+                        GlobalVars.ICSettings[Cstation].KE1 = (byte)0;
+                        //Update the output string value
+                        GlobalVars.ICSettings[Cstation].UpdateOutText();
+                        for (int i = 0; i < 5; i++)
+                        {
+                            criticalNum[Cstation] = true;
+                            Thread.Sleep(1000);
+                            if (d.Rows[station][11].ToString() == "RESET")
+                            {
+                                break;
+                            }
+
+                        }
+                        if (d.Rows[station][11].ToString() == "RESET")
+                        {
+                            break;
+                        }
+                    }
                 }
                 else if (d.Rows[station][10].ToString().Contains("CCA"))
                 {
@@ -3230,7 +3318,7 @@ namespace NewBTASProto
                 {
                     // Also nothing to do...
                 }
-                
+
 
                 //update the gui
                 this.Invoke((MethodInvoker)delegate()
@@ -3242,16 +3330,43 @@ namespace NewBTASProto
                 });
 
                 //Test is finished!
-                updateD(station,6,"");
+                updateD(station, 6, "");
                 if (MasterSlaveTest) { updateD(slaveRow, 6, ""); }
-                updateD(station,7,"Complete");
+                updateD(station, 7, "Complete");
                 if (MasterSlaveTest) { updateD(slaveRow, 7, "Complete"); }
                 updateD(station, 5, false);
                 if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
-                
-            },cRunTest[station].Token); // end thread
+
+            }, cRunTest[station].Token); // end thread
 
         }// end RunTest
+
+        private readonly object tLock = new object();
+        bool testLock = false;
+
+        private bool readTLock()
+        {
+            lock (tLock)
+            {
+                return testLock;
+            }
+        }
+
+        private void setTLock()
+        {
+            lock (tLock)
+            {
+                testLock = true;
+            }
+        }
+
+        private void clearTLock()
+        {
+            lock (tLock)
+            {
+                testLock = false;
+            }
+        }
 
     }
 }

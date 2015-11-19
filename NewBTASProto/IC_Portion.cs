@@ -36,7 +36,8 @@ namespace NewBTASProto
         bool [] criticalNum = new bool[16];
 
         //Com Error count 
-        byte[] comErrorNum = new byte[16] {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+         byte[] comErrorNum = new byte[16] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+         byte[] comGoodNum = new byte[16] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
         public void pollICs()
         {
@@ -84,7 +85,7 @@ namespace NewBTASProto
 
                             int slaveRow = -1;
                             ////////////////////////////////////////////NORMAL PRIORITY CHARGERS ARE CHECKED HERE///////////////////////
-                            if ((bool)d.Rows[j][8] && (bool)d.Rows[j][4] && (string)d.Rows[j][9] != "" && !d.Rows[j][9].ToString().Contains("S") && d.Rows[j][10].ToString().Contains("ICA"))
+                            if ((bool)d.Rows[j][8] && (bool)d.Rows[j][4] && (string)d.Rows[j][9] != "" && !d.Rows[j][9].ToString().Contains("S"))
                             {
                                 Thread.Sleep(800);
                                 try
@@ -128,7 +129,7 @@ namespace NewBTASProto
                                     {
                                         chargerID = Convert.ToInt32(d.Rows[j][9]);
                                     }
-
+                                    Debug.Print("Normal Command Sent To " + chargerID.ToString());
 
                                     // send the short command based on the settings for the charger...
                                     ICComPort.Write(GlobalVars.ICSettings[chargerID].outText, 0, 28);
@@ -246,12 +247,16 @@ namespace NewBTASProto
                                         if (comErrorNum[j] < 3) { comErrorNum[j]++; }
                                         this.Invoke((MethodInvoker)delegate
                                         {
-                                            if (comErrorNum[j] > 2)
+                                            if (comErrorNum[j] > 2 && d.Rows[j][10].ToString().Contains("ICA"))
                                             {
                                                 updateD(j, 11, "");
+                                                updateD(j, 10, "");
+                                                dataGridView1.Rows[j].Cells[8].Style.BackColor = Color.Gainsboro;
                                                 if (slaveRow > -1)
                                                 {
                                                     updateD(slaveRow, 11, "");
+                                                    updateD(slaveRow, 10, "");
+                                                    dataGridView1.Rows[slaveRow].Cells[8].Style.BackColor = Color.Gainsboro;
                                                 }
                                             }
                                             tempBuff = ICComPort.ReadExisting();
@@ -268,10 +273,12 @@ namespace NewBTASProto
                                 if ((string)d.Rows[j][11] != "" && !d.Rows[j][9].ToString().Contains("S"))
                                 {
                                     updateD(j, 11, "");
+                                    updateD(j, 10, "");
                                     dataGridView1.Rows[j].Cells[8].Style.BackColor = Color.Gainsboro;
                                     if (slaveRow > -1)
                                     {
                                         updateD(slaveRow, 11, "");
+                                        updateD(slaveRow, 10, "");
                                         dataGridView1.Rows[slaveRow].Cells[8].Style.BackColor = Color.Gainsboro;
                                     }
 
@@ -282,11 +289,12 @@ namespace NewBTASProto
                             /////////////////////////////CHECK FOR CHARGER IDENTITY///////////////////////////////////////
                             if (check)
                             {
-                                Thread.Sleep(500);
+                                Thread.Sleep(800);
                                 try
                                 {
                                     // send the short command based on the settings for the charger...
                                     ICComPort.Write(GlobalVars.ICSettings[toCheck].outText, 0, 28);
+                                    Debug.Print("Check Command Sent To " + toCheck.ToString());
                                     // wait for a response
                                     tempBuff = ICComPort.ReadTo("Z");
                                     //do something with the new data
@@ -327,9 +335,10 @@ namespace NewBTASProto
                                     Debug.Print("Station " + i.ToString() + " is critical");
                                     try
                                     {
-                                        Thread.Sleep(500);
+                                        Thread.Sleep(800);
                                         // send the short command based on the settings for the charger...
                                         ICComPort.Write(GlobalVars.ICSettings[i].outText, 0, 28);
+                                        Debug.Print("High Priority Command Sent To " + i.ToString());
                                         // wait for a response
                                         tempBuff = ICComPort.ReadTo("Z");
 
@@ -380,8 +389,19 @@ namespace NewBTASProto
                                         }
 
 
-                                        //turn off the critical
-                                        criticalNum[i] = false;
+                                        // if we are running a test one repsonse may not be enough...
+                                        if (comGoodNum[i] < 1 && (bool) d.Rows[i][5] == true)
+                                        {
+                                            comGoodNum[i]++;
+                                            comErrorNum[i] = 0;
+                                        }
+                                        else
+                                        {
+                                            criticalNum[i] = false;
+                                            comGoodNum[i] = 0;
+                                            comErrorNum[i] = 0;
+                                        }
+
                                         // we got a response so lets update the grid and the status box
                                         //A[1] has the terminal ID in it
                                         char[] delims = { ' ' };
@@ -497,11 +517,16 @@ namespace NewBTASProto
                                         if (ex is System.TimeoutException)
                                         {
                                             //if this charger is not part of a test and we've had three errors, we need to turn off the critical...
-                                            if (comErrorNum[i] < 3) { comErrorNum[i]++; }
+                                            if (comErrorNum[i] < 3) 
+                                            { 
+                                                comGoodNum[i] = 0;
+                                                comErrorNum[i]++; 
+                                            }
                                             if ((bool) d.Rows[i][5] == false && comErrorNum[i] ==3)
                                             {
                                                 criticalNum[i] = false;
                                                 comErrorNum[i] = 0;
+                                                comGoodNum[i] = 0;
                                             }
                                             Thread.Sleep(100);
                                         }
@@ -516,7 +541,7 @@ namespace NewBTASProto
                                 try
                                 {
                                     Thread.Sleep(10);
-                                    // send the short command based on the settings for the charger...
+                                    // send the short command to the masterfiller
                                     ICComPort.Write("~320Z");
                                     // wait for a response
                                     tempBuff = ICComPort.ReadTo("Z");

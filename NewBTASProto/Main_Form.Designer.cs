@@ -66,6 +66,7 @@
             this.editTechniciansToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripMenuItem();
             this.etcToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem28 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem27 = new System.Windows.Forms.ToolStripMenuItem();
             this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -93,6 +94,7 @@
             this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.timeLabel = new System.Windows.Forms.Label();
             this.timeLbLabel = new System.Windows.Forms.Label();
             this.dateLabel = new System.Windows.Forms.Label();
@@ -158,13 +160,14 @@
             this.toolStripMenuItem25 = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStripClear = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItem26 = new System.Windows.Forms.ToolStripMenuItem();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.toolStripMenuItem28 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem29 = new System.Windows.Forms.ToolStripSeparator();
+            this.importDataBaseFromPreviousVersionOfProgramToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.cMSTestType.SuspendLayout();
@@ -175,7 +178,6 @@
             this.contextMenuStripGraphPrint.SuspendLayout();
             this.contextMenuStripTextPrint.SuspendLayout();
             this.contextMenuStripClear.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // dataGridView1
@@ -248,7 +250,9 @@
             // 
             this.databaseOperationsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.backupDatabaseToolStripMenuItem,
-            this.restoreDatabaseToolStripMenuItem});
+            this.restoreDatabaseToolStripMenuItem,
+            this.toolStripMenuItem29,
+            this.importDataBaseFromPreviousVersionOfProgramToolStripMenuItem});
             this.databaseOperationsToolStripMenuItem.Name = "databaseOperationsToolStripMenuItem";
             this.databaseOperationsToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
             this.databaseOperationsToolStripMenuItem.Text = "Database Operations";
@@ -256,14 +260,14 @@
             // backupDatabaseToolStripMenuItem
             // 
             this.backupDatabaseToolStripMenuItem.Name = "backupDatabaseToolStripMenuItem";
-            this.backupDatabaseToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.backupDatabaseToolStripMenuItem.Size = new System.Drawing.Size(345, 22);
             this.backupDatabaseToolStripMenuItem.Text = "Backup Database";
             this.backupDatabaseToolStripMenuItem.Click += new System.EventHandler(this.backupDatabaseToolStripMenuItem_Click);
             // 
             // restoreDatabaseToolStripMenuItem
             // 
             this.restoreDatabaseToolStripMenuItem.Name = "restoreDatabaseToolStripMenuItem";
-            this.restoreDatabaseToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.restoreDatabaseToolStripMenuItem.Size = new System.Drawing.Size(345, 22);
             this.restoreDatabaseToolStripMenuItem.Text = "Restore Database";
             this.restoreDatabaseToolStripMenuItem.Click += new System.EventHandler(this.restoreDatabaseToolStripMenuItem_Click);
             // 
@@ -472,6 +476,13 @@
             this.etcToolStripMenuItem.Name = "etcToolStripMenuItem";
             this.etcToolStripMenuItem.Size = new System.Drawing.Size(71, 20);
             this.etcToolStripMenuItem.Text = "Reporting";
+            // 
+            // toolStripMenuItem28
+            // 
+            this.toolStripMenuItem28.Name = "toolStripMenuItem28";
+            this.toolStripMenuItem28.Size = new System.Drawing.Size(178, 22);
+            this.toolStripMenuItem28.Text = "Work Order Reports";
+            this.toolStripMenuItem28.Click += new System.EventHandler(this.toolStripMenuItem28_Click);
             // 
             // toolStripMenuItem27
             // 
@@ -722,6 +733,16 @@
             this.label7.Size = new System.Drawing.Size(134, 33);
             this.label7.TabIndex = 5;
             this.label7.Text = "BTAS-16";
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::NewBTASProto.Properties.Resources.btas7_h_I;
+            this.pictureBox1.Location = new System.Drawing.Point(218, 11);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(44, 38);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 4;
+            this.pictureBox1.TabStop = false;
             // 
             // timeLabel
             // 
@@ -1270,22 +1291,17 @@
             this.toolStripMenuItem26.Text = "Clear?";
             this.toolStripMenuItem26.Click += new System.EventHandler(this.toolStripMenuItem26_Click);
             // 
-            // pictureBox1
+            // toolStripMenuItem29
             // 
-            this.pictureBox1.Image = global::NewBTASProto.Properties.Resources.btas7_h_I;
-            this.pictureBox1.Location = new System.Drawing.Point(218, 11);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(44, 38);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 4;
-            this.pictureBox1.TabStop = false;
+            this.toolStripMenuItem29.Name = "toolStripMenuItem29";
+            this.toolStripMenuItem29.Size = new System.Drawing.Size(342, 6);
             // 
-            // toolStripMenuItem28
+            // importDataBaseFromPreviousVersionOfProgramToolStripMenuItem
             // 
-            this.toolStripMenuItem28.Name = "toolStripMenuItem28";
-            this.toolStripMenuItem28.Size = new System.Drawing.Size(178, 22);
-            this.toolStripMenuItem28.Text = "Work Order Reports";
-            this.toolStripMenuItem28.Click += new System.EventHandler(this.toolStripMenuItem28_Click);
+            this.importDataBaseFromPreviousVersionOfProgramToolStripMenuItem.Name = "importDataBaseFromPreviousVersionOfProgramToolStripMenuItem";
+            this.importDataBaseFromPreviousVersionOfProgramToolStripMenuItem.Size = new System.Drawing.Size(345, 22);
+            this.importDataBaseFromPreviousVersionOfProgramToolStripMenuItem.Text = "Import DataBase From Previous Version of Program";
+            this.importDataBaseFromPreviousVersionOfProgramToolStripMenuItem.Click += new System.EventHandler(this.importDataBaseFromPreviousVersionOfProgramToolStripMenuItem_Click);
             // 
             // Main_Form
             // 
@@ -1318,6 +1334,7 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
@@ -1329,7 +1346,6 @@
             this.contextMenuStripGraphPrint.ResumeLayout(false);
             this.contextMenuStripTextPrint.ResumeLayout(false);
             this.contextMenuStripClear.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1465,6 +1481,8 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem26;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem27;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem28;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem29;
+        private System.Windows.Forms.ToolStripMenuItem importDataBaseFromPreviousVersionOfProgramToolStripMenuItem;
     }
 }
 

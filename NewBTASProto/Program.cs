@@ -22,7 +22,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show("From Program.cs:  " + ex.ToString());
+                MessageBox.Show(new Form() { TopMost = true }, "From Program.cs:  " + ex.ToString());
             }
 
         }

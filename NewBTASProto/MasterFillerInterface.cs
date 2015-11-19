@@ -18,6 +18,7 @@ namespace NewBTASProto
         
         int curRow = 0;
         string curWorkOrder = "";
+        int average = 0;
 
         public MasterFillerInterface(int currentRow = 0, string currentWorkOrder = "")
         {
@@ -79,7 +80,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
                 return;
             }
             //  now try to access it
@@ -98,7 +99,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
                 return;
             }
             finally
@@ -137,7 +138,7 @@ namespace NewBTASProto
 
                 if (GlobalVars.checkMasterFiller == true)
                 {
-                    MessageBox.Show("Failed to Read MasterFiller Data.  Please check your set up and try again.");
+                    MessageBox.Show(new Form() { TopMost = true }, "Failed to Read MasterFiller Data.  Please check your set up and try again.");
                     GlobalVars.checkMasterFiller = false;
                     this.Invoke((MethodInvoker)delegate
                     {
@@ -175,6 +176,17 @@ namespace NewBTASProto
                         textBox22.Text = ((int.Parse(GlobalVars.MFData[26]) - 100) % 255).ToString();
                         textBox23.Text = ((int.Parse(GlobalVars.MFData[27]) - 100) % 255).ToString();
                         textBox24.Text = ((int.Parse(GlobalVars.MFData[28]) - 100) % 255).ToString();
+                        // now fill in the average box...
+                        average = 0;
+                        for (int i = 5; i < 28; i++)
+                        {
+                            if (((int.Parse(GlobalVars.MFData[i]) - 100) % 255) != 0)
+                            {
+                                average += (int.Parse(GlobalVars.MFData[i]) - 100) % 255;
+                            }
+                        }
+                        textBox25.Text = average.ToString();
+
                         button1.Enabled = true;
                         button2.Enabled = true;
                         button3.Enabled = true;
@@ -190,14 +202,14 @@ namespace NewBTASProto
             //do we have a station?
             if (comboBox1.Text == "")
             {
-                MessageBox.Show("Please select a station to associate the MasterFiller data with");
+                MessageBox.Show(new Form() { TopMost = true }, "Please select a station to associate the MasterFiller data with");
                 return;
             }
 
             //do we have a work order?
             if(comboBox2.Text == "")
             {
-                MessageBox.Show("Please select a Work Order to associate the MasterFiller data with");
+                MessageBox.Show(new Form() { TopMost = true }, "Please select a Work Order to associate the MasterFiller data with");
                 return;
             }
 
@@ -208,7 +220,7 @@ namespace NewBTASProto
 
             // Open database containing all the battery data....
             strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
-            string strUpdateCMD = "INSERT INTO WaterLevel (WorkOrderNumber,Cell1,Cell2,Cell3,Cell4,Cell5,Cell6,Cell7,Cell8,Cell9,Cell10,Cell11,Cell12,Cell13,Cell14,Cell15,Cell16,Cell17,Cell18,Cell19,Cell20,Cell21,Cell22,Cell23,Cell24) "
+            string strUpdateCMD = "INSERT INTO WaterLevel (WorkOrderNumber,Cell1,Cell2,Cell3,Cell4,Cell5,Cell6,Cell7,Cell8,Cell9,Cell10,Cell11,Cell12,Cell13,Cell14,Cell15,Cell16,Cell17,Cell18,Cell19,Cell20,Cell21,Cell22,Cell23,Cell24,AVE) "
                 + "VALUES ('" +
                 comboBox2.Text + "'," +                                                 //WorkOrderNumber
                 ((int.Parse(GlobalVars.MFData[5]) - 100) % 255).ToString() + "," +      //Cell1
@@ -234,7 +246,8 @@ namespace NewBTASProto
                 ((int.Parse(GlobalVars.MFData[25]) - 100) % 255).ToString() + "," +     //Cell21
                 ((int.Parse(GlobalVars.MFData[26]) - 100) % 255).ToString() + "," +     //Cell22
                 ((int.Parse(GlobalVars.MFData[27]) - 100) % 255).ToString() + "," +     //Cell23
-                ((int.Parse(GlobalVars.MFData[28]) - 100) % 255).ToString() +           //Cell24
+                ((int.Parse(GlobalVars.MFData[28]) - 100) % 255).ToString() + "," +     //Cell24
+                average.ToString() +                                                    //Cell24
                 ");";
 
             // try to open the DB
@@ -244,7 +257,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
                 return;
             }
             //  now try to access it
@@ -261,7 +274,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: Failed to store new data in the DataBase.\n" + ex.Message);
+                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to store new data in the DataBase.\n" + ex.Message);
                 return;
             }
 
@@ -276,6 +289,11 @@ namespace NewBTASProto
             //Now set the comboboxes to the current station and workorder...
             comboBox1.Text = curRow.ToString();
             comboBox2.Text = curWorkOrder;
+        }
+
+        private void label27_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

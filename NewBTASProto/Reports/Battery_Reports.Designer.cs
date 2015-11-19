@@ -253,7 +253,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Battery_Reports";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "View, Edit and Add Customer Batteries";
+            this.Text = "Battery Reports";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmVECustomerBats_FormClosing_1);
             this.Load += new System.EventHandler(this.Battery_Reports_Load);
             this.Shown += new System.EventHandler(this.frmVECustomerBats_Shown);

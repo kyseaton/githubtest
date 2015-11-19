@@ -139,7 +139,7 @@ namespace NewBTASProto
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                    MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
                     return;
                 }
                 //  now try to access it
@@ -162,7 +162,7 @@ namespace NewBTASProto
                 catch (Exception ex)
                 {
                     myAccessConn.Close();
-                    MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                    MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
                     return;
                 }
 
@@ -261,7 +261,7 @@ namespace NewBTASProto
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                        MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
                         return;
                     }
                     //  now try to access it
@@ -281,7 +281,7 @@ namespace NewBTASProto
                     catch (Exception ex)
                     {
                         myAccessConn.Close();
-                        MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                        MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
                         return;
                     }
 
@@ -302,7 +302,14 @@ namespace NewBTASProto
 
                             if (startup)
                             {
-                                comboBox2.SelectedIndex = comboBox2.FindString(curStep);
+                                try
+                                {
+                                    comboBox2.SelectedIndex = comboBox2.FindString(curStep);
+                                }
+                                catch
+                                {
+                                    // do nothing...
+                                }
                             }
                         });
 
@@ -312,7 +319,7 @@ namespace NewBTASProto
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                        MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
                         return;
                     }
 
@@ -361,7 +368,7 @@ namespace NewBTASProto
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                        MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
                         return;
                     }
                     //  now try to access it
@@ -382,7 +389,7 @@ namespace NewBTASProto
                     catch (Exception ex)
                     {   
                         myAccessConn.Close();
-                        MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                        MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
                         return;
                     }
 
@@ -403,7 +410,14 @@ namespace NewBTASProto
 
                             if (startup2)
                             {
-                                comboBox4.SelectedIndex = comboBox4.FindString(curStep);
+                                try
+                                {
+                                    comboBox4.SelectedIndex = comboBox4.FindString(curStep);
+                                }
+                                catch
+                                {
+                                    // do nothing...
+                                }
                             }
                         });
 
@@ -413,7 +427,7 @@ namespace NewBTASProto
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                        MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
                         return;
                     }
                 });
@@ -456,7 +470,7 @@ namespace NewBTASProto
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                        MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
                         return;
                     }
                     //  now try to access it
@@ -477,7 +491,7 @@ namespace NewBTASProto
                     catch (Exception ex)
                     {   
                         myAccessConn.Close();
-                        MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                        MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
                         return;
                     }
 
@@ -497,7 +511,7 @@ namespace NewBTASProto
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                        MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
                         return;
                     }
                     //  now try to access it
@@ -517,7 +531,7 @@ namespace NewBTASProto
                     }
                     catch (Exception ex)
                     {   myAccessConn.Close();
-                        MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                    MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
                         return;
                     }
 
@@ -742,7 +756,7 @@ namespace NewBTASProto
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                            MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
                             return;
                         }
                         // try to open the DB
@@ -763,7 +777,7 @@ namespace NewBTASProto
                         catch (Exception ex)
                         {
                             myAccessConn.Close();
-                            MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                            MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
                             return;
                         }
 
@@ -792,7 +806,7 @@ namespace NewBTASProto
                         catch (Exception ex)
                         {
                             myAccessConn.Close();
-                            MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                            MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
                             return;
                         }
 
@@ -882,7 +896,7 @@ namespace NewBTASProto
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                        MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
                         return;
                     }
                     //  now try to access it
@@ -903,7 +917,7 @@ namespace NewBTASProto
                     catch (Exception ex)
                     {
                         myAccessConn.Close();
-                        MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                        MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
                         return;
                     }
 
@@ -923,7 +937,7 @@ namespace NewBTASProto
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                        MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
                         return;
                     }
                     //  now try to access it
@@ -944,7 +958,7 @@ namespace NewBTASProto
                     catch (Exception ex)
                     {
                         myAccessConn.Close();
-                        MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                        MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
                         return;
                     }
 
@@ -1167,7 +1181,7 @@ namespace NewBTASProto
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                            MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
                             return;
                         }
                         // try to open the DB
@@ -1188,7 +1202,7 @@ namespace NewBTASProto
                         catch (Exception ex)
                         {
                             myAccessConn.Close();
-                            MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                            MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
                             return;
                         }
 
@@ -1206,7 +1220,7 @@ namespace NewBTASProto
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                            MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
                             return;
                         }
                         // try to open the DB
@@ -1227,7 +1241,7 @@ namespace NewBTASProto
                         catch (Exception ex)
                         {
                             myAccessConn.Close();
-                            MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                            MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
                             return;
                         }
 
@@ -1356,7 +1370,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
             }
 
 
@@ -1495,7 +1509,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
             }
 
         }
@@ -1819,7 +1833,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
             }
 
         }
@@ -1955,7 +1969,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
             }
 
 

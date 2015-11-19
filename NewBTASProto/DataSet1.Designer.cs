@@ -2733,6 +2733,8 @@ namespace NewBTASProto {
             
             private global::System.Data.DataColumn columnCell24;
             
+            private global::System.Data.DataColumn columnAVE;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public WaterLevelDataTable() {
@@ -2976,6 +2978,14 @@ namespace NewBTASProto {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn AVEColumn {
+                get {
+                    return this.columnAVE;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -3037,7 +3047,8 @@ namespace NewBTASProto {
                         string Cell21, 
                         string Cell22, 
                         string Cell23, 
-                        string Cell24) {
+                        string Cell24, 
+                        string AVE) {
                 WaterLevelRow rowWaterLevelRow = ((WaterLevelRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         WLID,
@@ -3065,7 +3076,8 @@ namespace NewBTASProto {
                         Cell21,
                         Cell22,
                         Cell23,
-                        Cell24};
+                        Cell24,
+                        AVE};
                 rowWaterLevelRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowWaterLevelRow);
                 return rowWaterLevelRow;
@@ -3114,6 +3126,7 @@ namespace NewBTASProto {
                 this.columnCell22 = base.Columns["Cell22"];
                 this.columnCell23 = base.Columns["Cell23"];
                 this.columnCell24 = base.Columns["Cell24"];
+                this.columnAVE = base.Columns["AVE"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3171,6 +3184,8 @@ namespace NewBTASProto {
                 base.Columns.Add(this.columnCell23);
                 this.columnCell24 = new global::System.Data.DataColumn("Cell24", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnCell24);
+                this.columnAVE = new global::System.Data.DataColumn("AVE", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnAVE);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -6698,6 +6713,22 @@ namespace NewBTASProto {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string AVE {
+                get {
+                    try {
+                        return ((string)(this[this.tableWaterLevel.AVEColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'AVE\' in table \'WaterLevel\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableWaterLevel.AVEColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public bool IsWLIDNull() {
                 return this.IsNull(this.tableWaterLevel.WLIDColumn);
             }
@@ -7006,6 +7037,18 @@ namespace NewBTASProto {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetCell24Null() {
                 this[this.tableWaterLevel.Cell24Column] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsAVENull() {
+                return this.IsNull(this.tableWaterLevel.AVEColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetAVENull() {
+                this[this.tableWaterLevel.AVEColumn] = global::System.Convert.DBNull;
             }
         }
         

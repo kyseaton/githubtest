@@ -45,7 +45,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
                 return;
             }
             //  now try to access it
@@ -63,7 +63,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
                 return;
             }
             finally
@@ -123,7 +123,7 @@ namespace NewBTASProto
                         else
                         {
 
-                            MessageBox.Show("Invalid phone number, please change");
+                            MessageBox.Show(new Form() { TopMost = true }, "Invalid phone number, please change");
 
                             textBox5.Focus();
 
@@ -178,7 +178,7 @@ namespace NewBTASProto
                 else
                 {
                     //somehow we are renamed the test and that's not good
-                    MessageBox.Show("There was an error!");
+                    MessageBox.Show(new Form() { TopMost = true }, "There was an error!");
                     return;
                 }
                 MessageBox.Show(current["TESTNAME"].ToString() + " has been updated.");

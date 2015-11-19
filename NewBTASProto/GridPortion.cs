@@ -353,7 +353,7 @@ namespace NewBTASProto
 
                     if ((string) d.Rows[e.RowIndex][9] == "")
                     {
-                        MessageBox.Show("You Still Need to Select a Charger ID Number");
+                        MessageBox.Show(new Form() { TopMost = true }, "You Still Need to Select a Charger ID Number");
                     }
                     else
                     {

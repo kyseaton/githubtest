@@ -28,7 +28,7 @@ namespace NewBTASProto
             {
                 SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
                 InitializeComponent();
-                
+
                 Initialize_Menus_Tools();
                 Initialize_Operators_CB();
                 Initialize_Graph_Settings();
@@ -42,14 +42,14 @@ namespace NewBTASProto
 
                 GlobalVars.loading = false;
 
-                this.Height = (int) Properties.Settings.Default.FormHeight;
-                this.Width = (int) Properties.Settings.Default.FormWidth;
+                this.Height = (int)Properties.Settings.Default.FormHeight;
+                this.Width = (int)Properties.Settings.Default.FormWidth;
 
-       
+
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                MessageBox.Show("In Main_Form:  " + ex.ToString());
+                MessageBox.Show(new Form() { TopMost = true }, "In Main_Form:  " + ex.ToString());
             }
 
 
@@ -69,7 +69,7 @@ namespace NewBTASProto
                     }
                     else if (d.Rows[i][9].ToString().Length == 3)
                     {
-                        criticalNum[int.Parse(d.Rows[i][9].ToString().Substring(0,1))] = true;
+                        criticalNum[int.Parse(d.Rows[i][9].ToString().Substring(0, 1))] = true;
                     }
                     else
                     {
@@ -101,7 +101,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
                 return;
             }
             //  now try to access it
@@ -120,12 +120,12 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
                 return;
             }
             finally
             {
-                
+
             }
 
             this.comboBox1.DisplayMember = "OperatorName";
@@ -142,7 +142,7 @@ namespace NewBTASProto
         private void Initialize_Menus_Tools()
         {
             if (GlobalVars.useF) { this.fahrenheitToolStripMenuItem.Checked = true; }
-            else{this.centigradeToolStripMenuItem.Checked = true;}
+            else { this.centigradeToolStripMenuItem.Checked = true; }
 
             if (GlobalVars.Pos2Neg) { this.positiveToNegativeToolStripMenuItem.Checked = true; }
             else { this.negativeToPositiveToolStripMenuItem.Checked = true; }
@@ -171,7 +171,7 @@ namespace NewBTASProto
             Graphics_Form gf = new Graphics_Form(d.Rows[dataGridView1.CurrentRow.Index][3].ToString(), d.Rows[dataGridView1.CurrentRow.Index][1].ToString());
             gf.Owner = this;
             gf.Show();
-   
+
         }
 
         private void testToolStripMenuItem_Click(object sender, EventArgs e)
@@ -196,7 +196,7 @@ namespace NewBTASProto
             string strUpdateCMD;
             // Open database containing all the battery data....
             strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
-            strUpdateCMD = "UPDATE Options SET Degree='" + (GlobalVars.useF ? "F." : "C.") + "', CellOrder='" + (GlobalVars.Pos2Neg ? "Pos. to Neg." : "Neg. to Pos.") + "', BusinessName='"+ GlobalVars.businessName+"';";
+            strUpdateCMD = "UPDATE Options SET Degree='" + (GlobalVars.useF ? "F." : "C.") + "', CellOrder='" + (GlobalVars.Pos2Neg ? "Pos. to Neg." : "Neg. to Pos.") + "', BusinessName='" + GlobalVars.businessName + "';";
             OleDbConnection myAccessConn;
 
             // try to open the DB
@@ -206,7 +206,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
                 return;
             }
             //  now try to access it
@@ -223,7 +223,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: Failed to store new data in the DataBase.\n" + ex.Message);
+                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to store new data in the DataBase.\n" + ex.Message);
                 return;
             }
 
@@ -235,7 +235,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
                 return;
             }
             try
@@ -250,7 +250,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: Failed to store new data in the DataBase.\n" + ex.Message);
+                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to store new data in the DataBase.\n" + ex.Message);
                 return;
             }
 
@@ -262,7 +262,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
                 return;
             }
             try
@@ -277,7 +277,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: Failed to store new data in the DataBase.\n" + ex.Message);
+                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to store new data in the DataBase.\n" + ex.Message);
                 return;
             }
 
@@ -289,7 +289,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
                 return;
             }
             try
@@ -304,7 +304,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: Failed to store new data in the DataBase.\n" + ex.Message);
+                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to store new data in the DataBase.\n" + ex.Message);
                 return;
             }
 
@@ -341,8 +341,8 @@ namespace NewBTASProto
 
         private void centigradeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (this.centigradeToolStripMenuItem.Checked == false) 
-            { 
+            if (this.centigradeToolStripMenuItem.Checked == false)
+            {
                 this.centigradeToolStripMenuItem.Checked = true;
                 this.fahrenheitToolStripMenuItem.Checked = false;
                 GlobalVars.useF = false;
@@ -390,14 +390,14 @@ namespace NewBTASProto
 
         }
 
-        public void updateBusiness() 
+        public void updateBusiness()
         {
             label10.Text = GlobalVars.businessName;
         }
 
         internal void updateWOC(int channel, string workOrder)
         {
-            updateD(channel,1,workOrder);
+            updateD(channel, 1, workOrder);
             // clear the grid (if it's not on a slave channel...
             if (!d.Rows[channel][9].ToString().Contains("S"))
             {
@@ -452,7 +452,7 @@ namespace NewBTASProto
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                    MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
                     return;
                 }
                 //  now try to access it
@@ -473,7 +473,7 @@ namespace NewBTASProto
                 catch (Exception ex)
                 {
                     myAccessConn.Close();
-                    MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                    MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
                     return;
                 }
 
@@ -501,7 +501,7 @@ namespace NewBTASProto
                 catch (Exception ex)
                 {
                     myAccessConn.Close();
-                    MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                    MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
                     return;
                 }
 
@@ -517,7 +517,7 @@ namespace NewBTASProto
                 }
                 if (batData.Tables[0].Rows[0][2].ToString() != "")
                 {
-                    pci.Rows[channel][3] = int.Parse(batData.Tables[0].Rows[0][2].ToString()); 
+                    pci.Rows[channel][3] = int.Parse(batData.Tables[0].Rows[0][2].ToString());
                 }
                 if (batData.Tables[0].Rows[0][3].ToString() != "")
                 {
@@ -606,7 +606,7 @@ namespace NewBTASProto
                 {
                     this.Invoke((MethodInvoker)delegate
                     {
-                        updateD(i,4, true);
+                        updateD(i, 4, true);
                         dataGridView1.Rows[i].Cells[4].Style.BackColor = Color.Red;
                     });
                 }
@@ -633,7 +633,7 @@ namespace NewBTASProto
                     // move the current channel
                     this.Invoke((MethodInvoker)delegate
                     {
-                        dataGridView1.CurrentCell = dataGridView1.Rows[i+1].Cells[0];
+                        dataGridView1.CurrentCell = dataGridView1.Rows[i + 1].Cells[0];
                         dataGridView1.ClearSelection();
                     });
 
@@ -643,7 +643,7 @@ namespace NewBTASProto
                     {
                         if (dataGridView1.Rows[i].Cells[4].Style.BackColor == Color.Red)
                         {
-                            updateD(i,4, false);
+                            updateD(i, 4, false);
                             dataGridView1.Rows[i].Cells[4].Style.BackColor = Color.Gainsboro;
                         }
                     });
@@ -674,7 +674,7 @@ namespace NewBTASProto
                 {
                     if (dataGridView1.Rows[15].Cells[4].Style.BackColor == Color.Red)
                     {
-                        updateD(15,4, false);
+                        updateD(15, 4, false);
                         dataGridView1.Rows[15].Cells[4].Style.BackColor = Color.Gainsboro;
                     }
                 });
@@ -825,7 +825,7 @@ namespace NewBTASProto
                     });
                 }// end if
 
-                    //reenable the button before exit
+                //reenable the button before exit
                 this.Invoke((MethodInvoker)delegate
                 {
                     // start by disabling the button while we look for stations
@@ -834,7 +834,7 @@ namespace NewBTASProto
                     dataGridView1.Enabled = true;
                 });
 
-            },cFindStations.Token);                     // end thread
+            }, cFindStations.Token);                     // end thread
 
 
 
@@ -855,17 +855,17 @@ namespace NewBTASProto
             // We need to check if there are tests running and ask the user if they are sure they want to quite in the event that there are tests running...
             for (int i = 0; i < 16; i++)
             {
-                if ((bool) d.Rows[i][5] == true)
+                if ((bool)d.Rows[i][5] == true)
                 {
-                    DialogResult dialogResult = MessageBox.Show("There is a test running. If you quit, the test data will no longer be recorded. You will also need to attend to the charger associated with the test, as it will no longer be computer controlled.", "Are you sure you want to quit?", MessageBoxButtons.OKCancel);
+                    DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "There is a test running. If you quit, the test data will no longer be recorded. You will also need to attend to the charger associated with the test, as it will no longer be computer controlled.", "Are you sure you want to quit?", MessageBoxButtons.OKCancel);
                     if (dialogResult == DialogResult.OK)
                     {
                         break;
                     }
-                    else 
+                    else
                     {
                         e.Cancel = true;
-                        return; 
+                        return;
                     }
 
                 }
@@ -873,7 +873,7 @@ namespace NewBTASProto
 
 
             //save the grid for the next time we restart
-            using (StreamWriter writer = new StreamWriter(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\main_grid.xml",false))
+            using (StreamWriter writer = new StreamWriter(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\main_grid.xml", false))
             {
                 for (int i = 0; i < 16; i++)
                 {
@@ -898,7 +898,7 @@ namespace NewBTASProto
             {
                 pci.WriteXml(writer);
             }
-            
+
             //Save the current form width and height
             if (this.WindowState == FormWindowState.Maximized)
             {
@@ -914,7 +914,7 @@ namespace NewBTASProto
             }
 
             Properties.Settings.Default.Save();
-            
+
             // tell those threadpool work items to stop!!!!!
             try
             {
@@ -923,9 +923,9 @@ namespace NewBTASProto
                 sequentialScanT.Cancel();
                 cFindStations.Cancel();
                 // make sure it takes...
-                Thread.Sleep(500);  
+                Thread.Sleep(500);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 if (ex is NullReferenceException)
                 {
@@ -937,7 +937,7 @@ namespace NewBTASProto
                 }
 
             }
-    
+
         }
 
         private void highlightCurrentToolStripMenuItem_Click(object sender, EventArgs e)
@@ -962,16 +962,16 @@ namespace NewBTASProto
             {
                 this.WindowState = FormWindowState.Maximized;
             }
-            else if(Properties.Settings.Default.PositionX > 100 && Properties.Settings.Default.PositionY > 100)
+            else if (Properties.Settings.Default.PositionX > 100 && Properties.Settings.Default.PositionY > 100)
             {
-                this.Location = new Point((int) Properties.Settings.Default.PositionX, (int)Properties.Settings.Default.PositionY);
+                this.Location = new Point((int)Properties.Settings.Default.PositionX, (int)Properties.Settings.Default.PositionY);
             }
-            
+
         }
 
         private void customChrgToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            updateD(dataGridView1.CurrentRow.Index,2,"Custom Chg");
+            updateD(dataGridView1.CurrentRow.Index, 2, "Custom Chg");
             updateD(dataGridView1.CurrentRow.Index, 3, "");
             updateD(dataGridView1.CurrentRow.Index, 6, "");
             updateD(dataGridView1.CurrentRow.Index, 7, "");
@@ -1392,7 +1392,7 @@ namespace NewBTASProto
             //Now onto the normal stuff...
             correctMasterSlave();
             // we always clear the current one..
-            updateD(dataGridView1.CurrentRow.Index,9, "");
+            updateD(dataGridView1.CurrentRow.Index, 9, "");
 
             //make sure we clear the current test
             updateD(dataGridView1.CurrentRow.Index, 3, "");
@@ -1435,7 +1435,7 @@ namespace NewBTASProto
                     {
                         // found it!
                         // make that one the master
-                        updateD(i,9, current);
+                        updateD(i, 9, current);
                         // Now enable adding another...
                         switch (Convert.ToInt32(current))
                         {
@@ -1501,13 +1501,13 @@ namespace NewBTASProto
 
             for (int i = 0; i < 16; i++)
             {
-                if ((string) d.Rows[i][9] == "0" && i != dataGridView1.CurrentRow.Index)
+                if ((string)d.Rows[i][9] == "0" && i != dataGridView1.CurrentRow.Index)
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
-                    updateD(i,9,"0-M");
+                    updateD(i, 9, "0-M");
                     // and the current one the slave
-                    updateD(dataGridView1.CurrentRow.Index,9,"0-S");
+                    updateD(dataGridView1.CurrentRow.Index, 9, "0-S");
                     // also change the grid color
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.LightSteelBlue;
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.LightSteelBlue;
@@ -1529,10 +1529,10 @@ namespace NewBTASProto
                 }
             }
             // otherwise we'll proceed as normal...
-            updateD(dataGridView1.CurrentRow.Index,9,"0");
+            updateD(dataGridView1.CurrentRow.Index, 9, "0");
 
             // also check for a charger if the channel is linked...
-            if ((bool) d.Rows[dataGridView1.CurrentRow.Index][8] == true)
+            if ((bool)d.Rows[dataGridView1.CurrentRow.Index][8] == true)
             {
                 checkForIC(int.Parse((string)d.Rows[dataGridView1.CurrentRow.Index][9]), dataGridView1.CurrentRow.Index);
             }
@@ -1553,9 +1553,9 @@ namespace NewBTASProto
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
-                    updateD(i,9, "1-M");
+                    updateD(i, 9, "1-M");
                     // and the current one the slave
-                    updateD(dataGridView1.CurrentRow.Index,9, "1-S");
+                    updateD(dataGridView1.CurrentRow.Index, 9, "1-S");
                     // also change the grid color
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.LightSteelBlue;
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.LightSteelBlue;
@@ -1577,8 +1577,8 @@ namespace NewBTASProto
                 }
             }
             // otherwise we'll proceed as normal...
-            updateD(dataGridView1.CurrentRow.Index,9, "1");
-            
+            updateD(dataGridView1.CurrentRow.Index, 9, "1");
+
             // also check for a charger if the channel is linked...
             if ((bool)d.Rows[dataGridView1.CurrentRow.Index][8] == true)
             {
@@ -1600,9 +1600,9 @@ namespace NewBTASProto
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
-                    updateD(i,9,"2-M");
+                    updateD(i, 9, "2-M");
                     // and the current one the slave
-                    updateD(dataGridView1.CurrentRow.Index,9, "2-S");
+                    updateD(dataGridView1.CurrentRow.Index, 9, "2-S");
                     // also change the grid color
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.LightSteelBlue;
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.LightSteelBlue;
@@ -1624,7 +1624,7 @@ namespace NewBTASProto
                 }
             }
             // otherwise we'll proceed as normal...
-            updateD(dataGridView1.CurrentRow.Index,9, "2");
+            updateD(dataGridView1.CurrentRow.Index, 9, "2");
 
             // also check for a charger if the channel is linked...
             if ((bool)d.Rows[dataGridView1.CurrentRow.Index][8] == true)
@@ -1647,9 +1647,9 @@ namespace NewBTASProto
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
-                    updateD(i,9, "3-M");
+                    updateD(i, 9, "3-M");
                     // and the current one the slave
-                    updateD(dataGridView1.CurrentRow.Index,9, "3-S");
+                    updateD(dataGridView1.CurrentRow.Index, 9, "3-S");
                     // also change the grid color
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.LightSteelBlue;
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.LightSteelBlue;
@@ -1671,7 +1671,7 @@ namespace NewBTASProto
                 }
             }
             // otherwise we'll proceed as normal...
-            updateD(dataGridView1.CurrentRow.Index,9, "3");
+            updateD(dataGridView1.CurrentRow.Index, 9, "3");
 
             // also check for a charger if the channel is linked...
             if ((bool)d.Rows[dataGridView1.CurrentRow.Index][8] == true)
@@ -1694,9 +1694,9 @@ namespace NewBTASProto
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
-                    updateD(i,9, "4-M");
+                    updateD(i, 9, "4-M");
                     // and the current one the slave
-                    updateD(dataGridView1.CurrentRow.Index,9, "4-S");
+                    updateD(dataGridView1.CurrentRow.Index, 9, "4-S");
                     // also change the grid color
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.LightSteelBlue;
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.LightSteelBlue;
@@ -1714,12 +1714,12 @@ namespace NewBTASProto
                     {
                         dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = dataGridView1.Rows[i].Cells[8].Style.BackColor;
                     }
-                    
+
                     return;
                 }
             }
             // otherwise we'll proceed as normal...
-            updateD(dataGridView1.CurrentRow.Index,9, "4");
+            updateD(dataGridView1.CurrentRow.Index, 9, "4");
 
             // also check for a charger if the channel is linked...
             if ((bool)d.Rows[dataGridView1.CurrentRow.Index][8] == true)
@@ -1742,9 +1742,9 @@ namespace NewBTASProto
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
-                    updateD(i,9, "5-M");
+                    updateD(i, 9, "5-M");
                     // and the current one the slave
-                    updateD(dataGridView1.CurrentRow.Index,9, "5-S");
+                    updateD(dataGridView1.CurrentRow.Index, 9, "5-S");
                     // also change the grid color
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.LightSteelBlue;
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.LightSteelBlue;
@@ -1766,7 +1766,7 @@ namespace NewBTASProto
                 }
             }
             // otherwise we'll proceed as normal...
-            updateD(dataGridView1.CurrentRow.Index,9, "5");
+            updateD(dataGridView1.CurrentRow.Index, 9, "5");
 
             // also check for a charger if the channel is linked...
             if ((bool)d.Rows[dataGridView1.CurrentRow.Index][8] == true)
@@ -1789,9 +1789,9 @@ namespace NewBTASProto
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
-                    updateD(i,9, "6-M");
+                    updateD(i, 9, "6-M");
                     // and the current one the slave
-                    updateD(dataGridView1.CurrentRow.Index,9, "6-S");
+                    updateD(dataGridView1.CurrentRow.Index, 9, "6-S");
                     // also change the grid color
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.LightSteelBlue;
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.LightSteelBlue;
@@ -1813,7 +1813,7 @@ namespace NewBTASProto
                 }
             }
             // otherwise we'll proceed as normal...
-            updateD(dataGridView1.CurrentRow.Index,9, "6");
+            updateD(dataGridView1.CurrentRow.Index, 9, "6");
 
             // also check for a charger if the channel is linked...
             if ((bool)d.Rows[dataGridView1.CurrentRow.Index][8] == true)
@@ -1836,9 +1836,9 @@ namespace NewBTASProto
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
-                    updateD(i,9, "7-M");
+                    updateD(i, 9, "7-M");
                     // and the current one the slave
-                    updateD(dataGridView1.CurrentRow.Index,9, "7-S");
+                    updateD(dataGridView1.CurrentRow.Index, 9, "7-S");
                     // also change the grid color
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.LightSteelBlue;
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.LightSteelBlue;
@@ -1860,7 +1860,7 @@ namespace NewBTASProto
                 }
             }
             // otherwise we'll proceed as normal...
-            updateD(dataGridView1.CurrentRow.Index,9, "7");
+            updateD(dataGridView1.CurrentRow.Index, 9, "7");
 
             // also check for a charger if the channel is linked...
             if ((bool)d.Rows[dataGridView1.CurrentRow.Index][8] == true)
@@ -1883,9 +1883,9 @@ namespace NewBTASProto
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
-                    updateD(i,9, "8-M");
+                    updateD(i, 9, "8-M");
                     // and the current one the slave
-                    updateD(dataGridView1.CurrentRow.Index,9, "8-S");
+                    updateD(dataGridView1.CurrentRow.Index, 9, "8-S");
                     // also change the grid color
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.LightSteelBlue;
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.LightSteelBlue;
@@ -1907,7 +1907,7 @@ namespace NewBTASProto
                 }
             }
             // otherwise we'll proceed as normal...
-            updateD(dataGridView1.CurrentRow.Index,9, "8");
+            updateD(dataGridView1.CurrentRow.Index, 9, "8");
 
             // also check for a charger if the channel is linked...
             if ((bool)d.Rows[dataGridView1.CurrentRow.Index][8] == true)
@@ -1930,9 +1930,9 @@ namespace NewBTASProto
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
-                    updateD(i,9, "9-M");
+                    updateD(i, 9, "9-M");
                     // and the current one the slave
-                    updateD(dataGridView1.CurrentRow.Index,9, "9-S");
+                    updateD(dataGridView1.CurrentRow.Index, 9, "9-S");
                     // also change the grid color
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.LightSteelBlue;
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.LightSteelBlue;
@@ -1954,7 +1954,7 @@ namespace NewBTASProto
                 }
             }
             // otherwise we'll proceed as normal...
-            updateD(dataGridView1.CurrentRow.Index,9, "9");
+            updateD(dataGridView1.CurrentRow.Index, 9, "9");
 
             // also check for a charger if the channel is linked...
             if ((bool)d.Rows[dataGridView1.CurrentRow.Index][8] == true)
@@ -1977,9 +1977,9 @@ namespace NewBTASProto
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
-                    updateD(i,9, "10-M");
+                    updateD(i, 9, "10-M");
                     // and the current one the slave
-                    updateD(dataGridView1.CurrentRow.Index,9, "10-S");
+                    updateD(dataGridView1.CurrentRow.Index, 9, "10-S");
                     // also change the grid color
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.LightSteelBlue;
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.LightSteelBlue;
@@ -2001,7 +2001,7 @@ namespace NewBTASProto
                 }
             }
             // otherwise we'll proceed as normal...
-            updateD(dataGridView1.CurrentRow.Index,9, "10");
+            updateD(dataGridView1.CurrentRow.Index, 9, "10");
 
             // also check for a charger if the channel is linked...
             if ((bool)d.Rows[dataGridView1.CurrentRow.Index][8] == true)
@@ -2024,9 +2024,9 @@ namespace NewBTASProto
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
-                    updateD(i,9, "11-M");
+                    updateD(i, 9, "11-M");
                     // and the current one the slave
-                    updateD(dataGridView1.CurrentRow.Index,9, "11-S");
+                    updateD(dataGridView1.CurrentRow.Index, 9, "11-S");
                     // also change the grid color
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.LightSteelBlue;
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.LightSteelBlue;
@@ -2048,7 +2048,7 @@ namespace NewBTASProto
                 }
             }
             // otherwise we'll proceed as normal...
-            updateD(dataGridView1.CurrentRow.Index,9, "11");
+            updateD(dataGridView1.CurrentRow.Index, 9, "11");
 
             // also check for a charger if the channel is linked...
             if ((bool)d.Rows[dataGridView1.CurrentRow.Index][8] == true)
@@ -2071,9 +2071,9 @@ namespace NewBTASProto
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
-                    updateD(i,9, "12-M");
+                    updateD(i, 9, "12-M");
                     // and the current one the slave
-                    updateD(dataGridView1.CurrentRow.Index,9, "12-S");
+                    updateD(dataGridView1.CurrentRow.Index, 9, "12-S");
                     // also change the grid color
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.LightSteelBlue;
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.LightSteelBlue;
@@ -2095,7 +2095,7 @@ namespace NewBTASProto
                 }
             }
             // otherwise we'll proceed as normal...
-            updateD(dataGridView1.CurrentRow.Index,9, "12");
+            updateD(dataGridView1.CurrentRow.Index, 9, "12");
 
             // also check for a charger if the channel is linked...
             if ((bool)d.Rows[dataGridView1.CurrentRow.Index][8] == true)
@@ -2118,9 +2118,9 @@ namespace NewBTASProto
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
-                    updateD(i,9, "13-M");
+                    updateD(i, 9, "13-M");
                     // and the current one the slave
-                    updateD(dataGridView1.CurrentRow.Index,9, "13-S");
+                    updateD(dataGridView1.CurrentRow.Index, 9, "13-S");
                     // also change the grid color
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.LightSteelBlue;
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.LightSteelBlue;
@@ -2142,7 +2142,7 @@ namespace NewBTASProto
                 }
             }
             // otherwise we'll proceed as normal...
-            updateD(dataGridView1.CurrentRow.Index,9, "13");
+            updateD(dataGridView1.CurrentRow.Index, 9, "13");
 
             // also check for a charger if the channel is linked...
             if ((bool)d.Rows[dataGridView1.CurrentRow.Index][8] == true)
@@ -2165,9 +2165,9 @@ namespace NewBTASProto
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
-                    updateD(i,9, "14-M");
+                    updateD(i, 9, "14-M");
                     // and the current one the slave
-                    updateD(dataGridView1.CurrentRow.Index,9, "14-S");
+                    updateD(dataGridView1.CurrentRow.Index, 9, "14-S");
                     // also change the grid color
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.LightSteelBlue;
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.LightSteelBlue;
@@ -2189,7 +2189,7 @@ namespace NewBTASProto
                 }
             }
             // otherwise we'll proceed as normal...
-            updateD(dataGridView1.CurrentRow.Index,9, "14");
+            updateD(dataGridView1.CurrentRow.Index, 9, "14");
 
             // also check for a charger if the channel is linked...
             if ((bool)d.Rows[dataGridView1.CurrentRow.Index][8] == true)
@@ -2212,9 +2212,9 @@ namespace NewBTASProto
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
-                    updateD(i,9, "15-M");
+                    updateD(i, 9, "15-M");
                     // and the current one the slave
-                    updateD(dataGridView1.CurrentRow.Index,9, "15-S");
+                    updateD(dataGridView1.CurrentRow.Index, 9, "15-S");
                     // also change the grid color
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.LightSteelBlue;
                     dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.LightSteelBlue;
@@ -2237,7 +2237,7 @@ namespace NewBTASProto
                 }
             }
             // otherwise we'll proceed as normal...
-            updateD(dataGridView1.CurrentRow.Index,9, "15");
+            updateD(dataGridView1.CurrentRow.Index, 9, "15");
 
             // also check for a charger if the channel is linked...
             if ((bool)d.Rows[dataGridView1.CurrentRow.Index][8] == true)
@@ -2252,12 +2252,12 @@ namespace NewBTASProto
 
         private void masterToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Master Selected.  Needs to be implemented...");
+            MessageBox.Show(new Form() { TopMost = true }, "Master Selected.  Needs to be implemented...");
         }
 
         private void slaveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Slave Selected.  Needs to be implemented...");
+            MessageBox.Show(new Form() { TopMost = true }, "Slave Selected.  Needs to be implemented...");
         }
 
         private void cMSChargerType_Opening(object sender, CancelEventArgs e)
@@ -2267,7 +2267,7 @@ namespace NewBTASProto
 
         private void cCAToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            updateD(dataGridView1.CurrentRow.Index,10,"CCA");
+            updateD(dataGridView1.CurrentRow.Index, 10, "CCA");
 
             //make sure we clear the current test
             updateD(dataGridView1.CurrentRow.Index, 6, "");
@@ -2403,7 +2403,7 @@ namespace NewBTASProto
             frmVETechs f2 = new frmVETechs();
             f2.Owner = this;
             f2.Show();
-           
+
         }
 
         private void viewEditDeleteBatteriesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2820,7 +2820,7 @@ namespace NewBTASProto
                     if (GlobalVars.stat15 == false) { return; }
                     else { break; }
                 default:
-                    return;        
+                    return;
             }// end station switch!
 
 
@@ -2844,7 +2844,7 @@ namespace NewBTASProto
                             note.To.Add(str.Trim());
                         }
                     }
-                    
+
                     // Add a message subject
                     note.Subject = "BTAS Message";
 
@@ -2878,7 +2878,7 @@ namespace NewBTASProto
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.ToString());
+                    MessageBox.Show(new Form() { TopMost = true }, "Error:  " + ex.ToString());
                 }
 
             });
@@ -2898,20 +2898,20 @@ namespace NewBTASProto
                     //try to copy the database from the appdata folder to the selected folder...
 
                     File.Copy(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB", folder + @"\BTAS16NV_" + System.DateTime.Now.ToString("yyyyMMddHHmmssfff") + @".MDB");
-                    MessageBox.Show("Database was backed up to:  " + folder);
+                    MessageBox.Show(new Form() { TopMost = true }, "Database was backed up to:  " + folder);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Database was not backed up!" + Environment.NewLine + ex.ToString());
+                    MessageBox.Show(new Form() { TopMost = true }, "Database was not backed up!" + Environment.NewLine + ex.ToString());
                 }
 
-            }            
+            }
 
         }// end backup database
 
         private void button5_Click_1(object sender, EventArgs e)
         {
-            
+
         }
 
         private void restoreDatabaseToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2921,14 +2921,14 @@ namespace NewBTASProto
             {
                 if ((bool)d.Rows[i][5] || d.Rows[i][2].ToString() != "")
                 {
-                    MessageBox.Show("Please stop all tests and clear all workorders before restoring the database!");
+                    MessageBox.Show(new Form() { TopMost = true }, "Please stop all tests and clear all workorders before restoring the database!");
                     return;
                 }
             }
 
             string folder = "";
 
-
+            folderBrowserDialog2.SelectedPath = "";
             if (folderBrowserDialog2.ShowDialog() == DialogResult.OK)
             {
 
@@ -2940,17 +2940,18 @@ namespace NewBTASProto
                     //try to copy the database from the appdata folder to the selected folder...
 
                     File.Copy(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB", folder + @"\BTAS16NV_" + System.DateTime.Now.ToString("yyyyMMddHHmmssfff") + @".MDB");
-                    MessageBox.Show("Database was backed up to:  " + folder);
+                    MessageBox.Show(new Form() { TopMost = true }, "Database was backed up to:  " + folder);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Database was not backed up!" + Environment.NewLine + ex.ToString());
+                    MessageBox.Show(new Form() { TopMost = true }, "Database was not backed up!" + Environment.NewLine + ex.ToString());
                     return;
                 }
 
                 string file;
 
                 //here we import the new DB
+                openFileDialog1.FileName = "";
                 if (openFileDialog1.ShowDialog() == DialogResult.OK)
                 {
                     //here we export the old DB
@@ -2960,12 +2961,12 @@ namespace NewBTASProto
                     {
                         //try to copy the database from the appdata folder to the selected folder...
 
-                        File.Copy(file,Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB",true);
-                        MessageBox.Show("Selected database has been restored");
+                        File.Copy(file, Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB", true);
+                        MessageBox.Show(new Form() { TopMost = true }, "Selected database has been restored");
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show("Database was not restored!" + Environment.NewLine + ex.ToString());
+                        MessageBox.Show(new Form() { TopMost = true }, "Database was not restored!" + Environment.NewLine + ex.ToString());
                         return;
                     }
                 }
@@ -3073,7 +3074,7 @@ namespace NewBTASProto
 
         private void rtbIncoming_Click(object sender, EventArgs e)
         {
-            MouseEventArgs inClick = (MouseEventArgs) e;
+            MouseEventArgs inClick = (MouseEventArgs)e;
 
             if (inClick.Button == MouseButtons.Right)
             {
@@ -3097,7 +3098,7 @@ namespace NewBTASProto
                     return;
                 }
             }
-            MasterFillerInterface f2 = new MasterFillerInterface(dataGridView1.CurrentRow.Index,d.Rows[dataGridView1.CurrentRow.Index][1].ToString());
+            MasterFillerInterface f2 = new MasterFillerInterface(dataGridView1.CurrentRow.Index, d.Rows[dataGridView1.CurrentRow.Index][1].ToString());
             f2.Owner = this;
             f2.Show();
         }
@@ -3138,7 +3139,153 @@ namespace NewBTASProto
             worf.Show();
         }
 
+        private void importDataBaseFromPreviousVersionOfProgramToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "Are you sure you want to continue? While the vast majority of the data from the old program will be imported, some items like standard batteries are no longer supported.  You will need to manually move this information over into the new program.", "Click Yes to continue or No to Cancel the Import.", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.No)
+            {
+                return;
+            }
+
+            //first check if there is a test running and return if so
+            for (int i = 0; i < 16; i++)
+            {
+                if ((bool)d.Rows[i][5] || d.Rows[i][2].ToString() != "")
+                {
+                    MessageBox.Show(new Form() { TopMost = true }, "Please stop all tests and clear all workorders before restoring the database!");
+                    return;
+                }
+            }
+            string folder = "";
+
+            folderBrowserDialog2.SelectedPath = "";
+            if (folderBrowserDialog2.ShowDialog() == DialogResult.OK)
+            {
+                //here we export the old DB
+                folder = folderBrowserDialog2.SelectedPath;
+                // Let the user know what happned!
+                try
+                {
+                    //try to copy the database from the appdata folder to the selected folder...
+                    File.Copy(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB", folder + @"\BTAS16NV_" + System.DateTime.Now.ToString("yyyyMMddHHmmssfff") + @".MDB");
+                    MessageBox.Show(new Form() { TopMost = true }, "Original database was backed up to:  " + folder);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(new Form() { TopMost = true }, "Database was not backed up!  Quiting DB import!" + Environment.NewLine + ex.ToString());
+                    return;
+                }
+
+                string file;
+                //here we import the new DB
+                openFileDialog1.FileName = "";
+                if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                {
+                    //here make a temp copy of the old style DB
+                    file = openFileDialog1.FileName;
+                    // Let the user know what happned!
+                    try
+                    {
+                        //try to copy the database from the appdata folder to the selected folder...
+                        File.Copy(file, Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV_temp.MDB", true);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(new Form() { TopMost = true }, "Database was not restored!" + Environment.NewLine + ex.ToString());
+                        return;
+                    }
+
+                    // now we need to clean up the old DB to work with the new program...
+                    try
+                    {
+                        // set up the db Connection
+                        string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV_temp.MDB";
+                        OleDbConnection conn = new OleDbConnection(connectionString);
+
+                        // we'll have execute a number of commands...
+                        string cmdStr;
+                        OleDbCommand cmd;
+
+                        //Delete BatteryApp
+                        cmdStr = "DROP TABLE BatteriesSTD, BatteryApp, BatteryMfr, BatteryTechnology, Cables, CellWaterLevel, Chargers, OrderStatus, SolicitedTest, SystemOptions, Terminals";
+                        cmd = new OleDbCommand(cmdStr, conn);
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                        conn.Close();
+
+                        //Add columns to BatteriesCustom
+                        cmdStr = "ALTER TABLE BatteriesCustom ADD AFLD31 Text(255), AFLD41 Text(255)" +
+                            ", T1Mode Text(255), T1Time1Hr Text(255), T1Time1Min Text(255), T1Curr1 Text(255), T1Volts1 Text(255), T1Time2Hr Text(255), T1Time2Min Text(255), T1Curr2 Text(255), T1Volts2 Text(255), T1Ohms Text(255)" +
+                            ", T2Mode Text(255), T2Time1Hr Text(255), T2Time1Min Text(255), T2Curr1 Text(255), T2Volts1 Text(255), T2Time2Hr Text(255), T2Time2Min Text(255), T2Curr2 Text(255), T2Volts2 Text(255), T2Ohms Text(255)" + 
+                            ", T3Mode Text(255), T3Time1Hr Text(255), T3Time1Min Text(255), T3Curr1 Text(255), T3Volts1 Text(255), T3Time2Hr Text(255), T3Time2Min Text(255), T3Curr2 Text(255), T3Volts2 Text(255), T3Ohms Text(255)" + 
+                            ", T4Mode Text(255), T4Time1Hr Text(255), T4Time1Min Text(255), T4Curr1 Text(255), T4Volts1 Text(255), T4Time2Hr Text(255), T4Time2Min Text(255), T4Curr2 Text(255), T4Volts2 Text(255), T4Ohms Text(255)" + 
+                            ", T5Mode Text(255), T5Time1Hr Text(255), T5Time1Min Text(255), T5Curr1 Text(255), T5Volts1 Text(255), T5Time2Hr Text(255), T5Time2Min Text(255), T5Curr2 Text(255), T5Volts2 Text(255), T5Ohms Text(255)" +
+                            ", T6Mode Text(255), T6Time1Hr Text(255), T6Time1Min Text(255), T6Curr1 Text(255), T6Volts1 Text(255), T6Time2Hr Text(255), T6Time2Min Text(255), T6Curr2 Text(255), T6Volts2 Text(255), T6Ohms Text(255)" +
+                            ", T7Mode Text(255), T7Time1Hr Text(255), T7Time1Min Text(255), T7Curr1 Text(255), T7Volts1 Text(255), T7Time2Hr Text(255), T7Time2Min Text(255), T7Curr2 Text(255), T7Volts2 Text(255), T7Ohms Text(255)" +
+                            ", T8Mode Text(255), T8Time1Hr Text(255), T8Time1Min Text(255), T8Curr1 Text(255), T8Volts1 Text(255), T8Time2Hr Text(255), T8Time2Min Text(255), T8Curr2 Text(255), T8Volts2 Text(255), T8Ohms Text(255)" +
+                            ", T9Mode Text(255), T9Time1Hr Text(255), T9Time1Min Text(255), T9Curr1 Text(255), T9Volts1 Text(255), T9Time2Hr Text(255), T9Time2Min Text(255), T9Curr2 Text(255), T9Volts2 Text(255), T9Ohms Text(255)" +
+                            ", T10Mode Text(255), T10Time1Hr Text(255), T10Time1Min Text(255), T10Curr1 Text(255), T10Volts1 Text(255), T10Time2Hr Text(255), T10Time2Min Text(255), T10Curr2 Text(255), T10Volts2 Text(255), T10Ohms Text(255)" +
+                            ", T11Mode Text(255), T11Time1Hr Text(255), T11Time1Min Text(255), T11Curr1 Text(255), T11Volts1 Text(255), T11Time2Hr Text(255), T11Time2Min Text(255), T11Curr2 Text(255), T11Volts2 Text(255), T11Ohms Text(255)" +
+                            ", T12Mode Text(255), T12Time1Hr Text(255), T12Time1Min Text(255), T12Curr1 Text(255), T12Volts1 Text(255), T12Time2Hr Text(255), T12Time2Min Text(255), T12Curr2 Text(255), T12Volts2 Text(255), T12Ohms Text(255)";
+                        cmd = new OleDbCommand(cmdStr, conn);
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                        conn.Close();
+
+                        //Add AVE to WaterLevel
+                        cmdStr = "ALTER TABLE WaterLevel ADD AVE Number";
+                        cmd = new OleDbCommand(cmdStr, conn);
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                        conn.Close();
+
+                        //Drop COMM3 column from Comconfig
+                        cmdStr = "ALTER TABLE Comconfig DROP COLUMN Comm3";
+                        cmd = new OleDbCommand(cmdStr, conn);
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                        conn.Close();
+
+                        // Change hidden to closed in the work order table
+                        cmdStr = "UPDATE WorkOrders SET OrderStatus='Closed' WHERE OrderStatus='Hidden'";
+                        cmd = new OleDbCommand(cmdStr, conn);
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                        conn.Close();
+
+                        // Also change Assigned to Open in the work order table
+                        cmdStr = "UPDATE WorkOrders SET OrderStatus='Open' WHERE OrderStatus='Assigned'";
+                        cmd = new OleDbCommand(cmdStr, conn);
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                        conn.Close();
+
+                        
+
+                        //Set any record that is Archived in the old prog to closed in the new...
+
+
+                        //Add WLID and WorkOrderNumber into WaterLevel
+                        cmdStr = "ALTER TABLE WaterLevel ADD WLID AUTOINCREMENT, WorkOrderNumber Text(255)";
+                        cmd = new OleDbCommand(cmdStr, conn);
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                        conn.Close();
+
+                        //Now replace the old DB with the imported one...
+                        File.Copy(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV_temp.MDB", Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB", true);
+
+                        MessageBox.Show(new Form() { TopMost = true }, "DataBase successfully imported.");
+                    }// end try
+                    catch(Exception ex)
+                    {
+                        // that didn't work out!
+                        MessageBox.Show(new Form() { TopMost = true }, "DataBase wasn't imported:  " + ex.ToString());
+                        return;
+                    }
+                }// end if
+            }// end if
+        }
 
     }// end mainform class section...
-
 }

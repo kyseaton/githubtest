@@ -45,7 +45,7 @@ namespace NewBTASProto
             catch (Exception ex)
             {
 
-                MessageBox.Show("Error: Failed to set up the database connection. \n" + ex.Message);
+                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to set up the database connection. \n" + ex.Message);
                 return;
 
             }
@@ -83,7 +83,7 @@ namespace NewBTASProto
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show("Error: Failed to set up the database connection. \n" + ex.Message);
+                        MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to set up the database connection. \n" + ex.Message);
                         return;
                     }
 
@@ -93,7 +93,7 @@ namespace NewBTASProto
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show("Error: Failed to set up the database connection. \n" + ex.Message);
+                        MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to set up the database connection. \n" + ex.Message);
                         return;
                     }
                 }
@@ -114,7 +114,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
                 myAccessConn.Close();
                 return;
             }
@@ -135,7 +135,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                //MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                //MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
                 myAccessConn.Close();
                 return;
             }
@@ -177,7 +177,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                //MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                //MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
                 myAccessConn.Close();
                 return;
             }
@@ -210,7 +210,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                //MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                //MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
                 myAccessConn.Close();
                 return;
             }
@@ -358,7 +358,7 @@ namespace NewBTASProto
                 // if the number is bad, we'll return
                 if(licGood == false)
                 {
-                    MessageBox.Show("Cannot continue without a good licence key.  Contact JFM if you need a valid licence key.");
+                    MessageBox.Show(new Form() { TopMost = true }, "Cannot continue without a good licence key.  Contact JFM if you need a valid licence key.");
                     this.Dispose();
                 }
                 //otherwise let's write the number to file and continue
@@ -425,53 +425,56 @@ namespace NewBTASProto
 
             // USE this function to update the DB!
 
+            //////////////////////////////////////// Look to see if we have the AVE column in the WaterLevel table//////////
 
-            //// check to see if we have a "BatteryProfiles" table and create it if we don't
-            //string strAccessConn;
-            //string strAccessSelect;
-            //OleDbConnection myAccessConn;
+            // check to see if we have a "BatteryProfiles" table and create it if we don't
+            string strAccessConn;
+            string strAccessSelect;
+            OleDbConnection myAccessConn;
 
-            //// create the connection
-            //try
-            //{
-            //    strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
-            //    myAccessConn = new OleDbConnection(strAccessConn);
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
-            //    return;
-            //}
+            // create the connection
+            try
+            {
+                strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                myAccessConn = new OleDbConnection(strAccessConn);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
+                return;
+            }
 
-            ////  open the db and try to get something out of the "BatteryProfiles" table
-            //try
-            //{
-            //    strAccessSelect = @"SELECT FIRST FROM BatteryProfiles;";
-            //    DataSet test = new DataSet();
-            //    OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
-            //    OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+            //  open the db and try to get something out of the "BatteryProfiles" table
+            try
+            {
+                strAccessSelect = @"SELECT AVE FROM WaterLevel";
+                DataSet test = new DataSet();
+                OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
 
-            //    myAccessConn.Open();
-            //    myDataAdapter.Fill(test, "test");
+                myAccessConn.Open();
+                myDataAdapter.Fill(test, "test");
+                myAccessConn.Close();
 
-            //}
-            //catch (Exception ex)
-            //{
-            //    myAccessConn.Close();
-            //    MessageBox.Show("You do not have a battery Profiles Table. Please convert to the new database!");
-            //    //if (ex is OleDbException)
-            //    //{
-            //    //    // we didn't find the table, so we need to create it!
-            //    //    // we need to insert
-            //    //    string strUpdateCMD = "CREATE TABLE BatteryProfiles (RecordID AutoNumber,Model Text,NCELLS Integer,MaxCellVoltage Single," +
-            //    //        "BMFR Text,BPN Text,BTECH Text,Notes Memo," +
-            //    //    ");";
-            //    //    OleDbCommand myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
-            //    //    myAccessCommand.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
 
-            //    //}
-            //    //else {throw ex;}
-            //}
+                if (ex is OleDbException)
+                {
+                    // we didn't find the table, so we need to create it!
+                    // we need to insert
+                    string strUpdateCMD = "ALTER TABLE WaterLevel ADD AVE Number";
+                    OleDbCommand myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
+                    myAccessCommand.ExecuteNonQuery();
+                    myAccessConn.Close();
+
+                }
+                else {
+                    myAccessConn.Close();
+                    MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
+                }
+            }
             
         }
 

@@ -74,7 +74,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
                 return;
             }
             //  now try to access it
@@ -93,7 +93,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
                 return;
             }
             finally
@@ -152,7 +152,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
                 return;
             }
             //  now try to access it
@@ -170,7 +170,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
                 return;
             }
             finally
@@ -205,7 +205,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
                 return;
             }
             //  now try to access it
@@ -223,7 +223,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
                 return;
             }
             finally
@@ -259,7 +259,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
                 return;
             }
             //  now try to access it
@@ -278,7 +278,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
                 return;
             }
             finally
@@ -373,7 +373,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
                 return;
             }
             //  now try to access it
@@ -392,7 +392,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
                 return;
             }
             finally
@@ -429,7 +429,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
                 return;
             }
             //  now try to access it
@@ -448,7 +448,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
                 return;
             }
             finally
@@ -559,7 +559,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
                 return;
             }
             //  now try to access it
@@ -580,7 +580,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
                 return;
             }
 
@@ -790,20 +790,20 @@ namespace NewBTASProto
 
             if (!comboBox1.Items.Contains(comboBox1.Text))
             {
-                MessageBox.Show("The selected battery serial number is not in the database.");
+                MessageBox.Show(new Form() { TopMost = true }, "The selected battery serial number is not in the database.");
                 Inhibit = true;
                 return;
             }
             else if (comboBox1.Text == "")
             {
-                MessageBox.Show("Please select a battery serial number.");
+                MessageBox.Show(new Form() { TopMost = true }, "Please select a battery serial number.");
                 Inhibit = true;
                 return;
             }
 
             else if (textBox1.Text.Contains(" "))
             {
-                MessageBox.Show("Work order names cannot have spaces in them.  Please correct and press save again.");
+                MessageBox.Show(new Form() { TopMost = true }, "Work order names cannot have spaces in them.  Please correct and press save again.");
                 Inhibit = true;
                 return;
             }
@@ -830,7 +830,7 @@ namespace NewBTASProto
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                    MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
                     Inhibit = true;
                     return;
                 }
@@ -850,7 +850,7 @@ namespace NewBTASProto
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                    MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
                     Inhibit = true;
                     return;
                 }
@@ -864,7 +864,7 @@ namespace NewBTASProto
                 if (foundRows.Length != 0)
                 {
                     Inhibit = true;
-                    MessageBox.Show("That battery is already assigned to an Open order");
+                    MessageBox.Show(new Form() { TopMost = true }, "That battery is already assigned to an Open order");
                     return;
                 }
             }
@@ -906,34 +906,33 @@ namespace NewBTASProto
                         "' WHERE WorkOrderID=" + current["WorkOrderID"].ToString();
                     OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
 
+
                     lock (Main_Form.dataBaseLock)
                     {
-                        lock (Main_Form.dataBaseLock)
-                        {
-                            conn.Open();
-                            cmd.ExecuteNonQuery();
-                            conn.Close();
-                        }
-
-                        // Also update the workorder number in the other tables!
-                        cmdStr = "UPDATE Tests SET WorkOrderNumber='" + textBox1.Text.Replace("'", "''") + "' WHERE WorkOrderNumber='" + current["WorkOrderNumber"].ToString() + "'";
-                        cmd = new OleDbCommand(cmdStr, conn);
-                        lock (Main_Form.dataBaseLock)
-                        {
-                            conn.Open();
-                            cmd.ExecuteNonQuery();
-                            conn.Close();
-                        }
-
-                        cmdStr = "UPDATE ScanData SET BWO='" + textBox1.Text.Replace("'", "''") + "' WHERE BWO='" + current["WorkOrderNumber"].ToString() + "'";
-                        cmd = new OleDbCommand(cmdStr, conn);
-                        lock (Main_Form.dataBaseLock)
-                        {
-                            conn.Open();
-                            cmd.ExecuteNonQuery();
-                            conn.Close();
-                        }
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                        conn.Close();
                     }
+
+                    // Also update the workorder number in the other tables!
+                    cmdStr = "UPDATE Tests SET WorkOrderNumber='" + textBox1.Text.Replace("'", "''") + "' WHERE WorkOrderNumber='" + current["WorkOrderNumber"].ToString() + "'";
+                    cmd = new OleDbCommand(cmdStr, conn);
+                    lock (Main_Form.dataBaseLock)
+                    {
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                        conn.Close();
+                    }
+
+                    cmdStr = "UPDATE ScanData SET BWO='" + textBox1.Text.Replace("'", "''") + "' WHERE BWO='" + current["WorkOrderNumber"].ToString() + "'";
+                    cmd = new OleDbCommand(cmdStr, conn);
+                    lock (Main_Form.dataBaseLock)
+                    {
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                        conn.Close();
+                    }
+
 
                     //now update the combobox..
                     toolStripCBWorkOrders.ComboBox.Text = textBox1.Text.Replace("'", "''");
@@ -1031,7 +1030,7 @@ namespace NewBTASProto
         {
             try
             {
-                if (MessageBox.Show("Are you sure you want to remove this work order?", "Delete Record", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (MessageBox.Show(new Form() { TopMost = true }, "Are you sure you want to remove this work order?", "Delete Record", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     // set up the db Connection
                     string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
@@ -1080,7 +1079,7 @@ namespace NewBTASProto
                     }
                     else
                     {
-                        MessageBox.Show("That record was not in the DB. You must save it in order to delete it.");
+                        MessageBox.Show(new Form() { TopMost = true }, "That record was not in the DB. You must save it in order to delete it.");
                     }
                     UpdateView();
 
@@ -1088,7 +1087,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Deletion Error" + ex.ToString());
+                MessageBox.Show(new Form() { TopMost = true }, "Deletion Error" + ex.ToString());
             }
 
         }
@@ -1101,10 +1100,10 @@ namespace NewBTASProto
                 //first see if there is anything to delete
                 if (testList.Tables[0].Rows.Count < 1)
                 {
-                    MessageBox.Show("No tests to delete!");
+                    MessageBox.Show(new Form() { TopMost = true }, "No tests to delete!");
                 }
 
-                else if (MessageBox.Show("Are you sure you want to remove this test?", "Delete Record", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                else if (MessageBox.Show(new Form() { TopMost = true }, "Are you sure you want to remove this test?", "Delete Record", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     // set up the db Connection
                     string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
@@ -1136,7 +1135,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Deletion Error" + ex.ToString());
+                MessageBox.Show(new Form() { TopMost = true }, "Deletion Error" + ex.ToString());
             }
 
         }

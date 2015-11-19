@@ -211,7 +211,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
                 return;
             }
             //  now try to access it
@@ -229,7 +229,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
                 return;
             }
             finally
@@ -692,7 +692,7 @@ namespace NewBTASProto
         {
             try
             {
-                if (MessageBox.Show("Are you sure you want to remove this battery from the data base?", "Delete Record", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (MessageBox.Show(new Form() { TopMost = true }, "Are you sure you want to remove this battery from the data base?", "Delete Record", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     // set up the db Connection
                     string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
@@ -723,13 +723,13 @@ namespace NewBTASProto
                     }
                     else
                     {
-                        MessageBox.Show("That record was not in the DB. You must save it in order to delete it.");
+                        MessageBox.Show(new Form() { TopMost = true }, "That record was not in the DB. You must save it in order to delete it.");
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Deletion Error" + ex.ToString());
+                MessageBox.Show(new Form() { TopMost = true }, "Deletion Error" + ex.ToString());
             }
         }
 
@@ -1425,7 +1425,7 @@ namespace NewBTASProto
                         cmd.ExecuteNonQuery();
                         conn.Close();
                     }
-                    MessageBox.Show("Battery model " + textBox2.Text + "'s entry has been created.");
+                    MessageBox.Show(new Form() { TopMost = true }, "Battery model " + textBox2.Text + "'s entry has been created.");
 
                     // update the dataTable with the new record ID also..
                     current[0] = max + 1;

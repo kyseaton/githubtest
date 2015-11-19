@@ -168,7 +168,7 @@ namespace NewBTASProto
                                             else if (d.Rows[currentRow][10].ToString().Contains("mini") && !(d.Rows[currentRow][2].ToString().Contains("Cap") || d.Rows[currentRow][2].ToString().Contains("Discharge")))
                                             {
                                                 // for the mini case
-                                                tempText += "Current:  " + (testData.currentTwo / 5).ToString("00.00") + Environment.NewLine;
+                                                tempText += "Current:  " + testData.currentTwo.ToString("00.00") + Environment.NewLine;
                                             }
                                             else
                                             {
@@ -800,243 +800,37 @@ namespace NewBTASProto
 
         private void updateChart(CScanDataStore testData)
         {
-            //Replace based on values selected in radio1("Battery") or radio2 ("Cells")
-            //and combo2 (Battery voltages) or combo3 (Cell voltages)
-            //if that row is selected, update the chart portion
-            int station = dataGridView1.CurrentRow.Index;
-
-            int Cells;
-
-            if ((int)pci.Rows[station][3] == -1)
+            try
             {
-                Cells = GlobalVars.CScanData[station].cellsToDisplay;
-            }
-            else
-            {
-                Cells = (int)pci.Rows[station][3];
-            }
+                //Replace based on values selected in radio1("Battery") or radio2 ("Cells")
+                //and combo2 (Battery voltages) or combo3 (Cell voltages)
+                //if that row is selected, update the chart portion
+                int station = dataGridView1.CurrentRow.Index;
 
-            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            if (station != testData.terminalID || lockUpdate)
-            {
-                // we got bad input data due to multithreading...
-                // or we are updating the combos..
-                return;
-            }
-            //special 4 batt case
-            else if ((comboBox2.Enabled == false || (radioButton2.Checked == true && comboBox3.Text == "Current Voltages")) && testData.CCID == 10)
-            {
-                //In this case we have a 4 Batt cable, but do not have a current test running.  We will display V1, V2, V3 and V4 on the main graph
-                chart1.Series.Clear();
+                int Cells;
 
-                var series1 = new System.Windows.Forms.DataVisualization.Charting.Series
+                if ((int)pci.Rows[station][3] == -1)
                 {
-                    Name = "Series1",
-                    Color = System.Drawing.Color.Green,
-                    IsVisibleInLegend = false,
-                    IsXValueIndexed = true,
-                    ChartType = SeriesChartType.Column,
-                    BorderColor = System.Drawing.Color.DarkGray,
-                    BorderWidth = 1
-                };
-                this.chart1.Series.Add(series1);
-                chart1.ChartAreas[0].AxisX.Title = "Battery";
-                chart1.ChartAreas[0].AxisY.Title = "Voltage";
-
-                series1.Points.AddXY(1, testData.VB1);
-                series1.Points[0].Color = pointColorMain(station, testData.VB1, true);
-                series1.Points[0].Label = "VB1";
-                series1.Points.AddXY(2, testData.VB2);
-                series1.Points[1].Color = pointColorMain(station,testData.VB2, true);
-                series1.Points[1].Label = "VB2";
-                series1.Points.AddXY(3, testData.VB3);
-                series1.Points[2].Color = pointColorMain(station, testData.VB3, true);
-                series1.Points[2].Label = "VB3";
-                series1.Points.AddXY(4, testData.VB4);
-                series1.Points[3].Color = pointColorMain(station, testData.VB4, true);
-                series1.Points[3].Label = "VB4";
-
-
-                chart1.Invalidate();
-                chart1.ChartAreas[0].RecalculateAxesScale();
-
-            }
-            //Normal Cell Voltage Only Case:
-            else if (comboBox2.Enabled == false || (radioButton2.Checked == true && comboBox3.Text == "Cell Voltages"))
-            {
-                chart1.Series.Clear();
-                
-                var series1 = new System.Windows.Forms.DataVisualization.Charting.Series
-                {
-                    Name = "Series1",
-                    Color = System.Drawing.Color.Green,
-                    IsVisibleInLegend = false,
-                    IsXValueIndexed = true,
-                    ChartType = SeriesChartType.Column,
-                    BorderColor = System.Drawing.Color.DarkGray,
-                    BorderWidth = 1
-                };
-                this.chart1.Series.Add(series1);
-                chart1.ChartAreas[0].AxisX.Title = "Cells";
-                chart1.ChartAreas[0].AxisY.Title = "Voltage";
-
-                int type = 4;
-
-                if ((string)d.Rows[station][2] == "As Received" ||
-                    (string)d.Rows[station][2] == "Capacity-1" ||
-                    (string)d.Rows[station][2] == "Test" ||
-                    (string)d.Rows[station][2] == "Custom Cap")
-                {
-                    type = 2;
-                }
-                else if ((string)d.Rows[station][2] == "Discharge")
-                {
-                    type = 0;
-                }
-
-                //special cable cases first...
-                if (GlobalVars.CScanData[station].CCID == 3)
-                {
-                    // this is the 2X 11 cable
-                    for (int i = 0; i < Cells; i++)
-                    {
-                        if (GlobalVars.Pos2Neg == false)
-                        {
-                            series1.Points.AddXY(i % 11  + 1, testData.orderedCells[i]);
-                            // color test
-                            series1.Points[i].Color = pointColorMain(station, testData.orderedCells[i], true);
-                            if (i == 10)
-                            {
-                                // add a blank point
-                                series1.Points.AddXY(" ",0);
-                            }
-                        }
-                        else
-                        {
-                            series1.Points.AddXY(i % 11 + 1, testData.orderedCells[Cells - i - 1]);
-                            // color test
-                            series1.Points[i].Color = pointColorMain(station, testData.orderedCells[Cells - i - 1], true);
-                            if (i == 6 || i == 13)
-                            {
-                                // add a blank point
-                                series1.Points.AddXY(" ", 0);
-                            }
-                        }
-                    }
-                }
-                else if (GlobalVars.CScanData[station].CCID == 4)
-                {
-                    // this is the 3X7 cable
-                    for (int i = 0; i < Cells; i++)
-                    {
-                        if (GlobalVars.Pos2Neg == false)
-                        {
-                            series1.Points.AddXY(i % 7 + 1, testData.orderedCells[i]);
-                            // color test
-                            series1.Points[i].Color = pointColorMain(station, testData.orderedCells[i], true);
-                            if (i == 10)
-                            {
-                                // add a blank point
-                                series1.Points.AddXY(" ", 0);
-                            }
-                        }
-                        else
-                        {
-                            series1.Points.AddXY(i % 7 + 1, testData.orderedCells[Cells - i - 1]);
-                            // color test
-                            series1.Points[i].Color = pointColorMain(station, testData.orderedCells[Cells - i - 1], true);
-                            if (i == 6 || i == 13)
-                            {
-                                // add a blank point
-                                series1.Points.AddXY(" ", 0);
-                            }
-                        }
-                    }
+                    Cells = GlobalVars.CScanData[station].cellsToDisplay;
                 }
                 else
                 {
-                    //  all other cases...
-                    for (int i = 0; i < Cells; i++)
-                    {
-                        if (GlobalVars.Pos2Neg == false)
-                        {
-                            series1.Points.AddXY(i + 1, testData.orderedCells[i]);
-                            // color test
-                            series1.Points[i].Color = pointColorMain(station, testData.orderedCells[i], true);
-                        }
-                        else
-                        {
-                            series1.Points.AddXY(i + 1, testData.orderedCells[Cells - i - 1]);
-                            // color test
-                            series1.Points[i].Color = pointColorMain(station, testData.orderedCells[Cells - i - 1], true);
-                        }
-                    }
+                    Cells = (int)pci.Rows[station][3];
                 }
-                chart1.Invalidate();
-                chart1.ChartAreas[0].RecalculateAxesScale();
-            }
 
-            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            else if (radioButton1.Checked == true)// we have to create a more complicated plot based on the values in GraphMain set...
-            {
-                //pulled this code from the Graphics_Form
-                /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                //Battery Section!!!!
-                try
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                if (station != testData.terminalID || lockUpdate)
                 {
-                    int q;
-                    // only do something if the combo box has a test save!
-                    if (comboBox2.SelectedIndex < 0) { return; }
-                    // Here we will look at the Value selected and then plot graph1Set
+                    // we got bad input data due to multithreading...
+                    // or we are updating the combos..
+                    return;
+                }
+                //special 4 batt case
+                else if ((comboBox2.Enabled == false || (radioButton2.Checked == true && comboBox3.Text == "Current Voltages")) && testData.CCID == 10)
+                {
+                    //In this case we have a 4 Batt cable, but do not have a current test running.  We will display V1, V2, V3 and V4 on the main graph
+                    chart1.Series.Clear();
 
-                    //find out which graph to plot from the selected text
-                    switch (comboBox2.Text)
-                    {
-                        case "Voltage":
-                        case "Voltage 1":
-                            q = 10;
-                            chart1.ChartAreas[0].AxisY.Title = "Voltage";
-                            break;
-                        case "Voltage 2":
-                            q = 11;
-                            chart1.ChartAreas[0].AxisY.Title = "Voltage";
-                            break;
-                        case "Voltage 3":
-                            q = 12;
-                            chart1.ChartAreas[0].AxisY.Title = "Voltage";
-                            break;
-                        case "Voltage 4":
-                            q = 13;
-                            chart1.ChartAreas[0].AxisY.Title = "Voltage";
-                            break;
-                        case "Current":
-                            q = 8;
-                            chart1.ChartAreas[0].AxisY.Title = "Current";
-                            break;
-                        case "Temperature 1":
-                            q = 38;
-                            chart1.ChartAreas[0].AxisY.Title = "Temperature";
-                            break;
-                        case "Temperature 2":
-                            q = 39;
-                            chart1.ChartAreas[0].AxisY.Title = "Temperature";
-                            break;
-                        case "Temperature 3":
-                            q = 40;
-                            chart1.ChartAreas[0].AxisY.Title = "Temperature";
-                            break;
-                        case "Temperature 4":
-                            q = 41;
-                            chart1.ChartAreas[0].AxisY.Title = "Temperature";
-                            break;
-                        default:
-                            q = 7;
-                            chart1.ChartAreas[0].AxisY.Title = "Time";
-                            break;
-                    }
-
-                    //we need to graph the col 7 as time and q as the value
-                    this.chart1.Series.Clear();
                     var series1 = new System.Windows.Forms.DataVisualization.Charting.Series
                     {
                         Name = "Series1",
@@ -1048,204 +842,32 @@ namespace NewBTASProto
                         BorderWidth = 1
                     };
                     this.chart1.Series.Add(series1);
-                    chart1.ChartAreas[0].AxisX.Title = "Time";
+                    chart1.ChartAreas[0].AxisX.Title = "Battery";
+                    chart1.ChartAreas[0].AxisY.Title = "Voltage";
 
-                    for (int i = 0; i < graphMainSet.Tables[0].Rows.Count; i++)
-                    {
-                        series1.Points.AddXY(Math.Round(double.Parse(graphMainSet.Tables[0].Rows[i][7].ToString()) * 1440), graphMainSet.Tables[0].Rows[i][q]);
-                        // color test
-                        if (q == 8 || q == 7)
-                        {
-                            //current
-                            series1.Points[i].Color = Color.Blue;
-                        }
-                        else if (q > 37 && q < 42)
-                        {
-                            //temp
-                            series1.Points[i].Color = Color.LightSeaGreen;
-                        }
-                        else
-                        {
-                            series1.Points[i].Color = pointColorMain(station, double.Parse(graphMainSet.Tables[0].Rows[i][q].ToString()), false);
-                        }
-                    }
+                    series1.Points.AddXY(1, testData.VB1);
+                    series1.Points[0].Color = pointColorMain(station, testData.VB1, true);
+                    series1.Points[0].Label = "VB1";
+                    series1.Points.AddXY(2, testData.VB2);
+                    series1.Points[1].Color = pointColorMain(station, testData.VB2, true);
+                    series1.Points[1].Label = "VB2";
+                    series1.Points.AddXY(3, testData.VB3);
+                    series1.Points[2].Color = pointColorMain(station, testData.VB3, true);
+                    series1.Points[2].Label = "VB3";
+                    series1.Points.AddXY(4, testData.VB4);
+                    series1.Points[3].Color = pointColorMain(station, testData.VB4, true);
+                    series1.Points[3].Label = "VB4";
 
-                                            // pad with zero Vals to help with the look of the plot...
-                        // first get the interval and total points
-                        int interval = 1;
-                        int points = 61;
-
-                        switch (d.Rows[station][2].ToString())
-                        {
-                            case "As Received":
-                                interval = 1 / 30;
-                                points = 3;
-                                break;
-                            case "Full Charge-6":
-                                interval = 5;
-                                points = 73;
-                                break;
-                            case "Full Charge-4":
-                                interval = 4;
-                                points = 61;
-                                break;
-                            case "Top Charge-4":
-                                interval = 4;
-                                points = 61;
-                                break;
-                            case "Top Charge-2":
-                                interval = 3;
-                                points = 41;
-                                break;
-                            case "Top Charge-1":
-                                interval = 1;
-                                points = 61;
-                                break;
-                            case "Constant Voltage":
-                                interval = 5;
-                                points = 73;
-                                break;
-                            case "Capacity-1":
-                                interval = 1;
-                                points = 61;
-                                break;
-                            case "Discharge":
-                                interval = 1;
-                                points = 61;
-                                break;
-                            case "Slow Charge-14":
-                                interval = 12;
-                                points = 73;
-                                break;
-                            case "SlowCharge-16":
-                                interval = 16;
-                                points = 61;
-                                break;
-                            default:
-                                //custom cap and charge get the default...
-                                //Custom Chg
-                                //Custom Cap
-                                break;
-                        }
-
-
-                        if (graphMainSet.Tables[0].Rows.Count <= points-1)
-                        {
-                            for (int i = graphMainSet.Tables[0].Rows.Count; i <= points-1; i++)
-                            {
-                                series1.Points.AddXY(i*interval, 0);
-                            }
-                        }
-            
 
                     chart1.Invalidate();
                     chart1.ChartAreas[0].RecalculateAxesScale();
+
                 }
-                catch (Exception ex)
+                //Normal Cell Voltage Only Case:
+                else if (comboBox2.Enabled == false || (radioButton2.Checked == true && comboBox3.Text == "Cell Voltages"))
                 {
-                    MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
-                }
-            }// end else  if
+                    chart1.Series.Clear();
 
-                //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            // Cells Section!!!!
-            else
-            {
-                try
-                {
-                    chart1.ChartAreas[0].AxisY.Title = "Voltage";
-                    chart1.ChartAreas[0].AxisX.Title = "Time";
-                    int q;
-                    // only do something if the radio button is selected
-                    if (radioButton2.Checked == false || comboBox3.SelectedIndex < 0) { return; }
-                    // Here we will look at the Value selected and then plot graph1Set
-
-                    //find out which graph to plot from the selected text
-                    switch (comboBox3.Text)
-                    {
-                        case "Ending Voltages":
-                            q = 999;
-                            break;
-                        case "Cell 1":
-                            q = 14;
-                            break;
-                        case "Cell 2":
-                            q = 15;
-                            break;
-                        case "Cell 3":
-                            q = 16;
-                            break;
-                        case "Cell 4":
-                            q = 17;
-                            break;
-                        case "Cell 5":
-                            q = 18;
-                            break;
-                        case "Cell 6":
-                            q = 19;
-                            break;
-                        case "Cell 7":
-                            q = 20;
-                            break;
-                        case "Cell 8":
-                            q = 21;
-                            break;
-                        case "Cell 9":
-                            q = 22;
-                            break;
-                        case "Cell 10":
-                            q = 23;
-                            break;
-                        case "Cell 11":
-                            q = 24;
-                            break;
-                        case "Cell 12":
-                            q = 25;
-                            break;
-                        case "Cell 13":
-                            q = 26;
-                            break;
-                        case "Cell 14":
-                            q = 27;
-                            break;
-                        case "Cell 15":
-                            q = 28;
-                            break;
-                        case "Cell 16":
-                            q = 29;
-                            break;
-                        case "Cell 17":
-                            q = 30;
-                            break;
-                        case "Cell 18":
-                            q = 31;
-                            break;
-                        case "Cell 19":
-                            q = 32;
-                            break;
-                        case "Cell 20":
-                            q = 33;
-                            break;
-                        case "Cell 21":
-                            q = 34;
-                            break;
-                        case "Cell 22":
-                            q = 35;
-                            break;
-                        case "Cell 23":
-                            q = 36;
-                            break;
-                        case "Cell 24":
-                            q = 37;
-                            break;
-                        default:
-                            q = 999;
-                            chart1.ChartAreas[0].AxisX.Title = "Cells";
-                            break;
-                    }
-
-                    //we need to graph the col 7 as time and q as the value
-                    this.chart1.Series.Clear();
                     var series1 = new System.Windows.Forms.DataVisualization.Charting.Series
                     {
                         Name = "Series1",
@@ -1257,25 +879,199 @@ namespace NewBTASProto
                         BorderWidth = 1
                     };
                     this.chart1.Series.Add(series1);
-            
+                    chart1.ChartAreas[0].AxisX.Title = "Cells";
+                    chart1.ChartAreas[0].AxisY.Title = "Voltage";
 
-                    if (q == 999)
+                    int type = 4;
+
+                    if ((string)d.Rows[station][2] == "As Received" ||
+                        (string)d.Rows[station][2] == "Capacity-1" ||
+                        (string)d.Rows[station][2] == "Test" ||
+                        (string)d.Rows[station][2] == "Custom Cap")
                     {
+                        type = 2;
+                    }
+                    else if ((string)d.Rows[station][2] == "Discharge")
+                    {
+                        type = 0;
+                    }
+
+                    //special cable cases first...
+                    if (GlobalVars.CScanData[station].CCID == 3)
+                    {
+                        // this is the 2X 11 cable
                         for (int i = 0; i < Cells; i++)
                         {
-                            series1.Points.AddXY(i + 1, graphMainSet.Tables[0].Rows[graphMainSet.Tables[0].Rows.Count - 1][i + 14]);
-                            // color test
-                            series1.Points[i].Color = pointColorMain(station, double.Parse(graphMainSet.Tables[0].Rows[graphMainSet.Tables[0].Rows.Count - 1][i + 14].ToString()), true);
+                            if (GlobalVars.Pos2Neg == false)
+                            {
+                                series1.Points.AddXY(i % 11 + 1, testData.orderedCells[i]);
+                                // color test
+                                series1.Points[i].Color = pointColorMain(station, testData.orderedCells[i], true);
+                                if (i == 10)
+                                {
+                                    // add a blank point
+                                    series1.Points.AddXY(" ", 0);
+                                }
+                            }
+                            else
+                            {
+                                series1.Points.AddXY(i % 11 + 1, testData.orderedCells[Cells - i - 1]);
+                                // color test
+                                series1.Points[i].Color = pointColorMain(station, testData.orderedCells[Cells - i - 1], true);
+                                if (i == 6 || i == 13)
+                                {
+                                    // add a blank point
+                                    series1.Points.AddXY(" ", 0);
+                                }
+                            }
+                        }
+                    }
+                    else if (GlobalVars.CScanData[station].CCID == 4)
+                    {
+                        // this is the 3X7 cable
+                        for (int i = 0; i < Cells; i++)
+                        {
+                            if (GlobalVars.Pos2Neg == false)
+                            {
+                                series1.Points.AddXY(i % 7 + 1, testData.orderedCells[i]);
+                                // color test
+                                series1.Points[i].Color = pointColorMain(station, testData.orderedCells[i], true);
+                                if (i == 10)
+                                {
+                                    // add a blank point
+                                    series1.Points.AddXY(" ", 0);
+                                }
+                            }
+                            else
+                            {
+                                series1.Points.AddXY(i % 7 + 1, testData.orderedCells[Cells - i - 1]);
+                                // color test
+                                series1.Points[i].Color = pointColorMain(station, testData.orderedCells[Cells - i - 1], true);
+                                if (i == 6 || i == 13)
+                                {
+                                    // add a blank point
+                                    series1.Points.AddXY(" ", 0);
+                                }
+                            }
                         }
                     }
                     else
                     {
+                        //  all other cases...
+                        for (int i = 0; i < Cells; i++)
+                        {
+                            if (GlobalVars.Pos2Neg == false)
+                            {
+                                series1.Points.AddXY(i + 1, testData.orderedCells[i]);
+                                // color test
+                                series1.Points[i].Color = pointColorMain(station, testData.orderedCells[i], true);
+                            }
+                            else
+                            {
+                                series1.Points.AddXY(i + 1, testData.orderedCells[Cells - i - 1]);
+                                // color test
+                                series1.Points[i].Color = pointColorMain(station, testData.orderedCells[Cells - i - 1], true);
+                            }
+                        }
+                    }
+                    chart1.Invalidate();
+                    chart1.ChartAreas[0].RecalculateAxesScale();
+                }
+
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                else if (radioButton1.Checked == true)// we have to create a more complicated plot based on the values in GraphMain set...
+                {
+                    //pulled this code from the Graphics_Form
+                    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    //Battery Section!!!!
+                    try
+                    {
+                        int q;
+                        // only do something if the combo box has a test save!
+                        if (comboBox2.SelectedIndex < 0) { return; }
+                        // Here we will look at the Value selected and then plot graph1Set
+
+                        //find out which graph to plot from the selected text
+                        switch (comboBox2.Text)
+                        {
+                            case "Voltage":
+                            case "Voltage 1":
+                                q = 10;
+                                chart1.ChartAreas[0].AxisY.Title = "Voltage";
+                                break;
+                            case "Voltage 2":
+                                q = 11;
+                                chart1.ChartAreas[0].AxisY.Title = "Voltage";
+                                break;
+                            case "Voltage 3":
+                                q = 12;
+                                chart1.ChartAreas[0].AxisY.Title = "Voltage";
+                                break;
+                            case "Voltage 4":
+                                q = 13;
+                                chart1.ChartAreas[0].AxisY.Title = "Voltage";
+                                break;
+                            case "Current":
+                                q = 8;
+                                chart1.ChartAreas[0].AxisY.Title = "Current";
+                                break;
+                            case "Temperature 1":
+                                q = 38;
+                                chart1.ChartAreas[0].AxisY.Title = "Temperature";
+                                break;
+                            case "Temperature 2":
+                                q = 39;
+                                chart1.ChartAreas[0].AxisY.Title = "Temperature";
+                                break;
+                            case "Temperature 3":
+                                q = 40;
+                                chart1.ChartAreas[0].AxisY.Title = "Temperature";
+                                break;
+                            case "Temperature 4":
+                                q = 41;
+                                chart1.ChartAreas[0].AxisY.Title = "Temperature";
+                                break;
+                            default:
+                                q = 7;
+                                chart1.ChartAreas[0].AxisY.Title = "Time";
+                                break;
+                        }
+
+                        //we need to graph the col 7 as time and q as the value
+                        this.chart1.Series.Clear();
+                        var series1 = new System.Windows.Forms.DataVisualization.Charting.Series
+                        {
+                            Name = "Series1",
+                            Color = System.Drawing.Color.Green,
+                            IsVisibleInLegend = false,
+                            IsXValueIndexed = true,
+                            ChartType = SeriesChartType.Column,
+                            BorderColor = System.Drawing.Color.DarkGray,
+                            BorderWidth = 1
+                        };
+                        this.chart1.Series.Add(series1);
+                        chart1.ChartAreas[0].AxisX.Title = "Time";
+
                         for (int i = 0; i < graphMainSet.Tables[0].Rows.Count; i++)
                         {
                             series1.Points.AddXY(Math.Round(double.Parse(graphMainSet.Tables[0].Rows[i][7].ToString()) * 1440), graphMainSet.Tables[0].Rows[i][q]);
                             // color test
-                            series1.Points[i].Color = pointColorMain(station, double.Parse(graphMainSet.Tables[0].Rows[i][q].ToString()), true);
+                            if (q == 8 || q == 7)
+                            {
+                                //current
+                                series1.Points[i].Color = Color.Blue;
+                            }
+                            else if (q > 37 && q < 42)
+                            {
+                                //temp
+                                series1.Points[i].Color = Color.LightSeaGreen;
+                            }
+                            else
+                            {
+                                series1.Points[i].Color = pointColorMain(station, double.Parse(graphMainSet.Tables[0].Rows[i][q].ToString()), false);
+                            }
                         }
+
                         // pad with zero Vals to help with the look of the plot...
                         // first get the interval and total points
                         int interval = 1;
@@ -1335,27 +1131,237 @@ namespace NewBTASProto
                         }
 
 
-                        if (graphMainSet.Tables[0].Rows.Count <= points-1)
+                        if (graphMainSet.Tables[0].Rows.Count <= points - 1)
                         {
-                            for (int i = graphMainSet.Tables[0].Rows.Count; i <= points-1; i++)
+                            for (int i = graphMainSet.Tables[0].Rows.Count; i <= points - 1; i++)
                             {
-                                series1.Points.AddXY(i*interval, 0);
+                                series1.Points.AddXY(i * interval, 0);
                             }
                         }
+
+
+                        chart1.Invalidate();
+                        chart1.ChartAreas[0].RecalculateAxesScale();
                     }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
+                    }
+                }// end else  if
 
-                    chart1.Invalidate();
-                    chart1.ChartAreas[0].RecalculateAxesScale();
-
-
-                }
-                catch (Exception ex)
+                    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                // Cells Section!!!!
+                else
                 {
-                    MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
-                }
-            }// end else
+                    try
+                    {
+                        chart1.ChartAreas[0].AxisY.Title = "Voltage";
+                        chart1.ChartAreas[0].AxisX.Title = "Time";
+                        int q;
+                        // only do something if the radio button is selected
+                        if (radioButton2.Checked == false || comboBox3.SelectedIndex < 0) { return; }
+                        // Here we will look at the Value selected and then plot graph1Set
+
+                        //find out which graph to plot from the selected text
+                        switch (comboBox3.Text)
+                        {
+                            case "Ending Voltages":
+                                q = 999;
+                                break;
+                            case "Cell 1":
+                                q = 14;
+                                break;
+                            case "Cell 2":
+                                q = 15;
+                                break;
+                            case "Cell 3":
+                                q = 16;
+                                break;
+                            case "Cell 4":
+                                q = 17;
+                                break;
+                            case "Cell 5":
+                                q = 18;
+                                break;
+                            case "Cell 6":
+                                q = 19;
+                                break;
+                            case "Cell 7":
+                                q = 20;
+                                break;
+                            case "Cell 8":
+                                q = 21;
+                                break;
+                            case "Cell 9":
+                                q = 22;
+                                break;
+                            case "Cell 10":
+                                q = 23;
+                                break;
+                            case "Cell 11":
+                                q = 24;
+                                break;
+                            case "Cell 12":
+                                q = 25;
+                                break;
+                            case "Cell 13":
+                                q = 26;
+                                break;
+                            case "Cell 14":
+                                q = 27;
+                                break;
+                            case "Cell 15":
+                                q = 28;
+                                break;
+                            case "Cell 16":
+                                q = 29;
+                                break;
+                            case "Cell 17":
+                                q = 30;
+                                break;
+                            case "Cell 18":
+                                q = 31;
+                                break;
+                            case "Cell 19":
+                                q = 32;
+                                break;
+                            case "Cell 20":
+                                q = 33;
+                                break;
+                            case "Cell 21":
+                                q = 34;
+                                break;
+                            case "Cell 22":
+                                q = 35;
+                                break;
+                            case "Cell 23":
+                                q = 36;
+                                break;
+                            case "Cell 24":
+                                q = 37;
+                                break;
+                            default:
+                                q = 999;
+                                chart1.ChartAreas[0].AxisX.Title = "Cells";
+                                break;
+                        }
+
+                        //we need to graph the col 7 as time and q as the value
+                        this.chart1.Series.Clear();
+                        var series1 = new System.Windows.Forms.DataVisualization.Charting.Series
+                        {
+                            Name = "Series1",
+                            Color = System.Drawing.Color.Green,
+                            IsVisibleInLegend = false,
+                            IsXValueIndexed = true,
+                            ChartType = SeriesChartType.Column,
+                            BorderColor = System.Drawing.Color.DarkGray,
+                            BorderWidth = 1
+                        };
+                        this.chart1.Series.Add(series1);
 
 
+                        if (q == 999)
+                        {
+                            for (int i = 0; i < Cells; i++)
+                            {
+                                series1.Points.AddXY(i + 1, graphMainSet.Tables[0].Rows[graphMainSet.Tables[0].Rows.Count - 1][i + 14]);
+                                // color test
+                                series1.Points[i].Color = pointColorMain(station, double.Parse(graphMainSet.Tables[0].Rows[graphMainSet.Tables[0].Rows.Count - 1][i + 14].ToString()), true);
+                            }
+                        }
+                        else
+                        {
+                            for (int i = 0; i < graphMainSet.Tables[0].Rows.Count; i++)
+                            {
+                                series1.Points.AddXY(Math.Round(double.Parse(graphMainSet.Tables[0].Rows[i][7].ToString()) * 1440), graphMainSet.Tables[0].Rows[i][q]);
+                                // color test
+                                series1.Points[i].Color = pointColorMain(station, double.Parse(graphMainSet.Tables[0].Rows[i][q].ToString()), true);
+                            }
+                            // pad with zero Vals to help with the look of the plot...
+                            // first get the interval and total points
+                            int interval = 1;
+                            int points = 61;
+
+                            switch (d.Rows[station][2].ToString())
+                            {
+                                case "As Received":
+                                    interval = 1 / 30;
+                                    points = 3;
+                                    break;
+                                case "Full Charge-6":
+                                    interval = 5;
+                                    points = 73;
+                                    break;
+                                case "Full Charge-4":
+                                    interval = 4;
+                                    points = 61;
+                                    break;
+                                case "Top Charge-4":
+                                    interval = 4;
+                                    points = 61;
+                                    break;
+                                case "Top Charge-2":
+                                    interval = 3;
+                                    points = 41;
+                                    break;
+                                case "Top Charge-1":
+                                    interval = 1;
+                                    points = 61;
+                                    break;
+                                case "Constant Voltage":
+                                    interval = 5;
+                                    points = 73;
+                                    break;
+                                case "Capacity-1":
+                                    interval = 1;
+                                    points = 61;
+                                    break;
+                                case "Discharge":
+                                    interval = 1;
+                                    points = 61;
+                                    break;
+                                case "Slow Charge-14":
+                                    interval = 12;
+                                    points = 73;
+                                    break;
+                                case "SlowCharge-16":
+                                    interval = 16;
+                                    points = 61;
+                                    break;
+                                default:
+                                    //custom cap and charge get the default...
+                                    //Custom Chg
+                                    //Custom Cap
+                                    break;
+                            }
+
+
+                            if (graphMainSet.Tables[0].Rows.Count <= points - 1)
+                            {
+                                for (int i = graphMainSet.Tables[0].Rows.Count; i <= points - 1; i++)
+                                {
+                                    series1.Points.AddXY(i * interval, 0);
+                                }
+                            }
+                        }
+
+                        chart1.Invalidate();
+                        chart1.ChartAreas[0].RecalculateAxesScale();
+
+
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
+                    }
+                }// end else
+
+            }
+            catch
+            {
+                //do nothing...
+            }
         }
 
         public void sequentialScan()
@@ -1672,7 +1678,7 @@ namespace NewBTASProto
                             }
                             catch (Exception ex)
                             {
-                                MessageBox.Show("Error: Failed to create a database connection. \n" + ex.Message);
+                                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
                                 lockUpdate = false;
                                 return;
                             }
@@ -1694,7 +1700,7 @@ namespace NewBTASProto
                             catch (Exception ex)
                             {
                                 myAccessConn.Close();
-                                MessageBox.Show("Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
                                 lockUpdate = false;
                                 return;
                             }

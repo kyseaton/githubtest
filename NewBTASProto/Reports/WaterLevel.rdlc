@@ -134,79 +134,82 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>0.348in</Width>
+              <Width>0.33in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.348in</Width>
+              <Width>0.33in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.348in</Width>
+              <Width>0.33in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.348in</Width>
+              <Width>0.33in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.348in</Width>
+              <Width>0.33in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.348in</Width>
+              <Width>0.33in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.348in</Width>
+              <Width>0.33in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.348in</Width>
+              <Width>0.33in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.348in</Width>
+              <Width>0.33in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.348in</Width>
+              <Width>0.33in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.348in</Width>
+              <Width>0.33in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.348in</Width>
+              <Width>0.33in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.348in</Width>
+              <Width>0.33in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.348in</Width>
+              <Width>0.33in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.348in</Width>
+              <Width>0.33in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.348in</Width>
+              <Width>0.33in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.348in</Width>
+              <Width>0.33in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.348in</Width>
+              <Width>0.33in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.348in</Width>
+              <Width>0.33in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.348in</Width>
+              <Width>0.33in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.348in</Width>
+              <Width>0.33in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.348in</Width>
+              <Width>0.33in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.348in</Width>
+              <Width>0.33in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.348in</Width>
+              <Width>0.33in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.348in</Width>
+              <Width>0.33in</Width>
+            </TablixColumn>
+            <TablixColumn>
+              <Width>0.45in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -1000,6 +1003,38 @@
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox70</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Color>LightGrey</Color>
+                          <Style>Solid</Style>
+                        </Border>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox2">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>Average</Value>
+                              <Style>
+                                <FontSize>7pt</FontSize>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style />
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox2</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -1818,12 +1853,45 @@
                     </Textbox>
                   </CellContents>
                 </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="AVE">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=Fields!AVE.Value</Value>
+                              <Style>
+                                <FontSize>7pt</FontSize>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style />
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>AVE</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Color>LightGrey</Color>
+                          <Style>Solid</Style>
+                        </Border>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
               </TablixCells>
             </TablixRow>
           </TablixRows>
         </TablixBody>
         <TablixColumnHierarchy>
           <TablixMembers>
+            <TablixMember />
             <TablixMember />
             <TablixMember />
             <TablixMember />
@@ -1877,7 +1945,7 @@
     <Height>1.26042in</Height>
     <Style />
   </Body>
-  <Width>8.72042in</Width>
+  <Width>8.71in</Width>
   <Page>
     <LeftMargin>1in</LeftMargin>
     <RightMargin>1in</RightMargin>
@@ -2004,6 +2072,10 @@
         </Field>
         <Field Name="Cell24">
           <DataField>Cell24</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="AVE">
+          <DataField>AVE</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
