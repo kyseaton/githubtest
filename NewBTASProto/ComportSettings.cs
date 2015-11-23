@@ -8,26 +8,39 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO.Ports;
+using System.IO;
+using System.Management;
 
 namespace NewBTASProto
 {
     public partial class ComportSettings : Form
     {
+        bool comportSet = false;
+        List<COMPortInfo> ComPortInformation = new List<COMPortInfo>();
+
         public ComportSettings()
         {
             InitializeComponent();
+            SetupCOMPortInformation();
             // Get a list of serial port names. 
             string[] ports = SerialPort.GetPortNames();
 
             // Display each port name to the console. 
-            foreach (string port in ports)
+            int i = 0;
+            foreach (COMPortInfo port in ComPortInformation)
             {
-                comboBox1.Items.Add(port);
-                comboBox2.Items.Add(port);
+                comboBox1.Items.Add(port.friendlyName);
+                if(port.portName == GlobalVars.CSCANComPort)
+                {
+                    comboBox1.SelectedIndex = i;
+                }
+                comboBox2.Items.Add(port.friendlyName);
+                if(port.portName == GlobalVars.ICComPort)
+                {
+                    comboBox2.SelectedIndex = i;
+                }
+                i++;
             }
-
-            comboBox1.SelectedItem = GlobalVars.CSCANComPort;
-            comboBox2.SelectedItem = GlobalVars.ICComPort;
 
             if (comboBox1.SelectedIndex == -1)
             {
@@ -44,6 +57,67 @@ namespace NewBTASProto
             }
             
 
+        }
+
+        private void SetupCOMPortInformation()
+        {
+            String[] portNames = System.IO.Ports.SerialPort.GetPortNames();
+            foreach (String s in portNames)
+            {
+                // s is like "COM14"
+                COMPortInfo ci = new COMPortInfo();
+                ci.portName = s;
+                ci.friendlyName = s;
+                ComPortInformation.Add(ci);
+            }
+
+            String[] usbDevs = GetUSBCOMDevices();
+            foreach (String s in usbDevs)
+            {
+                // Name will be like "USB Bridge (COM14)"
+                int start = s.IndexOf("(COM") + 1;
+                if (start >= 0)
+                {
+                    int end = s.IndexOf(")", start + 3);
+                    if (end >= 0)
+                    {
+                        // cname is like "COM14"
+                        String cname = s.Substring(start, end - start);
+                        for (int i = 0; i < ComPortInformation.Count; i++)
+                        {
+                            if (ComPortInformation[i].portName == cname)
+                            {
+                                ComPortInformation[i].friendlyName = s;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        static string[] GetUSBCOMDevices()
+        {
+            List<string> list = new List<string>();
+
+            ManagementObjectSearcher searcher2 = new ManagementObjectSearcher("SELECT * FROM Win32_PnPEntity");
+            foreach (ManagementObject mo2 in searcher2.Get())
+            {
+                string name = mo2["Name"].ToString();
+                // Name will have a substring like "(COM12)" in it.
+                if (name.Contains("(COM"))
+                {
+                    list.Add(name);
+                }
+            }
+            // remove duplicates, sort alphabetically and convert to array
+            string[] usbDevices = list.Distinct().OrderBy(s => s).ToArray();
+            return usbDevices;
+        }
+
+        public class COMPortInfo
+        {
+            public String portName;
+            public String friendlyName;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -77,8 +151,19 @@ namespace NewBTASProto
             ((Main_Form)this.Owner).ICComPort.Close();
 
             //Update the Globals
-            GlobalVars.CSCANComPort = comboBox1.SelectedItem.ToString();
-            GlobalVars.ICComPort = comboBox2.SelectedItem.ToString();
+            int i = 0;
+            foreach (COMPortInfo port in ComPortInformation)
+            {
+                if (port.friendlyName == comboBox1.Text)
+                {
+                    GlobalVars.CSCANComPort = port.portName;
+                }
+                if (port.friendlyName == comboBox2.Text)
+                {
+                    GlobalVars.ICComPort = port.portName;
+                }
+                i++;
+            }
 
             //Make sure the warnings have been cleared
             ((Main_Form)this.Owner).label8.Visible = false;

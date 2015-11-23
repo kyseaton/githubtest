@@ -32,6 +32,8 @@
             Microsoft.Reporting.WinForms.ReportDataSource reportDataSource1 = new Microsoft.Reporting.WinForms.ReportDataSource();
             Microsoft.Reporting.WinForms.ReportDataSource reportDataSource2 = new Microsoft.Reporting.WinForms.ReportDataSource();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Reports_Form));
+            this.myDatatableBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.MetaDataBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -42,8 +44,6 @@
             this.comboBox3 = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.reportViewer = new Microsoft.Reporting.WinForms.ReportViewer();
-            this.myDatatableBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.MetaDataBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.myDatatableDataTableBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.myDatatableBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.MetaDataBindingSource)).BeginInit();
@@ -125,8 +125,7 @@
             "Battery Data",
             "Cell Data",
             "Test Summary",
-            "Work Order Log",
-            "Work Order Summary"});
+            "Work Order Log"});
             this.comboBox3.Location = new System.Drawing.Point(417, 25);
             this.comboBox3.Name = "comboBox3";
             this.comboBox3.Size = new System.Drawing.Size(195, 21);

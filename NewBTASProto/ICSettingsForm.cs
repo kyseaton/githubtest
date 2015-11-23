@@ -343,6 +343,7 @@ namespace NewBTASProto
 
             //Update the output string value
             GlobalVars.ICSettings[comboBox1.SelectedIndex].UpdateOutText();
+            ((Main_Form)this.Owner).criticalNum[comboBox1.SelectedIndex] = true;
             
             int inVal = comboBox1.SelectedIndex;
             //now we are going to create a thread to set KE1 back to data mode after 15 seconds
@@ -364,6 +365,7 @@ namespace NewBTASProto
             GlobalVars.ICSettings[comboBox1.SelectedIndex].KE3 = (byte)(action[comboBox3.Text]);
             //Update the output string value
             GlobalVars.ICSettings[comboBox1.SelectedIndex].UpdateOutText();
+            ((Main_Form)this.Owner).criticalNum[comboBox1.SelectedIndex] = true;
 
             int inVal = comboBox1.SelectedIndex;
             //now we are going to create a thread to set KE1 back to data mode after 15 seconds

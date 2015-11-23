@@ -520,7 +520,7 @@ namespace NewBTASProto
                             // now look at all of the other cases to up date the label after a little break...
                             // if we are not looking for stations with the "find stations" function...
 
-                            if (button1.Enabled == true)
+                            if (toolStripMenuItem34.Enabled == true)
                             {
 
                                 if ((bool)d.Rows[j][4] && j != dataGridView1.CurrentRow.Index)
@@ -858,7 +858,8 @@ namespace NewBTASProto
                     series1.Points[3].Color = pointColorMain(station, testData.VB4, true);
                     series1.Points[3].Label = "VB4";
 
-
+                    chart1.Titles.Clear();
+                    chart1.Titles.Add("Current Voltages");
                     chart1.Invalidate();
                     chart1.ChartAreas[0].RecalculateAxesScale();
 
@@ -881,20 +882,6 @@ namespace NewBTASProto
                     this.chart1.Series.Add(series1);
                     chart1.ChartAreas[0].AxisX.Title = "Cells";
                     chart1.ChartAreas[0].AxisY.Title = "Voltage";
-
-                    int type = 4;
-
-                    if ((string)d.Rows[station][2] == "As Received" ||
-                        (string)d.Rows[station][2] == "Capacity-1" ||
-                        (string)d.Rows[station][2] == "Test" ||
-                        (string)d.Rows[station][2] == "Custom Cap")
-                    {
-                        type = 2;
-                    }
-                    else if ((string)d.Rows[station][2] == "Discharge")
-                    {
-                        type = 0;
-                    }
 
                     //special cable cases first...
                     if (GlobalVars.CScanData[station].CCID == 3)
@@ -974,6 +961,8 @@ namespace NewBTASProto
                             }
                         }
                     }
+                    chart1.Titles.Clear();
+                    chart1.Titles.Add("Cell Voltages");
                     chart1.Invalidate();
                     chart1.ChartAreas[0].RecalculateAxesScale();
                 }
@@ -1075,7 +1064,7 @@ namespace NewBTASProto
                         // pad with zero Vals to help with the look of the plot...
                         // first get the interval and total points
                         int interval = 1;
-                        int points = 61;
+                        int points = 1;
 
                         switch (d.Rows[station][2].ToString())
                         {
@@ -1139,7 +1128,8 @@ namespace NewBTASProto
                             }
                         }
 
-
+                        chart1.Titles.Clear();
+                        chart1.Titles.Add(comboBox2.Text);
                         chart1.Invalidate();
                         chart1.ChartAreas[0].RecalculateAxesScale();
                     }
@@ -1346,6 +1336,8 @@ namespace NewBTASProto
                             }
                         }
 
+                        chart1.Titles.Clear();
+                        chart1.Titles.Add(comboBox3.Text);
                         chart1.Invalidate();
                         chart1.ChartAreas[0].RecalculateAxesScale();
 
@@ -1385,7 +1377,7 @@ namespace NewBTASProto
                         Thread.Sleep(500);             // loop every 0.5 seconds
                         multi += 1;                    // increment multi
                         multi %= 10;                     // test every fourth count
-                        if (checkBox1.Checked && multi == 0 && button1.Enabled == true)          // sequential scanning is turned on
+                        if (toolStripMenuItem30.Checked && multi == 0 && toolStripMenuItem34.Enabled == true)          // sequential scanning is turned on
                         {
                             tempClick = dataGridView1.CurrentRow.Index;
                             //search from tempclick onto the next "in use" row
@@ -1568,14 +1560,19 @@ namespace NewBTASProto
                             {
                                 // just set to the cells readings..
                                 comboBox2.Items.Clear();
+                                toolStripComboBox2.ComboBox.Items.Clear();
                                 comboBox3.Items.Clear();
+                                toolStripComboBox3.ComboBox.Items.Clear();
                                 radioButton1.Enabled = false;
                                 radioButton2.Enabled = false;
                                 updateR2(true);
                                 comboBox2.Enabled = false;
+                                toolStripComboBox2.ComboBox.Enabled = false;
                                 comboBox3.Enabled = false;
+                                toolStripComboBox3.ComboBox.Enabled = false;
                                 radioButton2.Text = "Cells";
                                 comboBox3.Items.Add("Cell Voltages");
+                                toolStripComboBox3.ComboBox.Items.Add("Cell Voltages");
                                 updateC3("Cell Voltages");
                             });
 
@@ -1624,28 +1621,35 @@ namespace NewBTASProto
                                 {
                                     // just set to the cells readings..
                                     comboBox2.Items.Clear();
+                                    toolStripComboBox2.ComboBox.Items.Clear();
                                     comboBox3.Items.Clear();
+                                    toolStripComboBox3.ComboBox.Items.Clear();
                                     radioButton1.Enabled = false;
                                     radioButton2.Enabled = false;
                                     updateR2(true);
                                     comboBox2.Enabled = false;
+                                    toolStripComboBox2.ComboBox.Enabled = false;
                                     comboBox3.Enabled = false;
+                                    toolStripComboBox3.ComboBox.Enabled = false;
                                     if (GlobalVars.CScanData[currentRow] == null)
                                     {
                                         radioButton2.Text = "Cells";
                                         comboBox3.Items.Add("Cell Voltages");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell Voltages");
                                         updateC3("Cell Voltages");
                                     }
                                     else if (GlobalVars.CScanData[currentRow].CCID == 10)
                                     {
                                         radioButton2.Text = " ";
                                         comboBox3.Items.Add("Current Voltages");
+                                        toolStripComboBox3.ComboBox.Items.Add("Current Voltages");
                                         updateC3("Current Voltages");
                                     }
                                     else
                                     {
                                         radioButton2.Text = "Cells";
                                         comboBox3.Items.Add("Cell Voltages");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell Voltages");
                                         updateC3("Cell Voltages");
                                     }
                                 }// end try
@@ -1658,7 +1662,9 @@ namespace NewBTASProto
                             this.Invoke((MethodInvoker)delegate()
                             {
                                 comboBox2.Enabled = false;
+                                toolStripComboBox2.ComboBox.Enabled = false;
                                 comboBox3.Enabled = false;
+                                toolStripComboBox3.ComboBox.Enabled = false;
                             });
 
                             // do it on a helper thread!
@@ -1716,197 +1722,368 @@ namespace NewBTASProto
                                     case "1":
                                         // Battery combobox
                                         comboBox2.Items.Clear();
+                                        toolStripComboBox2.ComboBox.Items.Clear();
                                         comboBox2.Items.Add("Voltage");
+                                        toolStripComboBox2.ComboBox.Items.Add("Voltage");
                                         comboBox2.Items.Add("Current");
+                                        toolStripComboBox2.ComboBox.Items.Add("Current");
                                         comboBox2.Items.Add("Temperature 1");
+                                        toolStripComboBox2.ComboBox.Items.Add("Temperature 1");
                                         comboBox2.Items.Add("Temperature 2");
+                                        toolStripComboBox2.ComboBox.Items.Add("Temperature 2");
                                         comboBox2.Items.Add("Temperature 3");
+                                        toolStripComboBox2.ComboBox.Items.Add("Voltage");
                                         comboBox2.Items.Add("Temperature 4");
+                                        toolStripComboBox2.ComboBox.Items.Add("Voltage");
                                         // Cells combobox
                                         comboBox3.Items.Clear();
+                                        toolStripComboBox3.ComboBox.Items.Clear();
                                         comboBox3.Items.Add("Cell Voltages");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell Voltages");
                                         comboBox3.Items.Add("Cell 1");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 1");
                                         comboBox3.Items.Add("Cell 2");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 2");
                                         comboBox3.Items.Add("Cell 3");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 3");
                                         comboBox3.Items.Add("Cell 4");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 4");
                                         comboBox3.Items.Add("Cell 5");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 5");
                                         comboBox3.Items.Add("Cell 6");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 6");
                                         comboBox3.Items.Add("Cell 7");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 7");
                                         comboBox3.Items.Add("Cell 8");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 8");
                                         comboBox3.Items.Add("Cell 9");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 9");
                                         comboBox3.Items.Add("Cell 10");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 10");
                                         comboBox3.Items.Add("Cell 11");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 11");
                                         comboBox3.Items.Add("Cell 12");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 12");
                                         comboBox3.Items.Add("Cell 13");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 13");
                                         comboBox3.Items.Add("Cell 14");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 14");
                                         comboBox3.Items.Add("Cell 15");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 15");
                                         comboBox3.Items.Add("Cell 16");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 16");
                                         comboBox3.Items.Add("Cell 17");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 17");
                                         comboBox3.Items.Add("Cell 18");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 18");
                                         comboBox3.Items.Add("Cell 19");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 19");
                                         comboBox3.Items.Add("Cell 20");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 20");
                                         break;
                                     case "3":
                                         // Battery combobox
                                         comboBox2.Items.Clear();
+                                        toolStripComboBox2.ComboBox.Items.Clear();
                                         comboBox2.Items.Add("Voltage 1");
+                                        toolStripComboBox2.ComboBox.Items.Add("Voltage 1");
                                         comboBox2.Items.Add("Voltage 2");
+                                        toolStripComboBox2.ComboBox.Items.Add("Voltage 2");
                                         comboBox2.Items.Add("Current");
+                                        toolStripComboBox2.ComboBox.Items.Add("Current");
                                         comboBox2.Items.Add("Temperature 1");
+                                        toolStripComboBox2.ComboBox.Items.Add("Temperature 1");
                                         comboBox2.Items.Add("Temperature 2");
+                                        toolStripComboBox2.ComboBox.Items.Add("Temperature 2");
                                         comboBox2.Items.Add("Temperature 3");
+                                        toolStripComboBox2.ComboBox.Items.Add("Temperature 3");
                                         comboBox2.Items.Add("Temperature 4");
+                                        toolStripComboBox2.ComboBox.Items.Add("Temperature 4");
                                         // Cells combobox
                                         comboBox3.Items.Clear();
+                                        toolStripComboBox3.ComboBox.Items.Clear();
                                         comboBox3.Items.Add("Cell Voltages");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell Voltages");
                                         comboBox3.Items.Add("Cell 1");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 1");
                                         comboBox3.Items.Add("Cell 2");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 2");
                                         comboBox3.Items.Add("Cell 3");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 3");
                                         comboBox3.Items.Add("Cell 4");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 4");
                                         comboBox3.Items.Add("Cell 5");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 5");
                                         comboBox3.Items.Add("Cell 6");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 6");
                                         comboBox3.Items.Add("Cell 7");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 7");
                                         comboBox3.Items.Add("Cell 8");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 8");
                                         comboBox3.Items.Add("Cell 9");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 9");
                                         comboBox3.Items.Add("Cell 10");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 10");
                                         comboBox3.Items.Add("Cell 11");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 11");
                                         comboBox3.Items.Add("Cell 12");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 12");
                                         comboBox3.Items.Add("Cell 13");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 13");
                                         comboBox3.Items.Add("Cell 14");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 14");
                                         comboBox3.Items.Add("Cell 15");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 15");
                                         comboBox3.Items.Add("Cell 16");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 16");
                                         comboBox3.Items.Add("Cell 17");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 17");
                                         comboBox3.Items.Add("Cell 18");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 18");
                                         comboBox3.Items.Add("Cell 19");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 19");
                                         comboBox3.Items.Add("Cell 20");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 20");
                                         comboBox3.Items.Add("Cell 21");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 21");
                                         comboBox3.Items.Add("Cell 22");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 22");
                                         break;
                                     case "4":
                                         // Battery combobox
                                         comboBox2.Items.Clear();
+                                        toolStripComboBox2.ComboBox.Items.Clear();
                                         comboBox2.Items.Add("Voltage 1");
+                                        toolStripComboBox2.ComboBox.Items.Add("Voltage 1");
                                         comboBox2.Items.Add("Voltage 2");
+                                        toolStripComboBox2.ComboBox.Items.Add("Voltage 2");
                                         comboBox2.Items.Add("Voltage 3");
+                                        toolStripComboBox2.ComboBox.Items.Add("Voltage 3");
                                         comboBox2.Items.Add("Current");
+                                        toolStripComboBox2.ComboBox.Items.Add("Current");
                                         comboBox2.Items.Add("Temperature 1");
+                                        toolStripComboBox2.ComboBox.Items.Add("Temperature 1");
                                         comboBox2.Items.Add("Temperature 2");
+                                        toolStripComboBox2.ComboBox.Items.Add("Temperature 2");
                                         comboBox2.Items.Add("Temperature 3");
+                                        toolStripComboBox2.ComboBox.Items.Add("Temperature 3");
                                         comboBox2.Items.Add("Temperature 4");
+                                        toolStripComboBox2.ComboBox.Items.Add("Temperature 4");
                                         // Cells combobox
                                         comboBox3.Items.Clear();
+                                        toolStripComboBox3.ComboBox.Items.Clear();
                                         comboBox3.Items.Add("Cell Voltages");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell Voltages");
                                         comboBox3.Items.Add("Cell 1");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 1");
                                         comboBox3.Items.Add("Cell 2");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 2");
                                         comboBox3.Items.Add("Cell 3");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 3");
                                         comboBox3.Items.Add("Cell 4");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 4");
                                         comboBox3.Items.Add("Cell 5");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 5");
                                         comboBox3.Items.Add("Cell 6");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 6");
                                         comboBox3.Items.Add("Cell 7");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 7");
                                         comboBox3.Items.Add("Cell 8");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 8");
                                         comboBox3.Items.Add("Cell 9");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 9");
                                         comboBox3.Items.Add("Cell 10");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 10");
                                         comboBox3.Items.Add("Cell 11");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 11");
                                         comboBox3.Items.Add("Cell 12");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 12");
                                         comboBox3.Items.Add("Cell 13");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 13");
                                         comboBox3.Items.Add("Cell 14");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 14");
                                         comboBox3.Items.Add("Cell 15");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 15");
                                         comboBox3.Items.Add("Cell 16");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 16");
                                         comboBox3.Items.Add("Cell 17");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 17");
                                         comboBox3.Items.Add("Cell 18");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 18");
                                         comboBox3.Items.Add("Cell 19");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 19");
                                         comboBox3.Items.Add("Cell 20");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 20");
                                         comboBox3.Items.Add("Cell 21");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 21");
                                         break;
                                     case "10":
                                         // Battery combobox
                                         comboBox2.Items.Clear();
+                                        toolStripComboBox2.ComboBox.Items.Clear();
                                         comboBox2.Items.Add("Voltage 1");
+                                        toolStripComboBox2.ComboBox.Items.Add("Voltage 1");
                                         comboBox2.Items.Add("Voltage 2");
+                                        toolStripComboBox2.ComboBox.Items.Add("Voltage 2");
                                         comboBox2.Items.Add("Voltage 3");
+                                        toolStripComboBox2.ComboBox.Items.Add("Voltage 3");
                                         comboBox2.Items.Add("Voltage 4");
+                                        toolStripComboBox2.ComboBox.Items.Add("Voltage 4");
                                         comboBox2.Items.Add("Current");
+                                        toolStripComboBox2.ComboBox.Items.Add("Current");
                                         comboBox2.Items.Add("Temperature 1");
+                                        toolStripComboBox2.ComboBox.Items.Add("Temperature 1");
                                         comboBox2.Items.Add("Temperature 2");
+                                        toolStripComboBox2.ComboBox.Items.Add("Temperature 2");
                                         comboBox2.Items.Add("Temperature 3");
+                                        toolStripComboBox2.ComboBox.Items.Add("Temperature 3");
                                         comboBox2.Items.Add("Temperature 4");
+                                        toolStripComboBox2.ComboBox.Items.Add("Temperature 4");
                                         // Cells combobox
                                         comboBox3.Items.Clear();
+                                        toolStripComboBox3.ComboBox.Items.Clear();
                                         comboBox3.Items.Add("Current Voltages");
+                                        toolStripComboBox3.ComboBox.Items.Add("Current Voltages");
                                         break;
                                     case "21":
                                         // Battery combobox
                                         comboBox2.Items.Clear();
+                                        toolStripComboBox2.ComboBox.Items.Clear();
                                         comboBox2.Items.Add("Voltage");
+                                        toolStripComboBox2.ComboBox.Items.Add("Voltage");
                                         comboBox2.Items.Add("Current");
+                                        toolStripComboBox2.ComboBox.Items.Add("Current");
                                         comboBox2.Items.Add("Temperature 1");
+                                        toolStripComboBox2.ComboBox.Items.Add("Temperature 1");
                                         comboBox2.Items.Add("Temperature 2");
+                                        toolStripComboBox2.ComboBox.Items.Add("Temperature 2");
                                         comboBox2.Items.Add("Temperature 3");
+                                        toolStripComboBox2.ComboBox.Items.Add("Temperature 3");
                                         comboBox2.Items.Add("Temperature 4");
+                                        toolStripComboBox2.ComboBox.Items.Add("Temperature 4");
                                         // Cells combobox
                                         comboBox3.Items.Clear();
+                                        toolStripComboBox3.ComboBox.Items.Clear();
                                         comboBox3.Items.Add("Cell Voltages");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell Voltages");
                                         comboBox3.Items.Add("Cell 1");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 1");
                                         comboBox3.Items.Add("Cell 2");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 2");
                                         comboBox3.Items.Add("Cell 3");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 3");
                                         comboBox3.Items.Add("Cell 4");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 4");
                                         comboBox3.Items.Add("Cell 5");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 5");
                                         comboBox3.Items.Add("Cell 6");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 6");
                                         comboBox3.Items.Add("Cell 7");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 7");
                                         comboBox3.Items.Add("Cell 8");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 8");
                                         comboBox3.Items.Add("Cell 9");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 9");
                                         comboBox3.Items.Add("Cell 10");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 10");
                                         comboBox3.Items.Add("Cell 11");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 11");
                                         comboBox3.Items.Add("Cell 12");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 12");
                                         comboBox3.Items.Add("Cell 13");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 13");
                                         comboBox3.Items.Add("Cell 14");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 14");
                                         comboBox3.Items.Add("Cell 15");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 15");
                                         comboBox3.Items.Add("Cell 16");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 16");
                                         comboBox3.Items.Add("Cell 17");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 17");
                                         comboBox3.Items.Add("Cell 18");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 18");
                                         comboBox3.Items.Add("Cell 19");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 19");
                                         comboBox3.Items.Add("Cell 20");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 20");
                                         comboBox3.Items.Add("Cell 21");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 21");
                                         break;
                                     default:
                                         // Battery combobox
                                         comboBox2.Items.Clear();
+                                        toolStripComboBox2.ComboBox.Items.Clear();
                                         comboBox2.Items.Add("Voltage 1");
+                                        toolStripComboBox2.ComboBox.Items.Add("Voltage 1");
                                         comboBox2.Items.Add("Voltage 2");
+                                        toolStripComboBox2.ComboBox.Items.Add("Voltage 2");
                                         comboBox2.Items.Add("Voltage 3");
+                                        toolStripComboBox2.ComboBox.Items.Add("Voltage 3");
                                         comboBox2.Items.Add("Voltage 4");
+                                        toolStripComboBox2.ComboBox.Items.Add("Voltage 4");
                                         comboBox2.Items.Add("Current");
+                                        toolStripComboBox2.ComboBox.Items.Add("Current");
                                         comboBox2.Items.Add("Temperature 1");
+                                        toolStripComboBox2.ComboBox.Items.Add("Temperature 1");
                                         comboBox2.Items.Add("Temperature 2");
+                                        toolStripComboBox2.ComboBox.Items.Add("Temperature 2");
                                         comboBox2.Items.Add("Temperature 3");
+                                        toolStripComboBox2.ComboBox.Items.Add("Temperature 3");
                                         comboBox2.Items.Add("Temperature 4");
+                                        toolStripComboBox2.ComboBox.Items.Add("Temperature 4");
                                         // Cells combobox
                                         comboBox3.Items.Clear();
+                                        toolStripComboBox3.ComboBox.Items.Clear();
                                         comboBox3.Items.Add("Cell Voltages");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell Voltages");
                                         comboBox3.Items.Add("Cell 1");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 1");
                                         comboBox3.Items.Add("Cell 2");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 2");
                                         comboBox3.Items.Add("Cell 3");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 3");
                                         comboBox3.Items.Add("Cell 4");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 4");
                                         comboBox3.Items.Add("Cell 5");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 5");
                                         comboBox3.Items.Add("Cell 6");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 6");
                                         comboBox3.Items.Add("Cell 7");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 7");
                                         comboBox3.Items.Add("Cell 8");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 8");
                                         comboBox3.Items.Add("Cell 9");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 9");
                                         comboBox3.Items.Add("Cell 10");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 10");
                                         comboBox3.Items.Add("Cell 11");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 11");
                                         comboBox3.Items.Add("Cell 12");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 12");
                                         comboBox3.Items.Add("Cell 13");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 13");
                                         comboBox3.Items.Add("Cell 14");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 14");
                                         comboBox3.Items.Add("Cell 15");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 15");
                                         comboBox3.Items.Add("Cell 16");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 16");
                                         comboBox3.Items.Add("Cell 17");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 17");
                                         comboBox3.Items.Add("Cell 18");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 18");
                                         comboBox3.Items.Add("Cell 19");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 19");
                                         comboBox3.Items.Add("Cell 20");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 20");
                                         comboBox3.Items.Add("Cell 21");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 21");
                                         comboBox3.Items.Add("Cell 22");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 22");
                                         comboBox3.Items.Add("Cell 23");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 23");
                                         comboBox3.Items.Add("Cell 24");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 24");
                                         break;
                                 }// end switch
 
@@ -1927,16 +2104,28 @@ namespace NewBTASProto
 
                                     updateC2(gs.Rows[currentRow][1].ToString());
                                     comboBox3.SelectedIndex = 0;
-                                    if (comboBox2.Text == "") { comboBox2.SelectedIndex = 0; }
+                                    toolStripComboBox3.ComboBox.SelectedIndex = 0;
+                                    if (comboBox2.Text == "") 
+                                    { 
+                                        comboBox2.SelectedIndex = 0;
+                                        toolStripComboBox2.ComboBox.SelectedIndex = 0;
+                                    }
                                 }
                                 else
                                 {
                                     comboBox2.SelectedIndex = 0;
+                                    toolStripComboBox2.ComboBox.SelectedIndex = 0;
                                     updateC3(gs.Rows[currentRow][1].ToString());
-                                    if (comboBox3.Text == "") { comboBox3.SelectedIndex = 0; }
+                                    if (comboBox3.Text == "") 
+                                    { 
+                                        comboBox3.SelectedIndex = 0;
+                                        toolStripComboBox3.ComboBox.SelectedIndex = 0;
+                                    }
                                 }
                                 comboBox2.Enabled = true;
+                                toolStripComboBox2.ComboBox.Enabled = true;
                                 comboBox3.Enabled = true;
+                                toolStripComboBox3.ComboBox.Enabled = true;
 
                                 if (cellCable == "10") { radioButton2.Text = " "; }
                                 else { radioButton2.Text = "Cells"; }
@@ -1961,7 +2150,10 @@ namespace NewBTASProto
                {
                    this.Invoke((MethodInvoker)delegate()
                    {
-                       if (comboBox3.Text != "") { gs.Rows[dataGridView1.CurrentRow.Index][0] = radioButton1.Checked; }
+                       if (comboBox3.Text != "") 
+                       { 
+                           gs.Rows[dataGridView1.CurrentRow.Index][0] = radioButton1.Checked; 
+                       }
                    });
                });
         }
@@ -1977,7 +2169,10 @@ namespace NewBTASProto
                        {
                            this.Invoke((MethodInvoker)delegate()
                            {
-                               if (comboBox3.Text != "") { gs.Rows[dataGridView1.CurrentRow.Index][1] = comboBox2.Text; }
+                               if (comboBox2.Text != "") 
+                               { 
+                                   gs.Rows[dataGridView1.CurrentRow.Index][1] = comboBox2.Text; 
+                               }
                            });
                        }
                    }
@@ -1996,7 +2191,10 @@ namespace NewBTASProto
                        {
                            this.Invoke((MethodInvoker)delegate()
                            {
-                               if (comboBox3.Text != "") { gs.Rows[dataGridView1.CurrentRow.Index][1] = comboBox3.Text; }
+                               if (comboBox3.Text != "") 
+                               { 
+                                   gs.Rows[dataGridView1.CurrentRow.Index][1] = comboBox3.Text; 
+                               }
                            });
                        }
                    }
@@ -2012,6 +2210,7 @@ namespace NewBTASProto
             lock (combo2Lock)
             {
                 comboBox2.Text = inVal;
+                toolStripComboBox2.ComboBox.Text = inVal;
             }
         }
 
@@ -2022,6 +2221,7 @@ namespace NewBTASProto
             lock (combo3Lock)
             {
                 comboBox3.Text = inVal;
+                toolStripComboBox3.ComboBox.Text = inVal;
             }
         }
 

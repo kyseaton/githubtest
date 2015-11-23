@@ -24,7 +24,7 @@
     <MapFileExtensions>true</MapFileExtensions>
     <UpdateUrl>http://www.jfmeng.com/BTAS16_update/</UpdateUrl>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>59</ApplicationRevision>
+    <ApplicationRevision>62</ApplicationRevision>
     <ApplicationVersion>6.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -70,6 +70,7 @@
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
@@ -291,7 +292,6 @@
       <DependentUpon>WorkOrderReps.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\WaterLevel.rdlc" />
-    <EmbeddedResource Include="Reports\WorkOrderSummary.rdlc" />
     <EmbeddedResource Include="Reports\WorkOrderLog.rdlc" />
     <EmbeddedResource Include="Reports\TestSummaryNP20.rdlc" />
     <EmbeddedResource Include="Reports\TestSummaryNP21.rdlc" />
@@ -387,10 +387,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <Content Include="btas7.ico" />
+    <None Include="Resources\BTAS-16-TEXT.bmp" />
     <Content Include="Resources\btas7.ico" />
     <None Include="Resources\btas7_mid.jpg" />
     <None Include="Resources\btas7_h_I.jpg" />
     <None Include="Resources\mainDB.bmp" />
+    <None Include="Resources\BTAS_16_TEXT.jpg" />
     <Content Include="Resources\BTS16NV_clean.mdb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

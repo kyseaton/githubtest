@@ -63,6 +63,16 @@ namespace NewBTASProto.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap BTAS_16_TEXT {
+            get {
+                object obj = ResourceManager.GetObject("BTAS_16_TEXT", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap btas7 {
             get {
                 object obj = ResourceManager.GetObject("btas7", resourceCulture);

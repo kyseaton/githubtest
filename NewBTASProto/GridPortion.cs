@@ -577,6 +577,7 @@ namespace NewBTASProto
                 pci.Columns.Add("CCVMMIN", typeof(float));
                 pci.Columns.Add("CCVMAX", typeof(float));
                 pci.Columns.Add("CCAPV", typeof(float));
+                pci.Columns.Add("serial", typeof(string));
 
                 //name the table
                 pci.TableName = "pci_set";
@@ -608,6 +609,7 @@ namespace NewBTASProto
                         pci.Rows[i][6] = -1;         // negative 1 is the default...
                         pci.Rows[i][7] = 1.75;         // negative 1 is the default...
                         pci.Rows[i][8] = -1;         // negative 1 is the default...
+                        pci.Rows[i][9] = "";
                     }
                 }
             }
@@ -627,6 +629,7 @@ namespace NewBTASProto
                     pci.Rows[i][6] = -1;         // negative 1 is the default...
                     pci.Rows[i][7] = 1.75;         // negative 1 is the default...
                     pci.Rows[i][8] = -1;         // negative 1 is the default...
+                    pci.Rows[i][9] = "";
                 }
             }
 

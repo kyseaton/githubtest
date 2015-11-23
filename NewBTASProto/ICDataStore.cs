@@ -21,7 +21,7 @@ namespace NewBTASProto
         public float refVolt;           // reference voltage
         public float battCurrent;       // battery current
         public float battVoltage;       // battery voltage
-        public int ACVoltage;         // AC voltage
+        public int ACVoltage;           // AC voltage
         public float backupBattVolt;    // backup batttery voltage
         public float BT1;               // battery temperature 1
         public float BT2;               // battery temperature 2
@@ -53,7 +53,7 @@ namespace NewBTASProto
                 WDO = char.Parse(ICDATA[8]);
                 QS1 = int.Parse(ICDATA[5]) - 1000;
                 QS2 = int.Parse(ICDATA[6]) - 1000;
-                refVolt = (float.Parse(ICDATA[10]) - 1000) / 1000;
+                refVolt = (float.Parse(ICDATA[9]) - 1000) / 1000;
 
                 if (boardID < 2)
                 {
@@ -61,10 +61,10 @@ namespace NewBTASProto
                 }
                 else
                 {
-                    battCurrent = (float.Parse(ICDATA[10]) - 1000);
+                    battCurrent = (float.Parse(ICDATA[10]) - 1000) / 10;
                 }
 
-                battVoltage = (float.Parse(ICDATA[12]) - 1000) / 10;
+                battVoltage = (float.Parse(ICDATA[11]) - 1000) / 10;
                 ACVoltage = int.Parse(ICDATA[12]) - 1000;
                 backupBattVolt = (float.Parse(ICDATA[13]) - 1000) / 100;
                 BT1 = (float.Parse(ICDATA[14]) - 1000) / 10;

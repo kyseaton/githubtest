@@ -1258,9 +1258,7 @@ namespace NewBTASProto
 
                     //now force an update on the binding by moving one ahead and then back...
                     toolStripCBBats.ComboBox.Text = textBox2.Text.Replace("'", "''");
-                   
                     MessageBox.Show(this,"Battery model " + textBox2.Text + "'s entry has been updated.");
-
                 }
                 else
                 {

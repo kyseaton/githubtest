@@ -1930,8 +1930,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>DataSet1</DataSetName>
-        <Top>0.76042in</Top>
-        <Left>0.01in</Left>
+        <Top>0.9in</Top>
         <Height>0.5in</Height>
         <Width>8.7in</Width>
         <ZIndex>5</ZIndex>
@@ -1942,10 +1941,10 @@
         </Style>
       </Tablix>
     </ReportItems>
-    <Height>1.26042in</Height>
+    <Height>1.4in</Height>
     <Style />
   </Body>
-  <Width>8.71in</Width>
+  <Width>8.72042in</Width>
   <Page>
     <LeftMargin>1in</LeftMargin>
     <RightMargin>1in</RightMargin>

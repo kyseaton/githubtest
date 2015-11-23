@@ -458,12 +458,14 @@ namespace NewBTASProto
                 MessageBox.Show(new Form() { TopMost = true }, "Please Enter A Customer, Model and Serial Number in order to create a customer battery");
                 return;
             }
+            // set up the db Connection
+            string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+            OleDbConnection conn = new OleDbConnection(connectionString);
+
             try
             {
 
-                // set up the db Connection
-                string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
-                OleDbConnection conn = new OleDbConnection(connectionString);
+                
 
                 //MAKE SURE YOU SELECT THE CURRENT ROW FOR DOUBLE SAVES!!!!!!!!!!!!!!!!!
 
@@ -555,8 +557,6 @@ namespace NewBTASProto
                 MessageBox.Show(ex.ToString());
             }
 
-            
-
             UpdateBats();
 
             bindingNavigatorAddNewItem.Enabled = true;
@@ -576,6 +576,48 @@ namespace NewBTASProto
             catch(Exception ex)
             {
                 return;
+            }
+
+            //Last step!  We need to also update the pci table so our graphs look good...
+            // we'll need to load the data for this model...
+            DataSet modelInfo = new DataSet();
+            string strAccessSelect = @"SELECT BTECH,VOLT,NCELLS,BCVMIN,BCVMAX,CCVMMIN,CCVMAX,CCAPV FROM BatteriesCustom WHERE BatteryModel='" + comboBox2.Text + "'";
+            try
+            {
+                OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, conn);
+                OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                lock (Main_Form.dataBaseLock)
+                {
+                    conn.Open();
+                    myDataAdapter.Fill(modelInfo);
+                    conn.Close();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // didn't work...
+                // no biggie!
+                return;
+            }
+
+            // Also update the pci dataTable!
+            for (int i = 0; i < 16; i++)
+            {
+                if (((Main_Form)this.Owner).pci.Rows[i][9].ToString() == textBox3.Text)
+                {
+                    //update the four rows and then break...
+                    ((Main_Form)this.Owner).pci.Rows[i][0] = comboBox2.Text;
+                    if (modelInfo.Tables[0].Rows[0][0].ToString() != "") { ((Main_Form)this.Owner).pci.Rows[i][1] = modelInfo.Tables[0].Rows[0][0].ToString(); }        // tech
+                    if (modelInfo.Tables[0].Rows[0][1].ToString() != "") { ((Main_Form)this.Owner).pci.Rows[i][2] = modelInfo.Tables[0].Rows[0][1].ToString(); }        // (NomV) negative 1 is the default...
+                    if (modelInfo.Tables[0].Rows[0][2].ToString() != "") { ((Main_Form)this.Owner).pci.Rows[i][3] = modelInfo.Tables[0].Rows[0][2].ToString(); }        // (NCells) negative 1 is the default...
+                    if (modelInfo.Tables[0].Rows[0][3].ToString() != "") { ((Main_Form)this.Owner).pci.Rows[i][4] = modelInfo.Tables[0].Rows[0][3].ToString(); }        // (BCVMIN) negative 1 is the default...
+                    if (modelInfo.Tables[0].Rows[0][4].ToString() != "") { ((Main_Form)this.Owner).pci.Rows[i][5] = modelInfo.Tables[0].Rows[0][4].ToString(); }        // (BCVMAX) 24 is the default...
+                    if (modelInfo.Tables[0].Rows[0][5].ToString() != "") { ((Main_Form)this.Owner).pci.Rows[i][6] = modelInfo.Tables[0].Rows[0][5].ToString(); }        // (CCVMMIN) negative 1 is the default...
+                    if (modelInfo.Tables[0].Rows[0][6].ToString() != "") { ((Main_Form)this.Owner).pci.Rows[i][7] = modelInfo.Tables[0].Rows[0][6].ToString(); }        // (CCVMAX) 1.75 is the default...
+                    if (modelInfo.Tables[0].Rows[0][7].ToString() != "") { ((Main_Form)this.Owner).pci.Rows[i][8] = modelInfo.Tables[0].Rows[0][7].ToString(); }        // (CCAPV) negative 1 is the default...
+                }
             }
 
         }

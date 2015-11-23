@@ -33,7 +33,7 @@ namespace NewBTASProto
         int chanNum;
 
         //for critical operations (Start,Stop, etc)
-        bool [] criticalNum = new bool[16];
+        public bool [] criticalNum = new bool[16];
 
         //Com Error count 
          byte[] comErrorNum = new byte[16] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };

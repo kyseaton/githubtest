@@ -18,7 +18,7 @@ namespace NewBTASProto
         
         int curRow = 0;
         string curWorkOrder = "";
-        int average = 0;
+        float average = 0;
 
         public MasterFillerInterface(int currentRow = 0, string currentWorkOrder = "")
         {
@@ -178,12 +178,23 @@ namespace NewBTASProto
                         textBox24.Text = ((int.Parse(GlobalVars.MFData[28]) - 100) % 255).ToString();
                         // now fill in the average box...
                         average = 0;
+                        int count = 0;
                         for (int i = 5; i < 28; i++)
                         {
                             if (((int.Parse(GlobalVars.MFData[i]) - 100) % 255) != 0)
                             {
+                                count++;
                                 average += (int.Parse(GlobalVars.MFData[i]) - 100) % 255;
                             }
+                            
+                        }
+                        if(count == 0)
+                        {
+                            average = 0;                            
+                        }
+                        else
+                        {
+                            average /= count;
                         }
                         textBox25.Text = average.ToString();
 
@@ -210,6 +221,12 @@ namespace NewBTASProto
             if(comboBox2.Text == "")
             {
                 MessageBox.Show(new Form() { TopMost = true }, "Please select a Work Order to associate the MasterFiller data with");
+                return;
+            }
+            //do we data?
+            if (textBox1.Text == "")
+            {
+                MessageBox.Show(new Form() { TopMost = true }, "Please aquire data before trying to save!");
                 return;
             }
 

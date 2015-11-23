@@ -405,27 +405,37 @@ namespace NewBTASProto
                     DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The charger appears to already be running. Do you want to stop it now and proceed with the test?", "Click Yes to have the program stop the charger or No to do it manually", MessageBoxButtons.YesNo);
                     if (dialogResult == DialogResult.Yes)
                     {
-                        // now we need to reset the charger
-                        updateD(station, 7, "Stopping Charger!");
-                        if (MasterSlaveTest) { updateD(slaveRow, 7, "Stopping Charger!"); }
-                        // set KE1 to 2 ("command")
-                        GlobalVars.ICSettings[Cstation].KE1 = (byte)2;
-                        // set KE3 to stop
-                        GlobalVars.ICSettings[Cstation].KE3 = (byte)2;
-                        //Update the output string value
-                        GlobalVars.ICSettings[Cstation].UpdateOutText();
-                        criticalNum[Cstation] = true;
-                        //now we are going to create a thread to set KE1 back to data mode after 15 seconds
-                        for (int i = 0; i < 15; i++)
+                        for (int j = 0; j < 5; j++)
                         {
-                            Thread.Sleep(1000);
-                            if (GlobalVars.ICData[Cstation].runStatus != "RUN") { break; }
+                            // set KE1 to 2 ("command")
+                            GlobalVars.ICSettings[Cstation].KE1 = (byte)2;
+                            // set KE3 to stop
+                            GlobalVars.ICSettings[Cstation].KE3 = (byte)2;
+                            //Update the output string value
+                            GlobalVars.ICSettings[Cstation].UpdateOutText();
+                            criticalNum[Cstation] = true;
+                            //now we are going to create a thread to set KE1 back to data mode after 15 seconds
+                            Thread.Sleep(5000);
+
+                            // set KE1 to 1 ("query")
+                            GlobalVars.ICSettings[Cstation].KE1 = (byte)0;
+                            //Update the output string value
+                            GlobalVars.ICSettings[Cstation].UpdateOutText();
+                            for (int i = 0; i < 5; i++)
+                            {
+                                criticalNum[Cstation] = true;
+                                Thread.Sleep(1000);
+                                if (d.Rows[station][11].ToString() == "HOLD")
+                                {
+                                    break;
+                                }
+
+                            }
+                            if (d.Rows[station][11].ToString() == "HOLD")
+                            {
+                                break;
+                            }
                         }
-                        // set KE1 to 1 ("query")
-                        GlobalVars.ICSettings[Cstation].KE1 = (byte)0;
-                        //Update the output string value
-                        GlobalVars.ICSettings[Cstation].UpdateOutText();
-                        criticalNum[Cstation] = true;
                     }
                     else
                     {
@@ -499,7 +509,11 @@ namespace NewBTASProto
                     //now we need to set tlock so that only one test starts at a time...
 
                     setTLock();
-                    Thread.Sleep(5000);
+                    if (d.Rows[station][7].ToString() == "Test Start Wait")
+                    {
+                        Thread.Sleep(5000);
+                    }
+                    
                 }
 
 
@@ -1056,15 +1070,23 @@ namespace NewBTASProto
 
                         //Update the output string value
                         GlobalVars.ICSettings[Cstation].UpdateOutText();
-                        criticalNum[Cstation] = true;
+                        
                         updateD(station, 7, "Loading Settings");
                         if (MasterSlaveTest) { updateD(slaveRow, 7, "Loading Settings"); }
 
-                        Thread.Sleep(5000);
+                        criticalNum[Cstation] = true;
+                        Thread.Sleep(2000);
+                        criticalNum[Cstation] = true;
+                        Thread.Sleep(2000);
+                        criticalNum[Cstation] = true;
+                        Thread.Sleep(2000);
+                        criticalNum[Cstation] = true;
+                        Thread.Sleep(2000);
                         // set KE1 to 0 ("data")
                         GlobalVars.ICSettings[Cstation].KE1 = (byte)0;
                         GlobalVars.ICSettings[Cstation].UpdateOutText();
                         criticalNum[Cstation] = true;
+                        Thread.Sleep(2000);
 
                     } // end try
                     catch (Exception ex)
@@ -1318,7 +1340,7 @@ namespace NewBTASProto
                     // we need the technicial selected in the combo box too..
                     this.Invoke((MethodInvoker)delegate()
                     {
-                        comboText = comboBox1.Text;
+                        comboText = label2.Text;
                     });
 
                     #region save new test to test table
@@ -1775,6 +1797,35 @@ namespace NewBTASProto
 
                 #endregion
 
+                //cancel test
+                #region cancel block
+                if (token.IsCancellationRequested)
+                {
+
+                    if ((string)d.Rows[station][2] == "As Received")
+                    {
+                        //nothing to do here...
+                    }
+                    //clear values from d
+                    updateD(station, 7, "Test Cancelled");
+                    if (MasterSlaveTest) { updateD(slaveRow, 7, "Test Cancelled"); }
+                    updateD(station, 5, false);
+                    if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+
+                    //update the gui
+                    this.Invoke((MethodInvoker)delegate()
+                    {
+                        sendNote(station, 3, "Test Cancelled");
+                        startNewTestToolStripMenuItem.Enabled = true;
+                        resumeTestToolStripMenuItem.Enabled = true;
+                        stopTestToolStripMenuItem.Enabled = false;
+                    });
+
+                    clearTLock();
+                    return;
+                }
+                #endregion
+
 
                 // OK now we'll tell the charger to startup (if we need to!)/////////////////////////////////////////////////////////////////////////////////////
                 if (d.Rows[station][2].ToString() == "As Received")
@@ -1786,8 +1837,8 @@ namespace NewBTASProto
                 {
                     #region             mode test
                     //update the GUI and pause...
-                    updateD(station, 7, "Confirming Settings");
-                    if (MasterSlaveTest) { updateD(slaveRow, 7, "Confirming Settings"); }
+                    updateD(station, 7, "Confirming Mode");
+                    if (MasterSlaveTest) { updateD(slaveRow, 7, "Confirming Mode"); }
                     Thread.Sleep(2000);
 
                     // we need to check that we are in the correct mode for the test...
@@ -1983,7 +2034,31 @@ namespace NewBTASProto
                             break;
                     }
                     #endregion
-                    // we have an intelligent charger
+
+
+                    //cancel test
+                    #region cancel block
+                    if (token.IsCancellationRequested)
+                    {
+                        //clear values from d
+                        updateD(station, 7, "Test Cancelled");
+                        if (MasterSlaveTest) { updateD(slaveRow, 7, "Test Cancelled"); }
+                        updateD(station, 5, false);
+                        if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+
+                        //update the gui
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            sendNote(station, 3, "Test Cancelled");
+                            startNewTestToolStripMenuItem.Enabled = true;
+                            resumeTestToolStripMenuItem.Enabled = true;
+                            stopTestToolStripMenuItem.Enabled = false;
+                        });
+
+                        clearTLock();
+                        return;
+                    }
+                    #endregion
 
                     // If we are in hold and we are starting a new test we need to reset before starting!
                     if ((string)d.Rows[station][11] != "RESET" && (string)d.Rows[station][6] == "")
@@ -2025,6 +2100,29 @@ namespace NewBTASProto
 
                     }
 
+                    //cancel test
+                    #region cancel block
+                    if (token.IsCancellationRequested)
+                    {
+                        //clear values from d
+                        updateD(station, 7, "Test Cancelled");
+                        if (MasterSlaveTest) { updateD(slaveRow, 7, "Test Cancelled"); }
+                        updateD(station, 5, false);
+                        if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+
+                        //update the gui
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            sendNote(station, 3, "Test Cancelled");
+                            startNewTestToolStripMenuItem.Enabled = true;
+                            resumeTestToolStripMenuItem.Enabled = true;
+                            stopTestToolStripMenuItem.Enabled = false;
+                        });
+                        clearTLock();
+                        return;
+                    }
+                    #endregion
+
                     // we are not in hold and we had a fault that we needed to clear...
                     else if ((string)d.Rows[station][11] != "HOLD" && (string)d.Rows[station][6] != "")
                     {
@@ -2032,24 +2130,70 @@ namespace NewBTASProto
                         // now we need to reset the charger
                         updateD(station, 7, "Clearing Charger");
                         if (MasterSlaveTest) { updateD(slaveRow, 7, "Clearing Charger"); }
-                        // set KE1 to 2 ("command")
-                        GlobalVars.ICSettings[Cstation].KE1 = (byte)2;
-                        // set KE3 to stop
-                        GlobalVars.ICSettings[Cstation].KE3 = (byte)0;
-                        //Update the output string value
-                        GlobalVars.ICSettings[Cstation].UpdateOutText();
-                        criticalNum[Cstation] = true;
-                        //now we are going to create a thread to set KE1 back to data mode after 5 seconds
-                        Thread.Sleep(5000);
-                        // set KE1 to 1 ("query")
-                        GlobalVars.ICSettings[Cstation].KE1 = (byte)0;
-                        //Update the output string value
-                        GlobalVars.ICSettings[Cstation].UpdateOutText();
-                        criticalNum[Cstation] = true;
-                        Thread.Sleep(5000);
+
+
+                        for (int j = 0; j < 10; j++)
+                        {
+                            // set KE1 to 2 ("command")
+                            GlobalVars.ICSettings[Cstation].KE1 = (byte)2;
+                            // set KE3 to run
+                            GlobalVars.ICSettings[Cstation].KE3 = (byte)0;
+                            //Update the output string value
+                            GlobalVars.ICSettings[Cstation].UpdateOutText();
+                            criticalNum[Cstation] = true;
+                            Thread.Sleep(3000);
+                            // set KE1 to 1 ("query")
+                            GlobalVars.ICSettings[Cstation].KE1 = (byte)0;
+
+                            //Update the output string value
+                            GlobalVars.ICSettings[Cstation].UpdateOutText();
+                            for (int i = 0; i < 3; i++)
+                            {
+                                criticalNum[Cstation] = true;
+                                Thread.Sleep(1000);
+                                if (d.Rows[station][11].ToString() == "HOLD")
+                                {
+                                    break;
+                                }
+                            }
+
+                            //make sure the charger has priority
+                            if (d.Rows[station][11].ToString() == "HOLD")
+                            {
+                                break;
+                            }
+                        }
 
                     }
 
+                    //cancel test
+                    #region cancel block
+                    if (token.IsCancellationRequested)
+                    {
+
+                        if ((string)d.Rows[station][2] == "As Received")
+                        {
+                            //nothing to do here...
+                        }
+                        //clear values from d
+                        updateD(station, 7, "Test Cancelled");
+                        if (MasterSlaveTest) { updateD(slaveRow, 7, "Test Cancelled"); }
+                        updateD(station, 5, false);
+                        if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+
+                        //update the gui
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            sendNote(station, 3, "Test Cancelled");
+                            startNewTestToolStripMenuItem.Enabled = true;
+                            resumeTestToolStripMenuItem.Enabled = true;
+                            stopTestToolStripMenuItem.Enabled = false;
+                        });
+
+                        clearTLock();
+                        return;
+                    }
+                    #endregion
 
                     updateD(station, 7, "Telling Charger to Run");
                     if (MasterSlaveTest) { updateD(slaveRow, 7, "Telling Charger to Run"); }
@@ -2068,11 +2212,9 @@ namespace NewBTASProto
                             GlobalVars.ICSettings[Cstation].UpdateOutText();
                             criticalNum[Cstation] = true;
                             Thread.Sleep(3000);
-                            //now we are going to create a thread to set KE1 back to data mode after 15 seconds
                             // set KE1 to 1 ("query")
                             GlobalVars.ICSettings[Cstation].KE1 = (byte)0;
-                            // set KE3 to 0 ("query")
-                            GlobalVars.ICSettings[Cstation].KE3 = (byte)3;
+
                             //Update the output string value
                             GlobalVars.ICSettings[Cstation].UpdateOutText();
                             for (int i = 0; i < 3; i++)
@@ -2096,6 +2238,67 @@ namespace NewBTASProto
 
                     // start timer now...
                     Thread.Sleep(1000);
+
+                    //cancel test
+                    #region cancel block
+                    if (token.IsCancellationRequested)
+                    {
+                        updateD(station, 7, "Telling Charger to Stop");
+                        if (MasterSlaveTest) { updateD(slaveRow, 7, "Telling Charger to Stop"); }
+
+                        for (int j = 0; j < 5; j++)
+                        {
+
+                            // set KE1 to 2 ("command")
+                            GlobalVars.ICSettings[Cstation].KE1 = (byte)2;
+                            // set KE3 to stop
+                            GlobalVars.ICSettings[Cstation].KE3 = (byte)2;
+                            //Update the output string value
+                            GlobalVars.ICSettings[Cstation].UpdateOutText();
+                            criticalNum[Cstation] = true;
+                            //now we are going to create a thread to set KE1 back to data mode after 15 seconds
+                            Thread.Sleep(5000);
+
+                            // set KE1 to 1 ("query")
+                            GlobalVars.ICSettings[Cstation].KE1 = (byte)0;
+                            //Update the output string value
+                            GlobalVars.ICSettings[Cstation].UpdateOutText();
+                            for (int i = 0; i < 5; i++)
+                            {
+                                criticalNum[Cstation] = true;
+                                Thread.Sleep(1000);
+                                if (d.Rows[station][11].ToString() == "HOLD")
+                                {
+                                    break;
+                                }
+
+                            }
+                            if (d.Rows[station][11].ToString() == "HOLD")
+                            {
+                                break;
+                            }
+                        }
+
+                        //clear values from d
+                        updateD(station, 7, "Test Cancelled");
+                        if (MasterSlaveTest) { updateD(slaveRow, 7, "Test Cancelled"); }
+                        updateD(station, 5, false);
+                        if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+
+                        //update the gui
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            sendNote(station, 3, "Test Cancelled");
+                            startNewTestToolStripMenuItem.Enabled = true;
+                            resumeTestToolStripMenuItem.Enabled = true;
+                            stopTestToolStripMenuItem.Enabled = false;
+                        });
+
+                        clearTLock();
+                        return;
+                    }
+                    #endregion
+
                     stopwatch.Start();
                     Thread.Sleep(200);
 
@@ -2105,7 +2308,37 @@ namespace NewBTASProto
                 {
                     // We have a legacy Charger!
                     // We need to let it run!
+                    
+                    //cancel test
+                    #region cancel block
+                    if (token.IsCancellationRequested)
+                    {
+
+                        if ((string)d.Rows[station][2] == "As Received")
+                        {
+                            //nothing to do here...
+                        }
+                        //clear values from d
+                        updateD(station, 7, "Test Cancelled");
+                        if (MasterSlaveTest) { updateD(slaveRow, 7, "Test Cancelled"); }
+                        updateD(station, 5, false);
+                        if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+
+                        //update the gui
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            sendNote(station, 3, "Test Cancelled");
+                            startNewTestToolStripMenuItem.Enabled = true;
+                            resumeTestToolStripMenuItem.Enabled = true;
+                            stopTestToolStripMenuItem.Enabled = false;
+                        });
+
+                        return;
+                    }
+                    #endregion
+
                     stopwatch.Start();
+                    Thread.Sleep(500);
                     GlobalVars.cHold[station] = false;
                 }  // end else if for Legacy chargers
                 else if (d.Rows[station][10].ToString().Contains("Shunt"))
@@ -2170,7 +2403,7 @@ namespace NewBTASProto
                         stopTestToolStripMenuItem.Enabled = false;
                     });
 
-                    clearTLock();
+                    clearTLock();   // for good luck!
                     return;
                 }
 
@@ -2927,6 +3160,61 @@ namespace NewBTASProto
                             // At the moment the test will just continue until the time is up...
 
                         }
+                        else if (GlobalVars.ICData[station].battCurrent == 0)
+                        {
+
+                            // end the test!
+                            //clear values from d
+
+                            updateD(station, 7, ("FAILED ON " + (currentReading - 1).ToString() + " of " + readings.ToString()));
+                            if (MasterSlaveTest) { updateD(slaveRow, 7, ("FAILED ON " + (currentReading - 1).ToString() + " of " + readings.ToString())); }
+                            updateD(station, 5, false);
+                            if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+
+                            //update the gui
+                            this.Invoke((MethodInvoker)delegate()
+                            {
+                                sendNote(station, 3, "Test failed. Charger is not producing any current.  Please check the charger settings.");
+                                startNewTestToolStripMenuItem.Enabled = true;
+                                resumeTestToolStripMenuItem.Enabled = true;
+                                stopTestToolStripMenuItem.Enabled = false;
+                            });
+
+                            //also tell the charger to stop
+                            // now we need to stop the charger
+                            updateD(station, 7, "Telling Charger to Stop");
+                            if (MasterSlaveTest) { updateD(slaveRow, 7, "Telling Charger to Stop"); }
+
+                            for (int j = 0; j < 5; j++)
+                            {
+                                // set KE1 to 2 ("command")
+                                GlobalVars.ICSettings[Cstation].KE1 = (byte)2;
+                                // set KE3 to stop
+                                GlobalVars.ICSettings[Cstation].KE3 = (byte)2;
+                                //Update the output string value
+                                GlobalVars.ICSettings[Cstation].UpdateOutText();
+
+                                for (int i = 0; i < 15; i++)
+                                {
+                                    criticalNum[Cstation] = true;
+                                    Thread.Sleep(1000);
+                                    if (d.Rows[station][11].ToString() == "HOLD" || d.Rows[station][11].ToString() == "END")
+                                    {
+                                        break;
+                                    }
+
+                                }
+
+                                if (d.Rows[station][11].ToString() == "HOLD" || d.Rows[station][11].ToString() == "END")
+                                {
+                                    break;
+                                }
+
+                            }
+
+                            return;
+
+                        }
                         else if ((string)d.Rows[station][11] != "RUN" && (string)d.Rows[station][2] != "As Received")
                         {
                             //make sure the charger has priority
@@ -2991,23 +3279,36 @@ namespace NewBTASProto
 
                                     ThreadPool.QueueUserWorkItem(t =>
                                     {
-                                        // set KE1 to 2 ("command")
-                                        GlobalVars.ICSettings[Cstation].KE1 = (byte)2;
-                                        // set KE3 to run
-                                        GlobalVars.ICSettings[Cstation].KE3 = (byte)1;
-                                        //Update the output string value
-                                        GlobalVars.ICSettings[Cstation].UpdateOutText();
-                                        criticalNum[Cstation] = true;
-                                        //now we are going to create a thread to set KE1 back to data mode after 15 seconds
-                                        Thread.Sleep(5000);
-                                        // set KE1 to 1 ("query")
-                                        GlobalVars.ICSettings[Cstation].KE1 = (byte)0;
-                                        // set KE3 to 0 ("query")
-                                        GlobalVars.ICSettings[Cstation].KE3 = (byte)3;
-                                        //Update the output string value
-                                        GlobalVars.ICSettings[Cstation].UpdateOutText();
-                                        criticalNum[Cstation] = true;
-                                        Thread.Sleep(5000);
+                                        for (int j = 0; j < 10; j++)
+                                        {
+                                            // set KE1 to 2 ("command")
+                                            GlobalVars.ICSettings[Cstation].KE1 = (byte)2;
+                                            // set KE3 to run
+                                            GlobalVars.ICSettings[Cstation].KE3 = (byte)1;
+                                            //Update the output string value
+                                            GlobalVars.ICSettings[Cstation].UpdateOutText();
+                                            criticalNum[Cstation] = true;
+                                            Thread.Sleep(3000);
+                                            // set KE1 to 1 ("query")
+                                            GlobalVars.ICSettings[Cstation].KE1 = (byte)0;
+                                            //Update the output string value
+                                            GlobalVars.ICSettings[Cstation].UpdateOutText();
+                                            for (int i = 0; i < 3; i++)
+                                            {
+                                                criticalNum[Cstation] = true;
+                                                Thread.Sleep(1000);
+                                                if (d.Rows[station][11].ToString() == "RUN")
+                                                {
+                                                    break;
+                                                }
+                                            }
+
+                                            //make sure the charger has priority
+                                            if (d.Rows[station][11].ToString() == "RUN")
+                                            {
+                                                break;
+                                            }
+                                        }
 
                                     });                     // end thread
 
@@ -3035,8 +3336,6 @@ namespace NewBTASProto
                                         resumeTestToolStripMenuItem.Enabled = true;
                                         stopTestToolStripMenuItem.Enabled = false;
                                     });
-
-
                                     return;
                                 }// end test fail else
 
@@ -3186,21 +3485,36 @@ namespace NewBTASProto
                         }
                         else if (d.Rows[station][10].ToString().Contains("ICA"))
                         {
-                            //make sure the charger has priority
-                            criticalNum[Cstation] = true;
-
                             // now we need to stop the charger
                             updateD(station, 7, "Telling Charger to Stop");
                             if (MasterSlaveTest) { updateD(slaveRow, 7, "Telling Charger to Stop"); }
-                            // set KE1 to 2 ("command")
-                            GlobalVars.ICSettings[Cstation].KE1 = (byte)2;
-                            // set KE3 to stop
-                            GlobalVars.ICSettings[Cstation].KE3 = (byte)2;
-                            //Update the output string value
-                            GlobalVars.ICSettings[Cstation].UpdateOutText();
-                            criticalNum[Cstation] = true;
-                            //now we are going to create a thread to set KE1 back to data mode after 15 seconds
-                            Thread.Sleep(5000);
+
+                            for (int j = 0; j < 5; j++)
+                            {
+                                // set KE1 to 2 ("command")
+                                GlobalVars.ICSettings[Cstation].KE1 = (byte)2;
+                                // set KE3 to stop
+                                GlobalVars.ICSettings[Cstation].KE3 = (byte)2;
+                                //Update the output string value
+                                GlobalVars.ICSettings[Cstation].UpdateOutText();
+
+                                for (int i = 0; i < 15; i++)
+                                {
+                                    criticalNum[Cstation] = true;
+                                    Thread.Sleep(1000);
+                                    if (d.Rows[station][11].ToString() == "HOLD" || d.Rows[station][11].ToString() == "END")
+                                    {
+                                        break;
+                                    }
+
+                                }
+
+                                if (d.Rows[station][11].ToString() == "HOLD" || d.Rows[station][11].ToString() == "END")
+                                {
+                                    break;
+                                }
+
+                            }
 
                         }
                         else if (d.Rows[station][10].ToString().Contains("CCA"))

@@ -148,6 +148,10 @@ namespace NewBTASProto
 
 
                 startup = false;
+                if (curStep.Length < 2)
+                {
+                    curStep = "0" + curStep;
+                }
                 try
                 {
                     comboBox2.SelectedIndex = comboBox2.FindString(curStep);
@@ -290,7 +294,7 @@ namespace NewBTASProto
                 DataSet WaterLevels = new DataSet();
                 // Open database containing all the battery data....
                 string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
-                string strAccessSelect = @"SELECT WLID,WorkOrderNumber,Cell1,Cell2,Cell3,Cell4,Cell5,Cell6,Cell7,Cell8,Cell9,Cell10,Cell11,Cell12,Cell13,Cell14,Cell15,Cell16,Cell17,Cell18,Cell19,Cell20,Cell21,Cell22,Cell23,Cell24,AVE FROM WaterLevel WHERE WorkOrderNumber='" + comboBox1.Text + @"'";
+                string strAccessSelect = @"SELECT WLID,WorkOrderNumber,Cell1,Cell2,Cell3,Cell4,Cell5,Cell6,Cell7,Cell8,Cell9,Cell10,Cell11,Cell12,Cell13,Cell14,Cell15,Cell16,Cell17,Cell18,Cell19,Cell20,Cell21,Cell22,Cell23,Cell24,AVE FROM WaterLevel WHERE WorkOrderNumber='" + comboBox1.Text + @"' ORDER BY WLID ASC";
 
                 //Here is where I load the form wide dataset which will both let me fill in the rest of the combo boxes and the graphs!
                 OleDbConnection myAccessConn = null;
@@ -385,9 +389,6 @@ namespace NewBTASProto
                     case 3:
                         workOrderLog();
                         break;
-                    case 4:
-                        workOrderSummary();
-                        break;
                     default:
                         break;
                 }
@@ -400,110 +401,110 @@ namespace NewBTASProto
          
         }
 
-        private void workOrderSummary()
-        {
-            reportSet = new  DataSet();
+        //private void workOrderSummary()
+        //{
+        //    reportSet = new  DataSet();
 
-            if (!(comboBox1.SelectedIndex < 1)) // make sure we have a selection to act on...
-            {
-                // FIRST CLEAR THE OLD DATA SET!
-                reportSet.Clear();
-                // Open database containing all the battery data....
-                string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
-                string strAccessSelect = @"SELECT DATE FROM ScanData WHERE BWO='" + comboBox1.Text + "' ORDER BY RDG ASC";
+        //    if (!(comboBox1.SelectedIndex < 1)) // make sure we have a selection to act on...
+        //    {
+        //        // FIRST CLEAR THE OLD DATA SET!
+        //        reportSet.Clear();
+        //        // Open database containing all the battery data....
+        //        string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+        //        string strAccessSelect = @"SELECT DATE FROM ScanData WHERE BWO='" + comboBox1.Text + "' ORDER BY RDG ASC";
 
-                //Here is where I load the form wide dataset which will both let me fill in the rest of the combo boxes and the graphs!
-                OleDbConnection myAccessConn = null;
-                // try to open the DB
-                try
-                {
-                    myAccessConn = new OleDbConnection(strAccessConn);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
-                    return;
-                }
-                //  now try to access it
-                try
-                {
-                    OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
-                    OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+        //        //Here is where I load the form wide dataset which will both let me fill in the rest of the combo boxes and the graphs!
+        //        OleDbConnection myAccessConn = null;
+        //        // try to open the DB
+        //        try
+        //        {
+        //            myAccessConn = new OleDbConnection(strAccessConn);
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
+        //            return;
+        //        }
+        //        //  now try to access it
+        //        try
+        //        {
+        //            OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+        //            OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
 
-                    lock (Main_Form.dataBaseLock)
-                    {
-                        myAccessConn.Open();
-                        myDataAdapter.Fill(reportSet, "ScanData");
-                        myAccessConn.Close();
-                    }
+        //            lock (Main_Form.dataBaseLock)
+        //            {
+        //                myAccessConn.Open();
+        //                myDataAdapter.Fill(reportSet, "ScanData");
+        //                myAccessConn.Close();
+        //            }
 
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
-                    return;
-                }
-                finally
-                {
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+        //            return;
+        //        }
+        //        finally
+        //        {
                     
-                }
-            }
+        //        }
+        //    }
 
-            DataTable testTable = new DataTable();
-
-
-            testTable = testsPerformed.Tables[0].Copy();
-            testTable.Rows[0].Delete();
-
-            if (!(comboBox1.SelectedIndex < 0)) // make sure we have a selection to act on...
-            {
-
-                // We have the data in testsPerformed, so lets pass it over to the matching report
-
-                // bind datatable to report viewer
-                this.reportViewer.Reset();
-                this.reportViewer.ProcessingMode = ProcessingMode.Local;
-                this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.WorkOrderSummary.rdlc";
-                this.reportViewer.LocalReport.DataSources.Clear();
-
-                this.reportViewer.LocalReport.DataSources.Add(new ReportDataSource("reportSet", reportSet.Tables[0]));
-
-                /*************************Load testsPerformed into Tests  ************************/
+        //    DataTable testTable = new DataTable();
 
 
-                this.reportViewer.LocalReport.DataSources.Add(new ReportDataSource("Tests", testTable));
+        //    testTable = testsPerformed.Tables[0].Copy();
+        //    testTable.Rows[0].Delete();
 
-                /*************************Load Global data into MetaData data Table ***********************
-                // create datatable
-                DataTable MetaDT = new DataTable("MetaData");
-                MetaDT.Clear();
+        //    if (!(comboBox1.SelectedIndex < 0)) // make sure we have a selection to act on...
+        //    {
 
-                // add columns
-                MetaDT.Columns.Add("gBusinessName", typeof(string));
-                MetaDT.Columns.Add("gUseF", typeof(string));
-                MetaDT.Columns.Add("gPos2Neg", typeof(string));
-                MetaDT.Columns.Add("testComboName", typeof(string));
-                MetaDT.Columns.Add("cellsCable", typeof(string));
-                MetaDT.Columns.Add("shuntCable", typeof(string));
-                MetaDT.Columns.Add("tempCable", typeof(string));
+        //        // We have the data in testsPerformed, so lets pass it over to the matching report
 
-                // insert data rows
-                MetaDT.Rows.Add(GlobalVars.businessName, GlobalVars.useF, GlobalVars.Pos2Neg, comboBox2.Text, testsPerformed.Tables[0].Rows[comboBox2.SelectedIndex][15].ToString(), testsPerformed.Tables[0].Rows[comboBox2.SelectedIndex][16].ToString(), testsPerformed.Tables[0].Rows[comboBox2.SelectedIndex][17].ToString());
-                */
+        //        // bind datatable to report viewer
+        //        this.reportViewer.Reset();
+        //        this.reportViewer.ProcessingMode = ProcessingMode.Local;
+        //        this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.WorkOrderSummary.rdlc";
+        //        this.reportViewer.LocalReport.DataSources.Clear();
 
-                DataTable MetaDT = new DataTable("MetaData");
-                this.reportViewer.LocalReport.DataSources.Add(new ReportDataSource("MetaData", MetaDT));
+        //        this.reportViewer.LocalReport.DataSources.Add(new ReportDataSource("reportSet", reportSet.Tables[0]));
 
-                this.reportViewer.RefreshReport();
+        //        /*************************Load testsPerformed into Tests  ************************/
 
-                /*********************************************************/
 
-                // finally enable the reportview
-                reportViewer.Enabled = true;
+        //        this.reportViewer.LocalReport.DataSources.Add(new ReportDataSource("Tests", testTable));
 
-            }
+        //        /*************************Load Global data into MetaData data Table ***********************
+        //        // create datatable
+        //        DataTable MetaDT = new DataTable("MetaData");
+        //        MetaDT.Clear();
 
-        }
+        //        // add columns
+        //        MetaDT.Columns.Add("gBusinessName", typeof(string));
+        //        MetaDT.Columns.Add("gUseF", typeof(string));
+        //        MetaDT.Columns.Add("gPos2Neg", typeof(string));
+        //        MetaDT.Columns.Add("testComboName", typeof(string));
+        //        MetaDT.Columns.Add("cellsCable", typeof(string));
+        //        MetaDT.Columns.Add("shuntCable", typeof(string));
+        //        MetaDT.Columns.Add("tempCable", typeof(string));
+
+        //        // insert data rows
+        //        MetaDT.Rows.Add(GlobalVars.businessName, GlobalVars.useF, GlobalVars.Pos2Neg, comboBox2.Text, testsPerformed.Tables[0].Rows[comboBox2.SelectedIndex][15].ToString(), testsPerformed.Tables[0].Rows[comboBox2.SelectedIndex][16].ToString(), testsPerformed.Tables[0].Rows[comboBox2.SelectedIndex][17].ToString());
+        //        */
+
+        //        DataTable MetaDT = new DataTable("MetaData");
+        //        this.reportViewer.LocalReport.DataSources.Add(new ReportDataSource("MetaData", MetaDT));
+
+        //        this.reportViewer.RefreshReport();
+
+        //        /*********************************************************/
+
+        //        // finally enable the reportview
+        //        reportViewer.Enabled = true;
+
+        //    }
+
+        //}
 
         private void workOrderLog()
         {
