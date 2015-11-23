@@ -677,8 +677,8 @@
           </Style>
         </Textbox>
         <Image Name="Image4">
-          <Source>Embedded</Source>
-          <Value>btas7</Value>
+          <Source>External</Source>
+          <Value>=Parameters!Path.Value</Value>
           <Sizing>FitProportional</Sizing>
           <Top>0.01041in</Top>
           <Left>7.99042in</Left>
@@ -1102,6 +1102,12 @@
       </rd:DataSetInfo>
     </DataSet>
   </DataSets>
+  <ReportParameters>
+    <ReportParameter Name="Path">
+      <DataType>String</DataType>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+  </ReportParameters>
   <EmbeddedImages>
     <EmbeddedImage Name="icon">
       <MIMEType>image/bmp</MIMEType>

@@ -24,6 +24,10 @@ namespace NewBTASProto
         string curStep = "";
         string curWorkOrder = "";
         bool startup = true;
+        
+        //        ReportParameter Path = new ReportParameter("ImagePath", filePath.A;
+        
+        //Me.reportViewer1.LocalReport.SetParameters(New ReportParameter() {Path})
 
 
         public Reports_Form(string currentStep = "", string currentWorkOrder = "")
@@ -568,9 +572,14 @@ namespace NewBTASProto
 
                 // bind datatable to report viewer
                 this.reportViewer.Reset();
+
                 this.reportViewer.ProcessingMode = ProcessingMode.Local;
                 this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.WorkOrderLog.rdlc"; 
                 this.reportViewer.LocalReport.DataSources.Clear();
+
+                this.reportViewer.LocalReport.EnableExternalImages = true;
+                ReportParameter parameter = new ReportParameter("Path", "file:////" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\rp_logo.jpg");
+                this.reportViewer.LocalReport.SetParameters(parameter);
 
                 this.reportViewer.LocalReport.DataSources.Add(new ReportDataSource("reportSet", reportSet.Tables[0]));
 

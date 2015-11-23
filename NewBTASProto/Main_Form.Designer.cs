@@ -172,6 +172,8 @@
             this.toolStripComboBox2 = new System.Windows.Forms.ToolStripComboBox();
             this.cellsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripComboBox3 = new System.Windows.Forms.ToolStripComboBox();
+            this.toolStripMenuItem39 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem40 = new System.Windows.Forms.ToolStripSeparator();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -458,6 +460,8 @@
             this.selectCellOrderToolStripMenuItem,
             this.toolStripMenuItem38,
             this.bussinessNameToolStripMenuItem,
+            this.toolStripMenuItem40,
+            this.toolStripMenuItem39,
             this.toolStripSeparator2,
             this.toolStripMenuItem33,
             this.editTechniciansToolStripMenuItem});
@@ -471,7 +475,7 @@
             this.centigradeToolStripMenuItem,
             this.fahrenheitToolStripMenuItem});
             this.selectTemperatureUnitsToolStripMenuItem.Name = "selectTemperatureUnitsToolStripMenuItem";
-            this.selectTemperatureUnitsToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
+            this.selectTemperatureUnitsToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
             this.selectTemperatureUnitsToolStripMenuItem.Text = "Select Temperature Units";
             // 
             // centigradeToolStripMenuItem
@@ -494,7 +498,7 @@
             this.negativeToPositiveToolStripMenuItem,
             this.positiveToNegativeToolStripMenuItem});
             this.selectCellOrderToolStripMenuItem.Name = "selectCellOrderToolStripMenuItem";
-            this.selectCellOrderToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
+            this.selectCellOrderToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
             this.selectCellOrderToolStripMenuItem.Text = "Select Cell Order";
             // 
             // negativeToPositiveToolStripMenuItem
@@ -514,26 +518,26 @@
             // toolStripMenuItem38
             // 
             this.toolStripMenuItem38.Name = "toolStripMenuItem38";
-            this.toolStripMenuItem38.Size = new System.Drawing.Size(203, 6);
+            this.toolStripMenuItem38.Size = new System.Drawing.Size(206, 6);
             // 
             // bussinessNameToolStripMenuItem
             // 
             this.bussinessNameToolStripMenuItem.Name = "bussinessNameToolStripMenuItem";
-            this.bussinessNameToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
+            this.bussinessNameToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
             this.bussinessNameToolStripMenuItem.Text = "Bussiness Name";
             this.bussinessNameToolStripMenuItem.Click += new System.EventHandler(this.bussinessNameToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(203, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(206, 6);
             // 
             // toolStripMenuItem33
             // 
             this.toolStripMenuItem33.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripComboBox1});
             this.toolStripMenuItem33.Name = "toolStripMenuItem33";
-            this.toolStripMenuItem33.Size = new System.Drawing.Size(206, 22);
+            this.toolStripMenuItem33.Size = new System.Drawing.Size(209, 22);
             this.toolStripMenuItem33.Text = "Select Technician";
             // 
             // toolStripComboBox1
@@ -548,7 +552,7 @@
             // editTechniciansToolStripMenuItem
             // 
             this.editTechniciansToolStripMenuItem.Name = "editTechniciansToolStripMenuItem";
-            this.editTechniciansToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
+            this.editTechniciansToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
             this.editTechniciansToolStripMenuItem.Text = "Edit Technicians";
             this.editTechniciansToolStripMenuItem.Click += new System.EventHandler(this.editTechniciansToolStripMenuItem_Click);
             // 
@@ -1380,6 +1384,18 @@
             this.toolStripComboBox3.Size = new System.Drawing.Size(121, 23);
             this.toolStripComboBox3.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox3_SelectedIndexChanged);
             // 
+            // toolStripMenuItem39
+            // 
+            this.toolStripMenuItem39.Name = "toolStripMenuItem39";
+            this.toolStripMenuItem39.Size = new System.Drawing.Size(209, 22);
+            this.toolStripMenuItem39.Text = "Change Work Order Logo";
+            this.toolStripMenuItem39.Click += new System.EventHandler(this.toolStripMenuItem39_Click);
+            // 
+            // toolStripMenuItem40
+            // 
+            this.toolStripMenuItem40.Name = "toolStripMenuItem40";
+            this.toolStripMenuItem40.Size = new System.Drawing.Size(206, 6);
+            // 
             // Main_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1571,6 +1587,8 @@
         private System.Windows.Forms.ToolStripComboBox toolStripComboBox2;
         private System.Windows.Forms.ToolStripMenuItem cellsToolStripMenuItem;
         private System.Windows.Forms.ToolStripComboBox toolStripComboBox3;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem40;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem39;
     }
 }
 

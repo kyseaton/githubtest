@@ -3390,5 +3390,10 @@ namespace NewBTASProto
             }
         }
 
+        private void toolStripMenuItem39_Click(object sender, EventArgs e)
+        {
+            //TODO!!!!
+        }
+
     }// end mainform class section...
 }

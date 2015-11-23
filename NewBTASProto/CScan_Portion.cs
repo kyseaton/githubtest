@@ -977,7 +977,21 @@ namespace NewBTASProto
                     {
                         int q;
                         // only do something if the combo box has a test save!
-                        if (comboBox2.SelectedIndex < 0) { return; }
+                        if (comboBox2.SelectedIndex < 0) 
+                        {
+                            //reset to the default..
+                            radioButton2.Checked = true;
+                            comboBox3.SelectedIndex = 0;
+                            if (testData.CCID == 10)
+                            {
+                                comboBox3.Text = "Current Votages";
+                            }
+                            else
+                            {
+                                comboBox3.Text = "Cell Voltages";
+                            }
+                            return; 
+                        }
                         // Here we will look at the Value selected and then plot graph1Set
 
                         //find out which graph to plot from the selected text
@@ -1149,7 +1163,21 @@ namespace NewBTASProto
                         chart1.ChartAreas[0].AxisX.Title = "Time";
                         int q;
                         // only do something if the radio button is selected
-                        if (radioButton2.Checked == false || comboBox3.SelectedIndex < 0) { return; }
+                        if (radioButton2.Checked == false || comboBox3.SelectedIndex < 0) 
+                        {
+                            //reset to the default..
+                            radioButton2.Checked = true;
+                            comboBox3.SelectedIndex = 0;
+                            if (testData.CCID == 10)
+                            {
+                                comboBox3.Text = "Current Votages";
+                            }
+                            else
+                            {
+                                comboBox3.Text = "Cell Voltages";
+                            }
+                            return; 
+                        }
                         // Here we will look at the Value selected and then plot graph1Set
 
                         //find out which graph to plot from the selected text

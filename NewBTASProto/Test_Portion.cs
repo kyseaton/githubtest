@@ -2353,8 +2353,6 @@ namespace NewBTASProto
                         #region cancel block
                         if (token.IsCancellationRequested)
                         {
-
-
                             //clear values from d
                             updateD(station, 7, ("Cancelled"));
                             if (MasterSlaveTest) { updateD(slaveRow, 7, "Cancelled"); }
@@ -2408,6 +2406,14 @@ namespace NewBTASProto
                 }
 
                 bool startUpDelay = true;
+                // clear startUpDelay in 15 seconds...
+                ThreadPool.QueueUserWorkItem(t =>
+                {
+                    Thread.Sleep(10000);
+                    startUpDelay = false;
+                });
+
+
                 clearTLock();
 
 
@@ -3141,13 +3147,6 @@ namespace NewBTASProto
                     }
                     oldETime = eTimeS;
 
-                    // to avoid start up comm delay issues...
-                    // we won't look for faults for the first 10 seconds
-                    if (startUpDelay && stopwatch.Elapsed.Add(offset).TotalSeconds > 10)
-                    {
-                        startUpDelay = false;
-                    }
-
                     #region Here is where we are going to look for charging issues!
                     //Lets test for a charger issue now
                     // there are going to be three sections, ICA section, CCA section and SHUNT section
@@ -3342,7 +3341,7 @@ namespace NewBTASProto
                             }  // end still no run if
                         } // end no run if
                     }// end IC block
-                    else if (d.Rows[station][10].ToString().Contains("CCA"))
+                    else if (d.Rows[station][10].ToString().Contains("CCA") && !startUpDelay)
                     {
                         // check that the C-Scan is still running...
 
@@ -3402,7 +3401,7 @@ namespace NewBTASProto
                         }
 
                     }
-                    else if (d.Rows[station][10].ToString().Contains("Shunt"))
+                    else if (d.Rows[station][10].ToString().Contains("Shunt") && !startUpDelay)
                     {
                         //test that the current is still above the 0.2 threshold...
                         // check that the C-Scan is still running...
