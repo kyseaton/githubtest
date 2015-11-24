@@ -679,9 +679,9 @@
         <Image Name="Image4">
           <Source>External</Source>
           <Value>=Parameters!Path.Value</Value>
-          <Sizing>FitProportional</Sizing>
+          <Sizing>Fit</Sizing>
           <Top>0.01041in</Top>
-          <Left>7.99042in</Left>
+          <Left>7.99043in</Left>
           <Height>0.71875in</Height>
           <Width>0.71875in</Width>
           <ZIndex>5</ZIndex>

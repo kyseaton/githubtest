@@ -3624,8 +3624,12 @@ namespace NewBTASProto
                 }
                 else if (d.Rows[station][10].ToString().Contains("CCA"))
                 {
-                    // Put the charger back on hold...
-                    GlobalVars.cHold[station] = true;
+                    // Put the charger back on hold after a little while (charger clocks are typically slow)
+                    ThreadPool.QueueUserWorkItem(t =>
+                    {
+                        Thread.Sleep(20000);
+                        GlobalVars.cHold[station] = true;
+                    });
                 }
                 else if (d.Rows[station][10].ToString().Contains("Shunt"))
                 {

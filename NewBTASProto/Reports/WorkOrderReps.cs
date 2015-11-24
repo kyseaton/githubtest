@@ -209,6 +209,11 @@ namespace NewBTASProto
 
             this.reportViewer1.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.WorkOrderSum.rdlc";
             this.reportViewer1.LocalReport.DataSources.Clear();
+            
+            this.reportViewer1.LocalReport.EnableExternalImages = true;
+            ReportParameter parameter = new ReportParameter("Path", "file:////" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\rp_logo.jpg");
+            this.reportViewer1.LocalReport.SetParameters(parameter);
+
             this.reportViewer1.LocalReport.DataSources.Add(new ReportDataSource("WorkOrders", WorkOrders.Tables[0]));
 
             /*************************Load Global data into MetaData data Table ************************/

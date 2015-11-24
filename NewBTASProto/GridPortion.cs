@@ -158,7 +158,7 @@ namespace NewBTASProto
                         break;
                     case 5:
                         dataGridView1.Columns[i].Width = 44;
-                        dataGridView1.Columns[i].DefaultCellStyle.BackColor = Color.Gainsboro;
+                        dataGridView1.Columns[i].DefaultCellStyle.BackColor = Color.Aquamarine;
                         break;
                     case 6:
                         dataGridView1.Columns[i].Width = 100;
@@ -166,7 +166,7 @@ namespace NewBTASProto
                         break;
                     case 7:
                         dataGridView1.Columns[i].Width = 120;
-                        dataGridView1.Columns[i].DefaultCellStyle.BackColor = Color.Gainsboro;
+                        dataGridView1.Columns[i].DefaultCellStyle.BackColor = Color.LightCyan;
                         break;
                     case 8:
                         dataGridView1.Columns[i].Width = 60;
@@ -174,15 +174,15 @@ namespace NewBTASProto
                         break;
                     case 9:
                         dataGridView1.Columns[i].Width = 50;
-                        dataGridView1.Columns[i].DefaultCellStyle.BackColor = Color.LightGoldenrodYellow;
+                        dataGridView1.Columns[i].DefaultCellStyle.BackColor = Color.Aquamarine;
                         break;
                     case 10:
                         dataGridView1.Columns[i].Width = 78;
-                        dataGridView1.Columns[i].DefaultCellStyle.BackColor = Color.LightGoldenrodYellow;
+                        dataGridView1.Columns[i].DefaultCellStyle.BackColor = Color.LightCyan;
                         break;
                     case 11:
                         dataGridView1.Columns[i].Width = 78;
-                        dataGridView1.Columns[i].DefaultCellStyle.BackColor = Color.Gainsboro;
+                        dataGridView1.Columns[i].DefaultCellStyle.BackColor = Color.LightGoldenrodYellow;
                         break;
                     case 12:
                         dataGridView1.Columns[i].Width = 60;

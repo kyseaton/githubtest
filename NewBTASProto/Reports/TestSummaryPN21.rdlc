@@ -3620,12 +3620,12 @@ CDbl(First(Fields!CEL21.Value, "reportSet"))),"00.00")</Value>
             <PaddingBottom>2pt</PaddingBottom>
           </Style>
         </Textbox>
-        <Image Name="Image4">
-          <Source>Embedded</Source>
-          <Value>btas7</Value>
-          <Sizing>FitProportional</Sizing>
+        <Image Name="Image5">
+          <Source>External</Source>
+          <Value>=Parameters!Path.Value</Value>
+          <Sizing>Fit</Sizing>
           <Top>0.01041in</Top>
-          <Left>8.00126in</Left>
+          <Left>8.01167in</Left>
           <Height>0.71875in</Height>
           <Width>0.71875in</Width>
           <ZIndex>14</ZIndex>
@@ -4046,6 +4046,12 @@ CDbl(First(Fields!CEL21.Value, "reportSet"))),"00.00")</Value>
       </rd:DataSetInfo>
     </DataSet>
   </DataSets>
+  <ReportParameters>
+    <ReportParameter Name="Path">
+      <DataType>String</DataType>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+  </ReportParameters>
   <EmbeddedImages>
     <EmbeddedImage Name="icon">
       <MIMEType>image/bmp</MIMEType>

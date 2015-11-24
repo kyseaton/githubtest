@@ -1660,7 +1660,7 @@
     <Height>0.55624in</Height>
     <Style />
   </Body>
-  <Width>8.70917in</Width>
+  <Width>8.7in</Width>
   <Page>
     <PageHeader>
       <Height>1.5in</Height>
@@ -2113,11 +2113,11 @@
           </Style>
         </Textbox>
         <Image Name="Image4">
-          <Source>Embedded</Source>
-          <Value>btas7</Value>
-          <Sizing>FitProportional</Sizing>
+          <Source>External</Source>
+          <Value>=Parameters!Path.Value</Value>
+          <Sizing>Fit</Sizing>
           <Top>0.01041in</Top>
-          <Left>7.99042in</Left>
+          <Left>7.98116in</Left>
           <Height>0.71875in</Height>
           <Width>0.71875in</Width>
           <ZIndex>14</ZIndex>
@@ -2538,6 +2538,12 @@
       </rd:DataSetInfo>
     </DataSet>
   </DataSets>
+  <ReportParameters>
+    <ReportParameter Name="Path">
+      <DataType>String</DataType>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+  </ReportParameters>
   <EmbeddedImages>
     <EmbeddedImage Name="icon">
       <MIMEType>image/bmp</MIMEType>

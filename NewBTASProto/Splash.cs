@@ -284,6 +284,19 @@ namespace NewBTASProto
                 // do nothing...
             }
 
+            //final step is to make sure we have a workorder logo.  If we don't we need to copy the one from resources to the correct location...
+            try
+            {
+                if (!File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\rp_logo.jpg"))
+                {
+                    Properties.Resources.rp_logo.Save(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\rp_logo.jpg");
+                }
+            }
+            catch
+            {
+
+            }
+
             
         }
 

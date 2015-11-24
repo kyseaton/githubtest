@@ -4,15 +4,15 @@
     <Height>0.01042in</Height>
     <Style />
   </Body>
-  <Width>8.70921in</Width>
+  <Width>8.70917in</Width>
   <Page>
     <PageHeader>
-      <Height>0.72916in</Height>
+      <Height>0.74306in</Height>
       <PrintOnFirstPage>true</PrintOnFirstPage>
       <PrintOnLastPage>true</PrintOnLastPage>
       <ReportItems>
         <Line Name="Line1">
-          <Top>0.22916in</Top>
+          <Top>0.23264in</Top>
           <Left>0.00917in</Left>
           <Height>0in</Height>
           <Width>7.95519in</Width>
@@ -43,7 +43,7 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox16</rd:DefaultName>
-          <Top>0.22916in</Top>
+          <Top>0.23264in</Top>
           <Height>0.25in</Height>
           <Width>8.70917in</Width>
           <ZIndex>1</ZIndex>
@@ -58,10 +58,10 @@
           </Style>
         </Textbox>
         <Image Name="Image4">
-          <Source>Embedded</Source>
-          <Value>btas7</Value>
-          <Sizing>FitProportional</Sizing>
-          <Top>0.01041in</Top>
+          <Source>External</Source>
+          <Value>=Parameters!Path.Value</Value>
+          <Sizing>Fit</Sizing>
+          <Top>0.02431in</Top>
           <Left>7.99042in</Left>
           <Height>0.71875in</Height>
           <Width>0.71875in</Width>
@@ -97,6 +97,12 @@
       <rd:DataSourceID>983b7350-29af-4f83-a41c-8d8968b35355</rd:DataSourceID>
     </DataSource>
   </DataSources>
+  <ReportParameters>
+    <ReportParameter Name="Path">
+      <DataType>String</DataType>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+  </ReportParameters>
   <EmbeddedImages>
     <EmbeddedImage Name="icon">
       <MIMEType>image/bmp</MIMEType>

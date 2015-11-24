@@ -3462,7 +3462,7 @@ CDbl(First(Fields!CEL23.Value, "reportSet"))),"00.00")</Value>
   <Width>8.73042in</Width>
   <Page>
     <PageHeader>
-      <Height>1.5in</Height>
+      <Height>1.51737in</Height>
       <PrintOnFirstPage>true</PrintOnFirstPage>
       <PrintOnLastPage>true</PrintOnLastPage>
       <ReportItems>
@@ -3486,6 +3486,7 @@ CDbl(First(Fields!CEL23.Value, "reportSet"))),"00.00")</Value>
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox1</rd:DefaultName>
+          <Top>0.01737in</Top>
           <Left>0.01084in</Left>
           <Height>0.22916in</Height>
           <Width>6.95in</Width>
@@ -3500,7 +3501,7 @@ CDbl(First(Fields!CEL23.Value, "reportSet"))),"00.00")</Value>
           </Style>
         </Textbox>
         <Line Name="Line1">
-          <Top>0.22916in</Top>
+          <Top>0.24653in</Top>
           <Left>0.02001in</Left>
           <Height>0in</Height>
           <Width>7.95519in</Width>
@@ -3530,7 +3531,7 @@ CDbl(First(Fields!CEL23.Value, "reportSet"))),"00.00")</Value>
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox2</rd:DefaultName>
-          <Top>0.47916in</Top>
+          <Top>0.49653in</Top>
           <Left>0.01084in</Left>
           <Height>0.25in</Height>
           <Width>1.75in</Width>
@@ -3562,7 +3563,7 @@ CDbl(First(Fields!CEL23.Value, "reportSet"))),"00.00")</Value>
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox11</rd:DefaultName>
-          <Top>0.72916in</Top>
+          <Top>0.74653in</Top>
           <Left>0.02001in</Left>
           <Height>0.25in</Height>
           <Width>1.75in</Width>
@@ -3596,7 +3597,7 @@ CDbl(First(Fields!CEL23.Value, "reportSet"))),"00.00")</Value>
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox12</rd:DefaultName>
-          <Top>0.97916in</Top>
+          <Top>0.99653in</Top>
           <Left>0.01084in</Left>
           <Height>0.25in</Height>
           <Width>2.60417in</Width>
@@ -3630,7 +3631,7 @@ CDbl(First(Fields!CEL23.Value, "reportSet"))),"00.00")</Value>
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox13</rd:DefaultName>
-          <Top>0.97916in</Top>
+          <Top>0.99653in</Top>
           <Left>3.49043in</Left>
           <Height>0.25in</Height>
           <Width>1.75in</Width>
@@ -3664,7 +3665,7 @@ CDbl(First(Fields!CEL23.Value, "reportSet"))),"00.00")</Value>
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox14</rd:DefaultName>
-          <Top>0.97916in</Top>
+          <Top>0.99653in</Top>
           <Left>5.92959in</Left>
           <Height>0.25in</Height>
           <Width>2.78125in</Width>
@@ -3696,7 +3697,7 @@ CDbl(First(Fields!CEL23.Value, "reportSet"))),"00.00")</Value>
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox15</rd:DefaultName>
-          <Top>0.72916in</Top>
+          <Top>0.74653in</Top>
           <Left>1.77001in</Left>
           <Height>0.25in</Height>
           <Width>1.75in</Width>
@@ -3730,7 +3731,7 @@ CDbl(First(Fields!CEL23.Value, "reportSet"))),"00.00")</Value>
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox16</rd:DefaultName>
-          <Top>0.72916in</Top>
+          <Top>0.74653in</Top>
           <Left>3.49043in</Left>
           <Height>0.25in</Height>
           <Width>1.75in</Width>
@@ -3764,7 +3765,7 @@ CDbl(First(Fields!CEL23.Value, "reportSet"))),"00.00")</Value>
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox17</rd:DefaultName>
-          <Top>0.72916in</Top>
+          <Top>0.74653in</Top>
           <Left>5.21084in</Left>
           <Height>0.25in</Height>
           <Width>1.75in</Width>
@@ -3798,7 +3799,7 @@ CDbl(First(Fields!CEL23.Value, "reportSet"))),"00.00")</Value>
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox18</rd:DefaultName>
-          <Top>0.72916in</Top>
+          <Top>0.74653in</Top>
           <Left>6.96084in</Left>
           <Height>0.25in</Height>
           <Width>1.75in</Width>
@@ -3832,7 +3833,7 @@ CDbl(First(Fields!CEL23.Value, "reportSet"))),"00.00")</Value>
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox2</rd:DefaultName>
-          <Top>0.22916in</Top>
+          <Top>0.24653in</Top>
           <Left>0.01084in</Left>
           <Height>0.25in</Height>
           <Width>1.75in</Width>
@@ -3866,7 +3867,7 @@ CDbl(First(Fields!CEL23.Value, "reportSet"))),"00.00")</Value>
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox18</rd:DefaultName>
-          <Top>0.47916in</Top>
+          <Top>0.49653in</Top>
           <Left>3.49043in</Left>
           <Height>0.25in</Height>
           <Width>1.75in</Width>
@@ -3900,7 +3901,7 @@ CDbl(First(Fields!CEL23.Value, "reportSet"))),"00.00")</Value>
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox16</rd:DefaultName>
-          <Top>0.22916in</Top>
+          <Top>0.24653in</Top>
           <Left>3.49043in</Left>
           <Height>0.25in</Height>
           <Width>1.75in</Width>
@@ -3916,11 +3917,11 @@ CDbl(First(Fields!CEL23.Value, "reportSet"))),"00.00")</Value>
           </Style>
         </Textbox>
         <Image Name="Image4">
-          <Source>Embedded</Source>
-          <Value>btas7</Value>
-          <Sizing>FitProportional</Sizing>
-          <Top>0.01041in</Top>
-          <Left>8.00126in</Left>
+          <Source>External</Source>
+          <Value>=Parameters!Path.Value</Value>
+          <Sizing>Fit</Sizing>
+          <Top>0.01389in</Top>
+          <Left>8.01167in</Left>
           <Height>0.71875in</Height>
           <Width>0.71875in</Width>
           <ZIndex>14</ZIndex>
@@ -4341,6 +4342,12 @@ CDbl(First(Fields!CEL23.Value, "reportSet"))),"00.00")</Value>
       </rd:DataSetInfo>
     </DataSet>
   </DataSets>
+  <ReportParameters>
+    <ReportParameter Name="Path">
+      <DataType>String</DataType>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+  </ReportParameters>
   <EmbeddedImages>
     <EmbeddedImage Name="icon">
       <MIMEType>image/bmp</MIMEType>

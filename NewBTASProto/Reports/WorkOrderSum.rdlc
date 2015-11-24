@@ -13,21 +13,6 @@
           </Border>
         </Style>
       </Line>
-      <Image Name="Image4">
-        <Source>Embedded</Source>
-        <Value>btas7</Value>
-        <Sizing>FitProportional</Sizing>
-        <Top>0.01041in</Top>
-        <Left>7.99042in</Left>
-        <Height>0.71875in</Height>
-        <Width>0.71875in</Width>
-        <ZIndex>1</ZIndex>
-        <Style>
-          <Border>
-            <Style>Solid</Style>
-          </Border>
-        </Style>
-      </Image>
       <Textbox Name="Textbox1">
         <CanGrow>true</CanGrow>
         <KeepTogether>true</KeepTogether>
@@ -50,7 +35,7 @@
         <rd:DefaultName>Textbox1</rd:DefaultName>
         <Height>0.22916in</Height>
         <Width>6.95in</Width>
-        <ZIndex>2</ZIndex>
+        <ZIndex>1</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -84,7 +69,7 @@
         <Left>3.27167in</Left>
         <Height>0.25in</Height>
         <Width>2.175in</Width>
-        <ZIndex>3</ZIndex>
+        <ZIndex>2</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -743,13 +728,27 @@
         <Left>0.00917in</Left>
         <Height>0.5in</Height>
         <Width>8.70917in</Width>
-        <ZIndex>4</ZIndex>
+        <ZIndex>3</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
           </Border>
         </Style>
       </Tablix>
+      <Image Name="Image4">
+        <Source>External</Source>
+        <Value>=Parameters!Path.Value</Value>
+        <Sizing>Fit</Sizing>
+        <Left>7.99959in</Left>
+        <Height>0.71875in</Height>
+        <Width>0.71875in</Width>
+        <ZIndex>4</ZIndex>
+        <Style>
+          <Border>
+            <Style>Solid</Style>
+          </Border>
+        </Style>
+      </Image>
     </ReportItems>
     <Height>1.2875in</Height>
     <Style />
@@ -898,6 +897,12 @@
       </rd:DataSetInfo>
     </DataSet>
   </DataSets>
+  <ReportParameters>
+    <ReportParameter Name="Path">
+      <DataType>String</DataType>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+  </ReportParameters>
   <EmbeddedImages>
     <EmbeddedImage Name="btas7">
       <MIMEType>image/jpeg</MIMEType>

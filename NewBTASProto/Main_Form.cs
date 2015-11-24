@@ -3392,7 +3392,40 @@ namespace NewBTASProto
 
         private void toolStripMenuItem39_Click(object sender, EventArgs e)
         {
-            //TODO!!!!
+
+            //first check if there are any reports windows open...
+            FormCollection fc = Application.OpenForms;
+            foreach (Form frm in fc)
+            {
+                if (frm is Battery_Reports || frm is Reports_Form || frm is WorkOrderReps)
+                {
+                    MessageBox.Show(new Form() { TopMost = true }, "Please close all reports forms before changing the reports logo.");
+                    return;
+                }
+            }
+
+            string file;
+
+            //here we import the new logo
+            openFileDialog1.FileName = "";
+            if (openFileDialog2.ShowDialog() == DialogResult.OK)
+            {
+                //here we export the old DB
+                file = openFileDialog2.FileName;
+                try
+                {
+                    //try to copy the database from the appdata folder to the selected folder...
+
+                    File.Copy(file, Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\rp_logo.jpg", true);
+                    MessageBox.Show(new Form() { TopMost = true }, "Icon file has been updated.");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(new Form() { TopMost = true }, "Icon file was not updated!" + Environment.NewLine + ex.ToString());
+                    return;
+                }
+            }// end if
+
         }
 
     }// end mainform class section...

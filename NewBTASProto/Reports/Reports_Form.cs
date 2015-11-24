@@ -60,6 +60,11 @@ namespace NewBTASProto
             this.reportViewer.ProcessingMode = ProcessingMode.Local;
             this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.Report1.rdlc";
             this.reportViewer.LocalReport.DataSources.Clear();
+
+            this.reportViewer.LocalReport.EnableExternalImages = true;
+            ReportParameter parameter = new ReportParameter("Path", "file:////" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\rp_logo.jpg");
+            this.reportViewer.LocalReport.SetParameters(parameter);
+
             this.reportViewer.LocalReport.DataSources.Add(new ReportDataSource("MetaData", MetaDT));
             this.reportViewer.RefreshReport();
 
@@ -345,6 +350,11 @@ namespace NewBTASProto
 
                 this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.WaterLevel.rdlc";
                 this.reportViewer.LocalReport.DataSources.Clear();
+
+                this.reportViewer.LocalReport.EnableExternalImages = true;
+                ReportParameter parameter = new ReportParameter("Path", "file:////" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\rp_logo.jpg");
+                this.reportViewer.LocalReport.SetParameters(parameter);
+
                 this.reportViewer.LocalReport.DataSources.Add(new ReportDataSource("DataSet1", WaterLevels.Tables[0]));
 
                 /*************************Load Global data into MetaData data Table ************************/
@@ -470,6 +480,10 @@ namespace NewBTASProto
         //        this.reportViewer.ProcessingMode = ProcessingMode.Local;
         //        this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.WorkOrderSummary.rdlc";
         //        this.reportViewer.LocalReport.DataSources.Clear();
+
+        //        this.reportViewer.LocalReport.EnableExternalImages = true;
+        //        ReportParameter parameter = new ReportParameter("Path", "file:////" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\rp_logo.jpg");
+        //        this.reportViewer.LocalReport.SetParameters(parameter);
 
         //        this.reportViewer.LocalReport.DataSources.Add(new ReportDataSource("reportSet", reportSet.Tables[0]));
 
@@ -734,6 +748,9 @@ namespace NewBTASProto
                 }// end switch
 
                 this.reportViewer.LocalReport.DataSources.Clear();
+                this.reportViewer.LocalReport.EnableExternalImages = true;
+                ReportParameter parameter = new ReportParameter("Path", "file:////" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\rp_logo.jpg");
+                this.reportViewer.LocalReport.SetParameters(parameter);
 
 
 
@@ -853,6 +870,9 @@ namespace NewBTASProto
                 }// end switch
 
                 this.reportViewer.LocalReport.DataSources.Clear();
+                this.reportViewer.LocalReport.EnableExternalImages = true;
+                ReportParameter parameter = new ReportParameter("Path", "file:////" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\rp_logo.jpg");
+                this.reportViewer.LocalReport.SetParameters(parameter);
 
 
 
@@ -961,6 +981,10 @@ namespace NewBTASProto
                 }// end switch
 
                 this.reportViewer.LocalReport.DataSources.Clear();
+                this.reportViewer.LocalReport.EnableExternalImages = true;
+                ReportParameter parameter = new ReportParameter("Path", "file:////" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\rp_logo.jpg");
+                this.reportViewer.LocalReport.SetParameters(parameter);
+
                 this.reportViewer.LocalReport.DataSources.Add(new ReportDataSource("reportSet", reportSet.Tables[0]));
 
                 /*************************Load testsPerformed into Tests  ************************/
