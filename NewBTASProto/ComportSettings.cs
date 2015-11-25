@@ -29,12 +29,26 @@ namespace NewBTASProto
             int i = 0;
             foreach (COMPortInfo port in ComPortInformation)
             {
-                comboBox1.Items.Add(port.friendlyName);
+                if (port.friendlyName != null)
+                {
+                    comboBox1.Items.Add(port.friendlyName);
+                }
+                else
+                {
+                    comboBox1.Items.Add(port.portName);
+                }
                 if(port.portName == GlobalVars.CSCANComPort)
                 {
                     comboBox1.SelectedIndex = i;
                 }
-                comboBox2.Items.Add(port.friendlyName);
+                if(port.friendlyName != "")
+                {
+                    comboBox2.Items.Add(port.friendlyName);
+                }
+                else
+                {
+                    comboBox2.Items.Add(port.portName);
+                }
                 if(port.portName == GlobalVars.ICComPort)
                 {
                     comboBox2.SelectedIndex = i;
@@ -72,46 +86,63 @@ namespace NewBTASProto
             }
 
             String[] usbDevs = GetUSBCOMDevices();
-            foreach (String s in usbDevs)
+            if (usbDevs == null)
             {
-                // Name will be like "USB Bridge (COM14)"
-                int start = s.IndexOf("(COM") + 1;
-                if (start >= 0)
+                //traditional
+                return;
+            }
+            else
+            {
+                // with friendly
+                foreach (String s in usbDevs)
                 {
-                    int end = s.IndexOf(")", start + 3);
-                    if (end >= 0)
+                    // Name will be like "USB Bridge (COM14)"
+                    int start = s.IndexOf("(COM") + 1;
+                    if (start >= 0)
                     {
-                        // cname is like "COM14"
-                        String cname = s.Substring(start, end - start);
-                        for (int i = 0; i < ComPortInformation.Count; i++)
+                        int end = s.IndexOf(")", start + 3);
+                        if (end >= 0)
                         {
-                            if (ComPortInformation[i].portName == cname)
+                            // cname is like "COM14"
+                            String cname = s.Substring(start, end - start);
+                            for (int i = 0; i < ComPortInformation.Count; i++)
                             {
-                                ComPortInformation[i].friendlyName = s;
+                                if (ComPortInformation[i].portName == cname)
+                                {
+                                    ComPortInformation[i].friendlyName = s;
+                                }
                             }
                         }
                     }
                 }
-            }
+            }// end else
         }
 
         static string[] GetUSBCOMDevices()
         {
-            List<string> list = new List<string>();
-
-            ManagementObjectSearcher searcher2 = new ManagementObjectSearcher("SELECT * FROM Win32_PnPEntity");
-            foreach (ManagementObject mo2 in searcher2.Get())
+            try
             {
-                string name = mo2["Name"].ToString();
-                // Name will have a substring like "(COM12)" in it.
-                if (name.Contains("(COM"))
+                return null;
+                List<string> list = new List<string>();
+
+                ManagementObjectSearcher searcher2 = new ManagementObjectSearcher("SELECT * FROM Win32_PnPEntity");
+                foreach (ManagementObject mo2 in searcher2.Get())
                 {
-                    list.Add(name);
+                    string name = mo2["Name"].ToString();
+                    // Name will have a substring like "(COM12)" in it.
+                    if (name.Contains("(COM"))
+                    {
+                        list.Add(name);
+                    }
                 }
+                // remove duplicates, sort alphabetically and convert to array
+                string[] usbDevices = list.Distinct().OrderBy(s => s).ToArray();
+                return usbDevices;
             }
-            // remove duplicates, sort alphabetically and convert to array
-            string[] usbDevices = list.Distinct().OrderBy(s => s).ToArray();
-            return usbDevices;
+            catch
+            {
+                return null;
+            }
         }
 
         public class COMPortInfo

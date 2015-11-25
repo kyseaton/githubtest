@@ -1877,6 +1877,8 @@ namespace NewBTASProto
         private void frmVECustomBats_Shown(object sender, EventArgs e)
         {
             updateCurVals();
+
+            bindingNavigatorAddNewItem.PerformClick();
         }
 
         private void bindingNavigator1_Validating(object sender, CancelEventArgs e)

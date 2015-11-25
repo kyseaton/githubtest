@@ -160,7 +160,7 @@ namespace NewBTASProto
                     MessageBox.Show(new Form() { TopMost = true }, "CScan is not connected to a cells Cable.  Please connect a cells cable to this CSCAN to run a test.");
                     return;
                 }
-                else if (GlobalVars.CScanData[station].shuntCableType == "NONE")
+                else if (GlobalVars.CScanData[station].shuntCableType == "NONE" && (string)d.Rows[station][2] != "As Received")
                 {
                     MessageBox.Show(new Form() { TopMost = true }, "CScan is not connected to a cells Shunt cable.  Please connect a shunt cable to this CSCAN to run a test.");
                     return;
@@ -2416,6 +2416,8 @@ namespace NewBTASProto
 
                 clearTLock();
 
+                int badCurCount = 0;
+
 
                 while (currentReading <= readings)
                 {
@@ -3152,23 +3154,40 @@ namespace NewBTASProto
                     // there are going to be three sections, ICA section, CCA section and SHUNT section
                     if (d.Rows[station][10].ToString().Contains("ICA") && !startUpDelay)
                     {
-                        if ((currentReading == readings || currentReading == readings + 1) && d.Rows[station][11].ToString() == "END")
+                        //current check part...
+                        //if we have a mini that is charging...
+                        if (d.Rows[station][10].ToString().Contains("mini") && !(d.Rows[station][2].ToString().Contains("Cap") || d.Rows[station][2].ToString().Contains("Discharge")))
                         {
-
-                            // we are on the last reading.  Look out for the "END"...
-                            // At the moment the test will just continue until the time is up...
-
+                            //badCurCount looks at current two...
+                            // for the mini case
+                            if (Math.Abs(GlobalVars.CScanData[station].currentTwo) < 0.05)
+                            {
+                                badCurCount++;
+                            }
+                            else
+                            {
+                                badCurCount = 0;
+                            }
                         }
-                        else if (GlobalVars.ICData[station].battCurrent == 0)
+                        else
                         {
+                            // all other cases
+                            // for the mini case
+                            if (Math.Abs(GlobalVars.CScanData[station].currentOne) < 0.05)
+                            {
+                                badCurCount++;
+                            }
+                            else
+                            {
+                                badCurCount = 0;
+                            }
+                        }
 
+
+                        if (badCurCount > 100)
+                        {
                             // end the test!
                             //clear values from d
-
-                            updateD(station, 7, ("FAILED ON " + (currentReading - 1).ToString() + " of " + readings.ToString()));
-                            if (MasterSlaveTest) { updateD(slaveRow, 7, ("FAILED ON " + (currentReading - 1).ToString() + " of " + readings.ToString())); }
-                            updateD(station, 5, false);
-                            if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
 
                             //update the gui
                             this.Invoke((MethodInvoker)delegate()
@@ -3193,7 +3212,7 @@ namespace NewBTASProto
                                 //Update the output string value
                                 GlobalVars.ICSettings[Cstation].UpdateOutText();
 
-                                for (int i = 0; i < 15; i++)
+                                for (int i = 0; i < 5; i++)
                                 {
                                     criticalNum[Cstation] = true;
                                     Thread.Sleep(1000);
@@ -3211,7 +3230,22 @@ namespace NewBTASProto
 
                             }
 
+                            updateD(station, 7, ("FAILED ON " + (currentReading - 1).ToString() + " of " + readings.ToString()));
+                            if (MasterSlaveTest) { updateD(slaveRow, 7, ("FAILED ON " + (currentReading - 1).ToString() + " of " + readings.ToString())); }
+                            updateD(station, 5, false);
+                            if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+
                             return;
+                        }
+
+
+                        ////////status checks!
+                        
+                        if ((currentReading == readings || currentReading == readings + 1) && d.Rows[station][11].ToString() == "END")
+                        {
+
+                            // we are on the last reading.  Look out for the "END"...
+                            // At the moment the test will just continue until the time is up...
 
                         }
                         else if ((string)d.Rows[station][11] != "RUN" && (string)d.Rows[station][2] != "As Received")
@@ -3309,6 +3343,14 @@ namespace NewBTASProto
                                             }
                                         }
 
+                                    });                     // end thread
+
+                                    // lay off the tests for 10 seconds...
+                                    startUpDelay = true;
+                                    ThreadPool.QueueUserWorkItem(t =>
+                                    {
+                                        Thread.Sleep(10000);
+                                        startUpDelay = false;
                                     });                     // end thread
 
 

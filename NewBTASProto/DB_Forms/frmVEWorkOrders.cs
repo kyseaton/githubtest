@@ -1456,6 +1456,7 @@ namespace NewBTASProto
 
         private void frmVEWorkOrders_Shown(object sender, EventArgs e)
         {
+            //bindingNavigatorAddNewItem.PerformClick();
             #region enable disable depending....
 
             if (toolStripCBWorkOrderStatus.Text == "Active")
@@ -1537,6 +1538,8 @@ namespace NewBTASProto
             #endregion
             UpdateView();
             updateCurVals();
+
+            bindingNavigatorAddNewItem.PerformClick();
         }
 
         private void comboBox1_Enter(object sender, EventArgs e)

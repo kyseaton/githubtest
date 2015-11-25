@@ -168,7 +168,12 @@ namespace NewBTASProto
                                             else if (d.Rows[currentRow][10].ToString().Contains("mini") && !(d.Rows[currentRow][2].ToString().Contains("Cap") || d.Rows[currentRow][2].ToString().Contains("Discharge")))
                                             {
                                                 // for the mini case
-                                                tempText += "Current:  " + testData.currentTwo.ToString("00.00") + Environment.NewLine;
+                                                tempText += "Current:  " + testData.currentTwo.ToString("00.000") + Environment.NewLine;
+                                            }
+                                            else if (d.Rows[currentRow][10].ToString().Contains("mini"))
+                                            {
+                                                // all other cases
+                                                tempText += "Current:  " + (-1 * testData.currentOne).ToString("00.000") + Environment.NewLine;
                                             }
                                             else
                                             {
@@ -176,17 +181,25 @@ namespace NewBTASProto
                                                 tempText += "Current:  " + testData.currentOne.ToString("00.00") + Environment.NewLine;
                                             }
 
-
+                                            int cellsToDisplay = 0;
+                                            if ((int) pci.Rows[currentRow][3] != -1)
+                                            {
+                                                cellsToDisplay = (int)pci.Rows[currentRow][3];
+                                            }
+                                            else
+                                            {
+                                                cellsToDisplay = GlobalVars.CScanData[currentRow].cellsToDisplay;
+                                            }
                                             if (GlobalVars.Pos2Neg == false)
                                             {
-                                                for (int i = 0; i < GlobalVars.CScanData[currentRow].cellsToDisplay; i++)
+                                                for (int i = 0; i < cellsToDisplay; i++)
                                                 {
                                                     tempText += "Cell #" + (i + 1).ToString() + ":  " + testData.orderedCells[i].ToString("0.000") + Environment.NewLine;
                                                 }
                                             }
                                             else
                                             {
-                                                for (int i = 0; i < GlobalVars.CScanData[currentRow].cellsToDisplay; i++)
+                                                for (int i = 0; i < cellsToDisplay; i++)
                                                 {
                                                     tempText += "Cell #" + (i + 1).ToString() + ":  " + testData.orderedCells[GlobalVars.CScanData[currentRow].cellsToDisplay - i - 1].ToString("0.000") + Environment.NewLine;
                                                 }
@@ -1015,7 +1028,15 @@ namespace NewBTASProto
                                 chart1.ChartAreas[0].AxisY.Title = "Voltage";
                                 break;
                             case "Current":
-                                q = 8;
+                                //if we have a mini that is charging...
+                                if (d.Rows[testData.terminalID][10].ToString().Contains("mini") && !(d.Rows[testData.terminalID][2].ToString().Contains("Cap") || d.Rows[testData.terminalID][2].ToString().Contains("Discharge")))
+                                {
+                                    q = 9;
+                                }
+                                else
+                                {
+                                    q = 8;
+                                }
                                 chart1.ChartAreas[0].AxisY.Title = "Current";
                                 break;
                             case "Temperature 1":
@@ -1055,9 +1076,14 @@ namespace NewBTASProto
                         this.chart1.Series.Add(series1);
                         chart1.ChartAreas[0].AxisX.Title = "Time";
 
+                        int reverse = 1;
+                        if (d.Rows[testData.terminalID][10].ToString().Contains("mini") && q == 8)
+                        {
+                            reverse = -1;
+                        }
                         for (int i = 0; i < graphMainSet.Tables[0].Rows.Count; i++)
                         {
-                            series1.Points.AddXY(Math.Round(double.Parse(graphMainSet.Tables[0].Rows[i][7].ToString()) * 1440), graphMainSet.Tables[0].Rows[i][q]);
+                            series1.Points.AddXY(Math.Round(double.Parse(graphMainSet.Tables[0].Rows[i][7].ToString()) * 1440), reverse * float.Parse(graphMainSet.Tables[0].Rows[i][q].ToString()));
                             // color test
                             if (q == 8 || q == 7)
                             {

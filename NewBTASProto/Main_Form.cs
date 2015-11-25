@@ -3095,6 +3095,7 @@ namespace NewBTASProto
 
                 this.Invoke((MethodInvoker)delegate
                 {
+                    commPortSettingsToolStripMenuItem.Enabled = false;
                     // start by disabling the button while we look for stations
                     toolStripMenuItem34.Enabled = false;
                     // also disable the grid, so the user cannot interfere with the search
@@ -3336,6 +3337,7 @@ namespace NewBTASProto
                 //reenable the button before exit
                 this.Invoke((MethodInvoker)delegate
                 {
+                    commPortSettingsToolStripMenuItem.Enabled = true;
                     // start by disabling the button while we look for stations
                     toolStripMenuItem34.Enabled = true;
                     // also disable the grid, so the user cannot interfere with the search

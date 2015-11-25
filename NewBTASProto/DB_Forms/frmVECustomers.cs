@@ -546,6 +546,8 @@ namespace NewBTASProto
         private void frmVECustomers_Shown(object sender, EventArgs e)
         {
             updateCurVals();
+
+            bindingNavigatorAddNewItem.PerformClick();
         }
 
         private void bindingNavigator1_LocationChanged(object sender, EventArgs e)

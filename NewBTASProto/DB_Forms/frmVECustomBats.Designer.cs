@@ -1031,7 +1031,7 @@
             // 
             // numericUpDown6
             // 
-            this.numericUpDown6.DecimalPlaces = 1;
+            this.numericUpDown6.DecimalPlaces = 2;
             this.numericUpDown6.Increment = new decimal(new int[] {
             5,
             0,
@@ -1160,7 +1160,7 @@
             // 
             // numericUpDown3
             // 
-            this.numericUpDown3.DecimalPlaces = 1;
+            this.numericUpDown3.DecimalPlaces = 2;
             this.numericUpDown3.Increment = new decimal(new int[] {
             5,
             0,
@@ -1331,7 +1331,7 @@
             // 
             // numericUpDown10
             // 
-            this.numericUpDown10.DecimalPlaces = 1;
+            this.numericUpDown10.DecimalPlaces = 2;
             this.numericUpDown10.Increment = new decimal(new int[] {
             5,
             0,
@@ -1459,7 +1459,7 @@
             // 
             // numericUpDown14
             // 
-            this.numericUpDown14.DecimalPlaces = 1;
+            this.numericUpDown14.DecimalPlaces = 2;
             this.numericUpDown14.Increment = new decimal(new int[] {
             5,
             0,
@@ -1625,7 +1625,7 @@
             // 
             // numericUpDown18
             // 
-            this.numericUpDown18.DecimalPlaces = 1;
+            this.numericUpDown18.DecimalPlaces = 2;
             this.numericUpDown18.Increment = new decimal(new int[] {
             5,
             0,
@@ -1741,7 +1741,7 @@
             // 
             // numericUpDown22
             // 
-            this.numericUpDown22.DecimalPlaces = 1;
+            this.numericUpDown22.DecimalPlaces = 2;
             this.numericUpDown22.Increment = new decimal(new int[] {
             5,
             0,
@@ -1902,7 +1902,7 @@
             // 
             // numericUpDown26
             // 
-            this.numericUpDown26.DecimalPlaces = 1;
+            this.numericUpDown26.DecimalPlaces = 2;
             this.numericUpDown26.Increment = new decimal(new int[] {
             5,
             0,
@@ -2018,7 +2018,7 @@
             // 
             // numericUpDown30
             // 
-            this.numericUpDown30.DecimalPlaces = 1;
+            this.numericUpDown30.DecimalPlaces = 2;
             this.numericUpDown30.Increment = new decimal(new int[] {
             5,
             0,
@@ -2178,7 +2178,7 @@
             // 
             // numericUpDown34
             // 
-            this.numericUpDown34.DecimalPlaces = 1;
+            this.numericUpDown34.DecimalPlaces = 2;
             this.numericUpDown34.Increment = new decimal(new int[] {
             5,
             0,
@@ -2294,7 +2294,7 @@
             // 
             // numericUpDown38
             // 
-            this.numericUpDown38.DecimalPlaces = 1;
+            this.numericUpDown38.DecimalPlaces = 2;
             this.numericUpDown38.Increment = new decimal(new int[] {
             5,
             0,
@@ -2458,7 +2458,7 @@
             // 
             // numericUpDown81
             // 
-            this.numericUpDown81.DecimalPlaces = 1;
+            this.numericUpDown81.DecimalPlaces = 2;
             this.numericUpDown81.Increment = new decimal(new int[] {
             5,
             0,
@@ -2584,7 +2584,7 @@
             // 
             // numericUpDown85
             // 
-            this.numericUpDown85.DecimalPlaces = 1;
+            this.numericUpDown85.DecimalPlaces = 2;
             this.numericUpDown85.Increment = new decimal(new int[] {
             5,
             0,
@@ -2791,7 +2791,7 @@
             // 
             // numericUpDown43
             // 
-            this.numericUpDown43.DecimalPlaces = 1;
+            this.numericUpDown43.DecimalPlaces = 2;
             this.numericUpDown43.Increment = new decimal(new int[] {
             5,
             0,
@@ -2999,7 +2999,7 @@
             // 
             // numericUpDown48
             // 
-            this.numericUpDown48.DecimalPlaces = 1;
+            this.numericUpDown48.DecimalPlaces = 2;
             this.numericUpDown48.Increment = new decimal(new int[] {
             5,
             0,
@@ -3163,7 +3163,7 @@
             // 
             // numericUpDown57
             // 
-            this.numericUpDown57.DecimalPlaces = 1;
+            this.numericUpDown57.DecimalPlaces = 2;
             this.numericUpDown57.Increment = new decimal(new int[] {
             5,
             0,
@@ -3275,7 +3275,7 @@
             // 
             // numericUpDown61
             // 
-            this.numericUpDown61.DecimalPlaces = 1;
+            this.numericUpDown61.DecimalPlaces = 2;
             this.numericUpDown61.Increment = new decimal(new int[] {
             5,
             0,
@@ -3436,7 +3436,7 @@
             // 
             // numericUpDown65
             // 
-            this.numericUpDown65.DecimalPlaces = 1;
+            this.numericUpDown65.DecimalPlaces = 2;
             this.numericUpDown65.Increment = new decimal(new int[] {
             5,
             0,
@@ -3548,7 +3548,7 @@
             // 
             // numericUpDown69
             // 
-            this.numericUpDown69.DecimalPlaces = 1;
+            this.numericUpDown69.DecimalPlaces = 2;
             this.numericUpDown69.Increment = new decimal(new int[] {
             5,
             0,
@@ -3712,7 +3712,7 @@
             // 
             // numericUpDown73
             // 
-            this.numericUpDown73.DecimalPlaces = 1;
+            this.numericUpDown73.DecimalPlaces = 2;
             this.numericUpDown73.Increment = new decimal(new int[] {
             5,
             0,
@@ -3844,7 +3844,7 @@
             // 
             // numericUpDown77
             // 
-            this.numericUpDown77.DecimalPlaces = 1;
+            this.numericUpDown77.DecimalPlaces = 2;
             this.numericUpDown77.Increment = new decimal(new int[] {
             5,
             0,
@@ -4052,7 +4052,7 @@
             // 
             // numericUpDown53
             // 
-            this.numericUpDown53.DecimalPlaces = 1;
+            this.numericUpDown53.DecimalPlaces = 2;
             this.numericUpDown53.Increment = new decimal(new int[] {
             5,
             0,

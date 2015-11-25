@@ -807,6 +807,8 @@ namespace NewBTASProto
         private void frmVECustomerBats_Shown(object sender, EventArgs e)
         {
             updateCurVals();
+
+            bindingNavigatorAddNewItem.PerformClick();
         }
 
         private void bindingNavigatorMoveNextItem_Click(object sender, EventArgs e)

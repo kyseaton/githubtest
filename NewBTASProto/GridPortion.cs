@@ -142,15 +142,15 @@ namespace NewBTASProto
                         break;
                     case 1:
                         dataGridView1.Columns[i].Width = 180;
-                        dataGridView1.Columns[i].DefaultCellStyle.BackColor = Color.LightGoldenrodYellow;
+                        dataGridView1.Columns[i].DefaultCellStyle.BackColor = Color.FloralWhite;
                         break;
                     case 2:
                         dataGridView1.Columns[i].Width = 140;
-                        dataGridView1.Columns[i].DefaultCellStyle.BackColor = Color.Aquamarine;
+                        dataGridView1.Columns[i].DefaultCellStyle.BackColor = System.Drawing.ColorTranslator.FromHtml("#ccffcc");
                         break;
                     case 3:
                         dataGridView1.Columns[i].Width = 40;
-                        dataGridView1.Columns[i].DefaultCellStyle.BackColor = Color.Coral;
+                        dataGridView1.Columns[i].DefaultCellStyle.BackColor = System.Drawing.ColorTranslator.FromHtml("#ffbfa7");
                         break;
                     case 4:
                         dataGridView1.Columns[i].Width = 44;
@@ -158,7 +158,7 @@ namespace NewBTASProto
                         break;
                     case 5:
                         dataGridView1.Columns[i].Width = 44;
-                        dataGridView1.Columns[i].DefaultCellStyle.BackColor = Color.Aquamarine;
+                        dataGridView1.Columns[i].DefaultCellStyle.BackColor = System.Drawing.ColorTranslator.FromHtml("#ccffcc");
                         break;
                     case 6:
                         dataGridView1.Columns[i].Width = 100;
@@ -174,7 +174,7 @@ namespace NewBTASProto
                         break;
                     case 9:
                         dataGridView1.Columns[i].Width = 50;
-                        dataGridView1.Columns[i].DefaultCellStyle.BackColor = Color.Aquamarine;
+                        dataGridView1.Columns[i].DefaultCellStyle.BackColor = System.Drawing.ColorTranslator.FromHtml("#ccffcc");
                         break;
                     case 10:
                         dataGridView1.Columns[i].Width = 78;
