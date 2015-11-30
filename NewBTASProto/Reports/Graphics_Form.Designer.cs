@@ -162,9 +162,9 @@
             this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox1.Location = new System.Drawing.Point(663, 11);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(117, 17);
+            this.checkBox1.Size = new System.Drawing.Size(81, 17);
             this.checkBox1.TabIndex = 15;
-            this.checkBox1.Text = "Show Bottom Chart";
+            this.checkBox1.Text = "Dual Charts";
             this.checkBox1.UseVisualStyleBackColor = true;
             this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
@@ -351,6 +351,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Graphics_Form";
             this.Text = "Review Plots";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Graphics_Form_FormClosing);
             this.Load += new System.EventHandler(this.Graphics_Form_Load);
             this.SizeChanged += new System.EventHandler(this.Graphics_Form_SizeChanged);
             this.groupBox1.ResumeLayout(false);

@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main_Form));
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main_Form));
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -70,6 +70,8 @@
             this.selectCellOrderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.negativeToPositiveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.positiveToNegativeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem42 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuItem41 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem38 = new System.Windows.Forms.ToolStripSeparator();
             this.bussinessNameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem40 = new System.Windows.Forms.ToolStripSeparator();
@@ -99,6 +101,7 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -174,12 +177,12 @@
             this.cellsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripComboBox3 = new System.Windows.Forms.ToolStripComboBox();
             this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.cMSTestType.SuspendLayout();
@@ -191,7 +194,6 @@
             this.contextMenuStripTextPrint.SuspendLayout();
             this.contextMenuStripClear.SuspendLayout();
             this.contextMenuStripGraphSelect.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // dataGridView1
@@ -241,6 +243,7 @@
             this.menuStrip1.Size = new System.Drawing.Size(1282, 24);
             this.menuStrip1.TabIndex = 24;
             this.menuStrip1.Text = "menuStrip1";
+            this.menuStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.menuStrip1_ItemClicked);
             // 
             // fileToolStripMenuItem
             // 
@@ -459,6 +462,8 @@
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.selectTemperatureUnitsToolStripMenuItem,
             this.selectCellOrderToolStripMenuItem,
+            this.toolStripMenuItem42,
+            this.toolStripMenuItem41,
             this.toolStripMenuItem38,
             this.bussinessNameToolStripMenuItem,
             this.toolStripMenuItem40,
@@ -476,7 +481,7 @@
             this.centigradeToolStripMenuItem,
             this.fahrenheitToolStripMenuItem});
             this.selectTemperatureUnitsToolStripMenuItem.Name = "selectTemperatureUnitsToolStripMenuItem";
-            this.selectTemperatureUnitsToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.selectTemperatureUnitsToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
             this.selectTemperatureUnitsToolStripMenuItem.Text = "Select Temperature Units";
             // 
             // centigradeToolStripMenuItem
@@ -499,7 +504,7 @@
             this.negativeToPositiveToolStripMenuItem,
             this.positiveToNegativeToolStripMenuItem});
             this.selectCellOrderToolStripMenuItem.Name = "selectCellOrderToolStripMenuItem";
-            this.selectCellOrderToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.selectCellOrderToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
             this.selectCellOrderToolStripMenuItem.Text = "Select Cell Order";
             // 
             // negativeToPositiveToolStripMenuItem
@@ -516,41 +521,53 @@
             this.positiveToNegativeToolStripMenuItem.Text = "Positive to Negative";
             this.positiveToNegativeToolStripMenuItem.Click += new System.EventHandler(this.positiveToNegativeToolStripMenuItem_Click);
             // 
+            // toolStripMenuItem42
+            // 
+            this.toolStripMenuItem42.Name = "toolStripMenuItem42";
+            this.toolStripMenuItem42.Size = new System.Drawing.Size(213, 6);
+            // 
+            // toolStripMenuItem41
+            // 
+            this.toolStripMenuItem41.Name = "toolStripMenuItem41";
+            this.toolStripMenuItem41.Size = new System.Drawing.Size(216, 22);
+            this.toolStripMenuItem41.Text = "Show Chart Selecton Boxes";
+            this.toolStripMenuItem41.Click += new System.EventHandler(this.toolStripMenuItem41_Click);
+            // 
             // toolStripMenuItem38
             // 
             this.toolStripMenuItem38.Name = "toolStripMenuItem38";
-            this.toolStripMenuItem38.Size = new System.Drawing.Size(206, 6);
+            this.toolStripMenuItem38.Size = new System.Drawing.Size(213, 6);
             // 
             // bussinessNameToolStripMenuItem
             // 
             this.bussinessNameToolStripMenuItem.Name = "bussinessNameToolStripMenuItem";
-            this.bussinessNameToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.bussinessNameToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
             this.bussinessNameToolStripMenuItem.Text = "Bussiness Name";
             this.bussinessNameToolStripMenuItem.Click += new System.EventHandler(this.bussinessNameToolStripMenuItem_Click);
             // 
             // toolStripMenuItem40
             // 
             this.toolStripMenuItem40.Name = "toolStripMenuItem40";
-            this.toolStripMenuItem40.Size = new System.Drawing.Size(206, 6);
+            this.toolStripMenuItem40.Size = new System.Drawing.Size(213, 6);
             // 
             // toolStripMenuItem39
             // 
             this.toolStripMenuItem39.Name = "toolStripMenuItem39";
-            this.toolStripMenuItem39.Size = new System.Drawing.Size(209, 22);
+            this.toolStripMenuItem39.Size = new System.Drawing.Size(216, 22);
             this.toolStripMenuItem39.Text = "Change Work Order Logo";
             this.toolStripMenuItem39.Click += new System.EventHandler(this.toolStripMenuItem39_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(206, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(213, 6);
             // 
             // toolStripMenuItem33
             // 
             this.toolStripMenuItem33.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripComboBox1});
             this.toolStripMenuItem33.Name = "toolStripMenuItem33";
-            this.toolStripMenuItem33.Size = new System.Drawing.Size(209, 22);
+            this.toolStripMenuItem33.Size = new System.Drawing.Size(216, 22);
             this.toolStripMenuItem33.Text = "Select Technician";
             // 
             // toolStripComboBox1
@@ -565,7 +582,7 @@
             // editTechniciansToolStripMenuItem
             // 
             this.editTechniciansToolStripMenuItem.Name = "editTechniciansToolStripMenuItem";
-            this.editTechniciansToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.editTechniciansToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
             this.editTechniciansToolStripMenuItem.Text = "Edit Technicians";
             this.editTechniciansToolStripMenuItem.Click += new System.EventHandler(this.editTechniciansToolStripMenuItem_Click);
             // 
@@ -750,6 +767,15 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Enter += new System.EventHandler(this.groupBox2_Enter);
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(6, 13);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(90, 18);
+            this.pictureBox1.TabIndex = 17;
+            this.pictureBox1.TabStop = false;
+            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -860,7 +886,6 @@
             this.comboBox3.Name = "comboBox3";
             this.comboBox3.Size = new System.Drawing.Size(121, 21);
             this.comboBox3.TabIndex = 35;
-            this.comboBox3.Visible = false;
             this.comboBox3.TextChanged += new System.EventHandler(this.comboBox3_TextChanged);
             // 
             // comboBox2
@@ -871,7 +896,6 @@
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(121, 21);
             this.comboBox2.TabIndex = 34;
-            this.comboBox2.Visible = false;
             this.comboBox2.TextChanged += new System.EventHandler(this.comboBox2_TextChanged);
             // 
             // radioButton2
@@ -884,7 +908,6 @@
             this.radioButton2.TabStop = true;
             this.radioButton2.Text = "Cells";
             this.radioButton2.UseVisualStyleBackColor = true;
-            this.radioButton2.Visible = false;
             // 
             // radioButton1
             // 
@@ -896,7 +919,6 @@
             this.radioButton1.TabStop = true;
             this.radioButton1.Text = "Battery";
             this.radioButton1.UseVisualStyleBackColor = true;
-            this.radioButton1.Visible = false;
             this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
             // 
             // chart1
@@ -914,12 +936,12 @@
             chartArea1.AxisY.Title = "Voltage";
             chartArea1.Name = "ChartArea1";
             this.chart1.ChartAreas.Add(chartArea1);
-            this.chart1.Location = new System.Drawing.Point(6, 16);
+            this.chart1.Location = new System.Drawing.Point(6, 42);
             this.chart1.Name = "chart1";
             series1.ChartArea = "ChartArea1";
             series1.Name = "Series1";
             this.chart1.Series.Add(series1);
-            this.chart1.Size = new System.Drawing.Size(696, 293);
+            this.chart1.Size = new System.Drawing.Size(696, 267);
             this.chart1.TabIndex = 30;
             this.chart1.Text = "chart1";
             this.chart1.Click += new System.EventHandler(this.chart1_Click);
@@ -1392,15 +1414,6 @@
             this.openFileDialog2.Filter = "JPG Files (*.jpg)|*.jpg";
             this.openFileDialog2.Title = "Select Logo File";
             // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(6, 13);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(90, 18);
-            this.pictureBox1.TabIndex = 17;
-            this.pictureBox1.TabStop = false;
-            // 
             // Main_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1432,6 +1445,7 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
@@ -1444,7 +1458,6 @@
             this.contextMenuStripTextPrint.ResumeLayout(false);
             this.contextMenuStripClear.ResumeLayout(false);
             this.contextMenuStripGraphSelect.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1595,6 +1608,8 @@
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem40;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem39;
         private System.Windows.Forms.OpenFileDialog openFileDialog2;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem42;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem41;
     }
 }
 

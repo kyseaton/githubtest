@@ -48,6 +48,28 @@ namespace NewBTASProto
                     this.Width = (int)Properties.Settings.Default.FormWidth;
                 }
 
+                // graph selection option...
+                if (Properties.Settings.Default.showSels == true)
+                {
+                    toolStripMenuItem41.Checked = true;
+                    radioButton1.Visible = true;
+                    radioButton2.Visible = true;
+                    comboBox2.Visible = true;
+                    comboBox3.Visible = true;
+                    chart1.Height = rtbIncoming.Height - 26;
+                    chart1.Location = new Point(6, 42);
+                }
+                else
+                {
+                    toolStripMenuItem41.Checked = false;
+                    radioButton1.Visible = false;
+                    radioButton2.Visible = false;
+                    comboBox2.Visible = false;
+                    comboBox3.Visible = false;
+                    chart1.Height = rtbIncoming.Height;
+                    chart1.Location = new Point(6, 16);
+                }
+
 
             }
             catch (Exception ex)
@@ -670,6 +692,9 @@ namespace NewBTASProto
                 Properties.Settings.Default.PositionY = this.Location.Y;
             }
 
+            //save the graph selection setting
+            Properties.Settings.Default.showSels = toolStripMenuItem41.Checked;
+
             Properties.Settings.Default.Save();
 
             // tell those threadpool work items to stop!!!!!
@@ -1129,8 +1154,8 @@ namespace NewBTASProto
                     if (d.Rows[i][9].ToString().Contains(temp) && d.Rows[i][9].ToString().Contains("S"))
                     {
                         // also change the grid color
-                        dataGridView1.Rows[i].Cells[2].Style.BackColor = Color.Aquamarine;
-                        dataGridView1.Rows[i].Cells[5].Style.BackColor = Color.Gainsboro;
+                        dataGridView1.Rows[i].Cells[2].Style.BackColor = System.Drawing.ColorTranslator.FromHtml("#ccffcc");
+                        dataGridView1.Rows[i].Cells[5].Style.BackColor = System.Drawing.ColorTranslator.FromHtml("#ccffcc");
                         dataGridView1.Rows[i].Cells[8].Style.BackColor = Color.Gainsboro;
                         dataGridView1.Rows[i].Cells[12].Style.BackColor = Color.LightSkyBlue;
                     }
@@ -1139,8 +1164,8 @@ namespace NewBTASProto
             else if (d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Contains("S"))
             {
                 // also change the grid color
-                dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = Color.Aquamarine;
-                dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = Color.Gainsboro;
+                dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = System.Drawing.ColorTranslator.FromHtml("#ccffcc");
+                dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = System.Drawing.ColorTranslator.FromHtml("#ccffcc");
                 dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.Gainsboro;
                 dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[12].Style.BackColor = Color.LightSkyBlue;
                 updateD(dataGridView1.CurrentRow.Index, 12, false);
@@ -1166,6 +1191,12 @@ namespace NewBTASProto
 
             if (current.Length > 2)
             {
+                //Reset the colors
+                dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[2].Style.BackColor = System.Drawing.ColorTranslator.FromHtml("#ccffcc");
+                dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[5].Style.BackColor = System.Drawing.ColorTranslator.FromHtml("#ccffcc");
+                dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.Gainsboro;
+                dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[12].Style.BackColor = Color.LightSkyBlue;
+
                 //we've got a master or a slave
                 // check for slaves or master associated with this channel also
 
@@ -3427,6 +3458,35 @@ namespace NewBTASProto
                     return;
                 }
             }// end if
+
+        }
+
+        private void toolStripMenuItem41_Click(object sender, EventArgs e)
+        {
+            if (toolStripMenuItem41.Checked == false)
+            {
+                toolStripMenuItem41.Checked = true;
+                radioButton1.Visible = true;
+                radioButton2.Visible = true;
+                comboBox2.Visible = true;
+                comboBox3.Visible = true;
+                chart1.Height = rtbIncoming.Height - 26;
+                chart1.Location = new Point(6, 42);
+            }
+            else
+            {
+                toolStripMenuItem41.Checked = false;
+                radioButton1.Visible = false;
+                radioButton2.Visible = false;
+                comboBox2.Visible = false;
+                comboBox3.Visible = false;
+                chart1.Height = rtbIncoming.Height;
+                chart1.Location = new Point(6,16);
+            }
+        }
+
+        private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
 
         }
 

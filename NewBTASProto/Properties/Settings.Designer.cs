@@ -92,5 +92,29 @@ namespace NewBTASProto.Properties {
                 this["maximized"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool showSels {
+            get {
+                return ((bool)(this["showSels"]));
+            }
+            set {
+                this["showSels"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool dualPlots {
+            get {
+                return ((bool)(this["dualPlots"]));
+            }
+            set {
+                this["dualPlots"] = value;
+            }
+        }
     }
 }

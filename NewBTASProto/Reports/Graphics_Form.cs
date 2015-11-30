@@ -68,6 +68,8 @@ namespace NewBTASProto
             tt2.Text = "";
             chart2.Titles.Add(tt2);
 
+            checkBox1.Checked = Properties.Settings.Default.dualPlots;
+
             //myDataSet.Tables[0].
 
         }
@@ -86,6 +88,7 @@ namespace NewBTASProto
                 comboBox7.Visible = true;
                 comboBox8.Visible = true;
                 groupBox2.Visible = true;
+                chart1.Height = (panel1.Height / 2) - 3;
             }
             else
             {
@@ -99,6 +102,8 @@ namespace NewBTASProto
                 comboBox7.Visible = false;
                 comboBox8.Visible = false;
                 groupBox2.Visible = false;
+                chart2.Visible = false;
+                chart1.Height = panel1.Height - 6;
             }
         }
 
@@ -547,7 +552,7 @@ namespace NewBTASProto
                                 if (cell1 == 0) { cell1 = 20; }
                                 // Battery combobox
                                 comboBox5.Items.Clear();
-                                comboBox5.Text = "";
+                                //comboBox5.Text = "";
                                 comboBox5.Items.Add("Voltage");
                                 comboBox5.Items.Add("Current");
                                 comboBox5.Items.Add("Temperature 1");
@@ -556,7 +561,7 @@ namespace NewBTASProto
                                 comboBox5.Items.Add("Temperature 4");
                                 // Cells combobox
                                 comboBox6.Items.Clear();
-                                comboBox6.Text = "";
+                                //comboBox6.Text = "";
                                 comboBox6.Items.Add("Ending Voltages");
                                 comboBox6.Items.Add("Cell 1");
                                 comboBox6.Items.Add("Cell 2");
@@ -584,7 +589,7 @@ namespace NewBTASProto
                                 if (cell1 == 0) { cell1 = 22; }
                                 // Battery combobox
                                 comboBox5.Items.Clear();
-                                comboBox5.Text = "";
+                                //comboBox5.Text = "";
                                 comboBox5.Items.Add("Voltage 1");
                                 comboBox5.Items.Add("Voltage 2");
                                 comboBox5.Items.Add("Current");
@@ -594,7 +599,7 @@ namespace NewBTASProto
                                 comboBox5.Items.Add("Temperature 4");
                                 // Cells combobox
                                 comboBox6.Items.Clear();
-                                comboBox6.Text = "";
+                                //comboBox6.Text = "";
                                 comboBox6.Items.Add("Ending Voltages");
                                 comboBox6.Items.Add("Cell 1");
                                 comboBox6.Items.Add("Cell 2");
@@ -624,7 +629,7 @@ namespace NewBTASProto
                                 if (cell1 == 0) { cell1 = 21; }
                                 // Battery combobox
                                 comboBox5.Items.Clear();
-                                comboBox5.Text = "";
+                                //comboBox5.Text = "";
                                 comboBox5.Items.Add("Voltage 1");
                                 comboBox5.Items.Add("Voltage 2");
                                 comboBox5.Items.Add("Voltage 3");
@@ -635,7 +640,7 @@ namespace NewBTASProto
                                 comboBox5.Items.Add("Temperature 4");
                                 // Cells combobox
                                 comboBox6.Items.Clear();
-                                comboBox6.Text = "";
+                                //comboBox6.Text = "";
                                 comboBox6.Items.Add("Ending Voltages");
                                 comboBox6.Items.Add("Cell 1");
                                 comboBox6.Items.Add("Cell 2");
@@ -664,7 +669,7 @@ namespace NewBTASProto
                                 if (cell1 == 0) { cell1 = 21; }
                                 // Battery combobox
                                 comboBox5.Items.Clear();
-                                comboBox5.Text = "";
+                                //comboBox5.Text = "";
                                 comboBox5.Items.Add("Voltage");
                                 comboBox5.Items.Add("Current");
                                 comboBox5.Items.Add("Temperature 1");
@@ -673,7 +678,7 @@ namespace NewBTASProto
                                 comboBox5.Items.Add("Temperature 4");
                                 // Cells combobox
                                 comboBox6.Items.Clear();
-                                comboBox6.Text = "";
+                                //comboBox6.Text = "";
                                 comboBox6.Items.Add("Ending Voltages");
                                 comboBox6.Items.Add("Cell 1");
                                 comboBox6.Items.Add("Cell 2");
@@ -702,7 +707,7 @@ namespace NewBTASProto
                                 if (cell1 == 0) { cell1 = 20; }
                                 // Battery combobox
                                 comboBox5.Items.Clear();
-                                comboBox5.Text = "";
+                                //comboBox5.Text = "";
                                 comboBox5.Items.Add("Voltage 1");
                                 comboBox5.Items.Add("Voltage 2");
                                 comboBox5.Items.Add("Voltage 3");
@@ -714,7 +719,7 @@ namespace NewBTASProto
                                 comboBox5.Items.Add("Temperature 4");
                                 // Cells combobox
                                 comboBox6.Items.Clear();
-                                comboBox6.Text = "";
+                                //comboBox6.Text = "";
                                 comboBox6.Items.Add("Ending Voltages");
                                 comboBox6.Items.Add("Cell 1");
                                 comboBox6.Items.Add("Cell 2");
@@ -742,6 +747,9 @@ namespace NewBTASProto
                                 comboBox6.Items.Add("Cell 24");
                                 break;
                         }// end switch
+
+                        comboBox5.SelectedIndex = 0;
+                        comboBox6.SelectedIndex = 0;
 
                         // Now we need to look up some additional info in the Battery table for the graphs....
                         // first get the battry Model...
@@ -973,7 +981,7 @@ namespace NewBTASProto
                                 if (cell2 == 0) { cell2 = 20; }
                                 // Battery combobox
                                 comboBox7.Items.Clear();
-                                comboBox7.Text = "";
+                                //comboBox7.Text = "";
                                 comboBox7.Items.Add("Voltage");
                                 comboBox7.Items.Add("Current");
                                 comboBox7.Items.Add("Temperature 1");
@@ -982,7 +990,7 @@ namespace NewBTASProto
                                 comboBox7.Items.Add("Temperature 4");
                                 // Cells combobox
                                 comboBox8.Items.Clear();
-                                comboBox8.Text = "";
+                                //comboBox8.Text = "";
                                 comboBox8.Items.Add("Ending Voltages");
                                 comboBox8.Items.Add("Cell 1");
                                 comboBox8.Items.Add("Cell 2");
@@ -1010,7 +1018,7 @@ namespace NewBTASProto
                                 if (cell2 == 0) { cell2 = 22; }
                                 // Battery combobox
                                 comboBox7.Items.Clear();
-                                comboBox7.Text = "";
+                                //comboBox7.Text = "";
                                 comboBox7.Items.Add("Voltage 1");
                                 comboBox7.Items.Add("Voltage 2");
                                 comboBox7.Items.Add("Current");
@@ -1020,7 +1028,7 @@ namespace NewBTASProto
                                 comboBox7.Items.Add("Temperature 4");
                                 // Cells combobox
                                 comboBox8.Items.Clear();
-                                comboBox8.Text = "";
+                                //comboBox8.Text = "";
                                 comboBox8.Items.Add("Ending Voltages");
                                 comboBox8.Items.Add("Cell 1");
                                 comboBox8.Items.Add("Cell 2");
@@ -1050,7 +1058,7 @@ namespace NewBTASProto
                                 if (cell2 == 0) { cell2 = 21; }
                                 // Battery combobox
                                 comboBox7.Items.Clear();
-                                comboBox7.Text = "";
+                                //comboBox7.Text = "";
                                 comboBox7.Items.Add("Voltage 1");
                                 comboBox7.Items.Add("Voltage 2");
                                 comboBox7.Items.Add("Voltage 3");
@@ -1061,7 +1069,7 @@ namespace NewBTASProto
                                 comboBox7.Items.Add("Temperature 4");
                                 // Cells combobox
                                 comboBox8.Items.Clear();
-                                comboBox8.Text = "";
+                                //comboBox8.Text = "";
                                 comboBox8.Items.Add("Ending Voltages");
                                 comboBox8.Items.Add("Cell 1");
                                 comboBox8.Items.Add("Cell 2");
@@ -1090,7 +1098,7 @@ namespace NewBTASProto
                                 if (cell2 == 0) { cell2 = 21; }
                                 // Battery combobox
                                 comboBox7.Items.Clear();
-                                comboBox7.Text = "";
+                                //comboBox7.Text = "";
                                 comboBox7.Items.Add("Voltage");
                                 comboBox7.Items.Add("Current");
                                 comboBox7.Items.Add("Temperature 1");
@@ -1099,7 +1107,7 @@ namespace NewBTASProto
                                 comboBox7.Items.Add("Temperature 4");
                                 // Cells combobox
                                 comboBox8.Items.Clear();
-                                comboBox8.Text = "";
+                                //comboBox8.Text = "";
                                 comboBox8.Items.Add("Ending Voltages");
                                 comboBox8.Items.Add("Cell 1");
                                 comboBox8.Items.Add("Cell 2");
@@ -1128,7 +1136,7 @@ namespace NewBTASProto
                                 if (cell2 == 0) { cell2 = 20; }
                                 // Battery combobox
                                 comboBox7.Items.Clear();
-                                comboBox7.Text = "";
+                                //comboBox7.Text = "";
                                 comboBox7.Items.Add("Voltage 1");
                                 comboBox7.Items.Add("Voltage 2");
                                 comboBox7.Items.Add("Voltage 3");
@@ -1140,7 +1148,7 @@ namespace NewBTASProto
                                 comboBox7.Items.Add("Temperature 4");
                                 // Cells combobox
                                 comboBox8.Items.Clear();
-                                comboBox8.Text = "";
+                                //comboBox8.Text = "";
                                 comboBox8.Items.Add("Ending Voltages");
                                 comboBox8.Items.Add("Cell 1");
                                 comboBox8.Items.Add("Cell 2");
@@ -1168,6 +1176,9 @@ namespace NewBTASProto
                                 comboBox8.Items.Add("Cell 24");
                                 break;
                         }// end switch
+
+                        comboBox7.SelectedIndex = 0;
+                        comboBox8.SelectedIndex = 0;
 
                         // Now we need to look up some additional info in the Battery table for the graphs....
                         // first get the battry Model...
@@ -2017,17 +2028,35 @@ namespace NewBTASProto
             panel1.Height = this.Height - 179;
             panel1.Width = this.Width - 39;
             chart1.Width = this.Width - 44;
-            chart1.Height = (this.Height - 196)/2;
+
             chart1.Invalidate();
             chart2.Width = this.Width - 44;
-            chart2.Height = (this.Height - 196) / 2;
+
             chart2.Top = (int) (panel1.Height * 0.509666);
+
+            if (checkBox1.Checked)
+            {
+                chart1.Height = (this.Height - 196) / 2;
+                chart2.Height = (this.Height - 196) / 2;
+            }
+            else
+            {
+                chart1.Height = this.Height - 196;
+            }
+
+
             chart2.Invalidate();
         }
 
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void Graphics_Form_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Properties.Settings.Default.dualPlots = checkBox1.Checked;
+            Properties.Settings.Default.Save();
         }    
 
 

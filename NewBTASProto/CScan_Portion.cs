@@ -173,7 +173,7 @@ namespace NewBTASProto
                                             else if (d.Rows[currentRow][10].ToString().Contains("mini"))
                                             {
                                                 // all other cases
-                                                tempText += "Current:  " + (-1 * testData.currentOne).ToString("00.000") + Environment.NewLine;
+                                                tempText += "Current:  " + (testData.currentOne).ToString("00.000") + Environment.NewLine;
                                             }
                                             else
                                             {
@@ -1076,14 +1076,9 @@ namespace NewBTASProto
                         this.chart1.Series.Add(series1);
                         chart1.ChartAreas[0].AxisX.Title = "Time";
 
-                        int reverse = 1;
-                        if (d.Rows[testData.terminalID][10].ToString().Contains("mini") && q == 8)
-                        {
-                            reverse = -1;
-                        }
                         for (int i = 0; i < graphMainSet.Tables[0].Rows.Count; i++)
                         {
-                            series1.Points.AddXY(Math.Round(double.Parse(graphMainSet.Tables[0].Rows[i][7].ToString()) * 1440), reverse * float.Parse(graphMainSet.Tables[0].Rows[i][q].ToString()));
+                            series1.Points.AddXY(Math.Round(double.Parse(graphMainSet.Tables[0].Rows[i][7].ToString()) * 1440), float.Parse(graphMainSet.Tables[0].Rows[i][q].ToString()));
                             // color test
                             if (q == 8 || q == 7)
                             {

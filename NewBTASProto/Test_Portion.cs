@@ -1941,7 +1941,7 @@ namespace NewBTASProto
                             } // end if
                             break;
                         case "Discharge":
-                            if (!temp.Contains("32"))
+                            if (!temp.Contains("30"))
                             {
                                 DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The charger doesn't seem to be set up for Discharge. Are you sure you want to proceed with the test?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
                                 if (dialogResult == DialogResult.No)
@@ -3387,8 +3387,57 @@ namespace NewBTASProto
                     {
                         // check that the C-Scan is still running...
 
+                        // this is the power fail case...
+                        if (d.Rows[station][11].ToString() == "Power Off")
+                        {
+                            stopwatch.Stop();
+                            //set to hold
+                            GlobalVars.cHold[station] = true;
+                            //wait for a return of power..
+                            updateD(station, 7, "Waiting For Charger");
+                            if (MasterSlaveTest) { updateD(slaveRow, 7, "Waiting For Charger"); }
 
-                        if (Math.Abs(GlobalVars.CScanData[station].currentOne) < 0.2)
+                            while (d.Rows[station][11].ToString() != "HOLD")
+                            {
+
+
+                                // check for a cancel
+                                if (token.IsCancellationRequested)
+                                {
+                                    //clear values from d
+                                    updateD(station, 7, ("Read " + (currentReading - 1).ToString() + " of " + readings.ToString()));
+                                    if (MasterSlaveTest) { updateD(slaveRow, 7, ("Read " + (currentReading - 1).ToString() + " of " + readings.ToString())); }
+                                    updateD(station, 5, false);
+                                    if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+
+                                    //update the gui
+                                    this.Invoke((MethodInvoker)delegate()
+                                    {
+                                        sendNote(station, 3, "Test canceled while in a power fail.");
+                                        startNewTestToolStripMenuItem.Enabled = true;
+                                        resumeTestToolStripMenuItem.Enabled = true;
+                                        stopTestToolStripMenuItem.Enabled = false;
+                                    });
+
+                                    return;
+                                }
+                                // wait a little before testing again...
+                                Thread.Sleep(200);
+                            }// end power fail wait
+
+                            //reset readings
+                            updateD(station, 7, "Restarting Charger");
+                            if (MasterSlaveTest) { updateD(slaveRow, 7, "Restarting Charger"); }
+                            Thread.Sleep(1500);
+                            stopwatch.Start();
+                            GlobalVars.cHold[station] = false;
+                            Thread.Sleep(500);
+                            updateD(station, 7, ("Reading " + (currentReading - 1).ToString() + " of " + readings.ToString()));
+                            if (MasterSlaveTest) { updateD(slaveRow, 7, ("Reading " + (currentReading - 1).ToString() + " of " + readings.ToString())); }
+
+                        }
+
+                        else if (Math.Abs(GlobalVars.CScanData[station].currentOne) < 0.2)
                         {
                             int count = 0;
                             while (Math.Abs(GlobalVars.CScanData[station].currentOne) < 0.2)
@@ -3419,28 +3468,7 @@ namespace NewBTASProto
                                 }
                             }
                         }
-                        else if (d.Rows[station][11].ToString() == "Power Off")
-                        {
-                            //make sure the C-Scan is back on hold
-                            GlobalVars.cHold[station] = true;
 
-                            //clear values from d
-                            updateD(station, 7, ("Read " + (currentReading - 1).ToString() + " of " + readings.ToString()));
-                            if (MasterSlaveTest) { updateD(slaveRow, 7, ("Read " + (currentReading - 1).ToString() + " of " + readings.ToString())); }
-                            updateD(station, 5, false);
-                            if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
-
-                            //update the gui
-                            this.Invoke((MethodInvoker)delegate()
-                            {
-                                sendNote(station, 3, "Charger is no longer powered.  Please check the charger and then resume or restart the test.");
-                                startNewTestToolStripMenuItem.Enabled = true;
-                                resumeTestToolStripMenuItem.Enabled = true;
-                                stopTestToolStripMenuItem.Enabled = false;
-                            });
-
-                            return;
-                        }
 
                     }
                     else if (d.Rows[station][10].ToString().Contains("Shunt") && !startUpDelay)
@@ -3595,7 +3623,11 @@ namespace NewBTASProto
 
                 // We finished so let's clearn up!
                 // If we are running the charger tell it to stop and reset
-                if ((string)d.Rows[station][9] != "" && d.Rows[station][10].ToString().Contains("ICA") && (string)d.Rows[station][2] != "As Received")
+                if ((string)d.Rows[station][2] != "As Received")
+                {
+                    // nothing to do...
+                }
+                else if ((string)d.Rows[station][9] != "" && d.Rows[station][10].ToString().Contains("ICA"))
                 {
                     // now we need to stop the charger
                     updateD(station, 7, "Telling Charger to Stop");

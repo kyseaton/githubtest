@@ -494,6 +494,23 @@ namespace NewBTASProto
         private void updateCurVals()
         {
 
+            //we need to make sure all of the tabs have been "show"n first
+            //this is because the binding source doesn't update until the tab has been selected, which was killing saved values!
+            int selected = tabControl1.SelectedIndex;
+            LockWindowUpdate(this.Handle);
+            foreach (TabPage tp in tabControl1.TabPages)
+            {
+                tp.Show();
+            }
+
+
+            tabControl1.SelectTab(0);
+            this.BeginInvoke(new Action(() =>
+            {
+                tabControl1.SelectTab(selected);
+                LockWindowUpdate(IntPtr.Zero);
+            }));
+
             // update the current vars....
             //current data..
             curTemp1 = textBox2.Text;
@@ -1973,6 +1990,7 @@ namespace NewBTASProto
                 numericUpDown25.Value != curTemp52 ||
 
                 comboBox5.Text != curTemp53 ||
+                
                 numericUpDown40.Value != curTemp54 ||
                 numericUpDown39.Value != curTemp55 ||
                 numericUpDown38.Value != curTemp56 ||
