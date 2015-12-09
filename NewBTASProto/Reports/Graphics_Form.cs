@@ -854,8 +854,6 @@ namespace NewBTASProto
                             //leave as is...
                         }
 
-                        // The final step is to update the type of test that was selected
-                        type1 = comboBox2.Text;
 
                         comboBox5.Enabled = true;
                         comboBox6.Enabled = true;
@@ -1292,8 +1290,6 @@ namespace NewBTASProto
                             //leave as is...
                         }
 
-                        // The final step is to update the type of test that was selected
-                        type2 = comboBox4.Text;
 
                         comboBox7.Enabled = true;
                         comboBox8.Enabled = true;
@@ -1311,6 +1307,7 @@ namespace NewBTASProto
 
         private void comboBox5_SelectedValueChanged(object sender, EventArgs e)
         {
+            type1 = comboBox2.Text;
             try
             {
                 int q;
@@ -1389,6 +1386,7 @@ namespace NewBTASProto
         }
         private void comboBox6_SelectedValueChanged(object sender, EventArgs e)
         {
+            type1 = comboBox2.Text;
             try
             {
                 int q;
@@ -1566,7 +1564,7 @@ namespace NewBTASProto
             {
                 case "NiCd":
                     // Discharge
-                    if (type.Contains("As Received") || type.Contains("Capacity-1") || type.Contains("Discharge") || type.Contains("Custom Cap") || type == "")
+                    if (type.Contains("As Received") || type.Contains("Cap") || type.Contains("Discharge") || type == "")
                     {
                         Min4 = 1 * Cells;
                         Max = 1.05 * Cells;
@@ -1587,7 +1585,10 @@ namespace NewBTASProto
                         if (Value > Max) { return Color.Red; }
                         else if (Value > Min3) { return Color.Green; }
                         else if (Value > Min2) { return Color.Orange; }
-                        else if (Value > Min1) { return Color.Yellow; }
+                        else if (Value > Min1) 
+                        {
+                            return Color.Yellow; 
+                        }
                         else { return Color.Red; }
                     }
                 case "Sealed Lead Acid":
@@ -1675,7 +1676,7 @@ namespace NewBTASProto
             {
                 case "NiCd":
                     // Discharge
-                    if (type.Contains("As Received") || type.Contains("Capacity-1") || type.Contains("Discharge") || type.Contains("Custom Cap") || type == "")
+                    if (type.Contains("As Received") || type.Contains("Cap") || type.Contains("Discharge") || type == "")
                     {
                         Min4 = 1 * Cells;
                         Max = 1.05 * Cells;
@@ -1775,6 +1776,7 @@ namespace NewBTASProto
 
         private void comboBox7_SelectedValueChanged(object sender, EventArgs e)
         {
+            type2 = comboBox4.Text;
             try
             {
                 int q;
@@ -1851,6 +1853,8 @@ namespace NewBTASProto
 
         private void comboBox8_SelectedValueChanged(object sender, EventArgs e)
         {
+            type2 = comboBox4.Text;
+
             try
             {
                 int q;

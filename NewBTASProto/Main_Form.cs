@@ -190,7 +190,11 @@ namespace NewBTASProto
             label10.Text = GlobalVars.businessName;
 
 
-            if (GlobalVars.autoConfig) { this.automaticallyConfigureChargerToolStripMenuItem.Checked = true; }
+            if (GlobalVars.autoConfig) 
+            {
+                this.automaticallyConfigureChargerToolStripMenuItem.Checked = true;
+                this.chargerConfigurationInterfaceToolStripMenuItem.Enabled = false;
+            }
             else { this.automaticallyConfigureChargerToolStripMenuItem.Checked = false; }
 
             toolStripComboBox1.ComboBox.Text = GlobalVars.currentTech;
@@ -2321,13 +2325,28 @@ namespace NewBTASProto
         {
             if (automaticallyConfigureChargerToolStripMenuItem.Checked == false)
             {
+                //check if the chargerConfigInterface is open and return if so..
+                FormCollection fc = Application.OpenForms;
+
+                foreach (Form frm in fc)
+                {
+                    if (frm is ICSettingsForm)
+                    {
+                        MessageBox.Show(new Form() { TopMost = true }, @"You must close the Intelligetnt Charger Configuration Interface before turning on AutoConfig");
+                        return;
+                    }
+                }
+
+                // otherwise turn on the autoconfig...
                 automaticallyConfigureChargerToolStripMenuItem.Checked = true;
                 GlobalVars.autoConfig = true;
+                chargerConfigurationInterfaceToolStripMenuItem.Enabled = false;
             }
             else
             {
                 automaticallyConfigureChargerToolStripMenuItem.Checked = false;
                 GlobalVars.autoConfig = false;
+                chargerConfigurationInterfaceToolStripMenuItem.Enabled = true;
             }
 
             dataGridView1_Resize(this, null);
@@ -3060,6 +3079,13 @@ namespace NewBTASProto
 
                         //Add WLID and WorkOrderNumber into WaterLevel
                         cmdStr = "ALTER TABLE WaterLevel ADD WLID AUTOINCREMENT, WorkOrderNumber Text(255)";
+                        cmd = new OleDbCommand(cmdStr, conn);
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                        conn.Close();
+
+                        //make sure that you workOrders table has the BIDs as numbers...
+                        cmdStr = "ALTER TABLE WorkOrders ALTER COLUMN BID Number";
                         cmd = new OleDbCommand(cmdStr, conn);
                         conn.Open();
                         cmd.ExecuteNonQuery();

@@ -207,6 +207,7 @@ namespace NewBTASProto
             this.reportViewer1.Reset();
             this.reportViewer1.ProcessingMode = ProcessingMode.Local;
 
+            this.reportViewer1.LocalReport.EnableHyperlinks = true;
             this.reportViewer1.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.WorkOrderSum.rdlc";
             this.reportViewer1.LocalReport.DataSources.Clear();
             
@@ -469,6 +470,18 @@ namespace NewBTASProto
         private void dateTimePicker2_ValueChanged(object sender, EventArgs e)
         {
             LoadData();
+        }
+
+        private void reportViewer1_Hyperlink(object sender, HyperlinkEventArgs e)
+        {
+            string wo = e.Hyperlink;
+            wo = wo.Substring(7);
+            wo = wo.Substring(0, wo.Length - 1);
+
+            Reports_Form rf = new Reports_Form("1", wo);
+            rf.Owner = this.Owner;
+            rf.Show();
+            e.Cancel = true;
         }
 
     }

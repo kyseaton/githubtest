@@ -298,7 +298,11 @@ namespace NewBTASProto
                                             }
 
                                             tempText += "Reference:  " + testData.ref95V.ToString("0.000") + Environment.NewLine;
-                                            tempText += "Program Version " + testData.programVersion;
+                                            tempText += "Program Version: " + testData.programVersion + Environment.NewLine;
+                                            if (d.Rows[currentRow][10].ToString().Contains("ICA"))
+                                            {
+                                                tempText += "IC Program Version: " + GlobalVars.ICData[currentRow].PV1.ToString() + " (" + GlobalVars.ICData[currentRow].PV2.ToString() + ")";
+                                            }
 
                                             LockWindowUpdate(label1.Handle);
                                             label1.Text = tempText;
@@ -975,7 +979,7 @@ namespace NewBTASProto
                         }
                     }
                     chart1.Titles.Clear();
-                    chart1.Titles.Add("Cell Voltages");
+                    if (Cells != 0) { chart1.Titles.Add("Cell Voltages"); }
                     chart1.Invalidate();
                     chart1.ChartAreas[0].RecalculateAxesScale();
                 }

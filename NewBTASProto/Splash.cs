@@ -15,10 +15,11 @@ namespace NewBTASProto
 
         bool licGood = false;
         // here are the valid licence numbers
-        static string[] lics = new string[3] {
+        static string[] lics = new string[4] {
             "1111111111",
             "2222222222",
-            "3333333333"
+            "3333333333",
+            "5339428555"
         };
         // this is the lic dataTable (here for its writexml and readxml methods
         DataTable lic = new DataTable();
@@ -401,7 +402,7 @@ namespace NewBTASProto
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Image = global::NewBTASProto.Properties.Resources.splash6;
+            this.pictureBox1.Image = global::NewBTASProto.Properties.Resources.splash6_K;
             this.pictureBox1.Location = new System.Drawing.Point(-2, -1);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(491, 286);

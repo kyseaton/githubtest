@@ -24,7 +24,7 @@
     <MapFileExtensions>true</MapFileExtensions>
     <UpdateUrl>http://www.jfmeng.com/BTAS16_update/</UpdateUrl>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>71</ApplicationRevision>
+    <ApplicationRevision>72</ApplicationRevision>
     <ApplicationVersion>6.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -383,6 +383,7 @@
     <Folder Include="Properties\DataSources\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\splash6_K.jpg" />
     <None Include="bin\Debug\DB_1\BTS16NV_clean.mdb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -393,6 +394,7 @@
     <None Include="Resources\btas7_h_I.jpg" />
     <None Include="Resources\mainDB.bmp" />
     <None Include="Resources\BTAS_16_TEXT.jpg" />
+    <None Include="Resources\BTAS_16K_TEXT.jpg" />
     <Content Include="Resources\BTS16NV_clean.mdb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

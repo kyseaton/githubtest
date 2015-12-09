@@ -63,9 +63,9 @@ namespace NewBTASProto.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap BTAS_16_TEXT {
+        internal static System.Drawing.Bitmap BTAS_16K_TEXT {
             get {
-                object obj = ResourceManager.GetObject("BTAS_16_TEXT", resourceCulture);
+                object obj = ResourceManager.GetObject("BTAS_16K_TEXT", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -146,6 +146,16 @@ namespace NewBTASProto.Properties {
         internal static System.Drawing.Bitmap splash6 {
             get {
                 object obj = ResourceManager.GetObject("splash6", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap splash6_K {
+            get {
+                object obj = ResourceManager.GetObject("splash6_K", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

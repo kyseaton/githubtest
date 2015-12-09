@@ -504,7 +504,7 @@ namespace NewBTASProto
             {
                 // they don't match!
                 // ask if the user is sure that they want to continue...
-                DialogResult dialogResult = MessageBox.Show(this, "Looks like this record has been updated without being saved.  Are you sure you want to navigate away without saving?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
+                DialogResult dialogResult = MessageBox.Show(this, "Looks like this record has been updated without being saved.  Are you sure you want to navigate away without saving?", "Click Yes to continue or No return.", MessageBoxButtons.YesNo);
                 if (dialogResult == DialogResult.No)
                 {
                     lastValid = false;
@@ -521,7 +521,7 @@ namespace NewBTASProto
 
             //prevent lockups
             if (WorkOrders.Tables[0].Rows.Count == 0 && (toolStripCBCustomers.Text != "" || toolStripCBSerialNums.Text != "" || toolStripCBWorkOrderStatus.Text != "")) { ;}
-            else if (toolStripCBWorkOrders.Text == "" || toolStripCBWorkOrderStatus.Text == "") return;
+            else if (toolStripCBWorkOrderStatus.Text == "") return;
             
 
             string strAccessConn;
@@ -575,7 +575,10 @@ namespace NewBTASProto
                     myAccessConn.Close();
                 }
                                     loadTests();
-                if (comboBox2.Text != "Active" && toolStripCBWorkOrderStatus.Text != "Active") { bindingNavigatorAddNewItem.Enabled = true; }
+                if (comboBox2.Text != "Active" && toolStripCBWorkOrderStatus.Text != "Active") 
+                { 
+                    bindingNavigatorAddNewItem.Enabled = true; 
+                }
 
             }
             catch (Exception ex)
@@ -598,6 +601,11 @@ namespace NewBTASProto
                 return;
             }
 
+            if(bindingNavigatorAddNewItem.Enabled == false)
+            {
+                bindingNavigatorMovePreviousItem_Click(null,null);
+            }
+
             //Validate before moving
             if (ValidateIt())
             {
@@ -609,7 +617,12 @@ namespace NewBTASProto
             else
             {
                 oldPositionWOS = toolStripCBCustomers.SelectedIndex;
-                bindingNavigatorAddNewItem.Enabled = true;
+                if (bindingNavigatorAddNewItem.Enabled == false && lastValid && toolStripCBWorkOrderStatus.Text != "Active" && WorkOrders.Tables[0].Rows.Count > 0)
+                {
+                    WorkOrders.Tables[0].Rows[WorkOrders.Tables[0].Rows.Count - 1].Delete();
+                    bindingNavigatorAddNewItem.Enabled = true;
+                    lastValid = false;
+                }
                 #region enable disable depending....
 
                 if (toolStripCBWorkOrderStatus.Text == "Active")
@@ -716,7 +729,12 @@ namespace NewBTASProto
             else
             {
                 oldPositionCusts = toolStripCBCustomers.SelectedIndex;
-                bindingNavigatorAddNewItem.Enabled = true;
+                if (bindingNavigatorAddNewItem.Enabled == false && lastValid && toolStripCBWorkOrderStatus.Text != "Active" && WorkOrders.Tables[0].Rows.Count > 0)
+                {
+                    WorkOrders.Tables[0].Rows[WorkOrders.Tables[0].Rows.Count - 1].Delete();
+                    bindingNavigatorAddNewItem.Enabled = true;
+                    lastValid = false;
+                }
                 UpdateView();
                 updateCurVals();
             }
@@ -743,7 +761,12 @@ namespace NewBTASProto
             else
             {
                 oldPositionSerNums = toolStripCBSerialNums.SelectedIndex;
-                bindingNavigatorAddNewItem.Enabled = true;
+                if (bindingNavigatorAddNewItem.Enabled == false && lastValid && toolStripCBWorkOrderStatus.Text != "Active" && WorkOrders.Tables[0].Rows.Count > 0)
+                {
+                    WorkOrders.Tables[0].Rows[WorkOrders.Tables[0].Rows.Count - 1].Delete();
+                    bindingNavigatorAddNewItem.Enabled = true;
+                    lastValid = false;
+                }
                 UpdateView();
                 updateCurVals();
             }
@@ -1233,7 +1256,7 @@ namespace NewBTASProto
             try
             {
                 //remove the new record if there is one..
-                if (bindingNavigatorAddNewItem.Enabled == false && lastValid && toolStripCBWorkOrderStatus.Text != "Active")
+                if (bindingNavigatorAddNewItem.Enabled == false && lastValid && toolStripCBWorkOrderStatus.Text != "Active" && WorkOrders.Tables[0].Rows.Count > 0)
                 {
                     WorkOrders.Tables[0].Rows[WorkOrders.Tables[0].Rows.Count - 1].Delete();
                     bindingNavigatorAddNewItem.Enabled = true;
@@ -1251,7 +1274,7 @@ namespace NewBTASProto
             try
             {
                 //remove the new record if there is one..
-                if (bindingNavigatorAddNewItem.Enabled == false && lastValid && toolStripCBWorkOrderStatus.Text != "Active")
+                if (bindingNavigatorAddNewItem.Enabled == false && lastValid && toolStripCBWorkOrderStatus.Text != "Active" && WorkOrders.Tables[0].Rows.Count > 0)
                 {
                     WorkOrders.Tables[0].Rows[WorkOrders.Tables[0].Rows.Count - 1].Delete();
                     bindingNavigatorAddNewItem.Enabled = true;
@@ -1270,7 +1293,7 @@ namespace NewBTASProto
             try
             {
                 //remove the new record if there is one..
-                if (bindingNavigatorAddNewItem.Enabled == false && lastValid && toolStripCBWorkOrderStatus.Text != "Active")
+                if (bindingNavigatorAddNewItem.Enabled == false && lastValid && toolStripCBWorkOrderStatus.Text != "Active" && WorkOrders.Tables[0].Rows.Count > 0)
                 {
                     WorkOrders.Tables[0].Rows[WorkOrders.Tables[0].Rows.Count - 1].Delete();
                     bindingNavigatorAddNewItem.Enabled = true;
@@ -1308,7 +1331,7 @@ namespace NewBTASProto
             try
             {
                 //remove the new record if there is one..
-                if (bindingNavigatorAddNewItem.Enabled == false && lastValid && toolStripCBWorkOrderStatus.Text != "Active")
+                if (bindingNavigatorAddNewItem.Enabled == false && lastValid && toolStripCBWorkOrderStatus.Text != "Active" && WorkOrders.Tables[0].Rows.Count > 0)
                 {
                     WorkOrders.Tables[0].Rows[WorkOrders.Tables[0].Rows.Count - 1].Delete();
                     bindingNavigatorAddNewItem.Enabled = true;
@@ -1405,7 +1428,7 @@ namespace NewBTASProto
             try
             {
                 //remove the new record if there is one..
-                if (bindingNavigatorAddNewItem.Enabled == false && lastValid && toolStripCBWorkOrderStatus.Text != "Active")
+                if (bindingNavigatorAddNewItem.Enabled == false && lastValid && toolStripCBWorkOrderStatus.Text != "Active" && WorkOrders.Tables[0].Rows.Count > 0)
                 {
                     WorkOrders.Tables[0].Rows[WorkOrders.Tables[0].Rows.Count - 1].Delete();
                     bindingNavigatorAddNewItem.Enabled = true;
@@ -1423,7 +1446,7 @@ namespace NewBTASProto
             try
             {
                 //remove the new record if there is one..
-                if (bindingNavigatorAddNewItem.Enabled == false && lastValid && toolStripCBWorkOrderStatus.Text != "Active")
+                if (bindingNavigatorAddNewItem.Enabled == false && lastValid && toolStripCBWorkOrderStatus.Text != "Active" && WorkOrders.Tables[0].Rows.Count > 0)
                 {
                     WorkOrders.Tables[0].Rows[WorkOrders.Tables[0].Rows.Count - 1].Delete();
                     bindingNavigatorAddNewItem.Enabled = true;
@@ -1441,7 +1464,7 @@ namespace NewBTASProto
             try
             {
                 //remove the new record if there is one..
-                if (bindingNavigatorAddNewItem.Enabled == false && lastValid && toolStripCBWorkOrderStatus.Text != "Active")
+                if (bindingNavigatorAddNewItem.Enabled == false && lastValid && toolStripCBWorkOrderStatus.Text != "Active" && WorkOrders.Tables[0].Rows.Count > 0)
                 {
                     WorkOrders.Tables[0].Rows[WorkOrders.Tables[0].Rows.Count - 1].Delete();
                     bindingNavigatorAddNewItem.Enabled = true;
@@ -1545,6 +1568,41 @@ namespace NewBTASProto
         private void comboBox1_Enter(object sender, EventArgs e)
         {
             Inhibit = true;
+        }
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if ((this.ActiveControl == toolStripCBWorkOrderStatus.ComboBox ) && (keyData == Keys.Return))
+            {
+                if (ValidateIt()) { return true; }
+                InhibitCB1 = false;
+                toolStripCBWorkOrders_TextChanged(null, null);
+                UpdateView();
+                updateCurVals();
+                return true;
+            }
+            else if((this.ActiveControl == toolStripCBSerialNums.ComboBox) && (keyData == Keys.Return))
+            {
+                if (ValidateIt()) { return true; }
+                InhibitCB3 = false;
+                toolStripCBWorkOrders_TextChanged(null, null);
+                UpdateView();
+                updateCurVals();
+                return true;
+            }
+            else if((this.ActiveControl == toolStripCBCustomers.ComboBox) && (keyData == Keys.Return))
+            {
+                if (ValidateIt()) { return true; }
+                InhibitCB2 = false;
+                toolStripCBWorkOrders_TextChanged(null, null);
+                UpdateView();
+                updateCurVals();
+                return true;
+            }
+            else
+            {
+                return base.ProcessCmdKey(ref msg, keyData);
+            }
         }
 
     }

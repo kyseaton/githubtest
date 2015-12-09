@@ -58,6 +58,8 @@
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
+            this.toolStripLabel4 = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripCBBarCode = new System.Windows.Forms.ToolStripComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.bindingNavigator1)).BeginInit();
             this.bindingNavigator1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
@@ -73,6 +75,8 @@
             this.toolStripCBCustomers,
             this.toolStripLabel3,
             this.toolStripCBBatMod,
+            this.toolStripLabel4,
+            this.toolStripCBBarCode,
             this.toolStripSeparator1,
             this.toolStripLabel1,
             this.toolStripCBSerNum,
@@ -93,7 +97,7 @@
             this.bindingNavigator1.MovePreviousItem = this.bindingNavigatorMovePreviousItem;
             this.bindingNavigator1.Name = "bindingNavigator1";
             this.bindingNavigator1.PositionItem = this.bindingNavigatorPositionItem;
-            this.bindingNavigator1.Size = new System.Drawing.Size(899, 25);
+            this.bindingNavigator1.Size = new System.Drawing.Size(1070, 25);
             this.bindingNavigator1.TabIndex = 2;
             this.bindingNavigator1.Text = "bindingNavigator1";
             this.bindingNavigator1.RefreshItems += new System.EventHandler(this.bindingNavigator1_RefreshItems);
@@ -255,7 +259,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(54, 65);
+            this.label1.Location = new System.Drawing.Point(60, 59);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(91, 13);
             this.label1.TabIndex = 3;
@@ -265,7 +269,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(64, 91);
+            this.label2.Location = new System.Drawing.Point(70, 85);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(81, 13);
             this.label2.TabIndex = 4;
@@ -274,7 +278,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(27, 39);
+            this.label3.Location = new System.Drawing.Point(33, 33);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(118, 13);
             this.label3.TabIndex = 5;
@@ -283,7 +287,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(9, 118);
+            this.label9.Location = new System.Drawing.Point(15, 112);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(136, 13);
             this.label9.TabIndex = 11;
@@ -291,14 +295,14 @@
             // 
             // textBox3
             // 
-            this.textBox3.Location = new System.Drawing.Point(151, 36);
+            this.textBox3.Location = new System.Drawing.Point(157, 30);
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(336, 20);
             this.textBox3.TabIndex = 1;
             // 
             // textBox4
             // 
-            this.textBox4.Location = new System.Drawing.Point(151, 115);
+            this.textBox4.Location = new System.Drawing.Point(157, 109);
             this.textBox4.Name = "textBox4";
             this.textBox4.Size = new System.Drawing.Size(336, 20);
             this.textBox4.TabIndex = 4;
@@ -307,7 +311,7 @@
             // 
             this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(151, 62);
+            this.comboBox1.Location = new System.Drawing.Point(157, 56);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(336, 21);
             this.comboBox1.TabIndex = 2;
@@ -316,7 +320,7 @@
             // 
             this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(151, 88);
+            this.comboBox2.Location = new System.Drawing.Point(157, 82);
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(336, 21);
             this.comboBox2.TabIndex = 3;
@@ -325,9 +329,9 @@
             // label4
             // 
             this.label4.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.label4.Location = new System.Drawing.Point(10, 26);
+            this.label4.Location = new System.Drawing.Point(0, 25);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(878, 2);
+            this.label4.Size = new System.Drawing.Size(1067, 2);
             this.label4.TabIndex = 12;
             // 
             // bindingSource1
@@ -342,11 +346,30 @@
             this.bindingSource1.ListChanged += new System.ComponentModel.ListChangedEventHandler(this.bindingSource1_ListChanged);
             this.bindingSource1.PositionChanged += new System.EventHandler(this.bindingSource1_PositionChanged);
             // 
+            // toolStripLabel4
+            // 
+            this.toolStripLabel4.Name = "toolStripLabel4";
+            this.toolStripLabel4.Size = new System.Drawing.Size(85, 22);
+            this.toolStripLabel4.Text = "Bar Code Num";
+            // 
+            // toolStripCBBarCode
+            // 
+            this.toolStripCBBarCode.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.toolStripCBBarCode.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.toolStripCBBarCode.Name = "toolStripCBBarCode";
+            this.toolStripCBBarCode.Size = new System.Drawing.Size(121, 25);
+            this.toolStripCBBarCode.DropDown += new System.EventHandler(this.toolStripCBBarCode_DropDown);
+            this.toolStripCBBarCode.SelectedIndexChanged += new System.EventHandler(this.toolStripCBBarCode_SelectedIndexChanged);
+            this.toolStripCBBarCode.Enter += new System.EventHandler(this.toolStripCBBarCode_Enter);
+            this.toolStripCBBarCode.Leave += new System.EventHandler(this.toolStripCBBarCode_Leave);
+            this.toolStripCBBarCode.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.toolStripCBBarCode_KeyPress);
+            this.toolStripCBBarCode.TextChanged += new System.EventHandler(this.toolStripCBBarCode_TextChanged);
+            // 
             // frmVECustomerBats
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(899, 144);
+            this.ClientSize = new System.Drawing.Size(1070, 137);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.comboBox2);
             this.Controls.Add(this.comboBox1);
@@ -405,5 +428,7 @@
         private System.Windows.Forms.ComboBox comboBox2;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel4;
+        private System.Windows.Forms.ToolStripComboBox toolStripCBBarCode;
     }
 }

@@ -418,6 +418,13 @@
                           <TextRuns>
                             <TextRun>
                               <Value>=Fields!WorkOrderNumber.Value</Value>
+                              <ActionInfo>
+                                <Actions>
+                                  <Action>
+                                    <Hyperlink>=Fields!WorkOrderNumber.Value</Hyperlink>
+                                  </Action>
+                                </Actions>
+                              </ActionInfo>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -427,6 +434,13 @@
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>WorkOrderNumber</rd:DefaultName>
+                      <ActionInfo>
+                        <Actions>
+                          <Action>
+                            <Hyperlink>="http://" &amp; Fields!WorkOrderNumber.Value</Hyperlink>
+                          </Action>
+                        </Actions>
+                      </ActionInfo>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -438,6 +452,7 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>

@@ -213,6 +213,8 @@ namespace NewBTASProto
              *  * */
         }
 
+        string oldCustName = "";
+
         private void toolStripCBCustomers_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (InhibitCB) { return; }
@@ -230,6 +232,7 @@ namespace NewBTASProto
             {
                 InhibitCB = false;
                 updateCurVals();
+                oldCustName = textBox1.Text;
             }
         }
 
@@ -345,7 +348,7 @@ namespace NewBTASProto
                     }
 
                     // Also update the customer name in the other tables!
-                    cmdStr = "UPDATE WorkOrders SET CustomerName='" + textBox1.Text.Replace("'", "''") + "' WHERE CustomerName='" + current["CustomerName"].ToString() + "'";
+                    cmdStr = "UPDATE WorkOrders SET CustomerName='" + textBox1.Text.Replace("'", "''") + "' WHERE CustomerName='" + oldCustName + "'";
                     cmd = new OleDbCommand(cmdStr, conn);
                     lock (Main_Form.dataBaseLock)
                     {
@@ -354,7 +357,7 @@ namespace NewBTASProto
                         conn.Close();
                     }
 
-                    cmdStr = "UPDATE Batteries SET CustomerName='" + textBox1.Text.Replace("'", "''") + "' WHERE CustomerName='" + current["CustomerName"].ToString() + "'";
+                    cmdStr = "UPDATE Batteries SET CustomerName='" + textBox1.Text.Replace("'", "''") + "' WHERE CustomerName='" + oldCustName + "'";
                     cmd = new OleDbCommand(cmdStr, conn);
                     lock (Main_Form.dataBaseLock)
                     {

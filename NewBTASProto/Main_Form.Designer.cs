@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main_Form));
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main_Form));
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -82,8 +82,8 @@
             this.editTechniciansToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripMenuItem();
             this.etcToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem28 = new System.Windows.Forms.ToolStripMenuItem();
+            this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem27 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.test3ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -101,7 +101,6 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -177,12 +176,12 @@
             this.cellsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripComboBox3 = new System.Windows.Forms.ToolStripComboBox();
             this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.cMSTestType.SuspendLayout();
@@ -194,6 +193,7 @@
             this.contextMenuStripTextPrint.SuspendLayout();
             this.contextMenuStripClear.SuspendLayout();
             this.contextMenuStripGraphSelect.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // dataGridView1
@@ -379,81 +379,81 @@
             // highlightCurrentToolStripMenuItem
             // 
             this.highlightCurrentToolStripMenuItem.Name = "highlightCurrentToolStripMenuItem";
-            this.highlightCurrentToolStripMenuItem.Size = new System.Drawing.Size(290, 22);
+            this.highlightCurrentToolStripMenuItem.Size = new System.Drawing.Size(298, 22);
             this.highlightCurrentToolStripMenuItem.Text = "Highlight Current";
             this.highlightCurrentToolStripMenuItem.Click += new System.EventHandler(this.highlightCurrentToolStripMenuItem_Click);
             // 
             // toolStripMenuItem30
             // 
             this.toolStripMenuItem30.Name = "toolStripMenuItem30";
-            this.toolStripMenuItem30.Size = new System.Drawing.Size(290, 22);
+            this.toolStripMenuItem30.Size = new System.Drawing.Size(298, 22);
             this.toolStripMenuItem30.Text = "Sequential Scanning";
             this.toolStripMenuItem30.Click += new System.EventHandler(this.toolStripMenuItem30_Click);
             // 
             // toolStripMenuItem34
             // 
             this.toolStripMenuItem34.Name = "toolStripMenuItem34";
-            this.toolStripMenuItem34.Size = new System.Drawing.Size(290, 22);
+            this.toolStripMenuItem34.Size = new System.Drawing.Size(298, 22);
             this.toolStripMenuItem34.Text = "Find Stations";
             this.toolStripMenuItem34.Click += new System.EventHandler(this.toolStripMenuItem34_Click);
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(287, 6);
+            this.toolStripSeparator5.Size = new System.Drawing.Size(295, 6);
             // 
             // chargerConfigurationInterfaceToolStripMenuItem
             // 
             this.chargerConfigurationInterfaceToolStripMenuItem.Name = "chargerConfigurationInterfaceToolStripMenuItem";
-            this.chargerConfigurationInterfaceToolStripMenuItem.Size = new System.Drawing.Size(290, 22);
-            this.chargerConfigurationInterfaceToolStripMenuItem.Text = "Charger Configuration Interface";
+            this.chargerConfigurationInterfaceToolStripMenuItem.Size = new System.Drawing.Size(298, 22);
+            this.chargerConfigurationInterfaceToolStripMenuItem.Text = "Intelligent Charger Configuration Interface";
             this.chargerConfigurationInterfaceToolStripMenuItem.Click += new System.EventHandler(this.chargerConfigurationInterfaceToolStripMenuItem_Click);
             // 
             // toolStripMenuItem37
             // 
             this.toolStripMenuItem37.Name = "toolStripMenuItem37";
-            this.toolStripMenuItem37.Size = new System.Drawing.Size(287, 6);
+            this.toolStripMenuItem37.Size = new System.Drawing.Size(295, 6);
             // 
             // automaticallyConfigureChargerToolStripMenuItem
             // 
             this.automaticallyConfigureChargerToolStripMenuItem.Name = "automaticallyConfigureChargerToolStripMenuItem";
-            this.automaticallyConfigureChargerToolStripMenuItem.Size = new System.Drawing.Size(290, 22);
+            this.automaticallyConfigureChargerToolStripMenuItem.Size = new System.Drawing.Size(298, 22);
             this.automaticallyConfigureChargerToolStripMenuItem.Text = "Enable Automatic Charger Configuration";
             this.automaticallyConfigureChargerToolStripMenuItem.Click += new System.EventHandler(this.automaticallyConfigureChargerToolStripMenuItem_Click);
             // 
             // toolStripMenuItem36
             // 
             this.toolStripMenuItem36.Name = "toolStripMenuItem36";
-            this.toolStripMenuItem36.Size = new System.Drawing.Size(287, 6);
+            this.toolStripMenuItem36.Size = new System.Drawing.Size(295, 6);
             // 
             // toolStripMenuItem32
             // 
             this.toolStripMenuItem32.Name = "toolStripMenuItem32";
-            this.toolStripMenuItem32.Size = new System.Drawing.Size(290, 22);
+            this.toolStripMenuItem32.Size = new System.Drawing.Size(298, 22);
             this.toolStripMenuItem32.Text = "MasterFiller Interface";
             this.toolStripMenuItem32.Click += new System.EventHandler(this.toolStripMenuItem32_Click);
             // 
             // toolStripMenuItem31
             // 
             this.toolStripMenuItem31.Name = "toolStripMenuItem31";
-            this.toolStripMenuItem31.Size = new System.Drawing.Size(287, 6);
+            this.toolStripMenuItem31.Size = new System.Drawing.Size(295, 6);
             // 
             // editTestSettingsToolStripMenuItem
             // 
             this.editTestSettingsToolStripMenuItem.Name = "editTestSettingsToolStripMenuItem";
-            this.editTestSettingsToolStripMenuItem.Size = new System.Drawing.Size(290, 22);
+            this.editTestSettingsToolStripMenuItem.Size = new System.Drawing.Size(298, 22);
             this.editTestSettingsToolStripMenuItem.Text = "Edit Custom Test Settings";
             this.editTestSettingsToolStripMenuItem.Click += new System.EventHandler(this.editTestSettingsToolStripMenuItem_Click);
             // 
             // toolStripMenuItem35
             // 
             this.toolStripMenuItem35.Name = "toolStripMenuItem35";
-            this.toolStripMenuItem35.Size = new System.Drawing.Size(287, 6);
+            this.toolStripMenuItem35.Size = new System.Drawing.Size(295, 6);
             // 
             // notificationServiceToolStripMenuItem
             // 
             this.notificationServiceToolStripMenuItem.Name = "notificationServiceToolStripMenuItem";
-            this.notificationServiceToolStripMenuItem.Size = new System.Drawing.Size(290, 22);
+            this.notificationServiceToolStripMenuItem.Size = new System.Drawing.Size(298, 22);
             this.notificationServiceToolStripMenuItem.Text = "Notification Service";
             this.notificationServiceToolStripMenuItem.Click += new System.EventHandler(this.notificationServiceToolStripMenuItem_Click);
             // 
@@ -597,8 +597,8 @@
             // etcToolStripMenuItem
             // 
             this.etcToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.testToolStripMenuItem,
             this.toolStripMenuItem28,
+            this.testToolStripMenuItem,
             this.toolStripMenuItem27,
             this.toolStripSeparator1,
             this.test3ToolStripMenuItem});
@@ -606,19 +606,19 @@
             this.etcToolStripMenuItem.Size = new System.Drawing.Size(71, 20);
             this.etcToolStripMenuItem.Text = "Reporting";
             // 
-            // testToolStripMenuItem
-            // 
-            this.testToolStripMenuItem.Name = "testToolStripMenuItem";
-            this.testToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
-            this.testToolStripMenuItem.Text = "Test Reports";
-            this.testToolStripMenuItem.Click += new System.EventHandler(this.testToolStripMenuItem_Click);
-            // 
             // toolStripMenuItem28
             // 
             this.toolStripMenuItem28.Name = "toolStripMenuItem28";
             this.toolStripMenuItem28.Size = new System.Drawing.Size(178, 22);
             this.toolStripMenuItem28.Text = "Work Order Reports";
             this.toolStripMenuItem28.Click += new System.EventHandler(this.toolStripMenuItem28_Click);
+            // 
+            // testToolStripMenuItem
+            // 
+            this.testToolStripMenuItem.Name = "testToolStripMenuItem";
+            this.testToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
+            this.testToolStripMenuItem.Text = "Test Reports";
+            this.testToolStripMenuItem.Click += new System.EventHandler(this.testToolStripMenuItem_Click);
             // 
             // toolStripMenuItem27
             // 
@@ -767,20 +767,11 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Enter += new System.EventHandler(this.groupBox2_Enter);
             // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(6, 13);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(90, 18);
-            this.pictureBox1.TabIndex = 17;
-            this.pictureBox1.TabStop = false;
-            // 
             // label4
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(102, 15);
+            this.label4.Location = new System.Drawing.Point(118, 13);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(33, 13);
             this.label4.TabIndex = 16;
@@ -790,7 +781,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(227, 15);
+            this.label3.Location = new System.Drawing.Point(243, 13);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(33, 13);
             this.label3.TabIndex = 15;
@@ -800,7 +791,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(421, 13);
+            this.label2.Location = new System.Drawing.Point(437, 11);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(52, 17);
             this.label2.TabIndex = 14;
@@ -822,7 +813,7 @@
             // 
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(352, 15);
+            this.label9.Location = new System.Drawing.Point(368, 13);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(63, 13);
             this.label9.TabIndex = 7;
@@ -844,7 +835,7 @@
             // 
             this.timeLabel.BackColor = System.Drawing.Color.Bisque;
             this.timeLabel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.timeLabel.Location = new System.Drawing.Point(266, 14);
+            this.timeLabel.Location = new System.Drawing.Point(282, 12);
             this.timeLabel.Name = "timeLabel";
             this.timeLabel.Size = new System.Drawing.Size(80, 17);
             this.timeLabel.TabIndex = 3;
@@ -854,7 +845,7 @@
             // 
             this.dateLabel.BackColor = System.Drawing.Color.Bisque;
             this.dateLabel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.dateLabel.Location = new System.Drawing.Point(141, 14);
+            this.dateLabel.Location = new System.Drawing.Point(157, 12);
             this.dateLabel.Name = "dateLabel";
             this.dateLabel.Size = new System.Drawing.Size(80, 17);
             this.dateLabel.TabIndex = 1;
@@ -1414,6 +1405,15 @@
             this.openFileDialog2.Filter = "JPG Files (*.jpg)|*.jpg";
             this.openFileDialog2.Title = "Select Logo File";
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(6, 10);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(106, 21);
+            this.pictureBox1.TabIndex = 17;
+            this.pictureBox1.TabStop = false;
+            // 
             // Main_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1445,7 +1445,6 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
@@ -1458,6 +1457,7 @@
             this.contextMenuStripTextPrint.ResumeLayout(false);
             this.contextMenuStripClear.ResumeLayout(false);
             this.contextMenuStripGraphSelect.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1599,7 +1599,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem36;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem35;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem38;
-        private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripGraphSelect;
         private System.Windows.Forms.ToolStripMenuItem batteryToolStripMenuItem;
         private System.Windows.Forms.ToolStripComboBox toolStripComboBox2;
@@ -1610,6 +1609,7 @@
         private System.Windows.Forms.OpenFileDialog openFileDialog2;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem42;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem41;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }
 

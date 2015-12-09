@@ -157,7 +157,9 @@ namespace NewBTASProto
             //SerNumCB.DisplayMember = "BatterySerialNumber";
             CustCB.DataSource = Customers;
 
-            //  Finally, setup the drop down to contain all customers availible in the customer table
+
+
+            //  Setup the drop down to contain all battery models availible in the customer table
 
             // Open database containing all the customer names data....
 
@@ -204,6 +206,54 @@ namespace NewBTASProto
             ComboBox ModCB = toolStripCBBatMod.ComboBox;
             //SerNumCB.DisplayMember = "BatterySerialNumber";
             ModCB.DataSource = Mods;
+
+            //  Finally, setup the drop down to contain all of the battery barcode numbers availible
+
+            // Open database containing all the customer names data....
+
+            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+            strAccessSelect = @"SELECT DISTINCT BatteryBCN FROM Batteries ORDER BY BatteryBCN ASC";
+
+            DataSet BarList = new DataSet();
+            myAccessConn = null;
+            // try to open the DB
+            try
+            {
+                myAccessConn = new OleDbConnection(strAccessConn);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
+                return;
+            }
+            //  now try to access it
+            try
+            {
+                OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+                lock (Main_Form.dataBaseLock)
+                {
+                    myAccessConn.Open();
+                    myDataAdapter.Fill(BarList);
+                    myAccessConn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                return;
+            }
+            finally
+            {
+
+            }
+
+            List<string> Bars = BarList.Tables[0].AsEnumerable().Select(x => x[0].ToString()).Distinct().ToList();
+            Bars.Sort();
+            Bars.Insert(0, "");
+            ComboBox BarCB = toolStripCBBarCode.ComboBox;
+            //SerNumCB.DisplayMember = "BatterySerialNumber";
+            BarCB.DataSource = Bars;
             #endregion
 
             try
@@ -225,9 +275,6 @@ namespace NewBTASProto
             {
                 comboBox2.Items.Add(x);
             }
-
-
-
 
         }
 
@@ -319,28 +366,51 @@ namespace NewBTASProto
         {
             #region setup the binding
 
-            // The xml to bind to.
             string strAccessConn;
             string strAccessSelect;
             // Open database containing all the battery data....
             strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
 
-            if (toolStripCBCustomers.Text == "" && toolStripCBBatMod.Text == "")
+            //adding master if/else to the barcodenumber drop down...
+            if (toolStripCBBarCode.Text != "")
             {
-                strAccessSelect = @"SELECT * FROM Batteries ORDER BY BatterySerialNumber ASC";
-            }
+                if (toolStripCBCustomers.Text == "" && toolStripCBBatMod.Text == "")
+                {
+                    strAccessSelect = @"SELECT * FROM Batteries WHERE BatteryBCN='" + toolStripCBBarCode.Text.Replace("'", "''") + "' ORDER BY BatterySerialNumber ASC";
+                }
 
-            else if (toolStripCBBatMod.Text == "")
-            {
-                strAccessSelect = @"SELECT * FROM Batteries WHERE CustomerName='" + toolStripCBCustomers.Text.Replace("'", "''") + "' ORDER BY BatterySerialNumber ASC";
-            }
-            else if (toolStripCBCustomers.Text == "")
-            {
-                strAccessSelect = @"SELECT * FROM Batteries WHERE BatteryModel='" + toolStripCBBatMod.Text.Replace("'", "''") + "' ORDER BY BatterySerialNumber ASC";
+                else if (toolStripCBBatMod.Text == "")
+                {
+                    strAccessSelect = @"SELECT * FROM Batteries WHERE CustomerName='" + toolStripCBCustomers.Text.Replace("'", "''") + "' AND BatteryBCN='" + toolStripCBBarCode.Text.Replace("'", "''") + "' ORDER BY BatterySerialNumber ASC";
+                }
+                else if (toolStripCBCustomers.Text == "")
+                {
+                    strAccessSelect = @"SELECT * FROM Batteries WHERE BatteryModel='" + toolStripCBBatMod.Text.Replace("'", "''") + "' AND BatteryBCN='" + toolStripCBBarCode.Text.Replace("'", "''") + "' ORDER BY BatterySerialNumber ASC";
+                }
+                else
+                {
+                    strAccessSelect = @"SELECT * FROM Batteries WHERE CustomerName='" + toolStripCBCustomers.Text.Replace("'", "''") + "' AND " + "BatteryModel='" + toolStripCBBatMod.Text.Replace("'", "''") + "' AND BatteryBCN='" + toolStripCBBarCode.Text.Replace("'", "''") + "' ORDER BY BatterySerialNumber ASC";
+                }
             }
             else
             {
-                strAccessSelect = @"SELECT * FROM Batteries WHERE CustomerName='" + toolStripCBCustomers.Text.Replace("'", "''") + "' AND " + "BatteryModel='" + toolStripCBBatMod.Text.Replace("'", "''") + "' ORDER BY BatterySerialNumber ASC";
+                if (toolStripCBCustomers.Text == "" && toolStripCBBatMod.Text == "")
+                {
+                    strAccessSelect = @"SELECT * FROM Batteries ORDER BY BatterySerialNumber ASC";
+                }
+
+                else if (toolStripCBBatMod.Text == "")
+                {
+                    strAccessSelect = @"SELECT * FROM Batteries WHERE CustomerName='" + toolStripCBCustomers.Text.Replace("'", "''") + "' ORDER BY BatterySerialNumber ASC";
+                }
+                else if (toolStripCBCustomers.Text == "")
+                {
+                    strAccessSelect = @"SELECT * FROM Batteries WHERE BatteryModel='" + toolStripCBBatMod.Text.Replace("'", "''") + "' ORDER BY BatterySerialNumber ASC";
+                }
+                else
+                {
+                    strAccessSelect = @"SELECT * FROM Batteries WHERE CustomerName='" + toolStripCBCustomers.Text.Replace("'", "''") + "' AND " + "BatteryModel='" + toolStripCBBatMod.Text.Replace("'", "''") + "' ORDER BY BatterySerialNumber ASC";
+                }
             }
 
             Bats.Clear();
@@ -937,6 +1007,87 @@ namespace NewBTASProto
         private void toolStripCBSerNum_Enter(object sender, EventArgs e)
         {
 
+        }
+
+        private void toolStripCBBarCode_Enter(object sender, EventArgs e)
+        {
+            InhibitCB = true;
+        }
+
+        private void toolStripCBBarCode_Leave(object sender, EventArgs e)
+        {
+            InhibitCB = false;
+        }
+
+        private void toolStripCBBarCode_DropDown(object sender, EventArgs e)
+        {
+            InhibitCB = false;
+        }
+
+        int oldPositionBarCode = 0;
+
+        private void toolStripCBBarCode_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (InhibitCB)
+            {
+                return;
+            }
+
+            //Validate before moving
+            if (ValidateIt())
+            {
+                // move back
+                InhibitCB = true;
+                toolStripCBBarCode.SelectedIndex = oldPositionBarCode;
+            }
+            else
+            {
+                oldPositionBarCode = toolStripCBBarCode.SelectedIndex;
+                // make sure the add new is enabled..
+                bindingNavigatorAddNewItem.Enabled = true;
+                UpdateBats();
+                updateCurVals();
+            }
+            InhibitCB = true; 
+        }
+
+        private void toolStripCBBarCode_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                //remove the new record if there is one..
+                if (bindingNavigatorAddNewItem.Enabled == false && lastValid)
+                {
+                    Bats.Tables[0].Rows[Bats.Tables[0].Rows.Count - 1].Delete();
+                    bindingNavigatorAddNewItem.Enabled = true;
+                }
+            }
+            catch
+            {
+                //do nothing
+            }
+        }
+
+        private void toolStripCBBarCode_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == 13)
+            {
+                InhibitCB = false;
+            }
+        }
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if ((this.ActiveControl == toolStripCBBarCode.ComboBox || this.ActiveControl == toolStripCBBatMod.ComboBox || this.ActiveControl == toolStripCBCustomers.ComboBox) && (keyData == Keys.Return))
+            {
+                InhibitCB = false;
+                toolStripCBBarCode_SelectedIndexChanged(null, null);
+                return true;
+            }
+            else
+            {
+                return base.ProcessCmdKey(ref msg, keyData);
+            }
         }
     }
 }
