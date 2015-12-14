@@ -83,6 +83,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataSet1.cs">
+      <DependentUpon>DataSet1.xsd</DependentUpon>
+    </Compile>
     <Compile Include="MasterFillerInterface.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -172,15 +175,6 @@
     <Compile Include="CScanDataStore.cs" />
     <Compile Include="CScan_Portion.cs">
       <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="DataSet1.cs">
-      <DependentUpon>DataSet1.xsd</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="DataSet1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>DataSet1.xsd</DependentUpon>
     </Compile>
     <Compile Include="GlobalVars.cs" />
     <Compile Include="Reports\Battery_Reports.cs">
@@ -278,6 +272,7 @@
     <EmbeddedResource Include="ICSettingsForm.resx">
       <DependentUpon>ICSettingsForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Reports\WOTestSum.rdlc" />
     <EmbeddedResource Include="Reports\WorkOrderSum.rdlc" />
     <EmbeddedResource Include="Reports\CellDataNP7.rdlc" />
     <EmbeddedResource Include="Reports\CellDataPN7.rdlc" />
@@ -339,7 +334,7 @@
     <None Include="DataSet1.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>DataSet1.Designer.cs</LastGenOutput>
+      <LastGenOutput>DataSet11.Designer.cs</LastGenOutput>
     </None>
     <None Include="DataSet1.xss">
       <DependentUpon>DataSet1.xsd</DependentUpon>

@@ -1105,6 +1105,7 @@ namespace NewBTASProto
                         MessageBox.Show(new Form() { TopMost = true }, "That record was not in the DB. You must save it in order to delete it.");
                     }
                     UpdateView();
+                    updateCurVals();
 
                 }
             }

@@ -122,6 +122,7 @@
             // 
             this.comboBox3.FormattingEnabled = true;
             this.comboBox3.Items.AddRange(new object[] {
+            "Work Order Summary",
             "Battery Data",
             "Cell Data",
             "Test Summary",

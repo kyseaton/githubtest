@@ -748,6 +748,10 @@ namespace NewBTASProto
             {
                 MessageBox.Show(new Form() { TopMost = true }, "Deletion Error" + ex.ToString());
             }
+            finally
+            {
+                updateCurVals();
+            }
         }
 
         private void saveToolStripButton_Click_1(object sender, EventArgs e)

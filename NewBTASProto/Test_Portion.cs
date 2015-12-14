@@ -3388,7 +3388,7 @@ namespace NewBTASProto
                         // check that the C-Scan is still running...
 
                         // this is the power fail case...
-                        if (d.Rows[station][11].ToString() == "Power Off")
+                        if (d.Rows[station][11].ToString() == "Power Fail")
                         {
                             stopwatch.Stop();
                             //set to hold

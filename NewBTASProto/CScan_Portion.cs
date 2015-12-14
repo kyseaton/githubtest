@@ -364,10 +364,21 @@ namespace NewBTASProto
                                                         dataGridView1.Rows[slaveRow].Cells[8].Style.BackColor = Color.Red;
                                                     }
                                                 });
-                                                updateD(currentRow, 11, "Power Off");
-                                                if (slaveRow > -1)
+                                                if ((bool)d.Rows[currentRow][5] == false)
                                                 {
-                                                    updateD(slaveRow, 11, "Power Off");
+                                                    updateD(currentRow, 11, "Power Off");
+                                                    if (slaveRow > -1)
+                                                    {
+                                                        updateD(slaveRow, 11, "Power Off");
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    updateD(currentRow, 11, "Power Fail");
+                                                    if (slaveRow > -1)
+                                                    {
+                                                        updateD(slaveRow, 11, "Power Fail");
+                                                    }
                                                 }
                                             }
                                         }
@@ -398,10 +409,21 @@ namespace NewBTASProto
                                                     dataGridView1.Rows[slaveRow].Cells[8].Style.BackColor = Color.Red;
                                                 }
                                             });
-                                            updateD(currentRow, 11, "Power Off");
-                                            if (slaveRow > -1)
+                                            if ((bool)d.Rows[currentRow][5] == false)
                                             {
-                                                updateD(slaveRow, 11, "Power Off");
+                                                updateD(currentRow, 11, "Power Off");
+                                                if (slaveRow > -1)
+                                                {
+                                                    updateD(slaveRow, 11, "Power Off");
+                                                }
+                                            }
+                                            else
+                                            {
+                                                updateD(currentRow, 11, "Power Fail");
+                                                if (slaveRow > -1)
+                                                {
+                                                    updateD(slaveRow, 11, "Power Fail");
+                                                }
                                             }
                                         }
                                         else if (dataGridView1.Rows[currentRow].Cells[8].Style.BackColor == Color.Red && GlobalVars.CScanData[currentRow].powerOn && !d.Rows[currentRow][9].ToString().Contains("S") && d.Rows[currentRow][10].ToString() == "CCA")
@@ -469,10 +491,21 @@ namespace NewBTASProto
                                         {
                                             if (GlobalVars.CScanData[currentRow].powerOn == false)
                                             {
-                                                updateD(currentRow, 11, "Power Off");
-                                                if (slaveRow > -1)
+                                                if ((bool)d.Rows[currentRow][5] == false)
                                                 {
-                                                    updateD(slaveRow, 11, "Power Off");
+                                                    updateD(currentRow, 11, "Power Off");
+                                                    if (slaveRow > -1)
+                                                    {
+                                                        updateD(slaveRow, 11, "Power Off");
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    updateD(currentRow, 11, "Power Fail");
+                                                    if (slaveRow > -1)
+                                                    {
+                                                        updateD(slaveRow, 11, "Power Fail");
+                                                    }
                                                 }
                                             }
                                             else
@@ -640,10 +673,21 @@ namespace NewBTASProto
                                                             dataGridView1.Rows[slaveRow].Cells[8].Style.BackColor = Color.Red;
                                                         }
                                                     });
-                                                    updateD(j, 11, "Power Off");
-                                                    if (slaveRow > -1)
+                                                    if ((bool)d.Rows[j][5] == false)
                                                     {
-                                                        updateD(slaveRow, 11, "Power Off");
+                                                        updateD(j, 11, "Power Off");
+                                                        if (slaveRow > -1)
+                                                        {
+                                                            updateD(slaveRow, 11, "Power Off");
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        updateD(j, 11, "Power Fail");
+                                                        if (slaveRow > -1)
+                                                        {
+                                                            updateD(slaveRow, 11, "Power Fail");
+                                                        }
                                                     }
                                                 }
                                             }
@@ -675,10 +719,21 @@ namespace NewBTASProto
                                                     }
                                                 });
 
-                                                updateD(j, 11, "Power Off");
-                                                if (slaveRow > -1)
+                                                if ((bool)d.Rows[j][5] == false)
                                                 {
-                                                    updateD(slaveRow, 11, "Power Off");
+                                                    updateD(j, 11, "Power Off");
+                                                    if (slaveRow > -1)
+                                                    {
+                                                        updateD(slaveRow, 11, "Power Off");
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    updateD(j, 11, "Power Fail");
+                                                    if (slaveRow > -1)
+                                                    {
+                                                        updateD(slaveRow, 11, "Power Fail");
+                                                    }
                                                 }
                                             }
                                             else if (dataGridView1.Rows[j].Cells[8].Style.BackColor == Color.Red && GlobalVars.CScanData[j].powerOn && d.Rows[j][10].ToString() == "CCA" && !d.Rows[j][9].ToString().Contains("S"))
@@ -745,10 +800,21 @@ namespace NewBTASProto
                                         {
                                             if (GlobalVars.CScanData[j].powerOn == false)
                                             {
-                                                updateD(j, 11, "Power Off");
-                                                if (slaveRow > -1)
+                                                if ((bool)d.Rows[j][5] == false)
                                                 {
-                                                    updateD(slaveRow, 11, "Power Off");
+                                                    updateD(j, 11, "Power Off");
+                                                    if (slaveRow > -1)
+                                                    {
+                                                        updateD(slaveRow, 11, "Power Off");
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    updateD(j, 11, "Power Fail");
+                                                    if (slaveRow > -1)
+                                                    {
+                                                        updateD(slaveRow, 11, "Power Fail");
+                                                    }
                                                 }
                                             }
                                             else
@@ -819,6 +885,15 @@ namespace NewBTASProto
         {
             try
             {
+                // first check to see if you have a cells cable...
+                if (testData.cellCableType == "NONE")
+                {
+                    //clear and return
+                    chart1.Series.Clear();
+                    chart1.Titles.Clear();
+                    return;
+                }
+
                 //Replace based on values selected in radio1("Battery") or radio2 ("Cells")
                 //and combo2 (Battery voltages) or combo3 (Cell voltages)
                 //if that row is selected, update the chart portion

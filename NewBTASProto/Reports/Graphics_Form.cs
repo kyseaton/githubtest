@@ -1560,6 +1560,11 @@ namespace NewBTASProto
             double Min4 = 0;
             double Max = 0;
 
+            if (CellV1 == 0)
+            {
+                CellV1 = (float)1.75;
+            }
+
             switch (tech)
             {
                 case "NiCd":
@@ -1582,13 +1587,13 @@ namespace NewBTASProto
                         Min3 = 1.55 * Cells;
                         Max = CellV1 * Cells;
 
-                        if (Value > Max) { return Color.Red; }
+                        if (Value > Max) 
+                        { 
+                            return Color.Red; 
+                        }
                         else if (Value > Min3) { return Color.Green; }
                         else if (Value > Min2) { return Color.Orange; }
-                        else if (Value > Min1) 
-                        {
-                            return Color.Yellow; 
-                        }
+                        else if (Value > Min1) { return Color.Yellow; }
                         else { return Color.Red; }
                     }
                 case "Sealed Lead Acid":
@@ -1671,6 +1676,11 @@ namespace NewBTASProto
             double Min3 = 0;
             double Min4 = 0;
             double Max = 0;
+
+            if (CellV2 == 0)
+            {
+                CellV2 = (float)1.75;
+            }
 
             switch (tech)
             {

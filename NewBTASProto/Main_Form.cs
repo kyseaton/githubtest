@@ -439,157 +439,178 @@ namespace NewBTASProto
 
         internal void updateWOC(int channel, string workOrder)
         {
-            updateD(channel, 1, workOrder);
-            // clear the grid (if it's not on a slave channel...
-            if (!d.Rows[channel][9].ToString().Contains("S"))
+            try
             {
-                updateD(channel, 2, "");
-                updateD(channel, 3, "");
-                updateD(channel, 6, "");
-                updateD(channel, 7, "");
-            }
-            if (d.Rows[channel][9].ToString().Contains("M"))
-            {
-                // find the slave and update it also!
-                //find the slave
-                string temp = d.Rows[channel][9].ToString().Replace("-M", "");
-                for (int i = 0; i < 16; i++)
+                updateD(channel, 1, workOrder);
+                // clear the grid (if it's not on a slave channel...
+                if (!d.Rows[channel][9].ToString().Contains("S"))
                 {
-                    if (d.Rows[i][9].ToString().Contains(temp) && d.Rows[i][9].ToString().Contains("S"))
+                    updateD(channel, 2, "");
+                    updateD(channel, 3, "");
+                    updateD(channel, 6, "");
+                    updateD(channel, 7, "");
+                }
+                if (d.Rows[channel][9].ToString().Contains("M"))
+                {
+                    // find the slave and update it also!
+                    //find the slave
+                    string temp = d.Rows[channel][9].ToString().Replace("-M", "");
+                    for (int i = 0; i < 16; i++)
                     {
-                        updateD(i, 2, "");
-                        updateD(i, 3, "");
-                        updateD(i, 6, "");
-                        updateD(i, 7, "");
+                        if (d.Rows[i][9].ToString().Contains(temp) && d.Rows[i][9].ToString().Contains("S"))
+                        {
+                            updateD(i, 2, "");
+                            updateD(i, 3, "");
+                            updateD(i, 6, "");
+                            updateD(i, 7, "");
+                        }
                     }
+
                 }
 
-            }
+                // also re set the combos...
+                fillPlotCombos(channel);
 
-            // also re set the combos...
-            fillPlotCombos(channel);
-
-            // finally we need to update the pci datatable
-            if (workOrder != "")
-            {
-                //split off the first work order if we have multiple ones..
-                string tempWOS = workOrder;
-                char[] delims = { ' ' };
-                string[] A = tempWOS.Split(delims);
-                workOrder = A[0];
-
-                DataSet batData = new DataSet();
-
-                // find out the nominal voltage 
-                // first get the battery Model from the work order..
-                // Open database containing all the battery data....
-                string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
-                string strAccessSelect = @"SELECT BatteryModel,BatterySerialNumber FROM WorkOrders WHERE WorkOrderNumber='" + workOrder.Trim() + @"'";
-
-                OleDbConnection myAccessConn = null;
-                // try to open the DB
-                try
+                // finally we need to update the pci datatable
+                if (workOrder != "")
                 {
-                    myAccessConn = new OleDbConnection(strAccessConn);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
-                    return;
-                }
-                //  now try to access it
-                try
-                {
-                    OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
-                    OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+                    //split off the first work order if we have multiple ones..
+                    string tempWOS = workOrder;
+                    char[] delims = { ' ' };
+                    string[] A = tempWOS.Split(delims);
+                    workOrder = A[0];
 
-                    lock (dataBaseLock)
+                    DataSet batData = new DataSet();
+
+                    // find out the nominal voltage 
+                    // first get the battery Model from the work order..
+                    // Open database containing all the battery data....
+                    string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                    string strAccessSelect = @"SELECT BatteryModel,BatterySerialNumber FROM WorkOrders WHERE WorkOrderNumber='" + workOrder.Trim() + @"'";
+
+                    OleDbConnection myAccessConn = null;
+                    // try to open the DB
+                    try
                     {
-                        myAccessConn.Open();
-                        myDataAdapter.Fill(batData, "Bat");
+                        myAccessConn = new OleDbConnection(strAccessConn);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
+                        return;
+                    }
+                    //  now try to access it
+                    try
+                    {
+                        OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                        OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                        lock (dataBaseLock)
+                        {
+                            myAccessConn.Open();
+                            myDataAdapter.Fill(batData, "Bat");
+                            myAccessConn.Close();
+                        }
+
+
+                    }
+                    catch (Exception ex)
+                    {
                         myAccessConn.Close();
+                        MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                        return;
                     }
 
+                    //Now we have the battery Model...
+                    pci.Rows[channel][0] = batData.Tables[0].Rows[0][0].ToString();
+                    pci.Rows[channel][9] = batData.Tables[0].Rows[0][1].ToString();
 
-                }
-                catch (Exception ex)
-                {
-                    myAccessConn.Close();
-                    MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
-                    return;
-                }
+                    // Lets get the nominal voltage!
+                    strAccessSelect = @"SELECT BTECH,VOLT,NCELLS,BCVMIN,BCVMAX,CCVMMIN,CCVMAX,CCAPV FROM BatteriesCustom WHERE BatteryModel='" + batData.Tables[0].Rows[0][0].ToString() + @"'";
+                    batData = new DataSet();
+                    //  now try to access it
 
-                //Now we have the battery Model...
-                pci.Rows[channel][0] = batData.Tables[0].Rows[0][0].ToString();
-                pci.Rows[channel][9] = batData.Tables[0].Rows[0][1].ToString();
-
-                // Lets get the nominal voltage!
-                strAccessSelect = @"SELECT BTECH,VOLT,NCELLS,BCVMIN,BCVMAX,CCVMMIN,CCVMAX,CCAPV FROM BatteriesCustom WHERE BatteryModel='" + batData.Tables[0].Rows[0][0].ToString() + @"'";
-                batData = new DataSet();
-                //  now try to access it
-
-                try
-                {
-                    OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
-                    OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
-
-                    lock (dataBaseLock)
+                    try
                     {
-                        myAccessConn.Open();
-                        myDataAdapter.Fill(batData, "Bat");
+                        OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                        OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                        lock (dataBaseLock)
+                        {
+                            myAccessConn.Open();
+                            myDataAdapter.Fill(batData, "Bat");
+                            myAccessConn.Close();
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
                         myAccessConn.Close();
+                        MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                        return;
                     }
 
-                }
-                catch (Exception ex)
-                {
-                    myAccessConn.Close();
-                    MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
-                    return;
-                }
+                    // we should have the data!
+                    // now put it into the the pci!
 
-                // we should have the data!
-                // now put it into the the pci!
-                if (batData.Tables[0].Rows[0][0].ToString() != "")
-                {
-                    pci.Rows[channel][1] = batData.Tables[0].Rows[0][0].ToString();
+                    if (batData.Tables[0].Rows[0][0].ToString() != "")
+                    {
+                        pci.Rows[channel][1] = batData.Tables[0].Rows[0][0].ToString();
+                    }
+                    if (batData.Tables[0].Rows[0][1].ToString() != "")
+                    {
+                        pci.Rows[channel][2] = float.Parse(batData.Tables[0].Rows[0][1].ToString());
+                    }
+                    if (batData.Tables[0].Rows[0][2].ToString() != "")
+                    {
+                        pci.Rows[channel][3] = int.Parse(batData.Tables[0].Rows[0][2].ToString());
+                    }
+                    if (batData.Tables[0].Rows[0][3].ToString() != "")
+                    {
+                        pci.Rows[channel][4] = float.Parse(batData.Tables[0].Rows[0][3].ToString());
+                    }
+                    if (batData.Tables[0].Rows[0][4].ToString() != "")
+                    {
+                        pci.Rows[channel][5] = float.Parse(batData.Tables[0].Rows[0][4].ToString());
+                    }
+                    if (batData.Tables[0].Rows[0][5].ToString() != "")
+                    {
+                        pci.Rows[channel][6] = float.Parse(batData.Tables[0].Rows[0][5].ToString());
+                    }
+                    else if (batData.Tables[0].Rows[0][5].ToString() == "" && batData.Tables[0].Rows[0][0].ToString() == "NiCd ULM")
+                    {
+                        pci.Rows[channel][6] = 1.82;
+                    }
+                    if (batData.Tables[0].Rows[0][6].ToString() != "")
+                    {
+                        pci.Rows[channel][7] = float.Parse(batData.Tables[0].Rows[0][6].ToString());
+                    }
+                    if (batData.Tables[0].Rows[0][7].ToString() != "")
+                    {
+                        pci.Rows[channel][8] = float.Parse(batData.Tables[0].Rows[0][7].ToString());
+                    }
                 }
-                if (batData.Tables[0].Rows[0][1].ToString() != "")
+                else
                 {
-                    pci.Rows[channel][2] = float.Parse(batData.Tables[0].Rows[0][1].ToString());
-                }
-                if (batData.Tables[0].Rows[0][2].ToString() != "")
-                {
-                    pci.Rows[channel][3] = int.Parse(batData.Tables[0].Rows[0][2].ToString());
-                }
-                if (batData.Tables[0].Rows[0][3].ToString() != "")
-                {
-                    pci.Rows[channel][4] = float.Parse(batData.Tables[0].Rows[0][3].ToString());
-                }
-                if (batData.Tables[0].Rows[0][4].ToString() != "")
-                {
-                    pci.Rows[channel][5] = float.Parse(batData.Tables[0].Rows[0][4].ToString());
-                }
-                if (batData.Tables[0].Rows[0][5].ToString() != "")
-                {
-                    pci.Rows[channel][6] = float.Parse(batData.Tables[0].Rows[0][5].ToString());
-                }
-                else if (batData.Tables[0].Rows[0][5].ToString() == "" && batData.Tables[0].Rows[0][0].ToString() == "NiCd ULM")
-                {
-                    pci.Rows[channel][6] = 1.82;
-                }
-                if (batData.Tables[0].Rows[0][6].ToString() != "")
-                {
-                    pci.Rows[channel][7] = float.Parse(batData.Tables[0].Rows[0][6].ToString());
-                }
-                if (batData.Tables[0].Rows[0][7].ToString() != "")
-                {
-                    pci.Rows[channel][8] = float.Parse(batData.Tables[0].Rows[0][7].ToString());
+                    // we don't have a workorder
+                    // reset to default...
+                    pci.Rows[channel][0] = "None";
+                    pci.Rows[channel][1] = "NiCd";
+                    pci.Rows[channel][2] = 24;         // negative 1 is the default...
+                    pci.Rows[channel][3] = -1;         // negative 1 is the default...
+                    pci.Rows[channel][4] = -1;         // negative 1 is the default...
+                    pci.Rows[channel][5] = -1;         // negative 1 is the default...
+                    pci.Rows[channel][6] = -1;         // negative 1 is the default...
+                    pci.Rows[channel][7] = 1.75;         // negative 1 is the default...
+                    pci.Rows[channel][8] = -1;         // negative 1 is the default...
+                    pci.Rows[channel][9] = "";         // negative 1 is the default...
                 }
             }
-            else
+            catch
             {
-                // we don't have a workorder
+                MessageBox.Show(new Form() { TopMost = true }, "Probablem loading battery data!");
+                
+                // we don't have battery data...
                 // reset to default...
                 pci.Rows[channel][0] = "None";
                 pci.Rows[channel][1] = "NiCd";
@@ -601,6 +622,8 @@ namespace NewBTASProto
                 pci.Rows[channel][7] = 1.75;         // negative 1 is the default...
                 pci.Rows[channel][8] = -1;         // negative 1 is the default...
                 pci.Rows[channel][9] = "";         // negative 1 is the default...
+                
+
             }
         }
 

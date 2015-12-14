@@ -273,10 +273,16 @@ namespace NewBTASProto
                         MessageBox.Show(new Form() { TopMost = true }, "That record was not in the DB. You must save it in order to delete it.");
                     }
                 }
+
+                
             }
             catch(Exception ex)
             {
                 MessageBox.Show(new Form() { TopMost = true }, "Deletion Error" + ex.ToString());
+            }
+            finally
+            {
+                updateCurVals();
             }
         }
 

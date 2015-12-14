@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO.Ports;
 using System.Threading;
+using System.Data.OleDb;
 
 namespace NewBTASProto
 {
@@ -202,6 +203,68 @@ namespace NewBTASProto
             for (int j = 0; j < 16; j++)
             {
                 dataGridView1.Rows[j].Cells[4].Style.BackColor = Color.Gainsboro;
+            }
+
+            // so we do have a good data table.  Let's do some clean up on the DB to make sure we don't have any Active records what should be open
+            // this is a problem after crashes...
+            string strAccessConn;
+            string strAccessSelect;
+            OleDbConnection myAccessConn;
+
+            // create the connection
+            try
+            {
+                strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                myAccessConn = new OleDbConnection(strAccessConn);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
+                return;
+            }
+
+            // set all actives to open
+            try
+            {
+                strAccessSelect = "UPDATE WorkOrders SET OrderStatus = 'Open' WHERE OrderStatus = 'Active'";
+                OleDbCommand cmd = new OleDbCommand(strAccessSelect, myAccessConn);
+                lock (Main_Form.dataBaseLock)
+                {
+                    myAccessConn.Open();
+                    cmd.ExecuteNonQuery();
+                    myAccessConn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
+                return;
+            }
+
+            // Now we need to set the workorders that are actually active back to active
+            // lets loop through it!
+
+            try
+            {
+                for (int i = 0; i < 16; i++)
+                {
+                    if (d.Rows[i][1].ToString() != "")
+                    {
+                        strAccessSelect = "UPDATE WorkOrders SET OrderStatus = 'Active' WHERE WorkOrderNumber = '" + d.Rows[i][1].ToString() + "'";
+                        OleDbCommand cmd = new OleDbCommand(strAccessSelect, myAccessConn);
+                        lock (Main_Form.dataBaseLock)
+                        {
+                            myAccessConn.Open();
+                            cmd.ExecuteNonQuery();
+                            myAccessConn.Close();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
+                return;
             }
 
         }
@@ -538,7 +601,7 @@ namespace NewBTASProto
                 gs.ReadXml(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\graph_set.xml");
 
                 // do we have a good datatable?
-                if (gs.Rows.Count == 1)
+                if (gs.Rows.Count != 16)
                 {
                     gs.Clear();
                     for (int i = 0; i < 16; i++)
@@ -547,7 +610,9 @@ namespace NewBTASProto
                         gs.Rows[i][0] = false;
                         gs.Rows[i][1] = "Cell Voltages";
                     }
+                    return;
                 }
+
             }
             catch
             {
