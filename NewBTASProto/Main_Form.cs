@@ -33,12 +33,15 @@ namespace NewBTASProto
                 Initialize_Operators_CB();
                 Initialize_Graph_Settings();
                 Initialize_PCI_Settings();
+                UpdateLabels();
 
                 InitializeGrid();
                 InitializeTimers();
                 Scan();
 
                 SetChargersCriticalAtStart();
+
+
 
                 GlobalVars.loading = false;
 
@@ -78,6 +81,51 @@ namespace NewBTASProto
             }
 
 
+        }
+
+        public CancellationTokenSource cLabelUpdate;
+
+        private void UpdateLabels()
+        {
+            // to prevent closing issues...
+            cLabelUpdate = new CancellationTokenSource();
+            // this method will loop through on a seperate thread to update the labels on the form
+
+            //create the thread...
+            ThreadPool.QueueUserWorkItem(s =>
+            {
+                CancellationToken token = (CancellationToken)s;
+                while (true)
+                {
+                    try
+                    {
+                        this.Invoke((MethodInvoker)delegate
+                        {
+                            //up data the current terminal label
+                            label6.Text = dataGridView1.CurrentRow.Index.ToString();
+                            if (pci.Rows[dataGridView1.CurrentRow.Index][0].ToString() == "None")
+                            {
+                                label7.Text = "";
+                            }
+                            else
+                            {
+                                label7.Text = pci.Rows[dataGridView1.CurrentRow.Index][0].ToString();
+                            }
+                            label12.Text = pci.Rows[dataGridView1.CurrentRow.Index][9].ToString();
+                        });
+                    }
+                    catch
+                    {
+                        // didn't work
+                    }
+                    finally
+                    {
+                        Thread.Sleep(100);
+                    }
+
+                }
+
+            }, cLabelUpdate.Token);                     // end thread
         }
 
         private void SetChargersCriticalAtStart()
@@ -731,6 +779,7 @@ namespace NewBTASProto
                 cPollCScans.Cancel();
                 sequentialScanT.Cancel();
                 cFindStations.Cancel();
+                cLabelUpdate.Cancel();
                 // make sure it takes...
                 Thread.Sleep(500);
             }
@@ -3535,6 +3584,11 @@ namespace NewBTASProto
         }
 
         private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
+        }
+
+        private void label11_Click(object sender, EventArgs e)
         {
 
         }

@@ -146,7 +146,7 @@ namespace NewBTASProto
                     cellsToDisplay = 21;
                     break;
                 case 21:
-                    cellCableType = "21 C Cable";
+                    cellCableType = "21 CELLS";
                     cellsToDisplay = 21;
                     break;
                 default:

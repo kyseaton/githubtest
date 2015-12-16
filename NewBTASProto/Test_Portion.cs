@@ -1776,8 +1776,6 @@ namespace NewBTASProto
                     string temp = (string)d.Rows[station][6];
                     offset = new TimeSpan(int.Parse(temp.Substring(0, 2)), int.Parse(temp.Substring(3, 2)), int.Parse(temp.Substring(6, 2)));
                     currentReading = ((offset.Hours * 3600 + offset.Minutes * 60 + offset.Seconds) / interval) + 2;
-                    updateD(station, 7, ("Reading " + (currentReading - 1).ToString() + " of " + readings.ToString()));
-                    if (MasterSlaveTest) { updateD(slaveRow, 7, ("Reading " + (currentReading - 1).ToString() + " of " + readings.ToString())); }
                 }
                 else
                 {
@@ -2404,6 +2402,11 @@ namespace NewBTASProto
                     clearTLock();   // for good luck!
                     return;
                 }
+
+                // we made it.
+                //tell them what reading we are on!
+                updateD(station, 7, ("Reading " + (currentReading - 1).ToString() + " of " + readings.ToString()));
+                if (MasterSlaveTest) { updateD(slaveRow, 7, ("Reading " + (currentReading - 1).ToString() + " of " + readings.ToString())); }
 
                 bool startUpDelay = true;
                 // clear startUpDelay in 15 seconds...
@@ -3623,7 +3626,7 @@ namespace NewBTASProto
 
                 // We finished so let's clearn up!
                 // If we are running the charger tell it to stop and reset
-                if ((string)d.Rows[station][2] != "As Received")
+                if ((string)d.Rows[station][2] == "As Received")
                 {
                     // nothing to do...
                 }

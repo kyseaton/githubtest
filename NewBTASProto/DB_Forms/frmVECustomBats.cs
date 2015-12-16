@@ -1796,6 +1796,11 @@ namespace NewBTASProto
         {
             if (comboBox13.Text == "Sealed Lead Acid")
             {
+                ((Control)tabControl1.TabPages[0]).Enabled = false;
+                ((Control)tabControl1.TabPages[1]).Enabled = false;
+                ((Control)tabControl1.TabPages[7]).Enabled = false;
+                ((Control)tabControl1.TabPages[8]).Enabled = false;
+                ((Control)tabControl1.TabPages[9]).Enabled = false;
                 label6.Visible = false;
                 groupBox7.Visible = false;
                 textBox7.Visible = false;
@@ -1806,6 +1811,11 @@ namespace NewBTASProto
             }
             else
             {
+                ((Control)tabControl1.TabPages[0]).Enabled = true;
+                ((Control)tabControl1.TabPages[1]).Enabled = true;
+                ((Control)tabControl1.TabPages[7]).Enabled = true;
+                ((Control)tabControl1.TabPages[8]).Enabled = true;
+                ((Control)tabControl1.TabPages[9]).Enabled = true;
                 label6.Visible = true;
                 groupBox7.Visible = true;
                 textBox7.Visible = true;

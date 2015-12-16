@@ -205,6 +205,15 @@ namespace NewBTASProto
                 dataGridView1.Rows[j].Cells[4].Style.BackColor = Color.Gainsboro;
             }
 
+            //Also make sure that the linked chargers CSCANs know to hold them
+            for (int j = 0; j < 16; j++)
+            {
+                if ((bool)d.Rows[j][8] == true)
+                {
+                    GlobalVars.cHold[j] = true;
+                }
+            }
+
             // so we do have a good data table.  Let's do some clean up on the DB to make sure we don't have any Active records what should be open
             // this is a problem after crashes...
             string strAccessConn;
@@ -275,7 +284,8 @@ namespace NewBTASProto
             {
                 return;
             }
-            else if (e.ColumnIndex == 4 && (bool) d.Rows[e.RowIndex][5] != true)
+
+            if (e.ColumnIndex == 4 && (bool) d.Rows[e.RowIndex][5] != true)
             {
                 if ((bool)d.Rows[e.RowIndex][e.ColumnIndex]) 
                 {
@@ -393,6 +403,9 @@ namespace NewBTASProto
                         }
                     }
 
+                    // Also clear the CSCAN to hold
+                    GlobalVars.cHold[e.RowIndex] = false;
+
                 }
                 else
                 {
@@ -447,6 +460,9 @@ namespace NewBTASProto
                         }
                         checkForIC(chargerID,e.RowIndex);
                     }
+
+                    // Also set the CSCAN to hold
+                    GlobalVars.cHold[e.RowIndex] = true;
                 }
 
             }

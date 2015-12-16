@@ -40,6 +40,7 @@ namespace NewBTASProto
         public CancellationTokenSource cPollCScans;
         public CancellationTokenSource sequentialScanT;
 
+
         // prevent double fill combobox threads with the variable...
         // 99 is the start up value
         int oldRow = 99;
@@ -153,17 +154,38 @@ namespace NewBTASProto
                                             tempText += "Temp. Cable:  " + (3 - testData.TCAB).ToString() + "   (" + testData.tempPlateType + ")" + Environment.NewLine;
                                             tempText += "Cells Cable:  " + testData.CCID.ToString() + "   (" + testData.cellCableType + ")" + Environment.NewLine;
                                             tempText += "Shunt Cable:  " + testData.SHCID.ToString() + "   (" + testData.shuntCableType + ")" + Environment.NewLine;
-                                            tempText += "Voltage Batt 1:  " + testData.VB1.ToString("00.00") + Environment.NewLine;
-                                            tempText += "Voltage Batt 2:  " + testData.VB2.ToString("00.00") + Environment.NewLine;
-                                            tempText += "Voltage Batt 3:  " + testData.VB3.ToString("00.00") + Environment.NewLine;
-                                            tempText += "Voltage Batt 4:  " + testData.VB4.ToString("00.00") + Environment.NewLine;
+                                            tempText += Environment.NewLine;
+                                            if (testData.cellCableType != "NONE")       // don't show these when we have no cable attached...
+                                            {
+                                                if (testData.cellCableType == "4 BATT" || testData.cellCableType == "CELL SIM" || testData.cellCableType == "2X11 Cable" || testData.cellCableType == "3X7 Cable" || testData.cellCableType == "Unknown Cable")
+                                                {
+                                                    tempText += "Voltage Batt 1:  " + testData.VB1.ToString("00.00") + Environment.NewLine;
+                                                }
+                                                else
+                                                {
+                                                    tempText += "Voltage Batt:  " + testData.VB1.ToString("00.00") + Environment.NewLine;
+                                                }
+                                                if (testData.cellCableType == "4 BATT" || testData.cellCableType == "CELL SIM" || testData.cellCableType == "2X11 Cable" || testData.cellCableType == "3X7 Cable" || testData.cellCableType == "Unknown Cable")
+                                                {
+                                                    tempText += "Voltage Batt 2:  " + testData.VB2.ToString("00.00") + Environment.NewLine;
+                                                    if (testData.cellCableType == "4 BATT" || testData.cellCableType == "CELL SIM" || testData.cellCableType == "3X7 Cable" || testData.cellCableType == "Unknown Cable")
+                                                    {
+                                                        tempText += "Voltage Batt 3:  " + testData.VB3.ToString("00.00") + Environment.NewLine;
+                                                        if (testData.cellCableType == "4 BATT" || testData.cellCableType == "CELL SIM" || testData.cellCableType == "Unknown Cable")
+                                                        {
+                                                            tempText += "Voltage Batt 4:  " + testData.VB4.ToString("00.00") + Environment.NewLine;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            tempText += Environment.NewLine;
                                             // select which currents to display
                                             if (testData.shuntCableType == "TEST BOX")
                                             {
                                                 //dispaly both ...
                                                 tempText += "Current#1:  " + testData.currentOne.ToString("00.00") + Environment.NewLine;
                                                 tempText += "Current#2:  " + testData.currentTwo.ToString("00.00") + Environment.NewLine;
-                                            }
+                                            }                                                
                                             //if we have a mini that is charging...
                                             else if (d.Rows[currentRow][10].ToString().Contains("mini") && !(d.Rows[currentRow][2].ToString().Contains("Cap") || d.Rows[currentRow][2].ToString().Contains("Discharge")))
                                             {
@@ -181,8 +203,10 @@ namespace NewBTASProto
                                                 tempText += "Current:  " + testData.currentOne.ToString("00.00") + Environment.NewLine;
                                             }
 
+                                            tempText += Environment.NewLine;
+
                                             int cellsToDisplay = 0;
-                                            if ((int) pci.Rows[currentRow][3] != -1)
+                                            if ((int) pci.Rows[currentRow][3] != -1 && (int) pci.Rows[currentRow][3] <= GlobalVars.CScanData[currentRow].cellsToDisplay)
                                             {
                                                 cellsToDisplay = (int)pci.Rows[currentRow][3];
                                             }
@@ -204,6 +228,8 @@ namespace NewBTASProto
                                                     tempText += "Cell #" + (i + 1).ToString() + ":  " + testData.orderedCells[GlobalVars.CScanData[currentRow].cellsToDisplay - i - 1].ToString("0.000") + Environment.NewLine;
                                                 }
                                             }
+
+                                            tempText += Environment.NewLine;
 
                                             // WE need to display open when we get -99, cold for -98, hot for -97 and shorted for -96
                                             switch (Convert.ToInt16(testData.TP1))
@@ -297,11 +323,17 @@ namespace NewBTASProto
                                                     break;
                                             }
 
-                                            tempText += "Reference:  " + testData.ref95V.ToString("0.000") + Environment.NewLine;
-                                            tempText += "Program Version: " + testData.programVersion + Environment.NewLine;
+                                            tempText += Environment.NewLine;
+
+                                            tempText += "Reference Voltage:  " + testData.ref95V.ToString("0.000") + Environment.NewLine;
+
+                                            tempText += Environment.NewLine;
+
+                                            tempText += "CSCAN Program Version: " + testData.programVersion + Environment.NewLine;
                                             if (d.Rows[currentRow][10].ToString().Contains("ICA"))
                                             {
-                                                tempText += "IC Program Version: " + GlobalVars.ICData[currentRow].PV1.ToString() + " (" + GlobalVars.ICData[currentRow].PV2.ToString() + ")";
+                                                tempText += "IC Program Version: " + GlobalVars.ICData[currentRow].PV1.ToString() + Environment.NewLine;
+                                                tempText += "IC COMS Program Version:  " + GlobalVars.ICData[currentRow].PV2.ToString() + "";
                                             }
 
                                             LockWindowUpdate(label1.Handle);
@@ -938,16 +970,16 @@ namespace NewBTASProto
                     chart1.ChartAreas[0].AxisY.Title = "Voltage";
 
                     series1.Points.AddXY(1, testData.VB1);
-                    series1.Points[0].Color = pointColorMain(station, testData.VB1, true);
+                    series1.Points[0].Color = pointColorMain(station, testData.VB1, false);
                     series1.Points[0].Label = "VB1";
                     series1.Points.AddXY(2, testData.VB2);
-                    series1.Points[1].Color = pointColorMain(station, testData.VB2, true);
+                    series1.Points[1].Color = pointColorMain(station, testData.VB2, false);
                     series1.Points[1].Label = "VB2";
                     series1.Points.AddXY(3, testData.VB3);
-                    series1.Points[2].Color = pointColorMain(station, testData.VB3, true);
+                    series1.Points[2].Color = pointColorMain(station, testData.VB3, false);
                     series1.Points[2].Label = "VB3";
                     series1.Points.AddXY(4, testData.VB4);
-                    series1.Points[3].Color = pointColorMain(station, testData.VB4, true);
+                    series1.Points[3].Color = pointColorMain(station, testData.VB4, false);
                     series1.Points[3].Label = "VB4";
 
                     chart1.Titles.Clear();
@@ -1562,7 +1594,15 @@ namespace NewBTASProto
             {
                 if ((int)pci.Rows[station][3] == -1)
                 {
-                    Cells = GlobalVars.CScanData[station].cellsToDisplay;
+                    if (GlobalVars.CScanData[station].cellCableType == "4 BATT")
+                    {
+                        // this simulates a 24V nominal SLA battery...
+                        Cells = 20;
+                    }
+                    else
+                    {
+                        Cells = GlobalVars.CScanData[station].cellsToDisplay;
+                    }
                 }
                 else
                 {
@@ -1617,8 +1657,8 @@ namespace NewBTASProto
                     if (test_type == "As Received" || test_type == "Capacity-1" || test_type == "Discharge" || test_type == "Custom Cap" || test_type == "")
                     {
 
-                        Min4 = (20 / 24) * (float)pci.Rows[station][2];
-                        Max = (21/24) * (float) pci.Rows[station][2];
+                        Min4 = (20.0 / 24) * (float)pci.Rows[station][2];
+                        Max = (21.0 /24) * (float) pci.Rows[station][2];
 
                         if (Value > Max) { return Color.Green; }
                         else if (Value > Min4) { return Color.Orange; }

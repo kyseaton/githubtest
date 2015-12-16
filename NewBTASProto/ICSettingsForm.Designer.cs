@@ -96,9 +96,9 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(493, 275);
+            this.button1.Location = new System.Drawing.Point(527, 330);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(149, 23);
+            this.button1.Size = new System.Drawing.Size(118, 23);
             this.button1.TabIndex = 16;
             this.button1.Text = "Apply Settings";
             this.button1.UseVisualStyleBackColor = true;
@@ -112,7 +112,7 @@
             "Run",
             "Stop",
             "Reset"});
-            this.comboBox3.Location = new System.Drawing.Point(441, 400);
+            this.comboBox3.Location = new System.Drawing.Point(444, 405);
             this.comboBox3.Name = "comboBox3";
             this.comboBox3.Size = new System.Drawing.Size(201, 21);
             this.comboBox3.TabIndex = 17;
@@ -120,7 +120,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(389, 403);
+            this.label3.Location = new System.Drawing.Point(392, 408);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(46, 13);
             this.label3.TabIndex = 5;
@@ -128,7 +128,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(524, 427);
+            this.button2.Location = new System.Drawing.Point(527, 432);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(118, 23);
             this.button2.TabIndex = 18;
@@ -151,7 +151,7 @@
             this.groupBox1.Controls.Add(this.label21);
             this.groupBox1.Controls.Add(this.label23);
             this.groupBox1.Controls.Add(this.label24);
-            this.groupBox1.Location = new System.Drawing.Point(325, 64);
+            this.groupBox1.Location = new System.Drawing.Point(328, 119);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(317, 205);
             this.groupBox1.TabIndex = 5;
@@ -514,7 +514,7 @@
             this.groupBox4.Controls.Add(this.comboBox2);
             this.groupBox4.Location = new System.Drawing.Point(15, 64);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(304, 49);
+            this.groupBox4.Size = new System.Drawing.Size(630, 49);
             this.groupBox4.TabIndex = 2;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Mode";
@@ -532,7 +532,7 @@
             "30 Full Discharge",
             "31 Capacity Test",
             "32 Constant Resistance"});
-            this.comboBox2.Location = new System.Drawing.Point(97, 19);
+            this.comboBox2.Location = new System.Drawing.Point(212, 19);
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(201, 21);
             this.comboBox2.TabIndex = 2;
@@ -542,7 +542,7 @@
             this.groupBox5.Controls.Add(this.comboBox1);
             this.groupBox5.Location = new System.Drawing.Point(18, 12);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(304, 49);
+            this.groupBox5.Size = new System.Drawing.Size(627, 49);
             this.groupBox5.TabIndex = 1;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Charger ID";
@@ -567,7 +567,7 @@
             "13",
             "14",
             "15"});
-            this.comboBox1.Location = new System.Drawing.Point(97, 13);
+            this.comboBox1.Location = new System.Drawing.Point(209, 13);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(201, 21);
             this.comboBox1.TabIndex = 1;
@@ -587,7 +587,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(653, 462);
+            this.ClientSize = new System.Drawing.Size(653, 461);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox4);

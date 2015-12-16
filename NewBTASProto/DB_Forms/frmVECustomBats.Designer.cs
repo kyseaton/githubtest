@@ -2776,9 +2776,9 @@
             this.label89.AutoSize = true;
             this.label89.Location = new System.Drawing.Point(97, 108);
             this.label89.Name = "label89";
-            this.label89.Size = new System.Drawing.Size(77, 13);
+            this.label89.Size = new System.Drawing.Size(87, 13);
             this.label89.TabIndex = 58;
-            this.label89.Text = "Failure Voltage";
+            this.label89.Text = "Minimum Voltage";
             // 
             // label90
             // 
@@ -4037,9 +4037,9 @@
             this.label107.AutoSize = true;
             this.label107.Location = new System.Drawing.Point(97, 108);
             this.label107.Name = "label107";
-            this.label107.Size = new System.Drawing.Size(77, 13);
+            this.label107.Size = new System.Drawing.Size(87, 13);
             this.label107.TabIndex = 58;
-            this.label107.Text = "Failure Voltage";
+            this.label107.Text = "Minimum Voltage";
             // 
             // label108
             // 
