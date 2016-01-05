@@ -58,6 +58,12 @@ namespace NewBTASProto
             int station = dataGridView1.CurrentRow.Index;
             int Cstation = 0;
 
+            //here to prevent double starts...
+            if (cRunTest[station] != null && cRunTest[station].IsCancellationRequested == false)
+            {
+                return;
+            }
+
             // gettting rid of isASlave
             //you can't run tests from a slave anymore..
             //bool isASlave = false;
@@ -137,62 +143,96 @@ namespace NewBTASProto
                 // first we check if we have all the relavent options selected
                 if ((string)d.Rows[station][1] == "")
                 {
-                    MessageBox.Show(new Form() { TopMost = true }, "Please Assign a Work Order");
+                    this.Invoke((MethodInvoker)delegate()
+                    {
+                        MessageBox.Show(this, "Please Assign a Work Order", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    });
+                    cRunTest[station].Cancel();
                     return;
                 }
                 else if ((string)d.Rows[station][2] == "")
                 {
-                    MessageBox.Show(new Form() { TopMost = true }, "Please Select a Test Type.");
+                    this.Invoke((MethodInvoker)delegate()
+                    {
+                        MessageBox.Show(this, "Please Select a Test Type.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    });
+                    cRunTest[station].Cancel();
                     return;
                 }
                 else if ((bool)d.Rows[station][4] == false)
                 {
-                    MessageBox.Show(new Form() { TopMost = true }, "CScan is not In Use. Please Select it Before Proceeding.");
+                    this.Invoke((MethodInvoker)delegate()
+                    {
+                        MessageBox.Show(this, "CScan is not In Use. Please Select it Before Proceeding.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    });
+                    cRunTest[station].Cancel();
                     return;
                 }
                 else if (dataGridView1.Rows[station].Cells[4].Style.BackColor != Color.Green)
                 {
-                    MessageBox.Show(new Form() { TopMost = true }, "CScan is not currently connected.  Please Check Connection.");
+                    this.Invoke((MethodInvoker)delegate()
+                    {
+                        MessageBox.Show(this, "CScan is not currently connected.  Please Check Connection.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    });
+                    cRunTest[station].Cancel();
                     return;
                 }
                 else if (GlobalVars.CScanData[station].cellCableType == "NONE")
                 {
-                    MessageBox.Show(new Form() { TopMost = true }, "CScan is not connected to a cells Cable.  Please connect a cells cable to this CSCAN to run a test.");
+                    this.Invoke((MethodInvoker)delegate()
+                    {
+                        MessageBox.Show(this, "CScan is not connected to a cells Cable.  Please connect a cells cable to this CSCAN to run a test.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    });
+                    cRunTest[station].Cancel();
                     return;
                 }
                 else if (GlobalVars.CScanData[station].shuntCableType == "NONE" && (string)d.Rows[station][2] != "As Received")
                 {
-                    MessageBox.Show(new Form() { TopMost = true }, "CScan is not connected to a cells Shunt cable.  Please connect a shunt cable to this CSCAN to run a test.");
+                    this.Invoke((MethodInvoker)delegate()
+                    {
+                        MessageBox.Show(this, "CScan is not connected to a cells Shunt cable.  Please connect a shunt cable to this CSCAN to run a test.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    });
+                    cRunTest[station].Cancel();
                     return;
                 }
                 // check if we have the right cells cable for multiple work orders on one cscan...
                 else if (MWO2 != "" && MWO3 == "" && GlobalVars.CScanData[station].CCID != 3)
                 {
                     // we need to make sure the master has a 2x11 to continue
-                    MessageBox.Show(new Form() { TopMost = true }, "You have two work orders assocaited with the master CScan, but do not have a 2X11 cable connected to it.  In order to record two work orders with one CScan you must use a 2X11 cable.");
+                    this.Invoke((MethodInvoker)delegate()
+                    {
+                        MessageBox.Show(this, "You have two work orders assocaited with the master CScan, but do not have a 2X11 cable connected to it.  In order to record two work orders with one CScan you must use a 2X11 cable.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    });
+                    cRunTest[station].Cancel();
                     return;
                 }
                 else if (MWO2 != "" && MWO3 != "" && GlobalVars.CScanData[station].CCID != 4)
                 {
-                    // we need to make sure the master has a 2x11 to continue
-                    MessageBox.Show(new Form() { TopMost = true }, "You have three work orders assocaited with the master CScan, but do not have a 3X7 cable connected to it.  In order to record three work orders with one CScan you must use a 3X7 cable.");
+                    // we need to make sure the master has a 3x7 to continue
+                    this.Invoke((MethodInvoker)delegate()
+                    {
+                        MessageBox.Show(this, "You have three work orders assocaited with the master CScan, but do not have a 3X7 cable connected to it.  In order to record three work orders with one CScan you must use a 3X7 cable.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    });
+                    cRunTest[station].Cancel();
                     return;
                 }
                 else if (MWO2 == "" && GlobalVars.CScanData[station].CCID == 3)
                 {
                     // warn the user that if they use a 2X11 cable with only one work order that the data associated with the second battery will be lost
-                    DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "Are you sure you want to continue? You have one work order assocaited with the master CScan, but have a 2X11 cable connected to it.  In order to record the data from all 22 channels you will need to add an additional workorder to this station.", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
+                    DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "Are you sure you want to continue? You have one work order assocaited with the master CScan, but have a 2X11 cable connected to it.  In order to record the data from all 22 channels you will need to add an additional workorder to this station.", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                     if (dialogResult == DialogResult.No)
                     {
+                        cRunTest[station].Cancel();
                         return;
                     }
                 }
                 else if ((MWO2 == "" || MWO3 == "") && GlobalVars.CScanData[station].CCID == 4)
                 {
                     // warn the user that if they use a 3x7 cable with only one or two work orders that the data associated with the second or third battery will be lost
-                    DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "Are you sure you want to continue? You have less than 3 work orders assocaited with the master CScan, but have a 3X7 cable connected to it.  In order to record the data from all 21 channels you will need to add an additional workorder(s) to this station.", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
+                    DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "Are you sure you want to continue? You have less than 3 work orders assocaited with the master CScan, but have a 3X7 cable connected to it.  In order to record the data from all 21 channels you will need to add an additional workorder(s) to this station.", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                     if (dialogResult == DialogResult.No)
                     {
+                        cRunTest[station].Cancel();
                         return;
                     }
                 }
@@ -202,9 +242,10 @@ namespace NewBTASProto
                 if (GlobalVars.CScanData[station].CCID == 3 && (int)pci.Rows[station][3] != (GlobalVars.CScanData[station].cellsToDisplay / 2) && (int)pci.Rows[station][3] != -1)
                 {
                     // warn the user that the number of cells set in the database does not match the work order...
-                    DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The number of cells the battery contains does not match the cells cable currently being used.  Do you want to continue?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
+                    DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The number of cells the battery contains does not match the cells cable currently being used.  Do you want to continue?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                     if (dialogResult == DialogResult.No)
                     {
+                        cRunTest[station].Cancel();
                         return;
                     }
                 }
@@ -212,9 +253,10 @@ namespace NewBTASProto
                 if (GlobalVars.CScanData[station].CCID == 3 && (int)pci.Rows[station][3] != (GlobalVars.CScanData[station].cellsToDisplay / 3) && (int)pci.Rows[station][3] != -1)
                 {
                     // warn the user that the number of cells set in the database does not match the work order...
-                    DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The number of cells the battery contains does not match the cells cable currently being used.  Do you want to continue?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
+                    DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The number of cells the battery contains does not match the cells cable currently being used.  Do you want to continue?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                     if (dialogResult == DialogResult.No)
                     {
+                        cRunTest[station].Cancel();
                         return;
                     }
                 }
@@ -222,9 +264,10 @@ namespace NewBTASProto
                 else if (pci.Rows[station][1].ToString().Contains("NiCd") && (int)pci.Rows[station][3] != GlobalVars.CScanData[station].cellsToDisplay && (int)pci.Rows[station][3] != -1)
                 {
                     // warn the user that the number of cells set in the database does not match the work order...
-                    DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The number of cells the battery contains does not match the cells cable currently being used.  Do you want to continue?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
+                    DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The number of cells the battery contains does not match the cells cable currently being used.  Do you want to continue?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                     if (dialogResult == DialogResult.No)
                     {
+                        cRunTest[station].Cancel();
                         return;
                     }
                 }
@@ -234,52 +277,79 @@ namespace NewBTASProto
                 {
                     if ((string)d.Rows[slaveRow][1] == "")
                     {
-                        MessageBox.Show(new Form() { TopMost = true }, "Please Assign a Work Order to the Slave Channel");
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            MessageBox.Show(this, "Please Assign a Work Order to the Slave Channel", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        });
+                        cRunTest[station].Cancel();
                         return;
                     }
                     else if ((bool)d.Rows[slaveRow][4] == false)
                     {
-                        MessageBox.Show(new Form() { TopMost = true }, "The slave CScan is not In Use. Please make sure that is is In Use and connected before proceeding.");
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            MessageBox.Show(this, "The slave CScan is not In Use. Please make sure that is is In Use and connected before proceeding.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        
+                        });
+                        cRunTest[station].Cancel();
                         return;
                     }
                     else if (dataGridView1.Rows[slaveRow].Cells[4].Style.BackColor != Color.Green)
                     {
-                        MessageBox.Show(new Form() { TopMost = true }, "Slave CScan is not currently connected.  Please Check Connection.");
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            MessageBox.Show(this, "Slave CScan is not currently connected.  Please Check Connection.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        });
+                        cRunTest[station].Cancel();
                         return;
                     }
                     else if (GlobalVars.CScanData[slaveRow].cellCableType == "NONE")
                     {
-                        MessageBox.Show(new Form() { TopMost = true }, "Slave CScan is not connected to a cells Cable.  Please connect a cells cable to this CSCAN to run a test with it.");
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            MessageBox.Show(this, "Slave CScan is not connected to a cells Cable.  Please connect a cells cable to this CSCAN to run a test with it.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        });
+                        cRunTest[station].Cancel();
                         return;
                     }
                     // check if we have the right cells cable for multiple work orders on one cscan...
                     else if (SWO2 != "" && SWO3 == "" && GlobalVars.CScanData[slaveRow].CCID != 3)
                     {
                         // we need to make sure the master has a 2x11 to continue
-                        MessageBox.Show(new Form() { TopMost = true }, "You have two work orders assocaited with the slave CScan, but do not have a 2X11 cable connected to it.  In order to record two work orders with one CScan you must use a 2X11 cable.");
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            MessageBox.Show(this, "You have two work orders assocaited with the slave CScan, but do not have a 2X11 cable connected to it.  In order to record two work orders with one CScan you must use a 2X11 cable.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        });
+                        cRunTest[station].Cancel();
                         return;
                     }
                     else if (SWO2 != "" && SWO3 != "" && GlobalVars.CScanData[slaveRow].CCID != 4)
                     {
                         // we need to make sure the master has a 2x11 to continue
-                        MessageBox.Show(new Form() { TopMost = true }, "You have three work orders assocaited with the slave CScan, but do not have a 3X7 cable connected to it.  In order to record three work orders with one CScan you must use a 3X7 cable.");
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            MessageBox.Show(this, "You have three work orders assocaited with the slave CScan, but do not have a 3X7 cable connected to it.  In order to record three work orders with one CScan you must use a 3X7 cable.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        });
+                        cRunTest[station].Cancel();
                         return;
                     }
                     else if (SWO2 == "" && GlobalVars.CScanData[slaveRow].CCID == 3)
                     {
                         // warn the user that if they use a 2X11 cable with only one work order that the data associated with the second battery will be lost
-                        DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "Are you sure you want to continue? You have one work order assocaited with the slave CScan, but have a 2X11 cable connected to it.  In order to record the data from all 22 channels you will need to add an additional workorder to this station.", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
+                        DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "Are you sure you want to continue? You have one work order assocaited with the slave CScan, but have a 2X11 cable connected to it.  In order to record the data from all 22 channels you will need to add an additional workorder to this station.", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                         if (dialogResult == DialogResult.No)
                         {
+                            cRunTest[station].Cancel();
                             return;
                         }
                     }
                     else if ((SWO2 == "" || SWO3 == "") && GlobalVars.CScanData[slaveRow].CCID == 4)
                     {
                         // warn the user that if they use a 3x7 cable with only one or two work orders that the data associated with the second or third battery will be lost
-                        DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "Are you sure you want to continue? You have less than 3 work orders assocaited with the slave CScan, but have a 3X7 cable connected to it.  In order to record the data from all 21 channels you will need to add an additional workorder(s) to this station.", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
+                        DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "Are you sure you want to continue? You have less than 3 work orders assocaited with the slave CScan, but have a 3X7 cable connected to it.  In order to record the data from all 21 channels you will need to add an additional workorder(s) to this station.", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                         if (dialogResult == DialogResult.No)
                         {
+                            cRunTest[station].Cancel();
                             return;
                         }
                     }
@@ -288,9 +358,10 @@ namespace NewBTASProto
                     if (GlobalVars.CScanData[slaveRow].CCID == 3 && (int)pci.Rows[slaveRow][3] != (GlobalVars.CScanData[slaveRow].cellsToDisplay / 2) && (int)pci.Rows[station][3] != -1)
                     {
                         // warn the user that the number of cells set in the database does not match the work order...
-                        DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The number of cells the battery connected to the slave CSCAN contains does not match the cells cable currently being used.  Do you want to continue?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
+                        DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The number of cells the battery connected to the slave CSCAN contains does not match the cells cable currently being used.  Do you want to continue?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                         if (dialogResult == DialogResult.No)
                         {
+                            cRunTest[station].Cancel();
                             return;
                         }
                     }
@@ -298,9 +369,10 @@ namespace NewBTASProto
                     if (GlobalVars.CScanData[slaveRow].CCID == 3 && (int)pci.Rows[slaveRow][3] != (GlobalVars.CScanData[slaveRow].cellsToDisplay / 3) && (int)pci.Rows[station][3] != -1)
                     {
                         // warn the user that the number of cells set in the database does not match the work order...
-                        DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The number of cells the battery connected to the slave CSCAN contains does not match the cells cable currently being used.  Do you want to continue?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
+                        DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The number of cells the battery connected to the slave CSCAN contains does not match the cells cable currently being used.  Do you want to continue?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                         if (dialogResult == DialogResult.No)
                         {
+                            cRunTest[station].Cancel();
                             return;
                         }
                     }
@@ -308,9 +380,10 @@ namespace NewBTASProto
                     else if (pci.Rows[slaveRow][1].ToString().Contains("NiCd") && (int)pci.Rows[slaveRow][3] != GlobalVars.CScanData[slaveRow].cellsToDisplay && (int)pci.Rows[station][3] != -1)
                     {
                         // warn the user that the number of cells set in the database does not match the work order...
-                        DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The number of cells the battery connected to the slave CSCAN contains does not match the cells cable currently being used.  Do you want to continue?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
+                        DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The number of cells the battery connected to the slave CSCAN contains does not match the cells cable currently being used.  Do you want to continue?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                         if (dialogResult == DialogResult.No)
                         {
+                            cRunTest[station].Cancel();
                             return;
                         }
                     }
@@ -324,7 +397,11 @@ namespace NewBTASProto
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            MessageBox.Show(this, "Error: Failed to create a database connection. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        });
+                        cRunTest[station].Cancel();
                         return;
                     }
 
@@ -361,9 +438,10 @@ namespace NewBTASProto
                         // we got both so let's compare!
                         if (batMod1.Tables[0].Rows[0][0].ToString() != batMod2.Tables[0].Rows[0][0].ToString())
                         {
-                            DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The Master and Slave battery models do not match. Are you sure you want to proceed with the test?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
+                            DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The Master and Slave battery models do not match. Are you sure you want to proceed with the test?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                             if (dialogResult == DialogResult.No)
                             {
+                                cRunTest[station].Cancel();
                                 return;
                             }
                         }
@@ -371,7 +449,11 @@ namespace NewBTASProto
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to pull data in from the Database. \n" + ex.Message);
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            MessageBox.Show(this, "Error: Failed to pull data in from the Database. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        });
+                        cRunTest[station].Cancel();
                         return;
                     }
                 }
@@ -380,31 +462,66 @@ namespace NewBTASProto
                 // also need to check if an intelligent charger is connected for autoconfig
                 //else if (GlobalVars.autoConfig == true && d.Rows[station][9].ToString().Contains("ICA") && (string)d.Rows[station][2] != "As Received")
                 //{
-                //    MessageBox.Show(new Form() { TopMost = true }, "Auto Configure is turned on, but there is no intelligent charger detected.  Please connect an intelligent charger or turn Auto Configure off in the tools menu.");
+                //    MessageBox.Show(this, "Auto Configure is turned on, but there is no intelligent charger detected.  Please connect an intelligent charger or turn Auto Configure off in the tools menu.");
                 //     return;
                 //}
 
-                if ((string)d.Rows[station][11] == "offline!" && (string)d.Rows[station][2] != "As Received" && d.Rows[station][10].ToString().Contains("ICA"))
+
+                bool runAsShunt = false;
+                
+                if (d.Rows[station][10].ToString().Contains("Shunt"))
                 {
-                    MessageBox.Show(new Form() { TopMost = true }, "The Intelligent Charger is set to be offline.  Please set the charger to be online by pressing the following key sequence on the charger: FUNC, 1, 1 and ENTER.");
+                    runAsShunt = true;
+                }
+                else if ((bool)d.Rows[station][8] == false && (string)d.Rows[station][2] != "As Received")
+                {
+                    DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The charger is not linked. Do you want to proceed with the test in shunt mode?", "Click Yes to continue or No to cancel the test.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                    if (dialogResult == DialogResult.No)
+                    {
+                        cRunTest[station].Cancel();
+                        return;
+                    }
+                    runAsShunt = true;
+                }
+
+
+                if ((string)d.Rows[station][11] == "offline!" && (string)d.Rows[station][2] != "As Received" && d.Rows[station][10].ToString().Contains("ICA") && !runAsShunt)
+                {
+                    this.Invoke((MethodInvoker)delegate()
+                    {
+                        MessageBox.Show(this, "The Intelligent Charger is set to be offline.  Please set the charger to be online by pressing the following key sequence on the charger: FUNC, 1, 1 and ENTER.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    });
+                    cRunTest[station].Cancel();
                     return;
                 }
 
-                else if (((bool)d.Rows[station][8] == false || d.Rows[station][9].ToString() == "" || d.Rows[station][10].ToString() == "") && (string)d.Rows[station][2] != "As Received")
+                else if ((d.Rows[station][9].ToString() == "" || d.Rows[station][10].ToString() == "") && (string)d.Rows[station][2] != "As Received")
                 {
                     // we don't have a charger linked. Do we still want to continue...
-                    MessageBox.Show(new Form() { TopMost = true }, "There is no charger link established.  You mush have a charger or shunt to run any test other than 'As Received'");
+                    this.Invoke((MethodInvoker)delegate()
+                    {
+                        MessageBox.Show(this, "There is no charger ID entered.  You must enter a charger ID to run any test other than 'As Received'", "Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                    });
+                    cRunTest[station].Cancel();
                     return;
                 }
 
 
                 //Finally Lets check if the charger is running also...
-                else if (d.Rows[station][11].ToString() == "RUN" && d.Rows[station][10].ToString().Contains("ICA"))
+                else if (d.Rows[station][11].ToString() == "RUN" && d.Rows[station][10].ToString().Contains("ICA") && !runAsShunt)
                 {
                     //looks like that charger is already running.  Lets ask the user if we should stop the charger or not.
-                    DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The charger appears to already be running. Do you want to stop it now and proceed with the test?", "Click Yes to have the program stop the charger or No to do it manually", MessageBoxButtons.YesNo);
+                    DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The charger appears to already be running. Do you want to stop it now and proceed with the test?", "Click Yes to have the program stop the charger or No to do it manually", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                     if (dialogResult == DialogResult.Yes)
                     {
+
+                        // we'll check the box to indicate we are a go!
+                        updateD(station, 5, true);
+                        if (MasterSlaveTest) { updateD(slaveRow, 5, true); }
+                        // and update the status column
+                        updateD(station, 7, "Stopping Charger");
+                        if (MasterSlaveTest) { updateD(slaveRow, 7, "Stopping Charger"); }
+
                         for (int j = 0; j < 5; j++)
                         {
                             // set KE1 to 2 ("command")
@@ -439,6 +556,7 @@ namespace NewBTASProto
                     }
                     else
                     {
+                        cRunTest[station].Cancel();
                         return;
                     }
 
@@ -454,7 +572,11 @@ namespace NewBTASProto
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
+                    this.Invoke((MethodInvoker)delegate()
+                    {
+                        MessageBox.Show(this, "Error: Failed to create a database connection. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    });
+                    cRunTest[station].Cancel();
                     return;
                 }
 
@@ -467,7 +589,7 @@ namespace NewBTASProto
                 if (MasterSlaveTest) { updateD(slaveRow, 5, true); }
 
                 #region test startup wait (only for the ICAs...)
-                if (d.Rows[station][10].ToString().Contains("ICA"))
+                if (d.Rows[station][10].ToString().Contains("ICA") && !runAsShunt)
                 {
                     if (readTLock() == true)
                     {
@@ -495,9 +617,6 @@ namespace NewBTASProto
                                 this.Invoke((MethodInvoker)delegate()
                                 {
                                     sendNote(station, 3, "Test Cancelled");
-                                    startNewTestToolStripMenuItem.Enabled = true;
-                                    resumeTestToolStripMenuItem.Enabled = true;
-                                    stopTestToolStripMenuItem.Enabled = false;
                                 });
 
                                 return;
@@ -522,7 +641,7 @@ namespace NewBTASProto
                 #region if we are doing the autoconfig, let's get the charger settings in order and then loaded into the charger! (case 2 only)
 
                 // we'll tell the charger what to do! (if we have an IC and the user wants us to...)
-                if (GlobalVars.autoConfig && (bool)d.Rows[station][12] && d.Rows[station][10].ToString().Contains("ICA") && (string)d.Rows[station][2] != "As Received")
+                if (GlobalVars.autoConfig && (bool)d.Rows[station][12] && d.Rows[station][10].ToString().Contains("ICA") && (string)d.Rows[station][2] != "As Received" && !runAsShunt)
                 {
 
                     // GENERAL PROCEDURE
@@ -1019,10 +1138,20 @@ namespace NewBTASProto
                         }
                         catch
                         {
-                            MessageBox.Show(new Form() { TopMost = true }, "Fail to pull the settings from the DataBase. \r\nPlease make sure you have the battery model setup for this test under the Manage Battery Models menu.");
+                            this.Invoke((MethodInvoker)delegate()
+                            {
+                                sendNote(station, 3, "Error:  Fail to pull the settings from the DataBase.");
+                                MessageBox.Show(this, "Fail to pull the settings from the DataBase. \r\nPlease make sure you have the battery model setup for this test under the Manage Battery Models menu.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            });
+
+                            //clear values from d
+                            updateD(station, 7, ("Error"));
+                            if (MasterSlaveTest) { updateD(slaveRow, 7, "Error"); }
                             updateD(station, 5, false);
                             if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+
                             clearTLock();
+                            cRunTest[station].Cancel();
                             return;
                         }
 
@@ -1092,11 +1221,20 @@ namespace NewBTASProto
                     catch (Exception ex)
                     {
                         myAccessConn.Close();
-                        MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to Auto Load settings into the Charger.\n");
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            sendNote(station, 3, "Error:  Failed to Auto Load settings into the Charger.");
+                            MessageBox.Show(this, "Error: Failed to Auto Load settings into the Charger.\n", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        });
                         // reset everything
+                        //clear values from d
+                        updateD(station, 7, ("Error"));
+                        if (MasterSlaveTest) { updateD(slaveRow, 7, "Error"); }
                         updateD(station, 5, false);
                         if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+
                         clearTLock();
+                        cRunTest[station].Cancel();
                         return;
                     } // end catch
 
@@ -1133,10 +1271,18 @@ namespace NewBTASProto
                 catch (Exception ex)
                 {
                     myAccessConn.Close();
-                    MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                    this.Invoke((MethodInvoker)delegate()
+                    {
+                        sendNote(station, 3, "Error: Failed to retrieve the required data from the DataBase.");
+                        MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    });
                     updateD(station, 5, false);
                     if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                    //clear values from d
+                    updateD(station, 7, ("Error"));
+                    if (MasterSlaveTest) { updateD(slaveRow, 7, "Error"); }
                     clearTLock();
+                    cRunTest[station].Cancel();
                     return;
                 }
                 #endregion
@@ -1232,11 +1378,20 @@ namespace NewBTASProto
                     }
                     catch (Exception ex)
                     {
+
                         myAccessConn.Close();
-                        MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            sendNote(station, 3, "Error: Failed to retrieve the required data from the DataBase.");
+                            MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        });
                         updateD(station, 5, false);
                         if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                        //clear values from d
+                        updateD(station, 7, ("Error"));
+                        if (MasterSlaveTest) { updateD(slaveRow, 7, "Error"); }
                         clearTLock();
+                        cRunTest[station].Cancel();
                         return;
                     }
 
@@ -1322,10 +1477,18 @@ namespace NewBTASProto
                         catch (Exception ex)
                         {
                             myAccessConn.Close();
-                            MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                            this.Invoke((MethodInvoker)delegate()
+                            {
+                                sendNote(station, 3, "Error: Failed to retrieve the required data from the DataBase.");
+                                MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            });
                             updateD(station, 5, false);
                             if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                            //clear values from d
+                            updateD(station, 7, ("Error"));
+                            if (MasterSlaveTest) { updateD(slaveRow, 7, "Error"); }
                             clearTLock();
+                            cRunTest[station].Cancel();
                             return;
                         }
                     }
@@ -1459,10 +1622,18 @@ namespace NewBTASProto
                     catch (Exception ex)
                     {
                         myAccessConn.Close();
-                        MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to store new data in the DataBase.\n" + ex.Message);
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            sendNote(station, 3, "Error: Failed to retrieve the required data from the DataBase.");
+                            MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        });
                         updateD(station, 5, false);
                         if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                        //clear values from d
+                        updateD(station, 7, ("Error"));
+                        if (MasterSlaveTest) { updateD(slaveRow, 7, "Error"); }
                         clearTLock();
+                        cRunTest[station].Cancel();
                         return;
                     }
 
@@ -1588,10 +1759,18 @@ namespace NewBTASProto
                         catch (Exception ex)
                         {
                             myAccessConn.Close();
-                            MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to store new data in the DataBase.\n" + ex.Message);
+                            this.Invoke((MethodInvoker)delegate()
+                            {
+                                sendNote(station, 3, "Error: Failed to retrieve the required data from the DataBase.");
+                                MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            });
                             updateD(station, 5, false);
-                            updateD(slaveRow, 5, false);
+                            if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                            //clear values from d
+                            updateD(station, 7, ("Error"));
+                            if (MasterSlaveTest) { updateD(slaveRow, 7, "Error"); }
                             clearTLock();
+                            cRunTest[station].Cancel();
                             return;
                         }
 
@@ -1665,10 +1844,18 @@ namespace NewBTASProto
                         catch (Exception ex)
                         {
                             myAccessConn.Close();
-                            MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                            this.Invoke((MethodInvoker)delegate()
+                            {
+                                sendNote(station, 3, "Error: Failed to retrieve the required data from the DataBase.");
+                                MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            });
                             updateD(station, 5, false);
                             if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                            //clear values from d
+                            updateD(station, 7, ("Error"));
+                            if (MasterSlaveTest) { updateD(slaveRow, 7, "Error"); }
                             clearTLock();
+                            cRunTest[station].Cancel();
                             return;
                         }
                     }
@@ -1732,10 +1919,18 @@ namespace NewBTASProto
                         catch (Exception ex)
                         {
                             myAccessConn.Close();
-                            MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                            this.Invoke((MethodInvoker)delegate()
+                            {
+                                sendNote(station, 3, "Error: Failed to retrieve the required data from the DataBase.");
+                                MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            });
                             updateD(station, 5, false);
                             if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                            //clear values from d
+                            updateD(station, 7, ("Error"));
+                            if (MasterSlaveTest) { updateD(slaveRow, 7, "Error"); }
                             clearTLock();
+                            cRunTest[station].Cancel();
                             return;
                         }
                     }
@@ -1820,6 +2015,7 @@ namespace NewBTASProto
                     });
 
                     clearTLock();
+                    cRunTest[station].Cancel();
                     return;
                 }
                 #endregion
@@ -1831,7 +2027,7 @@ namespace NewBTASProto
                     // nothing to do! if it's an "As Received" or we are running the test on a slave charger... 
                     stopwatch.Start();
                 }
-                else if (d.Rows[station][10].ToString().Contains("ICA"))
+                else if (d.Rows[station][10].ToString().Contains("ICA") && !runAsShunt)
                 {
                     #region             mode test
                     //update the GUI and pause...
@@ -1850,7 +2046,7 @@ namespace NewBTASProto
                         case "Full Charge-4":
                             if (!(temp.Contains("20") || temp.Contains("21")))
                             {
-                                DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The charger doesn't seem to be set up for a Full Charge. Are you sure you want to proceed with the test?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
+                                DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The charger doesn't seem to be set up for a Full Charge. Are you sure you want to proceed with the test?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                                 if (dialogResult == DialogResult.No)
                                 {
                                     updateD(station, 5, false);
@@ -1865,6 +2061,7 @@ namespace NewBTASProto
                                         stopTestToolStripMenuItem.Enabled = false;
                                     });
                                     clearTLock();
+                                    cRunTest[station].Cancel();
                                     return;
                                 }  // end if
 
@@ -1875,7 +2072,7 @@ namespace NewBTASProto
                         case "Top Charge-1":
                             if (!(temp.Contains("10") || temp.Contains("11")))
                             {
-                                DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The charger doesn't seem to be set up for Top Charge. Are you sure you want to proceed with the test?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
+                                DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The charger doesn't seem to be set up for Top Charge. Are you sure you want to proceed with the test?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                                 if (dialogResult == DialogResult.No)
                                 {
                                     updateD(station, 5, false);
@@ -1890,6 +2087,7 @@ namespace NewBTASProto
                                         stopTestToolStripMenuItem.Enabled = false;
                                     });
                                     clearTLock();
+                                    cRunTest[station].Cancel();
                                     return;
                                 }  // end if
                             } // end if
@@ -1897,7 +2095,7 @@ namespace NewBTASProto
                         case "Constant Voltage":
                             if (!temp.Contains("12"))
                             {
-                                DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The charger doesn't seem to be set up for Constant Voltage. Are you sure you want to proceed with the test?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
+                                DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The charger doesn't seem to be set up for Constant Voltage. Are you sure you want to proceed with the test?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                                 if (dialogResult == DialogResult.No)
                                 {
                                     updateD(station, 5, false);
@@ -1912,6 +2110,7 @@ namespace NewBTASProto
                                         stopTestToolStripMenuItem.Enabled = false;
                                     });
                                     clearTLock();
+                                    cRunTest[station].Cancel();
                                     return;
                                 }  // end if
                             } // end if
@@ -1919,7 +2118,7 @@ namespace NewBTASProto
                         case "Capacity-1":
                             if (!(temp.Contains("31") || temp.Contains("32")))
                             {
-                                DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The charger doesn't seem to be set up for a Capacity test. Are you sure you want to proceed with the test?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
+                                DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The charger doesn't seem to be set up for a Capacity test. Are you sure you want to proceed with the test?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                                 if (dialogResult == DialogResult.No)
                                 {
                                     updateD(station, 5, false);
@@ -1934,6 +2133,7 @@ namespace NewBTASProto
                                         stopTestToolStripMenuItem.Enabled = false;
                                     });
                                     clearTLock();
+                                    cRunTest[station].Cancel();
                                     return;
                                 }  // end if
                             } // end if
@@ -1941,7 +2141,7 @@ namespace NewBTASProto
                         case "Discharge":
                             if (!temp.Contains("30"))
                             {
-                                DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The charger doesn't seem to be set up for Discharge. Are you sure you want to proceed with the test?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
+                                DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The charger doesn't seem to be set up for Discharge. Are you sure you want to proceed with the test?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                                 if (dialogResult == DialogResult.No)
                                 {
                                     updateD(station, 5, false);
@@ -1956,6 +2156,7 @@ namespace NewBTASProto
                                         stopTestToolStripMenuItem.Enabled = false;
                                     });
                                     clearTLock();
+                                    cRunTest[station].Cancel();
                                     return;
                                 }  // end if
                             } // end if
@@ -1964,7 +2165,7 @@ namespace NewBTASProto
                         case "Slow Charge-16":
                             if (!(temp.Contains("10") || temp.Contains("11")))
                             {
-                                DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The charger doesn't seem to be set up for Slow Charge. Are you sure you want to proceed with the test?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
+                                DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The charger doesn't seem to be set up for Slow Charge. Are you sure you want to proceed with the test?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                                 if (dialogResult == DialogResult.No)
                                 {
                                     updateD(station, 5, false);
@@ -1979,6 +2180,7 @@ namespace NewBTASProto
                                         stopTestToolStripMenuItem.Enabled = false;
                                     });
                                     clearTLock();
+                                    cRunTest[station].Cancel();
                                     return;
                                 }  // end if
                             } // end if
@@ -1986,7 +2188,7 @@ namespace NewBTASProto
                         case "Custom Chg":
                             if (!(temp.Contains("10") || temp.Contains("11") || temp.Contains("12") || temp.Contains("20") || temp.Contains("21")))
                             {
-                                DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The charger doesn't seem to be set up for a Custom Charge. Are you sure you want to proceed with the test?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
+                                DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The charger doesn't seem to be set up for a Custom Charge. Are you sure you want to proceed with the test?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                                 if (dialogResult == DialogResult.No)
                                 {
                                     updateD(station, 5, false);
@@ -2001,6 +2203,7 @@ namespace NewBTASProto
                                         stopTestToolStripMenuItem.Enabled = false;
                                     });
                                     clearTLock();
+                                    cRunTest[station].Cancel();
                                     return;
                                 }  // end if
                             } // end if
@@ -2008,7 +2211,7 @@ namespace NewBTASProto
                         case "Custom Cap":
                             if (!(temp.Contains("30") || temp.Contains("31") || temp.Contains("32")))
                             {
-                                DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The charger doesn't seem to be set up for a Custom Capacity test. Are you sure you want to proceed with the test?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
+                                DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The charger doesn't seem to be set up for a Custom Capacity test. Are you sure you want to proceed with the test?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                                 if (dialogResult == DialogResult.No)
                                 {
                                     updateD(station, 5, false);
@@ -2024,6 +2227,7 @@ namespace NewBTASProto
                                         sendNote(station, 1, "Test Mode Incorrect");
                                     });
                                     clearTLock();
+                                    cRunTest[station].Cancel();
                                     return;
                                 }  // end if
                             } // end if
@@ -2054,6 +2258,7 @@ namespace NewBTASProto
                         });
 
                         clearTLock();
+                        cRunTest[station].Cancel();
                         return;
                     }
                     #endregion
@@ -2117,6 +2322,7 @@ namespace NewBTASProto
                             stopTestToolStripMenuItem.Enabled = false;
                         });
                         clearTLock();
+                        cRunTest[station].Cancel();
                         return;
                     }
                     #endregion
@@ -2189,6 +2395,7 @@ namespace NewBTASProto
                         });
 
                         clearTLock();
+                        cRunTest[station].Cancel();
                         return;
                     }
                     #endregion
@@ -2293,6 +2500,7 @@ namespace NewBTASProto
                         });
 
                         clearTLock();
+                        cRunTest[station].Cancel();
                         return;
                     }
                     #endregion
@@ -2302,7 +2510,7 @@ namespace NewBTASProto
 
 
                 }// end else if for ICs...
-                else if (d.Rows[station][10].ToString().Contains("CCA"))
+                else if (d.Rows[station][10].ToString().Contains("CCA") && !runAsShunt)
                 {
                     // We have a legacy Charger!
                     // We need to let it run!
@@ -2339,7 +2547,7 @@ namespace NewBTASProto
                     Thread.Sleep(500);
                     GlobalVars.cHold[station] = false;
                 }  // end else if for Legacy chargers
-                else if (d.Rows[station][10].ToString().Contains("Shunt"))
+                else if (d.Rows[station][10].ToString().Contains("Shunt") || runAsShunt)
                 {
                     // We have a shunt!!!!!!
                     // We'll start the test when we start to see current...
@@ -2383,7 +2591,10 @@ namespace NewBTASProto
                 else
                 {
                     // We don't have a charger linked ...
-                    MessageBox.Show(new Form() { TopMost = true }, "No Charger Detected!  Please check settings!");
+                    this.Invoke((MethodInvoker)delegate()
+                    {
+                        MessageBox.Show(this, "No Charger Detected!  Please check settings!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    });
 
                     //clear values from d
                     updateD(station, 7, ("No Charger Detected!"));
@@ -2400,6 +2611,7 @@ namespace NewBTASProto
                     });
 
                     clearTLock();   // for good luck!
+                    cRunTest[station].Cancel();
                     return;
                 }
 
@@ -3125,10 +3337,22 @@ namespace NewBTASProto
                         }
                         catch (Exception ex)
                         {
+
                             myAccessConn.Close();
-                            MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to store new data in the DataBase.\n" + ex.Message);
+                            this.Invoke((MethodInvoker)delegate()
+                            {
+                                sendNote(station, 3, "Error: Failed to retrieve the required data from the DataBase.");
+                                startNewTestToolStripMenuItem.Enabled = true;
+                                resumeTestToolStripMenuItem.Enabled = true;
+                                stopTestToolStripMenuItem.Enabled = false;
+                                MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            });
                             updateD(station, 5, false);
                             if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                            //clear values from d
+                            updateD(station, 7, ("Error"));
+                            if (MasterSlaveTest) { updateD(slaveRow, 7, "Error"); }
+                            cRunTest[station].Cancel();
                             return;
                         }
                         #endregion
@@ -3155,7 +3379,7 @@ namespace NewBTASProto
                     #region Here is where we are going to look for charging issues!
                     //Lets test for a charger issue now
                     // there are going to be three sections, ICA section, CCA section and SHUNT section
-                    if (d.Rows[station][10].ToString().Contains("ICA") && !startUpDelay)
+                    if (d.Rows[station][10].ToString().Contains("ICA") && !startUpDelay && !runAsShunt)
                     {
                         //current check part...
                         //if we have a mini that is charging...
@@ -3199,6 +3423,7 @@ namespace NewBTASProto
                                 startNewTestToolStripMenuItem.Enabled = true;
                                 resumeTestToolStripMenuItem.Enabled = true;
                                 stopTestToolStripMenuItem.Enabled = false;
+                                MessageBox.Show(this, "Test failed. Charger is not producing any current.  Please check the charger settings.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             });
 
                             //also tell the charger to stop
@@ -3237,7 +3462,7 @@ namespace NewBTASProto
                             if (MasterSlaveTest) { updateD(slaveRow, 7, ("FAILED ON " + (currentReading - 1).ToString() + " of " + readings.ToString())); }
                             updateD(station, 5, false);
                             if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
-
+                            cRunTest[station].Cancel();
                             return;
                         }
 
@@ -3281,8 +3506,8 @@ namespace NewBTASProto
                                     // lets put things on pause and wait for the charger to come back
                                     while ((string)d.Rows[station][11] != "HOLD" && (string)d.Rows[station][11] != "RUN")
                                     {
-                                        //check for a cancel
-                                        if (token.IsCancellationRequested)
+                                        //check for a cancel or offline!
+                                        if (token.IsCancellationRequested || d.Rows[station][11].ToString() == "offline!")
                                         {
 
                                             //clear values from d
@@ -3379,14 +3604,16 @@ namespace NewBTASProto
                                         startNewTestToolStripMenuItem.Enabled = true;
                                         resumeTestToolStripMenuItem.Enabled = true;
                                         stopTestToolStripMenuItem.Enabled = false;
+                                        MessageBox.Show(this, "Test failed. Charger Status:  " + d.Rows[station][11].ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     });
+                                    cRunTest[station].Cancel();
                                     return;
                                 }// end test fail else
 
                             }  // end still no run if
                         } // end no run if
                     }// end IC block
-                    else if (d.Rows[station][10].ToString().Contains("CCA") && !startUpDelay)
+                    else if (d.Rows[station][10].ToString().Contains("CCA") && !startUpDelay && !runAsShunt)
                     {
                         // check that the C-Scan is still running...
 
@@ -3420,8 +3647,9 @@ namespace NewBTASProto
                                         startNewTestToolStripMenuItem.Enabled = true;
                                         resumeTestToolStripMenuItem.Enabled = true;
                                         stopTestToolStripMenuItem.Enabled = false;
+                                        MessageBox.Show(this, "Test canceled while in a power fail.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     });
-
+                                    
                                     return;
                                 }
                                 // wait a little before testing again...
@@ -3461,12 +3689,13 @@ namespace NewBTASProto
                                     //update the gui
                                     this.Invoke((MethodInvoker)delegate()
                                     {
-                                        sendNote(station, 3, "Current has fallen below minimum threshold.  Please check the shunt connection and resume or restart the test.");
+                                        sendNote(station, 3, "Current has fallen below minimum threshold. Please check the shunt connection and resume or restart the test.");
                                         startNewTestToolStripMenuItem.Enabled = true;
                                         resumeTestToolStripMenuItem.Enabled = true;
                                         stopTestToolStripMenuItem.Enabled = false;
+                                        MessageBox.Show(this, "Current has fallen below minimum threshold. Please check the shunt connection and resume or restart the test.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     });
-
+                                    cRunTest[station].Cancel();
                                     return;
                                 }
                             }
@@ -3474,23 +3703,20 @@ namespace NewBTASProto
 
 
                     }
-                    else if (d.Rows[station][10].ToString().Contains("Shunt") && !startUpDelay)
+                    else if ((d.Rows[station][10].ToString().Contains("Shunt") || runAsShunt) && !startUpDelay)
                     {
                         //test that the current is still above the 0.2 threshold...
                         // check that the C-Scan is still running...
                         if (Math.Abs(GlobalVars.CScanData[station].currentOne) < 0.2)
                         {
+                            int count = 0;
 
                             while (Math.Abs(GlobalVars.CScanData[station].currentOne) < 0.2)
                             {
-                                int count = 0;
                                 count++;
                                 Thread.Sleep(100);
                                 if (count > 20)
                                 {
-                                    //make sure the C-Scan is back on hold
-                                    GlobalVars.cHold[station] = true;
-
                                     //clear values from d
                                     updateD(station, 7, ("Read " + (currentReading - 1).ToString() + " of " + readings.ToString()));
                                     if (MasterSlaveTest) { updateD(slaveRow, 7, ("Read " + (currentReading - 1).ToString() + " of " + readings.ToString())); }
@@ -3504,8 +3730,9 @@ namespace NewBTASProto
                                         startNewTestToolStripMenuItem.Enabled = true;
                                         resumeTestToolStripMenuItem.Enabled = true;
                                         stopTestToolStripMenuItem.Enabled = false;
+                                        MessageBox.Show(this, "Current has fallen below minimum threshold. Please check the shunt connection and resume or restart the test.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     });
-
+                                    cRunTest[station].Cancel();
                                     return;
                                 }
                             }
@@ -3537,8 +3764,9 @@ namespace NewBTASProto
                             startNewTestToolStripMenuItem.Enabled = true;
                             resumeTestToolStripMenuItem.Enabled = true;
                             stopTestToolStripMenuItem.Enabled = false;
+                            MessageBox.Show(this, "Charger disconnected.  Please check connection and resume or restart the test.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         });
-
+                        cRunTest[station].Cancel();
                         return;
 
                     }
@@ -3555,7 +3783,7 @@ namespace NewBTASProto
                         {
                             //nothing to do here...
                         }
-                        else if (d.Rows[station][10].ToString().Contains("ICA"))
+                        else if (d.Rows[station][10].ToString().Contains("ICA") && !runAsShunt)
                         {
                             // now we need to stop the charger
                             updateD(station, 7, "Telling Charger to Stop");
@@ -3589,12 +3817,12 @@ namespace NewBTASProto
                             }
 
                         }
-                        else if (d.Rows[station][10].ToString().Contains("CCA"))
+                        else if (d.Rows[station][10].ToString().Contains("CCA") && !runAsShunt)
                         {
                             // Put the charger back on hold...
                             GlobalVars.cHold[station] = true;
                         }
-                        else if (d.Rows[station][10].ToString().Contains("Shunt"))
+                        else if (d.Rows[station][10].ToString().Contains("Shunt") ||  runAsShunt)
                         {
                             // Also nothing to do...
                         }
@@ -3630,7 +3858,7 @@ namespace NewBTASProto
                 {
                     // nothing to do...
                 }
-                else if ((string)d.Rows[station][9] != "" && d.Rows[station][10].ToString().Contains("ICA"))
+                else if ((string)d.Rows[station][9] != "" && d.Rows[station][10].ToString().Contains("ICA") && !runAsShunt)
                 {
                     // now we need to stop the charger
                     updateD(station, 7, "Telling Charger to Stop");
@@ -3699,7 +3927,7 @@ namespace NewBTASProto
                         }
                     }
                 }
-                else if (d.Rows[station][10].ToString().Contains("CCA"))
+                else if (d.Rows[station][10].ToString().Contains("CCA") && !runAsShunt)
                 {
                     // Put the charger back on hold after a little while (charger clocks are typically slow)
                     ThreadPool.QueueUserWorkItem(t =>
@@ -3708,7 +3936,7 @@ namespace NewBTASProto
                         GlobalVars.cHold[station] = true;
                     });
                 }
-                else if (d.Rows[station][10].ToString().Contains("Shunt"))
+                else if (d.Rows[station][10].ToString().Contains("Shunt") ||  runAsShunt)
                 {
                     // Also nothing to do...
                 }

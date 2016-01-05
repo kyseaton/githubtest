@@ -301,6 +301,7 @@
             // 
             // chart2
             // 
+            chartArea1.AxisX.IntervalAutoMode = System.Windows.Forms.DataVisualization.Charting.IntervalAutoMode.VariableCount;
             chartArea1.Name = "ChartArea1";
             this.chart2.ChartAreas.Add(chartArea1);
             this.chart2.Location = new System.Drawing.Point(3, 290);
@@ -314,6 +315,7 @@
             // 
             // chart1
             // 
+            chartArea2.AxisX.IntervalAutoMode = System.Windows.Forms.DataVisualization.Charting.IntervalAutoMode.VariableCount;
             chartArea2.Name = "ChartArea1";
             this.chart1.ChartAreas.Add(chartArea2);
             this.chart1.Location = new System.Drawing.Point(3, 3);

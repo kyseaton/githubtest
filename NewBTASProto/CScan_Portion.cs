@@ -107,6 +107,9 @@ namespace NewBTASProto
                             if ((bool)d.Rows[dataGridView1.CurrentRow.Index][4])
                             {
 
+                                
+
+
                                 try
                                 {
                                     CSCANComPort.Open();
@@ -132,6 +135,25 @@ namespace NewBTASProto
                                     //A[1] has the terminal ID in it
                                     testData = new CScanDataStore(A);
                                     GlobalVars.CScanData[currentRow] = testData;
+
+                                    int chargerNum = -1;
+                                    //figure out which charger you have on that channel.
+                                    if (d.Rows[currentRow][9].ToString().Length == 0)
+                                    {
+                                        //no id
+                                    }
+                                    else if (d.Rows[currentRow][9].ToString().Length < 3)
+                                    {
+                                        chargerNum = int.Parse(d.Rows[currentRow][9].ToString());
+                                    }
+                                    else if (d.Rows[currentRow][9].ToString().Length == 3)
+                                    {
+                                        chargerNum = int.Parse(d.Rows[currentRow][9].ToString().Substring(0, 1));
+                                    }
+                                    else if (d.Rows[currentRow][9].ToString().Length == 4)
+                                    {
+                                        chargerNum = int.Parse(d.Rows[currentRow][9].ToString().Substring(0, 2));
+                                    }
 
                                     if ((bool)d.Rows[currentRow][4] && tempClick == currentRow)  // test to see if we've clicked in the mean time...
                                     {
@@ -197,6 +219,11 @@ namespace NewBTASProto
                                                 // all other cases
                                                 tempText += "Current:  " + (testData.currentOne).ToString("00.000") + Environment.NewLine;
                                             }
+                                            else if(testData.shuntCableType == "100A")
+                                            {
+                                                // all other cases
+                                                tempText += "Current:  " + testData.currentOne.ToString("00.0") + Environment.NewLine;
+                                            }
                                             else
                                             {
                                                 // all other cases
@@ -225,7 +252,7 @@ namespace NewBTASProto
                                             {
                                                 for (int i = 0; i < cellsToDisplay; i++)
                                                 {
-                                                    tempText += "Cell #" + (i + 1).ToString() + ":  " + testData.orderedCells[GlobalVars.CScanData[currentRow].cellsToDisplay - i - 1].ToString("0.000") + Environment.NewLine;
+                                                    tempText += "Cell #" + (i + 1).ToString() + ":  " + testData.orderedCells[cellsToDisplay - i - 1].ToString("0.000") + Environment.NewLine;
                                                 }
                                             }
 
@@ -332,8 +359,8 @@ namespace NewBTASProto
                                             tempText += "CSCAN Program Version: " + testData.programVersion + Environment.NewLine;
                                             if (d.Rows[currentRow][10].ToString().Contains("ICA"))
                                             {
-                                                tempText += "IC Program Version: " + GlobalVars.ICData[currentRow].PV1.ToString() + Environment.NewLine;
-                                                tempText += "IC COMS Program Version:  " + GlobalVars.ICData[currentRow].PV2.ToString() + "";
+                                                tempText += "IC Program Version: " + GlobalVars.ICData[chargerNum].PV1.ToString() + Environment.NewLine;
+                                                tempText += "IC COMS Program Version:  " + GlobalVars.ICData[chargerNum].PV2.ToString() + "";
                                             }
 
                                             LockWindowUpdate(label1.Handle);
@@ -363,7 +390,7 @@ namespace NewBTASProto
                                         }
 
                                         if ((bool)d.Rows[currentRow][4] &&
-                                            (bool)d.Rows[currentRow][8] &&
+                                            //(bool)d.Rows[currentRow][8] &&
                                             !d.Rows[currentRow][9].ToString().Contains("S") &&
                                             GlobalVars.CScanData[currentRow].connected &&
                                             !d.Rows[currentRow][10].ToString().Contains("ICA") &&
@@ -415,7 +442,11 @@ namespace NewBTASProto
                                             }
                                         }
                                         //
-                                        else if ((bool)d.Rows[currentRow][8] && GlobalVars.CScanData[currentRow].connected == false && !d.Rows[currentRow][9].ToString().Contains("S") && d.Rows[currentRow][10].ToString() == "CCA")
+                                        else if (
+                                            //(bool)d.Rows[currentRow][8] && 
+                                            GlobalVars.CScanData[currentRow].connected == false && 
+                                            !d.Rows[currentRow][9].ToString().Contains("S") && 
+                                            d.Rows[currentRow][10].ToString() == "CCA")
                                         {
                                             updateD(currentRow, 10, "");
                                             if (slaveRow > -1)
@@ -474,7 +505,11 @@ namespace NewBTASProto
 
                                         ///////If nothing else do we at least have a shunt???!////////////////////////////////////////////////////////
 
-                                        if ((bool)d.Rows[currentRow][4] && (bool)d.Rows[currentRow][8] && d.Rows[currentRow][10].ToString() == "" && !d.Rows[currentRow][9].ToString().Contains("S") && GlobalVars.CScanData[currentRow].shuntCableType != "NONE")
+                                        if ((bool)d.Rows[currentRow][4] &&
+                                            //(bool)d.Rows[currentRow][8] && 
+                                            d.Rows[currentRow][10].ToString() == "" && 
+                                            !d.Rows[currentRow][9].ToString().Contains("S") && 
+                                            GlobalVars.CScanData[currentRow].shuntCableType != "NONE")
                                         {
                                             updateD(currentRow, 10, "Shunt");
                                             if (slaveRow > -1)
@@ -542,10 +577,10 @@ namespace NewBTASProto
                                             }
                                             else
                                             {
-                                                updateD(currentRow, 11, (GlobalVars.cHold[currentRow] ? "HOLD" : "RUN"));
+                                                updateD(currentRow, 11, (GlobalVars.cHold[currentRow] ? "HOLD" : ((bool) d.Rows[currentRow][8] ? "RUN" : "Not Controlled")));
                                                 if (slaveRow > -1)
                                                 {
-                                                    updateD(slaveRow, 11, (GlobalVars.cHold[currentRow] ? "HOLD" : "RUN"));
+                                                    updateD(slaveRow, 11, (GlobalVars.cHold[currentRow] ? "HOLD" : ((bool)d.Rows[currentRow][8] ? "RUN" : "Not Controlled")));
                                                 }
                                             }
                                         }
@@ -662,7 +697,10 @@ namespace NewBTASProto
                                             // we have a master
                                             for (int q = 0; q < 16; q++)
                                             {
-                                                if (d.Rows[q][9].ToString().Contains(temp) && d.Rows[q][9].ToString().Contains("S") && (bool) d.Rows[q][8])
+                                                if (d.Rows[q][9].ToString().Contains(temp) &&
+                                                    d.Rows[q][9].ToString().Contains("S") //&&
+                                                    //(bool) d.Rows[q][8]
+                                                    )
                                                 {
                                                     slaveRow = q;
                                                     break;
@@ -673,7 +711,7 @@ namespace NewBTASProto
                                         if ((bool)d.Rows[j][4] && !d.Rows[j][9].ToString().Contains("S"))
                                         {
                                             if ((bool)d.Rows[j][4] &&
-                                                (bool)d.Rows[j][8] &&
+                                                //(bool)d.Rows[j][8] &&
                                                 GlobalVars.CScanData[j].connected &&
                                                 !d.Rows[j][10].ToString().Contains("ICA") &&
                                                 (d.Rows[j][10].ToString() == "" || dataGridView1.Rows[j].Cells[8].Style.BackColor != Color.Olive || dataGridView1.Rows[j].Cells[8].Style.BackColor != Color.Red))  // if a charger type isn't already there maybe we need to update with a CSCAN controlled charger...
@@ -724,7 +762,11 @@ namespace NewBTASProto
                                                 }
                                             }
                                             //
-                                            else if ((bool)d.Rows[j][8] && GlobalVars.CScanData[j].connected == false && d.Rows[j][10].ToString() == "CCA" && !d.Rows[j][9].ToString().Contains("S"))
+                                            else if (
+                                                //(bool)d.Rows[j][8] && 
+                                                GlobalVars.CScanData[j].connected == false && 
+                                                d.Rows[j][10].ToString() == "CCA" && 
+                                                !d.Rows[j][9].ToString().Contains("S"))
                                             {
                                                 updateD(j, 10, "");
                                                 if (slaveRow > -1)
@@ -783,7 +825,11 @@ namespace NewBTASProto
 
                                         ///////If nothing else do we at least have a shunt???!////////////////////////////////////////////////////////
 
-                                        if ((bool)d.Rows[j][4] && (bool)d.Rows[j][8] && d.Rows[j][10].ToString() == "" && GlobalVars.CScanData[j].shuntCableType != "NONE" && !d.Rows[j][9].ToString().Contains("S"))
+                                        if ((bool)d.Rows[j][4] &&
+                                            //(bool)d.Rows[j][8] && 
+                                            d.Rows[j][10].ToString() == "" && 
+                                            GlobalVars.CScanData[j].shuntCableType != "NONE" && 
+                                            !d.Rows[j][9].ToString().Contains("S"))
                                         {
                                             updateD(j, 10, "Shunt");
                                             if (slaveRow > -1)
@@ -810,7 +856,11 @@ namespace NewBTASProto
                                                 }
                                             });
                                         }
-                                        else if ((bool)d.Rows[j][4] && (bool)d.Rows[j][8] && d.Rows[j][10].ToString() == "Shunt" && GlobalVars.CScanData[j].shuntCableType == "NONE" && !d.Rows[j][9].ToString().Contains("S"))
+                                        else if ((bool)d.Rows[j][4] && 
+                                            //(bool)d.Rows[j][8] && 
+                                            d.Rows[j][10].ToString() == "Shunt" && 
+                                            GlobalVars.CScanData[j].shuntCableType == "NONE" && 
+                                            !d.Rows[j][9].ToString().Contains("S"))
                                         {
                                             updateD(j, 10, "");
                                             if (slaveRow > -1)
@@ -851,10 +901,10 @@ namespace NewBTASProto
                                             }
                                             else
                                             {
-                                                updateD(j, 11, (GlobalVars.cHold[j] ? "HOLD" : "RUN"));
+                                                updateD(j, 11, (GlobalVars.cHold[j] ? "HOLD" : ((bool)d.Rows[j][8] ? "RUN" : "Not Controlled")));
                                                 if (slaveRow > -1)
                                                 {
-                                                    updateD(slaveRow, 11, (GlobalVars.cHold[j] ? "HOLD" : "RUN"));
+                                                    updateD(slaveRow, 11, (GlobalVars.cHold[j] ? "HOLD" : ((bool)d.Rows[j][8] ? "RUN" : "Not Controlled")));
                                                 }
                                             }
                                             
@@ -1281,7 +1331,10 @@ namespace NewBTASProto
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        });
                     }
                 }// end else  if
 
@@ -1291,6 +1344,19 @@ namespace NewBTASProto
                 {
                     try
                     {
+
+                        // we need to get the number of cells incase we are reversing...
+                        int numCells;
+
+                        if ((int)pci.Rows[station][3] == -1)
+                        {
+                            numCells = GlobalVars.CScanData[station].cellsToDisplay;
+                        }
+                        else
+                        {
+                            numCells = (int)pci.Rows[station][3];
+                        }
+
                         chart1.ChartAreas[0].AxisY.Title = "Voltage";
                         chart1.ChartAreas[0].AxisX.Title = "Time";
                         int q;
@@ -1319,76 +1385,100 @@ namespace NewBTASProto
                                 q = 999;
                                 break;
                             case "Cell 1":
-                                q = 14;
+                                if (GlobalVars.Pos2Neg) { q = 13 + numCells; }
+                                else { q = 14; }
                                 break;
                             case "Cell 2":
-                                q = 15;
+                                if (GlobalVars.Pos2Neg) { q = 13 + numCells - 1; }
+                                else { q = 15; }
                                 break;
                             case "Cell 3":
-                                q = 16;
+                                if (GlobalVars.Pos2Neg) { q = 13 + numCells - 2; }
+                                else { q = 16; }
                                 break;
                             case "Cell 4":
-                                q = 17;
+                                if (GlobalVars.Pos2Neg) { q = 13 + numCells - 3; }
+                                else { q = 17; }
                                 break;
                             case "Cell 5":
-                                q = 18;
+                                if (GlobalVars.Pos2Neg) { q = 13 + numCells - 4; }
+                                else { q = 18; }
                                 break;
                             case "Cell 6":
-                                q = 19;
+                                if (GlobalVars.Pos2Neg) { q = 13 + numCells - 5; }
+                                else { q = 19; }
                                 break;
                             case "Cell 7":
-                                q = 20;
+                                if (GlobalVars.Pos2Neg) { q = 13 + numCells - 6; }
+                                else { q = 20; }
                                 break;
                             case "Cell 8":
-                                q = 21;
+                                if (GlobalVars.Pos2Neg) { q = 13 + numCells - 7; }
+                                else { q = 21; }
                                 break;
                             case "Cell 9":
-                                q = 22;
+                                if (GlobalVars.Pos2Neg) { q = 13 + numCells - 8; }
+                                else { q = 22; }
                                 break;
                             case "Cell 10":
-                                q = 23;
+                                if (GlobalVars.Pos2Neg) { q = 13 + numCells - 9; }
+                                else { q = 23; }
                                 break;
                             case "Cell 11":
-                                q = 24;
+                                if (GlobalVars.Pos2Neg) { q = 13 + numCells - 10; }
+                                else { q = 24; }
                                 break;
                             case "Cell 12":
-                                q = 25;
+                                if (GlobalVars.Pos2Neg) { q = 13 + numCells - 11; }
+                                else { q = 25; }
                                 break;
                             case "Cell 13":
-                                q = 26;
+                                if (GlobalVars.Pos2Neg) { q = 13 + numCells - 12; }
+                                else { q = 26; }
                                 break;
                             case "Cell 14":
-                                q = 27;
+                                if (GlobalVars.Pos2Neg) { q = 13 + numCells - 13; }
+                                else { q = 27; }
                                 break;
                             case "Cell 15":
-                                q = 28;
+                                if (GlobalVars.Pos2Neg) { q = 13 + numCells - 14; }
+                                else { q = 28; }
                                 break;
                             case "Cell 16":
-                                q = 29;
+                                if (GlobalVars.Pos2Neg) { q = 13 + numCells - 15; }
+                                else { q = 29; }
                                 break;
                             case "Cell 17":
-                                q = 30;
+                                if (GlobalVars.Pos2Neg) { q = 13 + numCells - 16; }
+                                else { q = 30; }
                                 break;
                             case "Cell 18":
-                                q = 31;
+                                if (GlobalVars.Pos2Neg) { q = 13 + numCells - 17; }
+                                else { q = 31; }
                                 break;
                             case "Cell 19":
-                                q = 32;
+                                if (GlobalVars.Pos2Neg) { q = 13 + numCells - 18; }
+                                else { q = 32; }
                                 break;
                             case "Cell 20":
-                                q = 33;
+                                if (GlobalVars.Pos2Neg) { q = 13 + numCells - 19; }
+                                else { q = 33; }
                                 break;
                             case "Cell 21":
-                                q = 34;
+                                if (GlobalVars.Pos2Neg) { q = 13 + numCells - 20; }
+                                else { q = 34; }
                                 break;
                             case "Cell 22":
-                                q = 35;
+                                if (GlobalVars.Pos2Neg) { q = 13 + numCells - 21; }
+                                else { q = 35; }
                                 break;
                             case "Cell 23":
-                                q = 36;
+                                if (GlobalVars.Pos2Neg) { q = 13 + numCells - 22; }
+                                else { q = 36; }
                                 break;
                             case "Cell 24":
-                                q = 37;
+                                if (GlobalVars.Pos2Neg) { q = 13 + numCells - 23; }
+                                else { q = 37; }
                                 break;
                             default:
                                 q = 999;
@@ -1505,7 +1595,10 @@ namespace NewBTASProto
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        });
                     }
                 }// end else
 
@@ -1852,7 +1945,10 @@ namespace NewBTASProto
                             }
                             catch (Exception ex)
                             {
-                                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
+                                this.Invoke((MethodInvoker)delegate()
+                                {
+                                    MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                });
                                 lockUpdate = false;
                                 return;
                             }
@@ -1874,7 +1970,7 @@ namespace NewBTASProto
                             catch (Exception ex)
                             {
                                 myAccessConn.Close();
-                                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                                MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 lockUpdate = false;
                                 return;
                             }
@@ -1882,6 +1978,30 @@ namespace NewBTASProto
 
 
                             string cellCable = GlobalVars.CScanData[currentRow].CCID.ToString();
+
+                            //improve pick based on PCI here...
+                            try
+                            {
+                                if ((int)pci.Rows[currentRow][3] != -1)
+                                {
+                                    if ((int)pci.Rows[currentRow][3] == 20)
+                                    {
+                                        cellCable = "1";
+                                    }
+                                    else if ((int)pci.Rows[currentRow][3] == 21)
+                                    {
+                                        cellCable = "21";
+                                    }
+                                    else if ((int)pci.Rows[currentRow][3] == 22)
+                                    {
+                                        cellCable = "3";
+                                    }
+                                }
+                            }
+                            catch
+                            {
+                                //didn't work...
+                            }
 
                             this.Invoke((MethodInvoker)delegate()
                             {

@@ -85,7 +85,10 @@ namespace NewBTASProto
 
                             int slaveRow = -1;
                             ////////////////////////////////////////////NORMAL PRIORITY CHARGERS ARE CHECKED HERE///////////////////////
-                            if ((bool)d.Rows[j][8] && (bool)d.Rows[j][4] && (string)d.Rows[j][9] != "" && !d.Rows[j][9].ToString().Contains("S"))
+                            if (//(bool)d.Rows[j][8] && 
+                                (bool)d.Rows[j][4] && 
+                                (string)d.Rows[j][9] != "" && 
+                                !d.Rows[j][9].ToString().Contains("S"))
                             {
                                 Thread.Sleep(800);
                                 try
@@ -104,7 +107,7 @@ namespace NewBTASProto
                                             //now look for the slave row
                                             for (int i = 0; i < 16; i++)
                                             {
-                                                if (d.Rows[i][9].ToString().Contains(chargerID.ToString()) && i != j && (bool) d.Rows[i][8])
+                                                if (d.Rows[i][9].ToString().Contains(chargerID.ToString()) && i != j ) //&& (bool) d.Rows[i][8])
                                                 {
                                                     slaveRow = i;
                                                     break;
@@ -117,7 +120,7 @@ namespace NewBTASProto
                                             chargerID = int.Parse(d.Rows[j][9].ToString().Substring(0, 2));
                                             for (int i = 0; i < 16; i++)
                                             {
-                                                if (d.Rows[i][9].ToString().Contains(chargerID.ToString()) && i != j && (bool)d.Rows[i][8])
+                                                if (d.Rows[i][9].ToString().Contains(chargerID.ToString()) && i != j) //&& (bool)d.Rows[i][8])
                                                 {
                                                     slaveRow = i;
                                                     break;
@@ -147,7 +150,7 @@ namespace NewBTASProto
                                     {
                                         if (testData.online == true)
                                         {
-                                            if ((bool)d.Rows[j][4] && (bool)d.Rows[j][8]) // here to solve timing mismatch
+                                            if ((bool)d.Rows[j][4]) //&& (bool)d.Rows[j][8]) // here to solve timing mismatch
                                             {
                                                 if (testData.faultStatus != "") 
                                                 {
@@ -183,7 +186,7 @@ namespace NewBTASProto
                                                 }
                                             }
                                         }
-                                        else if ((bool)d.Rows[j][4] && (bool)d.Rows[j][8]) // here to solve timing mismatch
+                                        else if ((bool)d.Rows[j][4] ) //&& (bool)d.Rows[j][8]) // here to solve timing mismatch
                                         {
                                             updateD(j, 11, "offline!");
                                             dataGridView1.Rows[j].Cells[8].Style.BackColor = Color.Red;
@@ -195,7 +198,7 @@ namespace NewBTASProto
                                         }
 
                                         // also update the type of charger being used
-                                        if ((bool)d.Rows[j][4] && (bool)d.Rows[j][8]) // here to solve timing mismatch
+                                        if ((bool)d.Rows[j][4] ) //&& (bool)d.Rows[j][8]) // here to solve timing mismatch
                                         {
                                             if (testData.boardID == 1) 
                                             { 
@@ -268,7 +271,7 @@ namespace NewBTASProto
                                 }       // end catch
                             }       // end if
 
-                            else if (d.Rows[j][10].ToString().Contains("ICA") || (bool) d.Rows[j][8] == false) 
+                            else if (d.Rows[j][10].ToString().Contains("ICA") ) // || (bool) d.Rows[j][8] == false) 
                             {
                                 if ((string)d.Rows[j][11] != "" && !d.Rows[j][9].ToString().Contains("S"))
                                 {
@@ -304,7 +307,7 @@ namespace NewBTASProto
                                     testData = new ICDataStore(A);
                                     GlobalVars.ICData[toCheck] = testData;
                                     // if we got one then we can determine that we have an ICA
-                                    if ((bool)d.Rows[chanNum][4] && (bool)d.Rows[chanNum][8]) // here to solve timing mismatch
+                                    if ((bool)d.Rows[chanNum][4] ) //&& (bool)d.Rows[chanNum][8]) // here to solve timing mismatch
                                     {
                                         if (testData.boardID == 1) { updateD(chanNum, 10, "ICA mini"); }
                                         else if (testData.boardID == 6) { updateD(chanNum, 10, "ICA SMC"); }
@@ -358,7 +361,7 @@ namespace NewBTASProto
                                                     //now look for the slave row
                                                     for (int ii = 0; ii < 16; ii++)
                                                     {
-                                                        if (d.Rows[ii][9].ToString().Contains(v.ToString()) && ii != v && (bool) d.Rows[ii][8])
+                                                        if (d.Rows[ii][9].ToString().Contains(v.ToString()) && ii != v ) //&& (bool) d.Rows[ii][8])
                                                         {
                                                             slaveRow = ii;
                                                             break;
@@ -372,7 +375,7 @@ namespace NewBTASProto
                                                     station = int.Parse(d.Rows[v][9].ToString().Substring(0, 2));
                                                     for (int ii = 0; ii < 16; ii++)
                                                     {
-                                                        if (d.Rows[ii][9].ToString().Contains(v.ToString()) && ii != v && (bool)d.Rows[ii][8])
+                                                        if (d.Rows[ii][9].ToString().Contains(v.ToString()) && ii != v ) //&& (bool)d.Rows[ii][8])
                                                         {
                                                             slaveRow = ii;
                                                             break;
@@ -413,7 +416,7 @@ namespace NewBTASProto
                                             //rtbIncoming.Text = "Critical  " + i.ToString() + "  :  " + tempBuff;
                                             if (testData.online == true)
                                             {
-                                                if ((bool)d.Rows[station][4] && (bool)d.Rows[station][8]) // here to solve timing mismatch
+                                                if ((bool)d.Rows[station][4] ) //&& (bool)d.Rows[station][8]) // here to solve timing mismatch
                                                 {
                                                     if (testData.faultStatus != "") 
                                                     { 
@@ -452,27 +455,27 @@ namespace NewBTASProto
                                             }
                                             else 
                                             {
-                                                if ((bool)d.Rows[station][4] && (bool)d.Rows[station][8]) // here to solve timing mismatch
+                                                if ((bool)d.Rows[station][4] ) //&& (bool)d.Rows[station][8]) // here to solve timing mismatch
                                                 {
                                                     updateD(station, 11, "offline!");
                                                     if (slaveRow > -1)
                                                     {
                                                         updateD(slaveRow, 11, "offline!");
                                                     }
-                                                    if ((bool)d.Rows[station][8]) 
-                                                    { 
+                                                    //if ((bool)d.Rows[station][8]) 
+                                                    //{ 
                                                         dataGridView1.Rows[station].Cells[8].Style.BackColor = Color.Red;
                                                         if (slaveRow > -1)
                                                         {
                                                             dataGridView1.Rows[station].Cells[8].Style.BackColor = Color.Red;
                                                         }
-                                                    }
+                                                    //}
                                                 }
                             
                                             }
 
 
-                                            if ((bool)d.Rows[station][4] && (bool)d.Rows[station][8]) // here to solve timing mismatch
+                                            if ((bool)d.Rows[station][4] ) //&& (bool)d.Rows[station][8]) // here to solve timing mismatch
                                             {
                                                 // also update the type of charger being used
                                                 if (testData.boardID == 1) 

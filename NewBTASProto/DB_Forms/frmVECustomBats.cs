@@ -211,7 +211,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
+                MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             //  now try to access it
@@ -229,7 +229,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             finally
@@ -709,7 +709,7 @@ namespace NewBTASProto
         {
             try
             {
-                if (MessageBox.Show(new Form() { TopMost = true }, "Are you sure you want to remove this battery from the data base?", "Delete Record", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (MessageBox.Show(this, "Are you sure you want to remove this battery from the data base?", "Delete Record", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                 {
                     // set up the db Connection
                     string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
@@ -740,13 +740,13 @@ namespace NewBTASProto
                     }
                     else
                     {
-                        MessageBox.Show(new Form() { TopMost = true }, "That record was not in the DB. You must save it in order to delete it.");
+                        MessageBox.Show(this, "That record was not in the DB. You must save it in order to delete it.","Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Deletion Error" + ex.ToString());
+                MessageBox.Show(this, "Deletion Error" + ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
@@ -1279,7 +1279,7 @@ namespace NewBTASProto
 
                     //now force an update on the binding by moving one ahead and then back...
                     toolStripCBBats.ComboBox.Text = textBox2.Text.Replace("'", "''");
-                    MessageBox.Show(this,"Battery model " + textBox2.Text + "'s entry has been updated.");
+                    MessageBox.Show(this, "Battery model " + textBox2.Text + "'s entry has been updated.", "Successful", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
                 else
                 {
@@ -1444,7 +1444,7 @@ namespace NewBTASProto
                         cmd.ExecuteNonQuery();
                         conn.Close();
                     }
-                    MessageBox.Show(new Form() { TopMost = true }, "Battery model " + textBox2.Text + "'s entry has been created.");
+                    MessageBox.Show(this, "Battery model " + textBox2.Text + "'s entry has been created.", "Successful", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 
                     // update the dataTable with the new record ID also..
                     current[0] = max + 1;
@@ -1458,7 +1458,7 @@ namespace NewBTASProto
             }// end try
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString());
+                MessageBox.Show(this,ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
 
@@ -2089,7 +2089,7 @@ namespace NewBTASProto
             {
                 // they don't match!
                 // ask if the user is sure that they want to continue...
-                DialogResult dialogResult = MessageBox.Show(this, "Looks like this record has been updated without being saved.  Are you sure you want to navigate away without saving?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo);
+                DialogResult dialogResult = MessageBox.Show(this, "Looks like this record has been updated without being saved.  Are you sure you want to navigate away without saving?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                 if (dialogResult == DialogResult.No)
                 {
                     return true;

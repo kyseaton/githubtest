@@ -46,7 +46,7 @@ namespace NewBTASProto
             catch (Exception ex)
             {
 
-                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to set up the database connection. \n" + ex.Message);
+                MessageBox.Show(this, "Error: Failed to set up the database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
 
             }
@@ -84,7 +84,7 @@ namespace NewBTASProto
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to set up the database connection. \n" + ex.Message);
+                        MessageBox.Show(this, "Error: Failed to set up the database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
 
@@ -94,7 +94,7 @@ namespace NewBTASProto
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to set up the database connection. \n" + ex.Message);
+                        MessageBox.Show(this, "Error: Failed to set up the database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
                 }
@@ -115,7 +115,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 myAccessConn.Close();
                 return;
             }
@@ -136,7 +136,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                //MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                //MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 myAccessConn.Close();
                 return;
             }
@@ -178,7 +178,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                //MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                //MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 myAccessConn.Close();
                 return;
             }
@@ -211,7 +211,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                //MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                //MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 myAccessConn.Close();
                 return;
             }
@@ -372,7 +372,7 @@ namespace NewBTASProto
                 // if the number is bad, we'll return
                 if(licGood == false)
                 {
-                    MessageBox.Show(new Form() { TopMost = true }, "Cannot continue without a good licence key.  Contact JFM if you need a valid licence key.");
+                    MessageBox.Show(this, "Cannot continue without a good licence key.  Contact JFM if you need a valid licence key.");
                     this.Dispose();
                 }
                 //otherwise let's write the number to file and continue
@@ -454,7 +454,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
+                MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -486,7 +486,7 @@ namespace NewBTASProto
                 }
                 else {
                     myAccessConn.Close();
-                    MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
+                    MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             

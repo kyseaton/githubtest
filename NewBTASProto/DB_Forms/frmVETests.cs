@@ -45,7 +45,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
+                MessageBox.Show(this, "Error: Failed to create a database connection. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             //  now try to access it
@@ -63,7 +63,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             finally
@@ -123,7 +123,7 @@ namespace NewBTASProto
                         else
                         {
 
-                            MessageBox.Show(new Form() { TopMost = true }, "Invalid phone number, please change");
+                            MessageBox.Show(this, "Invalid phone number, please change");
 
                             textBox5.Focus();
 
@@ -178,14 +178,14 @@ namespace NewBTASProto
                 else
                 {
                     //somehow we are renamed the test and that's not good
-                    MessageBox.Show(new Form() { TopMost = true }, "There was an error!");
+                    MessageBox.Show(this, "There was an error!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
-                MessageBox.Show(current["TESTNAME"].ToString() + " has been updated.");
+                MessageBox.Show(this, current["TESTNAME"].ToString() + " has been updated.", "Successful", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }// end try
             catch(Exception ex)
             {
-                MessageBox.Show(ex.ToString());
+                MessageBox.Show(this, ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
         }

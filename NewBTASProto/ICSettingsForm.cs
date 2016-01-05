@@ -232,7 +232,7 @@ namespace NewBTASProto
             if(station == 99)
             {
                 //the station isn't there
-                MessageBox.Show(new Form() { TopMost = true }, "The charger ID you selected isn't valid");
+                MessageBox.Show(this, "The charger ID you selected isn't valid");
                 return;
             }
             

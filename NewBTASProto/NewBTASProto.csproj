@@ -24,7 +24,7 @@
     <MapFileExtensions>true</MapFileExtensions>
     <UpdateUrl>http://www.jfmeng.com/BTAS16_update/</UpdateUrl>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>74</ApplicationRevision>
+    <ApplicationRevision>81</ApplicationRevision>
     <ApplicationVersion>6.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -62,7 +62,7 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>btas7.ico</ApplicationIcon>
+    <ApplicationIcon>btas7_h_i_jXz_icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.ReportViewer.Common, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" />
@@ -385,6 +385,9 @@
     </None>
     <Content Include="btas7.ico" />
     <None Include="Resources\BTAS-16-TEXT.bmp" />
+    <Content Include="btas7_h_I_Big.ico" />
+    <Content Include="btas7_h_i_jXz_icon.ico" />
+    <Content Include="btas7_icon.ico" />
     <Content Include="Resources\btas7.ico" />
     <None Include="Resources\btas7_mid.jpg" />
     <None Include="Resources\btas7_h_I.jpg" />

@@ -80,7 +80,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
+                MessageBox.Show(this, "Error: Failed to create a database connection. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             //  now try to access it
@@ -99,7 +99,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             finally
@@ -138,7 +138,7 @@ namespace NewBTASProto
 
                 if (GlobalVars.checkMasterFiller == true)
                 {
-                    MessageBox.Show(new Form() { TopMost = true }, "Failed to Read MasterFiller Data.  Please check your set up and try again.");
+                    MessageBox.Show(this, "Failed to Read MasterFiller Data.  Please check your set up and try again.");
                     GlobalVars.checkMasterFiller = false;
                     this.Invoke((MethodInvoker)delegate
                     {
@@ -213,20 +213,20 @@ namespace NewBTASProto
             //do we have a station?
             if (comboBox1.Text == "")
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Please select a station to associate the MasterFiller data with");
+                MessageBox.Show(this, "Please select a station to associate the MasterFiller data with");
                 return;
             }
 
             //do we have a work order?
             if(comboBox2.Text == "")
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Please select a Work Order to associate the MasterFiller data with");
+                MessageBox.Show(this, "Please select a Work Order to associate the MasterFiller data with");
                 return;
             }
             //do we data?
             if (textBox1.Text == "")
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Please aquire data before trying to save!");
+                MessageBox.Show(this, "Please aquire data before trying to save!");
                 return;
             }
 
@@ -274,7 +274,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
+                MessageBox.Show(this, "Error: Failed to create a database connection. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             //  now try to access it
@@ -291,7 +291,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to store new data in the DataBase.\n" + ex.Message);
+                MessageBox.Show(this, "Error: Failed to store new data in the DataBase.\n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 

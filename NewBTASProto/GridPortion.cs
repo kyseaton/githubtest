@@ -228,7 +228,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
+                MessageBox.Show(this, "Error: Failed to create a database connection. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -246,7 +246,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
+                MessageBox.Show(this, "Error: Failed to create a database connection. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -272,7 +272,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
+                MessageBox.Show(this, "Error: Failed to create a database connection. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -429,7 +429,7 @@ namespace NewBTASProto
 
                     if ((string) d.Rows[e.RowIndex][9] == "")
                     {
-                        MessageBox.Show(new Form() { TopMost = true }, "You Still Need to Select a Charger ID Number");
+                        MessageBox.Show(this, "You Still Need to Select a Charger ID Number");
                     }
                     else
                     {
@@ -582,6 +582,8 @@ namespace NewBTASProto
             }
         }
 
+        bool startTog = true;
+
         private void dataGridView1_RowEnter(object sender, DataGridViewCellEventArgs e)
         {
             if (GlobalVars.loading == false)
@@ -589,7 +591,15 @@ namespace NewBTASProto
                 try
                 {
                     goodRead = false;
-                    fillPlotCombos(e.RowIndex);
+                    if (!startTog)
+                    {
+                        fillPlotCombos(e.RowIndex);
+                    }
+                    else
+                    {
+                        // put this in to not double up at startup on the fillPlotCombos
+                        startTog = false;
+                    }
                 }
                 // fill the plotCombos
                 catch { ;}

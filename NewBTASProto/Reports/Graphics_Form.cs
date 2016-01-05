@@ -48,6 +48,9 @@ namespace NewBTASProto
         bool startup = true;
         bool startup2 = true;
 
+        DataSet batInfo1;
+        DataSet batInfo2;
+
         public Graphics_Form(string currentStep = "", string currentWorkOrder = "")
         {
             InitializeComponent();
@@ -144,7 +147,10 @@ namespace NewBTASProto
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
+                    this.Invoke((MethodInvoker)delegate()
+                    {
+                        MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    });
                     return;
                 }
                 //  now try to access it
@@ -167,7 +173,10 @@ namespace NewBTASProto
                 catch (Exception ex)
                 {
                     myAccessConn.Close();
-                    MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                    this.Invoke((MethodInvoker)delegate()
+                    {
+                        MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }); 
                     return;
                 }
 
@@ -266,7 +275,10 @@ namespace NewBTASProto
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }); 
                         return;
                     }
                     //  now try to access it
@@ -286,7 +298,10 @@ namespace NewBTASProto
                     catch (Exception ex)
                     {
                         myAccessConn.Close();
-                        MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }); 
                         return;
                     }
 
@@ -324,7 +339,10 @@ namespace NewBTASProto
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        });
                         return;
                     }
 
@@ -373,8 +391,10 @@ namespace NewBTASProto
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
-                        return;
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }); return;
                     }
                     //  now try to access it
                     try
@@ -394,7 +414,10 @@ namespace NewBTASProto
                     catch (Exception ex)
                     {   
                         myAccessConn.Close();
-                        MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        });
                         return;
                     }
 
@@ -403,7 +426,7 @@ namespace NewBTASProto
                         DataRow emptyRow1 = testsPerformed.Tables["Tests"].NewRow();
                         emptyRow1["TestName"] = "";
                         testsPerformed.Tables["Tests"].Rows.InsertAt(emptyRow1, 0);
-                        testsPerformed.Tables["Tests"].Columns.Add("ForList", typeof(string), "StepNumber + ' '+ TestName");
+                        testsPerformed.Tables["Tests"].Columns.Add("ForList", typeof(string), "StepNumber + ' - '+ TestName");
 
                         this.Invoke((MethodInvoker)delegate()
                         {
@@ -432,7 +455,10 @@ namespace NewBTASProto
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        });
                         return;
                     }
                 });
@@ -475,7 +501,10 @@ namespace NewBTASProto
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        });
                         return;
                     }
                     //  now try to access it
@@ -494,9 +523,12 @@ namespace NewBTASProto
 
                     }
                     catch (Exception ex)
-                    {   
+                    {
                         myAccessConn.Close();
-                        MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        });
                         return;
                     }
 
@@ -516,7 +548,10 @@ namespace NewBTASProto
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        });
                         return;
                     }
                     //  now try to access it
@@ -531,12 +566,16 @@ namespace NewBTASProto
                             myDataAdapter.Fill(lookForCable, "Tests");
                             myAccessConn.Close();
                         }
-                        
+
 
                     }
                     catch (Exception ex)
-                    {   myAccessConn.Close();
-                    MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                    {
+                        myAccessConn.Close();
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        });
                         return;
                     }
 
@@ -748,122 +787,140 @@ namespace NewBTASProto
                                 break;
                         }// end switch
 
+                        
+
+                    });// end invoke
+
+                    // Now we need to look up some additional info in the Battery table for the graphs....
+                    // first get the battry Model...
+                    strAccessSelect = @"SELECT BatteryModel FROM WorkOrders WHERE WorkOrderNumber='" + combo1Text + @"'";
+                    DataSet wo = new DataSet();
+
+                    myAccessConn = null;
+                    // try to open the DB
+                    try
+                    {
+                        myAccessConn = new OleDbConnection(strAccessConn);
+                    }
+                    catch (Exception ex)
+                    {
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        });
+                        return;
+                    }
+                    // try to open the DB
+                    //  now try to access it
+                    try
+                    {
+                        OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                        OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                        lock (Main_Form.dataBaseLock)
+                        {
+                            myAccessConn.Open();
+                            myDataAdapter.Fill(wo, "WO");
+                            myAccessConn.Close();
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+                        myAccessConn.Close();
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        });
+                        return;
+                    }
+
+                    batMod1 = wo.Tables[0].Rows[0][0].ToString();
+
+
+                    //Now get the nominal voltage and the cell voltage level...
+                    strAccessSelect = @"SELECT VOLT,CCVMAX,BTECH,NCELLS FROM BatteriesCustom WHERE BatteryModel='" + batMod1 + @"'";
+                    batInfo1 = new DataSet();
+
+                    // try to open the DB
+                    //  now try to access it
+                    try
+                    {
+                        OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                        OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                        lock (Main_Form.dataBaseLock)
+                        {
+                            myAccessConn.Open();
+                            myDataAdapter.Fill(batInfo1, "Bat");
+                            myAccessConn.Close();
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+                        myAccessConn.Close();
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        });
+                        return;
+                    }
+
+                    try
+                    {
+                        NomV1 = float.Parse(batInfo1.Tables[0].Rows[0][0].ToString());
+                    }
+                    catch
+                    {
+                        NomV1 = 24;
+                    }
+                    try
+                    {
+                        CellV1 = float.Parse(batInfo1.Tables[0].Rows[0][1].ToString());
+                    }
+                    catch
+                    {
+                        CellV1 = (float)1.75;
+                    }
+                    try
+                    {
+                        technology1 = batInfo1.Tables[0].Rows[0][2].ToString();
+                    }
+                    catch
+                    {
+                        technology1 = "NiCd";
+                    }
+                    try
+                    {
+                        if (batInfo1.Tables[0].Rows[0][3].ToString() != "")
+                        {
+                            cell1 = int.Parse(batInfo1.Tables[0].Rows[0][3].ToString());
+                        }
+                    }
+                    catch
+                    {
+                        //leave as is...
+                    }
+
+                    this.Invoke((MethodInvoker)delegate()
+                    {
+
                         comboBox5.SelectedIndex = 0;
                         comboBox6.SelectedIndex = 0;
 
-                        // Now we need to look up some additional info in the Battery table for the graphs....
-                        // first get the battry Model...
-                        strAccessSelect = @"SELECT BatteryModel FROM WorkOrders WHERE WorkOrderNumber='" + combo1Text + @"'";
-                        DataSet wo = new DataSet();
-
-                        myAccessConn = null;
-                        // try to open the DB
-                        try
-                        {
-                            myAccessConn = new OleDbConnection(strAccessConn);
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
-                            return;
-                        }
-                        // try to open the DB
-                        //  now try to access it
-                        try
-                        {
-                            OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
-                            OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
-
-                            lock (Main_Form.dataBaseLock)
-                            {
-                                myAccessConn.Open();
-                                myDataAdapter.Fill(wo, "WO");
-                                myAccessConn.Close();
-                            }
-
-                        }
-                        catch (Exception ex)
-                        {
-                            myAccessConn.Close();
-                            MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
-                            return;
-                        }
-
-                        batMod1 = wo.Tables[0].Rows[0][0].ToString();
-
-
-                        //Now get the nominal voltage and the cell voltage level...
-                        strAccessSelect = @"SELECT VOLT,CCVMAX,BTECH,NCELLS FROM BatteriesCustom WHERE BatteryModel='" + batMod1 + @"'";
-                        DataSet batInfo = new DataSet();
-                        
-                        // try to open the DB
-                        //  now try to access it
-                        try
-                        {
-                            OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
-                            OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
-
-                            lock (Main_Form.dataBaseLock)
-                            {
-                                myAccessConn.Open();
-                                myDataAdapter.Fill(batInfo, "Bat");
-                                myAccessConn.Close();
-                            }
-
-                        }
-                        catch (Exception ex)
-                        {
-                            myAccessConn.Close();
-                            MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
-                            return;
-                        }
-
-                        try
-                        {
-                            NomV1 = float.Parse(batInfo.Tables[0].Rows[0][0].ToString());
-                        }
-                        catch
-                        {
-                            NomV1 = 24;
-                        }
-                        try
-                        {
-                            CellV1 = float.Parse(batInfo.Tables[0].Rows[0][1].ToString());
-                        }
-                        catch
-                        {
-                            CellV1 = (float) 1.75;
-                        }
-                        try
-                        {
-                            technology1 = batInfo.Tables[0].Rows[0][2].ToString();
-                        }
-                        catch
-                        {
-                            technology1 = "NiCd";
-                        }
-                        try
-                        {
-                            if (batInfo.Tables[0].Rows[0][3].ToString() != "")
-                            {
-                                cell1 = int.Parse(batInfo.Tables[0].Rows[0][3].ToString());
-                            }
-                        }
-                        catch
-                        {
-                            //leave as is...
-                        }
-
-
                         comboBox5.Enabled = true;
                         comboBox6.Enabled = true;
-
                         if (startup)
                         {
                             startup = false;
                             comboBox5.SelectedIndex = 0;
                         }
+
                     });// end invoke
+
+
+
                 });// end helper thread
             }
         }
@@ -902,7 +959,10 @@ namespace NewBTASProto
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        });
                         return;
                     }
                     //  now try to access it
@@ -923,7 +983,10 @@ namespace NewBTASProto
                     catch (Exception ex)
                     {
                         myAccessConn.Close();
-                        MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        });
                         return;
                     }
 
@@ -943,7 +1006,10 @@ namespace NewBTASProto
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        });
                         return;
                     }
                     //  now try to access it
@@ -964,7 +1030,10 @@ namespace NewBTASProto
                     catch (Exception ex)
                     {
                         myAccessConn.Close();
-                        MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        });
                         return;
                     }
 
@@ -976,7 +1045,10 @@ namespace NewBTASProto
                         {
                             case "1":
                                 // update the cells value
-                                if (cell2 == 0) { cell2 = 20; }
+                                if (cell2 == 0) 
+                                { 
+                                    cell2 = 20; 
+                                }
                                 // Battery combobox
                                 comboBox7.Items.Clear();
                                 //comboBox7.Text = "";
@@ -1013,7 +1085,10 @@ namespace NewBTASProto
                                 break;
                             case "3":
                                 // update the cells value
-                                if (cell2 == 0) { cell2 = 22; }
+                                if (cell2 == 0) 
+                                { 
+                                    cell2 = 22; 
+                                }
                                 // Battery combobox
                                 comboBox7.Items.Clear();
                                 //comboBox7.Text = "";
@@ -1053,7 +1128,10 @@ namespace NewBTASProto
                                 break;
                             case "4":
                                 // update the cells value
-                                if (cell2 == 0) { cell2 = 21; }
+                                if (cell2 == 0) 
+                                { 
+                                    cell2 = 21; 
+                                }
                                 // Battery combobox
                                 comboBox7.Items.Clear();
                                 //comboBox7.Text = "";
@@ -1093,7 +1171,10 @@ namespace NewBTASProto
                                 break;
                             case "21":
                                 // update the cells value
-                                if (cell2 == 0) { cell2 = 21; }
+                                if (cell2 == 0) 
+                                { 
+                                    cell2 = 21; 
+                                }
                                 // Battery combobox
                                 comboBox7.Items.Clear();
                                 //comboBox7.Text = "";
@@ -1131,7 +1212,10 @@ namespace NewBTASProto
                                 break;
                             default:
                                 // update the cells value
-                                if (cell2 == 0) { cell2 = 20; }
+                                if (cell2 == 0) 
+                                { 
+                                    cell2 = 20; 
+                                }
                                 // Battery combobox
                                 comboBox7.Items.Clear();
                                 //comboBox7.Text = "";
@@ -1175,8 +1259,7 @@ namespace NewBTASProto
                                 break;
                         }// end switch
 
-                        comboBox7.SelectedIndex = 0;
-                        comboBox8.SelectedIndex = 0;
+                        
 
                         // Now we need to look up some additional info in the Battery table for the graphs....
                         // first get the battry Model...
@@ -1190,7 +1273,10 @@ namespace NewBTASProto
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
+                            this.Invoke((MethodInvoker)delegate()
+                            {
+                                MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            });
                             return;
                         }
                         // try to open the DB
@@ -1211,7 +1297,10 @@ namespace NewBTASProto
                         catch (Exception ex)
                         {
                             myAccessConn.Close();
-                            MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                            this.Invoke((MethodInvoker)delegate()
+                            {
+                                MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            });
                             return;
                         }
 
@@ -1220,7 +1309,7 @@ namespace NewBTASProto
 
                         //Now get the nominal voltage and the cell voltage level...
                         strAccessSelect = @"SELECT VOLT,CCVMAX,BTECH,NCELLS FROM BatteriesCustom WHERE BatteryModel='" + batMod2 + @"'";
-                        DataSet batInfo = new DataSet();
+                        batInfo2 = new DataSet();
                         myAccessConn = null;
                         // try to open the DB
                         try
@@ -1229,7 +1318,10 @@ namespace NewBTASProto
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
+                            this.Invoke((MethodInvoker)delegate()
+                            {
+                                MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            });
                             return;
                         }
                         // try to open the DB
@@ -1242,7 +1334,7 @@ namespace NewBTASProto
                             lock (Main_Form.dataBaseLock)
                             {
                                 myAccessConn.Open();
-                                myDataAdapter.Fill(batInfo, "Bat");
+                                myDataAdapter.Fill(batInfo2, "Bat");
                                 myAccessConn.Close();
                             }
 
@@ -1250,13 +1342,16 @@ namespace NewBTASProto
                         catch (Exception ex)
                         {
                             myAccessConn.Close();
-                            MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                            this.Invoke((MethodInvoker)delegate()
+                            {
+                                MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            });
                             return;
                         }
 
                         try
                         {
-                            NomV2 = float.Parse(batInfo.Tables[0].Rows[0][0].ToString());
+                            NomV2 = float.Parse(batInfo2.Tables[0].Rows[0][0].ToString());
                         }
                         catch 
                         {
@@ -1264,7 +1359,7 @@ namespace NewBTASProto
                         }
                         try
                         {
-                            CellV2 = float.Parse(batInfo.Tables[0].Rows[0][1].ToString());
+                            CellV2 = float.Parse(batInfo2.Tables[0].Rows[0][1].ToString());
                         }
                         catch
                         {
@@ -1272,7 +1367,7 @@ namespace NewBTASProto
                         }
                         try
                         {
-                            technology2 = batInfo.Tables[0].Rows[0][2].ToString();
+                            technology2 = batInfo2.Tables[0].Rows[0][2].ToString();
                         }
                         catch
                         {
@@ -1280,9 +1375,9 @@ namespace NewBTASProto
                         }
                         try
                         {
-                            if (batInfo.Tables[0].Rows[0][3].ToString() != "")
+                            if (batInfo2.Tables[0].Rows[0][3].ToString() != "")
                             {
-                                cell2 = int.Parse(batInfo.Tables[0].Rows[0][3].ToString());
+                                cell2 = int.Parse(batInfo2.Tables[0].Rows[0][3].ToString());
                             }
                         }
                         catch
@@ -1293,6 +1388,9 @@ namespace NewBTASProto
 
                         comboBox7.Enabled = true;
                         comboBox8.Enabled = true;
+
+                        comboBox7.SelectedIndex = 0;
+                        comboBox8.SelectedIndex = 0;
 
 
                         if (startup2)
@@ -1307,7 +1405,9 @@ namespace NewBTASProto
 
         private void comboBox5_SelectedValueChanged(object sender, EventArgs e)
         {
+
             type1 = comboBox2.Text;
+
             try
             {
                 int q;
@@ -1367,9 +1467,77 @@ namespace NewBTASProto
 
                 for (int i = 0; i < graph1Set.Tables[0].Rows.Count; i++)
                 {
-                    series1.Points.AddXY((int)(double.Parse(graph1Set.Tables[0].Rows[i][7].ToString()) * 1440), graph1Set.Tables[0].Rows[i][q]);
+                    series1.Points.AddXY(Math.Round(double.Parse(graph1Set.Tables[0].Rows[i][7].ToString()) * 1440), graph1Set.Tables[0].Rows[i][q]);
                     // color test
                     series1.Points[i].Color = pointColor(technology1, cell1, double.Parse(graph1Set.Tables[0].Rows[i][q].ToString()), type1);
+                }
+
+                // pad with zero Vals to help with the look of the plot...
+                // first get the interval and total points
+                int interval = 1;
+                int points = 1;
+
+                switch (comboBox2.Text.Substring(5))
+                {
+                    case "As Received":
+                        interval = 1 / 30;
+                        points = 3;
+                        break;
+                    case "Full Charge-6":
+                        interval = 5;
+                        points = 73;
+                        break;
+                    case "Full Charge-4":
+                        interval = 4;
+                        points = 61;
+                        break;
+                    case "Top Charge-4":
+                        interval = 4;
+                        points = 61;
+                        break;
+                    case "Top Charge-2":
+                        interval = 3;
+                        points = 41;
+                        break;
+                    case "Top Charge-1":
+                        interval = 1;
+                        points = 61;
+                        break;
+                    case "Constant Voltage":
+                        interval = 5;
+                        points = 73;
+                        break;
+                    case "Capacity-1":
+                    case "Capacity":
+                        interval = 1;
+                        points = 61;
+                        break;
+                    case "Discharge":
+                        interval = 1;
+                        points = 61;
+                        break;
+                    case "Slow Charge-14":
+                        interval = 12;
+                        points = 73;
+                        break;
+                    case "SlowCharge-16":
+                        interval = 16;
+                        points = 61;
+                        break;
+                    default:
+                        //custom cap and charge get the default...
+                        //Custom Chg
+                        //Custom Cap
+                        break;
+                }
+
+
+                if (graph1Set.Tables[0].Rows.Count <= points - 1)
+                {
+                    for (int i = graph1Set.Tables[0].Rows.Count; i <= points - 1; i++)
+                    {
+                        series1.Points.AddXY(i * interval, 0);
+                    }
                 }
 
                 tt1.Text = "Work Order:  " + comboBox1.Text + "     Test:  " + comboBox2.Text + "     Date:  " + graph1Set.Tables[0].Rows[0][4].ToString();
@@ -1378,11 +1546,11 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
+                this.Invoke((MethodInvoker)delegate()
+                {
+                    MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                });
             }
-
-
-
         }
         private void comboBox6_SelectedValueChanged(object sender, EventArgs e)
         {
@@ -1504,9 +1672,79 @@ namespace NewBTASProto
                 {
                     for (int i = 0; i < graph1Set.Tables[0].Rows.Count; i++)
                     {
-                        series1.Points.AddXY((int)(double.Parse(graph1Set.Tables[0].Rows[i][7].ToString()) * 1440), graph1Set.Tables[0].Rows[i][q]);
+                        series1.Points.AddXY(Math.Round(double.Parse(graph1Set.Tables[0].Rows[i][7].ToString()) * 1440), graph1Set.Tables[0].Rows[i][q]);
                         // color test
                         series1.Points[i].Color = pointColor(technology1, 1, double.Parse(graph1Set.Tables[0].Rows[i][q].ToString()), type1);
+                    }
+
+
+
+                    // pad with zero Vals to help with the look of the plot...
+                    // first get the interval and total points
+                    int interval = 1;
+                    int points = 1;
+
+                    switch (comboBox2.Text.Substring(5))
+                    {
+                        case "As Received":
+                            interval = 1 / 30;
+                            points = 3;
+                            break;
+                        case "Full Charge-6":
+                            interval = 5;
+                            points = 73;
+                            break;
+                        case "Full Charge-4":
+                            interval = 4;
+                            points = 61;
+                            break;
+                        case "Top Charge-4":
+                            interval = 4;
+                            points = 61;
+                            break;
+                        case "Top Charge-2":
+                            interval = 3;
+                            points = 41;
+                            break;
+                        case "Top Charge-1":
+                            interval = 1;
+                            points = 61;
+                            break;
+                        case "Constant Voltage":
+                            interval = 5;
+                            points = 73;
+                            break;
+                        case "Capacity-1":
+                        case "Capacity":
+                            interval = 1;
+                            points = 61;
+                            break;
+                        case "Discharge":
+                            interval = 1;
+                            points = 61;
+                            break;
+                        case "Slow Charge-14":
+                            interval = 12;
+                            points = 73;
+                            break;
+                        case "SlowCharge-16":
+                            interval = 16;
+                            points = 61;
+                            break;
+                        default:
+                            //custom cap and charge get the default...
+                            //Custom Chg
+                            //Custom Cap
+                            break;
+                    }
+
+
+                    if (graph1Set.Tables[0].Rows.Count <= points - 1)
+                    {
+                        for (int i = graph1Set.Tables[0].Rows.Count; i <= points - 1; i++)
+                        {
+                            series1.Points.AddXY(i * interval, 0);
+                        }
                     }
                 }
 
@@ -1518,7 +1756,10 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
+                this.Invoke((MethodInvoker)delegate()
+                {
+                    MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                });
             }
 
         }
@@ -1601,8 +1842,8 @@ namespace NewBTASProto
                     if (type.Contains("As Received") || type.Contains("Capacity-1") || type.Contains("Discharge") || type.Contains("Custom Cap") || type == "")
                     {
 
-                        Min4 = (20 / 24) * NomV1;
-                        Max = (21 / 24) * NomV1;
+                        Min4 = (20.0 / 24) * NomV1;
+                        Max = (21.0 / 24) * NomV1;
 
                         if (Value > Max) { return Color.Green; }
                         else if (Value > Min4) { return Color.Orange; }
@@ -1715,8 +1956,8 @@ namespace NewBTASProto
                     if (type.Contains("As Received") || type.Contains("Capacity-1") || type.Contains("Discharge") || type.Contains("Custom Cap") || type == "")
                     {
 
-                        Min4 = (20 / 24) * NomV2;
-                        Max = (21 / 24) * NomV2;
+                        Min4 = (20.0 / 24) * NomV2;
+                        Max = (21.0 / 24) * NomV2;
 
                         if (Value > Max) { return Color.Green; }
                         else if (Value > Min4) { return Color.Orange; }
@@ -1733,7 +1974,7 @@ namespace NewBTASProto
                     // Discharge
                     if (type.Contains("As Received") || type.Contains("Capacity-1") || type.Contains("Discharge") || type.Contains("Custom Cap") || type == "")
                     {
-                        Min4 = 1 * Cells;
+                        Min4 = 1.0 * Cells;
                         Max = 1.05 * Cells;
 
                         if (Value > Max) { return Color.Green; }
@@ -1787,6 +2028,7 @@ namespace NewBTASProto
         private void comboBox7_SelectedValueChanged(object sender, EventArgs e)
         {
             type2 = comboBox4.Text;
+
             try
             {
                 int q;
@@ -1846,17 +2088,89 @@ namespace NewBTASProto
 
                 for (int i = 0; i < graph2Set.Tables[0].Rows.Count; i++)
                 {
-                    series2.Points.AddXY((int)(double.Parse(graph2Set.Tables[0].Rows[i][7].ToString()) * 1440), graph2Set.Tables[0].Rows[i][q]);
+                    series2.Points.AddXY(Math.Round(double.Parse(graph2Set.Tables[0].Rows[i][7].ToString()) * 1440), graph2Set.Tables[0].Rows[i][q]);
                     // color test
                     series2.Points[i].Color = pointColor2(technology2, cell2, double.Parse(graph2Set.Tables[0].Rows[i][q].ToString()), type2);
                 }
+
+                // pad with zero Vals to help with the look of the plot...
+                // first get the interval and total points
+                int interval = 1;
+                int points = 1;
+
+                switch (comboBox4.Text.Substring(5))
+                {
+                    case "As Received":
+                        interval = 1 / 30;
+                        points = 3;
+                        break;
+                    case "Full Charge-6":
+                        interval = 5;
+                        points = 73;
+                        break;
+                    case "Full Charge-4":
+                        interval = 4;
+                        points = 61;
+                        break;
+                    case "Top Charge-4":
+                        interval = 4;
+                        points = 61;
+                        break;
+                    case "Top Charge-2":
+                        interval = 3;
+                        points = 41;
+                        break;
+                    case "Top Charge-1":
+                        interval = 1;
+                        points = 61;
+                        break;
+                    case "Constant Voltage":
+                        interval = 5;
+                        points = 73;
+                        break;
+                    case "Capacity-1":
+                    case "Capacity":
+                        interval = 1;
+                        points = 61;
+                        break;
+                    case "Discharge":
+                        interval = 1;
+                        points = 61;
+                        break;
+                    case "Slow Charge-14":
+                        interval = 12;
+                        points = 73;
+                        break;
+                    case "SlowCharge-16":
+                        interval = 16;
+                        points = 61;
+                        break;
+                    default:
+                        //custom cap and charge get the default...
+                        //Custom Chg
+                        //Custom Cap
+                        break;
+                }
+
+
+                if (graph2Set.Tables[0].Rows.Count <= points - 1)
+                {
+                    for (int i = graph2Set.Tables[0].Rows.Count; i <= points - 1; i++)
+                    {
+                        series2.Points.AddXY(i * interval, 0);
+                    }
+                }
+
                 tt2.Text = "Work Order:  " + comboBox3.Text + "     Test:  " + comboBox4.Text + "     Date:  " + graph2Set.Tables[0].Rows[0][4].ToString();
                 chart2.Invalidate();
                 chart2.ChartAreas[0].RecalculateAxesScale();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
+                this.Invoke((MethodInvoker)delegate()
+                {
+                    MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                });
             }
 
         }
@@ -1971,7 +2285,7 @@ namespace NewBTASProto
 
                 if (q == 999)
                 {
-                    for (int i = 0; i < cell1; i++)
+                    for (int i = 0; i < cell2; i++)
                     {
                         series2.Points.AddXY(i + 1, graph2Set.Tables[0].Rows[graph2Set.Tables[0].Rows.Count - 1][i + 14]);
                         // color test
@@ -1982,9 +2296,77 @@ namespace NewBTASProto
                 {
                     for (int i = 0; i < graph2Set.Tables[0].Rows.Count; i++)
                     {
-                        series2.Points.AddXY((int)(double.Parse(graph2Set.Tables[0].Rows[i][7].ToString()) * 1440), graph2Set.Tables[0].Rows[i][q]);
+                        series2.Points.AddXY(Math.Round(double.Parse(graph2Set.Tables[0].Rows[i][7].ToString()) * 1440), graph2Set.Tables[0].Rows[i][q]);
                         // color test
                         series2.Points[i].Color = pointColor2(technology2, 1, double.Parse(graph2Set.Tables[0].Rows[i][q].ToString()), type2);
+                    }
+
+                    // pad with zero Vals to help with the look of the plot...
+                    // first get the interval and total points
+                    int interval = 1;
+                    int points = 1;
+
+                    switch (comboBox4.Text.Substring(5))
+                    {
+                        case "As Received":
+                            interval = 1 / 30;
+                            points = 3;
+                            break;
+                        case "Full Charge-6":
+                            interval = 5;
+                            points = 73;
+                            break;
+                        case "Full Charge-4":
+                            interval = 4;
+                            points = 61;
+                            break;
+                        case "Top Charge-4":
+                            interval = 4;
+                            points = 61;
+                            break;
+                        case "Top Charge-2":
+                            interval = 3;
+                            points = 41;
+                            break;
+                        case "Top Charge-1":
+                            interval = 1;
+                            points = 61;
+                            break;
+                        case "Constant Voltage":
+                            interval = 5;
+                            points = 73;
+                            break;
+                        case "Capacity-1":
+                        case "Capacity":
+                            interval = 1;
+                            points = 61;
+                            break;
+                        case "Discharge":
+                            interval = 1;
+                            points = 61;
+                            break;
+                        case "Slow Charge-14":
+                            interval = 12;
+                            points = 73;
+                            break;
+                        case "SlowCharge-16":
+                            interval = 16;
+                            points = 61;
+                            break;
+                        default:
+                            //custom cap and charge get the default...
+                            //Custom Chg
+                            //Custom Cap
+                            break;
+                    }
+
+
+                    if (graph2Set.Tables[0].Rows.Count <= points - 1)
+                    {
+                        for (int i = graph2Set.Tables[0].Rows.Count; i <= points - 1; i++)
+                        {
+                            series2.Points.AddXY(i * interval, 0);
+                        }
                     }
                 }
 
@@ -1994,7 +2376,10 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
+                this.Invoke((MethodInvoker)delegate()
+                {
+                    MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                });
             }
 
 

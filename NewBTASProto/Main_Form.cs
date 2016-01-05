@@ -37,6 +37,7 @@ namespace NewBTASProto
 
                 InitializeGrid();
                 InitializeTimers();
+                fillPlotCombos(0);
                 Scan();
 
                 SetChargersCriticalAtStart();
@@ -77,7 +78,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show(new Form() { TopMost = true }, "In Main_Form:  " + ex.ToString());
+                MessageBox.Show(this, "In Main_Form:  " + ex.ToString());
             }
 
 
@@ -94,6 +95,7 @@ namespace NewBTASProto
             //create the thread...
             ThreadPool.QueueUserWorkItem(s =>
             {
+                
                 CancellationToken token = (CancellationToken)s;
                 while (true)
                 {
@@ -123,6 +125,11 @@ namespace NewBTASProto
                         Thread.Sleep(100);
                     }
 
+                    // check to see if we are shutting down...
+                    if (token.IsCancellationRequested)
+                    {
+                        return;
+                    }
                 }
 
             }, cLabelUpdate.Token);                     // end thread
@@ -174,7 +181,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
+                MessageBox.Show(this, "Error: Failed to create a database connection. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             //  now try to access it
@@ -193,7 +200,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             finally
@@ -296,7 +303,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
+                MessageBox.Show(this, "Error: Failed to create a database connection. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             //  now try to access it
@@ -313,7 +320,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to store new data in the DataBase.\n" + ex.Message);
+                MessageBox.Show(this, "Error: Failed to store new data in the DataBase.\n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -325,7 +332,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
+                MessageBox.Show(this, "Error: Failed to create a database connection. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             try
@@ -340,7 +347,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to store new data in the DataBase.\n" + ex.Message);
+                MessageBox.Show(this, "Error: Failed to store new data in the DataBase.\n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -352,7 +359,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
+                MessageBox.Show(this, "Error: Failed to create a database connection. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             try
@@ -367,7 +374,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to store new data in the DataBase.\n" + ex.Message);
+                MessageBox.Show(this, "Error: Failed to store new data in the DataBase.\n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -379,7 +386,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
+                MessageBox.Show(this, "Error: Failed to create a database connection. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             try
@@ -394,7 +401,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to store new data in the DataBase.\n" + ex.Message);
+                MessageBox.Show(this, "Error: Failed to store new data in the DataBase.\n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -544,7 +551,7 @@ namespace NewBTASProto
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
+                        MessageBox.Show(this, "Error: Failed to create a database connection. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
                     //  now try to access it
@@ -565,7 +572,7 @@ namespace NewBTASProto
                     catch (Exception ex)
                     {
                         myAccessConn.Close();
-                        MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                        MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
 
@@ -594,7 +601,7 @@ namespace NewBTASProto
                     catch (Exception ex)
                     {
                         myAccessConn.Close();
-                        MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                        MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
 
@@ -656,7 +663,7 @@ namespace NewBTASProto
             }
             catch
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Probablem loading battery data!");
+                MessageBox.Show(this, "Probablem loading battery data!");
                 
                 // we don't have battery data...
                 // reset to default...
@@ -711,9 +718,14 @@ namespace NewBTASProto
             {
                 if ((bool)d.Rows[i][5] == true)
                 {
-                    DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "There is a test running. If you quit, the test data will no longer be recorded. You will also need to attend to the charger associated with the test, as it will no longer be computer controlled.", "Are you sure you want to quit?", MessageBoxButtons.OKCancel);
+                    DialogResult dialogResult = MessageBox.Show(this, "There is a test running. If you quit, the test data will no longer be recorded. You will also need to attend to the charger associated with the test, as it will no longer be computer controlled.", "Are you sure you want to quit?", MessageBoxButtons.OKCancel);
                     if (dialogResult == DialogResult.OK)
                     {
+                        //loop through and cancel all of the tests...
+                        for (int ii = 0; ii < 16; ii++)
+                        {
+                            cRunTest[ii].Cancel();
+                        }   
                         break;
                     }
                     else
@@ -2116,12 +2128,12 @@ namespace NewBTASProto
 
         private void masterToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(new Form() { TopMost = true }, "Master Selected.  Needs to be implemented...");
+            MessageBox.Show(this, "Master Selected.  Needs to be implemented...");
         }
 
         private void slaveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(new Form() { TopMost = true }, "Slave Selected.  Needs to be implemented...");
+            MessageBox.Show(this, "Slave Selected.  Needs to be implemented...");
         }
 
         private void cMSChargerType_Opening(object sender, CancelEventArgs e)
@@ -2404,7 +2416,7 @@ namespace NewBTASProto
                 {
                     if (frm is ICSettingsForm)
                     {
-                        MessageBox.Show(new Form() { TopMost = true }, @"You must close the Intelligetnt Charger Configuration Interface before turning on AutoConfig");
+                        MessageBox.Show(this, @"You must close the Intelligetnt Charger Configuration Interface before turning on AutoConfig");
                         return;
                     }
                 }
@@ -2531,6 +2543,25 @@ namespace NewBTASProto
                 dataGridView1.Columns[10].Width = (78 * dataGridView1.Width) / 1017;
                 cumWidth += (78 * dataGridView1.Width) / 1017;
                 dataGridView1.Columns[11].Width = (dataGridView1.Width - 43) - cumWidth;
+            }
+
+
+            // font adjustment section
+            if (dataGridView1.Width < 800)
+            {
+                dataGridView1.Font = new Font(dataGridView1.Font.Name, 6);
+            }
+            else if (dataGridView1.Width < 1000)
+            {
+                dataGridView1.Font = new Font(dataGridView1.Font.Name, 7.125f);
+            }
+            else if(dataGridView1.Width < 1350)
+            {
+                dataGridView1.Font = new Font(dataGridView1.Font.Name, 8.25f);
+            }
+            else
+            {
+                dataGridView1.Font = new Font(dataGridView1.Font.Name, 10f);
             }
 
         }
@@ -2757,7 +2788,7 @@ namespace NewBTASProto
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(new Form() { TopMost = true }, "Error:  " + ex.ToString());
+                    MessageBox.Show(this, "Error:  " + ex.ToString());
                 }
 
             });
@@ -2777,11 +2808,11 @@ namespace NewBTASProto
                     //try to copy the database from the appdata folder to the selected folder...
 
                     File.Copy(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB", folder + @"\BTAS16NV_" + System.DateTime.Now.ToString("yyyyMMddHHmmssfff") + @".MDB");
-                    MessageBox.Show(new Form() { TopMost = true }, "Database was backed up to:  " + folder);
+                    MessageBox.Show(this, "Database was backed up to:  " + folder);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(new Form() { TopMost = true }, "Database was not backed up!" + Environment.NewLine + ex.ToString());
+                    MessageBox.Show(this, "Database was not backed up!" + Environment.NewLine + ex.ToString());
                 }
 
             }
@@ -2800,7 +2831,7 @@ namespace NewBTASProto
             {
                 if ((bool)d.Rows[i][5] || d.Rows[i][2].ToString() != "")
                 {
-                    MessageBox.Show(new Form() { TopMost = true }, "Please stop all tests and clear all workorders before restoring the database!");
+                    MessageBox.Show(this, "Please stop all tests and clear all workorders before restoring the database!");
                     return;
                 }
             }
@@ -2819,11 +2850,11 @@ namespace NewBTASProto
                     //try to copy the database from the appdata folder to the selected folder...
 
                     File.Copy(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB", folder + @"\BTAS16NV_" + System.DateTime.Now.ToString("yyyyMMddHHmmssfff") + @".MDB");
-                    MessageBox.Show(new Form() { TopMost = true }, "Database was backed up to:  " + folder);
+                    MessageBox.Show(this, "Database was backed up to:  " + folder);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(new Form() { TopMost = true }, "Database was not backed up!" + Environment.NewLine + ex.ToString());
+                    MessageBox.Show(this, "Database was not backed up!" + Environment.NewLine + ex.ToString());
                     return;
                 }
 
@@ -2841,11 +2872,11 @@ namespace NewBTASProto
                         //try to copy the database from the appdata folder to the selected folder...
 
                         File.Copy(file, Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB", true);
-                        MessageBox.Show(new Form() { TopMost = true }, "Selected database has been restored");
+                        MessageBox.Show(this, "Selected database has been restored");
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(new Form() { TopMost = true }, "Database was not restored!" + Environment.NewLine + ex.ToString());
+                        MessageBox.Show(this, "Database was not restored!" + Environment.NewLine + ex.ToString());
                         return;
                     }
                 }
@@ -3025,7 +3056,7 @@ namespace NewBTASProto
 
         private void importDataBaseFromPreviousVersionOfProgramToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "Are you sure you want to continue? While the vast majority of the data from the old program will be imported, some items like standard batteries are no longer supported.  You will need to manually move this information over into the new program.", "Click Yes to continue or No to Cancel the Import.", MessageBoxButtons.YesNo);
+            DialogResult dialogResult = MessageBox.Show(this, "Are you sure you want to continue? While the vast majority of the data from the old program will be imported, some items like standard batteries are no longer supported.  You will need to manually move this information over into the new program.", "Click Yes to continue or No to Cancel the Import.", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.No)
             {
                 return;
@@ -3036,7 +3067,7 @@ namespace NewBTASProto
             {
                 if ((bool)d.Rows[i][5] || d.Rows[i][2].ToString() != "")
                 {
-                    MessageBox.Show(new Form() { TopMost = true }, "Please stop all tests and clear all workorders before restoring the database!");
+                    MessageBox.Show(this, "Please stop all tests and clear all workorders before restoring the database!");
                     return;
                 }
             }
@@ -3052,11 +3083,11 @@ namespace NewBTASProto
                 {
                     //try to copy the database from the appdata folder to the selected folder...
                     File.Copy(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB", folder + @"\BTAS16NV_" + System.DateTime.Now.ToString("yyyyMMddHHmmssfff") + @".MDB");
-                    MessageBox.Show(new Form() { TopMost = true }, "Original database was backed up to:  " + folder);
+                    MessageBox.Show(this, "Original database was backed up to:  " + folder);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(new Form() { TopMost = true }, "Database was not backed up!  Quiting DB import!" + Environment.NewLine + ex.ToString());
+                    MessageBox.Show(this, "Database was not backed up!  Quiting DB import!" + Environment.NewLine + ex.ToString());
                     return;
                 }
 
@@ -3075,7 +3106,7 @@ namespace NewBTASProto
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(new Form() { TopMost = true }, "Database was not restored!" + Environment.NewLine + ex.ToString());
+                        MessageBox.Show(this, "Database was not restored!" + Environment.NewLine + ex.ToString());
                         return;
                     }
 
@@ -3163,15 +3194,29 @@ namespace NewBTASProto
                         cmd.ExecuteNonQuery();
                         conn.Close();
 
+                        //make sure that there is a Contant Voltage test in the test table
+                        try
+                        {
+                            cmdStr = "INSERT INTO TestType ([TESTNAME], [Readings], [Interval]) VALUES ('Constant Voltage', 73, 300);";
+                            cmd = new OleDbCommand(cmdStr, conn);
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                            conn.Close();
+                        }
+                        catch(Exception ex)
+                        {
+                            //already there...
+                        }
+
                         //Now replace the old DB with the imported one...
                         File.Copy(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV_temp.MDB", Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB", true);
 
-                        MessageBox.Show(new Form() { TopMost = true }, "DataBase successfully imported.");
+                        MessageBox.Show(this, "DataBase successfully imported.");
                     }// end try
                     catch(Exception ex)
                     {
                         // that didn't work out!
-                        MessageBox.Show(new Form() { TopMost = true }, "DataBase wasn't imported:  " + ex.ToString());
+                        MessageBox.Show(this, "DataBase wasn't imported:  " + ex.ToString());
                         return;
                     }
                 }// end if
@@ -3530,7 +3575,7 @@ namespace NewBTASProto
             {
                 if (frm is Battery_Reports || frm is Reports_Form || frm is WorkOrderReps)
                 {
-                    MessageBox.Show(new Form() { TopMost = true }, "Please close all reports forms before changing the reports logo.");
+                    MessageBox.Show(this, "Please close all reports forms before changing the reports logo.");
                     return;
                 }
             }
@@ -3548,11 +3593,11 @@ namespace NewBTASProto
                     //try to copy the database from the appdata folder to the selected folder...
 
                     File.Copy(file, Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\rp_logo.jpg", true);
-                    MessageBox.Show(new Form() { TopMost = true }, "Icon file has been updated.");
+                    MessageBox.Show(this, "Icon file has been updated.");
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(new Form() { TopMost = true }, "Icon file was not updated!" + Environment.NewLine + ex.ToString());
+                    MessageBox.Show(this, "Icon file was not updated!" + Environment.NewLine + ex.ToString());
                     return;
                 }
             }// end if
@@ -3591,6 +3636,132 @@ namespace NewBTASProto
         private void label11_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void dataGridView1_Paint(object sender, PaintEventArgs e)
+        {
+            // header adjustment section
+            // we'll look at the size of the string using MeasureString and adjust accordingly
+            string measureString = "Auto Config";
+            SizeF stringSize = new SizeF();
+            stringSize = e.Graphics.MeasureString(measureString, dataGridView1.Font);
+
+            if (stringSize.Width > dataGridView1.Columns[12].Width - 4)
+            {
+                dataGridView1.Columns[12].HeaderCell.Value = "A.C.";
+            }
+            else
+            {
+                dataGridView1.Columns[12].HeaderCell.Value = "Auto Config";
+            }
+
+            measureString = "In Use";
+            stringSize = e.Graphics.MeasureString(measureString, dataGridView1.Font);
+
+            if (stringSize.Width > dataGridView1.Columns[4].Width - 12)
+            {
+                if (dataGridView1.Columns[4].HeaderCell.Value.ToString() != "I.U.")
+                {
+                    dataGridView1.Columns[4].HeaderCell.Value = "I.U.";
+                }
+            }
+            else
+            {
+                if (dataGridView1.Columns[4].HeaderCell.Value.ToString() != "In Use")
+                {
+                    dataGridView1.Columns[4].HeaderCell.Value = "In Use";
+                }
+            }
+
+            measureString = "Charger Status";
+            stringSize = e.Graphics.MeasureString(measureString, dataGridView1.Font);
+
+            if (stringSize.Width > dataGridView1.Columns[11].Width - 12)
+            {
+                if (dataGridView1.Columns[11].HeaderCell.Value.ToString() != "C. Stat")
+                {
+                    dataGridView1.Columns[11].HeaderCell.Value = "C. Stat";
+                }
+            }
+            else
+            {
+                if (dataGridView1.Columns[11].HeaderCell.Value.ToString() != "Charger Status")
+                {
+                    dataGridView1.Columns[11].HeaderCell.Value = "Charger Status";
+                }
+            }
+
+            measureString = "Charger Type";
+            stringSize = e.Graphics.MeasureString(measureString, dataGridView1.Font);
+
+            if (stringSize.Width > dataGridView1.Columns[10].Width - 12)
+            {
+                if (dataGridView1.Columns[10].HeaderCell.Value.ToString() != "C. Type")
+                {
+                    dataGridView1.Columns[10].HeaderCell.Value = "C. Type";
+                }
+            }
+            else
+            {
+                if (dataGridView1.Columns[10].HeaderCell.Value.ToString() != "Charger Type")
+                {
+                    dataGridView1.Columns[10].HeaderCell.Value = "Charger Type";
+                }
+            }
+
+            measureString = "Charger ID";
+            stringSize = e.Graphics.MeasureString(measureString, dataGridView1.Font);
+
+            if (stringSize.Width > dataGridView1.Columns[9].Width - 12)
+            {
+                if (dataGridView1.Columns[9].HeaderCell.Value.ToString() != "CID")
+                {
+                    dataGridView1.Columns[9].HeaderCell.Value = "CID";
+                }
+            }
+            else
+            {
+                if (dataGridView1.Columns[9].HeaderCell.Value.ToString() != "Charger ID")
+                {
+                    dataGridView1.Columns[9].HeaderCell.Value = "Charger ID";
+                }
+            }
+
+            measureString = "Link Charger";
+            stringSize = e.Graphics.MeasureString(measureString, dataGridView1.Font);
+
+            if (stringSize.Width > dataGridView1.Columns[8].Width - 12)
+            {
+                if (dataGridView1.Columns[8].HeaderCell.Value.ToString() != "Link C.")
+                {
+                    dataGridView1.Columns[8].HeaderCell.Value = "Link C.";
+                }
+            }
+            else
+            {
+                if (dataGridView1.Columns[8].HeaderCell.Value.ToString() != "Link Charger")
+                {
+                    dataGridView1.Columns[8].HeaderCell.Value = "Link Charger";
+                }
+            }
+
+            measureString = "Recording Status";
+            stringSize = e.Graphics.MeasureString(measureString, dataGridView1.Font);
+
+            if (stringSize.Width > dataGridView1.Columns[7].Width - 12)
+            {
+                if (dataGridView1.Columns[7].HeaderCell.Value.ToString() != "Status")
+                {
+                    dataGridView1.Columns[7].HeaderCell.Value = "Status";
+                }
+            }
+            else
+            {
+                if (dataGridView1.Columns[7].HeaderCell.Value.ToString() != "Recording Status")
+                {
+                    dataGridView1.Columns[7].HeaderCell.Value = "Recording Status";
+                }
+            }
         }
 
     }// end mainform class section...

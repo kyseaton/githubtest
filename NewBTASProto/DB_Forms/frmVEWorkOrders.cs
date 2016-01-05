@@ -74,7 +74,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
+                MessageBox.Show(this, "Error: Failed to create a database connection. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             //  now try to access it
@@ -93,7 +93,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             finally
@@ -152,7 +152,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
+                MessageBox.Show(this, "Error: Failed to create a database connection. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             //  now try to access it
@@ -170,7 +170,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             finally
@@ -205,7 +205,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
+                MessageBox.Show(this, "Error: Failed to create a database connection. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             //  now try to access it
@@ -223,7 +223,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             finally
@@ -259,7 +259,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
+                MessageBox.Show(this, "Error: Failed to create a database connection. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             //  now try to access it
@@ -278,7 +278,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             finally
@@ -373,7 +373,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
+                MessageBox.Show(this, "Error: Failed to create a database connection. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             //  now try to access it
@@ -392,7 +392,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             finally
@@ -429,7 +429,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
+                MessageBox.Show(this, "Error: Failed to create a database connection. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             //  now try to access it
@@ -448,7 +448,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             finally
@@ -504,7 +504,7 @@ namespace NewBTASProto
             {
                 // they don't match!
                 // ask if the user is sure that they want to continue...
-                DialogResult dialogResult = MessageBox.Show(this, "Looks like this record has been updated without being saved.  Are you sure you want to navigate away without saving?", "Click Yes to continue or No return.", MessageBoxButtons.YesNo);
+                DialogResult dialogResult = MessageBox.Show(this, "Looks like this record has been updated without being saved.  Are you sure you want to navigate away without saving?", "Click Yes to continue or No return.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                 if (dialogResult == DialogResult.No)
                 {
                     lastValid = false;
@@ -559,7 +559,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
+                MessageBox.Show(this, "Error: Failed to create a database connection. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             //  now try to access it
@@ -583,7 +583,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -813,20 +813,20 @@ namespace NewBTASProto
 
             if (!comboBox1.Items.Contains(comboBox1.Text))
             {
-                MessageBox.Show(new Form() { TopMost = true }, "The selected battery serial number is not in the database.");
+                MessageBox.Show(this, "The selected battery serial number is not in the database.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Inhibit = true;
                 return;
             }
             else if (comboBox1.Text == "")
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Please select a battery serial number.");
+                MessageBox.Show(this, "Please select a battery serial number.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Inhibit = true;
                 return;
             }
 
             else if (textBox1.Text.Contains(" "))
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Work order names cannot have spaces in them.  Please correct and press save again.");
+                MessageBox.Show(this, "Work order names cannot have spaces in them.  Please correct and press save again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Inhibit = true;
                 return;
             }
@@ -853,7 +853,7 @@ namespace NewBTASProto
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to create a database connection. \n" + ex.Message);
+                    MessageBox.Show(this, "Error: Failed to create a database connection. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     Inhibit = true;
                     return;
                 }
@@ -873,7 +873,7 @@ namespace NewBTASProto
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(new Form() { TopMost = true }, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message);
+                    MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     Inhibit = true;
                     return;
                 }
@@ -887,7 +887,7 @@ namespace NewBTASProto
                 if (foundRows.Length != 0)
                 {
                     Inhibit = true;
-                    MessageBox.Show(new Form() { TopMost = true }, "That battery is already assigned to an Open order");
+                    MessageBox.Show(this, "That battery is already assigned to an Open order");
                     return;
                 }
             }
@@ -959,7 +959,7 @@ namespace NewBTASProto
 
                     //now update the combobox..
                     toolStripCBWorkOrders.ComboBox.Text = textBox1.Text.Replace("'", "''");
-                    MessageBox.Show(textBox1.Text.Replace("'", "''") + " has been updated.");
+                    MessageBox.Show(this, textBox1.Text.Replace("'", "''") + " has been updated.", "Successful", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 
                 }
                 else
@@ -993,7 +993,7 @@ namespace NewBTASProto
                     // update the dataTable with the new customer ID also..
                     current[0] = max + 1;
                     max += 1;
-                    MessageBox.Show(textBox1.Text + " has been created.");
+                    MessageBox.Show(this, textBox1.Text + " has been created.", "Successful", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
 
                 updateCurVals();
@@ -1045,7 +1045,7 @@ namespace NewBTASProto
             }// end try
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString());
+                MessageBox.Show(this, ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -1053,7 +1053,7 @@ namespace NewBTASProto
         {
             try
             {
-                if (MessageBox.Show(new Form() { TopMost = true }, "Are you sure you want to remove this work order?", "Delete Record", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (MessageBox.Show(this, "Are you sure you want to remove this work order?", "Delete Record", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                 {
                     // set up the db Connection
                     string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
@@ -1102,7 +1102,7 @@ namespace NewBTASProto
                     }
                     else
                     {
-                        MessageBox.Show(new Form() { TopMost = true }, "That record was not in the DB. You must save it in order to delete it.");
+                        MessageBox.Show(this, "That record was not in the DB. You must save it in order to delete it.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                     UpdateView();
                     updateCurVals();
@@ -1111,7 +1111,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Deletion Error" + ex.ToString());
+                MessageBox.Show(this, "Deletion Error" + ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
         }
@@ -1124,10 +1124,10 @@ namespace NewBTASProto
                 //first see if there is anything to delete
                 if (testList.Tables[0].Rows.Count < 1)
                 {
-                    MessageBox.Show(new Form() { TopMost = true }, "No tests to delete!");
+                    MessageBox.Show(this, "No tests to delete!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
 
-                else if (MessageBox.Show(new Form() { TopMost = true }, "Are you sure you want to remove this test?", "Delete Record", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                else if (MessageBox.Show(this, "Are you sure you want to remove this test?", "Delete Record", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                 {
                     // set up the db Connection
                     string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
@@ -1159,7 +1159,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show(new Form() { TopMost = true }, "Deletion Error" + ex.ToString());
+                MessageBox.Show(this, "Deletion Error" + ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
         }
@@ -1211,7 +1211,7 @@ namespace NewBTASProto
                 textBox8.Enabled = false;
                 textBox10.Enabled = false;
                 textBox11.Enabled = false;
-                button1.Enabled = false;
+                button1.Enabled = true;
                 comboBox2.Enabled = false;
                 saveToolStripButton.Enabled = false;
                 bindingNavigatorDeleteItem.Enabled = false;

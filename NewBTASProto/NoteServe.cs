@@ -232,7 +232,7 @@ namespace NewBTASProto
 
                     // Send the message
                     smtp.Send(message);
-                    MessageBox.Show(new Form() { TopMost = true }, "Test Message Sent!");
+                    MessageBox.Show(this, "Test Message Sent!");
 
                 }
                 catch (Exception ex)
