@@ -3958,6 +3958,7 @@ namespace NewBTASProto
                 if (MasterSlaveTest) { updateD(slaveRow, 7, "Complete"); }
                 updateD(station, 5, false);
                 if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                cRunTest[station].Cancel();
 
             }, cRunTest[station].Token); // end thread
 

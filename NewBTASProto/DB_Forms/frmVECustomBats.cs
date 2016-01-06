@@ -250,9 +250,9 @@ namespace NewBTASProto
             textBox2.DataBindings.Add("Text", bindingSource1, "BatteryModel");
             textBox3.DataBindings.Add("Text", bindingSource1, "BPN");
             comboBox13.DataBindings.Add("Text", bindingSource1, "BTECH");
-            textBox6.DataBindings.Add("Text", bindingSource1, "VOLT");
-            textBox7.DataBindings.Add("Text", bindingSource1, "NCELLS");
-            textBox8.DataBindings.Add("Text", bindingSource1, "CAP");
+            numericUpDown89.DataBindings.Add("Text", bindingSource1, "VOLT");
+            numericUpDown88.DataBindings.Add("Text", bindingSource1, "NCELLS");
+            numericUpDown90.DataBindings.Add("Text", bindingSource1, "CAP");
             textBox21.DataBindings.Add("Text", bindingSource1, "BCVMIN");
             textBox22.DataBindings.Add("Text", bindingSource1, "BCVMAX");
             textBox23.DataBindings.Add("Text", bindingSource1, "COT");
@@ -518,9 +518,9 @@ namespace NewBTASProto
             curTemp3 = textBox3.Text;
             curTemp4 = comboBox13.Text;
 
-            curTemp5 = textBox6.Text;
-            curTemp6 = textBox7.Text;
-            curTemp7 = textBox8.Text;
+            curTemp5 = numericUpDown89.Text;
+            curTemp6 = numericUpDown88.Text;
+            curTemp7 = numericUpDown90.Text;
 
             curTemp10 = textBox27.Text;
             curTemp11 = textBox28.Text;
@@ -767,9 +767,9 @@ namespace NewBTASProto
                 string temp3 = textBox3.Text;
                 string temp4 = comboBox13.Text;
 
-                string temp5 = textBox6.Text;
-                string temp6 = textBox7.Text;
-                string temp7 = textBox8.Text;
+                string temp5 = numericUpDown89.Text;
+                string temp6 = numericUpDown88.Text;
+                string temp7 = numericUpDown90.Text;
 
                 string temp10 = textBox27.Text;
                 string temp11 = textBox28.Text;
@@ -921,9 +921,9 @@ namespace NewBTASProto
                 textBox3.Text = temp3;
                 comboBox13.Text = temp4;
 
-                textBox6.Text = temp5;
-                textBox7.Text = temp6;
-                textBox8.Text = temp7;
+                numericUpDown89.Text = temp5;
+                numericUpDown88.Text = temp6;
+                numericUpDown90.Text = temp7;
 
                 textBox27.Text = temp10;
                 textBox28.Text = temp11;
@@ -1109,9 +1109,9 @@ namespace NewBTASProto
                         "', BatteryModel='" + textBox2.Text.Replace("'", "''") +
                         "', BPN='" + textBox3.Text.Replace("'", "''") +
                         "', BTECH='" + comboBox13.Text.Replace("'", "''") +
-                        "', VOLT='" + textBox6.Text.Replace("'", "''") +
-                        "', NCELLS='" + textBox7.Text.Replace("'", "''") +
-                        "', CAP='" + textBox8.Text.Replace("'", "''") +
+                        "', VOLT='" + numericUpDown89.Text.Replace("'", "''") +
+                        "', NCELLS='" + numericUpDown88.Text.Replace("'", "''") +
+                        "', CAP='" + numericUpDown90.Text.Replace("'", "''") +
                         "', BCVMIN='" + textBox21.Text.Replace("'", "''") +
                         "', BCVMAX='" + textBox22.Text.Replace("'", "''") +
                         "', COT='" + textBox23.Text.Replace("'", "''") +
@@ -1267,8 +1267,8 @@ namespace NewBTASProto
                             //update the four rows and then break...
                             ((Main_Form)this.Owner).pci.Rows[i][0] = textBox2.Text.Replace("'", "''");
                             if (comboBox13.Text.Replace("'", "''") != "") { ((Main_Form)this.Owner).pci.Rows[i][1] = comboBox13.Text.Replace("'", "''"); }
-                            if (textBox6.Text.Replace("'", "''") != "") { ((Main_Form)this.Owner).pci.Rows[i][2] = textBox6.Text.Replace("'", "''"); }      // negative 1 is the default...
-                            if (textBox7.Text.Replace("'", "''") != "") { ((Main_Form)this.Owner).pci.Rows[i][3] = textBox7.Text.Replace("'", "''"); }        // negative 1 is the default...
+                            if (numericUpDown89.Text.Replace("'", "''") != "") { ((Main_Form)this.Owner).pci.Rows[i][2] = numericUpDown89.Text.Replace("'", "''"); }      // negative 1 is the default...
+                            if (numericUpDown88.Text.Replace("'", "''") != "") { ((Main_Form)this.Owner).pci.Rows[i][3] = numericUpDown88.Text.Replace("'", "''"); }        // negative 1 is the default...
                             if (textBox21.Text.Replace("'", "''") != "") { ((Main_Form)this.Owner).pci.Rows[i][4] = textBox21.Text.Replace("'", "''"); }        // negative 1 is the default...
                             if (textBox22.Text.Replace("'", "''") != "") { ((Main_Form)this.Owner).pci.Rows[i][5] = textBox22.Text.Replace("'", "''"); }        // 24 is the default...
                             if (textBox27.Text.Replace("'", "''") != "") { ((Main_Form)this.Owner).pci.Rows[i][6] = textBox27.Text.Replace("'", "''"); }        // negative 1 is the default...
@@ -1313,9 +1313,9 @@ namespace NewBTASProto
                         textBox2.Text.Replace("'", "''") + "','" +
                         textBox3.Text.Replace("'", "''") + "','" +
                         comboBox13.Text.Replace("'", "''") + "','" +
-                        textBox6.Text.Replace("'", "''") + "','" +
-                        textBox7.Text.Replace("'", "''") + "','" +
-                        textBox8.Text.Replace("'", "''") + "','" +
+                        numericUpDown89.Text.Replace("'", "''") + "','" +
+                        numericUpDown88.Text.Replace("'", "''") + "','" +
+                        numericUpDown90.Text.Replace("'", "''") + "','" +
                         textBox21.Text.Replace("'", "''") + "','" +
                         textBox22.Text.Replace("'", "''") + "','" +
                         textBox23.Text.Replace("'", "''") + "','" +
@@ -1803,7 +1803,7 @@ namespace NewBTASProto
                 ((Control)tabControl1.TabPages[9]).Enabled = false;
                 label6.Visible = false;
                 groupBox7.Visible = false;
-                textBox7.Visible = false;
+                numericUpDown88.Visible = false;
                 label32.Visible = true;
                 label33.Visible = true;
                 textBox21.Visible = true;
@@ -1818,7 +1818,7 @@ namespace NewBTASProto
                 ((Control)tabControl1.TabPages[9]).Enabled = true;
                 label6.Visible = true;
                 groupBox7.Visible = true;
-                textBox7.Visible = true;
+                numericUpDown88.Visible = true;
                 label32.Visible = false;
                 label33.Visible = false;
                 textBox21.Visible = false;
@@ -1941,9 +1941,9 @@ namespace NewBTASProto
                 textBox3.Text != curTemp3 ||
                 comboBox13.Text != curTemp4 ||
 
-                textBox6.Text != curTemp5 ||
-                textBox7.Text != curTemp6 ||
-                textBox8.Text != curTemp7 ||
+                numericUpDown89.Text != curTemp5 ||
+                numericUpDown88.Text != curTemp6 ||
+                numericUpDown90.Text != curTemp7 ||
 
                 textBox27.Text != curTemp10 ||
                 textBox28.Text != curTemp11 ||

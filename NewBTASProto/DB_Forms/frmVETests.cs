@@ -34,7 +34,7 @@ namespace NewBTASProto
             // Open database containing all the battery data....
 
             strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
-            strAccessSelect = @"SELECT * FROM TestType WHERE TESTNAME LIKE 'Custom%' ORDER BY TESTNAME ASC";
+            strAccessSelect = @"SELECT * FROM TestType WHERE TESTNAME='Custom Cap' OR TESTNAME='Custom Chg' ORDER BY TESTNAME ASC";
 
             Customers = new DataSet();
             OleDbConnection myAccessConn = null;

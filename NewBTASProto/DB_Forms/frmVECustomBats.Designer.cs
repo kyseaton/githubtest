@@ -49,11 +49,9 @@
             this.textBox28 = new System.Windows.Forms.TextBox();
             this.textBox29 = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.numericUpDown88 = new System.Windows.Forms.NumericUpDown();
             this.comboBox13 = new System.Windows.Forms.ComboBox();
             this.label11 = new System.Windows.Forms.Label();
-            this.textBox8 = new System.Windows.Forms.TextBox();
-            this.textBox7 = new System.Windows.Forms.TextBox();
-            this.textBox6 = new System.Windows.Forms.TextBox();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
@@ -354,9 +352,12 @@
             this.label113 = new System.Windows.Forms.Label();
             this.comboBox8 = new System.Windows.Forms.ComboBox();
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
+            this.numericUpDown89 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown90 = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.bindingNavigator1)).BeginInit();
             this.bindingNavigator1.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown88)).BeginInit();
             this.groupBox7.SuspendLayout();
             this.groupBox8.SuspendLayout();
             this.groupBox11.SuspendLayout();
@@ -482,6 +483,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown54)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown55)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown89)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown90)).BeginInit();
             this.SuspendLayout();
             // 
             // bindingNavigator1
@@ -670,11 +673,11 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.numericUpDown90);
+            this.groupBox1.Controls.Add(this.numericUpDown89);
+            this.groupBox1.Controls.Add(this.numericUpDown88);
             this.groupBox1.Controls.Add(this.comboBox13);
             this.groupBox1.Controls.Add(this.label11);
-            this.groupBox1.Controls.Add(this.textBox8);
-            this.groupBox1.Controls.Add(this.textBox7);
-            this.groupBox1.Controls.Add(this.textBox6);
             this.groupBox1.Controls.Add(this.textBox3);
             this.groupBox1.Controls.Add(this.label9);
             this.groupBox1.Controls.Add(this.label7);
@@ -692,6 +695,28 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
             this.groupBox1.Leave += new System.EventHandler(this.groupBox1_Leave);
+            // 
+            // numericUpDown88
+            // 
+            this.numericUpDown88.Location = new System.Drawing.Point(348, 64);
+            this.numericUpDown88.Maximum = new decimal(new int[] {
+            24,
+            0,
+            0,
+            0});
+            this.numericUpDown88.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDown88.Name = "numericUpDown88";
+            this.numericUpDown88.Size = new System.Drawing.Size(129, 20);
+            this.numericUpDown88.TabIndex = 82;
+            this.numericUpDown88.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
             // comboBox13
             // 
@@ -716,27 +741,6 @@
             this.label11.TabIndex = 81;
             this.label11.Text = "Manufacturer:  ";
             // 
-            // textBox8
-            // 
-            this.textBox8.Location = new System.Drawing.Point(348, 40);
-            this.textBox8.Name = "textBox8";
-            this.textBox8.Size = new System.Drawing.Size(129, 20);
-            this.textBox8.TabIndex = 6;
-            // 
-            // textBox7
-            // 
-            this.textBox7.Location = new System.Drawing.Point(348, 66);
-            this.textBox7.Name = "textBox7";
-            this.textBox7.Size = new System.Drawing.Size(129, 20);
-            this.textBox7.TabIndex = 7;
-            // 
-            // textBox6
-            // 
-            this.textBox6.Location = new System.Drawing.Point(348, 14);
-            this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(129, 20);
-            this.textBox6.TabIndex = 5;
-            // 
             // textBox3
             // 
             this.textBox3.Location = new System.Drawing.Point(94, 63);
@@ -756,7 +760,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(285, 43);
+            this.label7.Location = new System.Drawing.Point(285, 40);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(57, 13);
             this.label7.TabIndex = 69;
@@ -765,7 +769,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(252, 69);
+            this.label6.Location = new System.Drawing.Point(252, 66);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(90, 13);
             this.label6.TabIndex = 68;
@@ -774,7 +778,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(249, 17);
+            this.label5.Location = new System.Drawing.Point(249, 14);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(93, 13);
             this.label5.TabIndex = 67;
@@ -4157,6 +4161,42 @@
             this.bindingSource1.ListChanged += new System.ComponentModel.ListChangedEventHandler(this.bindingSource1_ListChanged);
             this.bindingSource1.PositionChanged += new System.EventHandler(this.bindingSource1_PositionChanged);
             // 
+            // numericUpDown89
+            // 
+            this.numericUpDown89.DecimalPlaces = 1;
+            this.numericUpDown89.Location = new System.Drawing.Point(348, 12);
+            this.numericUpDown89.Maximum = new decimal(new int[] {
+            40,
+            0,
+            0,
+            0});
+            this.numericUpDown89.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDown89.Name = "numericUpDown89";
+            this.numericUpDown89.Size = new System.Drawing.Size(129, 20);
+            this.numericUpDown89.TabIndex = 83;
+            this.numericUpDown89.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // numericUpDown90
+            // 
+            this.numericUpDown90.DecimalPlaces = 1;
+            this.numericUpDown90.Location = new System.Drawing.Point(348, 38);
+            this.numericUpDown90.Name = "numericUpDown90";
+            this.numericUpDown90.Size = new System.Drawing.Size(129, 20);
+            this.numericUpDown90.TabIndex = 84;
+            this.numericUpDown90.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
             // frmVECustomBats
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -4184,6 +4224,7 @@
             this.bindingNavigator1.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown88)).EndInit();
             this.groupBox7.ResumeLayout(false);
             this.groupBox7.PerformLayout();
             this.groupBox8.ResumeLayout(false);
@@ -4345,6 +4386,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown54)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown55)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown89)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown90)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -4369,9 +4412,6 @@
         private System.Windows.Forms.TextBox textBox29;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.TextBox textBox8;
-        private System.Windows.Forms.TextBox textBox7;
-        private System.Windows.Forms.TextBox textBox6;
         private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label7;
@@ -4676,5 +4716,8 @@
         private System.Windows.Forms.ComboBox comboBox13;
         private System.Windows.Forms.Label label35;
         private System.Windows.Forms.TextBox textBox23;
+        private System.Windows.Forms.NumericUpDown numericUpDown88;
+        private System.Windows.Forms.NumericUpDown numericUpDown89;
+        private System.Windows.Forms.NumericUpDown numericUpDown90;
     }
 }

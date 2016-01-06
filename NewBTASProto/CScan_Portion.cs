@@ -1521,7 +1521,7 @@ namespace NewBTASProto
                             // pad with zero Vals to help with the look of the plot...
                             // first get the interval and total points
                             int interval = 1;
-                            int points = 61;
+                            int points = 1;
 
                             switch (d.Rows[station][2].ToString())
                             {

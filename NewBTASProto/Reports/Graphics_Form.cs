@@ -584,6 +584,17 @@ namespace NewBTASProto
 
                     this.Invoke((MethodInvoker)delegate()
                     {
+                        // don't let the user look at cell values for SLA bats...
+                        if (cellCable != "10")
+                        {
+                            radioButton2.Enabled = true;
+                        }
+                        else
+                        {
+                            radioButton2.Enabled = false;
+                            radioButton1.Checked = true;
+                        }
+
                         switch (cellCable)
                         {
                             case "1":
@@ -741,6 +752,23 @@ namespace NewBTASProto
                                 comboBox6.Items.Add("Cell 20");
                                 comboBox6.Items.Add("Cell 21");
                                 break;
+                            case "10":
+                                // update the cells value
+                                if (cell1 == 0) { cell1 = 20; }
+                                // Battery combobox
+                                comboBox5.Items.Clear();
+                                //comboBox5.Text = "";
+                                comboBox5.Items.Add("Voltage");
+                                comboBox5.Items.Add("Current");
+                                comboBox5.Items.Add("Temperature 1");
+                                comboBox5.Items.Add("Temperature 2");
+                                comboBox5.Items.Add("Temperature 3");
+                                comboBox5.Items.Add("Temperature 4");
+                                // Cells combobox
+                                comboBox6.Items.Clear();
+                                //comboBox6.Text = "";
+                                comboBox6.Items.Add(" ");
+                                break;
                             default:
                                 // update the cells value
                                 if (cell1 == 0) { cell1 = 20; }
@@ -751,7 +779,8 @@ namespace NewBTASProto
                                 comboBox5.Items.Add("Voltage 2");
                                 comboBox5.Items.Add("Voltage 3");
                                 comboBox5.Items.Add("Voltage 4");
-                                comboBox5.Items.Add("Current");
+                                comboBox5.Items.Add("Current 1");
+                                comboBox5.Items.Add("Current 2");
                                 comboBox5.Items.Add("Temperature 1");
                                 comboBox5.Items.Add("Temperature 2");
                                 comboBox5.Items.Add("Temperature 3");
@@ -1041,6 +1070,17 @@ namespace NewBTASProto
 
                     this.Invoke((MethodInvoker)delegate()
                     {
+                        // don't let the user look at cell values for SLA bats...
+                        if (cellCable != "10")
+                        {
+                            radioButton4.Enabled = true;
+                        }
+                        else
+                        {
+                            radioButton4.Enabled = false;
+                            radioButton3.Checked = true;
+                        }
+
                         switch (cellCable)
                         {
                             case "1":
@@ -1210,6 +1250,23 @@ namespace NewBTASProto
                                 comboBox8.Items.Add("Cell 20");
                                 comboBox8.Items.Add("Cell 21");
                                 break;
+                            case "10":
+                                // update the cells value
+                                if (cell2 == 0) { cell2 = 20; }
+                                // Battery combobox
+                                comboBox7.Items.Clear();
+                                //comboBox7.Text = "";
+                                comboBox7.Items.Add("Voltage");
+                                comboBox7.Items.Add("Current");
+                                comboBox7.Items.Add("Temperature 1");
+                                comboBox7.Items.Add("Temperature 2");
+                                comboBox7.Items.Add("Temperature 3");
+                                comboBox7.Items.Add("Temperature 4");
+                                // Cells combobox
+                                comboBox8.Items.Clear();
+                                //comboBox8.Text = "";
+                                comboBox8.Items.Add(" ");
+                                break;
                             default:
                                 // update the cells value
                                 if (cell2 == 0) 
@@ -1223,7 +1280,8 @@ namespace NewBTASProto
                                 comboBox7.Items.Add("Voltage 2");
                                 comboBox7.Items.Add("Voltage 3");
                                 comboBox7.Items.Add("Voltage 4");
-                                comboBox7.Items.Add("Current");
+                                comboBox7.Items.Add("Current 1");
+                                comboBox7.Items.Add("Current 2");
                                 comboBox7.Items.Add("Temperature 1");
                                 comboBox7.Items.Add("Temperature 2");
                                 comboBox7.Items.Add("Temperature 3");
@@ -1432,7 +1490,11 @@ namespace NewBTASProto
                         q = 13;
                         break;
                     case "Current":
+                    case "Current 1":
                         q = 8;
+                        break;
+                    case "Current 2":
+                        q = 9;
                         break;
                     case "Temperature 1":
                         q = 38;
@@ -1563,82 +1625,108 @@ namespace NewBTASProto
                 // Here we will look at the Value selected and then plot graph1Set
 
                 //find out which graph to plot from the selected text
+                int numCells = cell1;
+
                 switch (comboBox6.Text)
                 {
                     case "Ending Voltages":
                         q = 999;
                         break;
                     case "Cell 1":
-                        q = 14;
+                        if (GlobalVars.Pos2Neg) { q = 13 + numCells; }
+                        else { q = 14; }
                         break;
                     case "Cell 2":
-                        q = 15;
+                        if (GlobalVars.Pos2Neg) { q = 13 + numCells - 1; }
+                        else { q = 15; }
                         break;
                     case "Cell 3":
-                        q = 16;
+                        if (GlobalVars.Pos2Neg) { q = 13 + numCells - 2; }
+                        else { q = 16; }
                         break;
                     case "Cell 4":
-                        q = 17;
+                        if (GlobalVars.Pos2Neg) { q = 13 + numCells - 3; }
+                        else { q = 17; }
                         break;
                     case "Cell 5":
-                        q = 18;
+                        if (GlobalVars.Pos2Neg) { q = 13 + numCells - 4; }
+                        else { q = 18; }
                         break;
                     case "Cell 6":
-                        q = 19;
+                        if (GlobalVars.Pos2Neg) { q = 13 + numCells - 5; }
+                        else { q = 19; }
                         break;
                     case "Cell 7":
-                        q = 20;
+                        if (GlobalVars.Pos2Neg) { q = 13 + numCells - 6; }
+                        else { q = 20; }
                         break;
                     case "Cell 8":
-                        q = 21;
+                        if (GlobalVars.Pos2Neg) { q = 13 + numCells - 7; }
+                        else { q = 21; }
                         break;
                     case "Cell 9":
-                        q = 22;
+                        if (GlobalVars.Pos2Neg) { q = 13 + numCells - 8; }
+                        else { q = 22; }
                         break;
                     case "Cell 10":
-                        q = 23;
+                        if (GlobalVars.Pos2Neg) { q = 13 + numCells - 9; }
+                        else { q = 23; }
                         break;
                     case "Cell 11":
-                        q = 24;
+                        if (GlobalVars.Pos2Neg) { q = 13 + numCells - 10; }
+                        else { q = 24; }
                         break;
                     case "Cell 12":
-                        q = 25;
+                        if (GlobalVars.Pos2Neg) { q = 13 + numCells - 11; }
+                        else { q = 25; }
                         break;
                     case "Cell 13":
-                        q = 26;
+                        if (GlobalVars.Pos2Neg) { q = 13 + numCells - 12; }
+                        else { q = 26; }
                         break;
                     case "Cell 14":
-                        q = 27;
+                        if (GlobalVars.Pos2Neg) { q = 13 + numCells - 13; }
+                        else { q = 27; }
                         break;
                     case "Cell 15":
-                        q = 28;
+                        if (GlobalVars.Pos2Neg) { q = 13 + numCells - 14; }
+                        else { q = 28; }
                         break;
                     case "Cell 16":
-                        q = 29;
+                        if (GlobalVars.Pos2Neg) { q = 13 + numCells - 15; }
+                        else { q = 29; }
                         break;
                     case "Cell 17":
-                        q = 30;
+                        if (GlobalVars.Pos2Neg) { q = 13 + numCells - 16; }
+                        else { q = 30; }
                         break;
                     case "Cell 18":
-                        q = 31;
+                        if (GlobalVars.Pos2Neg) { q = 13 + numCells - 17; }
+                        else { q = 31; }
                         break;
                     case "Cell 19":
-                        q = 32;
+                        if (GlobalVars.Pos2Neg) { q = 13 + numCells - 18; }
+                        else { q = 32; }
                         break;
                     case "Cell 20":
-                        q = 33;
+                        if (GlobalVars.Pos2Neg) { q = 13 + numCells - 19; }
+                        else { q = 33; }
                         break;
                     case "Cell 21":
-                        q = 34;
+                        if (GlobalVars.Pos2Neg) { q = 13 + numCells - 20; }
+                        else { q = 34; }
                         break;
                     case "Cell 22":
-                        q = 35;
+                        if (GlobalVars.Pos2Neg) { q = 13 + numCells - 21; }
+                        else { q = 35; }
                         break;
                     case "Cell 23":
-                        q = 36;
+                        if (GlobalVars.Pos2Neg) { q = 13 + numCells - 22; }
+                        else { q = 36; }
                         break;
                     case "Cell 24":
-                        q = 37;
+                        if (GlobalVars.Pos2Neg) { q = 13 + numCells - 23; }
+                        else { q = 37; }
                         break;
                     default:
                         q = 999;
@@ -1663,9 +1751,18 @@ namespace NewBTASProto
                 {
                     for (int i = 0; i < cell1; i++)
                     {
-                        series1.Points.AddXY(i + 1, graph1Set.Tables[0].Rows[graph1Set.Tables[0].Rows.Count - 1][i + 14]);
-                        // color test
-                        series1.Points[i].Color = pointColor(technology1, 1, double.Parse(graph1Set.Tables[0].Rows[graph1Set.Tables[0].Rows.Count - 1][i + 14].ToString()), type1);
+                        if (GlobalVars.Pos2Neg == false)
+                        {
+                            series1.Points.AddXY(i + 1, graph1Set.Tables[0].Rows[graph1Set.Tables[0].Rows.Count - 1][i + 14]);
+                            // color test
+                            series1.Points[i].Color = pointColor(technology1, 1, double.Parse(graph1Set.Tables[0].Rows[graph1Set.Tables[0].Rows.Count - 1][i + 14].ToString()), type1);
+                        }
+                        else
+                        {
+                            series1.Points.AddXY(i + 1, graph1Set.Tables[0].Rows[graph1Set.Tables[0].Rows.Count - 1][cell1 - i - 1 + 14]);
+                            // color test
+                            series1.Points[i].Color = pointColor(technology1, 1, double.Parse(graph1Set.Tables[0].Rows[graph1Set.Tables[0].Rows.Count - 1][cell1 - i - 1 + 14].ToString()), type1);
+                        }
                     }
                 }
                 else
@@ -1779,6 +1876,8 @@ namespace NewBTASProto
                 switch (comboBox5.Text)
                 {
                     case "Current":
+                    case "Current 1":
+                    case "Current 2":
                         return System.Drawing.Color.Blue;
                     case "Temperature 1":
                     case "Temperature 2":
@@ -1896,12 +1995,14 @@ namespace NewBTASProto
                 switch (comboBox7.Text)
                 {
                     case "Current":
+                    case "Current 1":
+                    case "Current 2":
                         return System.Drawing.Color.Blue;
                     case "Temperature 1":
                     case "Temperature 2":
                     case "Temperature 3":
                     case "Temperature 4":
-                        return System.Drawing.Color.Orange;
+                        return System.Drawing.Color.LightSeaGreen;
                     default:
                         break;
                 }
@@ -2053,7 +2154,11 @@ namespace NewBTASProto
                         q = 13;
                         break;
                     case "Current":
+                    case "Current 1":
                         q = 8;
+                        break;
+                    case "Current 2":
+                        q = 9;
                         break;
                     case "Temperature 1":
                         q = 38;
@@ -2186,6 +2291,7 @@ namespace NewBTASProto
                 if (radioButton4.Checked == false || comboBox8.SelectedIndex < 0) { return; }
                 // Here we will look at the Value selected and then plot graph1Set
 
+                int numCells = cell2;
                 //find out which graph to plot from the selected text
                 switch (comboBox8.Text)
                 {
@@ -2193,76 +2299,100 @@ namespace NewBTASProto
                         q = 999;
                         break;
                     case "Cell 1":
-                        q = 14;
+                        if (GlobalVars.Pos2Neg) { q = 13 + numCells; }
+                        else { q = 14; }
                         break;
                     case "Cell 2":
-                        q = 15;
+                        if (GlobalVars.Pos2Neg) { q = 13 + numCells - 1; }
+                        else { q = 15; }
                         break;
                     case "Cell 3":
-                        q = 16;
+                        if (GlobalVars.Pos2Neg) { q = 13 + numCells - 2; }
+                        else { q = 16; }
                         break;
                     case "Cell 4":
-                        q = 17;
+                        if (GlobalVars.Pos2Neg) { q = 13 + numCells - 3; }
+                        else { q = 17; }
                         break;
                     case "Cell 5":
-                        q = 18;
+                        if (GlobalVars.Pos2Neg) { q = 13 + numCells - 4; }
+                        else { q = 18; }
                         break;
                     case "Cell 6":
-                        q = 19;
+                        if (GlobalVars.Pos2Neg) { q = 13 + numCells - 5; }
+                        else { q = 19; }
                         break;
                     case "Cell 7":
-                        q = 20;
+                        if (GlobalVars.Pos2Neg) { q = 13 + numCells - 6; }
+                        else { q = 20; }
                         break;
                     case "Cell 8":
-                        q = 21;
+                        if (GlobalVars.Pos2Neg) { q = 13 + numCells - 7; }
+                        else { q = 21; }
                         break;
                     case "Cell 9":
-                        q = 22;
+                        if (GlobalVars.Pos2Neg) { q = 13 + numCells - 8; }
+                        else { q = 22; }
                         break;
                     case "Cell 10":
-                        q = 23;
+                        if (GlobalVars.Pos2Neg) { q = 13 + numCells - 9; }
+                        else { q = 23; }
                         break;
                     case "Cell 11":
-                        q = 24;
+                        if (GlobalVars.Pos2Neg) { q = 13 + numCells - 10; }
+                        else { q = 24; }
                         break;
                     case "Cell 12":
-                        q = 25;
+                        if (GlobalVars.Pos2Neg) { q = 13 + numCells - 11; }
+                        else { q = 25; }
                         break;
                     case "Cell 13":
-                        q = 26;
+                        if (GlobalVars.Pos2Neg) { q = 13 + numCells - 12; }
+                        else { q = 26; }
                         break;
                     case "Cell 14":
-                        q = 27;
+                        if (GlobalVars.Pos2Neg) { q = 13 + numCells - 13; }
+                        else { q = 27; }
                         break;
                     case "Cell 15":
-                        q = 28;
+                        if (GlobalVars.Pos2Neg) { q = 13 + numCells - 14; }
+                        else { q = 28; }
                         break;
                     case "Cell 16":
-                        q = 29;
+                        if (GlobalVars.Pos2Neg) { q = 13 + numCells - 15; }
+                        else { q = 29; }
                         break;
                     case "Cell 17":
-                        q = 30;
+                        if (GlobalVars.Pos2Neg) { q = 13 + numCells - 16; }
+                        else { q = 30; }
                         break;
                     case "Cell 18":
-                        q = 31;
+                        if (GlobalVars.Pos2Neg) { q = 13 + numCells - 17; }
+                        else { q = 31; }
                         break;
                     case "Cell 19":
-                        q = 32;
+                        if (GlobalVars.Pos2Neg) { q = 13 + numCells - 18; }
+                        else { q = 32; }
                         break;
                     case "Cell 20":
-                        q = 33;
+                        if (GlobalVars.Pos2Neg) { q = 13 + numCells - 19; }
+                        else { q = 33; }
                         break;
                     case "Cell 21":
-                        q = 34;
+                        if (GlobalVars.Pos2Neg) { q = 13 + numCells - 20; }
+                        else { q = 34; }
                         break;
                     case "Cell 22":
-                        q = 35;
+                        if (GlobalVars.Pos2Neg) { q = 13 + numCells - 21; }
+                        else { q = 35; }
                         break;
                     case "Cell 23":
-                        q = 36;
+                        if (GlobalVars.Pos2Neg) { q = 13 + numCells - 22; }
+                        else { q = 36; }
                         break;
                     case "Cell 24":
-                        q = 37;
+                        if (GlobalVars.Pos2Neg) { q = 13 + numCells - 23; }
+                        else { q = 37; }
                         break;
                     default:
                         q = 999;
@@ -2287,9 +2417,19 @@ namespace NewBTASProto
                 {
                     for (int i = 0; i < cell2; i++)
                     {
-                        series2.Points.AddXY(i + 1, graph2Set.Tables[0].Rows[graph2Set.Tables[0].Rows.Count - 1][i + 14]);
-                        // color test
-                        series2.Points[i].Color = pointColor2(technology2, 1, double.Parse(graph2Set.Tables[0].Rows[graph2Set.Tables[0].Rows.Count - 1][i + 14].ToString()), type2);
+                        if (GlobalVars.Pos2Neg == false)
+                        {
+                            series2.Points.AddXY(i + 1, graph2Set.Tables[0].Rows[graph2Set.Tables[0].Rows.Count - 1][i + 14]);
+                            // color test
+                            series2.Points[i].Color = pointColor2(technology2, 1, double.Parse(graph2Set.Tables[0].Rows[graph2Set.Tables[0].Rows.Count - 1][i + 14].ToString()), type2);
+                        }
+                        else
+                        {
+                            series2.Points.AddXY(i + 1, graph2Set.Tables[0].Rows[graph2Set.Tables[0].Rows.Count - 1][cell2 - i - 1 + 14]);
+                            // color test
+                            series2.Points[i].Color = pointColor2(technology2, 1, double.Parse(graph2Set.Tables[0].Rows[graph2Set.Tables[0].Rows.Count - 1][cell2 - i - 1 + 14].ToString()), type2);
+                        }
+                    
                     }
                 }
                 else
