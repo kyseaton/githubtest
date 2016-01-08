@@ -1606,5 +1606,116 @@ namespace NewBTASProto
             }
         }
 
+        private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == 0)
+            {
+                ThreadPool.QueueUserWorkItem(s =>
+                {
+                    int i = 0;
+
+                    // we double clicked on the first column do we have a Graph or test report windo open?
+                    FormCollection fc = Application.OpenForms;
+
+                    // first the graphics_form section
+                    foreach (Form frm in fc)
+                    {
+                        if (frm is Graphics_Form)
+                        {
+                            if (frm.WindowState == FormWindowState.Minimized)
+                            {
+                                frm.WindowState = FormWindowState.Normal;
+                            }
+
+                            Graphics_Form to_control = (Graphics_Form)frm;
+                            this.Invoke((MethodInvoker)delegate()
+                            {
+                                to_control.comboBox1.SelectedValue = toolStripCBWorkOrders.Text;
+                                to_control.comboBox3.SelectedValue = toolStripCBWorkOrders.Text;
+                            });
+
+                            while (to_control.comboBox2.Items.Count < 1)
+                            {
+                                Thread.Sleep(100);
+                                if (i > 20)
+                                {
+                                    // we timed out so we need to return...
+                                    return;
+                                }
+                            }
+
+                            i = 0;
+                            while (to_control.comboBox4.Items.Count < 1)
+                            {
+                                Thread.Sleep(100);
+                                if (i > 20)
+                                {
+                                    // we timed out so we need to return...
+                                    return;
+                                }
+                            }
+
+                            Thread.Sleep(200);
+
+                            this.Invoke((MethodInvoker)delegate()
+                            {
+                                to_control.comboBox2.SelectedIndex = e.RowIndex + 1;
+                                to_control.comboBox4.SelectedIndex = e.RowIndex + 1;
+                            });
+
+                        }
+
+                    }
+
+                    // and now the reports_form section
+                    foreach (Form frm in fc)
+                    {
+                        if (frm is Reports_Form)
+                        {
+                            if (frm.WindowState == FormWindowState.Minimized)
+                            {
+                                frm.WindowState = FormWindowState.Normal;
+                            }
+
+                            Reports_Form to_control = (Reports_Form)frm;
+                            this.Invoke((MethodInvoker)delegate()
+                            {
+                                to_control.comboBox1.SelectedValue = toolStripCBWorkOrders.Text;
+                            });
+
+                            i = 0;
+                            while (to_control.comboBox2.Items.Count < 1)
+                            {
+                                Thread.Sleep(100);
+                                if (i > 20)
+                                {
+                                    // we timed out so we need to return...
+                                    return;
+                                }
+                            }
+
+                            Thread.Sleep(200);
+
+                            this.Invoke((MethodInvoker)delegate()
+                            {
+                                to_control.comboBox2.SelectedIndex = e.RowIndex + 1;
+                            });
+
+                            Thread.Sleep(200);
+
+                            this.Invoke((MethodInvoker)delegate()
+                            {
+                                to_control.comboBox3.SelectedIndex = 1;
+                            });
+
+                            return;
+                        }
+                    }
+                });
+
+
+            }
+        }
+
     }
 }

@@ -371,10 +371,10 @@
         #endregion
 
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.ComboBox comboBox1;
-        private System.Windows.Forms.ComboBox comboBox2;
-        private System.Windows.Forms.ComboBox comboBox3;
-        private System.Windows.Forms.ComboBox comboBox4;
+        public System.Windows.Forms.ComboBox comboBox1;
+        public System.Windows.Forms.ComboBox comboBox2;
+        public System.Windows.Forms.ComboBox comboBox3;
+        public System.Windows.Forms.ComboBox comboBox4;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;

@@ -1523,8 +1523,8 @@ namespace NewBTASProto
                             (interval * 1000).ToString() + "','" +                                 //interval in msec
                             station.ToString() + "','" +                                           // station number
                             d.Rows[station][10].ToString() + "',#" +                               // charger type
-                            DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "#,#" +                 // start date
-                            DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "#,'" +                 // date completed
+                            DateTime.Now.Add(new TimeSpan(0, 0, 2)).ToString("yyyy-MM-dd HH:mm:ss") + "#,#" +                 // start date
+                            DateTime.Now.Add(new TimeSpan(0, 0, 2)).ToString("yyyy-MM-dd HH:mm:ss") + "#,'" +                 // date completed
                             comboText + "','" +                                                    // technician
                             (GlobalVars.CScanData[station].terminalID + 216).ToString() + "','" +  //terminal ID
                             GlobalVars.CScanData[station].CCID.ToString() + "','" +                //cells cable ID
@@ -1559,8 +1559,8 @@ namespace NewBTASProto
                             (interval * 1000).ToString() + "','" +                                  //interval in msec
                             station.ToString() + "','" +                                            // station number
                             d.Rows[station][10].ToString() + "',#" +                                // charger type
-                            DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "#,#" +                  // start date
-                            DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "#,'" +                  // date completed
+                            DateTime.Now.Add(new TimeSpan(0, 0, 2)).ToString("yyyy-MM-dd HH:mm:ss") + "#,#" +                  // start date
+                            DateTime.Now.Add(new TimeSpan(0, 0, 2)).ToString("yyyy-MM-dd HH:mm:ss") + "#,'" +                  // date completed
                             comboText + "','" +                                                     // technician
                             (GlobalVars.CScanData[station].terminalID + 216).ToString() + "','" +   //terminal ID
                             GlobalVars.CScanData[station].CCID.ToString() + "','" +                 //cells cable ID
@@ -1596,8 +1596,8 @@ namespace NewBTASProto
                             (interval * 1000).ToString() + "','" +                                  //interval in msec
                             station.ToString() + "','" +                                            // station number
                             d.Rows[station][10].ToString() + "',#" +                                // charger type
-                            DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "#,#" +                  // start date
-                            DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "#,'" +                  // date completed
+                            DateTime.Now.Add(new TimeSpan(0, 0, 2)).ToString("yyyy-MM-dd HH:mm:ss") + "#,#" +                  // start date
+                            DateTime.Now.Add(new TimeSpan(0, 0, 2)).ToString("yyyy-MM-dd HH:mm:ss") + "#,'" +                  // date completed
                             comboText + "','" +                                                     // technician
                             (GlobalVars.CScanData[station].terminalID + 216).ToString() + "','" +   //terminal ID
                             GlobalVars.CScanData[station].CCID.ToString() + "','" +                 //cells cable ID
@@ -1660,8 +1660,8 @@ namespace NewBTASProto
                                 (interval * 1000).ToString() + "','" +                                 //interval in msec
                                 slaveRow.ToString() + "','" +                                           // slaveRow number
                                 d.Rows[slaveRow][10].ToString() + "',#" +                               // charger type
-                                DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "#,#" +                 // start date
-                                DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "#,'" +                 // date completed
+                                DateTime.Now.Add(new TimeSpan(0, 0, 2)).ToString("yyyy-MM-dd HH:mm:ss") + "#,#" +                 // start date
+                                DateTime.Now.Add(new TimeSpan(0, 0, 2)).ToString("yyyy-MM-dd HH:mm:ss") + "#,'" +                 // date completed
                                 comboText + "','" +                                                    // technician
                                 (GlobalVars.CScanData[slaveRow].terminalID + 216).ToString() + "','" +  //terminal ID
                                 GlobalVars.CScanData[slaveRow].CCID.ToString() + "','" +                //cells cable ID
@@ -1696,8 +1696,8 @@ namespace NewBTASProto
                                 (interval * 1000).ToString() + "','" +                                  //interval in msec
                                 slaveRow.ToString() + "','" +                                           // slaveRow number
                                 d.Rows[slaveRow][10].ToString() + "',#" +                               // charger type
-                                DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "#,#" +                  // start date
-                                DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "#,'" +                  // date completed
+                                DateTime.Now.Add(new TimeSpan(0, 0, 2)).ToString("yyyy-MM-dd HH:mm:ss") + "#,#" +                  // start date
+                                DateTime.Now.Add(new TimeSpan(0, 0, 2)).ToString("yyyy-MM-dd HH:mm:ss") + "#,'" +                  // date completed
                                 comboText + "','" +                                                     // technician
                                 (GlobalVars.CScanData[slaveRow].terminalID + 216).ToString() + "','" +  //terminal ID
                                 GlobalVars.CScanData[slaveRow].CCID.ToString() + "','" +                //cells cable ID
@@ -1733,8 +1733,8 @@ namespace NewBTASProto
                                 (interval * 1000).ToString() + "','" +                                  //interval in msec
                                 slaveRow.ToString() + "','" +                                           // slaveRow number
                                 d.Rows[slaveRow][10].ToString() + "',#" +                               // charger type
-                                DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "#,#" +                  // start date
-                                DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "#,'" +                  // date completed
+                                DateTime.Now.Add(new TimeSpan(0, 0, 2)).ToString("yyyy-MM-dd HH:mm:ss") + "#,#" +                  // start date
+                                DateTime.Now.Add(new TimeSpan(0, 0, 2)).ToString("yyyy-MM-dd HH:mm:ss") + "#,'" +                  // date completed
                                 comboText + "','" +                                                     // technician
                                 (GlobalVars.CScanData[slaveRow].terminalID + 216).ToString() + "','" +  //terminal ID
                                 GlobalVars.CScanData[slaveRow].CCID.ToString() + "','" +                //cells cable ID
@@ -2016,6 +2016,7 @@ namespace NewBTASProto
 
                     clearTLock();
                     cRunTest[station].Cancel();
+                    updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
                     return;
                 }
                 #endregion
@@ -2062,6 +2063,7 @@ namespace NewBTASProto
                                     });
                                     clearTLock();
                                     cRunTest[station].Cancel();
+                                    updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
                                     return;
                                 }  // end if
 
@@ -2088,6 +2090,7 @@ namespace NewBTASProto
                                     });
                                     clearTLock();
                                     cRunTest[station].Cancel();
+                                    updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
                                     return;
                                 }  // end if
                             } // end if
@@ -2111,6 +2114,7 @@ namespace NewBTASProto
                                     });
                                     clearTLock();
                                     cRunTest[station].Cancel();
+                                    updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
                                     return;
                                 }  // end if
                             } // end if
@@ -2134,6 +2138,7 @@ namespace NewBTASProto
                                     });
                                     clearTLock();
                                     cRunTest[station].Cancel();
+                                    updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
                                     return;
                                 }  // end if
                             } // end if
@@ -2157,6 +2162,7 @@ namespace NewBTASProto
                                     });
                                     clearTLock();
                                     cRunTest[station].Cancel();
+                                    updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
                                     return;
                                 }  // end if
                             } // end if
@@ -2181,6 +2187,7 @@ namespace NewBTASProto
                                     });
                                     clearTLock();
                                     cRunTest[station].Cancel();
+                                    updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
                                     return;
                                 }  // end if
                             } // end if
@@ -2204,6 +2211,7 @@ namespace NewBTASProto
                                     });
                                     clearTLock();
                                     cRunTest[station].Cancel();
+                                    updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
                                     return;
                                 }  // end if
                             } // end if
@@ -2228,6 +2236,7 @@ namespace NewBTASProto
                                     });
                                     clearTLock();
                                     cRunTest[station].Cancel();
+                                    updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
                                     return;
                                 }  // end if
                             } // end if
@@ -2259,6 +2268,7 @@ namespace NewBTASProto
 
                         clearTLock();
                         cRunTest[station].Cancel();
+                        updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
                         return;
                     }
                     #endregion
@@ -2323,6 +2333,7 @@ namespace NewBTASProto
                         });
                         clearTLock();
                         cRunTest[station].Cancel();
+                        updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
                         return;
                     }
                     #endregion
@@ -2396,6 +2407,7 @@ namespace NewBTASProto
 
                         clearTLock();
                         cRunTest[station].Cancel();
+                        updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
                         return;
                     }
                     #endregion
@@ -2501,6 +2513,7 @@ namespace NewBTASProto
 
                         clearTLock();
                         cRunTest[station].Cancel();
+                        updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
                         return;
                     }
                     #endregion
@@ -2539,6 +2552,8 @@ namespace NewBTASProto
                             stopTestToolStripMenuItem.Enabled = false;
                         });
 
+                        //update the finish time
+                        updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
                         return;
                     }
                     #endregion
@@ -2575,6 +2590,8 @@ namespace NewBTASProto
                             });
 
                             clearTLock();
+                            //update the finish time
+                            updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
                             return;
                         }
                         #endregion
@@ -2612,6 +2629,8 @@ namespace NewBTASProto
 
                     clearTLock();   // for good luck!
                     cRunTest[station].Cancel();
+                    //update the finish time
+                    updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
                     return;
                 }
 
@@ -3353,6 +3372,8 @@ namespace NewBTASProto
                             updateD(station, 7, ("Error"));
                             if (MasterSlaveTest) { updateD(slaveRow, 7, "Error"); }
                             cRunTest[station].Cancel();
+                            //update the finish time
+                            updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
                             return;
                         }
                         #endregion
@@ -3463,6 +3484,8 @@ namespace NewBTASProto
                             updateD(station, 5, false);
                             if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
                             cRunTest[station].Cancel();
+                            //update the finish time
+                            updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
                             return;
                         }
 
@@ -3525,6 +3548,8 @@ namespace NewBTASProto
                                                 stopTestToolStripMenuItem.Enabled = false;
                                             });
 
+                                            //update the finish time
+                                            updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
                                             return;
                                         }
 
@@ -3607,6 +3632,8 @@ namespace NewBTASProto
                                         MessageBox.Show(this, "Test failed. Charger Status:  " + d.Rows[station][11].ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     });
                                     cRunTest[station].Cancel();
+                                    //update the finish time
+                                    updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
                                     return;
                                 }// end test fail else
 
@@ -3649,7 +3676,9 @@ namespace NewBTASProto
                                         stopTestToolStripMenuItem.Enabled = false;
                                         MessageBox.Show(this, "Test canceled while in a power fail.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     });
-                                    
+
+                                    //update the finish time
+                                    updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
                                     return;
                                 }
                                 // wait a little before testing again...
@@ -3696,6 +3725,8 @@ namespace NewBTASProto
                                         MessageBox.Show(this, "Current has fallen below minimum threshold. Please check the shunt connection and resume or restart the test.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     });
                                     cRunTest[station].Cancel();
+                                    //update the finish time
+                                    updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
                                     return;
                                 }
                             }
@@ -3733,6 +3764,8 @@ namespace NewBTASProto
                                         MessageBox.Show(this, "Current has fallen below minimum threshold. Please check the shunt connection and resume or restart the test.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     });
                                     cRunTest[station].Cancel();
+                                    //update the finish time
+                                    updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
                                     return;
                                 }
                             }
@@ -3767,6 +3800,8 @@ namespace NewBTASProto
                             MessageBox.Show(this, "Charger disconnected.  Please check connection and resume or restart the test.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         });
                         cRunTest[station].Cancel();
+                        //update the finish time
+                        updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
                         return;
 
                     }
@@ -3842,6 +3877,8 @@ namespace NewBTASProto
                             stopTestToolStripMenuItem.Enabled = false;
                         });
 
+                        //update the finish time
+                        updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
                         return;
                     }
                     #endregion
@@ -3958,10 +3995,104 @@ namespace NewBTASProto
                 if (MasterSlaveTest) { updateD(slaveRow, 7, "Complete"); }
                 updateD(station, 5, false);
                 if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+
+                //update the finish time
+                updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
+                
+                // finally, we need to set the cancel token to cancelled
                 cRunTest[station].Cancel();
 
             }, cRunTest[station].Token); // end thread
 
+        }
+
+        private void updateFinishTime(string MWO1, string MWO2, string MWO3, string SWO1, string SWO2, string SWO3, int stepNum, int stepNum2, int stepNum3, int slaveStepNum, int slaveStepNum2, int slaveStepNum3)
+        {
+            string strSETFINISHTIME = "UPDATE Tests SET DateCompleted= #" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "# WHERE WorkOrderNumber='" + MWO1.Trim() + "' AND StepNumber='" + stepNum.ToString("00") + "'";
+            string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+            OleDbConnection myAccessConn = new OleDbConnection(strAccessConn);
+
+            OleDbCommand myAccessCommand2 = new OleDbCommand(strSETFINISHTIME, myAccessConn);
+
+            lock (dataBaseLock)
+            {
+                myAccessConn.Open();
+                myAccessCommand2.ExecuteNonQuery();
+                myAccessConn.Close();
+            }
+
+            // do the same for MWO2 MWO3 and SW01 SW02 SW03
+
+            if (MWO2 != "")
+            {
+                strSETFINISHTIME = "UPDATE Tests SET DateCompleted= #" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "# WHERE WorkOrderNumber='" + MWO2.Trim() + "' AND StepNumber='" + stepNum2.ToString("00") + "'";
+
+                myAccessCommand2 = new OleDbCommand(strSETFINISHTIME, myAccessConn);
+
+                lock (dataBaseLock)
+                {
+                    myAccessConn.Open();
+                    myAccessCommand2.ExecuteNonQuery();
+                    myAccessConn.Close();
+                }
+
+                if (MWO3 != "")
+                {
+                    strSETFINISHTIME = "UPDATE Tests SET DateCompleted= #" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "# WHERE WorkOrderNumber='" + MWO3.Trim() + "' AND StepNumber='" + stepNum3.ToString("00") + "'";
+
+                    myAccessCommand2 = new OleDbCommand(strSETFINISHTIME, myAccessConn);
+
+                    lock (dataBaseLock)
+                    {
+                        myAccessConn.Open();
+                        myAccessCommand2.ExecuteNonQuery();
+                        myAccessConn.Close();
+                    }
+                }
+            }
+
+            if (SWO1 != "")
+            {
+                strSETFINISHTIME = "UPDATE Tests SET DateCompleted= #" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "# WHERE WorkOrderNumber='" + SWO1.Trim() + "' AND StepNumber='" + slaveStepNum.ToString("00") + "'";
+
+                myAccessCommand2 = new OleDbCommand(strSETFINISHTIME, myAccessConn);
+
+                lock (dataBaseLock)
+                {
+                    myAccessConn.Open();
+                    myAccessCommand2.ExecuteNonQuery();
+                    myAccessConn.Close();
+                }
+                if (SWO2 != "")
+                {
+                    strSETFINISHTIME = "UPDATE Tests SET DateCompleted= #" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "# WHERE WorkOrderNumber='" + SWO2.Trim() + "' AND StepNumber='" + slaveStepNum2.ToString("00") + "'";
+
+                    myAccessCommand2 = new OleDbCommand(strSETFINISHTIME, myAccessConn);
+
+                    lock (dataBaseLock)
+                    {
+                        myAccessConn.Open();
+                        myAccessCommand2.ExecuteNonQuery();
+                        myAccessConn.Close();
+                    }
+
+                    if (SWO3 != "")
+                    {
+                        strSETFINISHTIME = "UPDATE Tests SET DateCompleted= #" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "# WHERE WorkOrderNumber='" + SWO3.Trim() + "' AND StepNumber='" + slaveStepNum3.ToString("00") + "'";
+
+                        myAccessCommand2 = new OleDbCommand(strSETFINISHTIME, myAccessConn);
+
+                        lock (dataBaseLock)
+                        {
+                            myAccessConn.Open();
+                            myAccessCommand2.ExecuteNonQuery();
+                            myAccessConn.Close();
+                        }
+
+                    }
+                }
+
+            }
         }// end RunTest
 
         private readonly object tLock = new object();

@@ -540,6 +540,7 @@
             this.dataGridView1.Size = new System.Drawing.Size(501, 352);
             this.dataGridView1.TabIndex = 30;
             this.dataGridView1.TabStop = false;
+            this.dataGridView1.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellDoubleClick);
             // 
             // label3
             // 

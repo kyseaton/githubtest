@@ -24,7 +24,7 @@
     <MapFileExtensions>true</MapFileExtensions>
     <UpdateUrl>http://www.jfmeng.com/BTAS16_update/</UpdateUrl>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>83</ApplicationRevision>
+    <ApplicationRevision>85</ApplicationRevision>
     <ApplicationVersion>6.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -272,7 +272,21 @@
     <EmbeddedResource Include="ICSettingsForm.resx">
       <DependentUpon>ICSettingsForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reports\WOTestSum.rdlc" />
+    <EmbeddedResource Include="Reports\CellDataNP19.rdlc" />
+    <EmbeddedResource Include="Reports\CellDataPN19.rdlc" />
+    <EmbeddedResource Include="Reports\WOTestSum_07_NP.rdlc" />
+    <EmbeddedResource Include="Reports\WOTestSum_04_BAT.rdlc" />
+    <EmbeddedResource Include="Reports\WOTestSum_11_NP.rdlc" />
+    <EmbeddedResource Include="Reports\WOTestSum_07_PN.rdlc" />
+    <EmbeddedResource Include="Reports\WOTestSum_19_NP.rdlc" />
+    <EmbeddedResource Include="Reports\WOTestSum_11_PN.rdlc" />
+    <EmbeddedResource Include="Reports\WOTestSum_20_NP.rdlc" />
+    <EmbeddedResource Include="Reports\WOTestSum_19_PN.rdlc" />
+    <EmbeddedResource Include="Reports\WOTestSum_21_NP.rdlc" />
+    <EmbeddedResource Include="Reports\WOTestSum_20_PN.rdlc" />
+    <EmbeddedResource Include="Reports\WOTestSum_21_PN.rdlc" />
+    <EmbeddedResource Include="Reports\WOTestSum_24_PN.rdlc" />
+    <EmbeddedResource Include="Reports\WOTestSum_24_NP.rdlc" />
     <EmbeddedResource Include="Reports\WorkOrderSum.rdlc" />
     <EmbeddedResource Include="Reports\CellDataNP7.rdlc" />
     <EmbeddedResource Include="Reports\CellDataPN7.rdlc" />

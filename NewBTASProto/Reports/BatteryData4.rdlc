@@ -792,7 +792,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>= IIf(First(Fields!gUseF.Value, "MetaData"), Fields!BT1.Value * 1.8 + 32, Fields!BT1.Value)</Value>
+                              <Value>= IIf(Fields!BT1.Value = -99, "Open",IIf(Fields!BT1.Value = -98, "Cold",IIF(Fields!BT1.Value = -97, "Hot",IIF(Fields!BT1.Value = -96, "Shorted",IIf(First(Fields!gUseF.Value, "MetaData"), Fields!BT1.Value * 1.8 + 32, Fields!BT1.Value)))))</Value>
                               <Style>
                                 <FontFamily>Lucida Sans</FontFamily>
                                 <FontSize>9pt</FontSize>
@@ -814,6 +814,7 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -825,7 +826,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>= IIf(First(Fields!gUseF.Value, "MetaData"), Fields!BT2.Value * 1.8 + 32, Fields!BT2.Value)</Value>
+                              <Value>= IIf(Fields!BT2.Value = -99, "Open",IIf(Fields!BT2.Value = -98, "Cold",IIF(Fields!BT2.Value = -97, "Hot",IIF(Fields!BT2.Value = -96, "Shorted",IIf(First(Fields!gUseF.Value, "MetaData"), Fields!BT2.Value * 1.8 + 32, Fields!BT2.Value)))))</Value>
                               <Style>
                                 <FontFamily>Lucida Sans</FontFamily>
                                 <FontSize>9pt</FontSize>
@@ -858,7 +859,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>= IIf(First(Fields!gUseF.Value, "MetaData"), Fields!BT3.Value * 1.8 + 32, Fields!BT3.Value)</Value>
+                              <Value>= IIf(Fields!BT3.Value = -99, "Open",IIf(Fields!BT3.Value = -98, "Cold",IIF(Fields!BT3.Value = -97, "Hot",IIF(Fields!BT3.Value = -96, "Shorted",IIf(First(Fields!gUseF.Value, "MetaData"), Fields!BT3.Value * 1.8 + 32, Fields!BT3.Value)))))</Value>
                               <Style>
                                 <FontFamily>Lucida Sans</FontFamily>
                                 <FontSize>9pt</FontSize>
@@ -891,7 +892,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>= IIf(First(Fields!gUseF.Value, "MetaData"), Fields!BT4.Value * 1.8 + 32, Fields!BT4.Value)</Value>
+                              <Value>= IIf(Fields!BT4.Value = -99, "Open",IIf(Fields!BT4.Value = -98, "Cold",IIF(Fields!BT4.Value = -97, "Hot",IIF(Fields!BT4.Value = -96, "Shorted",IIf(First(Fields!gUseF.Value, "MetaData"), Fields!BT4.Value * 1.8 + 32, Fields!BT4.Value)))))</Value>
                               <Style>
                                 <FontFamily>Lucida Sans</FontFamily>
                                 <FontSize>9pt</FontSize>
@@ -957,7 +958,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>= IIf(First(Fields!gUseF.Value, "MetaData"), Fields!BT5.Value * 1.8 + 32, Fields!BT5.Value)</Value>
+                              <Value>= IIf(Fields!BT5.Value = -99, "Open",IIf(Fields!BT5.Value = -98, "Cold",IIF(Fields!BT5.Value = -97, "Hot",IIF(Fields!BT5.Value = -96, "Shorted",IIf(First(Fields!gUseF.Value, "MetaData"), Fields!BT5.Value * 1.8 + 32, Fields!BT5.Value)))))</Value>
                               <Style>
                                 <FontFamily>Lucida Sans</FontFamily>
                                 <FontSize>9pt</FontSize>

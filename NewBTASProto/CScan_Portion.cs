@@ -629,6 +629,7 @@ namespace NewBTASProto
                                     LockWindowUpdate(this.Handle);
                                     label1.Text = "";
                                     LockWindowUpdate(IntPtr.Zero);
+                                    chart1.Titles.Clear();
                                 });
 
                             }

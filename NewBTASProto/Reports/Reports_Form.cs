@@ -528,36 +528,39 @@ namespace NewBTASProto
                 // bind datatable to report viewer
                 this.reportViewer.Reset();
                 this.reportViewer.ProcessingMode = ProcessingMode.Local;
-                //switch (testsPerformed.Tables[0].Rows[comboBox2.SelectedIndex][15].ToString())
-                //{
-                //    case "1":
-                //        // update the cells value
-                //        if (GlobalVars.Pos2Neg == true) { this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.CellDataPN20.rdlc"; }
-                //        else { this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.CellDataNP20.rdlc"; }
-                //        break;
-                //    case "3":
-                //        // update the cells value
-                //        if (GlobalVars.Pos2Neg == true) { this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.CellDataPN11.rdlc"; }
-                //        else { this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.CellDataNP11.rdlc"; }
-                //        break;
-                //    case "4":
-                //        // update the cells value
-                //        if (GlobalVars.Pos2Neg == true) { this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.CellDataPN21.rdlc"; }
-                //        else { this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.CellDataNP21.rdlc"; }
-                //        break;
-                //    case "21":
-                //        // update the cells value
-                //        if (GlobalVars.Pos2Neg == true) { this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.CellDataPN21.rdlc"; }
-                //        else { this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.CellDataNP21.rdlc"; }
-                //        break;
-                //    default:
-                //        // update the cells value
-                //        if (GlobalVars.Pos2Neg == true) { this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.CellDataPN24.rdlc"; }
-                //        else { this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.CellDataNP24.rdlc"; }
-                //        break;
-                //}// end switch
+                switch (testsPerformed.Tables[0].Rows[1][15].ToString())
+                {
+                    case "1":
+                        if (GlobalVars.Pos2Neg == true) { this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.WOTestSum_20_PN.rdlc"; }
+                        else { this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.WOTestSum_20_NP.rdlc"; }
+                        break;
+                    case "2":
+                        if (GlobalVars.Pos2Neg == true) { this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.WOTestSum_19_PN.rdlc"; }
+                        else { this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.WOTestSum_19_NP.rdlc"; }
+                        break;
+                    case "3":
+                        if (GlobalVars.Pos2Neg == true) { this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.WOTestSum_11_PN.rdlc"; }
+                        else { this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.WOTestSum_11_NP.rdlc"; }
+                        break;
+                    case "4":
+                        if (GlobalVars.Pos2Neg == true) { this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.WOTestSum_07_PN.rdlc"; }
+                        else { this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.WOTestSum_07_NP.rdlc"; }
+                        break;
+                    case "10":
+                        this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.WOTestSum_04_BAT.rdlc";
+                        break;
+                    case "21":
+                        if (GlobalVars.Pos2Neg == true) { this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.WOTestSum_21_PN.rdlc"; }
+                        else { this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.WOTestSum_21_NP.rdlc"; }
+                        break;
+                    default:
+                        if (GlobalVars.Pos2Neg == true) { this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.WOTestSum_24_PN.rdlc"; }
+                        else { this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.WOTestSum_24_NP.rdlc"; }
+                        break;
+                }// end switch
 
-                this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.WOTestSum.rdlc";
+
+
                 this.reportViewer.LocalReport.DataSources.Clear();
                 this.reportViewer.LocalReport.EnableExternalImages = true;
                 ReportParameter parameter = new ReportParameter("Path", "file:////" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\rp_logo.jpg");
@@ -1033,6 +1036,11 @@ namespace NewBTASProto
                         if (GlobalVars.Pos2Neg == true) { this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.CellDataPN20.rdlc"; }
                         else { this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.CellDataNP20.rdlc"; }
                         break;
+                    case "2":
+                        // update the cells value
+                        if (GlobalVars.Pos2Neg == true) { this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.CellDataPN19.rdlc"; }
+                        else { this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.CellDataNP19.rdlc"; }
+                        break;
                     case "3":
                         // update the cells value
                         if (GlobalVars.Pos2Neg == true) { this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.CellDataPN11.rdlc"; }
@@ -1040,8 +1048,8 @@ namespace NewBTASProto
                         break;
                     case "4":
                         // update the cells value
-                        if (GlobalVars.Pos2Neg == true) { this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.CellDataPN21.rdlc"; }
-                        else { this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.CellDataNP21.rdlc"; }
+                        if (GlobalVars.Pos2Neg == true) { this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.CellDataPN7.rdlc"; }
+                        else { this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.CellDataNP7.rdlc"; }
                         break;
                     case "21":
                         // update the cells value
@@ -1151,14 +1159,13 @@ namespace NewBTASProto
 
                 switch (testsPerformed.Tables[0].Rows[comboBox2.SelectedIndex][15].ToString())
                 {
+                    case "31":
                     case "10":
                         this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.BatteryData4.rdlc";
                         break;
-                    case "20":
                     case "4":
                         this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.BatteryData3.rdlc";
                         break;
-                    case "19":
                     case "3":
                         this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.BatteryData2.rdlc";
                         break;

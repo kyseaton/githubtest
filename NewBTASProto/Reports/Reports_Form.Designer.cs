@@ -192,18 +192,18 @@
 
         #endregion
 
-        private System.Windows.Forms.ComboBox comboBox1;
-        private System.Windows.Forms.ComboBox comboBox2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.RadioButton radioButton2;
         private System.Windows.Forms.RadioButton radioButton1;
-        private System.Windows.Forms.ComboBox comboBox3;
         private System.Windows.Forms.Label label1;
         private Microsoft.Reporting.WinForms.ReportViewer reportViewer;
         private System.Windows.Forms.BindingSource myDatatableDataTableBindingSource;
         private System.Windows.Forms.BindingSource myDatatableBindingSource;
         private System.Windows.Forms.BindingSource MetaDataBindingSource;
+        public System.Windows.Forms.ComboBox comboBox1;
+        public System.Windows.Forms.ComboBox comboBox2;
+        public System.Windows.Forms.ComboBox comboBox3;
     }
 }

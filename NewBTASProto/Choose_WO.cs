@@ -38,7 +38,7 @@ namespace NewBTASProto
             // Open database containing all the battery data....
 
             strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
-            strAccessSelect = @"SELECT WorkOrderNumber,CustomerName,DateReceived FROM WorkOrders WHERE OrderStatus='Open'";
+            strAccessSelect = @"SELECT WorkOrderNumber,CustomerName,DateReceived FROM WorkOrders WHERE OrderStatus='Open' ORDER BY DateReceived DESC";
 
             DataSet workOrderList1 = new DataSet();
             OleDbConnection myAccessConn = null;
