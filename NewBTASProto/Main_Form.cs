@@ -3764,5 +3764,26 @@ namespace NewBTASProto
             }
         }
 
+        private void toolStripMenuItem43_Click(object sender, EventArgs e)
+        {
+            FormCollection fc = Application.OpenForms;
+
+            foreach (Form frm in fc)
+            {
+                if (frm is BatchReporting)
+                {
+                    if (frm.WindowState == FormWindowState.Minimized)
+                    {
+                        frm.WindowState = FormWindowState.Normal;
+                    }
+                    frm.BringToFront();
+                    return;
+                }
+            }
+            BatchReporting f2 = new BatchReporting();
+            f2.Owner = this;
+            f2.Show();
+        }
+
     }// end mainform class section...
 }

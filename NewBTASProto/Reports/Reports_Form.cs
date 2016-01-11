@@ -17,7 +17,7 @@ namespace NewBTASProto
 {
     public partial class Reports_Form : Form
     {
-        //form wide dataSets used to fill in the two graphs
+        //form wide dataSets used to fill in the report
         DataSet reportSet = new DataSet();
         DataSet testsPerformed = new DataSet();
 
@@ -765,6 +765,11 @@ namespace NewBTASProto
             
             testTable = testsPerformed.Tables[0].Copy();
             testTable.Rows[0].Delete();
+
+            // also get rid of the water level test
+            if(testTable.Rows[0][5].ToString().Contains("Water")){
+                testTable.Rows[0].Delete();
+            }
 
             if (!(comboBox1.SelectedIndex < 0)) // make sure we have a selection to act on...
             {

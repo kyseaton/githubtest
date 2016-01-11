@@ -2018,7 +2018,6 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
               </TablixCells>
@@ -2220,7 +2219,7 @@
             <Paragraph>
               <TextRuns>
                 <TextRun>
-                  <Value>="Step:  " &amp; First(Fields!testComboName.Value, "MetaData")</Value>
+                  <Value EvaluationMode="Constant" />
                   <Style>
                     <FontFamily>Lucida Sans</FontFamily>
                   </Style>

@@ -116,5 +116,77 @@ namespace NewBTASProto.Properties {
                 this["dualPlots"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool cb1 {
+            get {
+                return ((bool)(this["cb1"]));
+            }
+            set {
+                this["cb1"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool cb2 {
+            get {
+                return ((bool)(this["cb2"]));
+            }
+            set {
+                this["cb2"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool cb3 {
+            get {
+                return ((bool)(this["cb3"]));
+            }
+            set {
+                this["cb3"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool cb4 {
+            get {
+                return ((bool)(this["cb4"]));
+            }
+            set {
+                this["cb4"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool cb5 {
+            get {
+                return ((bool)(this["cb5"]));
+            }
+            set {
+                this["cb5"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool cb6 {
+            get {
+                return ((bool)(this["cb6"]));
+            }
+            set {
+                this["cb6"] = value;
+            }
+        }
     }
 }

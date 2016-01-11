@@ -617,6 +617,7 @@ namespace NewBTASProto
                                         CSCANComPort.Close();
 
                                     }
+                                    //  LOOK INTO DISCONNECTION EXCEPTIONS HERE!!!!
                                 }
                             }// end if for selected case
                             // the channel is not in use. clear everything!

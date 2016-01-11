@@ -86,6 +86,12 @@
     <Compile Include="DataSet1.cs">
       <DependentUpon>DataSet1.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Reports\BatchReporting.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Reports\BatchReporting.Designer.cs">
+      <DependentUpon>BatchReporting.cs</DependentUpon>
+    </Compile>
     <Compile Include="MasterFillerInterface.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -271,6 +277,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ICSettingsForm.resx">
       <DependentUpon>ICSettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\BatchReporting.resx">
+      <DependentUpon>BatchReporting.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\CellDataNP19.rdlc" />
     <EmbeddedResource Include="Reports\CellDataPN19.rdlc" />
