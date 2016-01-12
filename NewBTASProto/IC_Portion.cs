@@ -267,6 +267,26 @@ namespace NewBTASProto
                                         });
                                         Thread.Sleep(100);
                                     }
+                                    else if (ex is System.IO.IOException || ex is System.InvalidOperationException)
+                                    {
+                                        this.Invoke((MethodInvoker)delegate
+                                        {
+                                            //let the user know that the comports are no longer working
+                                            label8.Text = "Check Comports' Settings";
+                                            label8.Visible = true;
+                                            sendNote(0, 1, "COMPORTS DISCONNECTED. PLEASE CHECK.");
+                                        });
+
+                                        //cancel
+                                        this.cPollIC.Cancel();
+                                        this.cPollCScans.Cancel();
+                                        this.sequentialScanT.Cancel();
+                                        // close the com ports
+                                        CSCANComPort.Close();
+                                        ICComPort.Close();
+
+                                        return;
+                                    }
                                     else { throw ex; }
                                 }       // end catch
                             }       // end if
@@ -323,6 +343,26 @@ namespace NewBTASProto
                                     if (ex is System.TimeoutException)
                                     {
                                         Thread.Sleep(100);
+                                    }
+                                    else if (ex is System.IO.IOException || ex is System.InvalidOperationException)
+                                    {
+                                        this.Invoke((MethodInvoker)delegate
+                                        {
+                                            //let the user know that the comports are no longer working
+                                            label8.Text = "Check Comports' Settings";
+                                            label8.Visible = true;
+                                            sendNote(0, 1, "COMPORTS DISCONNECTED. PLEASE CHECK.");
+                                        });
+
+                                        //cancel
+                                        this.cPollIC.Cancel();
+                                        this.cPollCScans.Cancel();
+                                        this.sequentialScanT.Cancel();
+                                        // close the com ports
+                                        CSCANComPort.Close();
+                                        ICComPort.Close();
+
+                                        return;
                                     }
                                     else { throw ex; }
                                 }       // end catch
@@ -533,6 +573,26 @@ namespace NewBTASProto
                                             }
                                             Thread.Sleep(100);
                                         }
+                                        else if (ex is System.IO.IOException || ex is System.InvalidOperationException)
+                                        {
+                                            this.Invoke((MethodInvoker)delegate
+                                            {
+                                                //let the user know that the comports are no longer working
+                                                label8.Text = "Check Comports' Settings";
+                                                label8.Visible = true;
+                                                sendNote(0, 1, "COMPORTS DISCONNECTED. PLEASE CHECK.");
+                                            });
+
+                                            //cancel
+                                            this.cPollIC.Cancel();
+                                            this.cPollCScans.Cancel();
+                                            this.sequentialScanT.Cancel();
+                                            // close the com ports
+                                            CSCANComPort.Close();
+                                            ICComPort.Close();
+
+                                            return;
+                                        }
                                         else { throw ex; }
                                     }       // end catch
                                 } // end if
@@ -562,6 +622,26 @@ namespace NewBTASProto
                                     if (ex is System.TimeoutException)
                                     {
                                         // didn't get anything...
+                                    }
+                                    else if (ex is System.IO.IOException || ex is System.InvalidOperationException)
+                                    {
+                                        this.Invoke((MethodInvoker)delegate
+                                        {
+                                            //let the user know that the comports are no longer working
+                                            label8.Text = "Check Comports' Settings";
+                                            label8.Visible = true;
+                                            sendNote(0, 1, "COMPORTS DISCONNECTED. PLEASE CHECK.");
+                                        });
+
+                                        //cancel
+                                        this.cPollIC.Cancel();
+                                        this.cPollCScans.Cancel();
+                                        this.sequentialScanT.Cancel();
+                                        // close the com ports
+                                        CSCANComPort.Close();
+                                        ICComPort.Close();
+
+                                        return;
                                     }
                                     else { throw ex; }
                                 }       // end catch

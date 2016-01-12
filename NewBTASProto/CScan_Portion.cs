@@ -617,7 +617,27 @@ namespace NewBTASProto
                                         CSCANComPort.Close();
 
                                     }
-                                    //  LOOK INTO DISCONNECTION EXCEPTIONS HERE!!!!
+                                    else if (ex is System.IO.IOException || ex is System.InvalidOperationException)
+                                    {
+                                        this.Invoke((MethodInvoker)delegate
+                                        {
+                                            //let the user know that the comports are no longer working
+                                            label8.Text = "Check Comports' Settings";
+                                            label8.Visible = true;
+                                            sendNote(0, 1, "COMPORTS DISCONNECTED. PLEASE CHECK.");
+                                        });
+                                        
+                                        //cancel
+                                        this.cPollIC.Cancel();
+                                        this.cPollCScans.Cancel();
+                                        this.sequentialScanT.Cancel();
+                                        // close the com ports
+                                        CSCANComPort.Close();
+                                        ICComPort.Close();
+
+                                        return;
+                                    }
+
                                 }
                             }// end if for selected case
                             // the channel is not in use. clear everything!
@@ -935,6 +955,26 @@ namespace NewBTASProto
                                                 });
                                             }
                                         }  // end if
+                                        else if (ex is System.IO.IOException || ex is System.InvalidOperationException)
+                                        {
+                                            this.Invoke((MethodInvoker)delegate
+                                            {
+                                                //let the user know that the comports are no longer working
+                                                label8.Text = "Check Comports' Settings";
+                                                label8.Visible = true;
+                                                sendNote(0, 1, "COMPORTS DISCONNECTED. PLEASE CHECK.");
+                                            });
+
+                                            //cancel
+                                            this.cPollIC.Cancel();
+                                            this.cPollCScans.Cancel();
+                                            this.sequentialScanT.Cancel();
+                                            // close the com ports
+                                            CSCANComPort.Close();
+                                            ICComPort.Close();
+
+                                            return;
+                                        }
 
                                     }  // end catch
                                 }  // end if
@@ -1984,7 +2024,7 @@ namespace NewBTASProto
                             //improve pick based on PCI here...
                             try
                             {
-                                if ((int)pci.Rows[currentRow][3] != -1)
+                                if ((int)pci.Rows[currentRow][3] != -1 && pci.Rows[currentRow][1].ToString() != "Sealed Lead Acid")
                                 {
                                     if ((int)pci.Rows[currentRow][3] == 20)
                                     {

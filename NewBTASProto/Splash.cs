@@ -15,11 +15,12 @@ namespace NewBTASProto
 
         bool licGood = false;
         // here are the valid licence numbers
-        static string[] lics = new string[4] {
+        static string[] lics = new string[5] {
             "1111111111",
             "2222222222",
             "3333333333",
-            "5339428555"
+            "5339428555",                       // Chase Gulf Stream
+            "6875678858"                        // Greg Emerson
         };
         // this is the lic dataTable (here for its writexml and readxml methods
         DataTable lic = new DataTable();

@@ -1500,7 +1500,7 @@ namespace NewBTASProto
 
                     // Save the test information to the test table///////////////////////////////////////////////////////////////////////////////////////////
 
-                    // we need the technicial selected in the combo box too..
+                    // we need the technician selected in the combo box too..
                     this.Invoke((MethodInvoker)delegate()
                     {
                         comboText = label2.Text;
