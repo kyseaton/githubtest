@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.OleDb;
 using System.Xml.Serialization;
 using System.IO;
+using System.Deployment;
 
 namespace NewBTASProto
 {
@@ -387,11 +388,20 @@ namespace NewBTASProto
             }
 
             //display mainform
-            Main_Form mf = new Main_Form();
-            // update the options menu
-            mf.Show();
-            //hide this form
-            this.Hide();
+
+            try
+            {
+                Main_Form mf = new Main_Form();
+                // update the options menu
+                mf.Show();
+                //hide this form
+                this.Hide();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("From Main Form: " + ex.Message + Environment.NewLine + ex.StackTrace);
+            }
+
         }
 
         private void InitializeComponent()
@@ -406,7 +416,7 @@ namespace NewBTASProto
             this.pictureBox1.Image = global::NewBTASProto.Properties.Resources.splash6_K;
             this.pictureBox1.Location = new System.Drawing.Point(-2, -1);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(491, 286);
+            this.pictureBox1.Size = new System.Drawing.Size(492, 286);
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);

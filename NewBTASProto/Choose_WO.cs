@@ -18,6 +18,7 @@ namespace NewBTASProto
 
         public Choose_WO(int channel, string fromGrid)
         {
+            
             // save the channel you are working on
             selectedChannel = channel;
 
@@ -278,6 +279,20 @@ namespace NewBTASProto
 
             ((Main_Form)this.Owner).updateWOC(selectedChannel, temp);
             this.Dispose();
+        }
+
+        private void Choose_WO_MouseEnter(object sender, EventArgs e)
+        {
+        }
+
+        private void Choose_WO_Load(object sender, EventArgs e)
+        {
+           
+        }
+
+        private void Choose_WO_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            
         }
 
     }

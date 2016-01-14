@@ -229,6 +229,8 @@
             this.dataGridView1.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_RowEnter);
             this.dataGridView1.Click += new System.EventHandler(this.dataGridView1_Click);
             this.dataGridView1.Paint += new System.Windows.Forms.PaintEventHandler(this.dataGridView1_Paint);
+            this.dataGridView1.MouseEnter += new System.EventHandler(this.dataGridView1_MouseEnter);
+            this.dataGridView1.MouseLeave += new System.EventHandler(this.dataGridView1_MouseLeave);
             this.dataGridView1.Resize += new System.EventHandler(this.dataGridView1_Resize);
             // 
             // menuStrip1
@@ -727,7 +729,7 @@
             // 
             this.toolStripStatusLabel5.Name = "toolStripStatusLabel5";
             this.toolStripStatusLabel5.Size = new System.Drawing.Size(216, 17);
-            this.toolStripStatusLabel5.Text = "Copyright © 2015 JFM Engineering, Inc.";
+            this.toolStripStatusLabel5.Text = "Copyright © 2016 JFM Engineering, Inc.";
             // 
             // toolStripStatusLabel1
             // 
@@ -1060,8 +1062,10 @@
             this.toolStripMenuItem4,
             this.clearToolStripMenuItem2});
             this.cMSTestType.Name = "cMSTestType";
-            this.cMSTestType.Size = new System.Drawing.Size(166, 318);
+            this.cMSTestType.Size = new System.Drawing.Size(166, 340);
             this.cMSTestType.Opening += new System.ComponentModel.CancelEventHandler(this.cMSTestType_Opening);
+            this.cMSTestType.MouseEnter += new System.EventHandler(this.cMSTestType_MouseEnter);
+            this.cMSTestType.MouseLeave += new System.EventHandler(this.cMSTestType_MouseLeave);
             // 
             // asReceivedToolStripMenuItem
             // 
@@ -1229,6 +1233,8 @@
             this.cMSChargerChannel.Name = "cMSChargerChannel";
             this.cMSChargerChannel.Size = new System.Drawing.Size(102, 384);
             this.cMSChargerChannel.Opening += new System.ComponentModel.CancelEventHandler(this.cMSChargerChannel_Opening);
+            this.cMSChargerChannel.MouseEnter += new System.EventHandler(this.cMSChargerChannel_MouseEnter);
+            this.cMSChargerChannel.MouseLeave += new System.EventHandler(this.cMSChargerChannel_MouseLeave);
             // 
             // clearToolStripMenuItem
             // 

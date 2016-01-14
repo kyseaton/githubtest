@@ -1263,6 +1263,8 @@ namespace NewBTASProto
             correctMasterSlave();
             // we always clear the current one..
             updateD(dataGridView1.CurrentRow.Index, 9, "");
+            updateD(dataGridView1.CurrentRow.Index, 10, "");
+            updateD(dataGridView1.CurrentRow.Index, 11, "");
 
             //make sure we clear the current test
             updateD(dataGridView1.CurrentRow.Index, 3, "");
@@ -3154,12 +3156,20 @@ namespace NewBTASProto
                         cmd.ExecuteNonQuery();
                         conn.Close();
 
-                        //Drop COMM3 column from Comconfig
-                        cmdStr = "ALTER TABLE Comconfig DROP COLUMN Comm3";
-                        cmd = new OleDbCommand(cmdStr, conn);
-                        conn.Open();
-                        cmd.ExecuteNonQuery();
-                        conn.Close();
+                        try
+                        {
+                            //Drop COMM3 column from Comconfig
+                            cmdStr = "ALTER TABLE Comconfig DROP COLUMN Comm3";
+                            cmd = new OleDbCommand(cmdStr, conn);
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                            conn.Close();
+                        }
+                        catch
+                        {
+                            //never mind...
+                            conn.Close();
+                        }
 
                         // Change hidden to closed in the work order table
                         cmdStr = "UPDATE WorkOrders SET OrderStatus='Closed' WHERE OrderStatus='Hidden'";
@@ -3783,6 +3793,38 @@ namespace NewBTASProto
             BatchReporting f2 = new BatchReporting();
             f2.Owner = this;
             f2.Show();
+        }
+
+        public bool sshold = false;
+
+        private void dataGridView1_MouseEnter(object sender, EventArgs e)
+        {
+            sshold = true;
+        }
+
+        private void dataGridView1_MouseLeave(object sender, EventArgs e)
+        {
+            sshold = false;
+        }
+
+        private void cMSChargerChannel_MouseEnter(object sender, EventArgs e)
+        {
+            sshold = true;
+        }
+
+        private void cMSChargerChannel_MouseLeave(object sender, EventArgs e)
+        {
+            sshold = false;
+        }
+
+        private void cMSTestType_MouseEnter(object sender, EventArgs e)
+        {
+            sshold = true;
+        }
+
+        private void cMSTestType_MouseLeave(object sender, EventArgs e)
+        {
+            sshold = false;
         }
 
     }// end mainform class section...

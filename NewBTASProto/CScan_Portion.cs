@@ -168,14 +168,30 @@ namespace NewBTASProto
                                             //update chart function
                                             updateChart(testData);
 
+                                            // check if we are a slave row..
+                                            int masterRow = -1;
+                                            if (d.Rows[currentRow][9].ToString().Length > 2 && d.Rows[currentRow][9].ToString().Contains("S"))
+                                            {
+                                                // we have a slave
+                                                string temp = d.Rows[currentRow][9].ToString().Replace("-S", "");
+                                                for (int q = 0; q < 16; q++)
+                                                {
+                                                    if (d.Rows[q][9].ToString().Contains(temp) && d.Rows[q][9].ToString().Contains("M"))
+                                                    {
+                                                        masterRow = q;
+                                                        break;
+                                                    }
+                                                }
+                                            }
+
 
 
                                             //Real Time Data Portion
                                             string tempText = "";
                                             tempText = System.DateTime.Now.ToString("M/d/yyyy") + "       Terminal:  " + testData.terminalID.ToString() + Environment.NewLine;
-                                            tempText += "Temp. Cable:  " + (3 - testData.TCAB).ToString() + "   (" + testData.tempPlateType + ")" + Environment.NewLine;
+                                            tempText += "Temp. Cable:  " + (3 - (masterRow != -1 ? GlobalVars.CScanData[masterRow].TCAB : testData.TCAB)).ToString() + "   (" + (masterRow != -1 ? GlobalVars.CScanData[masterRow].tempPlateType : testData.tempPlateType) + ")" + Environment.NewLine;
                                             tempText += "Cells Cable:  " + testData.CCID.ToString() + "   (" + testData.cellCableType + ")" + Environment.NewLine;
-                                            tempText += "Shunt Cable:  " + testData.SHCID.ToString() + "   (" + testData.shuntCableType + ")" + Environment.NewLine;
+                                            tempText += "Shunt Cable:  " + (masterRow != -1 ? GlobalVars.CScanData[masterRow].SHCID : testData.SHCID).ToString() + "   (" + (masterRow != -1 ? GlobalVars.CScanData[masterRow].shuntCableType : testData.shuntCableType) + ")" + Environment.NewLine;
                                             tempText += Environment.NewLine;
                                             if (testData.cellCableType != "NONE")       // don't show these when we have no cable attached...
                                             {
@@ -202,32 +218,68 @@ namespace NewBTASProto
                                             }
                                             tempText += Environment.NewLine;
                                             // select which currents to display
-                                            if (testData.shuntCableType == "TEST BOX")
+
+                                            // check if we need to use the master Current..
+                                            if (masterRow != -1)
                                             {
-                                                //dispaly both ...
-                                                tempText += "Current#1:  " + testData.currentOne.ToString("00.00") + Environment.NewLine;
-                                                tempText += "Current#2:  " + testData.currentTwo.ToString("00.00") + Environment.NewLine;
-                                            }                                                
-                                            //if we have a mini that is charging...
-                                            else if (d.Rows[currentRow][10].ToString().Contains("mini") && !(d.Rows[currentRow][2].ToString().Contains("Cap") || d.Rows[currentRow][2].ToString().Contains("Discharge")))
-                                            {
-                                                // for the mini case
-                                                tempText += "Current:  " + testData.currentTwo.ToString("00.000") + Environment.NewLine;
+                                                if (GlobalVars.CScanData[masterRow].shuntCableType == "TEST BOX")
+                                                {
+                                                    //dispaly both ...
+                                                    tempText += "Current#1:  " + GlobalVars.CScanData[masterRow].currentOne.ToString("00.00") + Environment.NewLine;
+                                                    tempText += "Current#2:  " + GlobalVars.CScanData[masterRow].currentTwo.ToString("00.00") + Environment.NewLine;
+                                                }
+                                                //if we have a mini that is charging...
+                                                else if (d.Rows[currentRow][10].ToString().Contains("mini") && !(GlobalVars.ICData[chargerNum].testMode.ToString().Contains("Cap") || GlobalVars.ICData[chargerNum].testMode.ToString().Contains("Discharge")))
+                                                {
+                                                    // for the mini case
+                                                    tempText += "Current:  " + GlobalVars.CScanData[masterRow].currentTwo.ToString("00.000") + Environment.NewLine;
+                                                }
+                                                else if (d.Rows[currentRow][10].ToString().Contains("mini"))
+                                                {
+                                                    // all other cases
+                                                    tempText += "Current:  " + (GlobalVars.CScanData[masterRow].currentOne).ToString("00.000") + Environment.NewLine;
+                                                }
+                                                else if (GlobalVars.CScanData[masterRow].shuntCableType == "100A")
+                                                {
+                                                    // all other cases
+                                                    tempText += "Current:  " + GlobalVars.CScanData[masterRow].currentOne.ToString("00.0") + Environment.NewLine;
+                                                }
+                                                else
+                                                {
+                                                    // all other cases
+                                                    tempText += "Current:  " + GlobalVars.CScanData[masterRow].currentOne.ToString("00.00") + Environment.NewLine;
+                                                }
                                             }
-                                            else if (d.Rows[currentRow][10].ToString().Contains("mini"))
-                                            {
-                                                // all other cases
-                                                tempText += "Current:  " + (testData.currentOne).ToString("00.000") + Environment.NewLine;
-                                            }
-                                            else if(testData.shuntCableType == "100A")
-                                            {
-                                                // all other cases
-                                                tempText += "Current:  " + testData.currentOne.ToString("00.0") + Environment.NewLine;
-                                            }
+                                            // normal case
                                             else
                                             {
-                                                // all other cases
-                                                tempText += "Current:  " + testData.currentOne.ToString("00.00") + Environment.NewLine;
+                                                if (testData.shuntCableType == "TEST BOX")
+                                                {
+                                                    //dispaly both ...
+                                                    tempText += "Current#1:  " + testData.currentOne.ToString("00.00") + Environment.NewLine;
+                                                    tempText += "Current#2:  " + testData.currentTwo.ToString("00.00") + Environment.NewLine;
+                                                }
+                                                //if we have a mini that is charging...
+                                                else if (d.Rows[currentRow][10].ToString().Contains("mini") && !(GlobalVars.ICData[chargerNum].testMode.ToString().Contains("Cap") || GlobalVars.ICData[chargerNum].testMode.ToString().Contains("Discharge")))
+                                                {
+                                                    // for the mini case
+                                                    tempText += "Current:  " + testData.currentTwo.ToString("00.000") + Environment.NewLine;
+                                                }
+                                                else if (d.Rows[currentRow][10].ToString().Contains("mini"))
+                                                {
+                                                    // all other cases
+                                                    tempText += "Current:  " + (testData.currentOne).ToString("00.000") + Environment.NewLine;
+                                                }
+                                                else if (testData.shuntCableType == "100A")
+                                                {
+                                                    // all other cases
+                                                    tempText += "Current:  " + testData.currentOne.ToString("00.0") + Environment.NewLine;
+                                                }
+                                                else
+                                                {
+                                                    // all other cases
+                                                    tempText += "Current:  " + testData.currentOne.ToString("00.00") + Environment.NewLine;
+                                                }
                                             }
 
                                             tempText += Environment.NewLine;
@@ -259,7 +311,7 @@ namespace NewBTASProto
                                             tempText += Environment.NewLine;
 
                                             // WE need to display open when we get -99, cold for -98, hot for -97 and shorted for -96
-                                            switch (Convert.ToInt16(testData.TP1))
+                                            switch (masterRow != -1 ? Convert.ToInt16(GlobalVars.CScanData[masterRow].TP1) : Convert.ToInt16(testData.TP1))
                                             {
                                                 case -99:
                                                     tempText += "Temp Plate 1:  Open" + Environment.NewLine;
@@ -274,10 +326,10 @@ namespace NewBTASProto
                                                     tempText += "Temp Plate 1:  Shorted" + Environment.NewLine;
                                                     break;
                                                 default:
-                                                    tempText += "Temp Plate 1:  " + (GlobalVars.useF ? ConvertCelsiusToFahrenheit(testData.TP1).ToString("00.00") : testData.TP1.ToString("00.0")) + Environment.NewLine;
+                                                    tempText += "Temp Plate 1:  " + (GlobalVars.useF ? ConvertCelsiusToFahrenheit(masterRow != -1 ? Convert.ToInt16(GlobalVars.CScanData[masterRow].TP1) : Convert.ToInt16(testData.TP1)).ToString("00.00") : (masterRow != -1 ? Convert.ToInt16(GlobalVars.CScanData[masterRow].TP1) : Convert.ToInt16(testData.TP1)).ToString("00.0")) + Environment.NewLine;
                                                     break;
                                             }
-                                            switch (Convert.ToInt16(testData.TP2))
+                                            switch (masterRow != -1 ? Convert.ToInt16(GlobalVars.CScanData[masterRow].TP2) : Convert.ToInt16(testData.TP2))
                                             {
                                                 case -99:
                                                     tempText += "Temp Plate 2:  Open" + Environment.NewLine;
@@ -292,10 +344,10 @@ namespace NewBTASProto
                                                     tempText += "Temp Plate 2:  Shorted" + Environment.NewLine;
                                                     break;
                                                 default:
-                                                    tempText += "Temp Plate 2:  " + (GlobalVars.useF ? ConvertCelsiusToFahrenheit(testData.TP2).ToString("00.00") : testData.TP2.ToString("00.0")) + Environment.NewLine;
+                                                    tempText += "Temp Plate 2:  " + (GlobalVars.useF ? ConvertCelsiusToFahrenheit(masterRow != -1 ? Convert.ToInt16(GlobalVars.CScanData[masterRow].TP2) : Convert.ToInt16(testData.TP2)).ToString("00.00") : (masterRow != -1 ? Convert.ToInt16(GlobalVars.CScanData[masterRow].TP2) : Convert.ToInt16(testData.TP2)).ToString("00.0")) + Environment.NewLine;
                                                     break;
                                             }
-                                            switch (Convert.ToInt16(testData.TP3))
+                                            switch (masterRow != -1 ? Convert.ToInt16(GlobalVars.CScanData[masterRow].TP3) : Convert.ToInt16(testData.TP3))
                                             {
                                                 case -99:
                                                     tempText += "Temp Plate 3:  Open" + Environment.NewLine;
@@ -310,10 +362,10 @@ namespace NewBTASProto
                                                     tempText += "Temp Plate 3:  Shorted" + Environment.NewLine;
                                                     break;
                                                 default:
-                                                    tempText += "Temp Plate 3:  " + (GlobalVars.useF ? ConvertCelsiusToFahrenheit(testData.TP3).ToString("00.00") : testData.TP3.ToString("00.0")) + Environment.NewLine;
+                                                    tempText += "Temp Plate 3:  " + (GlobalVars.useF ? ConvertCelsiusToFahrenheit(masterRow != -1 ? Convert.ToInt16(GlobalVars.CScanData[masterRow].TP3) : Convert.ToInt16(testData.TP3)).ToString("00.00") : (masterRow != -1 ? Convert.ToInt16(GlobalVars.CScanData[masterRow].TP3) : Convert.ToInt16(testData.TP3)).ToString("00.0")) + Environment.NewLine;
                                                     break;
                                             }
-                                            switch (Convert.ToInt16(testData.TP4))
+                                            switch (masterRow != -1 ? Convert.ToInt16(GlobalVars.CScanData[masterRow].TP4) : Convert.ToInt16(testData.TP4))
                                             {
                                                 case -99:
                                                     tempText += "Temp Plate 4:  Open" + Environment.NewLine;
@@ -328,10 +380,10 @@ namespace NewBTASProto
                                                     tempText += "Temp Plate 4:  Shorted" + Environment.NewLine;
                                                     break;
                                                 default:
-                                                    tempText += "Temp Plate 4:  " + (GlobalVars.useF ? ConvertCelsiusToFahrenheit(testData.TP4).ToString("00.00") : testData.TP4.ToString("00.0")) + Environment.NewLine;
+                                                    tempText += "Temp Plate 4:  " + (GlobalVars.useF ? ConvertCelsiusToFahrenheit(masterRow != -1 ? Convert.ToInt16(GlobalVars.CScanData[masterRow].TP4) : Convert.ToInt16(testData.TP4)).ToString("00.00") : (masterRow != -1 ? Convert.ToInt16(GlobalVars.CScanData[masterRow].TP4) : Convert.ToInt16(testData.TP4)).ToString("00.0")) + Environment.NewLine;
                                                     break;
                                             }
-                                            switch (Convert.ToInt16(testData.TP5))
+                                            switch (masterRow != -1 ? Convert.ToInt16(GlobalVars.CScanData[masterRow].TP5) : Convert.ToInt16(testData.TP5))
                                             {
                                                 case -99:
                                                     tempText += "Ambient Temp:  Open" + Environment.NewLine;
@@ -346,7 +398,7 @@ namespace NewBTASProto
                                                     tempText += "Ambient Temp:  Shorted" + Environment.NewLine;
                                                     break;
                                                 default:
-                                                    tempText += "Ambient Temp:  " + (GlobalVars.useF ? ConvertCelsiusToFahrenheit(testData.TP5).ToString("00.00") : testData.TP5.ToString("00.0")) + Environment.NewLine;
+                                                    tempText += "Ambient Temp:  " + (GlobalVars.useF ? ConvertCelsiusToFahrenheit(masterRow != -1 ? Convert.ToInt16(GlobalVars.CScanData[masterRow].TP5) : Convert.ToInt16(testData.TP5)).ToString("00.00") : (masterRow != -1 ? Convert.ToInt16(GlobalVars.CScanData[masterRow].TP5) : Convert.ToInt16(testData.TP5)).ToString("00.0")) + Environment.NewLine;
                                                     break;
                                             }
 
@@ -397,10 +449,10 @@ namespace NewBTASProto
                                             (d.Rows[currentRow][10].ToString() == "" || dataGridView1.Rows[currentRow].Cells[8].Style.BackColor != Color.Olive || dataGridView1.Rows[currentRow].Cells[8].Style.BackColor != Color.Red))  // if a charger type isn't already there maybe we need to update with a CSCAN controlled charger...
                                         {
                                             // we got a CSCAN connected charger...
-                                            updateD(currentRow, 10, "CCA");
+                                            updateD(currentRow, 10, (GlobalVars.CScanData[currentRow].cellCableType == "CELL SIM" ? "CCA (SIM)" : "CCA"));
                                             if (slaveRow > -1)
                                             {
-                                                updateD(slaveRow, 10, "CCA");
+                                                updateD(slaveRow, 10, (GlobalVars.CScanData[currentRow].cellCableType == "CELL SIM" ? "CCA (SIM)" : "CCA"));
                                             }
                                             if (GlobalVars.CScanData[currentRow].powerOn) 
                                             { 
@@ -446,7 +498,7 @@ namespace NewBTASProto
                                             //(bool)d.Rows[currentRow][8] && 
                                             GlobalVars.CScanData[currentRow].connected == false && 
                                             !d.Rows[currentRow][9].ToString().Contains("S") && 
-                                            d.Rows[currentRow][10].ToString() == "CCA")
+                                            d.Rows[currentRow][10].ToString().Contains("CCA"))
                                         {
                                             updateD(currentRow, 10, "");
                                             if (slaveRow > -1)
@@ -462,7 +514,7 @@ namespace NewBTASProto
                                                 }
                                             });
                                         }
-                                        else if (dataGridView1.Rows[currentRow].Cells[8].Style.BackColor == Color.Olive && GlobalVars.CScanData[currentRow].powerOn == false && !d.Rows[currentRow][9].ToString().Contains("S") && d.Rows[currentRow][10].ToString() == "CCA")
+                                        else if (dataGridView1.Rows[currentRow].Cells[8].Style.BackColor == Color.Olive && GlobalVars.CScanData[currentRow].powerOn == false && !d.Rows[currentRow][9].ToString().Contains("S") && d.Rows[currentRow][10].ToString().Contains("CCA"))
                                         {
                                             this.Invoke((MethodInvoker)delegate 
                                             { 
@@ -489,7 +541,7 @@ namespace NewBTASProto
                                                 }
                                             }
                                         }
-                                        else if (dataGridView1.Rows[currentRow].Cells[8].Style.BackColor == Color.Red && GlobalVars.CScanData[currentRow].powerOn && !d.Rows[currentRow][9].ToString().Contains("S") && d.Rows[currentRow][10].ToString() == "CCA")
+                                        else if (dataGridView1.Rows[currentRow].Cells[8].Style.BackColor == Color.Red && GlobalVars.CScanData[currentRow].powerOn && !d.Rows[currentRow][9].ToString().Contains("S") && d.Rows[currentRow][10].ToString().Contains("CCA"))
                                         {
                                             this.Invoke((MethodInvoker)delegate 
                                             { 
@@ -525,7 +577,7 @@ namespace NewBTASProto
                                                 }
                                             });
                                         }
-                                        else if ((bool)d.Rows[currentRow][4] && (bool)d.Rows[currentRow][8] && d.Rows[currentRow][10].ToString() == "Shunt" && !d.Rows[currentRow][9].ToString().Contains("S") && GlobalVars.CScanData[currentRow].shuntCableType != "NONE")
+                                        else if ((bool)d.Rows[currentRow][4] && d.Rows[currentRow][10].ToString() == "Shunt" && !d.Rows[currentRow][9].ToString().Contains("S") && GlobalVars.CScanData[currentRow].shuntCableType != "NONE")
                                         {
                                             this.Invoke((MethodInvoker)delegate 
                                             { 
@@ -536,7 +588,7 @@ namespace NewBTASProto
                                                 }
                                             });
                                         }
-                                        else if ((bool)d.Rows[currentRow][4] && (bool)d.Rows[currentRow][8] && d.Rows[currentRow][10].ToString() == "Shunt" && !d.Rows[currentRow][9].ToString().Contains("S") && GlobalVars.CScanData[currentRow].shuntCableType == "NONE")
+                                        else if ((bool)d.Rows[currentRow][4] && d.Rows[currentRow][10].ToString() == "Shunt" && !d.Rows[currentRow][9].ToString().Contains("S") && GlobalVars.CScanData[currentRow].shuntCableType == "NONE")
                                         {
                                             updateD(currentRow, 10, "");
                                             if (slaveRow > -1)
@@ -739,10 +791,10 @@ namespace NewBTASProto
                                                 (d.Rows[j][10].ToString() == "" || dataGridView1.Rows[j].Cells[8].Style.BackColor != Color.Olive || dataGridView1.Rows[j].Cells[8].Style.BackColor != Color.Red))  // if a charger type isn't already there maybe we need to update with a CSCAN controlled charger...
                                             {
                                                 // we got a CSCAN connected charger...
-                                                updateD(j, 10, "CCA");
+                                                updateD(j, 10, (GlobalVars.CScanData[j].cellCableType == "CELL SIM" ? "CCA (SIM)" : "CCA"));
                                                 if (slaveRow > -1)
                                                 {
-                                                    updateD(slaveRow, 10, "CCA");
+                                                    updateD(slaveRow, 10, (GlobalVars.CScanData[j].cellCableType == "CELL SIM" ? "CCA (SIM)" : "CCA"));
                                                 }
                                                 if (GlobalVars.CScanData[j].powerOn) 
                                                 { 
@@ -787,7 +839,7 @@ namespace NewBTASProto
                                             else if (
                                                 //(bool)d.Rows[j][8] && 
                                                 GlobalVars.CScanData[j].connected == false && 
-                                                d.Rows[j][10].ToString() == "CCA" && 
+                                                d.Rows[j][10].ToString().Contains("CCA") && 
                                                 !d.Rows[j][9].ToString().Contains("S"))
                                             {
                                                 updateD(j, 10, "");
@@ -804,7 +856,7 @@ namespace NewBTASProto
                                                     }
                                                 });
                                             }
-                                            else if (dataGridView1.Rows[j].Cells[8].Style.BackColor == Color.Olive && GlobalVars.CScanData[j].powerOn == false && d.Rows[j][10].ToString() == "CCA" && !d.Rows[j][9].ToString().Contains("S"))
+                                            else if (dataGridView1.Rows[j].Cells[8].Style.BackColor == Color.Olive && GlobalVars.CScanData[j].powerOn == false && d.Rows[j][10].ToString().Contains("CCA") && !d.Rows[j][9].ToString().Contains("S"))
                                             {
                                                 this.Invoke((MethodInvoker)delegate 
                                                 { 
@@ -832,7 +884,7 @@ namespace NewBTASProto
                                                     }
                                                 }
                                             }
-                                            else if (dataGridView1.Rows[j].Cells[8].Style.BackColor == Color.Red && GlobalVars.CScanData[j].powerOn && d.Rows[j][10].ToString() == "CCA" && !d.Rows[j][9].ToString().Contains("S"))
+                                            else if (dataGridView1.Rows[j].Cells[8].Style.BackColor == Color.Red && GlobalVars.CScanData[j].powerOn && d.Rows[j][10].ToString().Contains("CCA") && !d.Rows[j][9].ToString().Contains("S"))
                                             {
                                                 this.Invoke((MethodInvoker)delegate 
                                                 { 
@@ -867,7 +919,7 @@ namespace NewBTASProto
                                                 }
                                             });
                                         }
-                                        else if ((bool)d.Rows[j][4] && (bool)d.Rows[j][8] && d.Rows[j][10].ToString() == "Shunt" && GlobalVars.CScanData[j].shuntCableType != "NONE" && !d.Rows[j][9].ToString().Contains("S"))
+                                        else if ((bool)d.Rows[j][4] && d.Rows[j][10].ToString() == "Shunt" && GlobalVars.CScanData[j].shuntCableType != "NONE" && !d.Rows[j][9].ToString().Contains("S"))
                                         {
                                             this.Invoke((MethodInvoker)delegate 
                                             { 
@@ -1672,7 +1724,7 @@ namespace NewBTASProto
                         Thread.Sleep(500);             // loop every 0.5 seconds
                         multi += 1;                    // increment multi
                         multi %= 10;                     // test every fourth count
-                        if (toolStripMenuItem30.Checked && multi == 0 && toolStripMenuItem34.Enabled == true)          // sequential scanning is turned on
+                        if (toolStripMenuItem30.Checked && multi == 0 && toolStripMenuItem34.Enabled == true && !sshold)          // sequential scanning is turned on
                         {
                             tempClick = dataGridView1.CurrentRow.Index;
                             //search from tempclick onto the next "in use" row

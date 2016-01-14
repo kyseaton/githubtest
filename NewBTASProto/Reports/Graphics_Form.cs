@@ -758,7 +758,10 @@ namespace NewBTASProto
                                 // Battery combobox
                                 comboBox5.Items.Clear();
                                 //comboBox5.Text = "";
-                                comboBox5.Items.Add("Voltage");
+                                comboBox5.Items.Add("Voltage 1");
+                                comboBox5.Items.Add("Voltage 2");
+                                comboBox5.Items.Add("Voltage 3");
+                                comboBox5.Items.Add("Voltage 4");
                                 comboBox5.Items.Add("Current");
                                 comboBox5.Items.Add("Temperature 1");
                                 comboBox5.Items.Add("Temperature 2");

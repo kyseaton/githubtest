@@ -124,6 +124,9 @@
             this.Name = "Choose_WO";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Select Work Orders";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Choose_WO_FormClosed);
+            this.Load += new System.EventHandler(this.Choose_WO_Load);
+            this.MouseEnter += new System.EventHandler(this.Choose_WO_MouseEnter);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
 

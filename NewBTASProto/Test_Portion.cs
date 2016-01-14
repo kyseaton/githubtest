@@ -139,6 +139,14 @@ namespace NewBTASProto
                 // setup the canellation token
                 CancellationToken token = (CancellationToken)s;
 
+                //cable connected tests
+                bool shuntCon = false;
+                bool tempCon = false;
+                bool cellCon = false;
+                bool oldShuntCon = false;
+                bool oldTempCon = false;
+                bool oldCellCon = false;
+
                 #region startup checks (all cases)
                 // first we check if we have all the relavent options selected
                 if ((string)d.Rows[station][1] == "")
@@ -561,6 +569,18 @@ namespace NewBTASProto
                     }
 
                 }
+
+                shuntCon = true;
+                cellCon = true;
+                oldShuntCon = true;
+                oldCellCon = true;
+                if(GlobalVars.CScanData[station].tempPlateType != "NONE")
+                {
+                    tempCon = true;
+                    oldTempCon = true;
+                }
+
+                
                 #endregion
 
                 #region db connection setup (all cases)
@@ -3400,6 +3420,70 @@ namespace NewBTASProto
                     #region Here is where we are going to look for charging issues!
                     //Lets test for a charger issue now
                     // there are going to be three sections, ICA section, CCA section and SHUNT section
+
+                    //CScan tests
+                    //Lets look to see if the cables have become disconnected...
+                    
+                    //check them
+                    if (GlobalVars.CScanData[station].shuntCableType == "NONE")
+                    {
+                        shuntCon = false;
+                    }
+                    else
+                    {
+                        shuntCon = true;
+                    }
+                    if (GlobalVars.CScanData[station].tempPlateType == "NONE")
+                    {
+                        tempCon = false;
+                    }
+                    else
+                    {
+                        tempCon = true;
+                    }
+                    if (GlobalVars.CScanData[station].cellCableType == "NONE")
+                    {
+                        cellCon = false;
+                    }
+                    else
+                    {
+                        cellCon = true;
+                    }
+
+                    //figure out if something bad happened
+                    if (shuntCon == false && oldShuntCon == true)
+                    {
+                        //shunt just got disconnected!
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            sendNote(station, 1, "Shunt disconnected from station " + station.ToString());
+                        });
+                    }
+                    if (tempCon == false && oldTempCon == true)
+                    {
+                        //shunt just got disconnected!
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            sendNote(station, 1, "Temp-Plate disconnected from station " + station.ToString());
+                        });
+                    }
+                    if (cellCon == false && oldCellCon == true)
+                    {
+                        //shunt just got disconnected!
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            sendNote(station, 1, "Cells cable disconnected from station " + station.ToString());
+                        });
+                    }
+
+                    //reset the old ones...
+                    oldShuntCon = shuntCon;
+                    oldTempCon = tempCon;
+                    oldCellCon = cellCon;
+
+
+
+                    //charger specific tests
                     if (d.Rows[station][10].ToString().Contains("ICA") && !startUpDelay && !runAsShunt)
                     {
                         //current check part...
