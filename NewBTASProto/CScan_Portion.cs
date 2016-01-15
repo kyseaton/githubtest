@@ -326,7 +326,7 @@ namespace NewBTASProto
                                                     tempText += "Temp Plate 1:  Shorted" + Environment.NewLine;
                                                     break;
                                                 default:
-                                                    tempText += "Temp Plate 1:  " + (GlobalVars.useF ? ConvertCelsiusToFahrenheit(masterRow != -1 ? Convert.ToInt16(GlobalVars.CScanData[masterRow].TP1) : Convert.ToInt16(testData.TP1)).ToString("00.00") : (masterRow != -1 ? Convert.ToInt16(GlobalVars.CScanData[masterRow].TP1) : Convert.ToInt16(testData.TP1)).ToString("00.0")) + Environment.NewLine;
+                                                    tempText += "Temp Plate 1:  " + (GlobalVars.useF ? ConvertCelsiusToFahrenheit(masterRow != -1 ? GlobalVars.CScanData[masterRow].TP1 : testData.TP1).ToString("00.00") : (masterRow != -1 ? GlobalVars.CScanData[masterRow].TP1 : testData.TP1).ToString("00.0")) + Environment.NewLine;
                                                     break;
                                             }
                                             switch (masterRow != -1 ? Convert.ToInt16(GlobalVars.CScanData[masterRow].TP2) : Convert.ToInt16(testData.TP2))
@@ -344,7 +344,7 @@ namespace NewBTASProto
                                                     tempText += "Temp Plate 2:  Shorted" + Environment.NewLine;
                                                     break;
                                                 default:
-                                                    tempText += "Temp Plate 2:  " + (GlobalVars.useF ? ConvertCelsiusToFahrenheit(masterRow != -1 ? Convert.ToInt16(GlobalVars.CScanData[masterRow].TP2) : Convert.ToInt16(testData.TP2)).ToString("00.00") : (masterRow != -1 ? Convert.ToInt16(GlobalVars.CScanData[masterRow].TP2) : Convert.ToInt16(testData.TP2)).ToString("00.0")) + Environment.NewLine;
+                                                    tempText += "Temp Plate 2:  " + (GlobalVars.useF ? ConvertCelsiusToFahrenheit(masterRow != -1 ? GlobalVars.CScanData[masterRow].TP2 : testData.TP2).ToString("00.00") : (masterRow != -1 ? GlobalVars.CScanData[masterRow].TP2 : testData.TP2).ToString("00.0")) + Environment.NewLine;
                                                     break;
                                             }
                                             switch (masterRow != -1 ? Convert.ToInt16(GlobalVars.CScanData[masterRow].TP3) : Convert.ToInt16(testData.TP3))
@@ -362,7 +362,7 @@ namespace NewBTASProto
                                                     tempText += "Temp Plate 3:  Shorted" + Environment.NewLine;
                                                     break;
                                                 default:
-                                                    tempText += "Temp Plate 3:  " + (GlobalVars.useF ? ConvertCelsiusToFahrenheit(masterRow != -1 ? Convert.ToInt16(GlobalVars.CScanData[masterRow].TP3) : Convert.ToInt16(testData.TP3)).ToString("00.00") : (masterRow != -1 ? Convert.ToInt16(GlobalVars.CScanData[masterRow].TP3) : Convert.ToInt16(testData.TP3)).ToString("00.0")) + Environment.NewLine;
+                                                    tempText += "Temp Plate 3:  " + (GlobalVars.useF ? ConvertCelsiusToFahrenheit(masterRow != -1 ? GlobalVars.CScanData[masterRow].TP3 : testData.TP3).ToString("00.00") : (masterRow != -1 ? GlobalVars.CScanData[masterRow].TP3 : testData.TP3).ToString("00.0")) + Environment.NewLine;
                                                     break;
                                             }
                                             switch (masterRow != -1 ? Convert.ToInt16(GlobalVars.CScanData[masterRow].TP4) : Convert.ToInt16(testData.TP4))
@@ -380,7 +380,7 @@ namespace NewBTASProto
                                                     tempText += "Temp Plate 4:  Shorted" + Environment.NewLine;
                                                     break;
                                                 default:
-                                                    tempText += "Temp Plate 4:  " + (GlobalVars.useF ? ConvertCelsiusToFahrenheit(masterRow != -1 ? Convert.ToInt16(GlobalVars.CScanData[masterRow].TP4) : Convert.ToInt16(testData.TP4)).ToString("00.00") : (masterRow != -1 ? Convert.ToInt16(GlobalVars.CScanData[masterRow].TP4) : Convert.ToInt16(testData.TP4)).ToString("00.0")) + Environment.NewLine;
+                                                    tempText += "Temp Plate 4:  " + (GlobalVars.useF ? ConvertCelsiusToFahrenheit(masterRow != -1 ? GlobalVars.CScanData[masterRow].TP4 : testData.TP4).ToString("00.00") : (masterRow != -1 ? GlobalVars.CScanData[masterRow].TP4 : testData.TP4).ToString("00.0")) + Environment.NewLine;
                                                     break;
                                             }
                                             switch (masterRow != -1 ? Convert.ToInt16(GlobalVars.CScanData[masterRow].TP5) : Convert.ToInt16(testData.TP5))
@@ -398,7 +398,7 @@ namespace NewBTASProto
                                                     tempText += "Ambient Temp:  Shorted" + Environment.NewLine;
                                                     break;
                                                 default:
-                                                    tempText += "Ambient Temp:  " + (GlobalVars.useF ? ConvertCelsiusToFahrenheit(masterRow != -1 ? Convert.ToInt16(GlobalVars.CScanData[masterRow].TP5) : Convert.ToInt16(testData.TP5)).ToString("00.00") : (masterRow != -1 ? Convert.ToInt16(GlobalVars.CScanData[masterRow].TP5) : Convert.ToInt16(testData.TP5)).ToString("00.0")) + Environment.NewLine;
+                                                    tempText += "Ambient Temp:  " + (GlobalVars.useF ? ConvertCelsiusToFahrenheit(masterRow != -1 ? GlobalVars.CScanData[masterRow].TP5 : testData.TP5).ToString("00.00") : (masterRow != -1 ? GlobalVars.CScanData[masterRow].TP5 : testData.TP5).ToString("00.0")) + Environment.NewLine;
                                                     break;
                                             }
 
