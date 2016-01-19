@@ -152,30 +152,30 @@ namespace NewBTASProto
 
                     this.Invoke((MethodInvoker)delegate
                     {
-                        textBox1.Text = ((int.Parse(GlobalVars.MFData[5]) - 100) % 255).ToString();
-                        textBox2.Text = ((int.Parse(GlobalVars.MFData[6]) - 100) % 255).ToString();
-                        textBox3.Text = ((int.Parse(GlobalVars.MFData[7]) - 100) % 255).ToString();
-                        textBox4.Text = ((int.Parse(GlobalVars.MFData[8]) - 100) % 255).ToString();
-                        textBox5.Text = ((int.Parse(GlobalVars.MFData[9]) - 100) % 255).ToString();
-                        textBox6.Text = ((int.Parse(GlobalVars.MFData[10]) - 100) % 255).ToString();
-                        textBox7.Text = ((int.Parse(GlobalVars.MFData[11]) - 100) % 255).ToString();
-                        textBox8.Text = ((int.Parse(GlobalVars.MFData[12]) - 100) % 255).ToString();
-                        textBox9.Text = ((int.Parse(GlobalVars.MFData[13]) - 100) % 255).ToString();
-                        textBox10.Text = ((int.Parse(GlobalVars.MFData[14]) - 100) % 255).ToString();
-                        textBox11.Text = ((int.Parse(GlobalVars.MFData[15]) - 100) % 255).ToString();
-                        textBox12.Text = ((int.Parse(GlobalVars.MFData[16]) - 100) % 255).ToString();
-                        textBox13.Text = ((int.Parse(GlobalVars.MFData[17]) - 100) % 255).ToString();
-                        textBox14.Text = ((int.Parse(GlobalVars.MFData[18]) - 100) % 255).ToString();
-                        textBox15.Text = ((int.Parse(GlobalVars.MFData[19]) - 100) % 255).ToString();
-                        textBox16.Text = ((int.Parse(GlobalVars.MFData[20]) - 100) % 255).ToString();
-                        textBox17.Text = ((int.Parse(GlobalVars.MFData[21]) - 100) % 255).ToString();
-                        textBox18.Text = ((int.Parse(GlobalVars.MFData[22]) - 100) % 255).ToString();
-                        textBox19.Text = ((int.Parse(GlobalVars.MFData[23]) - 100) % 255).ToString();
-                        textBox20.Text = ((int.Parse(GlobalVars.MFData[24]) - 100) % 255).ToString();
-                        textBox21.Text = ((int.Parse(GlobalVars.MFData[25]) - 100) % 255).ToString();
-                        textBox22.Text = ((int.Parse(GlobalVars.MFData[26]) - 100) % 255).ToString();
-                        textBox23.Text = ((int.Parse(GlobalVars.MFData[27]) - 100) % 255).ToString();
-                        textBox24.Text = ((int.Parse(GlobalVars.MFData[28]) - 100) % 255).ToString();
+                        numericUpDown1.Text = ((int.Parse(GlobalVars.MFData[5]) - 100) % 255).ToString();
+                        numericUpDown2.Text = ((int.Parse(GlobalVars.MFData[6]) - 100) % 255).ToString();
+                        numericUpDown3.Text = ((int.Parse(GlobalVars.MFData[7]) - 100) % 255).ToString();
+                        numericUpDown4.Text = ((int.Parse(GlobalVars.MFData[8]) - 100) % 255).ToString();
+                        numericUpDown5.Text = ((int.Parse(GlobalVars.MFData[9]) - 100) % 255).ToString();
+                        numericUpDown6.Text = ((int.Parse(GlobalVars.MFData[10]) - 100) % 255).ToString();
+                        numericUpDown7.Text = ((int.Parse(GlobalVars.MFData[11]) - 100) % 255).ToString();
+                        numericUpDown8.Text = ((int.Parse(GlobalVars.MFData[12]) - 100) % 255).ToString();
+                        numericUpDown9.Text = ((int.Parse(GlobalVars.MFData[13]) - 100) % 255).ToString();
+                        numericUpDown10.Text = ((int.Parse(GlobalVars.MFData[14]) - 100) % 255).ToString();
+                        numericUpDown11.Text = ((int.Parse(GlobalVars.MFData[15]) - 100) % 255).ToString();
+                        numericUpDown12.Text = ((int.Parse(GlobalVars.MFData[16]) - 100) % 255).ToString();
+                        numericUpDown13.Text = ((int.Parse(GlobalVars.MFData[17]) - 100) % 255).ToString();
+                        numericUpDown14.Text = ((int.Parse(GlobalVars.MFData[18]) - 100) % 255).ToString();
+                        numericUpDown15.Text = ((int.Parse(GlobalVars.MFData[19]) - 100) % 255).ToString();
+                        numericUpDown16.Text = ((int.Parse(GlobalVars.MFData[20]) - 100) % 255).ToString();
+                        numericUpDown17.Text = ((int.Parse(GlobalVars.MFData[21]) - 100) % 255).ToString();
+                        numericUpDown18.Text = ((int.Parse(GlobalVars.MFData[22]) - 100) % 255).ToString();
+                        numericUpDown19.Text = ((int.Parse(GlobalVars.MFData[23]) - 100) % 255).ToString();
+                        numericUpDown20.Text = ((int.Parse(GlobalVars.MFData[24]) - 100) % 255).ToString();
+                        numericUpDown21.Text = ((int.Parse(GlobalVars.MFData[25]) - 100) % 255).ToString();
+                        numericUpDown22.Text = ((int.Parse(GlobalVars.MFData[26]) - 100) % 255).ToString();
+                        numericUpDown23.Text = ((int.Parse(GlobalVars.MFData[27]) - 100) % 255).ToString();
+                        numericUpDown24.Text = ((int.Parse(GlobalVars.MFData[28]) - 100) % 255).ToString();
                         // now fill in the average box...
                         average = 0;
                         int count = 0;
@@ -196,7 +196,7 @@ namespace NewBTASProto
                         {
                             average /= count;
                         }
-                        textBox25.Text = average.ToString();
+                        numericUpDown25.Value = (decimal) average;
 
                         button1.Enabled = true;
                         button2.Enabled = true;
@@ -223,12 +223,69 @@ namespace NewBTASProto
                 MessageBox.Show(this, "Please select a Work Order to associate the MasterFiller data with");
                 return;
             }
-            //do we data?
-            if (textBox1.Text == "")
+
+            // now fill recalc the average
+            average = 0;
+            int count = 0;
+            average += (float) numericUpDown1.Value;
+            if (numericUpDown1.Value != 0) { count++; }
+            average += (float) numericUpDown2.Value;
+            if (numericUpDown2.Value != 0) { count++; }
+            average += (float)numericUpDown3.Value;
+            if (numericUpDown3.Value != 0) { count++; }
+            average += (float)numericUpDown4.Value;
+            if (numericUpDown4.Value != 0) { count++; }
+            average += (float)numericUpDown5.Value;
+            if (numericUpDown5.Value != 0) { count++; }
+            average += (float)numericUpDown6.Value;
+            if (numericUpDown6.Value != 0) { count++; }
+            average += (float)numericUpDown7.Value;
+            if (numericUpDown7.Value != 0) { count++; }
+            average += (float)numericUpDown8.Value;
+            if (numericUpDown8.Value != 0) { count++; }
+            average += (float)numericUpDown9.Value;
+            if (numericUpDown9.Value != 0) { count++; }
+            average += (float)numericUpDown10.Value;
+            if (numericUpDown10.Value != 0) { count++; }
+            average += (float)numericUpDown11.Value;
+            if (numericUpDown11.Value != 0) { count++; }
+            average += (float)numericUpDown12.Value;
+            if (numericUpDown12.Value != 0) { count++; }
+            average += (float)numericUpDown13.Value;
+            if (numericUpDown13.Value != 0) { count++; }
+            average += (float)numericUpDown14.Value;
+            if (numericUpDown14.Value != 0) { count++; }
+            average += (float)numericUpDown15.Value;
+            if (numericUpDown15.Value != 0) { count++; }
+            average += (float)numericUpDown16.Value;
+            if (numericUpDown16.Value != 0) { count++; }
+            average += (float)numericUpDown17.Value;
+            if (numericUpDown17.Value != 0) { count++; }
+            average += (float)numericUpDown18.Value;
+            if (numericUpDown18.Value != 0) { count++; }
+            average += (float)numericUpDown19.Value;
+            if (numericUpDown19.Value != 0) { count++; }
+            average += (float)numericUpDown20.Value;
+            if (numericUpDown20.Value != 0) { count++; }
+            average += (float)numericUpDown21.Value;
+            if (numericUpDown21.Value != 0) { count++; }
+            average += (float)numericUpDown22.Value;
+            if (numericUpDown22.Value != 0) { count++; }
+            average += (float)numericUpDown23.Value;
+            if (numericUpDown23.Value != 0) { count++; }
+            average += (float)numericUpDown24.Value;
+            if (numericUpDown24.Value != 0) { count++; }
+
+            if (count == 0)
             {
-                MessageBox.Show(this, "Please aquire data before trying to save!");
-                return;
+                average = 0;
             }
+            else
+            {
+                average /= count;
+            }
+
+            numericUpDown25.Value = (decimal)average;
 
             //look up the workOrderID.../////////////////////////////////////////////////////////////////
 
@@ -240,30 +297,30 @@ namespace NewBTASProto
             string strUpdateCMD = "INSERT INTO WaterLevel (WorkOrderNumber,Cell1,Cell2,Cell3,Cell4,Cell5,Cell6,Cell7,Cell8,Cell9,Cell10,Cell11,Cell12,Cell13,Cell14,Cell15,Cell16,Cell17,Cell18,Cell19,Cell20,Cell21,Cell22,Cell23,Cell24,AVE) "
                 + "VALUES ('" +
                 comboBox2.Text + "'," +                                                 //WorkOrderNumber
-                ((int.Parse(GlobalVars.MFData[5]) - 100) % 255).ToString() + "," +      //Cell1
-                ((int.Parse(GlobalVars.MFData[6]) - 100) % 255).ToString() + "," +      //Cell2
-                ((int.Parse(GlobalVars.MFData[7]) - 100) % 255).ToString() + "," +      //Cell3
-                ((int.Parse(GlobalVars.MFData[8]) - 100) % 255).ToString() + "," +      //Cell4
-                ((int.Parse(GlobalVars.MFData[9]) - 100) % 255).ToString() + "," +      //Cell5
-                ((int.Parse(GlobalVars.MFData[10]) - 100) % 255).ToString() + "," +     //Cell6
-                ((int.Parse(GlobalVars.MFData[11]) - 100) % 255).ToString() + "," +     //Cell7
-                ((int.Parse(GlobalVars.MFData[12]) - 100) % 255).ToString() + "," +     //Cell8
-                ((int.Parse(GlobalVars.MFData[13]) - 100) % 255).ToString() + "," +     //Cell9
-                ((int.Parse(GlobalVars.MFData[14]) - 100) % 255).ToString() + "," +     //Cell10
-                ((int.Parse(GlobalVars.MFData[15]) - 100) % 255).ToString() + "," +     //Cell11
-                ((int.Parse(GlobalVars.MFData[16]) - 100) % 255).ToString() + "," +     //Cell12
-                ((int.Parse(GlobalVars.MFData[17]) - 100) % 255).ToString() + "," +     //Cell13
-                ((int.Parse(GlobalVars.MFData[18]) - 100) % 255).ToString() + "," +     //Cell14
-                ((int.Parse(GlobalVars.MFData[19]) - 100) % 255).ToString() + "," +     //Cell15
-                ((int.Parse(GlobalVars.MFData[20]) - 100) % 255).ToString() + "," +     //Cell16
-                ((int.Parse(GlobalVars.MFData[21]) - 100) % 255).ToString() + "," +     //Cell17
-                ((int.Parse(GlobalVars.MFData[22]) - 100) % 255).ToString() + "," +     //Cell18
-                ((int.Parse(GlobalVars.MFData[23]) - 100) % 255).ToString() + "," +     //Cell19
-                ((int.Parse(GlobalVars.MFData[24]) - 100) % 255).ToString() + "," +     //Cell20
-                ((int.Parse(GlobalVars.MFData[25]) - 100) % 255).ToString() + "," +     //Cell21
-                ((int.Parse(GlobalVars.MFData[26]) - 100) % 255).ToString() + "," +     //Cell22
-                ((int.Parse(GlobalVars.MFData[27]) - 100) % 255).ToString() + "," +     //Cell23
-                ((int.Parse(GlobalVars.MFData[28]) - 100) % 255).ToString() + "," +     //Cell24
+                numericUpDown1.Value.ToString("0") + "," +      //Cell1
+                numericUpDown2.Value.ToString("0") + "," +      //Cell2
+                numericUpDown3.Value.ToString("0") + "," +      //Cell3
+                numericUpDown4.Value.ToString("0") + "," +      //Cell4
+                numericUpDown5.Value.ToString("0") + "," +      //Cell5
+                numericUpDown6.Value.ToString("0") + "," +     //Cell6
+                numericUpDown7.Value.ToString("0") + "," +     //Cell7
+                numericUpDown8.Value.ToString("0") + "," +     //Cell8
+                numericUpDown9.Value.ToString("0") + "," +     //Cell9
+                numericUpDown10.Value.ToString("0") + "," +     //Cell10
+                numericUpDown11.Value.ToString("0") + "," +     //Cell11
+                numericUpDown12.Value.ToString("0") + "," +     //Cell12
+                numericUpDown13.Value.ToString("0") + "," +     //Cell13
+                numericUpDown14.Value.ToString("0") + "," +     //Cell14
+                numericUpDown15.Value.ToString("0") + "," +     //Cell15
+                numericUpDown16.Value.ToString("0") + "," +     //Cell16
+                numericUpDown17.Value.ToString("0") + "," +     //Cell17
+                numericUpDown18.Value.ToString("0") + "," +     //Cell18
+                numericUpDown19.Value.ToString("0") + "," +     //Cell19
+                numericUpDown20.Value.ToString("0") + "," +     //Cell20
+                numericUpDown21.Value.ToString("0") + "," +     //Cell21
+                numericUpDown22.Value.ToString("0") + "," +     //Cell22
+                numericUpDown23.Value.ToString("0") + "," +     //Cell23
+                numericUpDown24.Value.ToString("0") + "," +     //Cell24
                 average.ToString() +                                                    //Cell24
                 ");";
 

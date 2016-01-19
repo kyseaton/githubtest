@@ -255,7 +255,7 @@ namespace NewBTASProto
                 //mini case
                 GlobalVars.ICSettings[comboBox1.SelectedIndex].KM4 = (byte)(numericUpDown3.Value * 10 + 48);
                 //update KM5
-                GlobalVars.ICSettings[comboBox1.SelectedIndex].KM5 = (byte)((0) + 48);
+                GlobalVars.ICSettings[comboBox1.SelectedIndex].KM5 = (byte)(Math.Round(numericUpDown3.Value * 1000) % 100 + 48);
             }
             else
             {
@@ -287,7 +287,7 @@ namespace NewBTASProto
                 //mini case
                 GlobalVars.ICSettings[comboBox1.SelectedIndex].KM10 = (byte)(numericUpDown6.Value * 10 + 48);
                 //update KM11
-                GlobalVars.ICSettings[comboBox1.SelectedIndex].KM11 = (byte)((0) + 48);
+                GlobalVars.ICSettings[comboBox1.SelectedIndex].KM11 = (byte)(Math.Round(numericUpDown6.Value * 1000) % 100 + 48);
             }
             else
             {

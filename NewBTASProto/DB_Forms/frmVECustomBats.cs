@@ -488,6 +488,19 @@ namespace NewBTASProto
                 InhibitCB = false;
                 updateCurVals();
             }
+            try
+            {
+                //remove the new record if there is one..
+                if (bindingNavigatorAddNewItem.Enabled == false && bindingNavigator1.BindingSource.Position < CustomBats.Tables[0].Rows.Count)
+                {
+                    CustomBats.Tables[0].Rows[CustomBats.Tables[0].Rows.Count - 1].Delete();
+                    bindingNavigatorAddNewItem.Enabled = true;
+                }
+            }
+            catch
+            {
+                //do nothing
+            }
 
         }
 

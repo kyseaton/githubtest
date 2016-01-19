@@ -36,56 +36,81 @@
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.textBox3 = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.textBox4 = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.textBox5 = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.textBox6 = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
-            this.textBox7 = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
-            this.textBox8 = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
-            this.textBox9 = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
-            this.textBox10 = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
-            this.textBox11 = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
-            this.textBox12 = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
-            this.textBox13 = new System.Windows.Forms.TextBox();
             this.label15 = new System.Windows.Forms.Label();
-            this.textBox14 = new System.Windows.Forms.TextBox();
             this.label16 = new System.Windows.Forms.Label();
-            this.textBox15 = new System.Windows.Forms.TextBox();
             this.label17 = new System.Windows.Forms.Label();
-            this.textBox16 = new System.Windows.Forms.TextBox();
             this.label18 = new System.Windows.Forms.Label();
-            this.textBox17 = new System.Windows.Forms.TextBox();
             this.label19 = new System.Windows.Forms.Label();
-            this.textBox18 = new System.Windows.Forms.TextBox();
             this.label20 = new System.Windows.Forms.Label();
-            this.textBox19 = new System.Windows.Forms.TextBox();
             this.label21 = new System.Windows.Forms.Label();
-            this.textBox20 = new System.Windows.Forms.TextBox();
             this.label22 = new System.Windows.Forms.Label();
-            this.textBox21 = new System.Windows.Forms.TextBox();
             this.label23 = new System.Windows.Forms.Label();
-            this.textBox22 = new System.Windows.Forms.TextBox();
             this.label24 = new System.Windows.Forms.Label();
-            this.textBox23 = new System.Windows.Forms.TextBox();
             this.label25 = new System.Windows.Forms.Label();
-            this.textBox24 = new System.Windows.Forms.TextBox();
             this.label26 = new System.Windows.Forms.Label();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.label27 = new System.Windows.Forms.Label();
-            this.textBox25 = new System.Windows.Forms.TextBox();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown4 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown5 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown6 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown7 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown8 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown9 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown10 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown11 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown12 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown13 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown14 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown15 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown16 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown17 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown18 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown19 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown20 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown21 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown22 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown23 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown24 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown25 = new System.Windows.Forms.NumericUpDown();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown6)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown7)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown8)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown9)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown10)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown11)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown12)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown13)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown14)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown15)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown16)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown17)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown18)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown19)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown20)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown21)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown22)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown23)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown24)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown25)).BeginInit();
             this.SuspendLayout();
             // 
             // button1
@@ -172,22 +197,6 @@
             this.label3.TabIndex = 6;
             this.label3.Text = "Cell 1:  ";
             // 
-            // textBox1
-            // 
-            this.textBox1.Enabled = false;
-            this.textBox1.Location = new System.Drawing.Point(66, 69);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(59, 20);
-            this.textBox1.TabIndex = 7;
-            // 
-            // textBox2
-            // 
-            this.textBox2.Enabled = false;
-            this.textBox2.Location = new System.Drawing.Point(66, 95);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(59, 20);
-            this.textBox2.TabIndex = 9;
-            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -196,14 +205,6 @@
             this.label4.Size = new System.Drawing.Size(42, 13);
             this.label4.TabIndex = 8;
             this.label4.Text = "Cell 2:  ";
-            // 
-            // textBox3
-            // 
-            this.textBox3.Enabled = false;
-            this.textBox3.Location = new System.Drawing.Point(66, 121);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(59, 20);
-            this.textBox3.TabIndex = 11;
             // 
             // label5
             // 
@@ -214,14 +215,6 @@
             this.label5.TabIndex = 10;
             this.label5.Text = "Cell 3:  ";
             // 
-            // textBox4
-            // 
-            this.textBox4.Enabled = false;
-            this.textBox4.Location = new System.Drawing.Point(66, 147);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(59, 20);
-            this.textBox4.TabIndex = 13;
-            // 
             // label6
             // 
             this.label6.AutoSize = true;
@@ -230,14 +223,6 @@
             this.label6.Size = new System.Drawing.Size(42, 13);
             this.label6.TabIndex = 12;
             this.label6.Text = "Cell 4:  ";
-            // 
-            // textBox5
-            // 
-            this.textBox5.Enabled = false;
-            this.textBox5.Location = new System.Drawing.Point(66, 173);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(59, 20);
-            this.textBox5.TabIndex = 15;
             // 
             // label7
             // 
@@ -248,14 +233,6 @@
             this.label7.TabIndex = 14;
             this.label7.Text = "Cell 5:  ";
             // 
-            // textBox6
-            // 
-            this.textBox6.Enabled = false;
-            this.textBox6.Location = new System.Drawing.Point(66, 199);
-            this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(59, 20);
-            this.textBox6.TabIndex = 17;
-            // 
             // label8
             // 
             this.label8.AutoSize = true;
@@ -264,14 +241,6 @@
             this.label8.Size = new System.Drawing.Size(42, 13);
             this.label8.TabIndex = 16;
             this.label8.Text = "Cell 6:  ";
-            // 
-            // textBox7
-            // 
-            this.textBox7.Enabled = false;
-            this.textBox7.Location = new System.Drawing.Point(66, 225);
-            this.textBox7.Name = "textBox7";
-            this.textBox7.Size = new System.Drawing.Size(59, 20);
-            this.textBox7.TabIndex = 19;
             // 
             // label9
             // 
@@ -282,14 +251,6 @@
             this.label9.TabIndex = 18;
             this.label9.Text = "Cell 7:  ";
             // 
-            // textBox8
-            // 
-            this.textBox8.Enabled = false;
-            this.textBox8.Location = new System.Drawing.Point(66, 251);
-            this.textBox8.Name = "textBox8";
-            this.textBox8.Size = new System.Drawing.Size(59, 20);
-            this.textBox8.TabIndex = 21;
-            // 
             // label10
             // 
             this.label10.AutoSize = true;
@@ -298,14 +259,6 @@
             this.label10.Size = new System.Drawing.Size(42, 13);
             this.label10.TabIndex = 20;
             this.label10.Text = "Cell 8:  ";
-            // 
-            // textBox9
-            // 
-            this.textBox9.Enabled = false;
-            this.textBox9.Location = new System.Drawing.Point(66, 277);
-            this.textBox9.Name = "textBox9";
-            this.textBox9.Size = new System.Drawing.Size(59, 20);
-            this.textBox9.TabIndex = 23;
             // 
             // label11
             // 
@@ -317,14 +270,6 @@
             this.label11.Text = "Cell 9:  ";
             this.label11.Click += new System.EventHandler(this.label11_Click);
             // 
-            // textBox10
-            // 
-            this.textBox10.Enabled = false;
-            this.textBox10.Location = new System.Drawing.Point(66, 303);
-            this.textBox10.Name = "textBox10";
-            this.textBox10.Size = new System.Drawing.Size(59, 20);
-            this.textBox10.TabIndex = 25;
-            // 
             // label12
             // 
             this.label12.AutoSize = true;
@@ -333,14 +278,6 @@
             this.label12.Size = new System.Drawing.Size(48, 13);
             this.label12.TabIndex = 24;
             this.label12.Text = "Cell 10:  ";
-            // 
-            // textBox11
-            // 
-            this.textBox11.Enabled = false;
-            this.textBox11.Location = new System.Drawing.Point(66, 329);
-            this.textBox11.Name = "textBox11";
-            this.textBox11.Size = new System.Drawing.Size(59, 20);
-            this.textBox11.TabIndex = 27;
             // 
             // label13
             // 
@@ -351,14 +288,6 @@
             this.label13.TabIndex = 26;
             this.label13.Text = "Cell 11:  ";
             // 
-            // textBox12
-            // 
-            this.textBox12.Enabled = false;
-            this.textBox12.Location = new System.Drawing.Point(66, 355);
-            this.textBox12.Name = "textBox12";
-            this.textBox12.Size = new System.Drawing.Size(59, 20);
-            this.textBox12.TabIndex = 29;
-            // 
             // label14
             // 
             this.label14.AutoSize = true;
@@ -368,14 +297,6 @@
             this.label14.TabIndex = 28;
             this.label14.Text = "Cell 12:  ";
             // 
-            // textBox13
-            // 
-            this.textBox13.Enabled = false;
-            this.textBox13.Location = new System.Drawing.Point(214, 69);
-            this.textBox13.Name = "textBox13";
-            this.textBox13.Size = new System.Drawing.Size(59, 20);
-            this.textBox13.TabIndex = 31;
-            // 
             // label15
             // 
             this.label15.AutoSize = true;
@@ -384,14 +305,6 @@
             this.label15.Size = new System.Drawing.Size(48, 13);
             this.label15.TabIndex = 30;
             this.label15.Text = "Cell 13:  ";
-            // 
-            // textBox14
-            // 
-            this.textBox14.Enabled = false;
-            this.textBox14.Location = new System.Drawing.Point(214, 95);
-            this.textBox14.Name = "textBox14";
-            this.textBox14.Size = new System.Drawing.Size(59, 20);
-            this.textBox14.TabIndex = 33;
             // 
             // label16
             // 
@@ -403,14 +316,6 @@
             this.label16.Text = "Cell 14:  ";
             this.label16.Click += new System.EventHandler(this.label16_Click);
             // 
-            // textBox15
-            // 
-            this.textBox15.Enabled = false;
-            this.textBox15.Location = new System.Drawing.Point(214, 121);
-            this.textBox15.Name = "textBox15";
-            this.textBox15.Size = new System.Drawing.Size(59, 20);
-            this.textBox15.TabIndex = 35;
-            // 
             // label17
             // 
             this.label17.AutoSize = true;
@@ -419,14 +324,6 @@
             this.label17.Size = new System.Drawing.Size(48, 13);
             this.label17.TabIndex = 34;
             this.label17.Text = "Cell 15:  ";
-            // 
-            // textBox16
-            // 
-            this.textBox16.Enabled = false;
-            this.textBox16.Location = new System.Drawing.Point(214, 147);
-            this.textBox16.Name = "textBox16";
-            this.textBox16.Size = new System.Drawing.Size(59, 20);
-            this.textBox16.TabIndex = 37;
             // 
             // label18
             // 
@@ -437,14 +334,6 @@
             this.label18.TabIndex = 36;
             this.label18.Text = "Cell 16:  ";
             // 
-            // textBox17
-            // 
-            this.textBox17.Enabled = false;
-            this.textBox17.Location = new System.Drawing.Point(214, 173);
-            this.textBox17.Name = "textBox17";
-            this.textBox17.Size = new System.Drawing.Size(59, 20);
-            this.textBox17.TabIndex = 39;
-            // 
             // label19
             // 
             this.label19.AutoSize = true;
@@ -453,14 +342,6 @@
             this.label19.Size = new System.Drawing.Size(48, 13);
             this.label19.TabIndex = 38;
             this.label19.Text = "Cell 17:  ";
-            // 
-            // textBox18
-            // 
-            this.textBox18.Enabled = false;
-            this.textBox18.Location = new System.Drawing.Point(214, 199);
-            this.textBox18.Name = "textBox18";
-            this.textBox18.Size = new System.Drawing.Size(59, 20);
-            this.textBox18.TabIndex = 41;
             // 
             // label20
             // 
@@ -471,14 +352,6 @@
             this.label20.TabIndex = 40;
             this.label20.Text = "Cell 18:  ";
             // 
-            // textBox19
-            // 
-            this.textBox19.Enabled = false;
-            this.textBox19.Location = new System.Drawing.Point(214, 225);
-            this.textBox19.Name = "textBox19";
-            this.textBox19.Size = new System.Drawing.Size(59, 20);
-            this.textBox19.TabIndex = 43;
-            // 
             // label21
             // 
             this.label21.AutoSize = true;
@@ -487,14 +360,6 @@
             this.label21.Size = new System.Drawing.Size(48, 13);
             this.label21.TabIndex = 42;
             this.label21.Text = "Cell 19:  ";
-            // 
-            // textBox20
-            // 
-            this.textBox20.Enabled = false;
-            this.textBox20.Location = new System.Drawing.Point(214, 251);
-            this.textBox20.Name = "textBox20";
-            this.textBox20.Size = new System.Drawing.Size(59, 20);
-            this.textBox20.TabIndex = 45;
             // 
             // label22
             // 
@@ -505,14 +370,6 @@
             this.label22.TabIndex = 44;
             this.label22.Text = "Cell 20:  ";
             // 
-            // textBox21
-            // 
-            this.textBox21.Enabled = false;
-            this.textBox21.Location = new System.Drawing.Point(214, 277);
-            this.textBox21.Name = "textBox21";
-            this.textBox21.Size = new System.Drawing.Size(59, 20);
-            this.textBox21.TabIndex = 47;
-            // 
             // label23
             // 
             this.label23.AutoSize = true;
@@ -521,14 +378,6 @@
             this.label23.Size = new System.Drawing.Size(48, 13);
             this.label23.TabIndex = 46;
             this.label23.Text = "Cell 21:  ";
-            // 
-            // textBox22
-            // 
-            this.textBox22.Enabled = false;
-            this.textBox22.Location = new System.Drawing.Point(214, 303);
-            this.textBox22.Name = "textBox22";
-            this.textBox22.Size = new System.Drawing.Size(59, 20);
-            this.textBox22.TabIndex = 49;
             // 
             // label24
             // 
@@ -540,14 +389,6 @@
             this.label24.Text = "Cell 22:  ";
             this.label24.Click += new System.EventHandler(this.label24_Click);
             // 
-            // textBox23
-            // 
-            this.textBox23.Enabled = false;
-            this.textBox23.Location = new System.Drawing.Point(214, 329);
-            this.textBox23.Name = "textBox23";
-            this.textBox23.Size = new System.Drawing.Size(59, 20);
-            this.textBox23.TabIndex = 51;
-            // 
             // label25
             // 
             this.label25.AutoSize = true;
@@ -556,14 +397,6 @@
             this.label25.Size = new System.Drawing.Size(48, 13);
             this.label25.TabIndex = 50;
             this.label25.Text = "Cell 23:  ";
-            // 
-            // textBox24
-            // 
-            this.textBox24.Enabled = false;
-            this.textBox24.Location = new System.Drawing.Point(214, 355);
-            this.textBox24.Name = "textBox24";
-            this.textBox24.Size = new System.Drawing.Size(59, 20);
-            this.textBox24.TabIndex = 53;
             // 
             // label26
             // 
@@ -594,69 +427,238 @@
             this.label27.Text = "Average:  ";
             this.label27.Click += new System.EventHandler(this.label27_Click);
             // 
-            // textBox25
+            // numericUpDown1
             // 
-            this.textBox25.Enabled = false;
-            this.textBox25.Location = new System.Drawing.Point(214, 381);
-            this.textBox25.Name = "textBox25";
-            this.textBox25.Size = new System.Drawing.Size(59, 20);
-            this.textBox25.TabIndex = 55;
+            this.numericUpDown1.Location = new System.Drawing.Point(66, 70);
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(59, 20);
+            this.numericUpDown1.TabIndex = 56;
+            // 
+            // numericUpDown2
+            // 
+            this.numericUpDown2.Location = new System.Drawing.Point(66, 96);
+            this.numericUpDown2.Name = "numericUpDown2";
+            this.numericUpDown2.Size = new System.Drawing.Size(59, 20);
+            this.numericUpDown2.TabIndex = 57;
+            // 
+            // numericUpDown3
+            // 
+            this.numericUpDown3.Location = new System.Drawing.Point(66, 122);
+            this.numericUpDown3.Name = "numericUpDown3";
+            this.numericUpDown3.Size = new System.Drawing.Size(59, 20);
+            this.numericUpDown3.TabIndex = 58;
+            // 
+            // numericUpDown4
+            // 
+            this.numericUpDown4.Location = new System.Drawing.Point(66, 148);
+            this.numericUpDown4.Name = "numericUpDown4";
+            this.numericUpDown4.Size = new System.Drawing.Size(59, 20);
+            this.numericUpDown4.TabIndex = 59;
+            // 
+            // numericUpDown5
+            // 
+            this.numericUpDown5.Location = new System.Drawing.Point(66, 174);
+            this.numericUpDown5.Name = "numericUpDown5";
+            this.numericUpDown5.Size = new System.Drawing.Size(59, 20);
+            this.numericUpDown5.TabIndex = 60;
+            // 
+            // numericUpDown6
+            // 
+            this.numericUpDown6.Location = new System.Drawing.Point(66, 200);
+            this.numericUpDown6.Name = "numericUpDown6";
+            this.numericUpDown6.Size = new System.Drawing.Size(59, 20);
+            this.numericUpDown6.TabIndex = 61;
+            // 
+            // numericUpDown7
+            // 
+            this.numericUpDown7.Location = new System.Drawing.Point(66, 226);
+            this.numericUpDown7.Name = "numericUpDown7";
+            this.numericUpDown7.Size = new System.Drawing.Size(59, 20);
+            this.numericUpDown7.TabIndex = 62;
+            // 
+            // numericUpDown8
+            // 
+            this.numericUpDown8.Location = new System.Drawing.Point(66, 252);
+            this.numericUpDown8.Name = "numericUpDown8";
+            this.numericUpDown8.Size = new System.Drawing.Size(59, 20);
+            this.numericUpDown8.TabIndex = 63;
+            // 
+            // numericUpDown9
+            // 
+            this.numericUpDown9.Location = new System.Drawing.Point(66, 278);
+            this.numericUpDown9.Name = "numericUpDown9";
+            this.numericUpDown9.Size = new System.Drawing.Size(59, 20);
+            this.numericUpDown9.TabIndex = 64;
+            // 
+            // numericUpDown10
+            // 
+            this.numericUpDown10.Location = new System.Drawing.Point(66, 304);
+            this.numericUpDown10.Name = "numericUpDown10";
+            this.numericUpDown10.Size = new System.Drawing.Size(59, 20);
+            this.numericUpDown10.TabIndex = 65;
+            // 
+            // numericUpDown11
+            // 
+            this.numericUpDown11.Location = new System.Drawing.Point(66, 330);
+            this.numericUpDown11.Name = "numericUpDown11";
+            this.numericUpDown11.Size = new System.Drawing.Size(59, 20);
+            this.numericUpDown11.TabIndex = 66;
+            // 
+            // numericUpDown12
+            // 
+            this.numericUpDown12.Location = new System.Drawing.Point(66, 356);
+            this.numericUpDown12.Name = "numericUpDown12";
+            this.numericUpDown12.Size = new System.Drawing.Size(59, 20);
+            this.numericUpDown12.TabIndex = 67;
+            // 
+            // numericUpDown13
+            // 
+            this.numericUpDown13.Location = new System.Drawing.Point(214, 70);
+            this.numericUpDown13.Name = "numericUpDown13";
+            this.numericUpDown13.Size = new System.Drawing.Size(59, 20);
+            this.numericUpDown13.TabIndex = 68;
+            // 
+            // numericUpDown14
+            // 
+            this.numericUpDown14.Location = new System.Drawing.Point(214, 96);
+            this.numericUpDown14.Name = "numericUpDown14";
+            this.numericUpDown14.Size = new System.Drawing.Size(59, 20);
+            this.numericUpDown14.TabIndex = 69;
+            // 
+            // numericUpDown15
+            // 
+            this.numericUpDown15.Location = new System.Drawing.Point(214, 122);
+            this.numericUpDown15.Name = "numericUpDown15";
+            this.numericUpDown15.Size = new System.Drawing.Size(59, 20);
+            this.numericUpDown15.TabIndex = 70;
+            // 
+            // numericUpDown16
+            // 
+            this.numericUpDown16.Location = new System.Drawing.Point(212, 148);
+            this.numericUpDown16.Name = "numericUpDown16";
+            this.numericUpDown16.Size = new System.Drawing.Size(59, 20);
+            this.numericUpDown16.TabIndex = 71;
+            // 
+            // numericUpDown17
+            // 
+            this.numericUpDown17.Location = new System.Drawing.Point(212, 174);
+            this.numericUpDown17.Name = "numericUpDown17";
+            this.numericUpDown17.Size = new System.Drawing.Size(59, 20);
+            this.numericUpDown17.TabIndex = 72;
+            // 
+            // numericUpDown18
+            // 
+            this.numericUpDown18.Location = new System.Drawing.Point(212, 200);
+            this.numericUpDown18.Name = "numericUpDown18";
+            this.numericUpDown18.Size = new System.Drawing.Size(59, 20);
+            this.numericUpDown18.TabIndex = 73;
+            // 
+            // numericUpDown19
+            // 
+            this.numericUpDown19.Location = new System.Drawing.Point(212, 226);
+            this.numericUpDown19.Name = "numericUpDown19";
+            this.numericUpDown19.Size = new System.Drawing.Size(59, 20);
+            this.numericUpDown19.TabIndex = 74;
+            // 
+            // numericUpDown20
+            // 
+            this.numericUpDown20.Location = new System.Drawing.Point(212, 252);
+            this.numericUpDown20.Name = "numericUpDown20";
+            this.numericUpDown20.Size = new System.Drawing.Size(59, 20);
+            this.numericUpDown20.TabIndex = 75;
+            // 
+            // numericUpDown21
+            // 
+            this.numericUpDown21.Location = new System.Drawing.Point(212, 278);
+            this.numericUpDown21.Name = "numericUpDown21";
+            this.numericUpDown21.Size = new System.Drawing.Size(59, 20);
+            this.numericUpDown21.TabIndex = 76;
+            // 
+            // numericUpDown22
+            // 
+            this.numericUpDown22.Location = new System.Drawing.Point(212, 304);
+            this.numericUpDown22.Name = "numericUpDown22";
+            this.numericUpDown22.Size = new System.Drawing.Size(59, 20);
+            this.numericUpDown22.TabIndex = 77;
+            // 
+            // numericUpDown23
+            // 
+            this.numericUpDown23.Location = new System.Drawing.Point(212, 330);
+            this.numericUpDown23.Name = "numericUpDown23";
+            this.numericUpDown23.Size = new System.Drawing.Size(59, 20);
+            this.numericUpDown23.TabIndex = 78;
+            // 
+            // numericUpDown24
+            // 
+            this.numericUpDown24.Location = new System.Drawing.Point(212, 356);
+            this.numericUpDown24.Name = "numericUpDown24";
+            this.numericUpDown24.Size = new System.Drawing.Size(59, 20);
+            this.numericUpDown24.TabIndex = 79;
+            // 
+            // numericUpDown25
+            // 
+            this.numericUpDown25.DecimalPlaces = 2;
+            this.numericUpDown25.Enabled = false;
+            this.numericUpDown25.Location = new System.Drawing.Point(212, 382);
+            this.numericUpDown25.Name = "numericUpDown25";
+            this.numericUpDown25.Size = new System.Drawing.Size(59, 20);
+            this.numericUpDown25.TabIndex = 80;
             // 
             // MasterFillerInterface
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(299, 464);
-            this.Controls.Add(this.textBox25);
+            this.Controls.Add(this.numericUpDown25);
+            this.Controls.Add(this.numericUpDown24);
+            this.Controls.Add(this.numericUpDown23);
+            this.Controls.Add(this.numericUpDown22);
+            this.Controls.Add(this.numericUpDown21);
+            this.Controls.Add(this.numericUpDown20);
+            this.Controls.Add(this.numericUpDown19);
+            this.Controls.Add(this.numericUpDown18);
+            this.Controls.Add(this.numericUpDown17);
+            this.Controls.Add(this.numericUpDown16);
+            this.Controls.Add(this.numericUpDown15);
+            this.Controls.Add(this.numericUpDown14);
+            this.Controls.Add(this.numericUpDown13);
+            this.Controls.Add(this.numericUpDown12);
+            this.Controls.Add(this.numericUpDown11);
+            this.Controls.Add(this.numericUpDown10);
+            this.Controls.Add(this.numericUpDown9);
+            this.Controls.Add(this.numericUpDown8);
+            this.Controls.Add(this.numericUpDown7);
+            this.Controls.Add(this.numericUpDown6);
+            this.Controls.Add(this.numericUpDown5);
+            this.Controls.Add(this.numericUpDown4);
+            this.Controls.Add(this.numericUpDown3);
+            this.Controls.Add(this.numericUpDown2);
+            this.Controls.Add(this.numericUpDown1);
             this.Controls.Add(this.label27);
             this.Controls.Add(this.comboBox2);
-            this.Controls.Add(this.textBox24);
             this.Controls.Add(this.label26);
-            this.Controls.Add(this.textBox23);
             this.Controls.Add(this.label25);
-            this.Controls.Add(this.textBox22);
             this.Controls.Add(this.label24);
-            this.Controls.Add(this.textBox21);
             this.Controls.Add(this.label23);
-            this.Controls.Add(this.textBox20);
             this.Controls.Add(this.label22);
-            this.Controls.Add(this.textBox19);
             this.Controls.Add(this.label21);
-            this.Controls.Add(this.textBox18);
             this.Controls.Add(this.label20);
-            this.Controls.Add(this.textBox17);
             this.Controls.Add(this.label19);
-            this.Controls.Add(this.textBox16);
             this.Controls.Add(this.label18);
-            this.Controls.Add(this.textBox15);
             this.Controls.Add(this.label17);
-            this.Controls.Add(this.textBox14);
             this.Controls.Add(this.label16);
-            this.Controls.Add(this.textBox13);
             this.Controls.Add(this.label15);
-            this.Controls.Add(this.textBox12);
             this.Controls.Add(this.label14);
-            this.Controls.Add(this.textBox11);
             this.Controls.Add(this.label13);
-            this.Controls.Add(this.textBox10);
             this.Controls.Add(this.label12);
-            this.Controls.Add(this.textBox9);
             this.Controls.Add(this.label11);
-            this.Controls.Add(this.textBox8);
             this.Controls.Add(this.label10);
-            this.Controls.Add(this.textBox7);
             this.Controls.Add(this.label9);
-            this.Controls.Add(this.textBox6);
             this.Controls.Add(this.label8);
-            this.Controls.Add(this.textBox5);
             this.Controls.Add(this.label7);
-            this.Controls.Add(this.textBox4);
             this.Controls.Add(this.label6);
-            this.Controls.Add(this.textBox3);
             this.Controls.Add(this.label5);
-            this.Controls.Add(this.textBox2);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.comboBox1);
@@ -672,6 +674,31 @@
             this.Text = "Master Filler Interface";
             this.Load += new System.EventHandler(this.MasterFillerInterface_Load);
             this.Shown += new System.EventHandler(this.MasterFillerInterface_Shown);
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown6)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown7)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown8)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown9)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown10)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown11)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown12)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown13)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown14)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown15)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown16)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown17)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown18)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown19)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown20)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown21)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown22)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown23)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown24)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown25)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -686,55 +713,55 @@
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox textBox4;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox textBox5;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.TextBox textBox6;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.TextBox textBox7;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.TextBox textBox8;
         private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.TextBox textBox9;
         private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.TextBox textBox10;
         private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.TextBox textBox11;
         private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.TextBox textBox12;
         private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.TextBox textBox13;
         private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.TextBox textBox14;
         private System.Windows.Forms.Label label16;
-        private System.Windows.Forms.TextBox textBox15;
         private System.Windows.Forms.Label label17;
-        private System.Windows.Forms.TextBox textBox16;
         private System.Windows.Forms.Label label18;
-        private System.Windows.Forms.TextBox textBox17;
         private System.Windows.Forms.Label label19;
-        private System.Windows.Forms.TextBox textBox18;
         private System.Windows.Forms.Label label20;
-        private System.Windows.Forms.TextBox textBox19;
         private System.Windows.Forms.Label label21;
-        private System.Windows.Forms.TextBox textBox20;
         private System.Windows.Forms.Label label22;
-        private System.Windows.Forms.TextBox textBox21;
         private System.Windows.Forms.Label label23;
-        private System.Windows.Forms.TextBox textBox22;
         private System.Windows.Forms.Label label24;
-        private System.Windows.Forms.TextBox textBox23;
         private System.Windows.Forms.Label label25;
-        private System.Windows.Forms.TextBox textBox24;
         private System.Windows.Forms.Label label26;
         private System.Windows.Forms.ComboBox comboBox2;
         private System.Windows.Forms.Label label27;
-        private System.Windows.Forms.TextBox textBox25;
+        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.NumericUpDown numericUpDown2;
+        private System.Windows.Forms.NumericUpDown numericUpDown3;
+        private System.Windows.Forms.NumericUpDown numericUpDown4;
+        private System.Windows.Forms.NumericUpDown numericUpDown5;
+        private System.Windows.Forms.NumericUpDown numericUpDown6;
+        private System.Windows.Forms.NumericUpDown numericUpDown7;
+        private System.Windows.Forms.NumericUpDown numericUpDown8;
+        private System.Windows.Forms.NumericUpDown numericUpDown9;
+        private System.Windows.Forms.NumericUpDown numericUpDown10;
+        private System.Windows.Forms.NumericUpDown numericUpDown11;
+        private System.Windows.Forms.NumericUpDown numericUpDown12;
+        private System.Windows.Forms.NumericUpDown numericUpDown13;
+        private System.Windows.Forms.NumericUpDown numericUpDown14;
+        private System.Windows.Forms.NumericUpDown numericUpDown15;
+        private System.Windows.Forms.NumericUpDown numericUpDown16;
+        private System.Windows.Forms.NumericUpDown numericUpDown17;
+        private System.Windows.Forms.NumericUpDown numericUpDown18;
+        private System.Windows.Forms.NumericUpDown numericUpDown19;
+        private System.Windows.Forms.NumericUpDown numericUpDown20;
+        private System.Windows.Forms.NumericUpDown numericUpDown21;
+        private System.Windows.Forms.NumericUpDown numericUpDown22;
+        private System.Windows.Forms.NumericUpDown numericUpDown23;
+        private System.Windows.Forms.NumericUpDown numericUpDown24;
+        private System.Windows.Forms.NumericUpDown numericUpDown25;
     }
 }

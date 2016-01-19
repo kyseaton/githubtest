@@ -64,9 +64,7 @@ namespace NewBTASProto
                 return;
             }
 
-            // gettting rid of isASlave
-            //you can't run tests from a slave anymore..
-            //bool isASlave = false;
+            #region master slave test and setup
             // we will use this bool to say if we need to do slave stuff..
             bool MasterSlaveTest = false;
             int slaveRow = -1;
@@ -104,9 +102,11 @@ namespace NewBTASProto
             {
                 Cstation = Convert.ToInt32(d.Rows[station][9]);
             }
+            #endregion
 
             cRunTest[station] = new CancellationTokenSource();
 
+            #region workorder number setup
             // we need to split up the work orders if we have multiple work orders on a single line...
             string tempWOS = d.Rows[station][1].ToString();
             char[] delims = { ' ' };
@@ -128,10 +128,15 @@ namespace NewBTASProto
                 if (A.Length > 2) { SWO2 = A[1]; }
                 if (A.Length > 3) { SWO3 = A[2]; }
             }
+            #endregion
 
             // Everything is going to be done on a helper thread
             ThreadPool.QueueUserWorkItem(s =>
             {
+
+                /////////////////////////////////SET UP/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                #region SETUP
+
                 string strAccessConn;
                 string strAccessSelect;
                 OleDbConnection myAccessConn;
@@ -139,7 +144,7 @@ namespace NewBTASProto
                 // setup the canellation token
                 CancellationToken token = (CancellationToken)s;
 
-                //cable connected tests
+                //cable connected test variables
                 bool shuntCon = false;
                 bool tempCon = false;
                 bool cellCon = false;
@@ -674,13 +679,10 @@ namespace NewBTASProto
                 #region if we are doing the autoconfig, let's get the charger settings in order and then loaded into the charger! (case 2 only)
 
                 // these will be used later in the IC check portion to confirm that the charger is running as expected
-                int timeSet1 =  0;
                 float curSet1 = 0;
                 float vSet1 = 0;
-                int timeSet2 = 0;
                 float curSet2 = 0;
                 float vSet2 = 0;
-                float ohmSet = 0;
 
                 // we'll tell the charger what to do! (if we have an IC and the user wants us to...)
                 if (GlobalVars.autoConfig && (bool)d.Rows[station][12] && d.Rows[station][10].ToString().Contains("ICA") && (string)d.Rows[station][2] != "As Received" && !runAsShunt)
@@ -741,7 +743,7 @@ namespace NewBTASProto
                                     if (d.Rows[station][10].ToString().Contains("mini"))
                                     {
                                         tempKMStore[3] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][45].ToString()) * 10));             //top current byte
-                                        tempKMStore[4] = (byte)(48);                                                                            //bottom current byte
+                                        tempKMStore[4] = (byte)(48 + Math.Round(float.Parse(battery.Tables[0].Rows[0][45].ToString()) * 1000) % 100);                                                                            //bottom current byte
                                     }
                                     else
                                     {
@@ -756,7 +758,7 @@ namespace NewBTASProto
                                     if (d.Rows[station][10].ToString().Contains("mini"))
                                     {
                                         tempKMStore[9] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][49].ToString()) * 10));             //top current 2 byte
-                                        tempKMStore[10] = (byte)(48);                                                                           //bottom current 2 byte
+                                        tempKMStore[10] = (byte) Math.Round(48 + (float.Parse(battery.Tables[0].Rows[0][49].ToString()) * 1000) % 100);                                                                           //bottom current 2 byte
                                     }
                                     else
                                     {
@@ -774,13 +776,10 @@ namespace NewBTASProto
                                     tempKMStore[18] = (byte)48;                                                                                //discharge voltage low byte
                                     tempKMStore[19] = (byte)48;                                                                                //discharge resistance high byte
                                     tempKMStore[20] = (byte)48;                                                                                //discharge resistance low byte
-                                    timeSet1 = int.Parse(battery.Tables[0].Rows[0][43].ToString());
                                     curSet1 = float.Parse(battery.Tables[0].Rows[0][45].ToString());
                                     vSet1 = (MasterSlaveTest ?  (2 * float.Parse(battery.Tables[0].Rows[0][46].ToString())) : float.Parse(battery.Tables[0].Rows[0][46].ToString()));
-                                    timeSet2 = int.Parse(battery.Tables[0].Rows[0][47].ToString());
                                     curSet2 = float.Parse(battery.Tables[0].Rows[0][49].ToString());
                                     vSet2 = (MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][50].ToString())) : float.Parse(battery.Tables[0].Rows[0][50].ToString()));
-                                    ohmSet =  0;
                                     break;
                                 case "Full Charge-4":
                                     tempKMStore[0] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][52].ToString().Substring(0, 2)));          //mode
@@ -789,7 +788,7 @@ namespace NewBTASProto
                                     if (d.Rows[station][10].ToString().Contains("mini"))
                                     {
                                         tempKMStore[3] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][55].ToString()) * 10));             //top current byte
-                                        tempKMStore[4] = (byte)(48);                                                                            //bottom current byte
+                                        tempKMStore[4] = (byte)(48 + Math.Round(float.Parse(battery.Tables[0].Rows[0][55].ToString()) * 1000) % 100);                                                                            //bottom current byte
                                     }
                                     else
                                     {
@@ -804,7 +803,7 @@ namespace NewBTASProto
                                     if (d.Rows[station][10].ToString().Contains("mini"))
                                     {
                                         tempKMStore[9] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][59].ToString()) * 10));             //top current 2 byte
-                                        tempKMStore[10] = (byte)(48);                                                                           //bottom current 2 byte
+                                        tempKMStore[10] = (byte) Math.Round(48 + (float.Parse(battery.Tables[0].Rows[0][59].ToString()) * 1000) % 100);                                                                           //bottom current 2 byte
                                     }
                                     else
                                     {
@@ -822,13 +821,10 @@ namespace NewBTASProto
                                     tempKMStore[18] = (byte)48;                                                                                //discharge voltage low byte
                                     tempKMStore[19] = (byte)48;                                                                                //discharge resistance high byte
                                     tempKMStore[20] = (byte)48;                                                                                //discharge resistance low byte
-                                    timeSet1 = int.Parse(battery.Tables[0].Rows[0][53].ToString());
                                     curSet1 = float.Parse(battery.Tables[0].Rows[0][55].ToString());
                                     vSet1 = (MasterSlaveTest ?  (2 * float.Parse(battery.Tables[0].Rows[0][56].ToString())) : float.Parse(battery.Tables[0].Rows[0][56].ToString()));
-                                    timeSet2 = int.Parse(battery.Tables[0].Rows[0][57].ToString());
                                     curSet2 = float.Parse(battery.Tables[0].Rows[0][59].ToString());
                                     vSet2 = (MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][60].ToString())) : float.Parse(battery.Tables[0].Rows[0][60].ToString()));
-                                    ohmSet =  0;
                                     break;
                                 case "Top Charge-4":
                                     tempKMStore[0] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][62].ToString().Substring(0, 2)));          //mode
@@ -837,7 +833,7 @@ namespace NewBTASProto
                                     if (d.Rows[station][10].ToString().Contains("mini"))
                                     {
                                         tempKMStore[3] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][65].ToString()) * 10));             //top current byte
-                                        tempKMStore[4] = (byte)(48);                                                                            //bottom current byte
+                                        tempKMStore[4] = (byte)(48 + Math.Round(float.Parse(battery.Tables[0].Rows[0][65].ToString()) * 1000) % 100);                                                                            //bottom current byte
                                     }
                                     else
                                     {
@@ -862,13 +858,10 @@ namespace NewBTASProto
                                     tempKMStore[18] = (byte)48;                                                                                //discharge voltage low byte
                                     tempKMStore[19] = (byte)48;                                                                                //discharge resistance high byte
                                     tempKMStore[20] = (byte)48;                                                                                //discharge resistance low byte
-                                    timeSet1 = int.Parse(battery.Tables[0].Rows[0][63].ToString());
                                     curSet1 = float.Parse(battery.Tables[0].Rows[0][65].ToString());
                                     vSet1 = (MasterSlaveTest ?  (2 * float.Parse(battery.Tables[0].Rows[0][66].ToString())) : float.Parse(battery.Tables[0].Rows[0][66].ToString()));
-                                    timeSet2 = 0;
                                     curSet2 = 0;
                                     vSet2 = 0;
-                                    ohmSet =  0;
                                     break;
                                 case "Top Charge-2":
                                     tempKMStore[0] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][72].ToString().Substring(0, 2)));          //mode
@@ -877,7 +870,7 @@ namespace NewBTASProto
                                     if (d.Rows[station][10].ToString().Contains("mini"))
                                     {
                                         tempKMStore[3] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][75].ToString()) * 10));             //top current byte
-                                        tempKMStore[4] = (byte)(48);                                                                            //bottom current byte
+                                        tempKMStore[4] = (byte)(48 + Math.Round(float.Parse(battery.Tables[0].Rows[0][75].ToString()) * 1000) % 100);                                                                            //bottom current byte
                                     }
                                     else
                                     {
@@ -902,13 +895,10 @@ namespace NewBTASProto
                                     tempKMStore[18] = (byte)48;                                                                                //discharge voltage low byte
                                     tempKMStore[19] = (byte)48;                                                                                //discharge resistance high byte
                                     tempKMStore[20] = (byte)48;                                                                                //discharge resistance low byte
-                                    timeSet1 = int.Parse(battery.Tables[0].Rows[0][73].ToString());
                                     curSet1 = float.Parse(battery.Tables[0].Rows[0][75].ToString());
                                     vSet1 = (MasterSlaveTest ?  (2 * float.Parse(battery.Tables[0].Rows[0][76].ToString())) : float.Parse(battery.Tables[0].Rows[0][76].ToString()));
-                                    timeSet2 = 0;
                                     curSet2 = 0;
                                     vSet2 = 0;
-                                    ohmSet =  0;
                                     break;
                                 case "Top Charge-1":
                                     tempKMStore[0] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][82].ToString().Substring(0, 2)));          //mode
@@ -917,7 +907,7 @@ namespace NewBTASProto
                                     if (d.Rows[station][10].ToString().Contains("mini"))
                                     {
                                         tempKMStore[3] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][85].ToString()) * 10));             //top current byte
-                                        tempKMStore[4] = (byte)(48);                                                                            //bottom current byte
+                                        tempKMStore[4] = (byte)(48 + Math.Round(float.Parse(battery.Tables[0].Rows[0][85].ToString()) * 1000) % 100);                                                                            //bottom current byte
                                     }
                                     else
                                     {
@@ -942,13 +932,10 @@ namespace NewBTASProto
                                     tempKMStore[18] = (byte)48;                                                                                //discharge voltage low byte
                                     tempKMStore[19] = (byte)48;                                                                                //discharge resistance high byte
                                     tempKMStore[20] = (byte)48;                                                                                //discharge resistance low byte
-                                    timeSet1 = int.Parse(battery.Tables[0].Rows[0][83].ToString());
                                     curSet1 = float.Parse(battery.Tables[0].Rows[0][85].ToString());
                                     vSet1 = (MasterSlaveTest ?  (2 * float.Parse(battery.Tables[0].Rows[0][86].ToString())) : float.Parse(battery.Tables[0].Rows[0][86].ToString()));
-                                    timeSet2 = 0;
                                     curSet2 = 0;
                                     vSet2 = 0;
-                                    ohmSet =  0;
                                     break;
                                 case "Capacity-1":
                                     tempKMStore[0] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][92].ToString().Substring(0, 2)));          //mode
@@ -973,7 +960,7 @@ namespace NewBTASProto
                                         if (d.Rows[station][10].ToString().Contains("mini"))
                                         {
                                             tempKMStore[15] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][95].ToString()) * 1));         //discharge current high byte
-                                            tempKMStore[16] = (byte)(48 + 100 * (float.Parse(battery.Tables[0].Rows[0][95].ToString()) % 1));   //discharge current low byte
+                                            tempKMStore[16] = (byte)(48 + Math.Round(100 * (float.Parse(battery.Tables[0].Rows[0][95].ToString()) % 1)));   //discharge current low byte
                                         }
                                         else
                                         {
@@ -988,13 +975,10 @@ namespace NewBTASProto
                                         tempKMStore[19] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][101].ToString()) / 1));            //discharge resistance high byte
                                         tempKMStore[20] = (byte)(48 + 100 * (float.Parse(battery.Tables[0].Rows[0][101].ToString()) % 1));      //discharge resistance low byte
                                     }
-                                    timeSet1 = int.Parse(battery.Tables[0].Rows[0][93].ToString());
-                                    curSet1 = float.Parse(battery.Tables[0].Rows[0][95].ToString());
+                                    if (battery.Tables[0].Rows[0][95].ToString() != "") { curSet1 = float.Parse(battery.Tables[0].Rows[0][95].ToString()); }
                                     vSet1 = (MasterSlaveTest ?  (2 * float.Parse(battery.Tables[0].Rows[0][96].ToString())) : float.Parse(battery.Tables[0].Rows[0][96].ToString()));
-                                    timeSet2 = 0;
                                     curSet2 = 0;
                                     vSet2 = 0;
-                                    ohmSet =  float.Parse(battery.Tables[0].Rows[0][101].ToString());
                                     break;
                                 case "Discharge":
                                     tempKMStore[0] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][102].ToString().Substring(0, 2)));         //mode
@@ -1017,7 +1001,7 @@ namespace NewBTASProto
                                     if (d.Rows[station][10].ToString().Contains("mini"))
                                     {
                                         tempKMStore[15] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][105].ToString()) * 1));            //discharge current high byte
-                                        tempKMStore[16] = (byte)(48 + 100 * (float.Parse(battery.Tables[0].Rows[0][105].ToString()) % 1));      //discharge current low byte
+                                        tempKMStore[16] = (byte)(48 + Math.Round(100 * (float.Parse(battery.Tables[0].Rows[0][105].ToString()) % 1)));      //discharge current low byte
                                     }
                                     else
                                     {
@@ -1028,13 +1012,10 @@ namespace NewBTASProto
                                     tempKMStore[18] = (byte)48;                                                                                //discharge voltage low byte
                                     tempKMStore[19] = (byte)48;                                                                                //discharge resistance high byte
                                     tempKMStore[20] = (byte)48;                                                                                //discharge resistance low byte
-                                    timeSet1 = int.Parse(battery.Tables[0].Rows[0][103].ToString());
                                     curSet1 = float.Parse(battery.Tables[0].Rows[0][105].ToString());
                                     vSet1 = 0;
-                                    timeSet2 = 0;
                                     curSet2 = 0;
                                     vSet2 = 0;
-                                    ohmSet =  0;
                                     break;
                                 case "Slow Charge-14":
                                     tempKMStore[0] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][112].ToString().Substring(0, 2)));         //mode
@@ -1043,7 +1024,7 @@ namespace NewBTASProto
                                     if (d.Rows[station][10].ToString().Contains("mini"))
                                     {
                                         tempKMStore[3] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][115].ToString()) * 10));            //top current byte
-                                        tempKMStore[4] = (byte)(48);                                                                            //bottom current byte
+                                        tempKMStore[4] = (byte)(48 + Math.Round(float.Parse(battery.Tables[0].Rows[0][115].ToString()) * 1000) % 100);                                                                            //bottom current byte
                                     }
                                     else
                                     {
@@ -1068,13 +1049,10 @@ namespace NewBTASProto
                                     tempKMStore[18] = (byte)48;                                                                                //discharge voltage low byte
                                     tempKMStore[19] = (byte)48;                                                                                //discharge resistance high byte
                                     tempKMStore[20] = (byte)48;                                                                                //discharge resistance low byte
-                                    timeSet1 = int.Parse(battery.Tables[0].Rows[0][113].ToString());
                                     curSet1 = float.Parse(battery.Tables[0].Rows[0][115].ToString());
                                     vSet1 = (MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][116].ToString())) : float.Parse(battery.Tables[0].Rows[0][116].ToString()));
-                                    timeSet2 = 0;
                                     curSet2 = 0;
                                     vSet2 = 0;
-                                    ohmSet =  0;
                                     break;
                                 case "Slow Charge-16":
                                     tempKMStore[0] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][122].ToString().Substring(0, 2)));         //mode
@@ -1083,7 +1061,7 @@ namespace NewBTASProto
                                     if (d.Rows[station][10].ToString().Contains("mini"))
                                     {
                                         tempKMStore[3] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][125].ToString()) * 10));            //top current byte
-                                        tempKMStore[4] = (byte)(48);                                                                            //bottom current byte
+                                        tempKMStore[4] = (byte)(48 + Math.Round(float.Parse(battery.Tables[0].Rows[0][125].ToString()) * 1000) % 100);                                                                            //bottom current byte
                                     }
                                     else
                                     {
@@ -1108,13 +1086,10 @@ namespace NewBTASProto
                                     tempKMStore[18] = (byte)48;                                                                                //discharge voltage low byte
                                     tempKMStore[19] = (byte)48;                                                                                //discharge resistance high byte
                                     tempKMStore[20] = (byte)48;                                                                                //discharge resistance low byte
-                                    timeSet1 = int.Parse(battery.Tables[0].Rows[0][123].ToString());
                                     curSet1 = float.Parse(battery.Tables[0].Rows[0][125].ToString());
                                     vSet1 = (MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][126].ToString())) : float.Parse(battery.Tables[0].Rows[0][126].ToString()));
-                                    timeSet2 = 0;
                                     curSet2 = 0;
                                     vSet2 = 0;
-                                    ohmSet =  0;
                                     break;
                                 case "Custom Chg":
                                     tempKMStore[0] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][132].ToString().Substring(0, 2)));         //mode
@@ -1126,7 +1101,7 @@ namespace NewBTASProto
                                     if (d.Rows[station][10].ToString().Contains("mini"))
                                     {
                                         tempKMStore[3] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][135].ToString()) * 10));            //top current byte
-                                        tempKMStore[4] = (byte)(48);                                                                            //bottom current byte
+                                        tempKMStore[4] = (byte)(48 + Math.Round(float.Parse(battery.Tables[0].Rows[0][135].ToString()) * 1000) % 100);                                                                            //bottom current byte
                                     }
                                     else
                                     {
@@ -1143,7 +1118,7 @@ namespace NewBTASProto
                                         if (d.Rows[station][10].ToString().Contains("mini"))
                                         {
                                             tempKMStore[9] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][139].ToString()) * 10));        //top current 2 byte
-                                            tempKMStore[10] = (byte)(48);                                                                       //bottom current 2 byte
+                                            tempKMStore[10] = (byte)(48 + Math.Round(float.Parse(battery.Tables[0].Rows[0][139].ToString()) * 1000) % 100);                                                                       //bottom current 2 byte
                                         }
                                         else
                                         {
@@ -1162,13 +1137,10 @@ namespace NewBTASProto
                                     tempKMStore[18] = (byte)48;                                                                                //discharge voltage low byte
                                     tempKMStore[19] = (byte)48;                                                                                //discharge resistance high byte
                                     tempKMStore[20] = (byte)48;                                                                                //discharge resistance low byte
-                                    timeSet1 = int.Parse(battery.Tables[0].Rows[0][133].ToString());
                                     curSet1 = float.Parse(battery.Tables[0].Rows[0][135].ToString());
                                     vSet1 = (MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][136].ToString())) : float.Parse(battery.Tables[0].Rows[0][136].ToString()));
-                                    timeSet2 = int.Parse(battery.Tables[0].Rows[0][137].ToString());
-                                    curSet2 = float.Parse(battery.Tables[0].Rows[0][139].ToString());
-                                    vSet2 = (MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][140].ToString())) : float.Parse(battery.Tables[0].Rows[0][140].ToString()));
-                                    ohmSet =  0;
+                                    if (battery.Tables[0].Rows[0][139].ToString() != "") { curSet2 = float.Parse(battery.Tables[0].Rows[0][139].ToString()); }
+                                    if (battery.Tables[0].Rows[0][140].ToString() != "") { vSet2 = (MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][140].ToString())) : float.Parse(battery.Tables[0].Rows[0][140].ToString())); }
                                     break;
                                 case "Custom Cap":
                                     tempKMStore[0] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][142].ToString().Substring(0, 2)));         //mode
@@ -1193,7 +1165,7 @@ namespace NewBTASProto
                                         if (d.Rows[station][10].ToString().Contains("mini"))
                                         {
                                             tempKMStore[15] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][145].ToString()) * 1));        //discharge current high byte
-                                            tempKMStore[16] = (byte)(48 + 100 * (float.Parse(battery.Tables[0].Rows[0][145].ToString()) % 1));  //discharge current low byte
+                                            tempKMStore[16] = (byte)(48 + Math.Round(100 * (float.Parse(battery.Tables[0].Rows[0][145].ToString()) % 1)));  //discharge current low byte
                                         }
                                         else
                                         {
@@ -1211,13 +1183,10 @@ namespace NewBTASProto
                                         tempKMStore[19] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][151].ToString()) / 1));            //discharge resistance high byte
                                         tempKMStore[20] = (byte)(48 + 100 * (float.Parse(battery.Tables[0].Rows[0][151].ToString()) % 1));      //discharge resistance low byte
                                     }
-                                    timeSet1 = int.Parse(battery.Tables[0].Rows[0][143].ToString());
-                                    curSet1 = float.Parse(battery.Tables[0].Rows[0][145].ToString());
-                                    vSet1 = (MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][146].ToString())) : float.Parse(battery.Tables[0].Rows[0][146].ToString()));
-                                    timeSet2 = 0;
+                                    if (battery.Tables[0].Rows[0][145].ToString() != "") { curSet1 = float.Parse(battery.Tables[0].Rows[0][145].ToString()); }
+                                    if (battery.Tables[0].Rows[0][146].ToString() != "") { vSet1 = (MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][146].ToString())) : float.Parse(battery.Tables[0].Rows[0][146].ToString())); }
                                     curSet2 = 0;
                                     vSet2 = 0;
-                                    ohmSet =  float.Parse(battery.Tables[0].Rows[0][151].ToString());
                                     break;
                                 case "Constant Voltage":
                                     tempKMStore[0] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][152].ToString().Substring(0, 2)));         //mode
@@ -1226,7 +1195,7 @@ namespace NewBTASProto
                                     if (d.Rows[station][10].ToString().Contains("mini"))
                                     {
                                         tempKMStore[3] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][155].ToString()) * 10));            //top current byte
-                                        tempKMStore[4] = (byte)(48);                                                                            //bottom current byte
+                                        tempKMStore[4] = (byte)(48 + Math.Round(float.Parse(battery.Tables[0].Rows[0][155].ToString()) * 1000) % 100);                                                                            //bottom current byte
                                     }
                                     else
                                     {
@@ -1251,13 +1220,10 @@ namespace NewBTASProto
                                     tempKMStore[18] = (byte)48;                                                                                //discharge voltage low byte
                                     tempKMStore[19] = (byte)48;                                                                                //discharge resistance high byte
                                     tempKMStore[20] = (byte)48;                                                                                //discharge resistance low byte
-                                    timeSet1 = int.Parse(battery.Tables[0].Rows[0][153].ToString());
                                     curSet1 = float.Parse(battery.Tables[0].Rows[0][155].ToString());
                                     vSet1 = (MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][156].ToString())) : float.Parse(battery.Tables[0].Rows[0][156].ToString()));
-                                    timeSet2 = 0;
                                     curSet2 = 0;
                                     vSet2 = 0;
-                                    ohmSet = 0;
                                     break;
                                 default:
                                     break;
@@ -1265,11 +1231,7 @@ namespace NewBTASProto
                         }
                         catch
                         {
-                            this.Invoke((MethodInvoker)delegate()
-                            {
-                                sendNote(station, 3, "Error:  Fail to pull the settings from the DataBase.");
-                                MessageBox.Show(this, "Fail to pull the settings from the DataBase. \r\nPlease make sure you have the battery model setup for this test under the Manage Battery Models menu.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            });
+
 
                             //clear values from d
                             updateD(station, 7, ("Error"));
@@ -1279,11 +1241,17 @@ namespace NewBTASProto
 
                             clearTLock();
                             cRunTest[station].Cancel();
+                            this.Invoke((MethodInvoker)delegate()
+                            {
+                                sendNote(station, 3, "Error:  Fail to pull the settings from the DataBase.");
+                                MessageBox.Show(this, "Fail to pull the settings from the DataBase. \r\nPlease make sure you have the battery model setup for this test under the Manage Battery Models menu.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            });
                             return;
                         }
 
                         #endregion
 
+                        #region load settings
                         // set KE1 to data
                         GlobalVars.ICSettings[Cstation].KE1 = (byte)1;
 
@@ -1344,15 +1312,13 @@ namespace NewBTASProto
                         criticalNum[Cstation] = true;
                         Thread.Sleep(2000);
 
+                        #endregion
+
                     } // end try
                     catch (Exception ex)
                     {
                         myAccessConn.Close();
-                        this.Invoke((MethodInvoker)delegate()
-                        {
-                            sendNote(station, 3, "Error:  Failed to Auto Load settings into the Charger.");
-                            MessageBox.Show(this, "Error: Failed to Auto Load settings into the Charger.\n", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        });
+
                         // reset everything
                         //clear values from d
                         updateD(station, 7, ("Error"));
@@ -1362,6 +1328,12 @@ namespace NewBTASProto
 
                         clearTLock();
                         cRunTest[station].Cancel();
+
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            sendNote(station, 3, "Error:  Failed to Auto Load settings into the Charger.");
+                            MessageBox.Show(this, "Error: Failed to Auto Load settings into the Charger.\n", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        });
                         return;
                     } // end catch
 
@@ -1398,11 +1370,7 @@ namespace NewBTASProto
                 catch (Exception ex)
                 {
                     myAccessConn.Close();
-                    this.Invoke((MethodInvoker)delegate()
-                    {
-                        sendNote(station, 3, "Error: Failed to retrieve the required data from the DataBase.");
-                        MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    });
+
                     updateD(station, 5, false);
                     if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
                     //clear values from d
@@ -1410,16 +1378,24 @@ namespace NewBTASProto
                     if (MasterSlaveTest) { updateD(slaveRow, 7, "Error"); }
                     clearTLock();
                     cRunTest[station].Cancel();
+                    this.Invoke((MethodInvoker)delegate()
+                    {
+                        sendNote(station, 3, "Error: Failed to retrieve the required data from the DataBase.");
+                        MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    });
                     return;
                 }
                 #endregion
 
+                #region check for new or resume and get step numbers
+                // step number variables for the 6 possible workorders..
                 int stepNum;
                 int stepNum2 = 0;
                 int stepNum3 = 0;
                 int slaveStepNum = 0;
                 int slaveStepNum2 = 0;
                 int slaveStepNum3 = 0;
+
 
                 //check if this is a new test first! Also check if the this is a master slave test and the two rows are out of sink...
                 if ((string)d.Rows[station][6] == "" || (MasterSlaveTest && d.Rows[station][6].ToString() != d.Rows[slaveRow][6].ToString()))
@@ -1507,11 +1483,6 @@ namespace NewBTASProto
                     {
 
                         myAccessConn.Close();
-                        this.Invoke((MethodInvoker)delegate()
-                        {
-                            sendNote(station, 3, "Error: Failed to retrieve the required data from the DataBase.");
-                            MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        });
                         updateD(station, 5, false);
                         if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
                         //clear values from d
@@ -1519,6 +1490,11 @@ namespace NewBTASProto
                         if (MasterSlaveTest) { updateD(slaveRow, 7, "Error"); }
                         clearTLock();
                         cRunTest[station].Cancel();
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            sendNote(station, 3, "Error: Failed to retrieve the required data from the DataBase.");
+                            MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        });
                         return;
                     }
 
@@ -1604,11 +1580,7 @@ namespace NewBTASProto
                         catch (Exception ex)
                         {
                             myAccessConn.Close();
-                            this.Invoke((MethodInvoker)delegate()
-                            {
-                                sendNote(station, 3, "Error: Failed to retrieve the required data from the DataBase.");
-                                MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            });
+
                             updateD(station, 5, false);
                             if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
                             //clear values from d
@@ -1616,6 +1588,11 @@ namespace NewBTASProto
                             if (MasterSlaveTest) { updateD(slaveRow, 7, "Error"); }
                             clearTLock();
                             cRunTest[station].Cancel();
+                            this.Invoke((MethodInvoker)delegate()
+                            {
+                                sendNote(station, 3, "Error: Failed to retrieve the required data from the DataBase.");
+                                MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            });
                             return;
                         }
                     }
@@ -1625,6 +1602,7 @@ namespace NewBTASProto
 
                     #endregion
 
+                    #region save new test to test table
                     // Save the test information to the test table///////////////////////////////////////////////////////////////////////////////////////////
 
                     // we need the technician selected in the combo box too..
@@ -1633,7 +1611,7 @@ namespace NewBTASProto
                         comboText = label2.Text;
                     });
 
-                    #region save new test to test table
+
                     //  now try to INSERT INTO it
                     try
                     {
@@ -1749,11 +1727,7 @@ namespace NewBTASProto
                     catch (Exception ex)
                     {
                         myAccessConn.Close();
-                        this.Invoke((MethodInvoker)delegate()
-                        {
-                            sendNote(station, 3, "Error: Failed to retrieve the required data from the DataBase.");
-                            MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        });
+
                         updateD(station, 5, false);
                         if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
                         //clear values from d
@@ -1761,6 +1735,11 @@ namespace NewBTASProto
                         if (MasterSlaveTest) { updateD(slaveRow, 7, "Error"); }
                         clearTLock();
                         cRunTest[station].Cancel();
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            sendNote(station, 3, "Error: Failed to retrieve the required data from the DataBase.");
+                            MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        });
                         return;
                     }
 
@@ -1886,11 +1865,7 @@ namespace NewBTASProto
                         catch (Exception ex)
                         {
                             myAccessConn.Close();
-                            this.Invoke((MethodInvoker)delegate()
-                            {
-                                sendNote(station, 3, "Error: Failed to retrieve the required data from the DataBase.");
-                                MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            });
+
                             updateD(station, 5, false);
                             if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
                             //clear values from d
@@ -1898,6 +1873,11 @@ namespace NewBTASProto
                             if (MasterSlaveTest) { updateD(slaveRow, 7, "Error"); }
                             clearTLock();
                             cRunTest[station].Cancel();
+                            this.Invoke((MethodInvoker)delegate()
+                            {
+                                sendNote(station, 3, "Error: Failed to retrieve the required data from the DataBase.");
+                                MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            });
                             return;
                         }
 
@@ -1907,13 +1887,14 @@ namespace NewBTASProto
                         updateD(slaveRow, 3, slaveStepNum.ToString());
 
                     }
-
-                }// end if
-
+ 
                     #endregion
+                }// end if
 
                 else    // We've got a resume!
                 {
+                    #region look up current test numbers
+
                     //get the current step number from d
                     stepNum = int.Parse((string)d.Rows[station][3]);
 
@@ -1939,7 +1920,7 @@ namespace NewBTASProto
                             }
                             else
                             {
-                                stepNum2 = int.Parse((string)tests.Tables[0].Rows[0][4]) + 1;
+                                stepNum2 = int.Parse((string)tests.Tables[0].Rows[0][4]); // set to last step
                             }
 
                             if (MWO3 != "")
@@ -1962,7 +1943,7 @@ namespace NewBTASProto
                                 }
                                 else
                                 {
-                                    stepNum3 = int.Parse((string)tests.Tables[0].Rows[0][4]) + 1;
+                                    stepNum3 = int.Parse((string)tests.Tables[0].Rows[0][4]);  // set to last step
                                 }
                             }
 
@@ -1971,11 +1952,7 @@ namespace NewBTASProto
                         catch (Exception ex)
                         {
                             myAccessConn.Close();
-                            this.Invoke((MethodInvoker)delegate()
-                            {
-                                sendNote(station, 3, "Error: Failed to retrieve the required data from the DataBase.");
-                                MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            });
+
                             updateD(station, 5, false);
                             if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
                             //clear values from d
@@ -1983,6 +1960,11 @@ namespace NewBTASProto
                             if (MasterSlaveTest) { updateD(slaveRow, 7, "Error"); }
                             clearTLock();
                             cRunTest[station].Cancel();
+                            this.Invoke((MethodInvoker)delegate()
+                            {
+                                sendNote(station, 3, "Error: Failed to retrieve the required data from the DataBase.");
+                                MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            });
                             return;
                         }
                     }
@@ -1993,37 +1975,16 @@ namespace NewBTASProto
                     {
                         slaveStepNum = int.Parse((string)d.Rows[slaveRow][3]);
 
-                        // Now we'll look up the current test number and increment the new step number/////////////////////////////////////////////////////
-                        //  open the db and pull in the options table
-                        try
+                        if (SWO2 != "")
                         {
-                            strAccessSelect = @"SELECT * FROM Tests WHERE WorkOrderNumber='" + SWO2 + "' ORDER BY StepNumber DESC;";
-                            DataSet tests = new DataSet();
-                            OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
-                            OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
-
-                            lock (dataBaseLock)
+                            // Now we'll look up the current test number and increment the new step number/////////////////////////////////////////////////////
+                            //  open the db and pull in the options table
+                            try
                             {
-                                myAccessConn.Open();
-                                myDataAdapter.Fill(tests, "Tests");
-                                myAccessConn.Close();
-                            }
-
-                            if (tests.Tables[0].Rows.Count == 0)
-                            {
-                                slaveStepNum2 = 1;
-                            }
-                            else
-                            {
-                                slaveStepNum2 = int.Parse((string)tests.Tables[0].Rows[0][4]) + 1;
-                            }
-
-                            if (SWO3 != "")
-                            {
-                                strAccessSelect = @"SELECT * FROM Tests WHERE WorkOrderNumber='" + SWO3 + "' ORDER BY StepNumber DESC;";
-                                tests = new DataSet();
-                                myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
-                                myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+                                strAccessSelect = @"SELECT * FROM Tests WHERE WorkOrderNumber='" + SWO2 + "' ORDER BY StepNumber DESC;";
+                                DataSet tests = new DataSet();
+                                OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                                OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
 
                                 lock (dataBaseLock)
                                 {
@@ -2034,34 +1995,61 @@ namespace NewBTASProto
 
                                 if (tests.Tables[0].Rows.Count == 0)
                                 {
-                                    slaveStepNum3 = 1;
+                                    slaveStepNum2 = 1;
                                 }
                                 else
                                 {
-                                    slaveStepNum3 = int.Parse((string)tests.Tables[0].Rows[0][4]) + 1;
+                                    slaveStepNum2 = int.Parse((string)tests.Tables[0].Rows[0][4]);  // set to last step
                                 }
-                            }
 
-                        }
-                        catch (Exception ex)
-                        {
-                            myAccessConn.Close();
-                            this.Invoke((MethodInvoker)delegate()
+                                if (SWO3 != "")
+                                {
+                                    strAccessSelect = @"SELECT * FROM Tests WHERE WorkOrderNumber='" + SWO3 + "' ORDER BY StepNumber DESC;";
+                                    tests = new DataSet();
+                                    myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                                    myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                                    lock (dataBaseLock)
+                                    {
+                                        myAccessConn.Open();
+                                        myDataAdapter.Fill(tests, "Tests");
+                                        myAccessConn.Close();
+                                    }
+
+                                    if (tests.Tables[0].Rows.Count == 0)
+                                    {
+                                        slaveStepNum3 = 1;
+                                    }
+                                    else
+                                    {
+                                        slaveStepNum3 = int.Parse((string)tests.Tables[0].Rows[0][4]);  // set to last step
+                                    }
+                                }
+
+                            }
+                            catch (Exception ex)
                             {
-                                sendNote(station, 3, "Error: Failed to retrieve the required data from the DataBase.");
-                                MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            });
-                            updateD(station, 5, false);
-                            if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
-                            //clear values from d
-                            updateD(station, 7, ("Error"));
-                            if (MasterSlaveTest) { updateD(slaveRow, 7, "Error"); }
-                            clearTLock();
-                            cRunTest[station].Cancel();
-                            return;
+                                myAccessConn.Close();
+                                updateD(station, 5, false);
+                                if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                                //clear values from d
+                                updateD(station, 7, ("Error"));
+                                if (MasterSlaveTest) { updateD(slaveRow, 7, "Error"); }
+                                clearTLock();
+                                cRunTest[station].Cancel();
+                                this.Invoke((MethodInvoker)delegate()
+                                {
+                                    sendNote(station, 3, "Error: Failed to retrieve the required data from the DataBase.");
+                                    MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                });
+                                return;
+                            }
                         }
                     }
+                    #endregion
                 }
+                #endregion
+
 
                 // We should be ready to go at this point!
                 // and indicate that the test is starting
@@ -2074,10 +2062,6 @@ namespace NewBTASProto
                     resumeTestToolStripMenuItem.Enabled = false;
                     stopTestToolStripMenuItem.Enabled = true;
                 });
-
-
-
-
 
                 #region timer setup
                 // We are now good to go on starting the test loop timer...
@@ -2148,8 +2132,9 @@ namespace NewBTASProto
                 }
                 #endregion
 
+                #endregion
+
                 /////////////////////////////////START UP//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                //////////////////////// OK now we'll tell the charger to startup (if we need to!)/////////////////////////////////////////////////////////////////////////////////////
                 #region START UP
                 if (d.Rows[station][2].ToString() == "As Received")
                 {
@@ -2612,13 +2597,13 @@ namespace NewBTASProto
                             {
                                 criticalNum[Cstation] = true;
                                 Thread.Sleep(1000);
-                                if (d.Rows[station][11].ToString() == "HOLD")
+                                if (d.Rows[station][11].ToString() == "HOLD" || d.Rows[station][11].ToString() == "RESET")
                                 {
                                     break;
                                 }
 
                             }
-                            if (d.Rows[station][11].ToString() == "HOLD")
+                            if (d.Rows[station][11].ToString() == "HOLD" || d.Rows[station][11].ToString() == "RESET")
                             {
                                 break;
                             }
@@ -2736,11 +2721,6 @@ namespace NewBTASProto
                 else
                 {
                     // We don't have a charger linked ...
-                    this.Invoke((MethodInvoker)delegate()
-                    {
-                        MessageBox.Show(this, "No Charger Detected!  Please check settings!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    });
-
                     //clear values from d
                     updateD(station, 7, ("No Charger Detected!"));
                     if (MasterSlaveTest) { updateD(slaveRow, 7, "No Charger Detected!"); }
@@ -2759,6 +2739,10 @@ namespace NewBTASProto
                     cRunTest[station].Cancel();
                     //update the finish time
                     updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
+                    this.Invoke((MethodInvoker)delegate()
+                    {
+                        MessageBox.Show(this, "No Charger Detected!  Please check settings!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    });
                     return;
                 }
 
@@ -2779,10 +2763,18 @@ namespace NewBTASProto
 
                 clearTLock();
 
+                #endregion
+
+                /////////////////////////////////MAIN LOOP//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                #region MAIN LOOP
+
                 //used for counting the number of bad current readings...
                 int badCurCount = 0;
-
-                #endregion
+                byte badReadingCount = 0;
+                //used for looking for temperature drift of temp plate
+                double startTemp = GlobalVars.CScanData[station].TP1 + GlobalVars.CScanData[station].TP2 + GlobalVars.CScanData[station].TP3 + GlobalVars.CScanData[station].TP4;
+                startTemp /= 4;
+                int memTemp = 0;
 
                 while (currentReading <= readings)
                 {
@@ -3489,14 +3481,6 @@ namespace NewBTASProto
                         {
 
                             myAccessConn.Close();
-                            this.Invoke((MethodInvoker)delegate()
-                            {
-                                sendNote(station, 3, "Error: Failed to retrieve the required data from the DataBase.");
-                                startNewTestToolStripMenuItem.Enabled = true;
-                                resumeTestToolStripMenuItem.Enabled = true;
-                                stopTestToolStripMenuItem.Enabled = false;
-                                MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            });
                             updateD(station, 5, false);
                             if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
                             //clear values from d
@@ -3505,6 +3489,14 @@ namespace NewBTASProto
                             cRunTest[station].Cancel();
                             //update the finish time
                             updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
+                            this.Invoke((MethodInvoker)delegate()
+                            {
+                                sendNote(station, 3, "Error: Failed to retrieve the required data from the DataBase.");
+                                startNewTestToolStripMenuItem.Enabled = true;
+                                resumeTestToolStripMenuItem.Enabled = true;
+                                stopTestToolStripMenuItem.Enabled = false;
+                                MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            });
                             return;
                         }
                         #endregion
@@ -3531,7 +3523,7 @@ namespace NewBTASProto
                     #region Here is where we are going to look for charging issues!
                     //Lets test for a charger issue now
                     // there are going to be three sections, ICA section, CCA section and SHUNT section
-                    #region CScan Tests
+                    #region CScan Tests and Temp drift check
                     //CScan tests
                     //Lets look to see if the cables have become disconnected...
                     
@@ -3592,6 +3584,53 @@ namespace NewBTASProto
                     oldTempCon = tempCon;
                     oldCellCon = cellCon;
 
+                    //Lets also look for a temperature rise on the temp-plate...
+                    double tempTemp = (GlobalVars.CScanData[station].TP1 + GlobalVars.CScanData[station].TP2 + GlobalVars.CScanData[station].TP3 + GlobalVars.CScanData[station].TP4) / 4;
+                    if ((tempTemp > (startTemp + 5)) && memTemp == 0)
+                    {
+                        // we got the first 5 C rise
+                        // warn the user
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            sendNote(station, 3, "Temperature has risen 5C on template for station " + station.ToString());
+                        });
+                        //update memTemp
+                        memTemp += 1;
+                    }
+                    else if ((tempTemp > (startTemp + 10)) && memTemp == 1)
+                    {
+                        // we got the first 5 C rise
+                        // warn the user
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            sendNote(station, 2, "Temperature has risen 10C on template for station " + station.ToString());
+                        });
+                        //update memTemp
+                        memTemp += 1;
+                    }
+                    else if ((tempTemp > (startTemp + 15)) && memTemp == 2)
+                    {
+                        // we got the first 5 C rise
+                        // warn the user
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            sendNote(station, 1, "Temperature has risen 15C on template for station " + station.ToString());
+                        });
+                        //update memTemp
+                        memTemp += 1;
+                    }
+                    else if ((tempTemp > (startTemp + 20)) && memTemp == 3)
+                    {
+                        // we got the first 5 C rise
+                        // warn the user
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            sendNote(station, 1, "Temperature has risen 20C on template for station " + station.ToString());
+                        });
+                        //update memTemp
+                        memTemp += 1;
+                    }
+
                     #endregion
                     //charger specific tests
                     #region IC checks
@@ -3633,16 +3672,6 @@ namespace NewBTASProto
                             // end the test!
                             //clear values from d
 
-                            //update the gui
-                            this.Invoke((MethodInvoker)delegate()
-                            {
-                                sendNote(station, 3, "Test failed. Charger is not producing any current.  Please check the charger settings.");
-                                startNewTestToolStripMenuItem.Enabled = true;
-                                resumeTestToolStripMenuItem.Enabled = true;
-                                stopTestToolStripMenuItem.Enabled = false;
-                                MessageBox.Show(this, "Test failed. Charger is not producing any current.  Please check the charger settings.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            });
-
                             //also tell the charger to stop
                             // now we need to stop the charger
                             updateD(station, 7, "Telling Charger to Stop");
@@ -3661,14 +3690,14 @@ namespace NewBTASProto
                                 {
                                     criticalNum[Cstation] = true;
                                     Thread.Sleep(1000);
-                                    if (d.Rows[station][11].ToString() == "HOLD" || d.Rows[station][11].ToString() == "END")
+                                    if (d.Rows[station][11].ToString() == "HOLD" || d.Rows[station][11].ToString() == "END" || d.Rows[station][11].ToString() == "RESET")
                                     {
                                         break;
                                     }
 
                                 }
 
-                                if (d.Rows[station][11].ToString() == "HOLD" || d.Rows[station][11].ToString() == "END")
+                                if (d.Rows[station][11].ToString() == "HOLD" || d.Rows[station][11].ToString() == "END" || d.Rows[station][11].ToString() == "RESET")
                                 {
                                     break;
                                 }
@@ -3682,6 +3711,17 @@ namespace NewBTASProto
                             cRunTest[station].Cancel();
                             //update the finish time
                             updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
+
+                            //update the gui
+                            this.Invoke((MethodInvoker)delegate()
+                            {
+                                sendNote(station, 3, "Test failed. Charger is not producing any current.  Please check the charger settings.");
+                                startNewTestToolStripMenuItem.Enabled = true;
+                                resumeTestToolStripMenuItem.Enabled = true;
+                                stopTestToolStripMenuItem.Enabled = false;
+                                MessageBox.Show(this, "Test failed. Charger is not producing any current.  Please check the charger settings.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            });
+
                             return;
                         }
 
@@ -3736,6 +3776,10 @@ namespace NewBTASProto
                                             updateD(station, 5, false);
                                             if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
 
+
+
+                                            //update the finish time
+                                            updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
                                             //update the gui
                                             this.Invoke((MethodInvoker)delegate()
                                             {
@@ -3745,8 +3789,6 @@ namespace NewBTASProto
                                                 stopTestToolStripMenuItem.Enabled = false;
                                             });
 
-                                            //update the finish time
-                                            updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
                                             return;
                                         }
 
@@ -3820,6 +3862,9 @@ namespace NewBTASProto
                                     if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
 
                                     //update the gui
+                                    cRunTest[station].Cancel();
+                                    //update the finish time
+                                    updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
                                     this.Invoke((MethodInvoker)delegate()
                                     {
                                         sendNote(station, 3, "Test failed. Charger Status:  " + d.Rows[station][11].ToString());
@@ -3828,18 +3873,19 @@ namespace NewBTASProto
                                         stopTestToolStripMenuItem.Enabled = false;
                                         MessageBox.Show(this, "Test failed. Charger Status:  " + d.Rows[station][11].ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     });
-                                    cRunTest[station].Cancel();
-                                    //update the finish time
-                                    updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
                                     return;
                                 }// end test fail else
 
                             }  // end still no run if
                         } // end no run if
+
                         // finally let take a look at the current and voltages and the like and see if they are where they should be...
+                        // this is a double check to make sure the autoconfig is behaving...
+                        #region settings checks for autoConfigged ICs
+                        
                         if (GlobalVars.autoConfig && (bool)d.Rows[station][12])
                         {
-                            /* we need to check
+                            /* we need to check that the charger is doing what it should be...
                             timeSet1
                             curSet1
                             vSet1
@@ -3849,7 +3895,94 @@ namespace NewBTASProto
                             ohmSet
                              * */
 
+                            Debug.Print("Current:" + GlobalVars.ICData[station].battCurrent.ToString());
+                            Debug.Print("Voltage:" + GlobalVars.ICData[station].battVoltage.ToString());
+                            // we are past the startup dealy, so lets see if we are reasonably close to one of the currents
+                            //check the currents
+                            if (GlobalVars.ICData[station].testMode.Contains("32"))
+                            {
+                                // constant current dis
+                            }
+                            else if (Math.Abs(GlobalVars.CScanData[station].currentOne - curSet1) > (0.1 + curSet1 * 0.05) && Math.Abs(GlobalVars.CScanData[station].currentOne - curSet2) > (0.1 + curSet2 * 0.05))
+                            {
+                                badReadingCount++;
+                            }
+                            else if ((d.Rows[station][2].ToString().Contains("Cap") || d.Rows[station][2].ToString().Contains("Dis")) && GlobalVars.ICData[station].battVoltage < (vSet1 - 1))
+                            {
+                                badReadingCount++;
+                            }
+                            else if (GlobalVars.ICData[station].battVoltage > (vSet1 + 0.5) && GlobalVars.ICData[station].battVoltage > (vSet2 + 0.5))
+                            {
+                                badReadingCount++;
+                            }
+                            else
+                            {
+                                badReadingCount = 0;
+                            }
+
                         }
+
+                        #region cancel because of out of programmed settings error
+                        if (badReadingCount > 100)
+                        {
+                            // quit the test and let them know about it...
+                            // end the test!
+                            //clear values from d
+
+                            //update the gui
+                            
+                            //also tell the charger to stop
+                            // now we need to stop the charger
+                            updateD(station, 7, "Telling Charger to Stop");
+                            if (MasterSlaveTest) { updateD(slaveRow, 7, "Telling Charger to Stop"); }
+
+                            for (int j = 0; j < 5; j++)
+                            {
+                                // set KE1 to 2 ("command")
+                                GlobalVars.ICSettings[Cstation].KE1 = (byte)2;
+                                // set KE3 to stop
+                                GlobalVars.ICSettings[Cstation].KE3 = (byte)2;
+                                //Update the output string value
+                                GlobalVars.ICSettings[Cstation].UpdateOutText();
+
+                                for (int i = 0; i < 5; i++)
+                                {
+                                    criticalNum[Cstation] = true;
+                                    Thread.Sleep(1000);
+                                    if (d.Rows[station][11].ToString() == "HOLD" || d.Rows[station][11].ToString() == "END" || d.Rows[station][11].ToString() == "RESET")
+                                    {
+                                        break;
+                                    }
+
+                                }
+
+                                if (d.Rows[station][11].ToString() == "HOLD" || d.Rows[station][11].ToString() == "END" || d.Rows[station][11].ToString() == "RESET")
+                                {
+                                    break;
+                                }
+
+                            }
+
+                            updateD(station, 7, ("FAILED ON " + (currentReading - 1).ToString() + " of " + readings.ToString()));
+                            if (MasterSlaveTest) { updateD(slaveRow, 7, ("FAILED ON " + (currentReading - 1).ToString() + " of " + readings.ToString())); }
+                            updateD(station, 5, false);
+                            if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                            cRunTest[station].Cancel();
+                            //update the finish time
+                            updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
+                            this.Invoke((MethodInvoker)delegate()
+                            {
+                                sendNote(station, 3, "Test failed. Charger is not running as programmed.  Please check the charger comms.");
+                                startNewTestToolStripMenuItem.Enabled = true;
+                                resumeTestToolStripMenuItem.Enabled = true;
+                                stopTestToolStripMenuItem.Enabled = false;
+                                MessageBox.Show(this, "Test failed. Charger is not running as programmed.  Please check the charger comms.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            });
+                            return;
+
+                        }
+                        #endregion
+                        #endregion
                     }// end IC block
                     #endregion
                     #region CCA tests
@@ -3881,6 +4014,10 @@ namespace NewBTASProto
                                     if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
 
                                     //update the gui
+                                    
+
+                                    //update the finish time
+                                    updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
                                     this.Invoke((MethodInvoker)delegate()
                                     {
                                         sendNote(station, 3, "Test canceled while in a power fail.");
@@ -3889,9 +4026,6 @@ namespace NewBTASProto
                                         stopTestToolStripMenuItem.Enabled = false;
                                         MessageBox.Show(this, "Test canceled while in a power fail.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     });
-
-                                    //update the finish time
-                                    updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
                                     return;
                                 }
                                 // wait a little before testing again...
@@ -3929,6 +4063,10 @@ namespace NewBTASProto
                                     if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
 
                                     //update the gui
+                                    
+                                    cRunTest[station].Cancel();
+                                    //update the finish time
+                                    updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
                                     this.Invoke((MethodInvoker)delegate()
                                     {
                                         sendNote(station, 3, "Current has fallen below minimum threshold. Please check the shunt connection and resume or restart the test.");
@@ -3937,9 +4075,6 @@ namespace NewBTASProto
                                         stopTestToolStripMenuItem.Enabled = false;
                                         MessageBox.Show(this, "Current has fallen below minimum threshold. Please check the shunt connection and resume or restart the test.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     });
-                                    cRunTest[station].Cancel();
-                                    //update the finish time
-                                    updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
                                     return;
                                 }
                             }
@@ -3969,6 +4104,10 @@ namespace NewBTASProto
                                     updateD(station, 5, false);
                                     if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
 
+                                    
+                                    cRunTest[station].Cancel();
+                                    //update the finish time
+                                    updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
                                     //update the gui
                                     this.Invoke((MethodInvoker)delegate()
                                     {
@@ -3978,9 +4117,6 @@ namespace NewBTASProto
                                         stopTestToolStripMenuItem.Enabled = false;
                                         MessageBox.Show(this, "Current has fallen below minimum threshold. Please check the shunt connection and resume or restart the test.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     });
-                                    cRunTest[station].Cancel();
-                                    //update the finish time
-                                    updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
                                     return;
                                 }
                             }
@@ -3988,7 +4124,7 @@ namespace NewBTASProto
 
                     }
                     #endregion
-                    #region Other Checks
+                    #region As Received and No Charger Tests
                     else if (d.Rows[station][2].ToString().Contains("As Received"))
                     {
                         // no test needed for now...
@@ -4008,6 +4144,10 @@ namespace NewBTASProto
                         if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
 
                         //update the gui
+                        
+                        cRunTest[station].Cancel();
+                        //update the finish time
+                        updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
                         this.Invoke((MethodInvoker)delegate()
                         {
                             sendNote(station, 3, "Charger disconnected.  Please check connection and resume or restart the test.");
@@ -4016,9 +4156,6 @@ namespace NewBTASProto
                             stopTestToolStripMenuItem.Enabled = false;
                             MessageBox.Show(this, "Charger disconnected.  Please check connection and resume or restart the test.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         });
-                        cRunTest[station].Cancel();
-                        //update the finish time
-                        updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
                         return;
 
                     }
@@ -4055,14 +4192,14 @@ namespace NewBTASProto
                                 {
                                     criticalNum[Cstation] = true;
                                     Thread.Sleep(1000);
-                                    if (d.Rows[station][11].ToString() == "HOLD" || d.Rows[station][11].ToString() == "END")
+                                    if (d.Rows[station][11].ToString() == "HOLD" || d.Rows[station][11].ToString() == "END" || d.Rows[station][11].ToString() == "RESET")
                                     {
                                         break;
                                     }
 
                                 }
 
-                                if (d.Rows[station][11].ToString() == "HOLD" || d.Rows[station][11].ToString() == "END")
+                                if (d.Rows[station][11].ToString() == "HOLD" || d.Rows[station][11].ToString() == "END" || d.Rows[station][11].ToString() == "RESET")
                                 {
                                     break;
                                 }
@@ -4105,8 +4242,10 @@ namespace NewBTASProto
                     Thread.Sleep(200);
 
                 } // end main test loop...
+                #endregion
 
-
+                ////////////////////////////////END TEST SECTION////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                #region END TEST
                 // We finished so let's clearn up!
                 // If we are running the charger tell it to stop and reset
                 if ((string)d.Rows[station][2] == "As Received")
@@ -4131,14 +4270,14 @@ namespace NewBTASProto
                         {
                             criticalNum[Cstation] = true;
                             Thread.Sleep(1000);
-                            if (d.Rows[station][11].ToString() == "HOLD" || d.Rows[station][11].ToString() == "END")
+                            if (d.Rows[station][11].ToString() == "HOLD" || d.Rows[station][11].ToString() == "END" || d.Rows[station][11].ToString() == "RESET")
                             {
                                 break;
                             }
 
                         }
 
-                        if (d.Rows[station][11].ToString() == "HOLD" || d.Rows[station][11].ToString() == "END")
+                        if (d.Rows[station][11].ToString() == "HOLD" || d.Rows[station][11].ToString() == "END" || d.Rows[station][11].ToString() == "RESET")
                         {
                             break;
                         }
@@ -4219,6 +4358,7 @@ namespace NewBTASProto
                 
                 // finally, we need to set the cancel token to cancelled
                 cRunTest[station].Cancel();
+                #endregion
 
             }, cRunTest[station].Token); // end thread
 

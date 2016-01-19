@@ -92,6 +92,7 @@ namespace NewBTASProto
                 comboBox8.Visible = true;
                 groupBox2.Visible = true;
                 chart1.Height = (panel1.Height / 2) - 3;
+                chart2.Height = (panel1.Height / 2) - 3;
             }
             else
             {

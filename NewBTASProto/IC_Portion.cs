@@ -132,7 +132,7 @@ namespace NewBTASProto
                                     {
                                         chargerID = Convert.ToInt32(d.Rows[j][9]);
                                     }
-                                    Debug.Print("Normal Command Sent To " + chargerID.ToString());
+                                    //Debug.Print("Normal Command Sent To " + chargerID.ToString());
 
                                     // send the short command based on the settings for the charger...
                                     ICComPort.Write(GlobalVars.ICSettings[chargerID].outText, 0, 28);
@@ -317,7 +317,7 @@ namespace NewBTASProto
                                 {
                                     // send the short command based on the settings for the charger...
                                     ICComPort.Write(GlobalVars.ICSettings[toCheck].outText, 0, 28);
-                                    Debug.Print("Check Command Sent To " + toCheck.ToString());
+                                    //Debug.Print("Check Command Sent To " + toCheck.ToString());
                                     // wait for a response
                                     tempBuff = ICComPort.ReadTo("Z");
                                     //do something with the new data
@@ -375,13 +375,13 @@ namespace NewBTASProto
                                 slaveRow = -1;
                                 if (criticalNum[i] == true)
                                 {
-                                    Debug.Print("Station " + i.ToString() + " is critical");
+                                    //Debug.Print("Station " + i.ToString() + " is critical");
                                     try
                                     {
                                         Thread.Sleep(800);
                                         // send the short command based on the settings for the charger...
                                         ICComPort.Write(GlobalVars.ICSettings[i].outText, 0, 28);
-                                        Debug.Print("High Priority Command Sent To " + i.ToString());
+                                        //Debug.Print("High Priority Command Sent To " + i.ToString());
                                         // wait for a response
                                         tempBuff = ICComPort.ReadTo("Z");
 
