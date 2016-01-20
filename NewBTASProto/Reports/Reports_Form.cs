@@ -528,7 +528,7 @@ namespace NewBTASProto
                 // bind datatable to report viewer
                 this.reportViewer.Reset();
                 this.reportViewer.ProcessingMode = ProcessingMode.Local;
-                switch (testsPerformed.Tables[0].Rows[1][15].ToString())
+                switch (testsPerformed.Tables[0].Rows[testsPerformed.Tables[0].Rows.Count - 1][15].ToString())
                 {
                     case "1":
                         if (GlobalVars.Pos2Neg == true) { this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.WOTestSum_20_PN.rdlc"; }

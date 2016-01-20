@@ -105,6 +105,7 @@ namespace NewBTASProto
                         {
                             //up data the current terminal label
                             label6.Text = dataGridView1.CurrentRow.Index.ToString();
+                            label15.Text = d.Rows[dataGridView1.CurrentRow.Index][1].ToString();
                             if (pci.Rows[dataGridView1.CurrentRow.Index][0].ToString() == "None")
                             {
                                 label7.Text = "";
@@ -3825,6 +3826,171 @@ namespace NewBTASProto
         private void cMSTestType_MouseLeave(object sender, EventArgs e)
         {
             sshold = false;
+        }
+
+        private void label15_DoubleClick(object sender, EventArgs e)
+        {
+
+            // lets launch the Work Order Dialog!
+            ThreadPool.QueueUserWorkItem(s =>
+            {
+                int i = 0;
+
+                // we double clicked on the work order dialog
+                // lets make sure that the form is open
+
+                this.Invoke((MethodInvoker)delegate()
+                {
+                    workOrdersToolStripMenuItem.PerformClick();
+                });
+
+                // now lets find it and set the comboboxes so the work orders shown are active and it points to the first work order selected..
+                FormCollection fc = Application.OpenForms;
+                foreach (Form frm in fc)
+                {
+                    if (frm is frmVEWorkOrders)
+                    {
+                        frmVEWorkOrders to_control = (frmVEWorkOrders) frm;
+
+                        //wait for it to load
+                        Thread.Sleep(100);
+                        while (to_control.bindingNavigatorAddNewItem.Enabled == true)
+                        {
+                            Thread.Sleep(100);
+                            i++;
+                            if (i > 10) { return; } // didn't work out...
+                        }
+                        Thread.Sleep(100);
+
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            to_control.InhibitCB1 = false;
+                            to_control.toolStripCBWorkOrderStatus.SelectedIndex = 3;
+                        });
+
+                        Thread.Sleep(100);
+
+                        while (to_control.toolStripCBWorkOrders.Items.Count < 1)
+                        {
+                            Thread.Sleep(100);
+                            i++;
+                            if (i > 10) { return; } // didn't work out...
+                        }
+
+                        char[] delims = { ' ' };
+                        string[] A = d.Rows[dataGridView1.CurrentRow.Index][1].ToString().Split(delims);
+
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            to_control.InhibitCB4 = false;
+                            to_control.toolStripCBWorkOrders.SelectedIndex = to_control.toolStripCBWorkOrders.FindString(A[0]);
+                        });
+
+                        break;
+                    }
+
+                }
+
+            });
+        }
+
+        private void label15_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label7_DoubleClick(object sender, EventArgs e)
+        {
+            // lets launch the Work Order Dialog!
+            ThreadPool.QueueUserWorkItem(s =>
+            {
+                int i = 0;
+
+                // we double clicked on the work order dialog
+                // lets make sure that the form is open
+
+                this.Invoke((MethodInvoker)delegate()
+                {
+                    batteriesToolStripMenuItem.PerformClick();
+                });
+
+                // now lets find it and set the comboboxes so the work orders shown are active and it points to the first work order selected..
+                FormCollection fc = Application.OpenForms;
+                foreach (Form frm in fc)
+                {
+                    if (frm is frmVECustomBats)
+                    {
+                        frmVECustomBats to_control = (frmVECustomBats)frm;
+
+                        //wait for it to load
+                        Thread.Sleep(100);
+                        while (to_control.toolStripCBBats.Items.Count < 1)
+                        {
+                            Thread.Sleep(100);
+                            i++;
+                            if (i > 10) { return; } // didn't work out...
+                        }
+                        Thread.Sleep(100);
+
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            to_control.toolStripCBBats.SelectedIndex = to_control.toolStripCBBats.FindString(label7.Text);
+                        });
+                        
+                        break;
+                    }
+
+                }
+
+            });
+        }
+
+        private void label12_Click(object sender, EventArgs e)
+        {
+            // lets launch the Work Order Dialog!
+            ThreadPool.QueueUserWorkItem(s =>
+            {
+                int i = 0;
+
+                // we double clicked on the work order dialog
+                // lets make sure that the form is open
+
+                this.Invoke((MethodInvoker)delegate()
+                {
+                    customerBatteriesToolStripMenuItem.PerformClick();
+                });
+
+                // now lets find it and set the comboboxes so the work orders shown are active and it points to the first work order selected..
+                FormCollection fc = Application.OpenForms;
+                foreach (Form frm in fc)
+                {
+                    if (frm is frmVECustomerBats)
+                    {
+                        frmVECustomerBats to_control = (frmVECustomerBats)frm;
+
+                        //wait for it to load
+                        Thread.Sleep(100);
+                        while (to_control.toolStripCBSerNum.Items.Count < 1)
+                        {
+                            Thread.Sleep(100);
+                            i++;
+                            if (i > 10) { return; } // didn't work out...
+                        }
+                        Thread.Sleep(100);
+
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            
+                            to_control.toolStripCBSerNum.SelectedIndex = to_control.toolStripCBSerNum.FindString(label12.Text);
+                            to_control.clearStartUp();
+                        });
+
+                        break;
+                    }
+
+                }
+
+            });
         }
 
     }// end mainform class section...

@@ -115,7 +115,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(212, 429);
+            this.button1.Location = new System.Drawing.Point(198, 429);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 5;
@@ -513,21 +513,21 @@
             // 
             // numericUpDown13
             // 
-            this.numericUpDown13.Location = new System.Drawing.Point(214, 70);
+            this.numericUpDown13.Location = new System.Drawing.Point(212, 70);
             this.numericUpDown13.Name = "numericUpDown13";
             this.numericUpDown13.Size = new System.Drawing.Size(59, 20);
             this.numericUpDown13.TabIndex = 68;
             // 
             // numericUpDown14
             // 
-            this.numericUpDown14.Location = new System.Drawing.Point(214, 96);
+            this.numericUpDown14.Location = new System.Drawing.Point(212, 96);
             this.numericUpDown14.Name = "numericUpDown14";
             this.numericUpDown14.Size = new System.Drawing.Size(59, 20);
             this.numericUpDown14.TabIndex = 69;
             // 
             // numericUpDown15
             // 
-            this.numericUpDown15.Location = new System.Drawing.Point(214, 122);
+            this.numericUpDown15.Location = new System.Drawing.Point(212, 122);
             this.numericUpDown15.Name = "numericUpDown15";
             this.numericUpDown15.Size = new System.Drawing.Size(59, 20);
             this.numericUpDown15.TabIndex = 70;
@@ -608,7 +608,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(299, 464);
+            this.ClientSize = new System.Drawing.Size(286, 464);
             this.Controls.Add(this.numericUpDown25);
             this.Controls.Add(this.numericUpDown24);
             this.Controls.Add(this.numericUpDown23);

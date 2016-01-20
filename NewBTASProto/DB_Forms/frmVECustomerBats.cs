@@ -762,7 +762,7 @@ namespace NewBTASProto
 
         }
 
-        bool lastValid = false;
+        public bool lastValid = true;
 
         private void bindingNavigator1_TextChanged(object sender, EventArgs e)
         {
@@ -1092,6 +1092,12 @@ namespace NewBTASProto
             {
                 return base.ProcessCmdKey(ref msg, keyData);
             }
+        }
+
+        public void clearStartUp()
+        {
+            Bats.Tables[0].Rows[Bats.Tables[0].Rows.Count - 1].Delete();
+            bindingNavigatorAddNewItem.Enabled = true;
         }
     }
 }

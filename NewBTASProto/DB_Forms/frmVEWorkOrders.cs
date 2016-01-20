@@ -38,10 +38,10 @@ namespace NewBTASProto
 
         // we use this bool to allow us to allow the databinding indext to be changed...
         bool Inhibit = true;
-        bool InhibitCB1 = true;         //workOrderStatusrCB
+        public bool InhibitCB1 = true;         //workOrderStatusrCB
         bool InhibitCB2 = true;         //customerCB
         bool InhibitCB3 = true;         //serialNumCB
-        bool InhibitCB4 = true;         //workOrderCB
+        public bool InhibitCB4 = true;         //workOrderCB
 
         public frmVEWorkOrders()
         {
@@ -1460,6 +1460,7 @@ namespace NewBTASProto
             }
         }
 
+
         private void toolStripCBWorkOrderStatus_TextChanged(object sender, EventArgs e)
         {
             try
@@ -1467,7 +1468,7 @@ namespace NewBTASProto
                 //remove the new record if there is one..
                 if (bindingNavigatorAddNewItem.Enabled == false && lastValid && toolStripCBWorkOrderStatus.Text != "Active" && WorkOrders.Tables[0].Rows.Count > 0)
                 {
-                    WorkOrders.Tables[0].Rows[WorkOrders.Tables[0].Rows.Count - 1].Delete();
+                    //WorkOrders.Tables[0].Rows[WorkOrders.Tables[0].Rows.Count - 1].Delete();
                     bindingNavigatorAddNewItem.Enabled = true;
                     lastValid = false;
                 }
