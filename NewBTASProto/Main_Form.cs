@@ -1205,6 +1205,32 @@ namespace NewBTASProto
             }
         }
 
+        private void toolStripMenuItem44_Click(object sender, EventArgs e)
+        {
+            updateD(dataGridView1.CurrentRow.Index, 2, "Combo: FC-6 Cap-1");
+            updateD(dataGridView1.CurrentRow.Index, 3, "");
+            updateD(dataGridView1.CurrentRow.Index, 6, "");
+            updateD(dataGridView1.CurrentRow.Index, 7, "");
+            fillPlotCombos(dataGridView1.CurrentRow.Index);
+
+            // also update the slave (if we have a master...)
+            if (d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Contains("M"))
+            {
+                //find the slave
+                string temp = d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Replace("-M", "");
+                for (int i = 0; i < 16; i++)
+                {
+                    if (d.Rows[i][9].ToString().Contains(temp) && d.Rows[i][9].ToString().Contains("S"))
+                    {
+                        updateD(i, 2, "Combo: FC-6 Cap-1");
+                        updateD(i, 3, "");
+                        updateD(i, 6, "");
+                        updateD(i, 7, "");
+                    }
+                }
+            }
+        }
+
         private void clearToolStripMenuItem2_Click(object sender, EventArgs e)
         {
             updateD(dataGridView1.CurrentRow.Index, 2, "");
@@ -2206,9 +2232,20 @@ namespace NewBTASProto
             }
             // we will run the tests on a helper thread
             // helper thread code is located in Test_Portion.cs
-            RunTest();
+            if (d.Rows[dataGridView1.CurrentRow.Index][2].ToString().Contains("Combo"))
+            {
+                //combo tests
+                comboRunTest();
+            }
+            else
+            {
+                // normal tests
+                RunTest();
+            }
 
         }
+
+
 
         private void resumeTestToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -3992,6 +4029,8 @@ namespace NewBTASProto
 
             });
         }
+
+
 
     }// end mainform class section...
 }

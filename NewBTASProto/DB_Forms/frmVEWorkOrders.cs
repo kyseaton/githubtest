@@ -1699,7 +1699,15 @@ namespace NewBTASProto
 
                             this.Invoke((MethodInvoker)delegate()
                             {
-                                to_control.comboBox2.SelectedIndex = e.RowIndex + 1;
+                                if (to_control.comboBox2.GetItemText(to_control.comboBox2.Items[1]).Contains("Water"))
+                                {
+                                    to_control.comboBox2.SelectedIndex = e.RowIndex + 2;
+                                }
+                                else
+                                {
+                                    to_control.comboBox2.SelectedIndex = e.RowIndex + 1;
+                                }
+                                
                             });
 
                             Thread.Sleep(200);

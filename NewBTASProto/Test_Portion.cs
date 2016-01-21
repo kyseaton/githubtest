@@ -26,7 +26,7 @@ namespace NewBTASProto
 
         //vars for recording in sc
 
-        private void RunTest()
+        private void RunTest(string testType = "default")
         {
 
             ///
@@ -62,6 +62,11 @@ namespace NewBTASProto
             if (cRunTest[station] != null && cRunTest[station].IsCancellationRequested == false)
             {
                 return;
+            }
+
+            if (testType == "default")
+            {
+                testType = d.Rows[station][2].ToString();
             }
 
             #region master slave test and setup
@@ -152,215 +157,93 @@ namespace NewBTASProto
                 bool oldTempCon = false;
                 bool oldCellCon = false;
 
-                #region startup checks (all cases)
-                // first we check if we have all the relavent options selected
-                if ((string)d.Rows[station][1] == "")
-                {
-                    this.Invoke((MethodInvoker)delegate()
-                    {
-                        MessageBox.Show(this, "Please Assign a Work Order", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    });
-                    cRunTest[station].Cancel();
-                    return;
-                }
-                else if ((string)d.Rows[station][2] == "")
-                {
-                    this.Invoke((MethodInvoker)delegate()
-                    {
-                        MessageBox.Show(this, "Please Select a Test Type.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    });
-                    cRunTest[station].Cancel();
-                    return;
-                }
-                else if ((bool)d.Rows[station][4] == false)
-                {
-                    this.Invoke((MethodInvoker)delegate()
-                    {
-                        MessageBox.Show(this, "CScan is not In Use. Please Select it Before Proceeding.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    });
-                    cRunTest[station].Cancel();
-                    return;
-                }
-                else if (dataGridView1.Rows[station].Cells[4].Style.BackColor != Color.Green)
-                {
-                    this.Invoke((MethodInvoker)delegate()
-                    {
-                        MessageBox.Show(this, "CScan is not currently connected.  Please Check Connection.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    });
-                    cRunTest[station].Cancel();
-                    return;
-                }
-                else if (GlobalVars.CScanData[station].cellCableType == "NONE")
-                {
-                    this.Invoke((MethodInvoker)delegate()
-                    {
-                        MessageBox.Show(this, "CScan is not connected to a cells Cable.  Please connect a cells cable to this CSCAN to run a test.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    });
-                    cRunTest[station].Cancel();
-                    return;
-                }
-                else if (GlobalVars.CScanData[station].shuntCableType == "NONE" && (string)d.Rows[station][2] != "As Received")
-                {
-                    this.Invoke((MethodInvoker)delegate()
-                    {
-                        MessageBox.Show(this, "CScan is not connected to a cells Shunt cable.  Please connect a shunt cable to this CSCAN to run a test.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    });
-                    cRunTest[station].Cancel();
-                    return;
-                }
-                // check if we have the right cells cable for multiple work orders on one cscan...
-                else if (MWO2 != "" && MWO3 == "" && GlobalVars.CScanData[station].CCID != 3)
-                {
-                    // we need to make sure the master has a 2x11 to continue
-                    this.Invoke((MethodInvoker)delegate()
-                    {
-                        MessageBox.Show(this, "You have two work orders assocaited with the master CScan, but do not have a 2X11 cable connected to it.  In order to record two work orders with one CScan you must use a 2X11 cable.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    });
-                    cRunTest[station].Cancel();
-                    return;
-                }
-                else if (MWO2 != "" && MWO3 != "" && GlobalVars.CScanData[station].CCID != 4)
-                {
-                    // we need to make sure the master has a 3x7 to continue
-                    this.Invoke((MethodInvoker)delegate()
-                    {
-                        MessageBox.Show(this, "You have three work orders assocaited with the master CScan, but do not have a 3X7 cable connected to it.  In order to record three work orders with one CScan you must use a 3X7 cable.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    });
-                    cRunTest[station].Cancel();
-                    return;
-                }
-                else if (MWO2 == "" && GlobalVars.CScanData[station].CCID == 3)
-                {
-                    // warn the user that if they use a 2X11 cable with only one work order that the data associated with the second battery will be lost
-                    this.Invoke((MethodInvoker)delegate() { this.Enabled = false; });
-                    DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "Are you sure you want to continue? You have one work order assocaited with the master CScan, but have a 2X11 cable connected to it.  In order to record the data from all 22 channels you will need to add an additional workorder to this station.", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-                    this.Invoke((MethodInvoker)delegate() { this.Enabled = true; });
-                    if (dialogResult == DialogResult.No)
-                    {
-                        cRunTest[station].Cancel();
-                        return;
-                    }
-                }
-                else if ((MWO2 == "" || MWO3 == "") && GlobalVars.CScanData[station].CCID == 4)
-                {
-                    // warn the user that if they use a 3x7 cable with only one or two work orders that the data associated with the second or third battery will be lost
-                    this.Invoke((MethodInvoker)delegate() { this.Enabled = false; });
-                    DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "Are you sure you want to continue? You have less than 3 work orders assocaited with the master CScan, but have a 3X7 cable connected to it.  In order to record the data from all 21 channels you will need to add an additional workorder(s) to this station.", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-                    this.Invoke((MethodInvoker)delegate() { this.Enabled = true; });
-                    if (dialogResult == DialogResult.No)
-                    {
-                        cRunTest[station].Cancel();
-                        return;
-                    }
-                }
+                bool runAsShunt = false;
 
+                if (!d.Rows[station][2].ToString().Contains("Combo") || d.Rows[station][2].ToString().Contains("Combo: >>"))
+                {
+                    #region startup checks (all cases)
+                    // first we check if we have all the relavent options selected
 
-                //2x11 case
-                if (GlobalVars.CScanData[station].CCID == 3 && (int)pci.Rows[station][3] != (GlobalVars.CScanData[station].cellsToDisplay / 2) && (int)pci.Rows[station][3] != -1)
-                {
-                    // warn the user that the number of cells set in the database does not match the work order...
-                    this.Invoke((MethodInvoker)delegate() { this.Enabled = false; });
-                    DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The number of cells the battery contains does not match the cells cable currently being used.  Do you want to continue?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-                    this.Invoke((MethodInvoker)delegate() { this.Enabled = true; });
-                    if (dialogResult == DialogResult.No)
-                    {
-                        cRunTest[station].Cancel();
-                        return;
-                    }
-                }
-                //3X7 case
-                if (GlobalVars.CScanData[station].CCID == 3 && (int)pci.Rows[station][3] != (GlobalVars.CScanData[station].cellsToDisplay / 3) && (int)pci.Rows[station][3] != -1)
-                {
-                    // warn the user that the number of cells set in the database does not match the work order...
-                    this.Invoke((MethodInvoker)delegate() { this.Enabled = false; });
-                    DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The number of cells the battery contains does not match the cells cable currently being used.  Do you want to continue?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-                    this.Invoke((MethodInvoker)delegate() { this.Enabled = true; });
-                    if (dialogResult == DialogResult.No)
-                    {
-                        cRunTest[station].Cancel();
-                        return;
-                    }
-                }
-                //general case
-                else if (pci.Rows[station][1].ToString().Contains("NiCd") && (int)pci.Rows[station][3] != GlobalVars.CScanData[station].cellsToDisplay && (int)pci.Rows[station][3] != -1)
-                {
-                    // warn the user that the number of cells set in the database does not match the work order...
-                    this.Invoke((MethodInvoker)delegate() { this.Enabled = false; });
-                    DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The number of cells the battery contains does not match the cells cable currently being used.  Do you want to continue?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-                    this.Invoke((MethodInvoker)delegate() { this.Enabled = true; });
-                    if (dialogResult == DialogResult.No)
-                    {
-                        cRunTest[station].Cancel();
-                        return;
-                    }
-                }
-
-                // may also need to check some of this for the slave
-                else if (MasterSlaveTest)
-                {
-                    if ((string)d.Rows[slaveRow][1] == "")
+                    if ((string)d.Rows[station][1] == "")
                     {
                         this.Invoke((MethodInvoker)delegate()
                         {
-                            MessageBox.Show(this, "Please Assign a Work Order to the Slave Channel", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show(this, "Please Assign a Work Order", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         });
                         cRunTest[station].Cancel();
                         return;
                     }
-                    else if ((bool)d.Rows[slaveRow][4] == false)
+                    else if (testType == "")
                     {
                         this.Invoke((MethodInvoker)delegate()
                         {
-                            MessageBox.Show(this, "The slave CScan is not In Use. Please make sure that is is In Use and connected before proceeding.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        
+                            MessageBox.Show(this, "Please Select a Test Type.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         });
                         cRunTest[station].Cancel();
                         return;
                     }
-                    else if (dataGridView1.Rows[slaveRow].Cells[4].Style.BackColor != Color.Green)
+                    else if ((bool)d.Rows[station][4] == false)
                     {
                         this.Invoke((MethodInvoker)delegate()
                         {
-                            MessageBox.Show(this, "Slave CScan is not currently connected.  Please Check Connection.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show(this, "CScan is not In Use. Please Select it Before Proceeding.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         });
                         cRunTest[station].Cancel();
                         return;
                     }
-                    else if (GlobalVars.CScanData[slaveRow].cellCableType == "NONE")
+                    else if (dataGridView1.Rows[station].Cells[4].Style.BackColor != Color.Green)
                     {
                         this.Invoke((MethodInvoker)delegate()
                         {
-                            MessageBox.Show(this, "Slave CScan is not connected to a cells Cable.  Please connect a cells cable to this CSCAN to run a test with it.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show(this, "CScan is not currently connected.  Please Check Connection.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        });
+                        cRunTest[station].Cancel();
+                        return;
+                    }
+                    else if (GlobalVars.CScanData[station].cellCableType == "NONE")
+                    {
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            MessageBox.Show(this, "CScan is not connected to a cells Cable.  Please connect a cells cable to this CSCAN to run a test.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        });
+                        cRunTest[station].Cancel();
+                        return;
+                    }
+                    else if (GlobalVars.CScanData[station].shuntCableType == "NONE" && testType != "As Received")
+                    {
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            MessageBox.Show(this, "CScan is not connected to a cells Shunt cable.  Please connect a shunt cable to this CSCAN to run a test.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         });
                         cRunTest[station].Cancel();
                         return;
                     }
                     // check if we have the right cells cable for multiple work orders on one cscan...
-                    else if (SWO2 != "" && SWO3 == "" && GlobalVars.CScanData[slaveRow].CCID != 3)
+                    else if (MWO2 != "" && MWO3 == "" && GlobalVars.CScanData[station].CCID != 3)
                     {
                         // we need to make sure the master has a 2x11 to continue
                         this.Invoke((MethodInvoker)delegate()
                         {
-                            MessageBox.Show(this, "You have two work orders assocaited with the slave CScan, but do not have a 2X11 cable connected to it.  In order to record two work orders with one CScan you must use a 2X11 cable.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show(this, "You have two work orders assocaited with the master CScan, but do not have a 2X11 cable connected to it.  In order to record two work orders with one CScan you must use a 2X11 cable.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         });
                         cRunTest[station].Cancel();
                         return;
                     }
-                    else if (SWO2 != "" && SWO3 != "" && GlobalVars.CScanData[slaveRow].CCID != 4)
+                    else if (MWO2 != "" && MWO3 != "" && GlobalVars.CScanData[station].CCID != 4)
                     {
-                        // we need to make sure the master has a 2x11 to continue
+                        // we need to make sure the master has a 3x7 to continue
                         this.Invoke((MethodInvoker)delegate()
                         {
-                            MessageBox.Show(this, "You have three work orders assocaited with the slave CScan, but do not have a 3X7 cable connected to it.  In order to record three work orders with one CScan you must use a 3X7 cable.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show(this, "You have three work orders assocaited with the master CScan, but do not have a 3X7 cable connected to it.  In order to record three work orders with one CScan you must use a 3X7 cable.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         });
                         cRunTest[station].Cancel();
                         return;
                     }
-                    else if (SWO2 == "" && GlobalVars.CScanData[slaveRow].CCID == 3)
+                    else if (MWO2 == "" && GlobalVars.CScanData[station].CCID == 3)
                     {
                         // warn the user that if they use a 2X11 cable with only one work order that the data associated with the second battery will be lost
                         this.Invoke((MethodInvoker)delegate() { this.Enabled = false; });
-                        DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "Are you sure you want to continue? You have one work order assocaited with the slave CScan, but have a 2X11 cable connected to it.  In order to record the data from all 22 channels you will need to add an additional workorder to this station.", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                        DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "Are you sure you want to continue? You have one work order assocaited with the master CScan, but have a 2X11 cable connected to it.  In order to record the data from all 22 channels you will need to add an additional workorder to this station.", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                         this.Invoke((MethodInvoker)delegate() { this.Enabled = true; });
                         if (dialogResult == DialogResult.No)
                         {
@@ -368,26 +251,27 @@ namespace NewBTASProto
                             return;
                         }
                     }
-                    else if ((SWO2 == "" || SWO3 == "") && GlobalVars.CScanData[slaveRow].CCID == 4)
+                    else if ((MWO2 == "" || MWO3 == "") && GlobalVars.CScanData[station].CCID == 4)
                     {
                         // warn the user that if they use a 3x7 cable with only one or two work orders that the data associated with the second or third battery will be lost
                         this.Invoke((MethodInvoker)delegate() { this.Enabled = false; });
-                        DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "Are you sure you want to continue? You have less than 3 work orders assocaited with the slave CScan, but have a 3X7 cable connected to it.  In order to record the data from all 21 channels you will need to add an additional workorder(s) to this station.", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                        DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "Are you sure you want to continue? You have less than 3 work orders assocaited with the master CScan, but have a 3X7 cable connected to it.  In order to record the data from all 21 channels you will need to add an additional workorder(s) to this station.", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                         this.Invoke((MethodInvoker)delegate() { this.Enabled = true; });
                         if (dialogResult == DialogResult.No)
                         {
                             cRunTest[station].Cancel();
-                            return;   
+                            return;
                         }
                     }
 
+
                     //2x11 case
-                    if (GlobalVars.CScanData[slaveRow].CCID == 3 && (int)pci.Rows[slaveRow][3] != (GlobalVars.CScanData[slaveRow].cellsToDisplay / 2) && (int)pci.Rows[station][3] != -1)
+                    if (GlobalVars.CScanData[station].CCID == 3 && (int)pci.Rows[station][3] != (GlobalVars.CScanData[station].cellsToDisplay / 2) && (int)pci.Rows[station][3] != -1)
                     {
                         // warn the user that the number of cells set in the database does not match the work order...
                         this.Invoke((MethodInvoker)delegate() { this.Enabled = false; });
-                        DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The number of cells the battery connected to the slave CSCAN contains does not match the cells cable currently being used.  Do you want to continue?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-                        this.Invoke((MethodInvoker)delegate() { this.Enabled = true; }); 
+                        DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The number of cells the battery contains does not match the cells cable currently being used.  Do you want to continue?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                        this.Invoke((MethodInvoker)delegate() { this.Enabled = true; });
                         if (dialogResult == DialogResult.No)
                         {
                             cRunTest[station].Cancel();
@@ -395,12 +279,12 @@ namespace NewBTASProto
                         }
                     }
                     //3X7 case
-                    if (GlobalVars.CScanData[slaveRow].CCID == 3 && (int)pci.Rows[slaveRow][3] != (GlobalVars.CScanData[slaveRow].cellsToDisplay / 3) && (int)pci.Rows[station][3] != -1)
+                    else if (GlobalVars.CScanData[station].CCID == 4 && (int)pci.Rows[station][3] != (GlobalVars.CScanData[station].cellsToDisplay / 3) && (int)pci.Rows[station][3] != -1)
                     {
                         // warn the user that the number of cells set in the database does not match the work order...
                         this.Invoke((MethodInvoker)delegate() { this.Enabled = false; });
-                        DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The number of cells the battery connected to the slave CSCAN contains does not match the cells cable currently being used.  Do you want to continue?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-                        this.Invoke((MethodInvoker)delegate() { this.Enabled = true; }); 
+                        DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The number of cells the battery contains does not match the cells cable currently being used.  Do you want to continue?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                        this.Invoke((MethodInvoker)delegate() { this.Enabled = true; });
                         if (dialogResult == DialogResult.No)
                         {
                             cRunTest[station].Cancel();
@@ -408,223 +292,351 @@ namespace NewBTASProto
                         }
                     }
                     //general case
-                    else if (pci.Rows[slaveRow][1].ToString().Contains("NiCd") && (int)pci.Rows[slaveRow][3] != GlobalVars.CScanData[slaveRow].cellsToDisplay && (int)pci.Rows[station][3] != -1)
+                    else if (pci.Rows[station][1].ToString().Contains("NiCd") && (int)pci.Rows[station][3] != GlobalVars.CScanData[station].cellsToDisplay && (int)pci.Rows[station][3] != -1)
                     {
                         // warn the user that the number of cells set in the database does not match the work order...
                         this.Invoke((MethodInvoker)delegate() { this.Enabled = false; });
-                        DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The number of cells the battery connected to the slave CSCAN contains does not match the cells cable currently being used.  Do you want to continue?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                        DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The number of cells the battery contains does not match the cells cable currently being used.  Do you want to continue?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                         this.Invoke((MethodInvoker)delegate() { this.Enabled = true; });
                         if (dialogResult == DialogResult.No)
                         {
                             cRunTest[station].Cancel();
                             return;
                         }
-                        
                     }
 
-                    // check that the batteries are the same model!
-                    // need to create a db connection
-                    try
+                    // may also need to check some of this for the slave
+                    else if (MasterSlaveTest)
                     {
-                        strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
-                        myAccessConn = new OleDbConnection(strAccessConn);
-                    }
-                    catch (Exception ex)
-                    {
-                        this.Invoke((MethodInvoker)delegate()
+                        if ((string)d.Rows[slaveRow][1] == "")
                         {
-                            MessageBox.Show(this, "Error: Failed to create a database connection. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        });
-                        cRunTest[station].Cancel();
-                        return;
-                    }
-
-
-                    // Now i need to pull in the model values for both work orders...
-                    // Need to think about expanding this to the possible 6 batteries....
-                    try
-                    {
-                        // get the battery serial model
-                        strAccessSelect = @"SELECT BatteryModel FROM WorkOrders WHERE WorkOrderNumber='" + MWO1 + "';";
-                        DataSet batMod1 = new DataSet();
-                        OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
-                        OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
-
-                        lock (dataBaseLock)
-                        {
-                            myAccessConn.Open();
-                            myDataAdapter.Fill(batMod1, "workOrder");
-                            myAccessConn.Close();
-                        }
-                        // get the battery serial model
-                        strAccessSelect = @"SELECT BatteryModel FROM WorkOrders WHERE WorkOrderNumber='" + SWO1 + "';";
-                        DataSet batMod2 = new DataSet();
-                        myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
-                        myDataAdapter = new OleDbDataAdapter(myAccessCommand);
-
-                        lock (dataBaseLock)
-                        {
-                            myAccessConn.Open();
-                            myDataAdapter.Fill(batMod2, "workOrder");
-                            myAccessConn.Close();
-                        }
-
-                        // we got both so let's compare!
-                        if (batMod1.Tables[0].Rows[0][0].ToString() != batMod2.Tables[0].Rows[0][0].ToString())
-                        {
-                            if (GlobalVars.autoConfig && (bool)d.Rows[station][12])
+                            this.Invoke((MethodInvoker)delegate()
                             {
-                                //we are setup for AutoConfig, but we have different types of batteries in the master slave, which will not work
-                                this.Invoke((MethodInvoker)delegate()
-                                {
-                                    MessageBox.Show(this, "Cannot AutoConfig the charger if the Master and Slave batteries are not the same.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                });
+                                MessageBox.Show(this, "Please Assign a Work Order to the Slave Channel", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            });
+                            cRunTest[station].Cancel();
+                            return;
+                        }
+                        else if ((bool)d.Rows[slaveRow][4] == false)
+                        {
+                            this.Invoke((MethodInvoker)delegate()
+                            {
+                                MessageBox.Show(this, "The slave CScan is not In Use. Please make sure that is is In Use and connected before proceeding.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                            });
+                            cRunTest[station].Cancel();
+                            return;
+                        }
+                        else if (dataGridView1.Rows[slaveRow].Cells[4].Style.BackColor != Color.Green)
+                        {
+                            this.Invoke((MethodInvoker)delegate()
+                            {
+                                MessageBox.Show(this, "Slave CScan is not currently connected.  Please Check Connection.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            });
+                            cRunTest[station].Cancel();
+                            return;
+                        }
+                        else if (GlobalVars.CScanData[slaveRow].cellCableType == "NONE")
+                        {
+                            this.Invoke((MethodInvoker)delegate()
+                            {
+                                MessageBox.Show(this, "Slave CScan is not connected to a cells Cable.  Please connect a cells cable to this CSCAN to run a test with it.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            });
+                            cRunTest[station].Cancel();
+                            return;
+                        }
+                        // check if we have the right cells cable for multiple work orders on one cscan...
+                        else if (SWO2 != "" && SWO3 == "" && GlobalVars.CScanData[slaveRow].CCID != 3)
+                        {
+                            // we need to make sure the master has a 2x11 to continue
+                            this.Invoke((MethodInvoker)delegate()
+                            {
+                                MessageBox.Show(this, "You have two work orders assocaited with the slave CScan, but do not have a 2X11 cable connected to it.  In order to record two work orders with one CScan you must use a 2X11 cable.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            });
+                            cRunTest[station].Cancel();
+                            return;
+                        }
+                        else if (SWO2 != "" && SWO3 != "" && GlobalVars.CScanData[slaveRow].CCID != 4)
+                        {
+                            // we need to make sure the master has a 2x11 to continue
+                            this.Invoke((MethodInvoker)delegate()
+                            {
+                                MessageBox.Show(this, "You have three work orders assocaited with the slave CScan, but do not have a 3X7 cable connected to it.  In order to record three work orders with one CScan you must use a 3X7 cable.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            });
+                            cRunTest[station].Cancel();
+                            return;
+                        }
+                        else if (SWO2 == "" && GlobalVars.CScanData[slaveRow].CCID == 3)
+                        {
+                            // warn the user that if they use a 2X11 cable with only one work order that the data associated with the second battery will be lost
+                            this.Invoke((MethodInvoker)delegate() { this.Enabled = false; });
+                            DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "Are you sure you want to continue? You have one work order assocaited with the slave CScan, but have a 2X11 cable connected to it.  In order to record the data from all 22 channels you will need to add an additional workorder to this station.", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                            this.Invoke((MethodInvoker)delegate() { this.Enabled = true; });
+                            if (dialogResult == DialogResult.No)
+                            {
                                 cRunTest[station].Cancel();
                                 return;
                             }
-                            else
+                        }
+                        else if ((SWO2 == "" || SWO3 == "") && GlobalVars.CScanData[slaveRow].CCID == 4)
+                        {
+                            // warn the user that if they use a 3x7 cable with only one or two work orders that the data associated with the second or third battery will be lost
+                            this.Invoke((MethodInvoker)delegate() { this.Enabled = false; });
+                            DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "Are you sure you want to continue? You have less than 3 work orders assocaited with the slave CScan, but have a 3X7 cable connected to it.  In order to record the data from all 21 channels you will need to add an additional workorder(s) to this station.", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                            this.Invoke((MethodInvoker)delegate() { this.Enabled = true; });
+                            if (dialogResult == DialogResult.No)
                             {
-                                this.Invoke((MethodInvoker)delegate() { this.Enabled = false; });
-                                DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The Master and Slave battery models do not match. Are you sure you want to proceed with the test?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-                                this.Invoke((MethodInvoker)delegate() { this.Enabled = true; });
-                                if (dialogResult == DialogResult.No)
+                                cRunTest[station].Cancel();
+                                return;
+                            }
+                        }
+
+                        //2x11 case
+                        if (GlobalVars.CScanData[slaveRow].CCID == 3 && (int)pci.Rows[slaveRow][3] != (GlobalVars.CScanData[slaveRow].cellsToDisplay / 2) && (int)pci.Rows[station][3] != -1)
+                        {
+                            // warn the user that the number of cells set in the database does not match the work order...
+                            this.Invoke((MethodInvoker)delegate() { this.Enabled = false; });
+                            DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The number of cells the battery connected to the slave CSCAN contains does not match the cells cable currently being used.  Do you want to continue?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                            this.Invoke((MethodInvoker)delegate() { this.Enabled = true; });
+                            if (dialogResult == DialogResult.No)
+                            {
+                                cRunTest[station].Cancel();
+                                return;
+                            }
+                        }
+                        //3X7 case
+                        if (GlobalVars.CScanData[slaveRow].CCID == 3 && (int)pci.Rows[slaveRow][3] != (GlobalVars.CScanData[slaveRow].cellsToDisplay / 3) && (int)pci.Rows[station][3] != -1)
+                        {
+                            // warn the user that the number of cells set in the database does not match the work order...
+                            this.Invoke((MethodInvoker)delegate() { this.Enabled = false; });
+                            DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The number of cells the battery connected to the slave CSCAN contains does not match the cells cable currently being used.  Do you want to continue?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                            this.Invoke((MethodInvoker)delegate() { this.Enabled = true; });
+                            if (dialogResult == DialogResult.No)
+                            {
+                                cRunTest[station].Cancel();
+                                return;
+                            }
+                        }
+                        //general case
+                        else if (pci.Rows[slaveRow][1].ToString().Contains("NiCd") && (int)pci.Rows[slaveRow][3] != GlobalVars.CScanData[slaveRow].cellsToDisplay && (int)pci.Rows[station][3] != -1)
+                        {
+                            // warn the user that the number of cells set in the database does not match the work order...
+                            this.Invoke((MethodInvoker)delegate() { this.Enabled = false; });
+                            DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The number of cells the battery connected to the slave CSCAN contains does not match the cells cable currently being used.  Do you want to continue?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                            this.Invoke((MethodInvoker)delegate() { this.Enabled = true; });
+                            if (dialogResult == DialogResult.No)
+                            {
+                                cRunTest[station].Cancel();
+                                return;
+                            }
+
+                        }
+
+                        // check that the batteries are the same model!
+                        // need to create a db connection
+                        try
+                        {
+                            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                            myAccessConn = new OleDbConnection(strAccessConn);
+                        }
+                        catch (Exception ex)
+                        {
+                            this.Invoke((MethodInvoker)delegate()
+                            {
+                                MessageBox.Show(this, "Error: Failed to create a database connection. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            });
+                            cRunTest[station].Cancel();
+                            return;
+                        }
+
+
+                        // Now i need to pull in the model values for both work orders...
+                        // Need to think about expanding this to the possible 6 batteries....
+                        try
+                        {
+                            // get the battery serial model
+                            strAccessSelect = @"SELECT BatteryModel FROM WorkOrders WHERE WorkOrderNumber='" + MWO1 + "';";
+                            DataSet batMod1 = new DataSet();
+                            OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                            OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                            lock (dataBaseLock)
+                            {
+                                myAccessConn.Open();
+                                myDataAdapter.Fill(batMod1, "workOrder");
+                                myAccessConn.Close();
+                            }
+                            // get the battery serial model
+                            strAccessSelect = @"SELECT BatteryModel FROM WorkOrders WHERE WorkOrderNumber='" + SWO1 + "';";
+                            DataSet batMod2 = new DataSet();
+                            myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                            myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                            lock (dataBaseLock)
+                            {
+                                myAccessConn.Open();
+                                myDataAdapter.Fill(batMod2, "workOrder");
+                                myAccessConn.Close();
+                            }
+
+                            // we got both so let's compare!
+                            if (batMod1.Tables[0].Rows[0][0].ToString() != batMod2.Tables[0].Rows[0][0].ToString())
+                            {
+                                if (GlobalVars.autoConfig && (bool)d.Rows[station][12])
                                 {
+                                    //we are setup for AutoConfig, but we have different types of batteries in the master slave, which will not work
+                                    this.Invoke((MethodInvoker)delegate()
+                                    {
+                                        MessageBox.Show(this, "Cannot AutoConfig the charger if the Master and Slave batteries are not the same.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    });
                                     cRunTest[station].Cancel();
                                     return;
                                 }
+                                else
+                                {
+                                    this.Invoke((MethodInvoker)delegate() { this.Enabled = false; });
+                                    DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The Master and Slave battery models do not match. Are you sure you want to proceed with the test?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                                    this.Invoke((MethodInvoker)delegate() { this.Enabled = true; });
+                                    if (dialogResult == DialogResult.No)
+                                    {
+                                        cRunTest[station].Cancel();
+                                        return;
+                                    }
+                                }
                             }
                         }
+                        catch (Exception ex)
+                        {
+                            this.Invoke((MethodInvoker)delegate()
+                            {
+                                MessageBox.Show(this, "Error: Failed to pull data in from the Database. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            });
+                            cRunTest[station].Cancel();
+                            return;
+                        }
                     }
-                    catch (Exception ex)
+
+                    if (d.Rows[station][10].ToString().Contains("Shunt"))
+                    {
+                        runAsShunt = true;
+                    }
+                    else if ((bool)d.Rows[station][8] == false && testType != "As Received")
+                    {
+                        this.Invoke((MethodInvoker)delegate() { this.Enabled = false; });
+                        DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The charger is not linked. Do you want to proceed with the test in shunt mode?", "Click Yes to continue or No to cancel the test.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                        this.Invoke((MethodInvoker)delegate() { this.Enabled = true; });
+                        if (dialogResult == DialogResult.No)
+                        {
+                            cRunTest[station].Cancel();
+                            return;
+                        }
+                        runAsShunt = true;
+                    }
+
+
+                    if ((string)d.Rows[station][11] == "offline!" && testType != "As Received" && d.Rows[station][10].ToString().Contains("ICA") && !runAsShunt)
                     {
                         this.Invoke((MethodInvoker)delegate()
                         {
-                            MessageBox.Show(this, "Error: Failed to pull data in from the Database. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show(this, "The Intelligent Charger is set to be offline.  Please set the charger to be online by pressing the following key sequence on the charger: FUNC, 1, 1 and ENTER.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         });
                         cRunTest[station].Cancel();
                         return;
                     }
-                }
 
-                //I removed this because the charger present will determine how the test is run...
-                // also need to check if an intelligent charger is connected for autoconfig
-                //else if (GlobalVars.autoConfig == true && d.Rows[station][9].ToString().Contains("ICA") && (string)d.Rows[station][2] != "As Received")
-                //{
-                //    MessageBox.Show(this, "Auto Configure is turned on, but there is no intelligent charger detected.  Please connect an intelligent charger or turn Auto Configure off in the tools menu.");
-                //     return;
-                //}
-
-
-                bool runAsShunt = false;
-                
-                if (d.Rows[station][10].ToString().Contains("Shunt"))
-                {
-                    runAsShunt = true;
-                }
-                else if ((bool)d.Rows[station][8] == false && (string)d.Rows[station][2] != "As Received")
-                {
-                    this.Invoke((MethodInvoker)delegate() { this.Enabled = false; });
-                    DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The charger is not linked. Do you want to proceed with the test in shunt mode?", "Click Yes to continue or No to cancel the test.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-                    this.Invoke((MethodInvoker)delegate() { this.Enabled = true; });
-                    if (dialogResult == DialogResult.No)
+                    else if ((d.Rows[station][9].ToString() == "" || d.Rows[station][10].ToString() == "") && testType != "As Received")
                     {
+                        // we don't have a charger linked. Do we still want to continue...
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            MessageBox.Show(this, "There is no charger ID entered.  You must enter a charger ID to run any test other than 'As Received'", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        });
                         cRunTest[station].Cancel();
                         return;
                     }
-                    runAsShunt = true;
-                }
 
 
-                if ((string)d.Rows[station][11] == "offline!" && (string)d.Rows[station][2] != "As Received" && d.Rows[station][10].ToString().Contains("ICA") && !runAsShunt)
-                {
-                    this.Invoke((MethodInvoker)delegate()
+                    //Finally Lets check if the charger is running also...
+                    else if (d.Rows[station][11].ToString() == "RUN" && d.Rows[station][10].ToString().Contains("ICA") && !runAsShunt)
                     {
-                        MessageBox.Show(this, "The Intelligent Charger is set to be offline.  Please set the charger to be online by pressing the following key sequence on the charger: FUNC, 1, 1 and ENTER.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    });
-                    cRunTest[station].Cancel();
-                    return;
-                }
-
-                else if ((d.Rows[station][9].ToString() == "" || d.Rows[station][10].ToString() == "") && (string)d.Rows[station][2] != "As Received")
-                {
-                    // we don't have a charger linked. Do we still want to continue...
-                    this.Invoke((MethodInvoker)delegate()
-                    {
-                        MessageBox.Show(this, "There is no charger ID entered.  You must enter a charger ID to run any test other than 'As Received'", "Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
-                    });
-                    cRunTest[station].Cancel();
-                    return;
-                }
-
-
-                //Finally Lets check if the charger is running also...
-                else if (d.Rows[station][11].ToString() == "RUN" && d.Rows[station][10].ToString().Contains("ICA") && !runAsShunt)
-                {
-                    //looks like that charger is already running.  Lets ask the user if we should stop the charger or not.
-                    this.Invoke((MethodInvoker)delegate() { this.Enabled = false; });
-                    DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The charger appears to already be running. Do you want to stop it now and proceed with the test?", "Click Yes to have the program stop the charger or No to do it manually", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-                    this.Invoke((MethodInvoker)delegate() { this.Enabled = true; });
-                    if (dialogResult == DialogResult.Yes)
-                    {   
-                        // we'll check the box to indicate we are a go!
-                        updateD(station, 5, true);
-                        if (MasterSlaveTest) { updateD(slaveRow, 5, true); }
-                        // and update the status column
-                        updateD(station, 7, "Stopping Charger");
-                        if (MasterSlaveTest) { updateD(slaveRow, 7, "Stopping Charger"); }
-
-                        for (int j = 0; j < 5; j++)
+                        //looks like that charger is already running.  Lets ask the user if we should stop the charger or not.
+                        this.Invoke((MethodInvoker)delegate() { this.Enabled = false; });
+                        DialogResult dialogResult = MessageBox.Show(new Form() { TopMost = true }, "The charger appears to already be running. Do you want to stop it now and proceed with the test?", "Click Yes to have the program stop the charger or No to do it manually", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                        this.Invoke((MethodInvoker)delegate() { this.Enabled = true; });
+                        if (dialogResult == DialogResult.Yes)
                         {
-                            // set KE1 to 2 ("command")
-                            GlobalVars.ICSettings[Cstation].KE1 = (byte)2;
-                            // set KE3 to stop
-                            GlobalVars.ICSettings[Cstation].KE3 = (byte)2;
-                            //Update the output string value
-                            GlobalVars.ICSettings[Cstation].UpdateOutText();
-                            criticalNum[Cstation] = true;
-                            //now we are going to create a thread to set KE1 back to data mode after 15 seconds
-                            Thread.Sleep(5000);
+                            // we'll check the box to indicate we are a go!
+                            updateD(station, 5, true);
+                            if (MasterSlaveTest) { updateD(slaveRow, 5, true); }
+                            // and update the status column
+                            updateD(station, 7, "Stopping Charger");
+                            if (MasterSlaveTest) { updateD(slaveRow, 7, "Stopping Charger"); }
 
-                            // set KE1 to 1 ("query")
-                            GlobalVars.ICSettings[Cstation].KE1 = (byte)0;
-                            //Update the output string value
-                            GlobalVars.ICSettings[Cstation].UpdateOutText();
-                            for (int i = 0; i < 5; i++)
+                            for (int j = 0; j < 5; j++)
                             {
+                                // set KE1 to 2 ("command")
+                                GlobalVars.ICSettings[Cstation].KE1 = (byte)2;
+                                // set KE3 to stop
+                                GlobalVars.ICSettings[Cstation].KE3 = (byte)2;
+                                //Update the output string value
+                                GlobalVars.ICSettings[Cstation].UpdateOutText();
                                 criticalNum[Cstation] = true;
-                                Thread.Sleep(1000);
+                                //now we are going to create a thread to set KE1 back to data mode after 15 seconds
+                                Thread.Sleep(5000);
+
+                                // set KE1 to 1 ("query")
+                                GlobalVars.ICSettings[Cstation].KE1 = (byte)0;
+                                //Update the output string value
+                                GlobalVars.ICSettings[Cstation].UpdateOutText();
+                                for (int i = 0; i < 5; i++)
+                                {
+                                    criticalNum[Cstation] = true;
+                                    Thread.Sleep(1000);
+                                    if (d.Rows[station][11].ToString() == "HOLD")
+                                    {
+                                        break;
+                                    }
+
+                                }
                                 if (d.Rows[station][11].ToString() == "HOLD")
                                 {
                                     break;
                                 }
-
-                            }
-                            if (d.Rows[station][11].ToString() == "HOLD")
-                            {
-                                break;
                             }
                         }
+                        else
+                        {
+                            cRunTest[station].Cancel();
+                            return;
+                        }
+
                     }
-                    else
+
+                    shuntCon = true;
+                    cellCon = true;
+                    oldShuntCon = true;
+                    oldCellCon = true;
+                    if (GlobalVars.CScanData[station].tempPlateType != "NONE")
                     {
-                        cRunTest[station].Cancel();
-                        return;
+                        tempCon = true;
+                        oldTempCon = true;
                     }
 
-                }
 
-                shuntCon = true;
-                cellCon = true;
-                oldShuntCon = true;
-                oldCellCon = true;
-                if(GlobalVars.CScanData[station].tempPlateType != "NONE")
+                    #endregion
+                }
+                    // we are running the second test of a combo...
+                else
                 {
-                    tempCon = true;
-                    oldTempCon = true;
+                    if (d.Rows[station][10].ToString().Contains("Shunt"))
+                    {
+                        runAsShunt = true;
+                    }
+                    else if ((bool)d.Rows[station][8] == false && testType != "As Received")
+                    {
+                        runAsShunt = true;
+                    }
                 }
-
-                
-                #endregion
 
                 #region db connection setup (all cases)
                 // create db connection
@@ -710,7 +722,7 @@ namespace NewBTASProto
                 float vSet2 = 0;
 
                 // we'll tell the charger what to do! (if we have an IC and the user wants us to...)
-                if (GlobalVars.autoConfig && (bool)d.Rows[station][12] && d.Rows[station][10].ToString().Contains("ICA") && (string)d.Rows[station][2] != "As Received" && !runAsShunt)
+                if (GlobalVars.autoConfig && (bool)d.Rows[station][12] && d.Rows[station][10].ToString().Contains("ICA") && testType != "As Received" && !runAsShunt)
                 {
 
                     // GENERAL PROCEDURE
@@ -759,7 +771,7 @@ namespace NewBTASProto
                         
                         try
                         {
-                            switch ((string)d.Rows[station][2])
+                            switch (testType)
                             {
                                 case "Full Charge-6":
                                     tempKMStore[0] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][42].ToString().Substring(0, 2)));          //mode
@@ -1377,7 +1389,7 @@ namespace NewBTASProto
                 //  open the db and pull in the options table
                 try
                 {
-                    strAccessSelect = @"SELECT * FROM TestType WHERE TESTNAME='" + d.Rows[station][2].ToString() + "';";
+                    strAccessSelect = @"SELECT * FROM TestType WHERE TESTNAME='" + testType + "';";
                     DataSet settings = new DataSet();
                     OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
                     OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
@@ -1649,7 +1661,7 @@ namespace NewBTASProto
                             MWO1.Trim() + "','" +                         //WorkOrderNumber
                             "" + "','" +                                                           //AggrWorkOrders
                             stepNum.ToString("00") + "','" +                                       //StepNumber
-                            d.Rows[station][2].ToString() + "','" +                                //TestName
+                            testType + "','" +                                //TestName
                             readings.ToString() + "','" +                                          //Reading
                             (interval * 1000).ToString() + "','" +                                 //interval in msec
                             station.ToString() + "','" +                                           // station number
@@ -1685,7 +1697,7 @@ namespace NewBTASProto
                             MWO2.Trim() + "','" +                                                   //WorkOrderNumber
                             "" + "','" +                                                            //AggrWorkOrders
                             stepNum2.ToString("00") + "','" +                                       //StepNumber
-                            d.Rows[station][2].ToString() + "','" +                                 //TestName
+                            testType + "','" +                                                      //TestName
                             readings.ToString() + "','" +                                           //Reading
                             (interval * 1000).ToString() + "','" +                                  //interval in msec
                             station.ToString() + "','" +                                            // station number
@@ -1722,7 +1734,7 @@ namespace NewBTASProto
                             MWO3.Trim() + "','" +                                                   //WorkOrderNumber
                             "" + "','" +                                                            //AggrWorkOrders
                             stepNum3.ToString("00") + "','" +                                       //StepNumber
-                            d.Rows[station][2].ToString() + "','" +                                 //TestName
+                            testType + "','" +                                                      //TestName
                             readings.ToString() + "','" +                                           //Reading
                             (interval * 1000).ToString() + "','" +                                  //interval in msec
                             station.ToString() + "','" +                                            // station number
@@ -2132,7 +2144,7 @@ namespace NewBTASProto
                 if (token.IsCancellationRequested)
                 {
 
-                    if ((string)d.Rows[station][2] == "As Received")
+                    if (testType == "As Received")
                     {
                         //nothing to do here...
                     }
@@ -2162,7 +2174,7 @@ namespace NewBTASProto
 
                 /////////////////////////////////START UP//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 #region START UP
-                if (d.Rows[station][2].ToString() == "As Received")
+                if (testType == "As Received")
                 {
                     // nothing to do! if it's an "As Received" or we are running the test on a slave charger... 
                     stopwatch.Start();
@@ -2177,7 +2189,7 @@ namespace NewBTASProto
 
                     // we need to check that we are in the correct mode for the test...
                     string temp = GlobalVars.ICData[Cstation].testMode.ToString();
-                    switch (d.Rows[station][2].ToString())
+                    switch (testType)
                     {
                         case "As Received":
                             // we should never get here..
@@ -2542,7 +2554,7 @@ namespace NewBTASProto
                     if (token.IsCancellationRequested)
                     {
 
-                        if ((string)d.Rows[station][2] == "As Received")
+                        if (testType == "As Received")
                         {
                             //nothing to do here...
                         }
@@ -2689,7 +2701,7 @@ namespace NewBTASProto
                     if (token.IsCancellationRequested)
                     {
 
-                        if ((string)d.Rows[station][2] == "As Received")
+                        if (testType == "As Received")
                         {
                             //nothing to do here...
                         }
@@ -3695,7 +3707,7 @@ namespace NewBTASProto
                     {
                         //current check part...
                         //if we have a mini that is charging...
-                        if (d.Rows[station][10].ToString().Contains("mini") && !(d.Rows[station][2].ToString().Contains("Cap") || d.Rows[station][2].ToString().Contains("Discharge")))
+                        if (d.Rows[station][10].ToString().Contains("mini") && !(testType.Contains("Cap") || testType.Contains("Discharge")))
                         {
                             //badCurCount looks at current two...
                             // for the mini case
@@ -3793,7 +3805,7 @@ namespace NewBTASProto
                             // doesn't seem to be an issue because all of the chargers are a little slow...
 
                         }
-                        else if ((string)d.Rows[station][11] != "RUN" && (string)d.Rows[station][2] != "As Received")
+                        else if ((string)d.Rows[station][11] != "RUN" && testType != "As Received")
                         {
                             //make sure the charger has priority
                             criticalNum[Cstation] = true;
@@ -3960,7 +3972,7 @@ namespace NewBTASProto
                             {
                                 // resistance discharge
                             }
-                            else if (d.Rows[station][2].ToString().Contains("Cap") || d.Rows[station][2].ToString().Contains("Dis"))
+                            else if (testType.Contains("Cap") || testType.Contains("Dis"))
                             {
                                 if (Math.Abs(-1 * GlobalVars.CScanData[station].currentOne - curSet1) > (0.1 + curSet1 * 0.05) && Math.Abs(-1 * GlobalVars.CScanData[station].currentOne - curSet2) > (0.1 + curSet2 * 0.05))
                                 {
@@ -4193,7 +4205,7 @@ namespace NewBTASProto
                     }
                     #endregion
                     #region As Received and No Charger Tests
-                    else if (d.Rows[station][2].ToString().Contains("As Received"))
+                    else if (testType.Contains("As Received"))
                     {
                         // no test needed for now...
                     }
@@ -4237,7 +4249,7 @@ namespace NewBTASProto
                     if (token.IsCancellationRequested)
                     {
 
-                        if ((string)d.Rows[station][2] == "As Received")
+                        if (testType == "As Received")
                         {
                             //nothing to do here...
                         }
@@ -4288,6 +4300,8 @@ namespace NewBTASProto
                         //clear values from d
                         updateD(station, 7, ("Read " + (currentReading - 1).ToString() + " of " + readings.ToString()));
                         if (MasterSlaveTest) { updateD(slaveRow, 7, ("Read " + (currentReading - 1).ToString() + " of " + readings.ToString())); }
+                        // only clear the test checkbox if you are not doing a combo test
+
                         updateD(station, 5, false);
                         if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
                         cRunTest[station].Cancel();
@@ -4316,7 +4330,7 @@ namespace NewBTASProto
                 #region END TEST
                 // We finished so let's clearn up!
                 // If we are running the charger tell it to stop and reset
-                if ((string)d.Rows[station][2] == "As Received")
+                if (testType == "As Received")
                 {
                     // nothing to do...
                 }
@@ -4418,8 +4432,11 @@ namespace NewBTASProto
                 if (MasterSlaveTest) { updateD(slaveRow, 6, ""); }
                 updateD(station, 7, "Complete");
                 if (MasterSlaveTest) { updateD(slaveRow, 7, "Complete"); }
-                updateD(station, 5, false);
-                if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                if (!d.Rows[station][2].ToString().Contains("Combo") || d.Rows[station][2].ToString().Substring(d.Rows[station][2].ToString().Length - 2).Contains("<<"))
+                {
+                    updateD(station, 5, false);
+                    if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                }
 
                 //update the finish time
                 updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
@@ -4546,6 +4563,167 @@ namespace NewBTASProto
             {
                 testLock = false;
             }
+        }
+
+        private void comboRunTest()
+        {
+            // we got a combo test
+            // set the station
+            int station = dataGridView1.CurrentRow.Index;
+            sendNote(station, 3, "Combo Test Initiated");
+
+            // we are going to manage this on a helper thread...
+
+            ThreadPool.QueueUserWorkItem(s =>
+            {
+                //try to pull in the start temp
+                double startTemp = (GlobalVars.CScanData[station].TP1 + GlobalVars.CScanData[station].TP2 + GlobalVars.CScanData[station].TP3 + GlobalVars.CScanData[station].TP4) / 4;
+                #region master slave test and setup
+                // we will use this bool to say if we need to do slave stuff..
+                bool MasterSlaveTest = false;
+                int slaveRow = -1;
+
+                if (d.Rows[station][9].ToString() == "") { ;}  // do nothing if there is no assigned charger id
+                else if (d.Rows[station][9].ToString().Length > 2)  // this is the case where we have a master and slave config
+                {
+                    MasterSlaveTest = true;
+                    // also assign the slave channel...
+                    string temp = d.Rows[station][9].ToString().Replace("-M", "");
+
+                    for (int i = 0; i < 16; i++)
+                    {
+                        if (d.Rows[i][9].ToString().Contains(temp) && d.Rows[i][9].ToString().Contains("S"))
+                        {
+                            //found the slave
+                            slaveRow = i;
+                            break;
+                        }
+                    }
+                }  // end the master slave find...
+
+                #endregion
+
+                // RUN THE FIRST TEST
+                // up date the grid to show that you are on the first test with >> <<
+                updateD(station, 2, "Combo: >>FC-6<<  Cap-1");
+                if (MasterSlaveTest) { updateD(slaveRow, 2, "Combo: >>FC-6<<  Cap-1"); }
+
+                RunTest("As Received");
+
+                // wait for the test to complete
+                // check for a cancel with the test marked as completed in the grid.. 
+                while (!cRunTest[station].IsCancellationRequested)
+                {
+                    Thread.Sleep(100);
+                }
+                if ((bool)d.Rows[station][5] == false)
+                {
+                    // it was cancelled...
+                    return;
+                }
+                
+                // VOLTAGE CHECKS AND TEMP SETTLE WAIT//////////////////////////////////////////////////////////////////////////////////////
+                // set up the timer
+                var stopwatch = new Stopwatch();
+                TimeSpan eTime;
+                string eTimeS;
+                string oldETime = "";
+
+                cRunTest[station] = new CancellationTokenSource();
+
+                for (int i = 0; i < 15; i++)
+                {
+                    Thread.Sleep(100);
+                    if (cRunTest[station].IsCancellationRequested) 
+                    {
+                        updateD(station, 5, false);
+                        if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                        return;
+                    }
+                }
+                updateD(station, 2, "Combo: FC-6 >><< Cap-1");
+                if (MasterSlaveTest) { updateD(slaveRow, 2, "Combo: FC-6 >><< Cap-1"); }
+                updateD(station, 7, "Temp Wait");
+                if (MasterSlaveTest) { updateD(slaveRow, 7, "Temp Wait"); }
+
+                stopwatch.Start();
+                eTime = stopwatch.Elapsed;
+                while (eTime.TotalSeconds < 3) // max wait
+                {
+                    //start the time update
+                    eTime = stopwatch.Elapsed;
+                    eTimeS = eTime.ToString(@"hh\:mm\:ss");
+                    if (oldETime != eTimeS)
+                    {
+                        try
+                        {
+                            updateD(station, 6, eTimeS);
+                            if (MasterSlaveTest) { updateD(slaveRow, 6, eTimeS); }
+                        }
+                        catch { }
+                    }
+
+                    oldETime = eTimeS;
+                    if (startTemp < -90 || GlobalVars.CScanData[station].tempPlateType == "NONE")
+                    {
+                        // we don't have a good start temp or a temp cable anymore
+                        //just wait for a while then
+
+                    }
+                    else
+                    {
+                        // we do have a good start temp
+                        // lets wait for the temp to come back down
+                        if (((GlobalVars.CScanData[station].TP1 + GlobalVars.CScanData[station].TP2 + GlobalVars.CScanData[station].TP3 + GlobalVars.CScanData[station].TP4) / 4) < (startTemp + 5))
+                        {
+                            // we are back within 5 C of the start temp
+                        }
+                    }
+                    Thread.Sleep(100);
+                    //did we cancel?
+                    if (cRunTest[station].IsCancellationRequested)
+                    {
+                        updateD(station, 5, false);
+                        if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                        return;
+                    }
+                }
+
+                //clear time
+                updateD(station, 6, "");
+                if (MasterSlaveTest) { updateD(slaveRow, 6, ""); }
+                
+                updateD(station, 7, "Next Test");
+                if (MasterSlaveTest) { updateD(slaveRow, 7, "Next Test"); }
+                for (int i = 0; i < 15; i++)
+                {
+                    Thread.Sleep(100);
+                    if (cRunTest[station].IsCancellationRequested)
+                    {
+                        updateD(station, 5, false);
+                        if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                        return;
+                    }
+                }
+
+
+                //RUN THE SECOND TEST
+                updateD(station, 2, "Combo: FC-6  >>Cap-1<<");
+                if (MasterSlaveTest) { updateD(slaveRow, 2, "Combo: FC-6  >>Cap-1<<"); }
+                RunTest("As Received");
+                while (!cRunTest[station].IsCancellationRequested)
+                {
+                    Thread.Sleep(100);
+                }
+
+                //CLOSE UP SHOP
+                updateD(station, 2, "Combo: FC-6 Cap-1");
+                if (MasterSlaveTest) { updateD(slaveRow, 2, "Combo: FC-6 Cap-1"); }
+
+
+            }); // end thread
+            
+
         }
 
     }
