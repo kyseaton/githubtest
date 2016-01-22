@@ -794,10 +794,9 @@ namespace NewBTASProto
 
                 this.reportViewer.LocalReport.DataSources.Add(new ReportDataSource("Tests", testTable));
 
-                /*************************Load Global data into MetaData data Table ***********************
+                /*************************Load Global data into MetaData data Table ************************/
                 // create datatable
                 DataTable MetaDT = new DataTable("MetaData");
-                MetaDT.Clear();
 
                 // add columns
                 MetaDT.Columns.Add("gBusinessName", typeof(string));
@@ -810,9 +809,7 @@ namespace NewBTASProto
 
                 // insert data rows
                 MetaDT.Rows.Add(GlobalVars.businessName, GlobalVars.useF, GlobalVars.Pos2Neg, comboBox2.Text, testsPerformed.Tables[0].Rows[comboBox2.SelectedIndex][15].ToString(), testsPerformed.Tables[0].Rows[comboBox2.SelectedIndex][16].ToString(), testsPerformed.Tables[0].Rows[comboBox2.SelectedIndex][17].ToString());
-                */
-
-                DataTable MetaDT = new DataTable("MetaData");
+                
                 this.reportViewer.LocalReport.DataSources.Add(new ReportDataSource("MetaData", MetaDT));
 
                 this.reportViewer.RefreshReport();

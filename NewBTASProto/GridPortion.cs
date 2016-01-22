@@ -379,9 +379,9 @@ namespace NewBTASProto
                 else if ((bool)d.Rows[e.RowIndex][e.ColumnIndex])
                 {
                     updateD(e.RowIndex,e.ColumnIndex,false);
-                    updateD(e.RowIndex, 10, "");
-                    updateD(e.RowIndex, 11, "");
-                    dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor = Color.Gainsboro;
+                    //updateD(e.RowIndex, 10, "");
+                    //updateD(e.RowIndex, 11, "");
+                    //dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor = Color.Gainsboro;
                     
                     // also update the slave (if we have a master...)
                     if (d.Rows[e.RowIndex][9].ToString().Contains("M"))
@@ -395,9 +395,9 @@ namespace NewBTASProto
                             {
                                 //found the slave
                                 updateD(i, 8, false);
-                                updateD(i, 10, "");
-                                updateD(i, 11, "");
-                                dataGridView1.Rows[i].Cells[8].Style.BackColor = Color.LightSteelBlue;
+                                //updateD(i, 10, "");
+                                //updateD(i, 11, "");
+                                //dataGridView1.Rows[i].Cells[8].Style.BackColor = Color.LightSteelBlue;
                                 break;
                             }
                         }

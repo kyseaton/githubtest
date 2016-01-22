@@ -220,9 +220,14 @@ namespace NewBTASProto
                                             // select which currents to display
 
                                             // check if we need to use the master Current..
+                                            
                                             if (masterRow != -1)
                                             {
-                                                if (GlobalVars.CScanData[masterRow].shuntCableType == "TEST BOX")
+                                                if (GlobalVars.CScanData[masterRow].shuntCableType == "NONE")
+                                                {
+                                                    //skip the current
+                                                }
+                                                else if (GlobalVars.CScanData[masterRow].shuntCableType == "TEST BOX")
                                                 {
                                                     //dispaly both ...
                                                     tempText += "Current#1:  " + GlobalVars.CScanData[masterRow].currentOne.ToString("00.00") + Environment.NewLine;
@@ -253,7 +258,11 @@ namespace NewBTASProto
                                             // normal case
                                             else
                                             {
-                                                if (testData.shuntCableType == "TEST BOX")
+                                                if (testData.shuntCableType == "NONE")
+                                                {
+                                                    //skip it...
+                                                }
+                                                else if (testData.shuntCableType == "TEST BOX")
                                                 {
                                                     //dispaly both ...
                                                     tempText += "Current#1:  " + testData.currentOne.ToString("00.00") + Environment.NewLine;
@@ -308,98 +317,102 @@ namespace NewBTASProto
                                                 }
                                             }
 
+                                            
                                             tempText += Environment.NewLine;
 
-                                            // WE need to display open when we get -99, cold for -98, hot for -97 and shorted for -96
-                                            switch (masterRow != -1 ? Convert.ToInt16(GlobalVars.CScanData[masterRow].TP1) : Convert.ToInt16(testData.TP1))
-                                            {
-                                                case -99:
-                                                    tempText += "Temp Plate 1:  Open" + Environment.NewLine;
-                                                    break;
-                                                case -98:
-                                                    tempText += "Temp Plate 1:  Cold" + Environment.NewLine;
-                                                    break;
-                                                case -97:
-                                                    tempText += "Temp Plate 1:  Hot" + Environment.NewLine;
-                                                    break;
-                                                case -96:
-                                                    tempText += "Temp Plate 1:  Shorted" + Environment.NewLine;
-                                                    break;
-                                                default:
-                                                    tempText += "Temp Plate 1:  " + (GlobalVars.useF ? ConvertCelsiusToFahrenheit(masterRow != -1 ? GlobalVars.CScanData[masterRow].TP1 : testData.TP1).ToString("00.00") : (masterRow != -1 ? GlobalVars.CScanData[masterRow].TP1 : testData.TP1).ToString("00.0")) + Environment.NewLine;
-                                                    break;
-                                            }
-                                            switch (masterRow != -1 ? Convert.ToInt16(GlobalVars.CScanData[masterRow].TP2) : Convert.ToInt16(testData.TP2))
-                                            {
-                                                case -99:
-                                                    tempText += "Temp Plate 2:  Open" + Environment.NewLine;
-                                                    break;
-                                                case -98:
-                                                    tempText += "Temp Plate 2:  Cold" + Environment.NewLine;
-                                                    break;
-                                                case -97:
-                                                    tempText += "Temp Plate 2:  Hot" + Environment.NewLine;
-                                                    break;
-                                                case -96:
-                                                    tempText += "Temp Plate 2:  Shorted" + Environment.NewLine;
-                                                    break;
-                                                default:
-                                                    tempText += "Temp Plate 2:  " + (GlobalVars.useF ? ConvertCelsiusToFahrenheit(masterRow != -1 ? GlobalVars.CScanData[masterRow].TP2 : testData.TP2).ToString("00.00") : (masterRow != -1 ? GlobalVars.CScanData[masterRow].TP2 : testData.TP2).ToString("00.0")) + Environment.NewLine;
-                                                    break;
-                                            }
-                                            switch (masterRow != -1 ? Convert.ToInt16(GlobalVars.CScanData[masterRow].TP3) : Convert.ToInt16(testData.TP3))
-                                            {
-                                                case -99:
-                                                    tempText += "Temp Plate 3:  Open" + Environment.NewLine;
-                                                    break;
-                                                case -98:
-                                                    tempText += "Temp Plate 3:  Cold" + Environment.NewLine;
-                                                    break;
-                                                case -97:
-                                                    tempText += "Temp Plate 3:  Hot" + Environment.NewLine;
-                                                    break;
-                                                case -96:
-                                                    tempText += "Temp Plate 3:  Shorted" + Environment.NewLine;
-                                                    break;
-                                                default:
-                                                    tempText += "Temp Plate 3:  " + (GlobalVars.useF ? ConvertCelsiusToFahrenheit(masterRow != -1 ? GlobalVars.CScanData[masterRow].TP3 : testData.TP3).ToString("00.00") : (masterRow != -1 ? GlobalVars.CScanData[masterRow].TP3 : testData.TP3).ToString("00.0")) + Environment.NewLine;
-                                                    break;
-                                            }
-                                            switch (masterRow != -1 ? Convert.ToInt16(GlobalVars.CScanData[masterRow].TP4) : Convert.ToInt16(testData.TP4))
-                                            {
-                                                case -99:
-                                                    tempText += "Temp Plate 4:  Open" + Environment.NewLine;
-                                                    break;
-                                                case -98:
-                                                    tempText += "Temp Plate 4:  Cold" + Environment.NewLine;
-                                                    break;
-                                                case -97:
-                                                    tempText += "Temp Plate 4:  Hot" + Environment.NewLine;
-                                                    break;
-                                                case -96:
-                                                    tempText += "Temp Plate 4:  Shorted" + Environment.NewLine;
-                                                    break;
-                                                default:
-                                                    tempText += "Temp Plate 4:  " + (GlobalVars.useF ? ConvertCelsiusToFahrenheit(masterRow != -1 ? GlobalVars.CScanData[masterRow].TP4 : testData.TP4).ToString("00.00") : (masterRow != -1 ? GlobalVars.CScanData[masterRow].TP4 : testData.TP4).ToString("00.0")) + Environment.NewLine;
-                                                    break;
-                                            }
-                                            switch (masterRow != -1 ? Convert.ToInt16(GlobalVars.CScanData[masterRow].TP5) : Convert.ToInt16(testData.TP5))
-                                            {
-                                                case -99:
-                                                    tempText += "Ambient Temp:  Open" + Environment.NewLine;
-                                                    break;
-                                                case -98:
-                                                    tempText += "Ambient Temp:  Cold" + Environment.NewLine;
-                                                    break;
-                                                case -97:
-                                                    tempText += "Ambient Temp:  Hot" + Environment.NewLine;
-                                                    break;
-                                                case -96:
-                                                    tempText += "Ambient Temp:  Shorted" + Environment.NewLine;
-                                                    break;
-                                                default:
-                                                    tempText += "Ambient Temp:  " + (GlobalVars.useF ? ConvertCelsiusToFahrenheit(masterRow != -1 ? GlobalVars.CScanData[masterRow].TP5 : testData.TP5).ToString("00.00") : (masterRow != -1 ? GlobalVars.CScanData[masterRow].TP5 : testData.TP5).ToString("00.0")) + Environment.NewLine;
-                                                    break;
+                                            if ((masterRow != -1 ?  GlobalVars.CScanData[masterRow].tempPlateType != "NONE" : testData.tempPlateType != "NONE"))
+                                            { 
+                                                // WE need to display open when we get -99, cold for -98, hot for -97 and shorted for -96
+                                                switch (masterRow != -1 ? Convert.ToInt16(GlobalVars.CScanData[masterRow].TP1) : Convert.ToInt16(testData.TP1))
+                                                {
+                                                    case -99:
+                                                        tempText += "Temp Plate 1:  Open" + Environment.NewLine;
+                                                        break;
+                                                    case -98:
+                                                        tempText += "Temp Plate 1:  Cold" + Environment.NewLine;
+                                                        break;
+                                                    case -97:
+                                                        tempText += "Temp Plate 1:  Hot" + Environment.NewLine;
+                                                        break;
+                                                    case -96:
+                                                        tempText += "Temp Plate 1:  Shorted" + Environment.NewLine;
+                                                        break;
+                                                    default:
+                                                        tempText += "Temp Plate 1:  " + (GlobalVars.useF ? ConvertCelsiusToFahrenheit(masterRow != -1 ? GlobalVars.CScanData[masterRow].TP1 : testData.TP1).ToString("00.00") : (masterRow != -1 ? GlobalVars.CScanData[masterRow].TP1 : testData.TP1).ToString("00.0")) + Environment.NewLine;
+                                                        break;
+                                                }
+                                                switch (masterRow != -1 ? Convert.ToInt16(GlobalVars.CScanData[masterRow].TP2) : Convert.ToInt16(testData.TP2))
+                                                {
+                                                    case -99:
+                                                        tempText += "Temp Plate 2:  Open" + Environment.NewLine;
+                                                        break;
+                                                    case -98:
+                                                        tempText += "Temp Plate 2:  Cold" + Environment.NewLine;
+                                                        break;
+                                                    case -97:
+                                                        tempText += "Temp Plate 2:  Hot" + Environment.NewLine;
+                                                        break;
+                                                    case -96:
+                                                        tempText += "Temp Plate 2:  Shorted" + Environment.NewLine;
+                                                        break;
+                                                    default:
+                                                        tempText += "Temp Plate 2:  " + (GlobalVars.useF ? ConvertCelsiusToFahrenheit(masterRow != -1 ? GlobalVars.CScanData[masterRow].TP2 : testData.TP2).ToString("00.00") : (masterRow != -1 ? GlobalVars.CScanData[masterRow].TP2 : testData.TP2).ToString("00.0")) + Environment.NewLine;
+                                                        break;
+                                                }
+                                                switch (masterRow != -1 ? Convert.ToInt16(GlobalVars.CScanData[masterRow].TP3) : Convert.ToInt16(testData.TP3))
+                                                {
+                                                    case -99:
+                                                        tempText += "Temp Plate 3:  Open" + Environment.NewLine;
+                                                        break;
+                                                    case -98:
+                                                        tempText += "Temp Plate 3:  Cold" + Environment.NewLine;
+                                                        break;
+                                                    case -97:
+                                                        tempText += "Temp Plate 3:  Hot" + Environment.NewLine;
+                                                        break;
+                                                    case -96:
+                                                        tempText += "Temp Plate 3:  Shorted" + Environment.NewLine;
+                                                        break;
+                                                    default:
+                                                        tempText += "Temp Plate 3:  " + (GlobalVars.useF ? ConvertCelsiusToFahrenheit(masterRow != -1 ? GlobalVars.CScanData[masterRow].TP3 : testData.TP3).ToString("00.00") : (masterRow != -1 ? GlobalVars.CScanData[masterRow].TP3 : testData.TP3).ToString("00.0")) + Environment.NewLine;
+                                                        break;
+                                                }
+                                                switch (masterRow != -1 ? Convert.ToInt16(GlobalVars.CScanData[masterRow].TP4) : Convert.ToInt16(testData.TP4))
+                                                {
+                                                    case -99:
+                                                        tempText += "Temp Plate 4:  Open" + Environment.NewLine;
+                                                        break;
+                                                    case -98:
+                                                        tempText += "Temp Plate 4:  Cold" + Environment.NewLine;
+                                                        break;
+                                                    case -97:
+                                                        tempText += "Temp Plate 4:  Hot" + Environment.NewLine;
+                                                        break;
+                                                    case -96:
+                                                        tempText += "Temp Plate 4:  Shorted" + Environment.NewLine;
+                                                        break;
+                                                    default:
+                                                        tempText += "Temp Plate 4:  " + (GlobalVars.useF ? ConvertCelsiusToFahrenheit(masterRow != -1 ? GlobalVars.CScanData[masterRow].TP4 : testData.TP4).ToString("00.00") : (masterRow != -1 ? GlobalVars.CScanData[masterRow].TP4 : testData.TP4).ToString("00.0")) + Environment.NewLine;
+                                                        break;
+                                                }
+                                                switch (masterRow != -1 ? Convert.ToInt16(GlobalVars.CScanData[masterRow].TP5) : Convert.ToInt16(testData.TP5))
+                                                {
+                                                    case -99:
+                                                        tempText += "Ambient Temp:  Open" + Environment.NewLine;
+                                                        break;
+                                                    case -98:
+                                                        tempText += "Ambient Temp:  Cold" + Environment.NewLine;
+                                                        break;
+                                                    case -97:
+                                                        tempText += "Ambient Temp:  Hot" + Environment.NewLine;
+                                                        break;
+                                                    case -96:
+                                                        tempText += "Ambient Temp:  Shorted" + Environment.NewLine;
+                                                        break;
+                                                    default:
+                                                        tempText += "Ambient Temp:  " + (GlobalVars.useF ? ConvertCelsiusToFahrenheit(masterRow != -1 ? GlobalVars.CScanData[masterRow].TP5 : testData.TP5).ToString("00.00") : (masterRow != -1 ? GlobalVars.CScanData[masterRow].TP5 : testData.TP5).ToString("00.0")) + Environment.NewLine;
+                                                        break;
+                                                }
                                             }
 
                                             tempText += Environment.NewLine;
@@ -433,7 +446,7 @@ namespace NewBTASProto
                                             string temp = d.Rows[currentRow][9].ToString().Replace("-M", "");
                                             for (int q = 0; q < 16; q++)
                                             {
-                                                if (d.Rows[q][9].ToString().Contains(temp) && d.Rows[q][9].ToString().Contains("S") && (bool) d.Rows[q][8])
+                                                if (d.Rows[q][9].ToString().Contains(temp) && d.Rows[q][9].ToString().Contains("S"))
                                                 {
                                                     slaveRow = q;
                                                     break;
@@ -1363,6 +1376,8 @@ namespace NewBTASProto
                                 points = 3;
                                 break;
                             case "Full Charge-6":
+                            case "Combo: >>FC-6<<  Cap-1":
+                            case "Combo: FC-6 >><< Cap-1":
                                 interval = 5;
                                 points = 73;
                                 break;
@@ -1387,6 +1402,7 @@ namespace NewBTASProto
                                 points = 73;
                                 break;
                             case "Capacity-1":
+                            case "Combo: FC-6  >>Cap-1<<":
                                 interval = 1;
                                 points = 61;
                                 break;
@@ -1624,6 +1640,8 @@ namespace NewBTASProto
                                     points = 3;
                                     break;
                                 case "Full Charge-6":
+                                case "Combo: >>FC-6<<  Cap-1":
+                                case "Combo: FC-6 >><< Cap-1":
                                     interval = 5;
                                     points = 73;
                                     break;
@@ -1648,6 +1666,7 @@ namespace NewBTASProto
                                     points = 73;
                                     break;
                                 case "Capacity-1":
+                                case "Combo: FC-6  >>Cap-1<<":
                                     interval = 1;
                                     points = 61;
                                     break;
@@ -1815,7 +1834,7 @@ namespace NewBTASProto
             {
                 case "NiCd":
                     // Discharge
-                    if (test_type == "As Received" || test_type == "Capacity-1" || test_type == "Discharge" || test_type == "Custom Cap" || test_type == "")
+                    if (test_type == "As Received" || test_type == "Capacity-1" || test_type == "Discharge" || test_type == "Custom Cap" || test_type == "Combo: FC-6  >>Cap-1<<" || test_type == "")
                     {
                         Min4 = 1 * Cells;
                         Max = 1.05 * Cells;

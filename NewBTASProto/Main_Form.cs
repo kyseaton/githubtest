@@ -250,6 +250,7 @@ namespace NewBTASProto
             {
                 this.automaticallyConfigureChargerToolStripMenuItem.Checked = true;
                 this.chargerConfigurationInterfaceToolStripMenuItem.Enabled = false;
+                this.toolStripMenuItem44.Enabled = true;
             }
             else { this.automaticallyConfigureChargerToolStripMenuItem.Checked = false; }
 
@@ -2250,7 +2251,16 @@ namespace NewBTASProto
         private void resumeTestToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //runtest without resetting the time!
-            RunTest();
+            if (d.Rows[dataGridView1.CurrentRow.Index][2].ToString().Contains("Combo"))
+            {
+                //combo tests
+                comboRunTest();
+            }
+            else
+            {
+                // normal tests
+                RunTest();
+            }
         }
 
         private void stopTestToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2465,12 +2475,14 @@ namespace NewBTASProto
                 automaticallyConfigureChargerToolStripMenuItem.Checked = true;
                 GlobalVars.autoConfig = true;
                 chargerConfigurationInterfaceToolStripMenuItem.Enabled = false;
+                this.toolStripMenuItem44.Enabled = true;
             }
             else
             {
                 automaticallyConfigureChargerToolStripMenuItem.Checked = false;
                 GlobalVars.autoConfig = false;
                 chargerConfigurationInterfaceToolStripMenuItem.Enabled = true;
+                this.toolStripMenuItem44.Enabled = false;
             }
 
             dataGridView1_Resize(this, null);
