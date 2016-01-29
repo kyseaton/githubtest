@@ -29,6 +29,7 @@ namespace NewBTASProto
         // we use this bool to allow us to allow the databinding indext to be changed...
         bool Inhibit = true;
         bool InhibitCB = true;
+        bool startup = true;
 
         public frmVECustomerBats()
         {
@@ -821,7 +822,7 @@ namespace NewBTASProto
             try
             {
                 //remove the new record if there is one..
-                if (bindingNavigatorAddNewItem.Enabled == false && lastValid)
+                if (bindingNavigatorAddNewItem.Enabled == false && lastValid == true)
                 {
                     Bats.Tables[0].Rows[Bats.Tables[0].Rows.Count - 1].Delete();
                     bindingNavigatorAddNewItem.Enabled = true;
@@ -883,6 +884,8 @@ namespace NewBTASProto
             updateCurVals();
 
             bindingNavigatorAddNewItem.PerformClick();
+
+            startup = false;
         }
 
         private void bindingNavigatorMoveNextItem_Click(object sender, EventArgs e)

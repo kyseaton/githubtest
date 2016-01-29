@@ -670,7 +670,7 @@ namespace NewBTASProto
                                             this.Invoke((MethodInvoker)delegate
                                             {
                                                 if ((bool)d.Rows[tempClick][4] == true) { dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[4].Style.BackColor = Color.Red; }
-                                                dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.Gainsboro;
+                                                if (!d.Rows[dataGridView1.CurrentRow.Index][10].ToString().Contains("ICA")) { dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.Gainsboro; }
                                                 chart1.Series.Clear();
                                                 chart1.Invalidate();
                                                 LockWindowUpdate(this.Handle);
@@ -1016,7 +1016,7 @@ namespace NewBTASProto
                                                 {
                                                     // set the cell to green
                                                     if ((bool)d.Rows[j][4]){dataGridView1.Rows[j].Cells[4].Style.BackColor = Color.Red;}
-                                                    dataGridView1.Rows[j].Cells[8].Style.BackColor = Color.Gainsboro;
+                                                    if(!d.Rows[j][10].ToString().Contains("ICA")){ dataGridView1.Rows[j].Cells[8].Style.BackColor = Color.Gainsboro;}
                                                 });
                                             }
                                         }  // end if
@@ -1374,6 +1374,18 @@ namespace NewBTASProto
                             case "As Received":
                                 interval = 1 / 30;
                                 points = 3;
+                                break;
+                            case "Combo: FC-6 Cap-1":
+                                if (d.Rows[station][7].ToString() == "Complete")
+                                {
+                                    interval = 1;
+                                    points = 61;
+                                }
+                                else
+                                {
+                                    interval = 5;
+                                    points = 73;
+                                }
                                 break;
                             case "Full Charge-6":
                             case "Combo: >>FC-6<<  Cap-1":
@@ -1834,7 +1846,7 @@ namespace NewBTASProto
             {
                 case "NiCd":
                     // Discharge
-                    if (test_type == "As Received" || test_type == "Capacity-1" || test_type == "Discharge" || test_type == "Custom Cap" || test_type == "Combo: FC-6  >>Cap-1<<" || test_type == "")
+                    if (test_type == "As Received" || test_type == "Capacity-1" || test_type == "Discharge" || test_type == "Custom Cap" || (test_type == "Combo: FC-6 Cap-1" && d.Rows[station][7].ToString() == "Complete") || test_type == "Combo: FC-6  >>Cap-1<<" || test_type == "")
                     {
                         Min4 = 1 * Cells;
                         Max = 1.05 * Cells;

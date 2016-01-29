@@ -26,7 +26,7 @@ namespace NewBTASProto
 
         //vars for recording in sc
 
-        private void RunTest(string testType = "default")
+        private void RunTest(string testType = "default", int station = -1)
         {
 
             ///
@@ -54,8 +54,11 @@ namespace NewBTASProto
             ///  V
             ///  Shunt - Y - >  Start test when you see a current (case 5)
 
+            if (station == -1)
+            {
+                station = dataGridView1.CurrentRow.Index;
+            }
 
-            int station = dataGridView1.CurrentRow.Index;
             int Cstation = 0;
 
             //here to prevent double starts...
@@ -4702,7 +4705,7 @@ namespace NewBTASProto
                     updateD(station, 2, "Combo: >>FC-6<<  Cap-1");
                     if (MasterSlaveTest) { updateD(slaveRow, 2, "Combo: >>FC-6<<  Cap-1"); }
 
-                    RunTest("Custom Chg");
+                    RunTest("Full Charge-6", station);
 
                     // wait for the test to complete
                     // check for a cancel with the test marked as completed in the grid.. 
@@ -4718,18 +4721,49 @@ namespace NewBTASProto
                         for (int i = 0; i < 200; i++)
                         {
                             Thread.Sleep(100);
-                            if (d.Rows[station][7].ToString().Contains("Read") && !d.Rows[station][7].ToString().Contains("Reading"))
+                            if ((d.Rows[station][7].ToString().Contains("Read") && !d.Rows[station][7].ToString().Contains("Reading")) || d.Rows[station][7].ToString() == "")
                             {
+                                if (d.Rows[station][7].ToString() == "")
+                                {
+                                    updateD(station, 2, "Combo: FC-6 Cap-1");
+                                    if (MasterSlaveTest) { updateD(slaveRow, 2, "Combo: FC-6 Cap-1"); }
+                                }
                                 return; // return when the test is finished with clean up...
                             }
                         }
                     }
 
                     // VOLTAGE CHECKS AND TEMP SETTLE WAIT /////////////////////////////////////////////////////////////////////
+                    cRunTest[station] = new CancellationTokenSource();
+                    updateD(station, 2, "Combo: FC-6 >><< Cap-1");
+                    if (MasterSlaveTest) { updateD(slaveRow, 2, "Combo: FC-6 >><< Cap-1"); }
+                    updateD(station, 7, "Test Verification");
+                    if (MasterSlaveTest) { updateD(slaveRow, 7, "Test Verification"); }
+
+                    //short wait
+                    for (int i = 0; i < 15; i++)
+                    {
+                        Thread.Sleep(100);
+                        if (cRunTest[station].IsCancellationRequested)
+                        {
+                            updateD(station, 5, false);
+                            if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                            this.Invoke((MethodInvoker)delegate()
+                            {
+                                sendNote(station, 3, "Combo Test Cancelled");
+                                startNewTestToolStripMenuItem.Enabled = true;
+                                resumeTestToolStripMenuItem.Enabled = true;
+                                stopTestToolStripMenuItem.Enabled = false;
+                            });
+                            return;
+                        }
+                    }// end wait
+
+
                     // do the cell test check
                     for (int i = 0; i < (int)pci.Rows[station][3]; i++)
                     {
-                        if (GlobalVars.CScanData[station].orderedCells[i] < 1.2)
+                        if (GlobalVars.CScanData[station].orderedCells[i] < 1.55)
                         {
                             // one of the cells didn't meet the minimum voltage threshold
                             // kill the combo test
@@ -4739,110 +4773,61 @@ namespace NewBTASProto
                             this.Invoke((MethodInvoker)delegate()
                             {
                                 sendNote(station, 2, "Combo test failed due to low cell voltages. Consult the test report.");
+                                startNewTestToolStripMenuItem.Enabled = true;
+                                resumeTestToolStripMenuItem.Enabled = true;
+                                stopTestToolStripMenuItem.Enabled = false;
                             });
 
+                            updateD(station, 7, "Low Cell Vs");
+                            if (MasterSlaveTest) { updateD(slaveRow, 7, "Low Cell Vs"); }
                             updateD(station, 5, false);
                             if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
 
                             return;
                         }
                     }
-                }
-                    
-                // set up the timer
-                var stopwatch = new Stopwatch();
-                //TimeSpan eTime;
-                //string eTimeS;
-                //string oldETime = "";
 
-                cRunTest[station] = new CancellationTokenSource();
-                updateD(station, 2, "Combo: FC-6 >><< Cap-1");
-                if (MasterSlaveTest) { updateD(slaveRow, 2, "Combo: FC-6 >><< Cap-1"); }
-                updateD(station, 7, "Test Verification");
-                if (MasterSlaveTest) { updateD(slaveRow, 7, "Test Verification"); }
 
-                //short wait
-                for (int i = 0; i < 15; i++)
-                {
-                    Thread.Sleep(100);
-                    if (cRunTest[station].IsCancellationRequested)
+                    if (((GlobalVars.CScanData[station].TP1 + GlobalVars.CScanData[station].TP2 + GlobalVars.CScanData[station].TP3 + GlobalVars.CScanData[station].TP4) / 4) > (startTemp + 5))
                     {
+                        // failed the temperature test...
                         updateD(station, 5, false);
                         if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                        updateD(station, 7, "Temp Too High");
+                        if (MasterSlaveTest) { updateD(slaveRow, 7, "Temp Too High"); }
                         this.Invoke((MethodInvoker)delegate()
                         {
-                            sendNote(station, 3, "Combo Test Cancelled");
+                            sendNote(station, 1, "Battery Temperature Rise Too High During Charge. Please Check Battery");
                             startNewTestToolStripMenuItem.Enabled = true;
                             resumeTestToolStripMenuItem.Enabled = true;
                             stopTestToolStripMenuItem.Enabled = false;
                         });
-                        return;
+                        return; // we can leave the while loop now...
                     }
-                }// end wait
 
-                if (((GlobalVars.CScanData[station].TP1 + GlobalVars.CScanData[station].TP2 + GlobalVars.CScanData[station].TP3 + GlobalVars.CScanData[station].TP4) / 4) < (startTemp + 5))
-                {
-                    // failed the temperature test...
-                    return; // we can leave the while loop now...
+                    //short wait
+                    for (int i = 0; i < 15; i++)
+                    {
+                        Thread.Sleep(100);
+                        if (cRunTest[station].IsCancellationRequested)
+                        {
+                            updateD(station, 5, false);
+                            if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                            this.Invoke((MethodInvoker)delegate()
+                            {
+                                sendNote(station, 3, "Combo Test Cancelled");
+                                startNewTestToolStripMenuItem.Enabled = true;
+                                resumeTestToolStripMenuItem.Enabled = true;
+                                stopTestToolStripMenuItem.Enabled = false;
+                            });
+                            return;
+                        }
+                    }// end wait
                 }
 
-                
-                //stopwatch.Start();
-                //eTime = stopwatch.Elapsed;
-                //while (eTime.TotalSeconds < 120) // max wait
-                //{
-                //    //start the time update
-                //    eTime = stopwatch.Elapsed;
-                //    eTimeS = eTime.ToString(@"hh\:mm\:ss");
-                //    if (oldETime != eTimeS)
-                //    {
-                //        try
-                //        {
-                //            updateD(station, 6, eTimeS);
-                //            if (MasterSlaveTest) { updateD(slaveRow, 6, eTimeS); }
-                //        }
-                //        catch { }
-                //    }
-
-                //    oldETime = eTimeS;
-                //    if (startTemp < -90 || GlobalVars.CScanData[station].tempPlateType == "NONE")
-                //    {
-                //        // we don't have a good start temp or a temp cable anymore
-                //        //just wait for the time out to end...
-                //    }
-                //    else
-                //    {
-                //        // we do have a good start temp
-                //        // lets wait for the temp to come back down
-                //        if (((GlobalVars.CScanData[station].TP1 + GlobalVars.CScanData[station].TP2 + GlobalVars.CScanData[station].TP3 + GlobalVars.CScanData[station].TP4) / 4) < (startTemp + 5) && eTime.TotalSeconds > 15)
-                //        {
-                //            // we are back within 5 C of the start temp
-                //            break; // we can leave the while loop now...
-                //        }
-                //    }
-                //    Thread.Sleep(100);
-                //    //did we cancel?
-                //    if (cRunTest[station].IsCancellationRequested)
-                //    {
-                //        updateD(station, 5, false);
-                //        if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
-                //        this.Invoke((MethodInvoker)delegate()
-                //        {
-                //            sendNote(station, 3, "Combo Test Cancelled");
-                //            startNewTestToolStripMenuItem.Enabled = true;
-                //            resumeTestToolStripMenuItem.Enabled = true;
-                //            stopTestToolStripMenuItem.Enabled = false;
-                //        });
-                //        return;
-                //    }
-                //}
-
-                //clear time
-                updateD(station, 6, "");
-                if (MasterSlaveTest) { updateD(slaveRow, 6, ""); }
-
-                updateD(station, 7, "Next Test");
-                if (MasterSlaveTest) { updateD(slaveRow, 7, "Next Test"); }
+                cRunTest[station] = new CancellationTokenSource();
+                updateD(station, 7, "Second Test");
+                if (MasterSlaveTest) { updateD(slaveRow, 7, "Second Test"); }
 
                 // short wait
                 for (int i = 0; i < 15; i++)
@@ -4870,7 +4855,7 @@ namespace NewBTASProto
                 // RUN THE SECOND TEST //////////////////////////////////////////////////////////////////////////////////////
                 updateD(station, 2, "Combo: FC-6  >>Cap-1<<");
                 if (MasterSlaveTest) { updateD(slaveRow, 2, "Combo: FC-6  >>Cap-1<<"); }
-                RunTest("Custom Cap");
+                RunTest("Capacity-1", station);
 
                 //wait for the test to run
                 while (!cRunTest[station].IsCancellationRequested)

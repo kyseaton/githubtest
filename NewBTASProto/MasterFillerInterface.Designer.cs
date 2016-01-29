@@ -671,7 +671,7 @@
             this.MaximizeBox = false;
             this.Name = "MasterFillerInterface";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Master Filler Interface";
+            this.Text = "Water Level Interface";
             this.Load += new System.EventHandler(this.MasterFillerInterface_Load);
             this.Shown += new System.EventHandler(this.MasterFillerInterface_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();

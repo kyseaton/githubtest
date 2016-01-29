@@ -445,7 +445,7 @@
             // 
             this.toolStripMenuItem32.Name = "toolStripMenuItem32";
             this.toolStripMenuItem32.Size = new System.Drawing.Size(298, 22);
-            this.toolStripMenuItem32.Text = "MasterFiller Interface";
+            this.toolStripMenuItem32.Text = "Water Level Interface";
             this.toolStripMenuItem32.Click += new System.EventHandler(this.toolStripMenuItem32_Click);
             // 
             // toolStripMenuItem31

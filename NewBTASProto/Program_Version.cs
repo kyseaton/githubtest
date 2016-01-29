@@ -16,6 +16,7 @@ namespace NewBTASProto
         {
             InitializeComponent();
             label1.Text = "Program Version:  " + GlobalVars.programVersion;
+            label2.Text = "Publish Date:  " + GlobalVars.programPubDate;
 
         }
 
