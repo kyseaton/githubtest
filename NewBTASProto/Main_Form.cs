@@ -3318,163 +3318,25 @@ namespace NewBTASProto
 
         private void toolStripMenuItem34_Click(object sender, EventArgs e)
         {
-
-            // create a thread to go through and look for the stations, this way the UI will still work while the search is happening
-            ThreadPool.QueueUserWorkItem(s =>
+            for (int i = 0; i < 16; i++)
             {
-
-                // setup the canellation token
-                CancellationToken token = (CancellationToken)s;
-
-
-                this.Invoke((MethodInvoker)delegate
+                if ((bool)d.Rows[i][5])
                 {
-                    commPortSettingsToolStripMenuItem.Enabled = false;
-                    // start by disabling the button while we look for stations
-                    toolStripMenuItem34.Enabled = false;
-                    // also disable the grid, so the user cannot interfere with the search
-                    dataGridView1.Enabled = false;
-                    //select the first row as your selected cell
-                    dataGridView1.CurrentCell = dataGridView1.Rows[0].Cells[0];
-                    dataGridView1.ClearSelection();
-                });
-
-                Thread.Sleep(250);
-                if (token.IsCancellationRequested) { return; }
-                Thread.Sleep(250);
-                if (token.IsCancellationRequested) { return; }
-
-                // turn on all of the in use buttons
-                for (int i = 0; i < 16; i++)
-                {
-                    this.Invoke((MethodInvoker)delegate
-                    {
-                        updateD(i, 4, true);
-                        dataGridView1.Rows[i].Cells[4].Style.BackColor = Color.Red;
-                    });
+                    MessageBox.Show(this, "Cannot Run Find Stations When a Test is Running","Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                    return;
                 }
-                // here is the for loop we'll use to look for cscans
-                for (int i = 0; i < 15; i++)
+            }
+                // create a thread to go through and look for the stations, this way the UI will still work while the search is happening
+                ThreadPool.QueueUserWorkItem(s =>
                 {
+
+                    // setup the canellation token
+                    CancellationToken token = (CancellationToken)s;
+
 
                     this.Invoke((MethodInvoker)delegate
                     {
-                        dataGridView1.CurrentCell = dataGridView1.Rows[i].Cells[0];
-                        dataGridView1.ClearSelection();
-                    });
-
-                    //give it time to check the channel
-                    Thread.Sleep(250);
-                    if (token.IsCancellationRequested) { return; }
-                    Thread.Sleep(250);
-                    if (token.IsCancellationRequested) { return; }
-                    Thread.Sleep(250);
-                    if (token.IsCancellationRequested) { return; }
-                    Thread.Sleep(250);
-                    if (token.IsCancellationRequested) { return; }
-
-                    // move the current channel
-                    this.Invoke((MethodInvoker)delegate
-                    {
-                        dataGridView1.CurrentCell = dataGridView1.Rows[i + 1].Cells[0];
-                        dataGridView1.ClearSelection();
-                    });
-
-                    // wait again
-                    Thread.Sleep(100);
-                    this.Invoke((MethodInvoker)delegate
-                    {
-                        if (dataGridView1.Rows[i].Cells[4].Style.BackColor == Color.Red)
-                        {
-                            updateD(i, 4, false);
-                            dataGridView1.Rows[i].Cells[4].Style.BackColor = Color.Gainsboro;
-                        }
-                    });
-                }
-
-                //Finally take care of the last channel
-                //give it time to check the channel
-
-                Thread.Sleep(250);
-                if (token.IsCancellationRequested) { return; }
-                Thread.Sleep(250);
-                if (token.IsCancellationRequested) { return; }
-                Thread.Sleep(250);
-                if (token.IsCancellationRequested) { return; }
-                Thread.Sleep(250);
-                if (token.IsCancellationRequested) { return; }
-
-                // move back to channel 0
-                this.Invoke((MethodInvoker)delegate
-                {
-                    dataGridView1.CurrentCell = dataGridView1.Rows[0].Cells[0];
-                    dataGridView1.ClearSelection();
-                });
-
-                // wait again
-                Thread.Sleep(100);
-                this.Invoke((MethodInvoker)delegate
-                {
-                    if (dataGridView1.Rows[15].Cells[4].Style.BackColor == Color.Red)
-                    {
-                        updateD(15, 4, false);
-                        dataGridView1.Rows[15].Cells[4].Style.BackColor = Color.Gainsboro;
-                    }
-                });
-
-                bool foundOne = false;
-                // let's see if we found any!
-                for (int i = 0; i < 16; i++)
-                {
-                    if ((bool)d.Rows[i][4])
-                    {
-                        foundOne = true;
-                        break;
-                    }
-                }
-
-                if (!foundOne)
-                {
-                    // flip the comms!
-                    // stop all of the scanning threads
-                    try
-                    {
-                        cPollIC.Cancel();
-                        cPollCScans.Cancel();
-                        sequentialScanT.Cancel();
-
-                        cPollIC.Dispose();
-                        cPollCScans.Dispose();
-                        sequentialScanT.Dispose();
-                    }
-                    catch (Exception ex)
-                    {
-                        if (ex is NullReferenceException || ex is ObjectDisposedException)
-                        {
-
-                        }
-                        else
-                        {
-                            throw ex;
-                        }
-                    }
-
-
-                    // close the comms
-                    CSCANComPort.Close();
-                    ICComPort.Close();
-
-                    //Update the Globals
-                    string temp = GlobalVars.CSCANComPort;
-                    GlobalVars.CSCANComPort = GlobalVars.ICComPort;
-                    GlobalVars.ICComPort = temp;
-
-                    //Start the threads back up
-                    Scan();
-
-                    //rerun the same code...
-                    this.Invoke((MethodInvoker)delegate
-                    {
+                        commPortSettingsToolStripMenuItem.Enabled = false;
                         // start by disabling the button while we look for stations
                         toolStripMenuItem34.Enabled = false;
                         // also disable the grid, so the user cannot interfere with the search
@@ -3488,7 +3350,6 @@ namespace NewBTASProto
                     if (token.IsCancellationRequested) { return; }
                     Thread.Sleep(250);
                     if (token.IsCancellationRequested) { return; }
-
 
                     // turn on all of the in use buttons
                     for (int i = 0; i < 16; i++)
@@ -3540,6 +3401,7 @@ namespace NewBTASProto
 
                     //Finally take care of the last channel
                     //give it time to check the channel
+
                     Thread.Sleep(250);
                     if (token.IsCancellationRequested) { return; }
                     Thread.Sleep(250);
@@ -3566,19 +3428,164 @@ namespace NewBTASProto
                             dataGridView1.Rows[15].Cells[4].Style.BackColor = Color.Gainsboro;
                         }
                     });
-                }// end if
 
-                //reenable the button before exit
-                this.Invoke((MethodInvoker)delegate
-                {
-                    commPortSettingsToolStripMenuItem.Enabled = true;
-                    // start by disabling the button while we look for stations
-                    toolStripMenuItem34.Enabled = true;
-                    // also disable the grid, so the user cannot interfere with the search
-                    dataGridView1.Enabled = true;
-                });
+                    bool foundOne = false;
+                    // let's see if we found any!
+                    for (int i = 0; i < 16; i++)
+                    {
+                        if ((bool)d.Rows[i][4])
+                        {
+                            foundOne = true;
+                            break;
+                        }
+                    }
 
-            }, cFindStations.Token);                     // end thread
+                    if (!foundOne)
+                    {
+                        // flip the comms!
+                        // stop all of the scanning threads
+                        try
+                        {
+                            cPollIC.Cancel();
+                            cPollCScans.Cancel();
+                            sequentialScanT.Cancel();
+
+                            cPollIC.Dispose();
+                            cPollCScans.Dispose();
+                            sequentialScanT.Dispose();
+                        }
+                        catch (Exception ex)
+                        {
+                            if (ex is NullReferenceException || ex is ObjectDisposedException)
+                            {
+
+                            }
+                            else
+                            {
+                                throw ex;
+                            }
+                        }
+
+
+                        // close the comms
+                        CSCANComPort.Close();
+                        ICComPort.Close();
+
+                        //Update the Globals
+                        string temp = GlobalVars.CSCANComPort;
+                        GlobalVars.CSCANComPort = GlobalVars.ICComPort;
+                        GlobalVars.ICComPort = temp;
+
+                        //Start the threads back up
+                        Scan();
+
+                        //rerun the same code...
+                        this.Invoke((MethodInvoker)delegate
+                        {
+                            // start by disabling the button while we look for stations
+                            toolStripMenuItem34.Enabled = false;
+                            // also disable the grid, so the user cannot interfere with the search
+                            dataGridView1.Enabled = false;
+                            //select the first row as your selected cell
+                            dataGridView1.CurrentCell = dataGridView1.Rows[0].Cells[0];
+                            dataGridView1.ClearSelection();
+                        });
+
+                        Thread.Sleep(250);
+                        if (token.IsCancellationRequested) { return; }
+                        Thread.Sleep(250);
+                        if (token.IsCancellationRequested) { return; }
+
+
+                        // turn on all of the in use buttons
+                        for (int i = 0; i < 16; i++)
+                        {
+                            this.Invoke((MethodInvoker)delegate
+                            {
+                                updateD(i, 4, true);
+                                dataGridView1.Rows[i].Cells[4].Style.BackColor = Color.Red;
+                            });
+                        }
+                        // here is the for loop we'll use to look for cscans
+                        for (int i = 0; i < 15; i++)
+                        {
+
+                            this.Invoke((MethodInvoker)delegate
+                            {
+                                dataGridView1.CurrentCell = dataGridView1.Rows[i].Cells[0];
+                                dataGridView1.ClearSelection();
+                            });
+
+                            //give it time to check the channel
+                            Thread.Sleep(250);
+                            if (token.IsCancellationRequested) { return; }
+                            Thread.Sleep(250);
+                            if (token.IsCancellationRequested) { return; }
+                            Thread.Sleep(250);
+                            if (token.IsCancellationRequested) { return; }
+                            Thread.Sleep(250);
+                            if (token.IsCancellationRequested) { return; }
+
+                            // move the current channel
+                            this.Invoke((MethodInvoker)delegate
+                            {
+                                dataGridView1.CurrentCell = dataGridView1.Rows[i + 1].Cells[0];
+                                dataGridView1.ClearSelection();
+                            });
+
+                            // wait again
+                            Thread.Sleep(100);
+                            this.Invoke((MethodInvoker)delegate
+                            {
+                                if (dataGridView1.Rows[i].Cells[4].Style.BackColor == Color.Red)
+                                {
+                                    updateD(i, 4, false);
+                                    dataGridView1.Rows[i].Cells[4].Style.BackColor = Color.Gainsboro;
+                                }
+                            });
+                        }
+
+                        //Finally take care of the last channel
+                        //give it time to check the channel
+                        Thread.Sleep(250);
+                        if (token.IsCancellationRequested) { return; }
+                        Thread.Sleep(250);
+                        if (token.IsCancellationRequested) { return; }
+                        Thread.Sleep(250);
+                        if (token.IsCancellationRequested) { return; }
+                        Thread.Sleep(250);
+                        if (token.IsCancellationRequested) { return; }
+
+                        // move back to channel 0
+                        this.Invoke((MethodInvoker)delegate
+                        {
+                            dataGridView1.CurrentCell = dataGridView1.Rows[0].Cells[0];
+                            dataGridView1.ClearSelection();
+                        });
+
+                        // wait again
+                        Thread.Sleep(100);
+                        this.Invoke((MethodInvoker)delegate
+                        {
+                            if (dataGridView1.Rows[15].Cells[4].Style.BackColor == Color.Red)
+                            {
+                                updateD(15, 4, false);
+                                dataGridView1.Rows[15].Cells[4].Style.BackColor = Color.Gainsboro;
+                            }
+                        });
+                    }// end if
+
+                    //reenable the button before exit
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        commPortSettingsToolStripMenuItem.Enabled = true;
+                        // start by disabling the button while we look for stations
+                        toolStripMenuItem34.Enabled = true;
+                        // also disable the grid, so the user cannot interfere with the search
+                        dataGridView1.Enabled = true;
+                    });
+
+                }, cFindStations.Token);                     // end thread
 
         }
 
@@ -4018,14 +4025,14 @@ namespace NewBTASProto
                         frmVECustomerBats to_control = (frmVECustomerBats)frm;
 
                         //wait for it to load
-                        Thread.Sleep(100);
+                        Thread.Sleep(200);
                         while (to_control.toolStripCBSerNum.Items.Count < 1)
                         {
-                            Thread.Sleep(100);
+                            Thread.Sleep(200);
                             i++;
                             if (i > 10) { return; } // didn't work out...
                         }
-                        Thread.Sleep(100);
+                        Thread.Sleep(200);
 
                         this.Invoke((MethodInvoker)delegate()
                         {
@@ -4040,6 +4047,26 @@ namespace NewBTASProto
                 }
 
             });
+        }
+
+        private void toolStripMenuItem45_Click(object sender, EventArgs e)
+        {
+            FormCollection fc = Application.OpenForms;
+
+            foreach (Form frm in fc)
+            {
+                if (frm is CombinationTestSettings)
+                {
+                    if (frm.WindowState == FormWindowState.Minimized)
+                    {
+                        frm.WindowState = FormWindowState.Normal;
+                    }
+                    return;
+                }
+            }
+            CombinationTestSettings f2 = new CombinationTestSettings();
+            f2.Owner = this;
+            f2.Show();
         }
 
 

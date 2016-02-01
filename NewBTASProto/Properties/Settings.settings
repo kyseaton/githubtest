@@ -49,5 +49,20 @@
     <Setting Name="cb6" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
+    <Setting Name="FC6C1MinimumCellVotageAfterChargeTestEnabled" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="FC6C1MinimumCellVoltageThreshold" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">1.55</Value>
+    </Setting>
+    <Setting Name="DecliningCellVoltageTestEnabled" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="FC6C1WaitEnabled" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="FC6C1WaitTime" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">15</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

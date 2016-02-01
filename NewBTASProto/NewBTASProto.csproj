@@ -8,11 +8,11 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NewBTASProto</RootNamespace>
-    <AssemblyName>BTAS-16K</AssemblyName>
+    <AssemblyName>NewBTASProto</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>publish\final_release\</PublishUrl>
+    <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
@@ -22,9 +22,9 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <UpdateUrl>http://www.jfmeng.com/BTAS16_update/final_release/</UpdateUrl>
+    <UpdateUrl>http://www.jfmeng.com/BTAS16_update/</UpdateUrl>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>98</ApplicationRevision>
+    <ApplicationRevision>99</ApplicationRevision>
     <ApplicationVersion>6.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -90,6 +90,12 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DataSet1.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CombinationTestSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CombinationTestSettings.Designer.cs">
+      <DependentUpon>CombinationTestSettings.cs</DependentUpon>
     </Compile>
     <Compile Include="Reports\BatchReporting.cs">
       <SubType>Form</SubType>
@@ -241,6 +247,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="CombinationTestSettings.resx">
+      <DependentUpon>CombinationTestSettings.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MasterFillerInterface.resx">
       <DependentUpon>MasterFillerInterface.cs</DependentUpon>
     </EmbeddedResource>
@@ -401,6 +410,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\BTAS16 Manual-K0.11.pdf" />
+    <None Include="Resources\BTAS16 Manual-K0.13.pdf" />
     <None Include="Resources\BTAS16 Manual-K0.6.pdf" />
     <None Include="Resources\Help.pdf" />
     <None Include="Resources\JFM Engineering Logo_small1.jpg" />

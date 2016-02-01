@@ -283,8 +283,8 @@ namespace NewBTASProto
                     MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
-                
 
+                comboBox2.Focus();
             }
         }
 
@@ -298,6 +298,11 @@ namespace NewBTASProto
             {
                 //show the water level report...
                 waterLevelSummary();
+            }
+            else
+            {
+                showBlank();
+                comboBox3.Focus();
             }
             
         }
@@ -414,8 +419,11 @@ namespace NewBTASProto
                         workOrderLog();
                         break;
                     default:
+                        showBlank();
                         break;
                 }
+
+                reportViewer.Focus();
             }
 
             catch(Exception ex)
@@ -423,6 +431,40 @@ namespace NewBTASProto
                 MessageBox.Show(ex.ToString());
             }
          
+        }
+
+        private void showBlank()
+        {
+            //so we have the dummy startup report shown...
+            /*************************Load Global data into MetaData data Table ************************/
+
+            // create datatable
+            DataTable MetaDT = new DataTable("MetaData");
+
+            // add columns
+            MetaDT.Columns.Add("gBusinessName", typeof(string));
+            MetaDT.Columns.Add("gUseF", typeof(string));
+            MetaDT.Columns.Add("gPos2Neg", typeof(string));
+
+            // insert data rows
+            MetaDT.Rows.Add(GlobalVars.businessName, GlobalVars.useF, GlobalVars.Pos2Neg);
+
+
+            // bind datatable to report viewer
+            this.reportViewer.Reset();
+            this.reportViewer.ProcessingMode = ProcessingMode.Local;
+            this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.Report1.rdlc";
+            this.reportViewer.LocalReport.DataSources.Clear();
+
+            this.reportViewer.LocalReport.EnableExternalImages = true;
+            ReportParameter parameter = new ReportParameter("Path", "file:////" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\rp_logo.jpg");
+            this.reportViewer.LocalReport.SetParameters(parameter);
+
+            this.reportViewer.LocalReport.DataSources.Add(new ReportDataSource("MetaData", MetaDT));
+            this.reportViewer.RefreshReport();
+
+            /*********************************************************/
+
         }
         
         private void workOrderSummary()

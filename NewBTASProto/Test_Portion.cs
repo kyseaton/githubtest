@@ -160,6 +160,8 @@ namespace NewBTASProto
                 bool oldTempCon = false;
                 bool oldCellCon = false;
 
+                byte badCSCanReads = 0;
+
                 bool runAsShunt = false;
 
                 if (!d.Rows[station][2].ToString().Contains("Combo") || d.Rows[station][2].ToString().Contains("Combo: >>"))
@@ -3660,6 +3662,20 @@ namespace NewBTASProto
                     #region CScan Tests and Temp drift check
                     //CScan tests
                     //Lets look to see if the cables have become disconnected...
+                    //start with a total Cscan test...
+                    if (dataGridView1.Rows[station].Cells[4].Style.BackColor == Color.Red)
+                    {
+                        badCSCanReads++;
+                    }
+                    if(badCSCanReads > 50)
+                    {
+                        //cancel the test
+                        cRunTest[station].Cancel();
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            sendNote(station, 1, "CScan communcations are failing. Please check the CScan connection and resume or restart the test.");
+                        });
+                    }
                     
                     //check them
                     if (GlobalVars.CScanData[station].shuntCableType == "NONE")
@@ -4761,32 +4777,34 @@ namespace NewBTASProto
 
 
                     // do the cell test check
-                    for (int i = 0; i < (int)pci.Rows[station][3]; i++)
+                    if (Properties.Settings.Default.FC6C1MinimumCellVotageAfterChargeTestEnabled)
                     {
-                        if (GlobalVars.CScanData[station].orderedCells[i] < 1.55)
+                        for (int i = 0; i < (int)pci.Rows[station][3]; i++)
                         {
-                            // one of the cells didn't meet the minimum voltage threshold
-                            // kill the combo test
-                            updateD(station, 2, "Combo: FC-6 Cap-1");
-                            if (MasterSlaveTest) { updateD(slaveRow, 2, "Combo: FC-6 Cap-1"); }
-
-                            this.Invoke((MethodInvoker)delegate()
+                            if (GlobalVars.CScanData[station].orderedCells[i] < (double)Properties.Settings.Default.FC6C1MinimumCellVoltageThreshold)
                             {
-                                sendNote(station, 2, "Combo test failed due to low cell voltages. Consult the test report.");
-                                startNewTestToolStripMenuItem.Enabled = true;
-                                resumeTestToolStripMenuItem.Enabled = true;
-                                stopTestToolStripMenuItem.Enabled = false;
-                            });
+                                // one of the cells didn't meet the minimum voltage threshold
+                                // kill the combo test
+                                updateD(station, 2, "Combo: FC-6 Cap-1");
+                                if (MasterSlaveTest) { updateD(slaveRow, 2, "Combo: FC-6 Cap-1"); }
 
-                            updateD(station, 7, "Low Cell Vs");
-                            if (MasterSlaveTest) { updateD(slaveRow, 7, "Low Cell Vs"); }
-                            updateD(station, 5, false);
-                            if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                                this.Invoke((MethodInvoker)delegate()
+                                {
+                                    sendNote(station, 2, "Combo test failed due to low cell voltages. Consult the test report.");
+                                    startNewTestToolStripMenuItem.Enabled = true;
+                                    resumeTestToolStripMenuItem.Enabled = true;
+                                    stopTestToolStripMenuItem.Enabled = false;
+                                });
 
-                            return;
+                                updateD(station, 7, "Low Cell Vs");
+                                if (MasterSlaveTest) { updateD(slaveRow, 7, "Low Cell Vs"); }
+                                updateD(station, 5, false);
+                                if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+
+                                return;
+                            }
                         }
                     }
-
 
                     if (((GlobalVars.CScanData[station].TP1 + GlobalVars.CScanData[station].TP2 + GlobalVars.CScanData[station].TP3 + GlobalVars.CScanData[station].TP4) / 4) > (startTemp + 5))
                     {
@@ -4805,24 +4823,30 @@ namespace NewBTASProto
                         return; // we can leave the while loop now...
                     }
 
-                    //short wait
-                    for (int i = 0; i < 15; i++)
+                    //defined wait
+                    if (Properties.Settings.Default.FC6C1WaitEnabled)
                     {
-                        Thread.Sleep(100);
-                        if (cRunTest[station].IsCancellationRequested)
+                        updateD(station, 7, "Timed Wait");
+                        if (MasterSlaveTest) { updateD(slaveRow, 7, "Timed Wait"); }
+
+                        for (int i = 0; i < (Properties.Settings.Default.FC6C1WaitTime * 60 * 10); i++)
                         {
-                            updateD(station, 5, false);
-                            if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
-                            this.Invoke((MethodInvoker)delegate()
+                            Thread.Sleep(100);
+                            if (cRunTest[station].IsCancellationRequested)
                             {
-                                sendNote(station, 3, "Combo Test Cancelled");
-                                startNewTestToolStripMenuItem.Enabled = true;
-                                resumeTestToolStripMenuItem.Enabled = true;
-                                stopTestToolStripMenuItem.Enabled = false;
-                            });
-                            return;
-                        }
-                    }// end wait
+                                updateD(station, 5, false);
+                                if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                                this.Invoke((MethodInvoker)delegate()
+                                {
+                                    sendNote(station, 3, "Combo Test Cancelled");
+                                    startNewTestToolStripMenuItem.Enabled = true;
+                                    resumeTestToolStripMenuItem.Enabled = true;
+                                    stopTestToolStripMenuItem.Enabled = false;
+                                });
+                                return;
+                            }
+                        }// end wait
+                    }
                 }
 
                 cRunTest[station] = new CancellationTokenSource();

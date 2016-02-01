@@ -61,6 +61,7 @@
             this.toolStripMenuItem32 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem31 = new System.Windows.Forms.ToolStripSeparator();
             this.editTestSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem45 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem35 = new System.Windows.Forms.ToolStripSeparator();
             this.notificationServiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -385,6 +386,7 @@
             this.toolStripMenuItem32,
             this.toolStripMenuItem31,
             this.editTestSettingsToolStripMenuItem,
+            this.toolStripMenuItem45,
             this.toolStripMenuItem35,
             this.notificationServiceToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
@@ -459,6 +461,13 @@
             this.editTestSettingsToolStripMenuItem.Size = new System.Drawing.Size(298, 22);
             this.editTestSettingsToolStripMenuItem.Text = "Edit Custom Test Settings";
             this.editTestSettingsToolStripMenuItem.Click += new System.EventHandler(this.editTestSettingsToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem45
+            // 
+            this.toolStripMenuItem45.Name = "toolStripMenuItem45";
+            this.toolStripMenuItem45.Size = new System.Drawing.Size(298, 22);
+            this.toolStripMenuItem45.Text = "Advanced Test Settings";
+            this.toolStripMenuItem45.Click += new System.EventHandler(this.toolStripMenuItem45_Click);
             // 
             // toolStripMenuItem35
             // 
@@ -1768,6 +1777,7 @@
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem44;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem45;
     }
 }
 

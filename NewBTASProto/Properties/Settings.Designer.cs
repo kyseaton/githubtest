@@ -188,5 +188,65 @@ namespace NewBTASProto.Properties {
                 this["cb6"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool FC6C1MinimumCellVotageAfterChargeTestEnabled {
+            get {
+                return ((bool)(this["FC6C1MinimumCellVotageAfterChargeTestEnabled"]));
+            }
+            set {
+                this["FC6C1MinimumCellVotageAfterChargeTestEnabled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1.55")]
+        public decimal FC6C1MinimumCellVoltageThreshold {
+            get {
+                return ((decimal)(this["FC6C1MinimumCellVoltageThreshold"]));
+            }
+            set {
+                this["FC6C1MinimumCellVoltageThreshold"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool DecliningCellVoltageTestEnabled {
+            get {
+                return ((bool)(this["DecliningCellVoltageTestEnabled"]));
+            }
+            set {
+                this["DecliningCellVoltageTestEnabled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool FC6C1WaitEnabled {
+            get {
+                return ((bool)(this["FC6C1WaitEnabled"]));
+            }
+            set {
+                this["FC6C1WaitEnabled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("15")]
+        public decimal FC6C1WaitTime {
+            get {
+                return ((decimal)(this["FC6C1WaitTime"]));
+            }
+            set {
+                this["FC6C1WaitTime"] = value;
+            }
+        }
     }
 }
