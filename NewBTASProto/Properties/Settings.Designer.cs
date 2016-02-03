@@ -191,7 +191,7 @@ namespace NewBTASProto.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool FC6C1MinimumCellVotageAfterChargeTestEnabled {
             get {
                 return ((bool)(this["FC6C1MinimumCellVotageAfterChargeTestEnabled"]));
@@ -215,7 +215,7 @@ namespace NewBTASProto.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool DecliningCellVoltageTestEnabled {
             get {
                 return ((bool)(this["DecliningCellVoltageTestEnabled"]));

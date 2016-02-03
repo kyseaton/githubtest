@@ -619,6 +619,7 @@ namespace NewBTASProto
                 oldPositionWOS = toolStripCBCustomers.SelectedIndex;
                 if (bindingNavigatorAddNewItem.Enabled == false && lastValid && toolStripCBWorkOrderStatus.Text != "Active" && WorkOrders.Tables[0].Rows.Count > 0)
                 {
+                    
                     WorkOrders.Tables[0].Rows[WorkOrders.Tables[0].Rows.Count - 1].Delete();
                     bindingNavigatorAddNewItem.Enabled = true;
                     lastValid = false;

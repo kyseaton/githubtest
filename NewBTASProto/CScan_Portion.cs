@@ -1144,6 +1144,24 @@ namespace NewBTASProto
                     chart1.Invalidate();
                     chart1.ChartAreas[0].RecalculateAxesScale();
 
+                    double max = 0;
+                    for (int i = 0; i < 4; i++)
+                    {
+                        if (series1.Points[i].YValues[0] > max)
+                        {
+                            max = series1.Points[i].YValues[0];
+                        }
+                    }
+
+                    if (max < 0.1)
+                    {
+                        chart1.ChartAreas[0].AxisY.Maximum = 0.1;
+                    }
+                    else
+                    {
+                        chart1.ChartAreas[0].AxisY.Maximum = Double.NaN;
+                    }
+
                 }
                 //Normal Cell Voltage Only Case:
                 else if (comboBox2.Enabled == false || (radioButton2.Checked == true && comboBox3.Text == "Cell Voltages"))
@@ -1246,6 +1264,24 @@ namespace NewBTASProto
                     if (Cells != 0) { chart1.Titles.Add("Cell Voltages"); }
                     chart1.Invalidate();
                     chart1.ChartAreas[0].RecalculateAxesScale();
+
+                    double max = 0;
+                    for (int i = 0; i < Cells; i++)
+                    {
+                        if (series1.Points[i].YValues[0] > max)
+                        {
+                            max = series1.Points[i].YValues[0];
+                        }
+                    }
+                    
+                    if (max < 0.1)
+                    {
+                        chart1.ChartAreas[0].AxisY.Maximum = 0.1;
+                    }
+                    else
+                    {   
+                        chart1.ChartAreas[0].AxisY.Maximum = Double.NaN;
+                    }
                 }
 
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1450,6 +1486,24 @@ namespace NewBTASProto
                         chart1.Titles.Add(comboBox2.Text);
                         chart1.Invalidate();
                         chart1.ChartAreas[0].RecalculateAxesScale();
+
+                        double max = 0;
+                        for (int i = 0; i < points; i++)
+                        {
+                            if (series1.Points[i].YValues[0] > max)
+                            {
+                                max = series1.Points[i].YValues[0];
+                            }
+                        }
+
+                        if (max < 0.1)
+                        {
+                            chart1.ChartAreas[0].AxisY.Maximum = 0.1;
+                        }
+                        else
+                        {
+                            chart1.ChartAreas[0].AxisY.Maximum = Double.NaN;
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -1622,6 +1676,8 @@ namespace NewBTASProto
                         };
                         this.chart1.Series.Add(series1);
 
+                        int interval = 1;
+                        int points = 1;
 
                         if (q == 999)
                         {
@@ -1642,8 +1698,7 @@ namespace NewBTASProto
                             }
                             // pad with zero Vals to help with the look of the plot...
                             // first get the interval and total points
-                            int interval = 1;
-                            int points = 1;
+                            
 
                             switch (d.Rows[station][2].ToString())
                             {
@@ -1715,6 +1770,24 @@ namespace NewBTASProto
                         chart1.Titles.Add(comboBox3.Text);
                         chart1.Invalidate();
                         chart1.ChartAreas[0].RecalculateAxesScale();
+
+                        double max = 0;
+                        for (int i = 0; i < points; i++)
+                        {
+                            if (series1.Points[i].YValues[0] > max)
+                            {
+                                max = series1.Points[i].YValues[0];
+                            }
+                        }
+
+                        if (max < 0.1)
+                        {
+                            chart1.ChartAreas[0].AxisY.Maximum = 0.1;
+                        }
+                        else
+                        {
+                            chart1.ChartAreas[0].AxisY.Maximum = Double.NaN;
+                        }
 
 
                     }

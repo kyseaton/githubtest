@@ -162,7 +162,12 @@ namespace NewBTASProto
 
                 byte badCSCanReads = 0;
 
+                double[,] cellHistory = new double[24, 4] { { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 } };
+                double[,] slaveCellHistory = new double[24, 4] { { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 } };
+
                 bool runAsShunt = false;
+
+
 
                 if (!d.Rows[station][2].ToString().Contains("Combo") || d.Rows[station][2].ToString().Contains("Combo: >>"))
                 {
@@ -2600,7 +2605,7 @@ namespace NewBTASProto
                         {
                             // set KE1 to 2 ("command")
                             GlobalVars.ICSettings[Cstation].KE1 = (byte)2;
-                            // set KE3 to run
+                            // set KE3 to clear
                             GlobalVars.ICSettings[Cstation].KE3 = (byte)0;
                             //Update the output string value
                             GlobalVars.ICSettings[Cstation].UpdateOutText();
@@ -2615,14 +2620,13 @@ namespace NewBTASProto
                             {
                                 criticalNum[Cstation] = true;
                                 Thread.Sleep(1000);
-                                if (d.Rows[station][11].ToString() == "HOLD")
+                                if (d.Rows[station][11].ToString() == "HOLD" || d.Rows[station][11].ToString() == "RESET")
                                 {
                                     break;
                                 }
                             }
 
-                            //make sure the charger has priority
-                            if (d.Rows[station][11].ToString() == "HOLD")
+                            if (d.Rows[station][11].ToString() == "HOLD" || d.Rows[station][11].ToString() == "RESET")
                             {
                                 break;
                             }
@@ -2923,7 +2927,7 @@ namespace NewBTASProto
                         updateD(station, 7, ("Reading " + currentReading.ToString() + " of " + readings.ToString()));
                         if (MasterSlaveTest) { updateD(slaveRow, 7, ("Reading " + currentReading.ToString() + " of " + readings.ToString())); }
 
-                        #region save a scan to the DB
+                        #region save a scan to the DB and update the main screen plots
                         //  now try to INSERT INTO it
                         try
                         {
@@ -3198,7 +3202,7 @@ namespace NewBTASProto
                                 }
                             }
 
-                            //also insert the slave reading is need be...
+                            //also insert the slave reading if need be...
                             if (MasterSlaveTest)
                             {
 
@@ -3637,6 +3641,120 @@ namespace NewBTASProto
                         }
                         #endregion
 
+                        //we are going to look for failing cells here...
+                        #region failing cell test
+
+                        //if we have the cell check turned on and the we are in charge check the cells for negative slopes...
+                        if (Properties.Settings.Default.DecliningCellVoltageTestEnabled && !(testType.Contains("Cap") || testType.Contains("Dis")))
+                        {
+
+                            int Cells;
+
+                            if ((int)pci.Rows[station][3] == -1)
+                            {
+                                Cells = GlobalVars.CScanData[station].cellsToDisplay;
+                            }
+                            else
+                            {
+                                Cells = (int)pci.Rows[station][3];
+                            }
+
+                            // move the old cells back a place
+                            for (int i = 1; i < 4; i++)
+                            {
+                                for (int j = 0; j < 24; j++)
+                                {
+                                    cellHistory[j, i-1] = cellHistory[j, i]; 
+                                }
+                            }
+                            // now load in the new values
+                            for (int j = 0; j < 24; j++)
+                            {
+                                cellHistory[j, 3] = GlobalVars.CScanData[station].orderedCells[j];
+                            }
+
+                            //finally test the cells for three consecutive negative slopes..
+                            for (int j = 0; j < Cells; j++)
+                            {
+                                if ((cellHistory[j, 1] - cellHistory[j, 0]) < -0.01 && (cellHistory[j, 2] - cellHistory[j, 1]) < -0.01 && (cellHistory[j, 3] - cellHistory[j, 2]) < -0.01)
+                                {
+                                    //we need to quit...
+                                    // here is where we cancel the test if we can...
+                                    if (d.Rows[station][10].ToString().Contains("ICA") || d.Rows[station][10].ToString().Contains("CCA") && !runAsShunt)
+                                    {
+                                        cRunTest[station].Cancel();
+                                        this.Invoke((MethodInvoker)delegate()
+                                        {
+                                            sendNote(station, 1, "Cell " + j.ToString() + " voltage is reversing! Cancelling Test!");
+                                        });
+                                    }
+                                    else
+                                    {
+                                        this.Invoke((MethodInvoker)delegate()
+                                        {
+                                            sendNote(station, 1, "Cell " + j.ToString() + " voltage is reversing! Cancel the test!");
+                                        });
+                                    }
+
+                                }
+                            }
+
+                            //do we need to do the same for the slave?
+                            if (MasterSlaveTest)
+                            {
+                                if ((int)pci.Rows[slaveRow][3] == -1)
+                                {
+                                    Cells = GlobalVars.CScanData[slaveRow].cellsToDisplay;
+                                }
+                                else
+                                {
+                                    Cells = (int)pci.Rows[slaveRow][3];
+                                }
+
+                                // move the old cells back a place
+                                for (int i = 1; i < 4; i++)
+                                {
+                                    for (int j = 0; j < 24; j++)
+                                    {
+                                        slaveCellHistory[j, i - 1] = slaveCellHistory[j, i];
+                                    }
+                                }
+                                // now load in the new values
+                                for (int j = 0; j < 24; j++)
+                                {
+                                    slaveCellHistory[j, 3] = GlobalVars.CScanData[slaveRow].orderedCells[j];
+                                }
+
+                                //finally test the cells for three consecutive negative slopes..
+                                for (int j = 0; j < Cells; j++)
+                                {
+                                    if ((slaveCellHistory[j, 1] - slaveCellHistory[j, 0]) < -0.01 && (slaveCellHistory[j, 2] - slaveCellHistory[j, 1]) < -0.01 && (slaveCellHistory[j, 3] - slaveCellHistory[j, 2]) < -0.01)
+                                    {
+                                        //we need to quit...
+                                        // here is where we cancel the test if we can...
+                                        if (d.Rows[slaveRow][10].ToString().Contains("ICA") || d.Rows[slaveRow][10].ToString().Contains("CCA") && !runAsShunt)
+                                        {
+                                            cRunTest[slaveRow].Cancel();
+                                            this.Invoke((MethodInvoker)delegate()
+                                            {
+                                                sendNote(slaveRow, 1, "Cell " + j.ToString() + " voltage is reversing! Cancelling Test!");
+                                            });
+                                        }
+                                        else
+                                        {
+                                            this.Invoke((MethodInvoker)delegate()
+                                            {
+                                                sendNote(slaveRow, 1, "Cell " + j.ToString() + " voltage is reversing! Cancel the test!");
+                                            });
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
+
+                        #endregion
+
                         // finally update the reading
                         currentReading++;
                     }
@@ -3667,6 +3785,11 @@ namespace NewBTASProto
                     {
                         badCSCanReads++;
                     }
+                    else
+                    {
+                        badCSCanReads = 0;
+                    }
+
                     if(badCSCanReads > 50)
                     {
                         //cancel the test
@@ -3778,12 +3901,12 @@ namespace NewBTASProto
                             sendNote(station, 1, "Temperature has risen 20C on template");
                         });
                         // here is where we cancel the test if we can...
-                        if (d.Rows[station][10].ToString().Contains("ICA") || d.Rows[station][10].ToString().Contains("CCA"))
+                        if (d.Rows[station][10].ToString().Contains("ICA") || d.Rows[station][10].ToString().Contains("CCA") && !runAsShunt)
                         {
                             cRunTest[station].Cancel();
                             this.Invoke((MethodInvoker)delegate()
                             {
-                                sendNote(station, 1, "Cancelling Test!");
+                                sendNote(station, 1, "Drastic temperature rise on the battery! Cancelling Test!");
                             });
                         }
                         else
@@ -4737,7 +4860,7 @@ namespace NewBTASProto
                         for (int i = 0; i < 200; i++)
                         {
                             Thread.Sleep(100);
-                            if ((d.Rows[station][7].ToString().Contains("Read") && !d.Rows[station][7].ToString().Contains("Reading")) || d.Rows[station][7].ToString() == "")
+                            if ((d.Rows[station][7].ToString().Contains("Read") && !d.Rows[station][7].ToString().Contains("Reading")) || d.Rows[station][7].ToString().Contains("FAILED") || d.Rows[station][7].ToString() == "")
                             {
                                 if (d.Rows[station][7].ToString() == "")
                                 {
@@ -4800,6 +4923,7 @@ namespace NewBTASProto
                                 if (MasterSlaveTest) { updateD(slaveRow, 7, "Low Cell Vs"); }
                                 updateD(station, 5, false);
                                 if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                                cRunTest[station].Cancel();
 
                                 return;
                             }
@@ -4820,16 +4944,24 @@ namespace NewBTASProto
                             resumeTestToolStripMenuItem.Enabled = true;
                             stopTestToolStripMenuItem.Enabled = false;
                         });
+                        cRunTest[station].Cancel();
                         return; // we can leave the while loop now...
                     }
 
                     //defined wait
                     if (Properties.Settings.Default.FC6C1WaitEnabled)
                     {
+
+                        var stopwatch = new Stopwatch();
+                        
+                        string eTimeS;
+
                         updateD(station, 7, "Timed Wait");
                         if (MasterSlaveTest) { updateD(slaveRow, 7, "Timed Wait"); }
 
-                        for (int i = 0; i < (Properties.Settings.Default.FC6C1WaitTime * 60 * 10); i++)
+                        stopwatch.Start();
+
+                        while( stopwatch.ElapsedMilliseconds < (Properties.Settings.Default.FC6C1WaitTime * 60 * 1000))
                         {
                             Thread.Sleep(100);
                             if (cRunTest[station].IsCancellationRequested)
@@ -4838,6 +4970,10 @@ namespace NewBTASProto
                                 if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
                                 this.Invoke((MethodInvoker)delegate()
                                 {
+                                    updateD(station, 7, "Combo Cancelled");
+                                    if (MasterSlaveTest) { updateD(slaveRow, 7, "Combo Cancelled"); }
+                                    //updateD(station, 6, "");
+                                    //if (MasterSlaveTest) { updateD(slaveRow, 6, ""); }
                                     sendNote(station, 3, "Combo Test Cancelled");
                                     startNewTestToolStripMenuItem.Enabled = true;
                                     resumeTestToolStripMenuItem.Enabled = true;
@@ -4845,6 +4981,10 @@ namespace NewBTASProto
                                 });
                                 return;
                             }
+
+                            eTimeS = stopwatch.Elapsed.ToString(@"hh\:mm\:ss");
+                            updateD(station, 6, eTimeS);
+                            if (MasterSlaveTest) { updateD(slaveRow, 6, eTimeS); }
                         }// end wait
                     }
                 }
@@ -4852,7 +4992,11 @@ namespace NewBTASProto
                 cRunTest[station] = new CancellationTokenSource();
                 updateD(station, 7, "Second Test");
                 if (MasterSlaveTest) { updateD(slaveRow, 7, "Second Test"); }
-
+                if (d.Rows[station][2].ToString().Contains(">><<"))
+                {
+                    updateD(station, 6, "");
+                    if (MasterSlaveTest) { updateD(slaveRow, 6, ""); }
+                }
                 // short wait
                 for (int i = 0; i < 15; i++)
                 {
@@ -4894,7 +5038,7 @@ namespace NewBTASProto
                     for (int i = 0; i < 200; i++)
                     {
                         Thread.Sleep(100);
-                        if (d.Rows[station][7].ToString().Contains("Read") && !d.Rows[station][7].ToString().Contains("Reading"))
+                        if (d.Rows[station][7].ToString().Contains("Read") && !d.Rows[station][7].ToString().Contains("Reading") || d.Rows[station][7].ToString().Contains("FAILED"))
                         {
                             return; // return when the test is finished with clean up...
                         }
