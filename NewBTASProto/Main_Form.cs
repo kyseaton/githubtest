@@ -20,10 +20,19 @@ namespace NewBTASProto
     public partial class Main_Form : Form
     {
 
+        static void MyHandler(object sender, UnhandledExceptionEventArgs args)
+        {
+            MessageBox.Show("Unhandled exception from" + sender.ToString());
+            
+
+        }
 
 
         public Main_Form()
         {
+            AppDomain currentDomain = AppDomain.CurrentDomain;
+            currentDomain.UnhandledException += new UnhandledExceptionEventHandler(MyHandler);
+
             try
             {
                 SetStyle(ControlStyles.OptimizedDoubleBuffer, true);

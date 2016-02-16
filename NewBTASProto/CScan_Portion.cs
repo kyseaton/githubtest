@@ -696,9 +696,35 @@ namespace NewBTASProto
                                         this.cPollIC.Cancel();
                                         this.cPollCScans.Cancel();
                                         this.sequentialScanT.Cancel();
+                                        for (int q = 0; q < 16; q++)
+                                        {
+                                            cRunTest[q].Cancel();
+                                        }
                                         // close the com ports
                                         CSCANComPort.Close();
                                         ICComPort.Close();
+
+                                        return;
+                                    }
+                                    else if (ex is System.ObjectDisposedException)
+                                    {
+                                        this.Invoke((MethodInvoker)delegate
+                                        {
+                                            //let the user know that the comports are no longer working
+                                            label8.Text = "Check Comports' Settings";
+                                            label8.Visible = true;
+                                            sendNote(0, 1, "COMPORTS DISCONNECTED. PLEASE CHECK.");
+                                        });
+
+                                        //cancel
+                                        this.cPollIC.Cancel();
+                                        this.cPollCScans.Cancel();
+                                        this.sequentialScanT.Cancel();
+
+                                        for (int q = 0; q < 16; q++)
+                                        {
+                                            cRunTest[q].Cancel();
+                                        }
 
                                         return;
                                     }
@@ -743,6 +769,7 @@ namespace NewBTASProto
                                     // look at the "In Use" columns and check for attached cscans
                                     try
                                     {
+
                                         CSCANComPort.Open();
                                         // send the polling command
                                         string outText;
@@ -1034,9 +1061,35 @@ namespace NewBTASProto
                                             this.cPollIC.Cancel();
                                             this.cPollCScans.Cancel();
                                             this.sequentialScanT.Cancel();
+                                            for (int q = 0; q < 16; q++)
+                                            {
+                                                cRunTest[q].Cancel();
+                                            }
                                             // close the com ports
                                             CSCANComPort.Close();
                                             ICComPort.Close();
+
+                                            return;
+                                        }
+                                        else if (ex is System.ObjectDisposedException)
+                                        {
+                                            this.Invoke((MethodInvoker)delegate
+                                            {
+                                                //let the user know that the comports are no longer working
+                                                label8.Text = "Check Comports' Settings";
+                                                label8.Visible = true;
+                                                sendNote(0, 1, "COMPORTS DISCONNECTED. PLEASE CHECK.");
+                                            });
+
+                                            //cancel
+                                            this.cPollIC.Cancel();
+                                            this.cPollCScans.Cancel();
+                                            this.sequentialScanT.Cancel();
+
+                                            for (int q = 0; q < 16; q++)
+                                            {
+                                                cRunTest[q].Cancel();
+                                            }
 
                                             return;
                                         }
@@ -2735,6 +2788,8 @@ namespace NewBTASProto
         {
             return ((9.0 / 5.0) * c) + 32;
         }
+
+        
 
     }
 }

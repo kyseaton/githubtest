@@ -20,6 +20,8 @@ namespace NewBTASProto
             {
                 try
                 {
+                    Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+
                     Application.EnableVisualStyles();
                     Application.SetCompatibleTextRenderingDefault(false);
                     Application.Run(new Splash());
