@@ -287,7 +287,7 @@ namespace NewBTASProto
 
                                         for (int q = 0; q < 16; q++)
                                         {
-                                            cRunTest[q].Cancel();
+                                            cRunTest[q].Cancel(); 
                                         }
                                         return;
                                     }
