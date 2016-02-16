@@ -33,8 +33,6 @@
               <xs:element name="cellsCable" msprop:Generator_ColumnVarNameInTable="columncellsCable" msprop:Generator_ColumnPropNameInRow="cellsCable" msprop:Generator_ColumnPropNameInTable="cellsCableColumn" msprop:Generator_UserColumnName="cellsCable" type="xs:string" minOccurs="0" />
               <xs:element name="shuntCable" msprop:Generator_ColumnVarNameInTable="columnshuntCable" msprop:Generator_ColumnPropNameInRow="shuntCable" msprop:Generator_ColumnPropNameInTable="shuntCableColumn" msprop:Generator_UserColumnName="shuntCable" type="xs:string" minOccurs="0" />
               <xs:element name="tempCable" msprop:Generator_ColumnVarNameInTable="columntempCable" msprop:Generator_ColumnPropNameInRow="tempCable" msprop:Generator_ColumnPropNameInTable="tempCableColumn" msprop:Generator_UserColumnName="tempCable" type="xs:string" minOccurs="0" />
-              <xs:element name="PartNum" msprop:Generator_ColumnVarNameInTable="columnPartNum" msprop:Generator_ColumnPropNameInRow="PartNum" msprop:Generator_ColumnPropNameInTable="PartNumColumn" msprop:Generator_UserColumnName="PartNum" type="xs:string" minOccurs="0" />
-              <xs:element name="SerialNum" msprop:Generator_ColumnVarNameInTable="columnSerialNum" msprop:Generator_ColumnPropNameInRow="SerialNum" msprop:Generator_ColumnPropNameInTable="SerialNumColumn" msprop:Generator_UserColumnName="SerialNum" type="xs:string" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>

@@ -23,8 +23,8 @@ namespace NewBTASProto
             "5339428555",                       // Chase @ Gulf Stream
             "6875678858",                       // Greg  @ Emerson
             "8595903103",
-            "2013021954",                       // AOG
-            "5388165955",                       // Bandi @ Scandinavian Avionics Norway
+            "2013021954",
+            "5388165955",
             "8303121362",
             "5735222138",
             
