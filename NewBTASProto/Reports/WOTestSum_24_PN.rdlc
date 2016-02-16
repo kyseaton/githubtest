@@ -1439,7 +1439,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=CStr(Floor((Fields!ETIME.Value * 24) / 1) + IIf(Round((Fields!ETIME.Value*24*60)) = 60,1,0)) + ":" + Format(Round((Fields!ETIME.Value*24*60)) Mod 60,"00")</Value>
+                              <Value>=CStr(Floor((Fields!ETIME.Value * 24) / 1)) + ":" + Format(Round((Fields!ETIME.Value*24*60)) Mod 60,"00")</Value>
                               <Style>
                                 <FontSize>7pt</FontSize>
                               </Style>
@@ -2325,6 +2325,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>WOSumSet</DataSetName>
+        <Left>0.00839in</Left>
         <Height>1in</Height>
         <Width>8.69999in</Width>
         <Style>
@@ -4189,9 +4190,9 @@
         <KeepTogether>true</KeepTogether>
         <DataSetName>WaterLevelData</DataSetName>
         <Top>1.04167in</Top>
-        <Left>0.00146in</Left>
+        <Left>0.00985in</Left>
         <Height>0.75in</Height>
-        <Width>8.69849in</Width>
+        <Width>8.69841in</Width>
         <ZIndex>1</ZIndex>
         <Style>
           <Border>
@@ -4203,10 +4204,10 @@
     <Height>1.79167in</Height>
     <Style />
   </Body>
-  <Width>8.7in</Width>
+  <Width>8.70839in</Width>
   <Page>
     <PageHeader>
-      <Height>1.22916in</Height>
+      <Height>1.51041in</Height>
       <PrintOnFirstPage>true</PrintOnFirstPage>
       <PrintOnLastPage>true</PrintOnLastPage>
       <ReportItems>
@@ -4230,6 +4231,7 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox1</rd:DefaultName>
+          <Left>0.00839in</Left>
           <Height>0.22916in</Height>
           <Width>6.95in</Width>
           <Style>
@@ -4244,7 +4246,7 @@
         </Textbox>
         <Line Name="Line1">
           <Top>0.22916in</Top>
-          <Left>0.00917in</Left>
+          <Left>0.01756in</Left>
           <Height>0in</Height>
           <Width>7.95519in</Width>
           <ZIndex>1</ZIndex>
@@ -4274,41 +4276,10 @@
           </Paragraphs>
           <rd:DefaultName>Textbox2</rd:DefaultName>
           <Top>0.47916in</Top>
+          <Left>0.00839in</Left>
           <Height>0.25in</Height>
           <Width>1.75in</Width>
           <ZIndex>2</ZIndex>
-          <Style>
-            <Border>
-              <Style>None</Style>
-            </Border>
-            <PaddingLeft>2pt</PaddingLeft>
-            <PaddingRight>2pt</PaddingRight>
-            <PaddingTop>2pt</PaddingTop>
-            <PaddingBottom>2pt</PaddingBottom>
-          </Style>
-        </Textbox>
-        <Textbox Name="Textbox11">
-          <CanGrow>true</CanGrow>
-          <KeepTogether>true</KeepTogether>
-          <Paragraphs>
-            <Paragraph>
-              <TextRuns>
-                <TextRun>
-                  <Value EvaluationMode="Constant" />
-                  <Style>
-                    <FontFamily>Lucida Sans</FontFamily>
-                  </Style>
-                </TextRun>
-              </TextRuns>
-              <Style />
-            </Paragraph>
-          </Paragraphs>
-          <rd:DefaultName>Textbox11</rd:DefaultName>
-          <Top>0.72916in</Top>
-          <Left>0.00917in</Left>
-          <Height>0.25in</Height>
-          <Width>1.75in</Width>
-          <ZIndex>3</ZIndex>
           <Style>
             <Border>
               <Style>None</Style>
@@ -4339,9 +4310,10 @@
           </Paragraphs>
           <rd:DefaultName>Textbox12</rd:DefaultName>
           <Top>0.97916in</Top>
+          <Left>0.00839in</Left>
           <Height>0.25in</Height>
           <Width>2.60417in</Width>
-          <ZIndex>4</ZIndex>
+          <ZIndex>3</ZIndex>
           <Style>
             <Border>
               <Style>None</Style>
@@ -4372,10 +4344,10 @@
           </Paragraphs>
           <rd:DefaultName>Textbox13</rd:DefaultName>
           <Top>0.97916in</Top>
-          <Left>3.47959in</Left>
+          <Left>2.8577in</Left>
           <Height>0.25in</Height>
-          <Width>1.75in</Width>
-          <ZIndex>5</ZIndex>
+          <Width>3in</Width>
+          <ZIndex>4</ZIndex>
           <Style>
             <Border>
               <Style>None</Style>
@@ -4406,10 +4378,10 @@
           </Paragraphs>
           <rd:DefaultName>Textbox14</rd:DefaultName>
           <Top>0.97916in</Top>
-          <Left>5.91875in</Left>
+          <Left>5.92714in</Left>
           <Height>0.25in</Height>
           <Width>2.78125in</Width>
-          <ZIndex>6</ZIndex>
+          <ZIndex>5</ZIndex>
           <Style>
             <Border>
               <Style>None</Style>
@@ -4440,10 +4412,10 @@
           </Paragraphs>
           <rd:DefaultName>Textbox16</rd:DefaultName>
           <Top>0.72916in</Top>
-          <Left>3.47959in</Left>
+          <Left>3.48798in</Left>
           <Height>0.25in</Height>
           <Width>1.75in</Width>
-          <ZIndex>7</ZIndex>
+          <ZIndex>6</ZIndex>
           <Style>
             <Border>
               <Style>None</Style>
@@ -4468,16 +4440,16 @@
                 </TextRun>
               </TextRuns>
               <Style>
-                <TextAlign>Right</TextAlign>
+                <TextAlign>Left</TextAlign>
               </Style>
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox17</rd:DefaultName>
           <Top>0.72916in</Top>
-          <Left>5.2in</Left>
+          <Left>0.00839in</Left>
           <Height>0.25in</Height>
           <Width>1.75in</Width>
-          <ZIndex>8</ZIndex>
+          <ZIndex>7</ZIndex>
           <Style>
             <Border>
               <Style>None</Style>
@@ -4508,10 +4480,10 @@
           </Paragraphs>
           <rd:DefaultName>Textbox18</rd:DefaultName>
           <Top>0.72916in</Top>
-          <Left>6.95in</Left>
+          <Left>6.95839in</Left>
           <Height>0.25in</Height>
           <Width>1.75in</Width>
-          <ZIndex>9</ZIndex>
+          <ZIndex>8</ZIndex>
           <Style>
             <Border>
               <Style>None</Style>
@@ -4542,9 +4514,10 @@
           </Paragraphs>
           <rd:DefaultName>Textbox2</rd:DefaultName>
           <Top>0.22916in</Top>
+          <Left>0.00839in</Left>
           <Height>0.25in</Height>
           <Width>1.75in</Width>
-          <ZIndex>10</ZIndex>
+          <ZIndex>9</ZIndex>
           <Style>
             <Border>
               <Style>None</Style>
@@ -4575,10 +4548,10 @@
           </Paragraphs>
           <rd:DefaultName>Textbox18</rd:DefaultName>
           <Top>0.47916in</Top>
-          <Left>3.47959in</Left>
+          <Left>3.48798in</Left>
           <Height>0.25in</Height>
           <Width>1.75in</Width>
-          <ZIndex>11</ZIndex>
+          <ZIndex>10</ZIndex>
           <Style>
             <Border>
               <Style>None</Style>
@@ -4609,10 +4582,10 @@
           </Paragraphs>
           <rd:DefaultName>Textbox16</rd:DefaultName>
           <Top>0.22916in</Top>
-          <Left>3.47959in</Left>
+          <Left>3.48798in</Left>
           <Height>0.25in</Height>
           <Width>1.75in</Width>
-          <ZIndex>12</ZIndex>
+          <ZIndex>11</ZIndex>
           <Style>
             <Border>
               <Style>None</Style>
@@ -4628,16 +4601,84 @@
           <Value>=Parameters!Path.Value</Value>
           <Sizing>Fit</Sizing>
           <Top>0.01041in</Top>
-          <Left>7.9812in</Left>
+          <Left>7.98959in</Left>
           <Height>0.71875in</Height>
           <Width>0.71875in</Width>
-          <ZIndex>13</ZIndex>
+          <ZIndex>12</ZIndex>
           <Style>
             <Border>
               <Style>Solid</Style>
             </Border>
           </Style>
         </Image>
+        <Textbox Name="Textbox15">
+          <CanGrow>true</CanGrow>
+          <KeepTogether>true</KeepTogether>
+          <Paragraphs>
+            <Paragraph>
+              <TextRuns>
+                <TextRun>
+                  <Value>="Model Number:  " + First(Fields!PartNum.Value, "MetaData")</Value>
+                  <Style>
+                    <FontFamily>Lucida Sans</FontFamily>
+                  </Style>
+                </TextRun>
+              </TextRuns>
+              <Style>
+                <TextAlign>Left</TextAlign>
+              </Style>
+            </Paragraph>
+          </Paragraphs>
+          <rd:DefaultName>Textbox12</rd:DefaultName>
+          <Top>1.22916in</Top>
+          <Left>0.00839in</Left>
+          <Height>0.25in</Height>
+          <Width>2.60417in</Width>
+          <ZIndex>13</ZIndex>
+          <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
+            <PaddingLeft>2pt</PaddingLeft>
+            <PaddingRight>2pt</PaddingRight>
+            <PaddingTop>2pt</PaddingTop>
+            <PaddingBottom>2pt</PaddingBottom>
+          </Style>
+        </Textbox>
+        <Textbox Name="Textbox22">
+          <CanGrow>true</CanGrow>
+          <KeepTogether>true</KeepTogether>
+          <Paragraphs>
+            <Paragraph>
+              <TextRuns>
+                <TextRun>
+                  <Value>="Serial Number:  " &amp; Last(Fields!SerialNum.Value, "MetaData")</Value>
+                  <Style>
+                    <FontFamily>Lucida Sans</FontFamily>
+                  </Style>
+                </TextRun>
+              </TextRuns>
+              <Style>
+                <TextAlign>Right</TextAlign>
+              </Style>
+            </Paragraph>
+          </Paragraphs>
+          <rd:DefaultName>Textbox14</rd:DefaultName>
+          <Top>1.22916in</Top>
+          <Left>5.9248in</Left>
+          <Height>0.25in</Height>
+          <Width>2.78125in</Width>
+          <ZIndex>14</ZIndex>
+          <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
+            <PaddingLeft>2pt</PaddingLeft>
+            <PaddingRight>2pt</PaddingRight>
+            <PaddingTop>2pt</PaddingTop>
+            <PaddingBottom>2pt</PaddingBottom>
+          </Style>
+        </Textbox>
       </ReportItems>
       <Style>
         <Border>
@@ -4696,6 +4737,14 @@
         </Field>
         <Field Name="tempCable">
           <DataField>tempCable</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="PartNum">
+          <DataField>PartNum</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="SerialNum">
+          <DataField>SerialNum</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>

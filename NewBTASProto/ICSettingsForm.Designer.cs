@@ -335,7 +335,7 @@
             // 
             // numericUpDown6
             // 
-            this.numericUpDown6.DecimalPlaces = 2;
+            this.numericUpDown6.DecimalPlaces = 3;
             this.numericUpDown6.Increment = new decimal(new int[] {
             5,
             0,
@@ -448,7 +448,7 @@
             // 
             // numericUpDown3
             // 
-            this.numericUpDown3.DecimalPlaces = 2;
+            this.numericUpDown3.DecimalPlaces = 3;
             this.numericUpDown3.Increment = new decimal(new int[] {
             5,
             0,

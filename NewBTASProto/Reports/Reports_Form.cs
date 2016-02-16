@@ -605,6 +605,48 @@ namespace NewBTASProto
 
                 }
 
+                //now lets get the battery serial number and part number
+                // we need a data set..
+                DataSet BatInfo = new DataSet();
+                // Open database containing all the battery data....
+                strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                strAccessSelect = @"SELECT BatteryModel,BatterySerialNumber FROM WorkOrders WHERE WorkOrderNumber='" + comboBox1.Text + @"'";
+
+                //Here is where I load the form wide dataset which will both let me fill in the rest of the combo boxes and the graphs!
+                myAccessConn = null;
+                // try to open the DB
+                try
+                {
+                    myAccessConn = new OleDbConnection(strAccessConn);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                //  now try to access it
+                try
+                {
+                    OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                    OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                    lock (Main_Form.dataBaseLock)
+                    {
+                        myAccessConn.Open();
+                        myDataAdapter.Fill(BatInfo, "BatInfo");
+                        myAccessConn.Close();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                finally
+                {
+
+                }
+
 
                 // Now that we have the data in reportSet along with testsPerformed lets pass it over to the matching report
                 /*************************Load reportSet into reportSet  ************************/
@@ -670,9 +712,13 @@ namespace NewBTASProto
                 MetaDT.Columns.Add("cellsCable", typeof(string));
                 MetaDT.Columns.Add("shuntCable", typeof(string));
                 MetaDT.Columns.Add("tempCable", typeof(string));
+                MetaDT.Columns.Add("PartNum", typeof(string));
+                MetaDT.Columns.Add("SerialNum", typeof(string));
 
+                int selected = comboBox2.SelectedIndex;
+                if (selected < 1) { selected = testsPerformed.Tables[0].Rows.Count - 1; }
                 // insert data rows
-                MetaDT.Rows.Add(GlobalVars.businessName, GlobalVars.useF, GlobalVars.Pos2Neg, comboBox2.Text, testsPerformed.Tables[0].Rows[comboBox2.SelectedIndex][15].ToString(), testsPerformed.Tables[0].Rows[comboBox2.SelectedIndex][16].ToString(), testsPerformed.Tables[0].Rows[comboBox2.SelectedIndex][17].ToString());
+                MetaDT.Rows.Add(GlobalVars.businessName, GlobalVars.useF, GlobalVars.Pos2Neg, comboBox2.Text, testsPerformed.Tables[0].Rows[selected][15].ToString(), testsPerformed.Tables[0].Rows[selected][16].ToString(), testsPerformed.Tables[0].Rows[selected][17].ToString(), BatInfo.Tables[0].Rows[0][0].ToString(), BatInfo.Tables[0].Rows[0][1].ToString());
 
                 this.reportViewer.LocalReport.DataSources.Add(new ReportDataSource("MetaData", MetaDT));
                 

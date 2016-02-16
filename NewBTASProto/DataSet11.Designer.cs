@@ -778,6 +778,10 @@ namespace NewBTASProto {
             
             private global::System.Data.DataColumn columntempCable;
             
+            private global::System.Data.DataColumn columnPartNum;
+            
+            private global::System.Data.DataColumn columnSerialNum;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public MetaDataDataTable() {
@@ -869,6 +873,22 @@ namespace NewBTASProto {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn PartNumColumn {
+                get {
+                    return this.columnPartNum;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn SerialNumColumn {
+                get {
+                    return this.columnSerialNum;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -904,7 +924,7 @@ namespace NewBTASProto {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public MetaDataRow AddMetaDataRow(string gBusinessName, string gUseF, string gPos2Neg, string testComboName, string cellsCable, string shuntCable, string tempCable) {
+            public MetaDataRow AddMetaDataRow(string gBusinessName, string gUseF, string gPos2Neg, string testComboName, string cellsCable, string shuntCable, string tempCable, string PartNum, string SerialNum) {
                 MetaDataRow rowMetaDataRow = ((MetaDataRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         gBusinessName,
@@ -913,7 +933,9 @@ namespace NewBTASProto {
                         testComboName,
                         cellsCable,
                         shuntCable,
-                        tempCable};
+                        tempCable,
+                        PartNum,
+                        SerialNum};
                 rowMetaDataRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowMetaDataRow);
                 return rowMetaDataRow;
@@ -943,6 +965,8 @@ namespace NewBTASProto {
                 this.columncellsCable = base.Columns["cellsCable"];
                 this.columnshuntCable = base.Columns["shuntCable"];
                 this.columntempCable = base.Columns["tempCable"];
+                this.columnPartNum = base.Columns["PartNum"];
+                this.columnSerialNum = base.Columns["SerialNum"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -962,6 +986,10 @@ namespace NewBTASProto {
                 base.Columns.Add(this.columnshuntCable);
                 this.columntempCable = new global::System.Data.DataColumn("tempCable", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columntempCable);
+                this.columnPartNum = new global::System.Data.DataColumn("PartNum", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnPartNum);
+                this.columnSerialNum = new global::System.Data.DataColumn("SerialNum", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnSerialNum);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -5187,6 +5215,38 @@ namespace NewBTASProto {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string PartNum {
+                get {
+                    try {
+                        return ((string)(this[this.tableMetaData.PartNumColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'PartNum\' in table \'MetaData\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableMetaData.PartNumColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string SerialNum {
+                get {
+                    try {
+                        return ((string)(this[this.tableMetaData.SerialNumColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'SerialNum\' in table \'MetaData\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableMetaData.SerialNumColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public bool IsgBusinessNameNull() {
                 return this.IsNull(this.tableMetaData.gBusinessNameColumn);
             }
@@ -5267,6 +5327,30 @@ namespace NewBTASProto {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SettempCableNull() {
                 this[this.tableMetaData.tempCableColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsPartNumNull() {
+                return this.IsNull(this.tableMetaData.PartNumColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetPartNumNull() {
+                this[this.tableMetaData.PartNumColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsSerialNumNull() {
+                return this.IsNull(this.tableMetaData.SerialNumColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetSerialNumNull() {
+                this[this.tableMetaData.SerialNumColumn] = global::System.Convert.DBNull;
             }
         }
         
