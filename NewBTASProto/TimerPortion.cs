@@ -71,6 +71,8 @@ namespace NewBTASProto
             // First do a commPort Check
             try
             {
+                CSCANComPort = new SerialPort();
+                ICComPort = new SerialPort();
                 CSCANComPort.PortName = GlobalVars.CSCANComPort;
                 ICComPort.PortName = GlobalVars.ICComPort;
                 
@@ -87,7 +89,9 @@ namespace NewBTASProto
             finally
             {
                 CSCANComPort.Close();
+                CSCANComPort.Dispose();
                 ICComPort.Close();
+                ICComPort.Dispose();
 
             }
 

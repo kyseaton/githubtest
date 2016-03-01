@@ -27,7 +27,7 @@ namespace NewBTASProto
         /// <summary>
         /// Serial Stuff defined here
         /// </summary>
-        public SerialPort CSCANComPort = new SerialPort();
+        public SerialPort CSCANComPort;
 
         internal delegate void SerialDataReceivedEventHandlerDelegate(object sender, SerialDataReceivedEventArgs e);
         delegate void SetTextCallback(string text);
@@ -66,14 +66,6 @@ namespace NewBTASProto
             int tempClick = 0;
 
             //MOVE TO A STARTUP LOCATION!!!!!!!!!!!!!!!!!!!!!
-            // Open the comport
-            CSCANComPort.ReadTimeout = 200;
-            CSCANComPort.PortName = GlobalVars.CSCANComPort;
-            CSCANComPort.BaudRate = 19200;
-            CSCANComPort.DataBits = 8;
-            CSCANComPort.StopBits = StopBits.One;
-            CSCANComPort.Handshake = Handshake.None;
-            CSCANComPort.Parity = Parity.None;
 
             ThreadPool.QueueUserWorkItem(s =>
             {
@@ -112,6 +104,15 @@ namespace NewBTASProto
 
                                 try
                                 {
+                                    // Open the comport
+                                    CSCANComPort = new SerialPort();
+                                    CSCANComPort.ReadTimeout = 200;
+                                    CSCANComPort.PortName = GlobalVars.CSCANComPort;
+                                    CSCANComPort.BaudRate = 19200;
+                                    CSCANComPort.DataBits = 8;
+                                    CSCANComPort.StopBits = StopBits.One;
+                                    CSCANComPort.Handshake = Handshake.None;
+                                    CSCANComPort.Parity = Parity.None;
                                     CSCANComPort.Open();
 
                                     // send the polling command
@@ -127,6 +128,7 @@ namespace NewBTASProto
                                     tempBuff = CSCANComPort.ReadTo("Z");
                                     // close the comport
                                     CSCANComPort.Close();
+                                    CSCANComPort.Dispose();
                                     //we got a good read...
                                     goodRead = true;
                                     //do something with the new data
@@ -680,6 +682,7 @@ namespace NewBTASProto
                                             });
                                         }
                                         CSCANComPort.Close();
+                                        CSCANComPort.Dispose();
 
                                     }
                                     else if (ex is System.IO.IOException || ex is System.InvalidOperationException)
@@ -702,8 +705,10 @@ namespace NewBTASProto
                                         }
                                         // close the com ports
                                         CSCANComPort.Close();
+                                        CSCANComPort.Dispose();
                                         ICComPort.Close();
-
+                                        ICComPort.Dispose();
+                                        
                                         return;
                                     }
                                     else if (ex is System.ObjectDisposedException)
@@ -769,7 +774,15 @@ namespace NewBTASProto
                                     // look at the "In Use" columns and check for attached cscans
                                     try
                                     {
-
+                                        // Open the comport
+                                        CSCANComPort = new SerialPort();
+                                        CSCANComPort.ReadTimeout = 200;
+                                        CSCANComPort.PortName = GlobalVars.CSCANComPort;
+                                        CSCANComPort.BaudRate = 19200;
+                                        CSCANComPort.DataBits = 8;
+                                        CSCANComPort.StopBits = StopBits.One;
+                                        CSCANComPort.Handshake = Handshake.None;
+                                        CSCANComPort.Parity = Parity.None;
                                         CSCANComPort.Open();
                                         // send the polling command
                                         string outText;
@@ -783,6 +796,7 @@ namespace NewBTASProto
                                         tempBuff = CSCANComPort.ReadTo("Z");
                                         // close the comport
                                         CSCANComPort.Close();
+                                        CSCANComPort.Dispose();
                                         //do something with the new data
                                         char[] delims = { ' ' };
                                         string[] A = tempBuff.Split(delims);
@@ -1035,6 +1049,7 @@ namespace NewBTASProto
                                     catch (Exception ex)
                                     {
                                         CSCANComPort.Close();
+                                        CSCANComPort.Dispose();
                                         if (ex is System.TimeoutException)
                                         {
                                             if ((bool)d.Rows[j][4] && dataGridView1.CurrentRow.Index != j)  // added to help with gui look
@@ -1067,7 +1082,9 @@ namespace NewBTASProto
                                             }
                                             // close the com ports
                                             CSCANComPort.Close();
+                                            CSCANComPort.Dispose();
                                             ICComPort.Close();
+                                            ICComPort.Dispose();
 
                                             return;
                                         }
@@ -1386,7 +1403,7 @@ namespace NewBTASProto
                                 break;
                             case "Current":
                                 //if we have a mini that is charging...
-                                if (d.Rows[testData.terminalID][10].ToString().Contains("mini") && !(d.Rows[testData.terminalID][2].ToString().Contains("Cap") || d.Rows[testData.terminalID][2].ToString().Contains("Discharge")))
+                                if (d.Rows[station][10].ToString().Contains("mini") && !(d.Rows[station][2].ToString().Contains("Cap") || d.Rows[station][2].ToString().Contains("Discharge")))
                                 {
                                     q = 9;
                                 }
@@ -1515,7 +1532,7 @@ namespace NewBTASProto
                                 interval = 12;
                                 points = 73;
                                 break;
-                            case "SlowCharge-16":
+                            case "Slow Charge-16":
                                 interval = 16;
                                 points = 61;
                                 break;
@@ -1798,7 +1815,7 @@ namespace NewBTASProto
                                     interval = 12;
                                     points = 73;
                                     break;
-                                case "SlowCharge-16":
+                                case "Slow Charge-16":
                                     interval = 16;
                                     points = 61;
                                     break;

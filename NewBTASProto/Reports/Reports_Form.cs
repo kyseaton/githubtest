@@ -1407,6 +1407,12 @@ namespace NewBTASProto
 
         }
 
+        private void Reports_Form_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            reportSet = null;
+            testsPerformed = null;
+        }
+
 
     }
 }

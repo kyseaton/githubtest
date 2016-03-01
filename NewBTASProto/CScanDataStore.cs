@@ -77,6 +77,9 @@ namespace NewBTASProto
         {
             //terminalID = A[1]-216;
             terminalID = Int32.Parse(CDATA[1]) - 216;
+            // here to kill out of bounds errors
+            if (terminalID > 15) { terminalID = 15; }
+            else if (terminalID < 0) { terminalID = 0; }
  
             //stored in A[2];
             programVersion = CDATA[2];

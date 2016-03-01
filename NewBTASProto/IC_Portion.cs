@@ -23,7 +23,7 @@ namespace NewBTASProto
         /// <summary>
         /// Serial Stuff defined here
         /// </summary>
-        public SerialPort ICComPort = new SerialPort();
+        public SerialPort ICComPort;
 
         public CancellationTokenSource cPollIC;
 
@@ -50,17 +50,7 @@ namespace NewBTASProto
             string tempBuff = "";
             ICDataStore testData;
 
-            // Open the comport
-            ICComPort.ReadTimeout = 100;
-            ICComPort.PortName = GlobalVars.ICComPort;
-            ICComPort.BaudRate = 19200;
-            ICComPort.DataBits = 8;
-            ICComPort.StopBits = StopBits.One;
-            ICComPort.Handshake = Handshake.None;
-            ICComPort.Parity = Parity.None;
-            ICComPort.DtrEnable = true;
-            ICComPort.RtsEnable = false;
-            ICComPort.Open();
+
 
             //OUTPUT DATA STRUCTURE ----------------------------------
 
@@ -135,9 +125,27 @@ namespace NewBTASProto
                                     //Debug.Print("Normal Command Sent To " + chargerID.ToString());
 
                                     // send the short command based on the settings for the charger...
+                                    if (ICComPort == null) 
+                                    { 
+                                    
+                                    }
+                                    // set up the comport
+                                    ICComPort = new SerialPort();
+                                    ICComPort.ReadTimeout = 100;
+                                    ICComPort.PortName = GlobalVars.ICComPort;
+                                    ICComPort.BaudRate = 19200;
+                                    ICComPort.DataBits = 8;
+                                    ICComPort.StopBits = StopBits.One;
+                                    ICComPort.Handshake = Handshake.None;
+                                    ICComPort.Parity = Parity.None;
+                                    ICComPort.DtrEnable = true;
+                                    ICComPort.RtsEnable = false;
+                                    ICComPort.Open();
                                     ICComPort.Write(GlobalVars.ICSettings[chargerID].outText, 0, 28);
                                     // wait for a response
                                     tempBuff = ICComPort.ReadTo("Z");
+                                    ICComPort.Close();
+                                    ICComPort.Dispose();
                                     //do something with the new data
                                     char[] delims = { ' ' };
                                     string[] A = tempBuff.Split(delims);
@@ -265,7 +273,10 @@ namespace NewBTASProto
                                             tempBuff = ICComPort.ReadExisting();
                                             //rtbIncoming.Text = "Com Error" + System.Environment.NewLine + tempBuff;
                                         });
+                                        ICComPort.Close();
+                                        ICComPort.Dispose();
                                         Thread.Sleep(100);
+                                        
                                     }
                                     else if (ex is System.IO.IOException || ex is System.InvalidOperationException)
                                     {
@@ -283,7 +294,9 @@ namespace NewBTASProto
                                         this.sequentialScanT.Cancel();
                                         // close the com ports
                                         CSCANComPort.Close();
+                                        CSCANComPort.Dispose();
                                         ICComPort.Close();
+                                        ICComPort.Dispose();
 
                                         for (int q = 0; q < 16; q++)
                                         {
@@ -342,10 +355,24 @@ namespace NewBTASProto
                                 try
                                 {
                                     // send the short command based on the settings for the charger...
+                                    // set up the comport
+                                    ICComPort = new SerialPort();
+                                    ICComPort.ReadTimeout = 100;
+                                    ICComPort.PortName = GlobalVars.ICComPort;
+                                    ICComPort.BaudRate = 19200;
+                                    ICComPort.DataBits = 8;
+                                    ICComPort.StopBits = StopBits.One;
+                                    ICComPort.Handshake = Handshake.None;
+                                    ICComPort.Parity = Parity.None;
+                                    ICComPort.DtrEnable = true;
+                                    ICComPort.RtsEnable = false;
+                                    ICComPort.Open();
                                     ICComPort.Write(GlobalVars.ICSettings[toCheck].outText, 0, 28);
                                     //Debug.Print("Check Command Sent To " + toCheck.ToString());
                                     // wait for a response
                                     tempBuff = ICComPort.ReadTo("Z");
+                                    ICComPort.Close();
+                                    ICComPort.Dispose();
                                     //do something with the new data
                                     char[] delims = { ' ' };
                                     string[] A = tempBuff.Split(delims);
@@ -368,6 +395,8 @@ namespace NewBTASProto
                                 {
                                     if (ex is System.TimeoutException)
                                     {
+                                        ICComPort.Close();
+                                        ICComPort.Dispose();
                                         Thread.Sleep(100);
                                     }
                                     else if (ex is System.IO.IOException || ex is System.InvalidOperationException)
@@ -392,7 +421,9 @@ namespace NewBTASProto
 
                                         // close the com ports
                                         CSCANComPort.Close();
+                                        CSCANComPort.Dispose();
                                         ICComPort.Close();
+                                        ICComPort.Dispose();
 
                                         return;
                                     }
@@ -434,10 +465,24 @@ namespace NewBTASProto
                                     {
                                         Thread.Sleep(800);
                                         // send the short command based on the settings for the charger...
+                                        // set up the comport
+                                        ICComPort = new SerialPort();
+                                        ICComPort.ReadTimeout = 100;
+                                        ICComPort.PortName = GlobalVars.ICComPort;
+                                        ICComPort.BaudRate = 19200;
+                                        ICComPort.DataBits = 8;
+                                        ICComPort.StopBits = StopBits.One;
+                                        ICComPort.Handshake = Handshake.None;
+                                        ICComPort.Parity = Parity.None;
+                                        ICComPort.DtrEnable = true;
+                                        ICComPort.RtsEnable = false;
+                                        ICComPort.Open();
                                         ICComPort.Write(GlobalVars.ICSettings[i].outText, 0, 28);
                                         //Debug.Print("High Priority Command Sent To " + i.ToString());
                                         // wait for a response
                                         tempBuff = ICComPort.ReadTo("Z");
+                                        ICComPort.Close();
+                                        ICComPort.Dispose();
 
                                         int station = 0;
                                         //find where the charger is located
@@ -625,6 +670,8 @@ namespace NewBTASProto
                                                 comErrorNum[i] = 0;
                                                 comGoodNum[i] = 0;
                                             }
+                                            ICComPort.Close();
+                                            ICComPort.Dispose();
                                             Thread.Sleep(100);
                                         }
                                         else if (ex is System.IO.IOException || ex is System.InvalidOperationException)
@@ -643,7 +690,9 @@ namespace NewBTASProto
                                             this.sequentialScanT.Cancel();
                                             // close the com ports
                                             CSCANComPort.Close();
+                                            CSCANComPort.Dispose();
                                             ICComPort.Close();
+                                            ICComPort.Dispose();
 
                                             for (int q = 0; q < 16; q++)
                                             {
@@ -686,10 +735,23 @@ namespace NewBTASProto
                                 {
                                     Thread.Sleep(10);
                                     // send the short command to the masterfiller
+                                    // set up the comport
+                                    ICComPort = new SerialPort();
+                                    ICComPort.ReadTimeout = 100;
+                                    ICComPort.PortName = GlobalVars.ICComPort;
+                                    ICComPort.BaudRate = 19200;
+                                    ICComPort.DataBits = 8;
+                                    ICComPort.StopBits = StopBits.One;
+                                    ICComPort.Handshake = Handshake.None;
+                                    ICComPort.Parity = Parity.None;
+                                    ICComPort.DtrEnable = true;
+                                    ICComPort.RtsEnable = false;
+                                    ICComPort.Open();
                                     ICComPort.Write("~320Z");
                                     // wait for a response
                                     tempBuff = ICComPort.ReadTo("Z");
-
+                                    ICComPort.Close();
+                                    ICComPort.Dispose();
                                     // we got a response so lets update the grid and the status box
                                     //A[1] has the terminal ID in it
                                     char[] delims = { ' ' };
@@ -703,6 +765,8 @@ namespace NewBTASProto
                                     if (ex is System.TimeoutException)
                                     {
                                         // didn't get anything...
+                                        ICComPort.Close();
+                                        ICComPort.Dispose();
                                     }
                                     else if (ex is System.IO.IOException || ex is System.InvalidOperationException)
                                     {
@@ -720,7 +784,9 @@ namespace NewBTASProto
                                         this.sequentialScanT.Cancel();
                                         // close the com ports
                                         CSCANComPort.Close();
+                                        CSCANComPort.Dispose();
                                         ICComPort.Close();
+                                        ICComPort.Dispose();
 
                                         for (int q = 0; q < 16; q++)
                                         {

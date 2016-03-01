@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
+using System.Runtime.ExceptionServices;
+
 
 namespace NewBTASProto
 {
@@ -14,8 +16,13 @@ namespace NewBTASProto
         /// </summary>
         static Mutex mutex = new Mutex(true, "BTAS-16K");
         [STAThread]
+        [HandleProcessCorruptedStateExceptions]
         static void Main(String[] args)
         {
+
+            AppDomain currentDomain = AppDomain.CurrentDomain;
+            currentDomain.UnhandledException += new UnhandledExceptionEventHandler(MyHandler);
+
             if (mutex.WaitOne(TimeSpan.Zero, true))
             {
                 try
@@ -37,6 +44,15 @@ namespace NewBTASProto
             }
 
         }
+
+        static void MyHandler(object sender, UnhandledExceptionEventArgs args)
+        {
+            Exception e = (Exception)args.ExceptionObject;
+            MessageBox.Show("Unhandled exception : " + e.Message + Environment.NewLine + e.StackTrace);
+            
+            
+        }
+
     }
 
 }

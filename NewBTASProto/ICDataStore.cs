@@ -46,6 +46,10 @@ namespace NewBTASProto
             try
             {
                 terminalID = int.Parse(ICDATA[1]) - 100;
+                // here to kill out of bounds errors
+                if (terminalID > 15) { terminalID = 15; }
+                else if (terminalID < 0) { terminalID = 0; }
+
                 boardID = int.Parse(ICDATA[2]) - 1000;
                 PV1 = int.Parse(ICDATA[3]) - 1000;
                 PV2 = int.Parse(ICDATA[4]) - 1000;

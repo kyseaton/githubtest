@@ -20,18 +20,9 @@ namespace NewBTASProto
     public partial class Main_Form : Form
     {
 
-        static void MyHandler(object sender, UnhandledExceptionEventArgs args)
-        {
-            MessageBox.Show("Unhandled exception from" + sender.ToString());
-            
-
-        }
-
 
         public Main_Form()
-        {
-            AppDomain currentDomain = AppDomain.CurrentDomain;
-            currentDomain.UnhandledException += new UnhandledExceptionEventHandler(MyHandler);
+        {           
 
             try
             {
@@ -89,6 +80,7 @@ namespace NewBTASProto
             {
                 MessageBox.Show(this, "In Main_Form:  " + ex.ToString());
             }
+
 
 
         }
@@ -3449,6 +3441,8 @@ namespace NewBTASProto
                         }
                     }
 
+                    Thread.Sleep(100);
+
                     if (!foundOne)
                     {
                         // flip the comms!
@@ -3478,7 +3472,9 @@ namespace NewBTASProto
 
                         // close the comms
                         CSCANComPort.Close();
+                        CSCANComPort.Dispose();
                         ICComPort.Close();
+                        ICComPort.Dispose();
 
                         //Update the Globals
                         string temp = GlobalVars.CSCANComPort;

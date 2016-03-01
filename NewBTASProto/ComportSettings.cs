@@ -179,7 +179,9 @@ namespace NewBTASProto
 
             // close the comms
             ((Main_Form)this.Owner).CSCANComPort.Close();
+            ((Main_Form)this.Owner).CSCANComPort.Dispose();
             ((Main_Form)this.Owner).ICComPort.Close();
+            ((Main_Form)this.Owner).ICComPort.Dispose();
 
             //Update the Globals
             int i = 0;

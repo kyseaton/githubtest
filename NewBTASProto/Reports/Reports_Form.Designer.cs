@@ -179,6 +179,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Reports_Form";
             this.Text = "Test Reports";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Reports_Form_FormClosing);
             this.Load += new System.EventHandler(this.Reports_Form_Load);
             this.Shown += new System.EventHandler(this.Reports_Form_Shown);
             this.SizeChanged += new System.EventHandler(this.Reports_Form_SizeChanged);

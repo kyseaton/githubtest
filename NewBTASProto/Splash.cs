@@ -25,7 +25,7 @@ namespace NewBTASProto
             "8595903103",
             "2013021954",                       // AOG
             "5388165955",                       // Bandi @ Scandinavian Avionics Norway
-            "8303121362",
+            "8303121362",                       // Benson Wong / Raymond Fung @ Topcast Hong Kong
             "5735222138",
             
             "2995964807",
