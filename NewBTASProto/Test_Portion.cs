@@ -2921,417 +2921,145 @@ namespace NewBTASProto
 
                     while (currentReading <= readings)
                     {
-                        // check if we need to take a reading
-                        if (((currentReading - 1) * interval * 1000) < stopwatch.Elapsed.Add(offset).TotalMilliseconds)
+                        // main loop try
+                        try
                         {
-                            //first record the elapsed amount of time
-                            TimeSpan temp = stopwatch.Elapsed.Add(offset);
-                            // update the grid
-                            updateD(station, 7, ("Reading " + currentReading.ToString() + " of " + readings.ToString()));
-                            if (MasterSlaveTest) { updateD(slaveRow, 7, ("Reading " + currentReading.ToString() + " of " + readings.ToString())); }
-
-                            #region save a scan to the DB and update the main screen plots
-                            //  now try to INSERT INTO it
-                            try
+                            // check if we need to take a reading
+                            if (((currentReading - 1) * interval * 1000) < stopwatch.Elapsed.Add(offset).TotalMilliseconds)
                             {
-                                string strUpdateCMD = "INSERT INTO ScanData (Station,BWO,STEP,RDG,[DATE],QS1,CTR,ETIME,CUR1,CUR2,VB1,VB2,VB3,VB4," +
-                                    "CEL01,CEL02,CEL03,CEL04,CEL05,CEL06,CEL07,CEL08,CEL09,CEL10,CEL11,CEL12,CEL13,CEL14,CEL15,CEL16,CEL17,CEL18,CEL19,CEL20,CEL21,CEL22,CEL23,CEL24," +
-                                    "BT1,BT2,BT3,BT4,BT5,BT6,CGND1,CGND2,REF,GND,FV,MSV,PSV) "
-                                    + "VALUES (" + station.ToString() + ",'" +                            //station number
-                                    MWO1.Trim() + "','" +                          //WorkOrderNumber
-                                    stepNum.ToString("00") + "'," +                                            //StepNumber
-                                    currentReading.ToString() + ",#" +                                     //ReadingNumber
-                                    DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "#,'" +                  //date
-                                    GlobalVars.CScanData[station].QS1.ToString() + "','" +                  //QS1
-                                    GlobalVars.CScanData[station].CTR.ToString() + "','" +                  //CTR
-                                    temp.TotalDays.ToString("0.00000") + "','" +                                      //time elapsed in days
-                                    GlobalVars.CScanData[station].currentOne.ToString("0.0") + "','" +           //CUR1
-                                    GlobalVars.CScanData[station].currentTwo.ToString("0.0") + "','" +           //CUR2
-                                    GlobalVars.CScanData[station].VB1.ToString("0.00") + "','" +                  //VB1
-                                    GlobalVars.CScanData[station].VB2.ToString("0.00") + "','" +                  //VB2
-                                    GlobalVars.CScanData[station].VB3.ToString("0.00") + "','" +                  //VB3
-                                    GlobalVars.CScanData[station].VB4.ToString("0.00") + "','" +                  //VB4
-                                    GlobalVars.CScanData[station].orderedCells[0].ToString("0.000") + "','" +      //CEL01
-                                    GlobalVars.CScanData[station].orderedCells[1].ToString("0.000") + "','" +      //CEL02
-                                    GlobalVars.CScanData[station].orderedCells[2].ToString("0.000") + "','" +      //CEL03
-                                    GlobalVars.CScanData[station].orderedCells[3].ToString("0.000") + "','" +      //CEL04
-                                    GlobalVars.CScanData[station].orderedCells[4].ToString("0.000") + "','" +      //CEL05
-                                    GlobalVars.CScanData[station].orderedCells[5].ToString("0.000") + "','" +      //CEL06
-                                    GlobalVars.CScanData[station].orderedCells[6].ToString("0.000") + "','" +      //CEL07
-                                    GlobalVars.CScanData[station].orderedCells[7].ToString("0.000") + "','" +      //CEL08
-                                    GlobalVars.CScanData[station].orderedCells[8].ToString("0.000") + "','" +      //CEL09
-                                    GlobalVars.CScanData[station].orderedCells[9].ToString("0.000") + "','" +      //CEL10
-                                    GlobalVars.CScanData[station].orderedCells[10].ToString("0.000") + "','" +     //CEL11
-                                    GlobalVars.CScanData[station].orderedCells[11].ToString("0.000") + "','" +     //CEL12
-                                    GlobalVars.CScanData[station].orderedCells[12].ToString("0.000") + "','" +     //CEL13
-                                    GlobalVars.CScanData[station].orderedCells[13].ToString("0.000") + "','" +     //CEL14
-                                    GlobalVars.CScanData[station].orderedCells[14].ToString("0.000") + "','" +     //CEL15
-                                    GlobalVars.CScanData[station].orderedCells[15].ToString("0.000") + "','" +     //CEL16
-                                    GlobalVars.CScanData[station].orderedCells[16].ToString("0.000") + "','" +     //CEL17
-                                    GlobalVars.CScanData[station].orderedCells[17].ToString("0.000") + "','" +     //CEL18
-                                    GlobalVars.CScanData[station].orderedCells[18].ToString("0.000") + "','" +     //CEL19
-                                    GlobalVars.CScanData[station].orderedCells[19].ToString("0.000") + "','" +     //CEL20
-                                    GlobalVars.CScanData[station].orderedCells[20].ToString("0.000") + "','" +     //CEL21
-                                    GlobalVars.CScanData[station].orderedCells[21].ToString("0.000") + "','" +     //CEL22
-                                    GlobalVars.CScanData[station].orderedCells[22].ToString("0.000") + "','" +     //CEL23
-                                    GlobalVars.CScanData[station].orderedCells[23].ToString("0.000") + "','" +     //CEL24
-                                    GlobalVars.CScanData[station].TP1.ToString("0.0") + "','" +                  //TP1
-                                    GlobalVars.CScanData[station].TP2.ToString("0.0") + "','" +                  //TP2
-                                    GlobalVars.CScanData[station].TP3.ToString("0.0") + "','" +                  //TP3
-                                    GlobalVars.CScanData[station].TP4.ToString("0.0") + "','" +                  //TP4
-                                    GlobalVars.CScanData[station].TP5.ToString("0.0") + "','" +                  //TP5
-                                    "0.0" + "','" +                                                         //TP6
-                                    GlobalVars.CScanData[station].cellGND1.ToString("0.000") + "','" +             //CGND1
-                                    GlobalVars.CScanData[station].cellGND2.ToString("0.000") + "','" +             //CGND2
-                                    GlobalVars.CScanData[station].ref95V.ToString("0.000") + "','" +               //ref
-                                    GlobalVars.CScanData[station].ch0GND.ToString("0.000") + "','" +               //GND
-                                    GlobalVars.CScanData[station].plus5V.ToString("0.000") + "','" +              //FV
-                                    GlobalVars.CScanData[station].minus15.ToString("0.00") + "','" +              //MSV
-                                    GlobalVars.CScanData[station].plus15.ToString("0.00") +                       //PSV
-                                    "');";
+                                //first record the elapsed amount of time
+                                TimeSpan temp = stopwatch.Elapsed.Add(offset);
+                                // update the grid
+                                updateD(station, 7, ("Reading " + currentReading.ToString() + " of " + readings.ToString()));
+                                if (MasterSlaveTest) { updateD(slaveRow, 7, ("Reading " + currentReading.ToString() + " of " + readings.ToString())); }
 
-                                OleDbCommand myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
-
-                                lock (dataBaseLock)
+                                #region save a scan to the DB and update the main screen plots
+                                //  now try to INSERT INTO it
+                                try
                                 {
-                                    myAccessConn.Open();
-                                    myAccessCommand.ExecuteNonQuery();
-                                    myAccessConn.Close();
-                                }
-
-                                if (MWO2 != "" && MWO3 == "")
-                                {
-                                    // this is the case where the second work order is the bottom 11 cells of a 2X11 cable...
-                                    strUpdateCMD = "INSERT INTO ScanData (Station,BWO,STEP,RDG,[DATE],QS1,CTR,ETIME,CUR1,CUR2,VB1,VB2,VB3,VB4," +
-                                    "CEL01,CEL02,CEL03,CEL04,CEL05,CEL06,CEL07,CEL08,CEL09,CEL10,CEL11,CEL12,CEL13,CEL14,CEL15,CEL16,CEL17,CEL18,CEL19,CEL20,CEL21,CEL22,CEL23,CEL24," +
-                                    "BT1,BT2,BT3,BT4,BT5,BT6,CGND1,CGND2,REF,GND,FV,MSV,PSV) "
-                                    + "VALUES (" + station.ToString() + ",'" +                            //station number
-                                    MWO2.Trim() + "','" +                          //WorkOrderNumber
-                                    stepNum2.ToString("00") + "'," +                                            //StepNumber
-                                    currentReading.ToString() + ",#" +                                     //ReadingNumber
-                                    DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "#,'" +                  //date
-                                    GlobalVars.CScanData[station].QS1.ToString() + "','" +                  //QS1
-                                    GlobalVars.CScanData[station].CTR.ToString() + "','" +                  //CTR
-                                    temp.TotalDays.ToString("0.00000") + "','" +                                      //time elapsed in days
-                                    GlobalVars.CScanData[station].currentOne.ToString("0.0") + "','" +           //CUR1
-                                    GlobalVars.CScanData[station].currentTwo.ToString("0.0") + "','" +           //CUR2
-                                    GlobalVars.CScanData[station].VB1.ToString("0.00") + "','" +                  //VB1
-                                    GlobalVars.CScanData[station].VB2.ToString("0.00") + "','" +                  //VB2
-                                    GlobalVars.CScanData[station].VB3.ToString("0.00") + "','" +                  //VB3
-                                    GlobalVars.CScanData[station].VB4.ToString("0.00") + "','" +                  //VB4
-                                    GlobalVars.CScanData[station].orderedCells[11].ToString("0.000") + "','" +      //CEL01
-                                    GlobalVars.CScanData[station].orderedCells[12].ToString("0.000") + "','" +      //CEL02
-                                    GlobalVars.CScanData[station].orderedCells[13].ToString("0.000") + "','" +      //CEL03
-                                    GlobalVars.CScanData[station].orderedCells[14].ToString("0.000") + "','" +      //CEL04
-                                    GlobalVars.CScanData[station].orderedCells[15].ToString("0.000") + "','" +      //CEL05
-                                    GlobalVars.CScanData[station].orderedCells[16].ToString("0.000") + "','" +      //CEL06
-                                    GlobalVars.CScanData[station].orderedCells[17].ToString("0.000") + "','" +      //CEL07
-                                    GlobalVars.CScanData[station].orderedCells[18].ToString("0.000") + "','" +      //CEL08
-                                    GlobalVars.CScanData[station].orderedCells[19].ToString("0.000") + "','" +      //CEL09
-                                    GlobalVars.CScanData[station].orderedCells[20].ToString("0.000") + "','" +      //CEL10
-                                    GlobalVars.CScanData[station].orderedCells[21].ToString("0.000") + "','" +     //CEL11
-                                    GlobalVars.CScanData[station].orderedCells[0].ToString("0.000") + "','" +     //CEL12
-                                    GlobalVars.CScanData[station].orderedCells[1].ToString("0.000") + "','" +     //CEL13
-                                    GlobalVars.CScanData[station].orderedCells[2].ToString("0.000") + "','" +     //CEL14
-                                    GlobalVars.CScanData[station].orderedCells[3].ToString("0.000") + "','" +     //CEL15
-                                    GlobalVars.CScanData[station].orderedCells[4].ToString("0.000") + "','" +     //CEL16
-                                    GlobalVars.CScanData[station].orderedCells[5].ToString("0.000") + "','" +     //CEL17
-                                    GlobalVars.CScanData[station].orderedCells[6].ToString("0.000") + "','" +     //CEL18
-                                    GlobalVars.CScanData[station].orderedCells[7].ToString("0.000") + "','" +     //CEL19
-                                    GlobalVars.CScanData[station].orderedCells[8].ToString("0.000") + "','" +     //CEL20
-                                    GlobalVars.CScanData[station].orderedCells[9].ToString("0.000") + "','" +     //CEL21
-                                    GlobalVars.CScanData[station].orderedCells[10].ToString("0.000") + "','" +     //CEL22
-                                    GlobalVars.CScanData[station].orderedCells[22].ToString("0.000") + "','" +     //CEL23
-                                    GlobalVars.CScanData[station].orderedCells[23].ToString("0.000") + "','" +     //CEL24
-                                    GlobalVars.CScanData[station].TP1.ToString("0.0") + "','" +                  //TP1
-                                    GlobalVars.CScanData[station].TP2.ToString("0.0") + "','" +                  //TP2
-                                    GlobalVars.CScanData[station].TP3.ToString("0.0") + "','" +                  //TP3
-                                    GlobalVars.CScanData[station].TP4.ToString("0.0") + "','" +                  //TP4
-                                    GlobalVars.CScanData[station].TP5.ToString("0.0") + "','" +                  //TP5
-                                    "0.0" + "','" +                                                         //TP6
-                                    GlobalVars.CScanData[station].cellGND1.ToString("0.000") + "','" +             //CGND1
-                                    GlobalVars.CScanData[station].cellGND2.ToString("0.000") + "','" +             //CGND2
-                                    GlobalVars.CScanData[station].ref95V.ToString("0.000") + "','" +               //ref
-                                    GlobalVars.CScanData[station].ch0GND.ToString("0.000") + "','" +               //GND
-                                    GlobalVars.CScanData[station].plus5V.ToString("0.000") + "','" +              //FV
-                                    GlobalVars.CScanData[station].minus15.ToString("0.00") + "','" +              //MSV
-                                    GlobalVars.CScanData[station].plus15.ToString("0.00") +                       //PSV
-                                    "');";
-
-                                    myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
-
-                                    lock (dataBaseLock)
-                                    {
-                                        myAccessConn.Open();
-                                        myAccessCommand.ExecuteNonQuery();
-                                        myAccessConn.Close();
-                                    }
-                                }
-                                else if (MWO2 != "")
-                                {
-                                    // this is the case where the second work order is the middle 7 cells of a 3X7 cable...
-                                    strUpdateCMD = "INSERT INTO ScanData (Station,BWO,STEP,RDG,[DATE],QS1,CTR,ETIME,CUR1,CUR2,VB1,VB2,VB3,VB4," +
-                                    "CEL01,CEL02,CEL03,CEL04,CEL05,CEL06,CEL07,CEL08,CEL09,CEL10,CEL11,CEL12,CEL13,CEL14,CEL15,CEL16,CEL17,CEL18,CEL19,CEL20,CEL21,CEL22,CEL23,CEL24," +
-                                    "BT1,BT2,BT3,BT4,BT5,BT6,CGND1,CGND2,REF,GND,FV,MSV,PSV) "
-                                    + "VALUES (" + station.ToString() + ",'" +                            //station number
-                                    MWO2.Trim() + "','" +                          //WorkOrderNumber
-                                    stepNum2.ToString("00") + "'," +                                            //StepNumber
-                                    currentReading.ToString() + ",#" +                                     //ReadingNumber
-                                    DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "#,'" +                  //date
-                                    GlobalVars.CScanData[station].QS1.ToString() + "','" +                  //QS1
-                                    GlobalVars.CScanData[station].CTR.ToString() + "','" +                  //CTR
-                                    temp.TotalDays.ToString("0.00000") + "','" +                                      //time elapsed in days
-                                    GlobalVars.CScanData[station].currentOne.ToString("0.0") + "','" +           //CUR1
-                                    GlobalVars.CScanData[station].currentTwo.ToString("0.0") + "','" +           //CUR2
-                                    GlobalVars.CScanData[station].VB1.ToString("0.00") + "','" +                  //VB1
-                                    GlobalVars.CScanData[station].VB2.ToString("0.00") + "','" +                  //VB2
-                                    GlobalVars.CScanData[station].VB3.ToString("0.00") + "','" +                  //VB3
-                                    GlobalVars.CScanData[station].VB4.ToString("0.00") + "','" +                  //VB4
-                                    GlobalVars.CScanData[station].orderedCells[7].ToString("0.000") + "','" +      //CEL01
-                                    GlobalVars.CScanData[station].orderedCells[8].ToString("0.000") + "','" +      //CEL02
-                                    GlobalVars.CScanData[station].orderedCells[9].ToString("0.000") + "','" +      //CEL03
-                                    GlobalVars.CScanData[station].orderedCells[10].ToString("0.000") + "','" +      //CEL04
-                                    GlobalVars.CScanData[station].orderedCells[11].ToString("0.000") + "','" +      //CEL05
-                                    GlobalVars.CScanData[station].orderedCells[12].ToString("0.000") + "','" +      //CEL06
-                                    GlobalVars.CScanData[station].orderedCells[13].ToString("0.000") + "','" +      //CEL07
-                                    GlobalVars.CScanData[station].orderedCells[14].ToString("0.000") + "','" +      //CEL08
-                                    GlobalVars.CScanData[station].orderedCells[15].ToString("0.000") + "','" +      //CEL09
-                                    GlobalVars.CScanData[station].orderedCells[16].ToString("0.000") + "','" +      //CEL10
-                                    GlobalVars.CScanData[station].orderedCells[17].ToString("0.000") + "','" +     //CEL11
-                                    GlobalVars.CScanData[station].orderedCells[18].ToString("0.000") + "','" +     //CEL12
-                                    GlobalVars.CScanData[station].orderedCells[19].ToString("0.000") + "','" +     //CEL13
-                                    GlobalVars.CScanData[station].orderedCells[20].ToString("0.000") + "','" +     //CEL14
-                                    GlobalVars.CScanData[station].orderedCells[21].ToString("0.000") + "','" +     //CEL15
-                                    GlobalVars.CScanData[station].orderedCells[22].ToString("0.000") + "','" +     //CEL16
-                                    GlobalVars.CScanData[station].orderedCells[23].ToString("0.000") + "','" +     //CEL17
-                                    GlobalVars.CScanData[station].orderedCells[0].ToString("0.000") + "','" +     //CEL18
-                                    GlobalVars.CScanData[station].orderedCells[1].ToString("0.000") + "','" +     //CEL19
-                                    GlobalVars.CScanData[station].orderedCells[2].ToString("0.000") + "','" +     //CEL20
-                                    GlobalVars.CScanData[station].orderedCells[3].ToString("0.000") + "','" +     //CEL21
-                                    GlobalVars.CScanData[station].orderedCells[4].ToString("0.000") + "','" +     //CEL22
-                                    GlobalVars.CScanData[station].orderedCells[5].ToString("0.000") + "','" +     //CEL23
-                                    GlobalVars.CScanData[station].orderedCells[6].ToString("0.000") + "','" +     //CEL24
-                                    GlobalVars.CScanData[station].TP1.ToString("0.0") + "','" +                  //TP1
-                                    GlobalVars.CScanData[station].TP2.ToString("0.0") + "','" +                  //TP2
-                                    GlobalVars.CScanData[station].TP3.ToString("0.0") + "','" +                  //TP3
-                                    GlobalVars.CScanData[station].TP4.ToString("0.0") + "','" +                  //TP4
-                                    GlobalVars.CScanData[station].TP5.ToString("0.0") + "','" +                  //TP5
-                                    "0.0" + "','" +                                                         //TP6
-                                    GlobalVars.CScanData[station].cellGND1.ToString("0.000") + "','" +             //CGND1
-                                    GlobalVars.CScanData[station].cellGND2.ToString("0.000") + "','" +             //CGND2
-                                    GlobalVars.CScanData[station].ref95V.ToString("0.000") + "','" +               //ref
-                                    GlobalVars.CScanData[station].ch0GND.ToString("0.000") + "','" +               //GND
-                                    GlobalVars.CScanData[station].plus5V.ToString("0.000") + "','" +              //FV
-                                    GlobalVars.CScanData[station].minus15.ToString("0.00") + "','" +              //MSV
-                                    GlobalVars.CScanData[station].plus15.ToString("0.00") +                       //PSV
-                                    "');";
-
-                                    myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
-
-                                    lock (dataBaseLock)
-                                    {
-                                        myAccessConn.Open();
-                                        myAccessCommand.ExecuteNonQuery();
-                                        myAccessConn.Close();
-                                    }
-                                }
-
-                                if (MWO3 != "")
-                                {
-                                    // this is the case where the third work order is the last 7 cells of a 3X7 cable...
-                                    strUpdateCMD = "INSERT INTO ScanData (Station,BWO,STEP,RDG,[DATE],QS1,CTR,ETIME,CUR1,CUR2,VB1,VB2,VB3,VB4," +
-                                    "CEL01,CEL02,CEL03,CEL04,CEL05,CEL06,CEL07,CEL08,CEL09,CEL10,CEL11,CEL12,CEL13,CEL14,CEL15,CEL16,CEL17,CEL18,CEL19,CEL20,CEL21,CEL22,CEL23,CEL24," +
-                                    "BT1,BT2,BT3,BT4,BT5,BT6,CGND1,CGND2,REF,GND,FV,MSV,PSV) "
-                                    + "VALUES (" + station.ToString() + ",'" +                            //station number
-                                    MWO3.Trim() + "','" +                          //WorkOrderNumber
-                                    stepNum3.ToString("00") + "'," +                                            //StepNumber
-                                    currentReading.ToString() + ",#" +                                     //ReadingNumber
-                                    DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "#,'" +                  //date
-                                    GlobalVars.CScanData[station].QS1.ToString() + "','" +                  //QS1
-                                    GlobalVars.CScanData[station].CTR.ToString() + "','" +                  //CTR
-                                    temp.TotalDays.ToString("0.00000") + "','" +                                      //time elapsed in days
-                                    GlobalVars.CScanData[station].currentOne.ToString("0.0") + "','" +           //CUR1
-                                    GlobalVars.CScanData[station].currentTwo.ToString("0.0") + "','" +           //CUR2
-                                    GlobalVars.CScanData[station].VB1.ToString("0.00") + "','" +                  //VB1
-                                    GlobalVars.CScanData[station].VB2.ToString("0.00") + "','" +                  //VB2
-                                    GlobalVars.CScanData[station].VB3.ToString("0.00") + "','" +                  //VB3
-                                    GlobalVars.CScanData[station].VB4.ToString("0.00") + "','" +                  //VB4
-                                    GlobalVars.CScanData[station].orderedCells[14].ToString("0.000") + "','" +      //CEL01
-                                    GlobalVars.CScanData[station].orderedCells[15].ToString("0.000") + "','" +      //CEL02
-                                    GlobalVars.CScanData[station].orderedCells[16].ToString("0.000") + "','" +      //CEL03
-                                    GlobalVars.CScanData[station].orderedCells[17].ToString("0.000") + "','" +      //CEL04
-                                    GlobalVars.CScanData[station].orderedCells[18].ToString("0.000") + "','" +      //CEL05
-                                    GlobalVars.CScanData[station].orderedCells[19].ToString("0.000") + "','" +      //CEL06
-                                    GlobalVars.CScanData[station].orderedCells[20].ToString("0.000") + "','" +      //CEL07
-                                    GlobalVars.CScanData[station].orderedCells[21].ToString("0.000") + "','" +      //CEL08
-                                    GlobalVars.CScanData[station].orderedCells[22].ToString("0.000") + "','" +      //CEL09
-                                    GlobalVars.CScanData[station].orderedCells[23].ToString("0.000") + "','" +      //CEL10
-                                    GlobalVars.CScanData[station].orderedCells[0].ToString("0.000") + "','" +     //CEL11
-                                    GlobalVars.CScanData[station].orderedCells[1].ToString("0.000") + "','" +     //CEL12
-                                    GlobalVars.CScanData[station].orderedCells[2].ToString("0.000") + "','" +     //CEL13
-                                    GlobalVars.CScanData[station].orderedCells[3].ToString("0.000") + "','" +     //CEL14
-                                    GlobalVars.CScanData[station].orderedCells[4].ToString("0.000") + "','" +     //CEL15
-                                    GlobalVars.CScanData[station].orderedCells[5].ToString("0.000") + "','" +     //CEL16
-                                    GlobalVars.CScanData[station].orderedCells[6].ToString("0.000") + "','" +     //CEL17
-                                    GlobalVars.CScanData[station].orderedCells[7].ToString("0.000") + "','" +     //CEL18
-                                    GlobalVars.CScanData[station].orderedCells[8].ToString("0.000") + "','" +     //CEL19
-                                    GlobalVars.CScanData[station].orderedCells[9].ToString("0.000") + "','" +     //CEL20
-                                    GlobalVars.CScanData[station].orderedCells[10].ToString("0.000") + "','" +     //CEL21
-                                    GlobalVars.CScanData[station].orderedCells[11].ToString("0.000") + "','" +     //CEL22
-                                    GlobalVars.CScanData[station].orderedCells[12].ToString("0.000") + "','" +     //CEL23
-                                    GlobalVars.CScanData[station].orderedCells[13].ToString("0.000") + "','" +     //CEL24
-                                    GlobalVars.CScanData[station].TP1.ToString("0.0") + "','" +                  //TP1
-                                    GlobalVars.CScanData[station].TP2.ToString("0.0") + "','" +                  //TP2
-                                    GlobalVars.CScanData[station].TP3.ToString("0.0") + "','" +                  //TP3
-                                    GlobalVars.CScanData[station].TP4.ToString("0.0") + "','" +                  //TP4
-                                    GlobalVars.CScanData[station].TP5.ToString("0.0") + "','" +                  //TP5
-                                    "0.0" + "','" +                                                         //TP6
-                                    GlobalVars.CScanData[station].cellGND1.ToString("0.000") + "','" +             //CGND1
-                                    GlobalVars.CScanData[station].cellGND2.ToString("0.000") + "','" +             //CGND2
-                                    GlobalVars.CScanData[station].ref95V.ToString("0.000") + "','" +               //ref
-                                    GlobalVars.CScanData[station].ch0GND.ToString("0.000") + "','" +               //GND
-                                    GlobalVars.CScanData[station].plus5V.ToString("0.000") + "','" +              //FV
-                                    GlobalVars.CScanData[station].minus15.ToString("0.00") + "','" +              //MSV
-                                    GlobalVars.CScanData[station].plus15.ToString("0.00") +                       //PSV
-                                    "');";
-
-                                    myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
-
-                                    lock (dataBaseLock)
-                                    {
-                                        myAccessConn.Open();
-                                        myAccessCommand.ExecuteNonQuery();
-                                        myAccessConn.Close();
-                                    }
-                                }
-
-                                //also insert the slave reading if need be...
-                                if (MasterSlaveTest)
-                                {
-
-                                    strUpdateCMD = "INSERT INTO ScanData (Station,BWO,STEP,RDG,[DATE],QS1,CTR,ETIME,CUR1,CUR2,VB1,VB2,VB3,VB4," +
+                                    string strUpdateCMD = "INSERT INTO ScanData (Station,BWO,STEP,RDG,[DATE],QS1,CTR,ETIME,CUR1,CUR2,VB1,VB2,VB3,VB4," +
                                         "CEL01,CEL02,CEL03,CEL04,CEL05,CEL06,CEL07,CEL08,CEL09,CEL10,CEL11,CEL12,CEL13,CEL14,CEL15,CEL16,CEL17,CEL18,CEL19,CEL20,CEL21,CEL22,CEL23,CEL24," +
                                         "BT1,BT2,BT3,BT4,BT5,BT6,CGND1,CGND2,REF,GND,FV,MSV,PSV) "
-                                        + "VALUES (" + slaveRow.ToString() + ",'" +                            //slaveRow number
-                                        SWO1.Trim() + "','" +                          //WorkOrderNumber
-                                        slaveStepNum.ToString("00") + "'," +                                            //StepNumber
+                                        + "VALUES (" + station.ToString() + ",'" +                            //station number
+                                        MWO1.Trim() + "','" +                          //WorkOrderNumber
+                                        stepNum.ToString("00") + "'," +                                            //StepNumber
                                         currentReading.ToString() + ",#" +                                     //ReadingNumber
                                         DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "#,'" +                  //date
-                                        GlobalVars.CScanData[slaveRow].QS1.ToString() + "','" +                  //QS1
-                                        GlobalVars.CScanData[slaveRow].CTR.ToString() + "','" +                  //CTR
+                                        GlobalVars.CScanData[station].QS1.ToString() + "','" +                  //QS1
+                                        GlobalVars.CScanData[station].CTR.ToString() + "','" +                  //CTR
                                         temp.TotalDays.ToString("0.00000") + "','" +                                      //time elapsed in days
-                                        GlobalVars.CScanData[station].currentOne.ToString("0.0") + "','" +           //CUR1  (pulled from master CSCAN)
-                                        GlobalVars.CScanData[station].currentTwo.ToString("0.0") + "','" +           //CUR2  
-                                        GlobalVars.CScanData[slaveRow].VB1.ToString("0.00") + "','" +                  //VB1
-                                        GlobalVars.CScanData[slaveRow].VB2.ToString("0.00") + "','" +                  //VB2
-                                        GlobalVars.CScanData[slaveRow].VB3.ToString("0.00") + "','" +                  //VB3
-                                        GlobalVars.CScanData[slaveRow].VB4.ToString("0.00") + "','" +                  //VB4
-                                        GlobalVars.CScanData[slaveRow].orderedCells[0].ToString("0.000") + "','" +      //CEL01
-                                        GlobalVars.CScanData[slaveRow].orderedCells[1].ToString("0.000") + "','" +      //CEL02
-                                        GlobalVars.CScanData[slaveRow].orderedCells[2].ToString("0.000") + "','" +      //CEL03
-                                        GlobalVars.CScanData[slaveRow].orderedCells[3].ToString("0.000") + "','" +      //CEL04
-                                        GlobalVars.CScanData[slaveRow].orderedCells[4].ToString("0.000") + "','" +      //CEL05
-                                        GlobalVars.CScanData[slaveRow].orderedCells[5].ToString("0.000") + "','" +      //CEL06
-                                        GlobalVars.CScanData[slaveRow].orderedCells[6].ToString("0.000") + "','" +      //CEL07
-                                        GlobalVars.CScanData[slaveRow].orderedCells[7].ToString("0.000") + "','" +      //CEL08
-                                        GlobalVars.CScanData[slaveRow].orderedCells[8].ToString("0.000") + "','" +      //CEL09
-                                        GlobalVars.CScanData[slaveRow].orderedCells[9].ToString("0.000") + "','" +      //CEL10
-                                        GlobalVars.CScanData[slaveRow].orderedCells[10].ToString("0.000") + "','" +     //CEL11
-                                        GlobalVars.CScanData[slaveRow].orderedCells[11].ToString("0.000") + "','" +     //CEL12
-                                        GlobalVars.CScanData[slaveRow].orderedCells[12].ToString("0.000") + "','" +     //CEL13
-                                        GlobalVars.CScanData[slaveRow].orderedCells[13].ToString("0.000") + "','" +     //CEL14
-                                        GlobalVars.CScanData[slaveRow].orderedCells[14].ToString("0.000") + "','" +     //CEL15
-                                        GlobalVars.CScanData[slaveRow].orderedCells[15].ToString("0.000") + "','" +     //CEL16
-                                        GlobalVars.CScanData[slaveRow].orderedCells[16].ToString("0.000") + "','" +     //CEL17
-                                        GlobalVars.CScanData[slaveRow].orderedCells[17].ToString("0.000") + "','" +     //CEL18
-                                        GlobalVars.CScanData[slaveRow].orderedCells[18].ToString("0.000") + "','" +     //CEL19
-                                        GlobalVars.CScanData[slaveRow].orderedCells[19].ToString("0.000") + "','" +     //CEL20
-                                        GlobalVars.CScanData[slaveRow].orderedCells[20].ToString("0.000") + "','" +     //CEL21
-                                        GlobalVars.CScanData[slaveRow].orderedCells[21].ToString("0.000") + "','" +     //CEL22
-                                        GlobalVars.CScanData[slaveRow].orderedCells[22].ToString("0.000") + "','" +     //CEL23
-                                        GlobalVars.CScanData[slaveRow].orderedCells[23].ToString("0.000") + "','" +     //CEL24
-                                        GlobalVars.CScanData[station].TP1.ToString("0.0") + "','" +                  //TP1  (pulled from master CSCAN)
-                                        GlobalVars.CScanData[station].TP2.ToString("0.0") + "','" +                  //TP2  (pulled from master CSCAN)
-                                        GlobalVars.CScanData[station].TP3.ToString("0.0") + "','" +                  //TP3  (pulled from master CSCAN)
-                                        GlobalVars.CScanData[station].TP4.ToString("0.0") + "','" +                  //TP4  (pulled from master CSCAN)
-                                        GlobalVars.CScanData[station].TP5.ToString("0.0") + "','" +                  //TP5  (pulled from master CSCAN)
+                                        GlobalVars.CScanData[station].currentOne.ToString("0.0") + "','" +           //CUR1
+                                        GlobalVars.CScanData[station].currentTwo.ToString("0.0") + "','" +           //CUR2
+                                        GlobalVars.CScanData[station].VB1.ToString("0.00") + "','" +                  //VB1
+                                        GlobalVars.CScanData[station].VB2.ToString("0.00") + "','" +                  //VB2
+                                        GlobalVars.CScanData[station].VB3.ToString("0.00") + "','" +                  //VB3
+                                        GlobalVars.CScanData[station].VB4.ToString("0.00") + "','" +                  //VB4
+                                        GlobalVars.CScanData[station].orderedCells[0].ToString("0.000") + "','" +      //CEL01
+                                        GlobalVars.CScanData[station].orderedCells[1].ToString("0.000") + "','" +      //CEL02
+                                        GlobalVars.CScanData[station].orderedCells[2].ToString("0.000") + "','" +      //CEL03
+                                        GlobalVars.CScanData[station].orderedCells[3].ToString("0.000") + "','" +      //CEL04
+                                        GlobalVars.CScanData[station].orderedCells[4].ToString("0.000") + "','" +      //CEL05
+                                        GlobalVars.CScanData[station].orderedCells[5].ToString("0.000") + "','" +      //CEL06
+                                        GlobalVars.CScanData[station].orderedCells[6].ToString("0.000") + "','" +      //CEL07
+                                        GlobalVars.CScanData[station].orderedCells[7].ToString("0.000") + "','" +      //CEL08
+                                        GlobalVars.CScanData[station].orderedCells[8].ToString("0.000") + "','" +      //CEL09
+                                        GlobalVars.CScanData[station].orderedCells[9].ToString("0.000") + "','" +      //CEL10
+                                        GlobalVars.CScanData[station].orderedCells[10].ToString("0.000") + "','" +     //CEL11
+                                        GlobalVars.CScanData[station].orderedCells[11].ToString("0.000") + "','" +     //CEL12
+                                        GlobalVars.CScanData[station].orderedCells[12].ToString("0.000") + "','" +     //CEL13
+                                        GlobalVars.CScanData[station].orderedCells[13].ToString("0.000") + "','" +     //CEL14
+                                        GlobalVars.CScanData[station].orderedCells[14].ToString("0.000") + "','" +     //CEL15
+                                        GlobalVars.CScanData[station].orderedCells[15].ToString("0.000") + "','" +     //CEL16
+                                        GlobalVars.CScanData[station].orderedCells[16].ToString("0.000") + "','" +     //CEL17
+                                        GlobalVars.CScanData[station].orderedCells[17].ToString("0.000") + "','" +     //CEL18
+                                        GlobalVars.CScanData[station].orderedCells[18].ToString("0.000") + "','" +     //CEL19
+                                        GlobalVars.CScanData[station].orderedCells[19].ToString("0.000") + "','" +     //CEL20
+                                        GlobalVars.CScanData[station].orderedCells[20].ToString("0.000") + "','" +     //CEL21
+                                        GlobalVars.CScanData[station].orderedCells[21].ToString("0.000") + "','" +     //CEL22
+                                        GlobalVars.CScanData[station].orderedCells[22].ToString("0.000") + "','" +     //CEL23
+                                        GlobalVars.CScanData[station].orderedCells[23].ToString("0.000") + "','" +     //CEL24
+                                        GlobalVars.CScanData[station].TP1.ToString("0.0") + "','" +                  //TP1
+                                        GlobalVars.CScanData[station].TP2.ToString("0.0") + "','" +                  //TP2
+                                        GlobalVars.CScanData[station].TP3.ToString("0.0") + "','" +                  //TP3
+                                        GlobalVars.CScanData[station].TP4.ToString("0.0") + "','" +                  //TP4
+                                        GlobalVars.CScanData[station].TP5.ToString("0.0") + "','" +                  //TP5
                                         "0.0" + "','" +                                                         //TP6
-                                        GlobalVars.CScanData[slaveRow].cellGND1.ToString("0.000") + "','" +             //CGND1
-                                        GlobalVars.CScanData[slaveRow].cellGND2.ToString("0.000") + "','" +             //CGND2
-                                        GlobalVars.CScanData[slaveRow].ref95V.ToString("0.000") + "','" +               //ref
-                                        GlobalVars.CScanData[slaveRow].ch0GND.ToString("0.000") + "','" +               //GND
-                                        GlobalVars.CScanData[slaveRow].plus5V.ToString("0.000") + "','" +              //FV
-                                        GlobalVars.CScanData[slaveRow].minus15.ToString("0.00") + "','" +              //MSV
-                                        GlobalVars.CScanData[slaveRow].plus15.ToString("0.00") +                       //PSV
+                                        GlobalVars.CScanData[station].cellGND1.ToString("0.000") + "','" +             //CGND1
+                                        GlobalVars.CScanData[station].cellGND2.ToString("0.000") + "','" +             //CGND2
+                                        GlobalVars.CScanData[station].ref95V.ToString("0.000") + "','" +               //ref
+                                        GlobalVars.CScanData[station].ch0GND.ToString("0.000") + "','" +               //GND
+                                        GlobalVars.CScanData[station].plus5V.ToString("0.000") + "','" +              //FV
+                                        GlobalVars.CScanData[station].minus15.ToString("0.00") + "','" +              //MSV
+                                        GlobalVars.CScanData[station].plus15.ToString("0.00") +                       //PSV
                                         "');";
 
-                                    myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
+                                    OleDbCommand myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
 
                                     lock (dataBaseLock)
                                     {
                                         myAccessConn.Open();
                                         myAccessCommand.ExecuteNonQuery();
                                         myAccessConn.Close();
-                                    } // end lock
+                                    }
 
-                                    if (SWO2 != "" && SWO3 == "")
+                                    if (MWO2 != "" && MWO3 == "")
                                     {
                                         // this is the case where the second work order is the bottom 11 cells of a 2X11 cable...
                                         strUpdateCMD = "INSERT INTO ScanData (Station,BWO,STEP,RDG,[DATE],QS1,CTR,ETIME,CUR1,CUR2,VB1,VB2,VB3,VB4," +
-                                            "CEL01,CEL02,CEL03,CEL04,CEL05,CEL06,CEL07,CEL08,CEL09,CEL10,CEL11,CEL12,CEL13,CEL14,CEL15,CEL16,CEL17,CEL18,CEL19,CEL20,CEL21,CEL22,CEL23,CEL24," +
-                                            "BT1,BT2,BT3,BT4,BT5,BT6,CGND1,CGND2,REF,GND,FV,MSV,PSV) "
-                                            + "VALUES (" + station.ToString() + ",'" +                            //station number
-                                            SWO2.Trim() + "','" +                          //WorkOrderNumber
-                                            slaveStepNum2.ToString("00") + "'," +                                            //StepNumber
-                                            currentReading.ToString() + ",#" +                                     //ReadingNumber
-                                            DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "#,'" +                  //date
-                                            GlobalVars.CScanData[station].QS1.ToString() + "','" +                  //QS1
-                                            GlobalVars.CScanData[station].CTR.ToString() + "','" +                  //CTR
-                                            temp.TotalDays.ToString("0.00000") + "','" +                                      //time elapsed in days
-                                            GlobalVars.CScanData[station].currentOne.ToString("0.0") + "','" +           //CUR1
-                                            GlobalVars.CScanData[station].currentTwo.ToString("0.0") + "','" +           //CUR2
-                                            GlobalVars.CScanData[slaveRow].VB1.ToString("0.00") + "','" +                  //VB1
-                                            GlobalVars.CScanData[slaveRow].VB2.ToString("0.00") + "','" +                  //VB2
-                                            GlobalVars.CScanData[slaveRow].VB3.ToString("0.00") + "','" +                  //VB3
-                                            GlobalVars.CScanData[slaveRow].VB4.ToString("0.00") + "','" +                  //VB4
-                                            GlobalVars.CScanData[slaveRow].orderedCells[11].ToString("0.000") + "','" +      //CEL01
-                                            GlobalVars.CScanData[slaveRow].orderedCells[12].ToString("0.000") + "','" +      //CEL02
-                                            GlobalVars.CScanData[slaveRow].orderedCells[13].ToString("0.000") + "','" +      //CEL03
-                                            GlobalVars.CScanData[slaveRow].orderedCells[14].ToString("0.000") + "','" +      //CEL04
-                                            GlobalVars.CScanData[slaveRow].orderedCells[15].ToString("0.000") + "','" +      //CEL05
-                                            GlobalVars.CScanData[slaveRow].orderedCells[16].ToString("0.000") + "','" +      //CEL06
-                                            GlobalVars.CScanData[slaveRow].orderedCells[17].ToString("0.000") + "','" +      //CEL07
-                                            GlobalVars.CScanData[slaveRow].orderedCells[18].ToString("0.000") + "','" +      //CEL08
-                                            GlobalVars.CScanData[slaveRow].orderedCells[19].ToString("0.000") + "','" +      //CEL09
-                                            GlobalVars.CScanData[slaveRow].orderedCells[20].ToString("0.000") + "','" +      //CEL10
-                                            GlobalVars.CScanData[slaveRow].orderedCells[21].ToString("0.000") + "','" +     //CEL11
-                                            GlobalVars.CScanData[slaveRow].orderedCells[0].ToString("0.000") + "','" +     //CEL12
-                                            GlobalVars.CScanData[slaveRow].orderedCells[1].ToString("0.000") + "','" +     //CEL13
-                                            GlobalVars.CScanData[slaveRow].orderedCells[2].ToString("0.000") + "','" +     //CEL14
-                                            GlobalVars.CScanData[slaveRow].orderedCells[3].ToString("0.000") + "','" +     //CEL15
-                                            GlobalVars.CScanData[slaveRow].orderedCells[4].ToString("0.000") + "','" +     //CEL16
-                                            GlobalVars.CScanData[slaveRow].orderedCells[5].ToString("0.000") + "','" +     //CEL17
-                                            GlobalVars.CScanData[slaveRow].orderedCells[6].ToString("0.000") + "','" +     //CEL18
-                                            GlobalVars.CScanData[slaveRow].orderedCells[7].ToString("0.000") + "','" +     //CEL19
-                                            GlobalVars.CScanData[slaveRow].orderedCells[8].ToString("0.000") + "','" +     //CEL20
-                                            GlobalVars.CScanData[slaveRow].orderedCells[9].ToString("0.000") + "','" +     //CEL21
-                                            GlobalVars.CScanData[slaveRow].orderedCells[10].ToString("0.000") + "','" +     //CEL22
-                                            GlobalVars.CScanData[slaveRow].orderedCells[22].ToString("0.000") + "','" +     //CEL23
-                                            GlobalVars.CScanData[slaveRow].orderedCells[23].ToString("0.000") + "','" +     //CEL24
-                                            GlobalVars.CScanData[station].TP1.ToString("0.0") + "','" +                  //TP1
-                                            GlobalVars.CScanData[station].TP2.ToString("0.0") + "','" +                  //TP2
-                                            GlobalVars.CScanData[station].TP3.ToString("0.0") + "','" +                  //TP3
-                                            GlobalVars.CScanData[station].TP4.ToString("0.0") + "','" +                  //TP4
-                                            GlobalVars.CScanData[station].TP5.ToString("0.0") + "','" +                  //TP5
-                                            "0.0" + "','" +                                                         //TP6
-                                            GlobalVars.CScanData[slaveRow].cellGND1.ToString("0.000") + "','" +             //CGND1
-                                            GlobalVars.CScanData[slaveRow].cellGND2.ToString("0.000") + "','" +             //CGND2
-                                            GlobalVars.CScanData[slaveRow].ref95V.ToString("0.000") + "','" +               //ref
-                                            GlobalVars.CScanData[slaveRow].ch0GND.ToString("0.000") + "','" +               //GND
-                                            GlobalVars.CScanData[slaveRow].plus5V.ToString("0.000") + "','" +              //FV
-                                            GlobalVars.CScanData[slaveRow].minus15.ToString("0.00") + "','" +              //MSV
-                                            GlobalVars.CScanData[slaveRow].plus15.ToString("0.00") +                       //PSV
-                                            "');";
+                                        "CEL01,CEL02,CEL03,CEL04,CEL05,CEL06,CEL07,CEL08,CEL09,CEL10,CEL11,CEL12,CEL13,CEL14,CEL15,CEL16,CEL17,CEL18,CEL19,CEL20,CEL21,CEL22,CEL23,CEL24," +
+                                        "BT1,BT2,BT3,BT4,BT5,BT6,CGND1,CGND2,REF,GND,FV,MSV,PSV) "
+                                        + "VALUES (" + station.ToString() + ",'" +                            //station number
+                                        MWO2.Trim() + "','" +                          //WorkOrderNumber
+                                        stepNum2.ToString("00") + "'," +                                            //StepNumber
+                                        currentReading.ToString() + ",#" +                                     //ReadingNumber
+                                        DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "#,'" +                  //date
+                                        GlobalVars.CScanData[station].QS1.ToString() + "','" +                  //QS1
+                                        GlobalVars.CScanData[station].CTR.ToString() + "','" +                  //CTR
+                                        temp.TotalDays.ToString("0.00000") + "','" +                                      //time elapsed in days
+                                        GlobalVars.CScanData[station].currentOne.ToString("0.0") + "','" +           //CUR1
+                                        GlobalVars.CScanData[station].currentTwo.ToString("0.0") + "','" +           //CUR2
+                                        GlobalVars.CScanData[station].VB1.ToString("0.00") + "','" +                  //VB1
+                                        GlobalVars.CScanData[station].VB2.ToString("0.00") + "','" +                  //VB2
+                                        GlobalVars.CScanData[station].VB3.ToString("0.00") + "','" +                  //VB3
+                                        GlobalVars.CScanData[station].VB4.ToString("0.00") + "','" +                  //VB4
+                                        GlobalVars.CScanData[station].orderedCells[11].ToString("0.000") + "','" +      //CEL01
+                                        GlobalVars.CScanData[station].orderedCells[12].ToString("0.000") + "','" +      //CEL02
+                                        GlobalVars.CScanData[station].orderedCells[13].ToString("0.000") + "','" +      //CEL03
+                                        GlobalVars.CScanData[station].orderedCells[14].ToString("0.000") + "','" +      //CEL04
+                                        GlobalVars.CScanData[station].orderedCells[15].ToString("0.000") + "','" +      //CEL05
+                                        GlobalVars.CScanData[station].orderedCells[16].ToString("0.000") + "','" +      //CEL06
+                                        GlobalVars.CScanData[station].orderedCells[17].ToString("0.000") + "','" +      //CEL07
+                                        GlobalVars.CScanData[station].orderedCells[18].ToString("0.000") + "','" +      //CEL08
+                                        GlobalVars.CScanData[station].orderedCells[19].ToString("0.000") + "','" +      //CEL09
+                                        GlobalVars.CScanData[station].orderedCells[20].ToString("0.000") + "','" +      //CEL10
+                                        GlobalVars.CScanData[station].orderedCells[21].ToString("0.000") + "','" +     //CEL11
+                                        GlobalVars.CScanData[station].orderedCells[0].ToString("0.000") + "','" +     //CEL12
+                                        GlobalVars.CScanData[station].orderedCells[1].ToString("0.000") + "','" +     //CEL13
+                                        GlobalVars.CScanData[station].orderedCells[2].ToString("0.000") + "','" +     //CEL14
+                                        GlobalVars.CScanData[station].orderedCells[3].ToString("0.000") + "','" +     //CEL15
+                                        GlobalVars.CScanData[station].orderedCells[4].ToString("0.000") + "','" +     //CEL16
+                                        GlobalVars.CScanData[station].orderedCells[5].ToString("0.000") + "','" +     //CEL17
+                                        GlobalVars.CScanData[station].orderedCells[6].ToString("0.000") + "','" +     //CEL18
+                                        GlobalVars.CScanData[station].orderedCells[7].ToString("0.000") + "','" +     //CEL19
+                                        GlobalVars.CScanData[station].orderedCells[8].ToString("0.000") + "','" +     //CEL20
+                                        GlobalVars.CScanData[station].orderedCells[9].ToString("0.000") + "','" +     //CEL21
+                                        GlobalVars.CScanData[station].orderedCells[10].ToString("0.000") + "','" +     //CEL22
+                                        GlobalVars.CScanData[station].orderedCells[22].ToString("0.000") + "','" +     //CEL23
+                                        GlobalVars.CScanData[station].orderedCells[23].ToString("0.000") + "','" +     //CEL24
+                                        GlobalVars.CScanData[station].TP1.ToString("0.0") + "','" +                  //TP1
+                                        GlobalVars.CScanData[station].TP2.ToString("0.0") + "','" +                  //TP2
+                                        GlobalVars.CScanData[station].TP3.ToString("0.0") + "','" +                  //TP3
+                                        GlobalVars.CScanData[station].TP4.ToString("0.0") + "','" +                  //TP4
+                                        GlobalVars.CScanData[station].TP5.ToString("0.0") + "','" +                  //TP5
+                                        "0.0" + "','" +                                                         //TP6
+                                        GlobalVars.CScanData[station].cellGND1.ToString("0.000") + "','" +             //CGND1
+                                        GlobalVars.CScanData[station].cellGND2.ToString("0.000") + "','" +             //CGND2
+                                        GlobalVars.CScanData[station].ref95V.ToString("0.000") + "','" +               //ref
+                                        GlobalVars.CScanData[station].ch0GND.ToString("0.000") + "','" +               //GND
+                                        GlobalVars.CScanData[station].plus5V.ToString("0.000") + "','" +              //FV
+                                        GlobalVars.CScanData[station].minus15.ToString("0.00") + "','" +              //MSV
+                                        GlobalVars.CScanData[station].plus15.ToString("0.00") +                       //PSV
+                                        "');";
 
                                         myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
 
@@ -3342,63 +3070,63 @@ namespace NewBTASProto
                                             myAccessConn.Close();
                                         }
                                     }
-                                    else if (SWO2 != "")
+                                    else if (MWO2 != "")
                                     {
                                         // this is the case where the second work order is the middle 7 cells of a 3X7 cable...
                                         strUpdateCMD = "INSERT INTO ScanData (Station,BWO,STEP,RDG,[DATE],QS1,CTR,ETIME,CUR1,CUR2,VB1,VB2,VB3,VB4," +
                                         "CEL01,CEL02,CEL03,CEL04,CEL05,CEL06,CEL07,CEL08,CEL09,CEL10,CEL11,CEL12,CEL13,CEL14,CEL15,CEL16,CEL17,CEL18,CEL19,CEL20,CEL21,CEL22,CEL23,CEL24," +
                                         "BT1,BT2,BT3,BT4,BT5,BT6,CGND1,CGND2,REF,GND,FV,MSV,PSV) "
-                                        + "VALUES (" + slaveRow.ToString() + ",'" +                            //station number
-                                        SWO2.Trim() + "','" +                          //WorkOrderNumber
-                                        slaveStepNum2.ToString("00") + "'," +                                            //StepNumber
+                                        + "VALUES (" + station.ToString() + ",'" +                            //station number
+                                        MWO2.Trim() + "','" +                          //WorkOrderNumber
+                                        stepNum2.ToString("00") + "'," +                                            //StepNumber
                                         currentReading.ToString() + ",#" +                                     //ReadingNumber
                                         DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "#,'" +                  //date
-                                        GlobalVars.CScanData[slaveRow].QS1.ToString() + "','" +                  //QS1
-                                        GlobalVars.CScanData[slaveRow].CTR.ToString() + "','" +                  //CTR
+                                        GlobalVars.CScanData[station].QS1.ToString() + "','" +                  //QS1
+                                        GlobalVars.CScanData[station].CTR.ToString() + "','" +                  //CTR
                                         temp.TotalDays.ToString("0.00000") + "','" +                                      //time elapsed in days
                                         GlobalVars.CScanData[station].currentOne.ToString("0.0") + "','" +           //CUR1
                                         GlobalVars.CScanData[station].currentTwo.ToString("0.0") + "','" +           //CUR2
-                                        GlobalVars.CScanData[slaveRow].VB1.ToString("0.00") + "','" +                  //VB1
-                                        GlobalVars.CScanData[slaveRow].VB2.ToString("0.00") + "','" +                  //VB2
-                                        GlobalVars.CScanData[slaveRow].VB3.ToString("0.00") + "','" +                  //VB3
-                                        GlobalVars.CScanData[slaveRow].VB4.ToString("0.00") + "','" +                  //VB4
-                                        GlobalVars.CScanData[slaveRow].orderedCells[7].ToString("0.000") + "','" +      //CEL01
-                                        GlobalVars.CScanData[slaveRow].orderedCells[8].ToString("0.000") + "','" +      //CEL02
-                                        GlobalVars.CScanData[slaveRow].orderedCells[9].ToString("0.000") + "','" +      //CEL03
-                                        GlobalVars.CScanData[slaveRow].orderedCells[10].ToString("0.000") + "','" +      //CEL04
-                                        GlobalVars.CScanData[slaveRow].orderedCells[11].ToString("0.000") + "','" +      //CEL05
-                                        GlobalVars.CScanData[slaveRow].orderedCells[12].ToString("0.000") + "','" +      //CEL06
-                                        GlobalVars.CScanData[slaveRow].orderedCells[13].ToString("0.000") + "','" +      //CEL07
-                                        GlobalVars.CScanData[slaveRow].orderedCells[14].ToString("0.000") + "','" +      //CEL08
-                                        GlobalVars.CScanData[slaveRow].orderedCells[15].ToString("0.000") + "','" +      //CEL09
-                                        GlobalVars.CScanData[slaveRow].orderedCells[16].ToString("0.000") + "','" +      //CEL10
-                                        GlobalVars.CScanData[slaveRow].orderedCells[17].ToString("0.000") + "','" +     //CEL11
-                                        GlobalVars.CScanData[slaveRow].orderedCells[18].ToString("0.000") + "','" +     //CEL12
-                                        GlobalVars.CScanData[slaveRow].orderedCells[19].ToString("0.000") + "','" +     //CEL13
-                                        GlobalVars.CScanData[slaveRow].orderedCells[20].ToString("0.000") + "','" +     //CEL14
-                                        GlobalVars.CScanData[slaveRow].orderedCells[21].ToString("0.000") + "','" +     //CEL15
-                                        GlobalVars.CScanData[slaveRow].orderedCells[22].ToString("0.000") + "','" +     //CEL16
-                                        GlobalVars.CScanData[slaveRow].orderedCells[23].ToString("0.000") + "','" +     //CEL17
-                                        GlobalVars.CScanData[slaveRow].orderedCells[0].ToString("0.000") + "','" +     //CEL18
-                                        GlobalVars.CScanData[slaveRow].orderedCells[1].ToString("0.000") + "','" +     //CEL19
-                                        GlobalVars.CScanData[slaveRow].orderedCells[2].ToString("0.000") + "','" +     //CEL20
-                                        GlobalVars.CScanData[slaveRow].orderedCells[3].ToString("0.000") + "','" +     //CEL21
-                                        GlobalVars.CScanData[slaveRow].orderedCells[4].ToString("0.000") + "','" +     //CEL22
-                                        GlobalVars.CScanData[slaveRow].orderedCells[5].ToString("0.000") + "','" +     //CEL23
-                                        GlobalVars.CScanData[slaveRow].orderedCells[6].ToString("0.000") + "','" +     //CEL24
+                                        GlobalVars.CScanData[station].VB1.ToString("0.00") + "','" +                  //VB1
+                                        GlobalVars.CScanData[station].VB2.ToString("0.00") + "','" +                  //VB2
+                                        GlobalVars.CScanData[station].VB3.ToString("0.00") + "','" +                  //VB3
+                                        GlobalVars.CScanData[station].VB4.ToString("0.00") + "','" +                  //VB4
+                                        GlobalVars.CScanData[station].orderedCells[7].ToString("0.000") + "','" +      //CEL01
+                                        GlobalVars.CScanData[station].orderedCells[8].ToString("0.000") + "','" +      //CEL02
+                                        GlobalVars.CScanData[station].orderedCells[9].ToString("0.000") + "','" +      //CEL03
+                                        GlobalVars.CScanData[station].orderedCells[10].ToString("0.000") + "','" +      //CEL04
+                                        GlobalVars.CScanData[station].orderedCells[11].ToString("0.000") + "','" +      //CEL05
+                                        GlobalVars.CScanData[station].orderedCells[12].ToString("0.000") + "','" +      //CEL06
+                                        GlobalVars.CScanData[station].orderedCells[13].ToString("0.000") + "','" +      //CEL07
+                                        GlobalVars.CScanData[station].orderedCells[14].ToString("0.000") + "','" +      //CEL08
+                                        GlobalVars.CScanData[station].orderedCells[15].ToString("0.000") + "','" +      //CEL09
+                                        GlobalVars.CScanData[station].orderedCells[16].ToString("0.000") + "','" +      //CEL10
+                                        GlobalVars.CScanData[station].orderedCells[17].ToString("0.000") + "','" +     //CEL11
+                                        GlobalVars.CScanData[station].orderedCells[18].ToString("0.000") + "','" +     //CEL12
+                                        GlobalVars.CScanData[station].orderedCells[19].ToString("0.000") + "','" +     //CEL13
+                                        GlobalVars.CScanData[station].orderedCells[20].ToString("0.000") + "','" +     //CEL14
+                                        GlobalVars.CScanData[station].orderedCells[21].ToString("0.000") + "','" +     //CEL15
+                                        GlobalVars.CScanData[station].orderedCells[22].ToString("0.000") + "','" +     //CEL16
+                                        GlobalVars.CScanData[station].orderedCells[23].ToString("0.000") + "','" +     //CEL17
+                                        GlobalVars.CScanData[station].orderedCells[0].ToString("0.000") + "','" +     //CEL18
+                                        GlobalVars.CScanData[station].orderedCells[1].ToString("0.000") + "','" +     //CEL19
+                                        GlobalVars.CScanData[station].orderedCells[2].ToString("0.000") + "','" +     //CEL20
+                                        GlobalVars.CScanData[station].orderedCells[3].ToString("0.000") + "','" +     //CEL21
+                                        GlobalVars.CScanData[station].orderedCells[4].ToString("0.000") + "','" +     //CEL22
+                                        GlobalVars.CScanData[station].orderedCells[5].ToString("0.000") + "','" +     //CEL23
+                                        GlobalVars.CScanData[station].orderedCells[6].ToString("0.000") + "','" +     //CEL24
                                         GlobalVars.CScanData[station].TP1.ToString("0.0") + "','" +                  //TP1
                                         GlobalVars.CScanData[station].TP2.ToString("0.0") + "','" +                  //TP2
                                         GlobalVars.CScanData[station].TP3.ToString("0.0") + "','" +                  //TP3
                                         GlobalVars.CScanData[station].TP4.ToString("0.0") + "','" +                  //TP4
                                         GlobalVars.CScanData[station].TP5.ToString("0.0") + "','" +                  //TP5
                                         "0.0" + "','" +                                                         //TP6
-                                        GlobalVars.CScanData[slaveRow].cellGND1.ToString("0.000") + "','" +             //CGND1
-                                        GlobalVars.CScanData[slaveRow].cellGND2.ToString("0.000") + "','" +             //CGND2
-                                        GlobalVars.CScanData[slaveRow].ref95V.ToString("0.000") + "','" +               //ref
-                                        GlobalVars.CScanData[slaveRow].ch0GND.ToString("0.000") + "','" +               //GND
-                                        GlobalVars.CScanData[slaveRow].plus5V.ToString("0.000") + "','" +              //FV
-                                        GlobalVars.CScanData[slaveRow].minus15.ToString("0.00") + "','" +              //MSV
-                                        GlobalVars.CScanData[slaveRow].plus15.ToString("0.00") +                       //PSV
+                                        GlobalVars.CScanData[station].cellGND1.ToString("0.000") + "','" +             //CGND1
+                                        GlobalVars.CScanData[station].cellGND2.ToString("0.000") + "','" +             //CGND2
+                                        GlobalVars.CScanData[station].ref95V.ToString("0.000") + "','" +               //ref
+                                        GlobalVars.CScanData[station].ch0GND.ToString("0.000") + "','" +               //GND
+                                        GlobalVars.CScanData[station].plus5V.ToString("0.000") + "','" +              //FV
+                                        GlobalVars.CScanData[station].minus15.ToString("0.00") + "','" +              //MSV
+                                        GlobalVars.CScanData[station].plus15.ToString("0.00") +                       //PSV
                                         "');";
 
                                         myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
@@ -3417,57 +3145,57 @@ namespace NewBTASProto
                                         strUpdateCMD = "INSERT INTO ScanData (Station,BWO,STEP,RDG,[DATE],QS1,CTR,ETIME,CUR1,CUR2,VB1,VB2,VB3,VB4," +
                                         "CEL01,CEL02,CEL03,CEL04,CEL05,CEL06,CEL07,CEL08,CEL09,CEL10,CEL11,CEL12,CEL13,CEL14,CEL15,CEL16,CEL17,CEL18,CEL19,CEL20,CEL21,CEL22,CEL23,CEL24," +
                                         "BT1,BT2,BT3,BT4,BT5,BT6,CGND1,CGND2,REF,GND,FV,MSV,PSV) "
-                                        + "VALUES (" + slaveRow.ToString() + ",'" +                            //station number
-                                        SWO3.Trim() + "','" +                          //WorkOrderNumber
-                                        slaveStepNum3.ToString("00") + "'," +                                            //StepNumber
+                                        + "VALUES (" + station.ToString() + ",'" +                            //station number
+                                        MWO3.Trim() + "','" +                          //WorkOrderNumber
+                                        stepNum3.ToString("00") + "'," +                                            //StepNumber
                                         currentReading.ToString() + ",#" +                                     //ReadingNumber
                                         DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "#,'" +                  //date
-                                        GlobalVars.CScanData[slaveRow].QS1.ToString() + "','" +                  //QS1
-                                        GlobalVars.CScanData[slaveRow].CTR.ToString() + "','" +                  //CTR
+                                        GlobalVars.CScanData[station].QS1.ToString() + "','" +                  //QS1
+                                        GlobalVars.CScanData[station].CTR.ToString() + "','" +                  //CTR
                                         temp.TotalDays.ToString("0.00000") + "','" +                                      //time elapsed in days
                                         GlobalVars.CScanData[station].currentOne.ToString("0.0") + "','" +           //CUR1
                                         GlobalVars.CScanData[station].currentTwo.ToString("0.0") + "','" +           //CUR2
-                                        GlobalVars.CScanData[slaveRow].VB1.ToString("0.00") + "','" +                  //VB1
-                                        GlobalVars.CScanData[slaveRow].VB2.ToString("0.00") + "','" +                  //VB2
-                                        GlobalVars.CScanData[slaveRow].VB3.ToString("0.00") + "','" +                  //VB3
-                                        GlobalVars.CScanData[slaveRow].VB4.ToString("0.00") + "','" +                  //VB4
-                                        GlobalVars.CScanData[slaveRow].orderedCells[14].ToString("0.000") + "','" +      //CEL01
-                                        GlobalVars.CScanData[slaveRow].orderedCells[15].ToString("0.000") + "','" +      //CEL02
-                                        GlobalVars.CScanData[slaveRow].orderedCells[16].ToString("0.000") + "','" +      //CEL03
-                                        GlobalVars.CScanData[slaveRow].orderedCells[17].ToString("0.000") + "','" +      //CEL04
-                                        GlobalVars.CScanData[slaveRow].orderedCells[18].ToString("0.000") + "','" +      //CEL05
-                                        GlobalVars.CScanData[slaveRow].orderedCells[19].ToString("0.000") + "','" +      //CEL06
-                                        GlobalVars.CScanData[slaveRow].orderedCells[20].ToString("0.000") + "','" +      //CEL07
-                                        GlobalVars.CScanData[slaveRow].orderedCells[21].ToString("0.000") + "','" +      //CEL08
-                                        GlobalVars.CScanData[slaveRow].orderedCells[22].ToString("0.000") + "','" +      //CEL09
-                                        GlobalVars.CScanData[slaveRow].orderedCells[23].ToString("0.000") + "','" +      //CEL10
-                                        GlobalVars.CScanData[slaveRow].orderedCells[0].ToString("0.000") + "','" +     //CEL11
-                                        GlobalVars.CScanData[slaveRow].orderedCells[1].ToString("0.000") + "','" +     //CEL12
-                                        GlobalVars.CScanData[slaveRow].orderedCells[2].ToString("0.000") + "','" +     //CEL13
-                                        GlobalVars.CScanData[slaveRow].orderedCells[3].ToString("0.000") + "','" +     //CEL14
-                                        GlobalVars.CScanData[slaveRow].orderedCells[4].ToString("0.000") + "','" +     //CEL15
-                                        GlobalVars.CScanData[slaveRow].orderedCells[5].ToString("0.000") + "','" +     //CEL16
-                                        GlobalVars.CScanData[slaveRow].orderedCells[6].ToString("0.000") + "','" +     //CEL17
-                                        GlobalVars.CScanData[slaveRow].orderedCells[7].ToString("0.000") + "','" +     //CEL18
-                                        GlobalVars.CScanData[slaveRow].orderedCells[8].ToString("0.000") + "','" +     //CEL19
-                                        GlobalVars.CScanData[slaveRow].orderedCells[9].ToString("0.000") + "','" +     //CEL20
-                                        GlobalVars.CScanData[slaveRow].orderedCells[10].ToString("0.000") + "','" +     //CEL21
-                                        GlobalVars.CScanData[slaveRow].orderedCells[11].ToString("0.000") + "','" +     //CEL22
-                                        GlobalVars.CScanData[slaveRow].orderedCells[12].ToString("0.000") + "','" +     //CEL23
-                                        GlobalVars.CScanData[slaveRow].orderedCells[13].ToString("0.000") + "','" +     //CEL24
+                                        GlobalVars.CScanData[station].VB1.ToString("0.00") + "','" +                  //VB1
+                                        GlobalVars.CScanData[station].VB2.ToString("0.00") + "','" +                  //VB2
+                                        GlobalVars.CScanData[station].VB3.ToString("0.00") + "','" +                  //VB3
+                                        GlobalVars.CScanData[station].VB4.ToString("0.00") + "','" +                  //VB4
+                                        GlobalVars.CScanData[station].orderedCells[14].ToString("0.000") + "','" +      //CEL01
+                                        GlobalVars.CScanData[station].orderedCells[15].ToString("0.000") + "','" +      //CEL02
+                                        GlobalVars.CScanData[station].orderedCells[16].ToString("0.000") + "','" +      //CEL03
+                                        GlobalVars.CScanData[station].orderedCells[17].ToString("0.000") + "','" +      //CEL04
+                                        GlobalVars.CScanData[station].orderedCells[18].ToString("0.000") + "','" +      //CEL05
+                                        GlobalVars.CScanData[station].orderedCells[19].ToString("0.000") + "','" +      //CEL06
+                                        GlobalVars.CScanData[station].orderedCells[20].ToString("0.000") + "','" +      //CEL07
+                                        GlobalVars.CScanData[station].orderedCells[21].ToString("0.000") + "','" +      //CEL08
+                                        GlobalVars.CScanData[station].orderedCells[22].ToString("0.000") + "','" +      //CEL09
+                                        GlobalVars.CScanData[station].orderedCells[23].ToString("0.000") + "','" +      //CEL10
+                                        GlobalVars.CScanData[station].orderedCells[0].ToString("0.000") + "','" +     //CEL11
+                                        GlobalVars.CScanData[station].orderedCells[1].ToString("0.000") + "','" +     //CEL12
+                                        GlobalVars.CScanData[station].orderedCells[2].ToString("0.000") + "','" +     //CEL13
+                                        GlobalVars.CScanData[station].orderedCells[3].ToString("0.000") + "','" +     //CEL14
+                                        GlobalVars.CScanData[station].orderedCells[4].ToString("0.000") + "','" +     //CEL15
+                                        GlobalVars.CScanData[station].orderedCells[5].ToString("0.000") + "','" +     //CEL16
+                                        GlobalVars.CScanData[station].orderedCells[6].ToString("0.000") + "','" +     //CEL17
+                                        GlobalVars.CScanData[station].orderedCells[7].ToString("0.000") + "','" +     //CEL18
+                                        GlobalVars.CScanData[station].orderedCells[8].ToString("0.000") + "','" +     //CEL19
+                                        GlobalVars.CScanData[station].orderedCells[9].ToString("0.000") + "','" +     //CEL20
+                                        GlobalVars.CScanData[station].orderedCells[10].ToString("0.000") + "','" +     //CEL21
+                                        GlobalVars.CScanData[station].orderedCells[11].ToString("0.000") + "','" +     //CEL22
+                                        GlobalVars.CScanData[station].orderedCells[12].ToString("0.000") + "','" +     //CEL23
+                                        GlobalVars.CScanData[station].orderedCells[13].ToString("0.000") + "','" +     //CEL24
                                         GlobalVars.CScanData[station].TP1.ToString("0.0") + "','" +                  //TP1
                                         GlobalVars.CScanData[station].TP2.ToString("0.0") + "','" +                  //TP2
                                         GlobalVars.CScanData[station].TP3.ToString("0.0") + "','" +                  //TP3
                                         GlobalVars.CScanData[station].TP4.ToString("0.0") + "','" +                  //TP4
                                         GlobalVars.CScanData[station].TP5.ToString("0.0") + "','" +                  //TP5
                                         "0.0" + "','" +                                                         //TP6
-                                        GlobalVars.CScanData[slaveRow].cellGND1.ToString("0.000") + "','" +             //CGND1
-                                        GlobalVars.CScanData[slaveRow].cellGND2.ToString("0.000") + "','" +             //CGND2
-                                        GlobalVars.CScanData[slaveRow].ref95V.ToString("0.000") + "','" +               //ref
-                                        GlobalVars.CScanData[slaveRow].ch0GND.ToString("0.000") + "','" +               //GND
-                                        GlobalVars.CScanData[slaveRow].plus5V.ToString("0.000") + "','" +              //FV
-                                        GlobalVars.CScanData[slaveRow].minus15.ToString("0.00") + "','" +              //MSV
-                                        GlobalVars.CScanData[slaveRow].plus15.ToString("0.00") +                       //PSV
+                                        GlobalVars.CScanData[station].cellGND1.ToString("0.000") + "','" +             //CGND1
+                                        GlobalVars.CScanData[station].cellGND2.ToString("0.000") + "','" +             //CGND2
+                                        GlobalVars.CScanData[station].ref95V.ToString("0.000") + "','" +               //ref
+                                        GlobalVars.CScanData[station].ch0GND.ToString("0.000") + "','" +               //GND
+                                        GlobalVars.CScanData[station].plus5V.ToString("0.000") + "','" +              //FV
+                                        GlobalVars.CScanData[station].minus15.ToString("0.00") + "','" +              //MSV
+                                        GlobalVars.CScanData[station].plus15.ToString("0.00") +                       //PSV
                                         "');";
 
                                         myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
@@ -3478,240 +3206,463 @@ namespace NewBTASProto
                                             myAccessCommand.ExecuteNonQuery();
                                             myAccessConn.Close();
                                         }
-
-                                    }  // end if
-
-                                } // end if
-
-                                //if this is the first scan we also need to rerun fill plot combos and we are still on the station...
-                                if (firstRun && station == dataGridView1.CurrentRow.Index)
-                                {
-                                    oldRow = 99;
-                                    fillPlotCombos(station);
-                                    firstRun = false;
-                                }
-                                //else we need to add the current point to the graphMainSet dataTable if this test is running on the current row...
-                                else if (station == dataGridView1.CurrentRow.Index)
-                                {
-                                    //update graphmainset
-                                    DataRow newRow = graphMainSet.Tables[0].NewRow();
-
-                                    newRow["Station"] = station.ToString();
-                                    newRow["BWO"] = MWO1.Trim();
-                                    newRow["STEP"] = stepNum.ToString("00");
-                                    newRow["RDG"] = currentReading.ToString();
-                                    newRow["DATE"] = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                                    newRow["QS1"] = GlobalVars.CScanData[station].QS1.ToString();
-                                    newRow["CTR"] = GlobalVars.CScanData[station].CTR.ToString();
-                                    newRow["ETIME"] = temp.TotalDays.ToString("0.00000");
-                                    newRow["CUR1"] = GlobalVars.CScanData[station].currentOne.ToString("0.0");
-                                    newRow["CUR2"] = GlobalVars.CScanData[station].currentTwo.ToString("0.0");
-                                    newRow["VB1"] = GlobalVars.CScanData[station].VB1.ToString("0.00");
-                                    newRow["VB2"] = GlobalVars.CScanData[station].VB2.ToString("0.00");
-                                    newRow["VB3"] = GlobalVars.CScanData[station].VB3.ToString("0.00");
-                                    newRow["VB4"] = GlobalVars.CScanData[station].VB4.ToString("0.00");
-                                    newRow["CEL01"] = GlobalVars.CScanData[station].orderedCells[0].ToString("0.000");
-                                    newRow["CEL02"] = GlobalVars.CScanData[station].orderedCells[1].ToString("0.000");
-                                    newRow["CEL03"] = GlobalVars.CScanData[station].orderedCells[2].ToString("0.000");
-                                    newRow["CEL04"] = GlobalVars.CScanData[station].orderedCells[3].ToString("0.000");
-                                    newRow["CEL05"] = GlobalVars.CScanData[station].orderedCells[4].ToString("0.000");
-                                    newRow["CEL06"] = GlobalVars.CScanData[station].orderedCells[5].ToString("0.000");
-                                    newRow["CEL07"] = GlobalVars.CScanData[station].orderedCells[6].ToString("0.000");
-                                    newRow["CEL08"] = GlobalVars.CScanData[station].orderedCells[7].ToString("0.000");
-                                    newRow["CEL09"] = GlobalVars.CScanData[station].orderedCells[8].ToString("0.000");
-                                    newRow["CEL10"] = GlobalVars.CScanData[station].orderedCells[9].ToString("0.000");
-                                    newRow["CEL11"] = GlobalVars.CScanData[station].orderedCells[10].ToString("0.000");
-                                    newRow["CEL12"] = GlobalVars.CScanData[station].orderedCells[11].ToString("0.000");
-                                    newRow["CEL13"] = GlobalVars.CScanData[station].orderedCells[12].ToString("0.000");
-                                    newRow["CEL14"] = GlobalVars.CScanData[station].orderedCells[13].ToString("0.000");
-                                    newRow["CEL15"] = GlobalVars.CScanData[station].orderedCells[14].ToString("0.000");
-                                    newRow["CEL16"] = GlobalVars.CScanData[station].orderedCells[15].ToString("0.000");
-                                    newRow["CEL17"] = GlobalVars.CScanData[station].orderedCells[16].ToString("0.000");
-                                    newRow["CEL18"] = GlobalVars.CScanData[station].orderedCells[17].ToString("0.000");
-                                    newRow["CEL19"] = GlobalVars.CScanData[station].orderedCells[18].ToString("0.000");
-                                    newRow["CEL20"] = GlobalVars.CScanData[station].orderedCells[19].ToString("0.000");
-                                    newRow["CEL21"] = GlobalVars.CScanData[station].orderedCells[20].ToString("0.000");
-                                    newRow["CEL22"] = GlobalVars.CScanData[station].orderedCells[21].ToString("0.000");
-                                    newRow["CEL23"] = GlobalVars.CScanData[station].orderedCells[22].ToString("0.000");
-                                    newRow["CEL24"] = GlobalVars.CScanData[station].orderedCells[23].ToString("0.000");
-                                    newRow["BT1"] = GlobalVars.CScanData[station].TP1.ToString("0.0");
-                                    newRow["BT2"] = GlobalVars.CScanData[station].TP2.ToString("0.0");
-                                    newRow["BT3"] = GlobalVars.CScanData[station].TP3.ToString("0.0");
-                                    newRow["BT4"] = GlobalVars.CScanData[station].TP4.ToString("0.0");
-                                    newRow["BT5"] = GlobalVars.CScanData[station].TP5.ToString("0.0");
-                                    newRow["BT6"] = "0.0";
-                                    newRow["CGND1"] = GlobalVars.CScanData[station].cellGND1.ToString("0.000");
-                                    newRow["CGND2"] = GlobalVars.CScanData[station].cellGND2.ToString("0.000");
-                                    newRow["REF"] = GlobalVars.CScanData[station].ref95V.ToString("0.000");
-                                    newRow["GND"] = GlobalVars.CScanData[station].ch0GND.ToString("0.000");
-                                    newRow["FV"] = GlobalVars.CScanData[station].plus5V.ToString("0.000");
-                                    newRow["MSV"] = GlobalVars.CScanData[station].minus15.ToString("0.00");
-                                    newRow["PSV"] = GlobalVars.CScanData[station].plus15.ToString("0.00");
-
-                                    graphMainSet.Tables[0].Rows.Add(newRow);
-
-                                }
-                                else if (firstRun && slaveRow == dataGridView1.CurrentRow.Index)
-                                {
-                                    oldRow = 99;
-                                    fillPlotCombos(slaveRow);
-                                    firstRun = false;
-                                }
-                                //else we need to add the current point to the graphMainSet dataTable if this test is running on the current row...
-                                else if (slaveRow == dataGridView1.CurrentRow.Index)
-                                {
-                                    //update graphmainset
-                                    DataRow newRow = graphMainSet.Tables[0].NewRow();
-
-                                    newRow["Station"] = slaveRow.ToString();
-                                    newRow["BWO"] = SWO1.Trim();
-                                    newRow["STEP"] = stepNum.ToString("00");
-                                    newRow["RDG"] = currentReading.ToString();
-                                    newRow["DATE"] = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                                    newRow["QS1"] = GlobalVars.CScanData[slaveRow].QS1.ToString();
-                                    newRow["CTR"] = GlobalVars.CScanData[slaveRow].CTR.ToString();
-                                    newRow["ETIME"] = temp.TotalDays.ToString("0.00000");
-                                    newRow["CUR1"] = GlobalVars.CScanData[station].currentOne.ToString("0.0");
-                                    newRow["CUR2"] = GlobalVars.CScanData[station].currentTwo.ToString("0.0");
-                                    newRow["VB1"] = GlobalVars.CScanData[slaveRow].VB1.ToString("0.00");
-                                    newRow["VB2"] = GlobalVars.CScanData[slaveRow].VB2.ToString("0.00");
-                                    newRow["VB3"] = GlobalVars.CScanData[slaveRow].VB3.ToString("0.00");
-                                    newRow["VB4"] = GlobalVars.CScanData[slaveRow].VB4.ToString("0.00");
-                                    newRow["CEL01"] = GlobalVars.CScanData[slaveRow].orderedCells[0].ToString("0.000");
-                                    newRow["CEL02"] = GlobalVars.CScanData[slaveRow].orderedCells[1].ToString("0.000");
-                                    newRow["CEL03"] = GlobalVars.CScanData[slaveRow].orderedCells[2].ToString("0.000");
-                                    newRow["CEL04"] = GlobalVars.CScanData[slaveRow].orderedCells[3].ToString("0.000");
-                                    newRow["CEL05"] = GlobalVars.CScanData[slaveRow].orderedCells[4].ToString("0.000");
-                                    newRow["CEL06"] = GlobalVars.CScanData[slaveRow].orderedCells[5].ToString("0.000");
-                                    newRow["CEL07"] = GlobalVars.CScanData[slaveRow].orderedCells[6].ToString("0.000");
-                                    newRow["CEL08"] = GlobalVars.CScanData[slaveRow].orderedCells[7].ToString("0.000");
-                                    newRow["CEL09"] = GlobalVars.CScanData[slaveRow].orderedCells[8].ToString("0.000");
-                                    newRow["CEL10"] = GlobalVars.CScanData[slaveRow].orderedCells[9].ToString("0.000");
-                                    newRow["CEL11"] = GlobalVars.CScanData[slaveRow].orderedCells[10].ToString("0.000");
-                                    newRow["CEL12"] = GlobalVars.CScanData[slaveRow].orderedCells[11].ToString("0.000");
-                                    newRow["CEL13"] = GlobalVars.CScanData[slaveRow].orderedCells[12].ToString("0.000");
-                                    newRow["CEL14"] = GlobalVars.CScanData[slaveRow].orderedCells[13].ToString("0.000");
-                                    newRow["CEL15"] = GlobalVars.CScanData[slaveRow].orderedCells[14].ToString("0.000");
-                                    newRow["CEL16"] = GlobalVars.CScanData[slaveRow].orderedCells[15].ToString("0.000");
-                                    newRow["CEL17"] = GlobalVars.CScanData[slaveRow].orderedCells[16].ToString("0.000");
-                                    newRow["CEL18"] = GlobalVars.CScanData[slaveRow].orderedCells[17].ToString("0.000");
-                                    newRow["CEL19"] = GlobalVars.CScanData[slaveRow].orderedCells[18].ToString("0.000");
-                                    newRow["CEL20"] = GlobalVars.CScanData[slaveRow].orderedCells[19].ToString("0.000");
-                                    newRow["CEL21"] = GlobalVars.CScanData[slaveRow].orderedCells[20].ToString("0.000");
-                                    newRow["CEL22"] = GlobalVars.CScanData[slaveRow].orderedCells[21].ToString("0.000");
-                                    newRow["CEL23"] = GlobalVars.CScanData[slaveRow].orderedCells[22].ToString("0.000");
-                                    newRow["CEL24"] = GlobalVars.CScanData[slaveRow].orderedCells[23].ToString("0.000");
-                                    newRow["BT1"] = GlobalVars.CScanData[station].TP1.ToString("0.0");
-                                    newRow["BT2"] = GlobalVars.CScanData[station].TP2.ToString("0.0");
-                                    newRow["BT3"] = GlobalVars.CScanData[station].TP3.ToString("0.0");
-                                    newRow["BT4"] = GlobalVars.CScanData[station].TP4.ToString("0.0");
-                                    newRow["BT5"] = GlobalVars.CScanData[station].TP5.ToString("0.0");
-                                    newRow["BT6"] = "0.0";
-                                    newRow["CGND1"] = GlobalVars.CScanData[slaveRow].cellGND1.ToString("0.000");
-                                    newRow["CGND2"] = GlobalVars.CScanData[slaveRow].cellGND2.ToString("0.000");
-                                    newRow["REF"] = GlobalVars.CScanData[slaveRow].ref95V.ToString("0.000");
-                                    newRow["GND"] = GlobalVars.CScanData[slaveRow].ch0GND.ToString("0.000");
-                                    newRow["FV"] = GlobalVars.CScanData[slaveRow].plus5V.ToString("0.000");
-                                    newRow["MSV"] = GlobalVars.CScanData[slaveRow].minus15.ToString("0.00");
-                                    newRow["PSV"] = GlobalVars.CScanData[slaveRow].plus15.ToString("0.00");
-
-                                    graphMainSet.Tables[0].Rows.Add(newRow);
-
-                                }
-
-                            }
-                            catch (Exception ex)
-                            {
-
-                                myAccessConn.Close();
-                                updateD(station, 5, false);
-                                if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
-                                //clear values from d
-                                updateD(station, 7, ("Error"));
-                                if (MasterSlaveTest) { updateD(slaveRow, 7, "Error"); }
-                                cRunTest[station].Cancel();
-                                //update the finish time
-                                updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
-                                this.Invoke((MethodInvoker)delegate()
-                                {
-                                    sendNote(station, 3, "Error: Failed to retrieve the required data from the DataBase.");
-                                    startNewTestToolStripMenuItem.Enabled = true;
-                                    resumeTestToolStripMenuItem.Enabled = true;
-                                    stopTestToolStripMenuItem.Enabled = false;
-                                    MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                });
-                                return;
-                            }
-                            #endregion
-
-                            //we are going to look for failing cells here...
-                            #region failing cell test
-
-                            //if we have the cell check turned on and the we are in charge check the cells for negative slopes...
-                            if (Properties.Settings.Default.DecliningCellVoltageTestEnabled && !(testType.Contains("Cap") || testType.Contains("Dis")))
-                            {
-
-                                int Cells;
-
-                                if ((int)pci.Rows[station][3] == -1)
-                                {
-                                    Cells = GlobalVars.CScanData[station].cellsToDisplay;
-                                }
-                                else
-                                {
-                                    Cells = (int)pci.Rows[station][3];
-                                }
-
-                                // move the old cells back a place
-                                for (int i = 1; i < 4; i++)
-                                {
-                                    for (int j = 0; j < 24; j++)
-                                    {
-                                        cellHistory[j, i - 1] = cellHistory[j, i];
                                     }
-                                }
-                                // now load in the new values
-                                for (int j = 0; j < 24; j++)
-                                {
-                                    cellHistory[j, 3] = GlobalVars.CScanData[station].orderedCells[j];
-                                }
 
-                                //finally test the cells for three consecutive negative slopes..
-                                for (int j = 0; j < Cells; j++)
-                                {
-                                    if ((cellHistory[j, 1] - cellHistory[j, 0]) < -0.01 && (cellHistory[j, 2] - cellHistory[j, 1]) < -0.01 && (cellHistory[j, 3] - cellHistory[j, 2]) < -0.01)
+                                    //also insert the slave reading if need be...
+                                    if (MasterSlaveTest)
                                     {
-                                        //we need to quit...
-                                        // here is where we cancel the test if we can...
-                                        if (d.Rows[station][10].ToString().Contains("ICA") || d.Rows[station][10].ToString().Contains("CCA") && !runAsShunt)
+
+                                        strUpdateCMD = "INSERT INTO ScanData (Station,BWO,STEP,RDG,[DATE],QS1,CTR,ETIME,CUR1,CUR2,VB1,VB2,VB3,VB4," +
+                                            "CEL01,CEL02,CEL03,CEL04,CEL05,CEL06,CEL07,CEL08,CEL09,CEL10,CEL11,CEL12,CEL13,CEL14,CEL15,CEL16,CEL17,CEL18,CEL19,CEL20,CEL21,CEL22,CEL23,CEL24," +
+                                            "BT1,BT2,BT3,BT4,BT5,BT6,CGND1,CGND2,REF,GND,FV,MSV,PSV) "
+                                            + "VALUES (" + slaveRow.ToString() + ",'" +                            //slaveRow number
+                                            SWO1.Trim() + "','" +                          //WorkOrderNumber
+                                            slaveStepNum.ToString("00") + "'," +                                            //StepNumber
+                                            currentReading.ToString() + ",#" +                                     //ReadingNumber
+                                            DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "#,'" +                  //date
+                                            GlobalVars.CScanData[slaveRow].QS1.ToString() + "','" +                  //QS1
+                                            GlobalVars.CScanData[slaveRow].CTR.ToString() + "','" +                  //CTR
+                                            temp.TotalDays.ToString("0.00000") + "','" +                                      //time elapsed in days
+                                            GlobalVars.CScanData[station].currentOne.ToString("0.0") + "','" +           //CUR1  (pulled from master CSCAN)
+                                            GlobalVars.CScanData[station].currentTwo.ToString("0.0") + "','" +           //CUR2  
+                                            GlobalVars.CScanData[slaveRow].VB1.ToString("0.00") + "','" +                  //VB1
+                                            GlobalVars.CScanData[slaveRow].VB2.ToString("0.00") + "','" +                  //VB2
+                                            GlobalVars.CScanData[slaveRow].VB3.ToString("0.00") + "','" +                  //VB3
+                                            GlobalVars.CScanData[slaveRow].VB4.ToString("0.00") + "','" +                  //VB4
+                                            GlobalVars.CScanData[slaveRow].orderedCells[0].ToString("0.000") + "','" +      //CEL01
+                                            GlobalVars.CScanData[slaveRow].orderedCells[1].ToString("0.000") + "','" +      //CEL02
+                                            GlobalVars.CScanData[slaveRow].orderedCells[2].ToString("0.000") + "','" +      //CEL03
+                                            GlobalVars.CScanData[slaveRow].orderedCells[3].ToString("0.000") + "','" +      //CEL04
+                                            GlobalVars.CScanData[slaveRow].orderedCells[4].ToString("0.000") + "','" +      //CEL05
+                                            GlobalVars.CScanData[slaveRow].orderedCells[5].ToString("0.000") + "','" +      //CEL06
+                                            GlobalVars.CScanData[slaveRow].orderedCells[6].ToString("0.000") + "','" +      //CEL07
+                                            GlobalVars.CScanData[slaveRow].orderedCells[7].ToString("0.000") + "','" +      //CEL08
+                                            GlobalVars.CScanData[slaveRow].orderedCells[8].ToString("0.000") + "','" +      //CEL09
+                                            GlobalVars.CScanData[slaveRow].orderedCells[9].ToString("0.000") + "','" +      //CEL10
+                                            GlobalVars.CScanData[slaveRow].orderedCells[10].ToString("0.000") + "','" +     //CEL11
+                                            GlobalVars.CScanData[slaveRow].orderedCells[11].ToString("0.000") + "','" +     //CEL12
+                                            GlobalVars.CScanData[slaveRow].orderedCells[12].ToString("0.000") + "','" +     //CEL13
+                                            GlobalVars.CScanData[slaveRow].orderedCells[13].ToString("0.000") + "','" +     //CEL14
+                                            GlobalVars.CScanData[slaveRow].orderedCells[14].ToString("0.000") + "','" +     //CEL15
+                                            GlobalVars.CScanData[slaveRow].orderedCells[15].ToString("0.000") + "','" +     //CEL16
+                                            GlobalVars.CScanData[slaveRow].orderedCells[16].ToString("0.000") + "','" +     //CEL17
+                                            GlobalVars.CScanData[slaveRow].orderedCells[17].ToString("0.000") + "','" +     //CEL18
+                                            GlobalVars.CScanData[slaveRow].orderedCells[18].ToString("0.000") + "','" +     //CEL19
+                                            GlobalVars.CScanData[slaveRow].orderedCells[19].ToString("0.000") + "','" +     //CEL20
+                                            GlobalVars.CScanData[slaveRow].orderedCells[20].ToString("0.000") + "','" +     //CEL21
+                                            GlobalVars.CScanData[slaveRow].orderedCells[21].ToString("0.000") + "','" +     //CEL22
+                                            GlobalVars.CScanData[slaveRow].orderedCells[22].ToString("0.000") + "','" +     //CEL23
+                                            GlobalVars.CScanData[slaveRow].orderedCells[23].ToString("0.000") + "','" +     //CEL24
+                                            GlobalVars.CScanData[station].TP1.ToString("0.0") + "','" +                  //TP1  (pulled from master CSCAN)
+                                            GlobalVars.CScanData[station].TP2.ToString("0.0") + "','" +                  //TP2  (pulled from master CSCAN)
+                                            GlobalVars.CScanData[station].TP3.ToString("0.0") + "','" +                  //TP3  (pulled from master CSCAN)
+                                            GlobalVars.CScanData[station].TP4.ToString("0.0") + "','" +                  //TP4  (pulled from master CSCAN)
+                                            GlobalVars.CScanData[station].TP5.ToString("0.0") + "','" +                  //TP5  (pulled from master CSCAN)
+                                            "0.0" + "','" +                                                         //TP6
+                                            GlobalVars.CScanData[slaveRow].cellGND1.ToString("0.000") + "','" +             //CGND1
+                                            GlobalVars.CScanData[slaveRow].cellGND2.ToString("0.000") + "','" +             //CGND2
+                                            GlobalVars.CScanData[slaveRow].ref95V.ToString("0.000") + "','" +               //ref
+                                            GlobalVars.CScanData[slaveRow].ch0GND.ToString("0.000") + "','" +               //GND
+                                            GlobalVars.CScanData[slaveRow].plus5V.ToString("0.000") + "','" +              //FV
+                                            GlobalVars.CScanData[slaveRow].minus15.ToString("0.00") + "','" +              //MSV
+                                            GlobalVars.CScanData[slaveRow].plus15.ToString("0.00") +                       //PSV
+                                            "');";
+
+                                        myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
+
+                                        lock (dataBaseLock)
                                         {
-                                            cRunTest[station].Cancel();
-                                            this.Invoke((MethodInvoker)delegate()
+                                            myAccessConn.Open();
+                                            myAccessCommand.ExecuteNonQuery();
+                                            myAccessConn.Close();
+                                        } // end lock
+
+                                        if (SWO2 != "" && SWO3 == "")
+                                        {
+                                            // this is the case where the second work order is the bottom 11 cells of a 2X11 cable...
+                                            strUpdateCMD = "INSERT INTO ScanData (Station,BWO,STEP,RDG,[DATE],QS1,CTR,ETIME,CUR1,CUR2,VB1,VB2,VB3,VB4," +
+                                                "CEL01,CEL02,CEL03,CEL04,CEL05,CEL06,CEL07,CEL08,CEL09,CEL10,CEL11,CEL12,CEL13,CEL14,CEL15,CEL16,CEL17,CEL18,CEL19,CEL20,CEL21,CEL22,CEL23,CEL24," +
+                                                "BT1,BT2,BT3,BT4,BT5,BT6,CGND1,CGND2,REF,GND,FV,MSV,PSV) "
+                                                + "VALUES (" + station.ToString() + ",'" +                            //station number
+                                                SWO2.Trim() + "','" +                          //WorkOrderNumber
+                                                slaveStepNum2.ToString("00") + "'," +                                            //StepNumber
+                                                currentReading.ToString() + ",#" +                                     //ReadingNumber
+                                                DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "#,'" +                  //date
+                                                GlobalVars.CScanData[station].QS1.ToString() + "','" +                  //QS1
+                                                GlobalVars.CScanData[station].CTR.ToString() + "','" +                  //CTR
+                                                temp.TotalDays.ToString("0.00000") + "','" +                                      //time elapsed in days
+                                                GlobalVars.CScanData[station].currentOne.ToString("0.0") + "','" +           //CUR1
+                                                GlobalVars.CScanData[station].currentTwo.ToString("0.0") + "','" +           //CUR2
+                                                GlobalVars.CScanData[slaveRow].VB1.ToString("0.00") + "','" +                  //VB1
+                                                GlobalVars.CScanData[slaveRow].VB2.ToString("0.00") + "','" +                  //VB2
+                                                GlobalVars.CScanData[slaveRow].VB3.ToString("0.00") + "','" +                  //VB3
+                                                GlobalVars.CScanData[slaveRow].VB4.ToString("0.00") + "','" +                  //VB4
+                                                GlobalVars.CScanData[slaveRow].orderedCells[11].ToString("0.000") + "','" +      //CEL01
+                                                GlobalVars.CScanData[slaveRow].orderedCells[12].ToString("0.000") + "','" +      //CEL02
+                                                GlobalVars.CScanData[slaveRow].orderedCells[13].ToString("0.000") + "','" +      //CEL03
+                                                GlobalVars.CScanData[slaveRow].orderedCells[14].ToString("0.000") + "','" +      //CEL04
+                                                GlobalVars.CScanData[slaveRow].orderedCells[15].ToString("0.000") + "','" +      //CEL05
+                                                GlobalVars.CScanData[slaveRow].orderedCells[16].ToString("0.000") + "','" +      //CEL06
+                                                GlobalVars.CScanData[slaveRow].orderedCells[17].ToString("0.000") + "','" +      //CEL07
+                                                GlobalVars.CScanData[slaveRow].orderedCells[18].ToString("0.000") + "','" +      //CEL08
+                                                GlobalVars.CScanData[slaveRow].orderedCells[19].ToString("0.000") + "','" +      //CEL09
+                                                GlobalVars.CScanData[slaveRow].orderedCells[20].ToString("0.000") + "','" +      //CEL10
+                                                GlobalVars.CScanData[slaveRow].orderedCells[21].ToString("0.000") + "','" +     //CEL11
+                                                GlobalVars.CScanData[slaveRow].orderedCells[0].ToString("0.000") + "','" +     //CEL12
+                                                GlobalVars.CScanData[slaveRow].orderedCells[1].ToString("0.000") + "','" +     //CEL13
+                                                GlobalVars.CScanData[slaveRow].orderedCells[2].ToString("0.000") + "','" +     //CEL14
+                                                GlobalVars.CScanData[slaveRow].orderedCells[3].ToString("0.000") + "','" +     //CEL15
+                                                GlobalVars.CScanData[slaveRow].orderedCells[4].ToString("0.000") + "','" +     //CEL16
+                                                GlobalVars.CScanData[slaveRow].orderedCells[5].ToString("0.000") + "','" +     //CEL17
+                                                GlobalVars.CScanData[slaveRow].orderedCells[6].ToString("0.000") + "','" +     //CEL18
+                                                GlobalVars.CScanData[slaveRow].orderedCells[7].ToString("0.000") + "','" +     //CEL19
+                                                GlobalVars.CScanData[slaveRow].orderedCells[8].ToString("0.000") + "','" +     //CEL20
+                                                GlobalVars.CScanData[slaveRow].orderedCells[9].ToString("0.000") + "','" +     //CEL21
+                                                GlobalVars.CScanData[slaveRow].orderedCells[10].ToString("0.000") + "','" +     //CEL22
+                                                GlobalVars.CScanData[slaveRow].orderedCells[22].ToString("0.000") + "','" +     //CEL23
+                                                GlobalVars.CScanData[slaveRow].orderedCells[23].ToString("0.000") + "','" +     //CEL24
+                                                GlobalVars.CScanData[station].TP1.ToString("0.0") + "','" +                  //TP1
+                                                GlobalVars.CScanData[station].TP2.ToString("0.0") + "','" +                  //TP2
+                                                GlobalVars.CScanData[station].TP3.ToString("0.0") + "','" +                  //TP3
+                                                GlobalVars.CScanData[station].TP4.ToString("0.0") + "','" +                  //TP4
+                                                GlobalVars.CScanData[station].TP5.ToString("0.0") + "','" +                  //TP5
+                                                "0.0" + "','" +                                                         //TP6
+                                                GlobalVars.CScanData[slaveRow].cellGND1.ToString("0.000") + "','" +             //CGND1
+                                                GlobalVars.CScanData[slaveRow].cellGND2.ToString("0.000") + "','" +             //CGND2
+                                                GlobalVars.CScanData[slaveRow].ref95V.ToString("0.000") + "','" +               //ref
+                                                GlobalVars.CScanData[slaveRow].ch0GND.ToString("0.000") + "','" +               //GND
+                                                GlobalVars.CScanData[slaveRow].plus5V.ToString("0.000") + "','" +              //FV
+                                                GlobalVars.CScanData[slaveRow].minus15.ToString("0.00") + "','" +              //MSV
+                                                GlobalVars.CScanData[slaveRow].plus15.ToString("0.00") +                       //PSV
+                                                "');";
+
+                                            myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
+
+                                            lock (dataBaseLock)
                                             {
-                                                sendNote(station, 1, "Cell " + j.ToString() + " voltage is reversing! Cancelling Test!");
-                                            });
+                                                myAccessConn.Open();
+                                                myAccessCommand.ExecuteNonQuery();
+                                                myAccessConn.Close();
+                                            }
                                         }
-                                        else
+                                        else if (SWO2 != "")
                                         {
-                                            this.Invoke((MethodInvoker)delegate()
+                                            // this is the case where the second work order is the middle 7 cells of a 3X7 cable...
+                                            strUpdateCMD = "INSERT INTO ScanData (Station,BWO,STEP,RDG,[DATE],QS1,CTR,ETIME,CUR1,CUR2,VB1,VB2,VB3,VB4," +
+                                            "CEL01,CEL02,CEL03,CEL04,CEL05,CEL06,CEL07,CEL08,CEL09,CEL10,CEL11,CEL12,CEL13,CEL14,CEL15,CEL16,CEL17,CEL18,CEL19,CEL20,CEL21,CEL22,CEL23,CEL24," +
+                                            "BT1,BT2,BT3,BT4,BT5,BT6,CGND1,CGND2,REF,GND,FV,MSV,PSV) "
+                                            + "VALUES (" + slaveRow.ToString() + ",'" +                            //station number
+                                            SWO2.Trim() + "','" +                          //WorkOrderNumber
+                                            slaveStepNum2.ToString("00") + "'," +                                            //StepNumber
+                                            currentReading.ToString() + ",#" +                                     //ReadingNumber
+                                            DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "#,'" +                  //date
+                                            GlobalVars.CScanData[slaveRow].QS1.ToString() + "','" +                  //QS1
+                                            GlobalVars.CScanData[slaveRow].CTR.ToString() + "','" +                  //CTR
+                                            temp.TotalDays.ToString("0.00000") + "','" +                                      //time elapsed in days
+                                            GlobalVars.CScanData[station].currentOne.ToString("0.0") + "','" +           //CUR1
+                                            GlobalVars.CScanData[station].currentTwo.ToString("0.0") + "','" +           //CUR2
+                                            GlobalVars.CScanData[slaveRow].VB1.ToString("0.00") + "','" +                  //VB1
+                                            GlobalVars.CScanData[slaveRow].VB2.ToString("0.00") + "','" +                  //VB2
+                                            GlobalVars.CScanData[slaveRow].VB3.ToString("0.00") + "','" +                  //VB3
+                                            GlobalVars.CScanData[slaveRow].VB4.ToString("0.00") + "','" +                  //VB4
+                                            GlobalVars.CScanData[slaveRow].orderedCells[7].ToString("0.000") + "','" +      //CEL01
+                                            GlobalVars.CScanData[slaveRow].orderedCells[8].ToString("0.000") + "','" +      //CEL02
+                                            GlobalVars.CScanData[slaveRow].orderedCells[9].ToString("0.000") + "','" +      //CEL03
+                                            GlobalVars.CScanData[slaveRow].orderedCells[10].ToString("0.000") + "','" +      //CEL04
+                                            GlobalVars.CScanData[slaveRow].orderedCells[11].ToString("0.000") + "','" +      //CEL05
+                                            GlobalVars.CScanData[slaveRow].orderedCells[12].ToString("0.000") + "','" +      //CEL06
+                                            GlobalVars.CScanData[slaveRow].orderedCells[13].ToString("0.000") + "','" +      //CEL07
+                                            GlobalVars.CScanData[slaveRow].orderedCells[14].ToString("0.000") + "','" +      //CEL08
+                                            GlobalVars.CScanData[slaveRow].orderedCells[15].ToString("0.000") + "','" +      //CEL09
+                                            GlobalVars.CScanData[slaveRow].orderedCells[16].ToString("0.000") + "','" +      //CEL10
+                                            GlobalVars.CScanData[slaveRow].orderedCells[17].ToString("0.000") + "','" +     //CEL11
+                                            GlobalVars.CScanData[slaveRow].orderedCells[18].ToString("0.000") + "','" +     //CEL12
+                                            GlobalVars.CScanData[slaveRow].orderedCells[19].ToString("0.000") + "','" +     //CEL13
+                                            GlobalVars.CScanData[slaveRow].orderedCells[20].ToString("0.000") + "','" +     //CEL14
+                                            GlobalVars.CScanData[slaveRow].orderedCells[21].ToString("0.000") + "','" +     //CEL15
+                                            GlobalVars.CScanData[slaveRow].orderedCells[22].ToString("0.000") + "','" +     //CEL16
+                                            GlobalVars.CScanData[slaveRow].orderedCells[23].ToString("0.000") + "','" +     //CEL17
+                                            GlobalVars.CScanData[slaveRow].orderedCells[0].ToString("0.000") + "','" +     //CEL18
+                                            GlobalVars.CScanData[slaveRow].orderedCells[1].ToString("0.000") + "','" +     //CEL19
+                                            GlobalVars.CScanData[slaveRow].orderedCells[2].ToString("0.000") + "','" +     //CEL20
+                                            GlobalVars.CScanData[slaveRow].orderedCells[3].ToString("0.000") + "','" +     //CEL21
+                                            GlobalVars.CScanData[slaveRow].orderedCells[4].ToString("0.000") + "','" +     //CEL22
+                                            GlobalVars.CScanData[slaveRow].orderedCells[5].ToString("0.000") + "','" +     //CEL23
+                                            GlobalVars.CScanData[slaveRow].orderedCells[6].ToString("0.000") + "','" +     //CEL24
+                                            GlobalVars.CScanData[station].TP1.ToString("0.0") + "','" +                  //TP1
+                                            GlobalVars.CScanData[station].TP2.ToString("0.0") + "','" +                  //TP2
+                                            GlobalVars.CScanData[station].TP3.ToString("0.0") + "','" +                  //TP3
+                                            GlobalVars.CScanData[station].TP4.ToString("0.0") + "','" +                  //TP4
+                                            GlobalVars.CScanData[station].TP5.ToString("0.0") + "','" +                  //TP5
+                                            "0.0" + "','" +                                                         //TP6
+                                            GlobalVars.CScanData[slaveRow].cellGND1.ToString("0.000") + "','" +             //CGND1
+                                            GlobalVars.CScanData[slaveRow].cellGND2.ToString("0.000") + "','" +             //CGND2
+                                            GlobalVars.CScanData[slaveRow].ref95V.ToString("0.000") + "','" +               //ref
+                                            GlobalVars.CScanData[slaveRow].ch0GND.ToString("0.000") + "','" +               //GND
+                                            GlobalVars.CScanData[slaveRow].plus5V.ToString("0.000") + "','" +              //FV
+                                            GlobalVars.CScanData[slaveRow].minus15.ToString("0.00") + "','" +              //MSV
+                                            GlobalVars.CScanData[slaveRow].plus15.ToString("0.00") +                       //PSV
+                                            "');";
+
+                                            myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
+
+                                            lock (dataBaseLock)
                                             {
-                                                sendNote(station, 1, "Cell " + j.ToString() + " voltage is reversing! Cancel the test!");
-                                            });
+                                                myAccessConn.Open();
+                                                myAccessCommand.ExecuteNonQuery();
+                                                myAccessConn.Close();
+                                            }
                                         }
 
-                                    }
-                                }
+                                        if (MWO3 != "")
+                                        {
+                                            // this is the case where the third work order is the last 7 cells of a 3X7 cable...
+                                            strUpdateCMD = "INSERT INTO ScanData (Station,BWO,STEP,RDG,[DATE],QS1,CTR,ETIME,CUR1,CUR2,VB1,VB2,VB3,VB4," +
+                                            "CEL01,CEL02,CEL03,CEL04,CEL05,CEL06,CEL07,CEL08,CEL09,CEL10,CEL11,CEL12,CEL13,CEL14,CEL15,CEL16,CEL17,CEL18,CEL19,CEL20,CEL21,CEL22,CEL23,CEL24," +
+                                            "BT1,BT2,BT3,BT4,BT5,BT6,CGND1,CGND2,REF,GND,FV,MSV,PSV) "
+                                            + "VALUES (" + slaveRow.ToString() + ",'" +                            //station number
+                                            SWO3.Trim() + "','" +                          //WorkOrderNumber
+                                            slaveStepNum3.ToString("00") + "'," +                                            //StepNumber
+                                            currentReading.ToString() + ",#" +                                     //ReadingNumber
+                                            DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "#,'" +                  //date
+                                            GlobalVars.CScanData[slaveRow].QS1.ToString() + "','" +                  //QS1
+                                            GlobalVars.CScanData[slaveRow].CTR.ToString() + "','" +                  //CTR
+                                            temp.TotalDays.ToString("0.00000") + "','" +                                      //time elapsed in days
+                                            GlobalVars.CScanData[station].currentOne.ToString("0.0") + "','" +           //CUR1
+                                            GlobalVars.CScanData[station].currentTwo.ToString("0.0") + "','" +           //CUR2
+                                            GlobalVars.CScanData[slaveRow].VB1.ToString("0.00") + "','" +                  //VB1
+                                            GlobalVars.CScanData[slaveRow].VB2.ToString("0.00") + "','" +                  //VB2
+                                            GlobalVars.CScanData[slaveRow].VB3.ToString("0.00") + "','" +                  //VB3
+                                            GlobalVars.CScanData[slaveRow].VB4.ToString("0.00") + "','" +                  //VB4
+                                            GlobalVars.CScanData[slaveRow].orderedCells[14].ToString("0.000") + "','" +      //CEL01
+                                            GlobalVars.CScanData[slaveRow].orderedCells[15].ToString("0.000") + "','" +      //CEL02
+                                            GlobalVars.CScanData[slaveRow].orderedCells[16].ToString("0.000") + "','" +      //CEL03
+                                            GlobalVars.CScanData[slaveRow].orderedCells[17].ToString("0.000") + "','" +      //CEL04
+                                            GlobalVars.CScanData[slaveRow].orderedCells[18].ToString("0.000") + "','" +      //CEL05
+                                            GlobalVars.CScanData[slaveRow].orderedCells[19].ToString("0.000") + "','" +      //CEL06
+                                            GlobalVars.CScanData[slaveRow].orderedCells[20].ToString("0.000") + "','" +      //CEL07
+                                            GlobalVars.CScanData[slaveRow].orderedCells[21].ToString("0.000") + "','" +      //CEL08
+                                            GlobalVars.CScanData[slaveRow].orderedCells[22].ToString("0.000") + "','" +      //CEL09
+                                            GlobalVars.CScanData[slaveRow].orderedCells[23].ToString("0.000") + "','" +      //CEL10
+                                            GlobalVars.CScanData[slaveRow].orderedCells[0].ToString("0.000") + "','" +     //CEL11
+                                            GlobalVars.CScanData[slaveRow].orderedCells[1].ToString("0.000") + "','" +     //CEL12
+                                            GlobalVars.CScanData[slaveRow].orderedCells[2].ToString("0.000") + "','" +     //CEL13
+                                            GlobalVars.CScanData[slaveRow].orderedCells[3].ToString("0.000") + "','" +     //CEL14
+                                            GlobalVars.CScanData[slaveRow].orderedCells[4].ToString("0.000") + "','" +     //CEL15
+                                            GlobalVars.CScanData[slaveRow].orderedCells[5].ToString("0.000") + "','" +     //CEL16
+                                            GlobalVars.CScanData[slaveRow].orderedCells[6].ToString("0.000") + "','" +     //CEL17
+                                            GlobalVars.CScanData[slaveRow].orderedCells[7].ToString("0.000") + "','" +     //CEL18
+                                            GlobalVars.CScanData[slaveRow].orderedCells[8].ToString("0.000") + "','" +     //CEL19
+                                            GlobalVars.CScanData[slaveRow].orderedCells[9].ToString("0.000") + "','" +     //CEL20
+                                            GlobalVars.CScanData[slaveRow].orderedCells[10].ToString("0.000") + "','" +     //CEL21
+                                            GlobalVars.CScanData[slaveRow].orderedCells[11].ToString("0.000") + "','" +     //CEL22
+                                            GlobalVars.CScanData[slaveRow].orderedCells[12].ToString("0.000") + "','" +     //CEL23
+                                            GlobalVars.CScanData[slaveRow].orderedCells[13].ToString("0.000") + "','" +     //CEL24
+                                            GlobalVars.CScanData[station].TP1.ToString("0.0") + "','" +                  //TP1
+                                            GlobalVars.CScanData[station].TP2.ToString("0.0") + "','" +                  //TP2
+                                            GlobalVars.CScanData[station].TP3.ToString("0.0") + "','" +                  //TP3
+                                            GlobalVars.CScanData[station].TP4.ToString("0.0") + "','" +                  //TP4
+                                            GlobalVars.CScanData[station].TP5.ToString("0.0") + "','" +                  //TP5
+                                            "0.0" + "','" +                                                         //TP6
+                                            GlobalVars.CScanData[slaveRow].cellGND1.ToString("0.000") + "','" +             //CGND1
+                                            GlobalVars.CScanData[slaveRow].cellGND2.ToString("0.000") + "','" +             //CGND2
+                                            GlobalVars.CScanData[slaveRow].ref95V.ToString("0.000") + "','" +               //ref
+                                            GlobalVars.CScanData[slaveRow].ch0GND.ToString("0.000") + "','" +               //GND
+                                            GlobalVars.CScanData[slaveRow].plus5V.ToString("0.000") + "','" +              //FV
+                                            GlobalVars.CScanData[slaveRow].minus15.ToString("0.00") + "','" +              //MSV
+                                            GlobalVars.CScanData[slaveRow].plus15.ToString("0.00") +                       //PSV
+                                            "');";
 
-                                //do we need to do the same for the slave?
-                                if (MasterSlaveTest)
-                                {
-                                    if ((int)pci.Rows[slaveRow][3] == -1)
+                                            myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
+
+                                            lock (dataBaseLock)
+                                            {
+                                                myAccessConn.Open();
+                                                myAccessCommand.ExecuteNonQuery();
+                                                myAccessConn.Close();
+                                            }
+
+                                        }  // end if
+
+                                    } // end if
+
+                                    //if this is the first scan we also need to rerun fill plot combos and we are still on the station...
+                                    if (firstRun && station == dataGridView1.CurrentRow.Index)
                                     {
-                                        Cells = GlobalVars.CScanData[slaveRow].cellsToDisplay;
+                                        oldRow = 99;
+                                        fillPlotCombos(station);
+                                        firstRun = false;
+                                    }
+                                    //else we need to add the current point to the graphMainSet dataTable if this test is running on the current row...
+                                    else if (station == dataGridView1.CurrentRow.Index)
+                                    {
+                                        //update graphmainset
+                                        DataRow newRow = graphMainSet.Tables[0].NewRow();
+
+                                        newRow["Station"] = station.ToString();
+                                        newRow["BWO"] = MWO1.Trim();
+                                        newRow["STEP"] = stepNum.ToString("00");
+                                        newRow["RDG"] = currentReading.ToString();
+                                        newRow["DATE"] = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                                        newRow["QS1"] = GlobalVars.CScanData[station].QS1.ToString();
+                                        newRow["CTR"] = GlobalVars.CScanData[station].CTR.ToString();
+                                        newRow["ETIME"] = temp.TotalDays.ToString("0.00000");
+                                        newRow["CUR1"] = GlobalVars.CScanData[station].currentOne.ToString("0.0");
+                                        newRow["CUR2"] = GlobalVars.CScanData[station].currentTwo.ToString("0.0");
+                                        newRow["VB1"] = GlobalVars.CScanData[station].VB1.ToString("0.00");
+                                        newRow["VB2"] = GlobalVars.CScanData[station].VB2.ToString("0.00");
+                                        newRow["VB3"] = GlobalVars.CScanData[station].VB3.ToString("0.00");
+                                        newRow["VB4"] = GlobalVars.CScanData[station].VB4.ToString("0.00");
+                                        newRow["CEL01"] = GlobalVars.CScanData[station].orderedCells[0].ToString("0.000");
+                                        newRow["CEL02"] = GlobalVars.CScanData[station].orderedCells[1].ToString("0.000");
+                                        newRow["CEL03"] = GlobalVars.CScanData[station].orderedCells[2].ToString("0.000");
+                                        newRow["CEL04"] = GlobalVars.CScanData[station].orderedCells[3].ToString("0.000");
+                                        newRow["CEL05"] = GlobalVars.CScanData[station].orderedCells[4].ToString("0.000");
+                                        newRow["CEL06"] = GlobalVars.CScanData[station].orderedCells[5].ToString("0.000");
+                                        newRow["CEL07"] = GlobalVars.CScanData[station].orderedCells[6].ToString("0.000");
+                                        newRow["CEL08"] = GlobalVars.CScanData[station].orderedCells[7].ToString("0.000");
+                                        newRow["CEL09"] = GlobalVars.CScanData[station].orderedCells[8].ToString("0.000");
+                                        newRow["CEL10"] = GlobalVars.CScanData[station].orderedCells[9].ToString("0.000");
+                                        newRow["CEL11"] = GlobalVars.CScanData[station].orderedCells[10].ToString("0.000");
+                                        newRow["CEL12"] = GlobalVars.CScanData[station].orderedCells[11].ToString("0.000");
+                                        newRow["CEL13"] = GlobalVars.CScanData[station].orderedCells[12].ToString("0.000");
+                                        newRow["CEL14"] = GlobalVars.CScanData[station].orderedCells[13].ToString("0.000");
+                                        newRow["CEL15"] = GlobalVars.CScanData[station].orderedCells[14].ToString("0.000");
+                                        newRow["CEL16"] = GlobalVars.CScanData[station].orderedCells[15].ToString("0.000");
+                                        newRow["CEL17"] = GlobalVars.CScanData[station].orderedCells[16].ToString("0.000");
+                                        newRow["CEL18"] = GlobalVars.CScanData[station].orderedCells[17].ToString("0.000");
+                                        newRow["CEL19"] = GlobalVars.CScanData[station].orderedCells[18].ToString("0.000");
+                                        newRow["CEL20"] = GlobalVars.CScanData[station].orderedCells[19].ToString("0.000");
+                                        newRow["CEL21"] = GlobalVars.CScanData[station].orderedCells[20].ToString("0.000");
+                                        newRow["CEL22"] = GlobalVars.CScanData[station].orderedCells[21].ToString("0.000");
+                                        newRow["CEL23"] = GlobalVars.CScanData[station].orderedCells[22].ToString("0.000");
+                                        newRow["CEL24"] = GlobalVars.CScanData[station].orderedCells[23].ToString("0.000");
+                                        newRow["BT1"] = GlobalVars.CScanData[station].TP1.ToString("0.0");
+                                        newRow["BT2"] = GlobalVars.CScanData[station].TP2.ToString("0.0");
+                                        newRow["BT3"] = GlobalVars.CScanData[station].TP3.ToString("0.0");
+                                        newRow["BT4"] = GlobalVars.CScanData[station].TP4.ToString("0.0");
+                                        newRow["BT5"] = GlobalVars.CScanData[station].TP5.ToString("0.0");
+                                        newRow["BT6"] = "0.0";
+                                        newRow["CGND1"] = GlobalVars.CScanData[station].cellGND1.ToString("0.000");
+                                        newRow["CGND2"] = GlobalVars.CScanData[station].cellGND2.ToString("0.000");
+                                        newRow["REF"] = GlobalVars.CScanData[station].ref95V.ToString("0.000");
+                                        newRow["GND"] = GlobalVars.CScanData[station].ch0GND.ToString("0.000");
+                                        newRow["FV"] = GlobalVars.CScanData[station].plus5V.ToString("0.000");
+                                        newRow["MSV"] = GlobalVars.CScanData[station].minus15.ToString("0.00");
+                                        newRow["PSV"] = GlobalVars.CScanData[station].plus15.ToString("0.00");
+
+                                        graphMainSet.Tables[0].Rows.Add(newRow);
+
+                                    }
+                                    else if (firstRun && slaveRow == dataGridView1.CurrentRow.Index)
+                                    {
+                                        oldRow = 99;
+                                        fillPlotCombos(slaveRow);
+                                        firstRun = false;
+                                    }
+                                    //else we need to add the current point to the graphMainSet dataTable if this test is running on the current row...
+                                    else if (slaveRow == dataGridView1.CurrentRow.Index)
+                                    {
+                                        //update graphmainset
+                                        DataRow newRow = graphMainSet.Tables[0].NewRow();
+
+                                        newRow["Station"] = slaveRow.ToString();
+                                        newRow["BWO"] = SWO1.Trim();
+                                        newRow["STEP"] = stepNum.ToString("00");
+                                        newRow["RDG"] = currentReading.ToString();
+                                        newRow["DATE"] = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                                        newRow["QS1"] = GlobalVars.CScanData[slaveRow].QS1.ToString();
+                                        newRow["CTR"] = GlobalVars.CScanData[slaveRow].CTR.ToString();
+                                        newRow["ETIME"] = temp.TotalDays.ToString("0.00000");
+                                        newRow["CUR1"] = GlobalVars.CScanData[station].currentOne.ToString("0.0");
+                                        newRow["CUR2"] = GlobalVars.CScanData[station].currentTwo.ToString("0.0");
+                                        newRow["VB1"] = GlobalVars.CScanData[slaveRow].VB1.ToString("0.00");
+                                        newRow["VB2"] = GlobalVars.CScanData[slaveRow].VB2.ToString("0.00");
+                                        newRow["VB3"] = GlobalVars.CScanData[slaveRow].VB3.ToString("0.00");
+                                        newRow["VB4"] = GlobalVars.CScanData[slaveRow].VB4.ToString("0.00");
+                                        newRow["CEL01"] = GlobalVars.CScanData[slaveRow].orderedCells[0].ToString("0.000");
+                                        newRow["CEL02"] = GlobalVars.CScanData[slaveRow].orderedCells[1].ToString("0.000");
+                                        newRow["CEL03"] = GlobalVars.CScanData[slaveRow].orderedCells[2].ToString("0.000");
+                                        newRow["CEL04"] = GlobalVars.CScanData[slaveRow].orderedCells[3].ToString("0.000");
+                                        newRow["CEL05"] = GlobalVars.CScanData[slaveRow].orderedCells[4].ToString("0.000");
+                                        newRow["CEL06"] = GlobalVars.CScanData[slaveRow].orderedCells[5].ToString("0.000");
+                                        newRow["CEL07"] = GlobalVars.CScanData[slaveRow].orderedCells[6].ToString("0.000");
+                                        newRow["CEL08"] = GlobalVars.CScanData[slaveRow].orderedCells[7].ToString("0.000");
+                                        newRow["CEL09"] = GlobalVars.CScanData[slaveRow].orderedCells[8].ToString("0.000");
+                                        newRow["CEL10"] = GlobalVars.CScanData[slaveRow].orderedCells[9].ToString("0.000");
+                                        newRow["CEL11"] = GlobalVars.CScanData[slaveRow].orderedCells[10].ToString("0.000");
+                                        newRow["CEL12"] = GlobalVars.CScanData[slaveRow].orderedCells[11].ToString("0.000");
+                                        newRow["CEL13"] = GlobalVars.CScanData[slaveRow].orderedCells[12].ToString("0.000");
+                                        newRow["CEL14"] = GlobalVars.CScanData[slaveRow].orderedCells[13].ToString("0.000");
+                                        newRow["CEL15"] = GlobalVars.CScanData[slaveRow].orderedCells[14].ToString("0.000");
+                                        newRow["CEL16"] = GlobalVars.CScanData[slaveRow].orderedCells[15].ToString("0.000");
+                                        newRow["CEL17"] = GlobalVars.CScanData[slaveRow].orderedCells[16].ToString("0.000");
+                                        newRow["CEL18"] = GlobalVars.CScanData[slaveRow].orderedCells[17].ToString("0.000");
+                                        newRow["CEL19"] = GlobalVars.CScanData[slaveRow].orderedCells[18].ToString("0.000");
+                                        newRow["CEL20"] = GlobalVars.CScanData[slaveRow].orderedCells[19].ToString("0.000");
+                                        newRow["CEL21"] = GlobalVars.CScanData[slaveRow].orderedCells[20].ToString("0.000");
+                                        newRow["CEL22"] = GlobalVars.CScanData[slaveRow].orderedCells[21].ToString("0.000");
+                                        newRow["CEL23"] = GlobalVars.CScanData[slaveRow].orderedCells[22].ToString("0.000");
+                                        newRow["CEL24"] = GlobalVars.CScanData[slaveRow].orderedCells[23].ToString("0.000");
+                                        newRow["BT1"] = GlobalVars.CScanData[station].TP1.ToString("0.0");
+                                        newRow["BT2"] = GlobalVars.CScanData[station].TP2.ToString("0.0");
+                                        newRow["BT3"] = GlobalVars.CScanData[station].TP3.ToString("0.0");
+                                        newRow["BT4"] = GlobalVars.CScanData[station].TP4.ToString("0.0");
+                                        newRow["BT5"] = GlobalVars.CScanData[station].TP5.ToString("0.0");
+                                        newRow["BT6"] = "0.0";
+                                        newRow["CGND1"] = GlobalVars.CScanData[slaveRow].cellGND1.ToString("0.000");
+                                        newRow["CGND2"] = GlobalVars.CScanData[slaveRow].cellGND2.ToString("0.000");
+                                        newRow["REF"] = GlobalVars.CScanData[slaveRow].ref95V.ToString("0.000");
+                                        newRow["GND"] = GlobalVars.CScanData[slaveRow].ch0GND.ToString("0.000");
+                                        newRow["FV"] = GlobalVars.CScanData[slaveRow].plus5V.ToString("0.000");
+                                        newRow["MSV"] = GlobalVars.CScanData[slaveRow].minus15.ToString("0.00");
+                                        newRow["PSV"] = GlobalVars.CScanData[slaveRow].plus15.ToString("0.00");
+
+                                        graphMainSet.Tables[0].Rows.Add(newRow);
+
+                                    }
+
+                                }
+                                catch (Exception ex)
+                                {
+
+                                    myAccessConn.Close();
+                                    updateD(station, 5, false);
+                                    if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                                    //clear values from d
+                                    updateD(station, 7, ("Error"));
+                                    if (MasterSlaveTest) { updateD(slaveRow, 7, "Error"); }
+                                    cRunTest[station].Cancel();
+                                    //update the finish time
+                                    updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
+                                    this.Invoke((MethodInvoker)delegate()
+                                    {
+                                        sendNote(station, 3, "Error: Failed to retrieve the required data from the DataBase.");
+                                        startNewTestToolStripMenuItem.Enabled = true;
+                                        resumeTestToolStripMenuItem.Enabled = true;
+                                        stopTestToolStripMenuItem.Enabled = false;
+                                        MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    });
+                                    return;
+                                }
+                                #endregion
+
+                                //we are going to look for failing cells here...
+                                #region failing cell test
+
+                                //if we have the cell check turned on and the we are in charge check the cells for negative slopes...
+                                if (Properties.Settings.Default.DecliningCellVoltageTestEnabled && !(testType.Contains("Cap") || testType.Contains("Dis")))
+                                {
+
+                                    int Cells;
+
+                                    if ((int)pci.Rows[station][3] == -1)
+                                    {
+                                        Cells = GlobalVars.CScanData[station].cellsToDisplay;
                                     }
                                     else
                                     {
-                                        Cells = (int)pci.Rows[slaveRow][3];
+                                        Cells = (int)pci.Rows[station][3];
                                     }
 
                                     // move the old cells back a place
@@ -3719,267 +3670,326 @@ namespace NewBTASProto
                                     {
                                         for (int j = 0; j < 24; j++)
                                         {
-                                            slaveCellHistory[j, i - 1] = slaveCellHistory[j, i];
+                                            cellHistory[j, i - 1] = cellHistory[j, i];
                                         }
                                     }
                                     // now load in the new values
                                     for (int j = 0; j < 24; j++)
                                     {
-                                        slaveCellHistory[j, 3] = GlobalVars.CScanData[slaveRow].orderedCells[j];
+                                        cellHistory[j, 3] = GlobalVars.CScanData[station].orderedCells[j];
                                     }
 
                                     //finally test the cells for three consecutive negative slopes..
                                     for (int j = 0; j < Cells; j++)
                                     {
-                                        if ((slaveCellHistory[j, 1] - slaveCellHistory[j, 0]) < -0.01 && (slaveCellHistory[j, 2] - slaveCellHistory[j, 1]) < -0.01 && (slaveCellHistory[j, 3] - slaveCellHistory[j, 2]) < -0.01)
+                                        if ((cellHistory[j, 1] - cellHistory[j, 0]) < -0.01 && (cellHistory[j, 2] - cellHistory[j, 1]) < -0.01 && (cellHistory[j, 3] - cellHistory[j, 2]) < -0.01)
                                         {
                                             //we need to quit...
                                             // here is where we cancel the test if we can...
-                                            if (d.Rows[slaveRow][10].ToString().Contains("ICA") || d.Rows[slaveRow][10].ToString().Contains("CCA") && !runAsShunt)
+                                            if (d.Rows[station][10].ToString().Contains("ICA") || d.Rows[station][10].ToString().Contains("CCA") && !runAsShunt)
                                             {
-                                                cRunTest[slaveRow].Cancel();
+                                                cRunTest[station].Cancel();
                                                 this.Invoke((MethodInvoker)delegate()
                                                 {
-                                                    sendNote(slaveRow, 1, "Cell " + j.ToString() + " voltage is reversing! Cancelling Test!");
+                                                    sendNote(station, 1, "Cell " + j.ToString() + " voltage is reversing! Cancelling Test!");
                                                 });
                                             }
                                             else
                                             {
                                                 this.Invoke((MethodInvoker)delegate()
                                                 {
-                                                    sendNote(slaveRow, 1, "Cell " + j.ToString() + " voltage is reversing! Cancel the test!");
+                                                    sendNote(station, 1, "Cell " + j.ToString() + " voltage is reversing! Cancel the test!");
                                                 });
                                             }
 
                                         }
                                     }
+
+                                    //do we need to do the same for the slave?
+                                    if (MasterSlaveTest)
+                                    {
+                                        if ((int)pci.Rows[slaveRow][3] == -1)
+                                        {
+                                            Cells = GlobalVars.CScanData[slaveRow].cellsToDisplay;
+                                        }
+                                        else
+                                        {
+                                            Cells = (int)pci.Rows[slaveRow][3];
+                                        }
+
+                                        // move the old cells back a place
+                                        for (int i = 1; i < 4; i++)
+                                        {
+                                            for (int j = 0; j < 24; j++)
+                                            {
+                                                slaveCellHistory[j, i - 1] = slaveCellHistory[j, i];
+                                            }
+                                        }
+                                        // now load in the new values
+                                        for (int j = 0; j < 24; j++)
+                                        {
+                                            slaveCellHistory[j, 3] = GlobalVars.CScanData[slaveRow].orderedCells[j];
+                                        }
+
+                                        //finally test the cells for three consecutive negative slopes..
+                                        for (int j = 0; j < Cells; j++)
+                                        {
+                                            if ((slaveCellHistory[j, 1] - slaveCellHistory[j, 0]) < -0.01 && (slaveCellHistory[j, 2] - slaveCellHistory[j, 1]) < -0.01 && (slaveCellHistory[j, 3] - slaveCellHistory[j, 2]) < -0.01)
+                                            {
+                                                //we need to quit...
+                                                // here is where we cancel the test if we can...
+                                                if (d.Rows[slaveRow][10].ToString().Contains("ICA") || d.Rows[slaveRow][10].ToString().Contains("CCA") && !runAsShunt)
+                                                {
+                                                    cRunTest[slaveRow].Cancel();
+                                                    this.Invoke((MethodInvoker)delegate()
+                                                    {
+                                                        sendNote(slaveRow, 1, "Cell " + j.ToString() + " voltage is reversing! Cancelling Test!");
+                                                    });
+                                                }
+                                                else
+                                                {
+                                                    this.Invoke((MethodInvoker)delegate()
+                                                    {
+                                                        sendNote(slaveRow, 1, "Cell " + j.ToString() + " voltage is reversing! Cancel the test!");
+                                                    });
+                                                }
+
+                                            }
+                                        }
+                                    }
+                                }
+
+                                #endregion
+
+                                // finally update the reading
+                                currentReading++;
+                            }
+
+                            //Now update the timer
+                            eTime = stopwatch.Elapsed.Add(offset);
+                            eTimeS = eTime.ToString(@"hh\:mm\:ss");
+                            if (oldETime != eTimeS)
+                            {
+                                try
+                                {
+                                    updateD(station, 6, eTimeS);
+                                    if (MasterSlaveTest) { updateD(slaveRow, 6, eTimeS); }
+                                }
+                                catch { }
+
+                            }
+                            oldETime = eTimeS;
+
+                            #region Here is where we are going to look for charging issues!
+                            //Lets test for a charger issue now
+                            // there are going to be three sections, ICA section, CCA section and SHUNT section
+                            #region CScan Tests and Temp drift check
+                            //CScan tests
+                            //Lets look to see if the cables have become disconnected...
+                            //start with a total Cscan test...
+                            if (dataGridView1.Rows[station].Cells[4].Style.BackColor == Color.Red)
+                            {
+                                badCSCanReads++;
+                            }
+                            else
+                            {
+                                badCSCanReads = 0;
+                            }
+
+                            if (badCSCanReads > 50)
+                            {
+                                //cancel the test
+                                cRunTest[station].Cancel();
+                                this.Invoke((MethodInvoker)delegate()
+                                {
+                                    sendNote(station, 1, "CScan communcations are failing. Please check the CScan connection and resume or restart the test.");
+                                });
+                            }
+
+                            //check them
+                            if (GlobalVars.CScanData[station].shuntCableType == "NONE")
+                            {
+                                shuntCon = false;
+                            }
+                            else
+                            {
+                                shuntCon = true;
+                            }
+                            if (GlobalVars.CScanData[station].tempPlateType == "NONE")
+                            {
+                                tempCon = false;
+                            }
+                            else
+                            {
+                                tempCon = true;
+                            }
+                            if (GlobalVars.CScanData[station].cellCableType == "NONE")
+                            {
+                                cellCon = false;
+                            }
+                            else
+                            {
+                                cellCon = true;
+                            }
+
+                            //figure out if something bad happened
+                            if (shuntCon == false && oldShuntCon == true)
+                            {
+                                //shunt just got disconnected!
+                                this.Invoke((MethodInvoker)delegate()
+                                {
+                                    sendNote(station, 1, "Shunt disconnected from station " + station.ToString());
+                                });
+                            }
+                            if (tempCon == false && oldTempCon == true)
+                            {
+                                //shunt just got disconnected!
+                                this.Invoke((MethodInvoker)delegate()
+                                {
+                                    sendNote(station, 1, "Temp-Plate disconnected from station " + station.ToString());
+                                });
+                            }
+                            if (cellCon == false && oldCellCon == true)
+                            {
+                                //shunt just got disconnected!
+                                this.Invoke((MethodInvoker)delegate()
+                                {
+                                    sendNote(station, 1, "Cells cable disconnected from station " + station.ToString());
+                                });
+                            }
+
+                            //reset the old ones...
+                            oldShuntCon = shuntCon;
+                            oldTempCon = tempCon;
+                            oldCellCon = cellCon;
+
+                            //Lets also look for a temperature rise on the temp-plate...
+                            double tempTemp = (GlobalVars.CScanData[station].TP1 + GlobalVars.CScanData[station].TP2 + GlobalVars.CScanData[station].TP3 + GlobalVars.CScanData[station].TP4) / 4;
+                            if ((tempTemp > (startTemp + 5)) && memTemp == 0)
+                            {
+                                // we got the first 5 C rise
+                                // warn the user
+                                this.Invoke((MethodInvoker)delegate()
+                                {
+                                    sendNote(station, 3, "Temperature has risen 5C on template");
+                                });
+                                //update memTemp
+                                memTemp += 1;
+                            }
+                            else if ((tempTemp > (startTemp + 10)) && memTemp == 1)
+                            {
+                                // we got the a  10 C rise
+                                // warn the user
+                                this.Invoke((MethodInvoker)delegate()
+                                {
+                                    sendNote(station, 2, "Temperature has risen 10C on template");
+                                });
+                                //update memTemp
+                                memTemp += 1;
+                            }
+                            else if ((tempTemp > (startTemp + 15)) && memTemp == 2)
+                            {
+                                // we got the a 15 C rise
+                                // warn the user
+                                this.Invoke((MethodInvoker)delegate()
+                                {
+                                    sendNote(station, 1, "Temperature has risen 15C on template");
+                                });
+                                //update memTemp
+                                memTemp += 1;
+                            }
+                            else if ((tempTemp > (startTemp + 20)) && memTemp == 3)
+                            {
+                                // we got the a 20 C rise
+                                // this is out of hand!  Lets quit the test. If we can...
+                                this.Invoke((MethodInvoker)delegate()
+                                {
+                                    sendNote(station, 1, "Temperature has risen 20C on template");
+                                });
+                                // here is where we cancel the test if we can...
+                                if (d.Rows[station][10].ToString().Contains("ICA") || d.Rows[station][10].ToString().Contains("CCA") && !runAsShunt)
+                                {
+                                    cRunTest[station].Cancel();
+                                    this.Invoke((MethodInvoker)delegate()
+                                    {
+                                        sendNote(station, 1, "Drastic temperature rise on the battery! Cancelling Test!");
+                                    });
+                                }
+                                else
+                                {
+                                    this.Invoke((MethodInvoker)delegate()
+                                    {
+                                        sendNote(station, 1, "Drastic temperature rise on the battery! Cancel the test!");
+                                    });
                                 }
                             }
 
                             #endregion
-
-                            // finally update the reading
-                            currentReading++;
-                        }
-
-                        //Now update the timer
-                        eTime = stopwatch.Elapsed.Add(offset);
-                        eTimeS = eTime.ToString(@"hh\:mm\:ss");
-                        if (oldETime != eTimeS)
-                        {
-                            try
+                            //charger specific tests
+                            #region IC checks
+                            if (d.Rows[station][10].ToString().Contains("ICA") && !startUpDelay && !runAsShunt)
                             {
-                                updateD(station, 6, eTimeS);
-                                if (MasterSlaveTest) { updateD(slaveRow, 6, eTimeS); }
-                            }
-                            catch { }
-
-                        }
-                        oldETime = eTimeS;
-
-                        #region Here is where we are going to look for charging issues!
-                        //Lets test for a charger issue now
-                        // there are going to be three sections, ICA section, CCA section and SHUNT section
-                        #region CScan Tests and Temp drift check
-                        //CScan tests
-                        //Lets look to see if the cables have become disconnected...
-                        //start with a total Cscan test...
-                        if (dataGridView1.Rows[station].Cells[4].Style.BackColor == Color.Red)
-                        {
-                            badCSCanReads++;
-                        }
-                        else
-                        {
-                            badCSCanReads = 0;
-                        }
-
-                        if (badCSCanReads > 50)
-                        {
-                            //cancel the test
-                            cRunTest[station].Cancel();
-                            this.Invoke((MethodInvoker)delegate()
-                            {
-                                sendNote(station, 1, "CScan communcations are failing. Please check the CScan connection and resume or restart the test.");
-                            });
-                        }
-
-                        //check them
-                        if (GlobalVars.CScanData[station].shuntCableType == "NONE")
-                        {
-                            shuntCon = false;
-                        }
-                        else
-                        {
-                            shuntCon = true;
-                        }
-                        if (GlobalVars.CScanData[station].tempPlateType == "NONE")
-                        {
-                            tempCon = false;
-                        }
-                        else
-                        {
-                            tempCon = true;
-                        }
-                        if (GlobalVars.CScanData[station].cellCableType == "NONE")
-                        {
-                            cellCon = false;
-                        }
-                        else
-                        {
-                            cellCon = true;
-                        }
-
-                        //figure out if something bad happened
-                        if (shuntCon == false && oldShuntCon == true)
-                        {
-                            //shunt just got disconnected!
-                            this.Invoke((MethodInvoker)delegate()
-                            {
-                                sendNote(station, 1, "Shunt disconnected from station " + station.ToString());
-                            });
-                        }
-                        if (tempCon == false && oldTempCon == true)
-                        {
-                            //shunt just got disconnected!
-                            this.Invoke((MethodInvoker)delegate()
-                            {
-                                sendNote(station, 1, "Temp-Plate disconnected from station " + station.ToString());
-                            });
-                        }
-                        if (cellCon == false && oldCellCon == true)
-                        {
-                            //shunt just got disconnected!
-                            this.Invoke((MethodInvoker)delegate()
-                            {
-                                sendNote(station, 1, "Cells cable disconnected from station " + station.ToString());
-                            });
-                        }
-
-                        //reset the old ones...
-                        oldShuntCon = shuntCon;
-                        oldTempCon = tempCon;
-                        oldCellCon = cellCon;
-
-                        //Lets also look for a temperature rise on the temp-plate...
-                        double tempTemp = (GlobalVars.CScanData[station].TP1 + GlobalVars.CScanData[station].TP2 + GlobalVars.CScanData[station].TP3 + GlobalVars.CScanData[station].TP4) / 4;
-                        if ((tempTemp > (startTemp + 5)) && memTemp == 0)
-                        {
-                            // we got the first 5 C rise
-                            // warn the user
-                            this.Invoke((MethodInvoker)delegate()
-                            {
-                                sendNote(station, 3, "Temperature has risen 5C on template");
-                            });
-                            //update memTemp
-                            memTemp += 1;
-                        }
-                        else if ((tempTemp > (startTemp + 10)) && memTemp == 1)
-                        {
-                            // we got the a  10 C rise
-                            // warn the user
-                            this.Invoke((MethodInvoker)delegate()
-                            {
-                                sendNote(station, 2, "Temperature has risen 10C on template");
-                            });
-                            //update memTemp
-                            memTemp += 1;
-                        }
-                        else if ((tempTemp > (startTemp + 15)) && memTemp == 2)
-                        {
-                            // we got the a 15 C rise
-                            // warn the user
-                            this.Invoke((MethodInvoker)delegate()
-                            {
-                                sendNote(station, 1, "Temperature has risen 15C on template");
-                            });
-                            //update memTemp
-                            memTemp += 1;
-                        }
-                        else if ((tempTemp > (startTemp + 20)) && memTemp == 3)
-                        {
-                            // we got the a 20 C rise
-                            // this is out of hand!  Lets quit the test. If we can...
-                            this.Invoke((MethodInvoker)delegate()
-                            {
-                                sendNote(station, 1, "Temperature has risen 20C on template");
-                            });
-                            // here is where we cancel the test if we can...
-                            if (d.Rows[station][10].ToString().Contains("ICA") || d.Rows[station][10].ToString().Contains("CCA") && !runAsShunt)
-                            {
-                                cRunTest[station].Cancel();
-                                this.Invoke((MethodInvoker)delegate()
+                                //current check part...
+                                //if we have a mini that is charging...
+                                if (d.Rows[station][10].ToString().Contains("mini") && !(testType.Contains("Cap") || testType.Contains("Discharge")))
                                 {
-                                    sendNote(station, 1, "Drastic temperature rise on the battery! Cancelling Test!");
-                                });
-                            }
-                            else
-                            {
-                                this.Invoke((MethodInvoker)delegate()
-                                {
-                                    sendNote(station, 1, "Drastic temperature rise on the battery! Cancel the test!");
-                                });
-                            }
-                        }
-
-                        #endregion
-                        //charger specific tests
-                        #region IC checks
-                        if (d.Rows[station][10].ToString().Contains("ICA") && !startUpDelay && !runAsShunt)
-                        {
-                            //current check part...
-                            //if we have a mini that is charging...
-                            if (d.Rows[station][10].ToString().Contains("mini") && !(testType.Contains("Cap") || testType.Contains("Discharge")))
-                            {
-                                //badCurCount looks at current two...
-                                // for the mini case
-                                if (Math.Abs(GlobalVars.CScanData[station].currentTwo) < 0.005)
-                                {
-                                    badCurCount++;
-                                }
-                                else
-                                {
-                                    badCurCount = 0;
-                                }
-                            }
-                            else
-                            {
-                                // all other cases
-                                // for the mini case
-                                if (Math.Abs(GlobalVars.CScanData[station].currentOne) < 0.05)
-                                {
-                                    badCurCount++;
-                                }
-                                else
-                                {
-                                    badCurCount = 0;
-                                }
-                            }
-
-
-                            // this is the current check!
-                            if (badCurCount > 100)
-                            {
-                                // end the test!
-                                //clear values from d
-
-                                //also tell the charger to stop
-                                // now we need to stop the charger
-                                updateD(station, 7, "Telling Charger to Stop");
-                                if (MasterSlaveTest) { updateD(slaveRow, 7, "Telling Charger to Stop"); }
-
-                                for (int j = 0; j < 5; j++)
-                                {
-                                    // set KE1 to 2 ("command")
-                                    GlobalVars.ICSettings[Cstation].KE1 = (byte)2;
-                                    // set KE3 to stop
-                                    GlobalVars.ICSettings[Cstation].KE3 = (byte)2;
-                                    //Update the output string value
-                                    GlobalVars.ICSettings[Cstation].UpdateOutText();
-
-                                    for (int i = 0; i < 5; i++)
+                                    //badCurCount looks at current two...
+                                    // for the mini case
+                                    if (Math.Abs(GlobalVars.CScanData[station].currentTwo) < 0.005)
                                     {
-                                        criticalNum[Cstation] = true;
-                                        Thread.Sleep(1000);
+                                        badCurCount++;
+                                    }
+                                    else
+                                    {
+                                        badCurCount = 0;
+                                    }
+                                }
+                                else
+                                {
+                                    // all other cases
+                                    // for the mini case
+                                    if (Math.Abs(GlobalVars.CScanData[station].currentOne) < 0.05)
+                                    {
+                                        badCurCount++;
+                                    }
+                                    else
+                                    {
+                                        badCurCount = 0;
+                                    }
+                                }
+
+
+                                // this is the current check!
+                                if (badCurCount > 100)
+                                {
+                                    // end the test!
+                                    //clear values from d
+
+                                    //also tell the charger to stop
+                                    // now we need to stop the charger
+                                    updateD(station, 7, "Telling Charger to Stop");
+                                    if (MasterSlaveTest) { updateD(slaveRow, 7, "Telling Charger to Stop"); }
+
+                                    for (int j = 0; j < 5; j++)
+                                    {
+                                        // set KE1 to 2 ("command")
+                                        GlobalVars.ICSettings[Cstation].KE1 = (byte)2;
+                                        // set KE3 to stop
+                                        GlobalVars.ICSettings[Cstation].KE3 = (byte)2;
+                                        //Update the output string value
+                                        GlobalVars.ICSettings[Cstation].UpdateOutText();
+
+                                        for (int i = 0; i < 5; i++)
+                                        {
+                                            criticalNum[Cstation] = true;
+                                            Thread.Sleep(1000);
+                                            if (d.Rows[station][11].ToString() == "HOLD" || d.Rows[station][11].ToString() == "END" || d.Rows[station][11].ToString() == "RESET")
+                                            {
+                                                break;
+                                            }
+
+                                        }
+
                                         if (d.Rows[station][11].ToString() == "HOLD" || d.Rows[station][11].ToString() == "END" || d.Rows[station][11].ToString() == "RESET")
                                         {
                                             break;
@@ -3987,219 +3997,225 @@ namespace NewBTASProto
 
                                     }
 
-                                    if (d.Rows[station][11].ToString() == "HOLD" || d.Rows[station][11].ToString() == "END" || d.Rows[station][11].ToString() == "RESET")
+                                    updateD(station, 7, ("FAILED ON " + (currentReading - 1).ToString() + " of " + readings.ToString()));
+                                    if (MasterSlaveTest) { updateD(slaveRow, 7, ("FAILED ON " + (currentReading - 1).ToString() + " of " + readings.ToString())); }
+                                    updateD(station, 5, false);
+                                    if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                                    cRunTest[station].Cancel();
+                                    //update the finish time
+                                    updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
+
+                                    //update the gui
+                                    this.Invoke((MethodInvoker)delegate()
                                     {
-                                        break;
+                                        sendNote(station, 3, "Test failed. Charger is not producing any current.  Please check the charger settings.");
+                                        startNewTestToolStripMenuItem.Enabled = true;
+                                        resumeTestToolStripMenuItem.Enabled = true;
+                                        stopTestToolStripMenuItem.Enabled = false;
+                                        MessageBox.Show(this, "Test failed. Charger is not producing any current.  Please check the charger settings.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    });
+
+                                    return;
+                                }
+
+
+                                ////////status checks!
+
+                                if ((currentReading == readings || currentReading == readings + 1) && d.Rows[station][11].ToString() == "END")
+                                {
+
+                                    // we are on the last reading.  Look out for the "END"...
+                                    // At the moment the test will just continue until the time is up...
+                                    // doesn't seem to be an issue because all of the chargers are a little slow...
+
+                                }
+                                else if ((string)d.Rows[station][11] != "RUN" && testType != "As Received")
+                                {
+                                    //make sure the charger has priority
+                                    criticalNum[Cstation] = true;
+
+                                    //try it a couple more times
+                                    for (byte b = 0; b < 3; b++)
+                                    {
+                                        Thread.Sleep(2000);
+                                        if ((string)d.Rows[station][11] == "RUN") { break; }
                                     }
 
-                                }
-
-                                updateD(station, 7, ("FAILED ON " + (currentReading - 1).ToString() + " of " + readings.ToString()));
-                                if (MasterSlaveTest) { updateD(slaveRow, 7, ("FAILED ON " + (currentReading - 1).ToString() + " of " + readings.ToString())); }
-                                updateD(station, 5, false);
-                                if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
-                                cRunTest[station].Cancel();
-                                //update the finish time
-                                updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
-
-                                //update the gui
-                                this.Invoke((MethodInvoker)delegate()
-                                {
-                                    sendNote(station, 3, "Test failed. Charger is not producing any current.  Please check the charger settings.");
-                                    startNewTestToolStripMenuItem.Enabled = true;
-                                    resumeTestToolStripMenuItem.Enabled = true;
-                                    stopTestToolStripMenuItem.Enabled = false;
-                                    MessageBox.Show(this, "Test failed. Charger is not producing any current.  Please check the charger settings.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                });
-
-                                return;
-                            }
-
-
-                            ////////status checks!
-
-                            if ((currentReading == readings || currentReading == readings + 1) && d.Rows[station][11].ToString() == "END")
-                            {
-
-                                // we are on the last reading.  Look out for the "END"...
-                                // At the moment the test will just continue until the time is up...
-                                // doesn't seem to be an issue because all of the chargers are a little slow...
-
-                            }
-                            else if ((string)d.Rows[station][11] != "RUN" && testType != "As Received")
-                            {
-                                //make sure the charger has priority
-                                criticalNum[Cstation] = true;
-
-                                //try it a couple more times
-                                for (byte b = 0; b < 3; b++)
-                                {
-                                    Thread.Sleep(2000);
-                                    if ((string)d.Rows[station][11] == "RUN") { break; }
-                                }
-
-                                //retest the "RUN"
-                                if ((string)d.Rows[station][11] != "RUN")
-                                {
-                                    updateD(station, 7, "Found Fault!");
-                                    if (MasterSlaveTest) { updateD(slaveRow, 7, "Found Fault!"); }
-                                    // we got an issue!
-                                    // stop the clock!
-                                    stopwatch.Stop();
-                                    Thread.Sleep(5000);
-
-                                    if ((string)d.Rows[station][11] == "Power Fail" || (string)d.Rows[station][11] == "HOLD")
+                                    //retest the "RUN"
+                                    if ((string)d.Rows[station][11] != "RUN")
                                     {
+                                        updateD(station, 7, "Found Fault!");
+                                        if (MasterSlaveTest) { updateD(slaveRow, 7, "Found Fault!"); }
+                                        // we got an issue!
+                                        // stop the clock!
+                                        stopwatch.Stop();
+                                        Thread.Sleep(5000);
 
-                                        updateD(station, 7, "Waiting For Charger");
-                                        if (MasterSlaveTest) { updateD(slaveRow, 7, "Waiting For Charger"); }
-                                        // lets put things on pause and wait for the charger to come back
-                                        while ((string)d.Rows[station][11] != "HOLD" && (string)d.Rows[station][11] != "RUN")
+                                        if ((string)d.Rows[station][11] == "Power Fail" || (string)d.Rows[station][11] == "HOLD")
                                         {
-                                            //check for a cancel or offline!
-                                            if (token.IsCancellationRequested || d.Rows[station][11].ToString() == "offline!")
+
+                                            updateD(station, 7, "Waiting For Charger");
+                                            if (MasterSlaveTest) { updateD(slaveRow, 7, "Waiting For Charger"); }
+                                            // lets put things on pause and wait for the charger to come back
+                                            while ((string)d.Rows[station][11] != "HOLD" && (string)d.Rows[station][11] != "RUN")
                                             {
-
-                                                //clear values from d
-                                                updateD(station, 7, ("Read " + (currentReading - 1).ToString() + " of " + readings.ToString()));
-                                                if (MasterSlaveTest) { updateD(slaveRow, 7, ("Read " + (currentReading - 1).ToString() + " of " + readings.ToString())); }
-                                                updateD(station, 5, false);
-                                                if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
-
-
-                                                cRunTest[station].Cancel();
-                                                //update the finish time
-                                                updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
-                                                //update the gui
-                                                this.Invoke((MethodInvoker)delegate()
+                                                //check for a cancel or offline!
+                                                if (token.IsCancellationRequested || d.Rows[station][11].ToString() == "offline!")
                                                 {
-                                                    sendNote(station, 3, "Test Cancelled");
-                                                    startNewTestToolStripMenuItem.Enabled = true;
-                                                    resumeTestToolStripMenuItem.Enabled = true;
-                                                    stopTestToolStripMenuItem.Enabled = false;
-                                                });
 
-                                                return;
+                                                    //clear values from d
+                                                    updateD(station, 7, ("Read " + (currentReading - 1).ToString() + " of " + readings.ToString()));
+                                                    if (MasterSlaveTest) { updateD(slaveRow, 7, ("Read " + (currentReading - 1).ToString() + " of " + readings.ToString())); }
+                                                    updateD(station, 5, false);
+                                                    if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+
+
+                                                    cRunTest[station].Cancel();
+                                                    //update the finish time
+                                                    updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
+                                                    //update the gui
+                                                    this.Invoke((MethodInvoker)delegate()
+                                                    {
+                                                        sendNote(station, 3, "Test Cancelled");
+                                                        startNewTestToolStripMenuItem.Enabled = true;
+                                                        resumeTestToolStripMenuItem.Enabled = true;
+                                                        stopTestToolStripMenuItem.Enabled = false;
+                                                    });
+
+                                                    return;
+                                                }
+
+                                                Thread.Sleep(400);
                                             }
+                                            // were back!
+                                            //start the charger back up!
 
-                                            Thread.Sleep(400);
-                                        }
-                                        // were back!
-                                        //start the charger back up!
+                                            criticalNum[Cstation] = true;
+                                            updateD(station, 7, "Telling Charger to Run");
+                                            if (MasterSlaveTest) { updateD(slaveRow, 7, "Telling Charger to Run"); }
+                                            stopwatch.Start();
 
-                                        criticalNum[Cstation] = true;
-                                        updateD(station, 7, "Telling Charger to Run");
-                                        if (MasterSlaveTest) { updateD(slaveRow, 7, "Telling Charger to Run"); }
-                                        stopwatch.Start();
-
-                                        ThreadPool.QueueUserWorkItem(t =>
-                                        {
-                                            for (int j = 0; j < 10; j++)
+                                            ThreadPool.QueueUserWorkItem(t =>
                                             {
-                                                // set KE1 to 2 ("command")
-                                                GlobalVars.ICSettings[Cstation].KE1 = (byte)2;
-                                                // set KE3 to run
-                                                GlobalVars.ICSettings[Cstation].KE3 = (byte)1;
-                                                //Update the output string value
-                                                GlobalVars.ICSettings[Cstation].UpdateOutText();
-                                                criticalNum[Cstation] = true;
-                                                Thread.Sleep(3000);
-                                                // set KE1 to 1 ("query")
-                                                GlobalVars.ICSettings[Cstation].KE1 = (byte)0;
-                                                //Update the output string value
-                                                GlobalVars.ICSettings[Cstation].UpdateOutText();
-                                                for (int i = 0; i < 3; i++)
+                                                for (int j = 0; j < 10; j++)
                                                 {
+                                                    // set KE1 to 2 ("command")
+                                                    GlobalVars.ICSettings[Cstation].KE1 = (byte)2;
+                                                    // set KE3 to run
+                                                    GlobalVars.ICSettings[Cstation].KE3 = (byte)1;
+                                                    //Update the output string value
+                                                    GlobalVars.ICSettings[Cstation].UpdateOutText();
                                                     criticalNum[Cstation] = true;
-                                                    Thread.Sleep(1000);
+                                                    Thread.Sleep(3000);
+                                                    // set KE1 to 1 ("query")
+                                                    GlobalVars.ICSettings[Cstation].KE1 = (byte)0;
+                                                    //Update the output string value
+                                                    GlobalVars.ICSettings[Cstation].UpdateOutText();
+                                                    for (int i = 0; i < 3; i++)
+                                                    {
+                                                        criticalNum[Cstation] = true;
+                                                        Thread.Sleep(1000);
+                                                        if (d.Rows[station][11].ToString() == "RUN")
+                                                        {
+                                                            break;
+                                                        }
+                                                    }
+
+                                                    //make sure the charger has priority
                                                     if (d.Rows[station][11].ToString() == "RUN")
                                                     {
                                                         break;
                                                     }
                                                 }
 
-                                                //make sure the charger has priority
-                                                if (d.Rows[station][11].ToString() == "RUN")
-                                                {
-                                                    break;
-                                                }
-                                            }
+                                            });                     // end thread
 
-                                        });                     // end thread
+                                            // lay off the tests for 10 seconds...
+                                            startUpDelay = true;
+                                            ThreadPool.QueueUserWorkItem(t =>
+                                            {
+                                                Thread.Sleep(10000);
+                                                startUpDelay = false;
+                                            });                     // end thread
 
-                                        // lay off the tests for 10 seconds...
-                                        startUpDelay = true;
-                                        ThreadPool.QueueUserWorkItem(t =>
+
+                                            Thread.Sleep(2000);
+                                            updateD(station, 7, ("Reading " + (currentReading - 1).ToString() + " of " + readings.ToString()));
+                                            if (MasterSlaveTest) { updateD(slaveRow, 7, ("Reading " + (currentReading - 1).ToString() + " of " + readings.ToString())); }
+
+                                        }// end power fail if
+                                        else
                                         {
-                                            Thread.Sleep(10000);
-                                            startUpDelay = false;
-                                        });                     // end thread
+                                            // end the test!
+                                            //clear values from d
 
+                                            updateD(station, 7, ("FAILED ON " + (currentReading - 1).ToString() + " of " + readings.ToString()));
+                                            if (MasterSlaveTest) { updateD(slaveRow, 7, ("FAILED ON " + (currentReading - 1).ToString() + " of " + readings.ToString())); }
+                                            updateD(station, 5, false);
+                                            if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
 
-                                        Thread.Sleep(2000);
-                                        updateD(station, 7, ("Reading " + (currentReading - 1).ToString() + " of " + readings.ToString()));
-                                        if (MasterSlaveTest) { updateD(slaveRow, 7, ("Reading " + (currentReading - 1).ToString() + " of " + readings.ToString())); }
+                                            //update the gui
+                                            cRunTest[station].Cancel();
+                                            //update the finish time
+                                            updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
+                                            this.Invoke((MethodInvoker)delegate()
+                                            {
+                                                sendNote(station, 3, "Test failed. Charger Status:  " + d.Rows[station][11].ToString());
+                                                startNewTestToolStripMenuItem.Enabled = true;
+                                                resumeTestToolStripMenuItem.Enabled = true;
+                                                stopTestToolStripMenuItem.Enabled = false;
+                                                MessageBox.Show(this, "Test failed. Charger Status:  " + d.Rows[station][11].ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                            });
+                                            return;
+                                        }// end test fail else
 
-                                    }// end power fail if
-                                    else
+                                    }  // end still no run if
+                                } // end no run if
+
+                                // finally let take a look at the current and voltages and the like and see if they are where they should be...
+                                // this is a double check to make sure the autoconfig is behaving...
+                                #region settings checks for autoConfigged ICs
+
+                                if (GlobalVars.autoConfig && (bool)d.Rows[station][12])
+                                {
+                                    /* we need to check that the charger is doing what it should be...
+                                    timeSet1
+                                    curSet1
+                                    vSet1
+                                    timeSet2
+                                    curSet2
+                                    vSet2
+                                    ohmSet
+                                     * */
+
+                                    Debug.Print("Current:" + GlobalVars.ICData[station].battCurrent.ToString());
+                                    Debug.Print("Voltage:" + GlobalVars.ICData[station].battVoltage.ToString());
+                                    // we are past the startup dealy, so lets see if we are reasonably close to one of the currents
+                                    //check the currents
+                                    if (GlobalVars.ICData[station].testMode.Contains("32"))
                                     {
-                                        // end the test!
-                                        //clear values from d
-
-                                        updateD(station, 7, ("FAILED ON " + (currentReading - 1).ToString() + " of " + readings.ToString()));
-                                        if (MasterSlaveTest) { updateD(slaveRow, 7, ("FAILED ON " + (currentReading - 1).ToString() + " of " + readings.ToString())); }
-                                        updateD(station, 5, false);
-                                        if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
-
-                                        //update the gui
-                                        cRunTest[station].Cancel();
-                                        //update the finish time
-                                        updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
-                                        this.Invoke((MethodInvoker)delegate()
+                                        // resistance discharge
+                                    }
+                                    else if (testType.Contains("Cap") || testType.Contains("Dis"))
+                                    {
+                                        if (Math.Abs(-1 * GlobalVars.CScanData[station].currentOne - curSet1) > (0.1 + curSet1 * 0.05) && Math.Abs(-1 * GlobalVars.CScanData[station].currentOne - curSet2) > (0.1 + curSet2 * 0.05))
                                         {
-                                            sendNote(station, 3, "Test failed. Charger Status:  " + d.Rows[station][11].ToString());
-                                            startNewTestToolStripMenuItem.Enabled = true;
-                                            resumeTestToolStripMenuItem.Enabled = true;
-                                            stopTestToolStripMenuItem.Enabled = false;
-                                            MessageBox.Show(this, "Test failed. Charger Status:  " + d.Rows[station][11].ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                        });
-                                        return;
-                                    }// end test fail else
-
-                                }  // end still no run if
-                            } // end no run if
-
-                            // finally let take a look at the current and voltages and the like and see if they are where they should be...
-                            // this is a double check to make sure the autoconfig is behaving...
-                            #region settings checks for autoConfigged ICs
-
-                            if (GlobalVars.autoConfig && (bool)d.Rows[station][12])
-                            {
-                                /* we need to check that the charger is doing what it should be...
-                                timeSet1
-                                curSet1
-                                vSet1
-                                timeSet2
-                                curSet2
-                                vSet2
-                                ohmSet
-                                 * */
-
-                                Debug.Print("Current:" + GlobalVars.ICData[station].battCurrent.ToString());
-                                Debug.Print("Voltage:" + GlobalVars.ICData[station].battVoltage.ToString());
-                                // we are past the startup dealy, so lets see if we are reasonably close to one of the currents
-                                //check the currents
-                                if (GlobalVars.ICData[station].testMode.Contains("32"))
-                                {
-                                    // resistance discharge
-                                }
-                                else if (testType.Contains("Cap") || testType.Contains("Dis"))
-                                {
-                                    if (Math.Abs(-1 * GlobalVars.CScanData[station].currentOne - curSet1) > (0.1 + curSet1 * 0.05) && Math.Abs(-1 * GlobalVars.CScanData[station].currentOne - curSet2) > (0.1 + curSet2 * 0.05))
+                                            badReadingCount++;
+                                        }
+                                        else if (GlobalVars.ICData[station].battVoltage < (vSet1 - 1))
+                                        {
+                                            badReadingCount++;
+                                        }
+                                        else
+                                        {
+                                            badReadingCount = 0;
+                                        }
+                                    }
+                                    else if (Math.Abs(GlobalVars.CScanData[station].currentOne - curSet1) > (0.1 + curSet1 * 0.05) && Math.Abs(GlobalVars.CScanData[station].currentOne - curSet2) > (0.1 + curSet2 * 0.05))
                                     {
                                         badReadingCount++;
                                     }
-                                    else if (GlobalVars.ICData[station].battVoltage < (vSet1 - 1))
+                                    else if (GlobalVars.ICData[station].battVoltage > (vSet1 + 0.5) && GlobalVars.ICData[station].battVoltage > (vSet2 + 0.5))
                                     {
                                         badReadingCount++;
                                     }
@@ -4207,49 +4223,43 @@ namespace NewBTASProto
                                     {
                                         badReadingCount = 0;
                                     }
-                                }
-                                else if (Math.Abs(GlobalVars.CScanData[station].currentOne - curSet1) > (0.1 + curSet1 * 0.05) && Math.Abs(GlobalVars.CScanData[station].currentOne - curSet2) > (0.1 + curSet2 * 0.05))
-                                {
-                                    badReadingCount++;
-                                }
-                                else if (GlobalVars.ICData[station].battVoltage > (vSet1 + 0.5) && GlobalVars.ICData[station].battVoltage > (vSet2 + 0.5))
-                                {
-                                    badReadingCount++;
-                                }
-                                else
-                                {
-                                    badReadingCount = 0;
+
                                 }
 
-                            }
-
-                            #region cancel because of out of programmed settings error
-                            if (badReadingCount > 100)
-                            {
-                                // quit the test and let them know about it...
-                                // end the test!
-                                //clear values from d
-
-                                //update the gui
-
-                                //also tell the charger to stop
-                                // now we need to stop the charger
-                                updateD(station, 7, "Telling Charger to Stop");
-                                if (MasterSlaveTest) { updateD(slaveRow, 7, "Telling Charger to Stop"); }
-
-                                for (int j = 0; j < 5; j++)
+                                #region cancel because of out of programmed settings error
+                                if (badReadingCount > 100)
                                 {
-                                    // set KE1 to 2 ("command")
-                                    GlobalVars.ICSettings[Cstation].KE1 = (byte)2;
-                                    // set KE3 to stop
-                                    GlobalVars.ICSettings[Cstation].KE3 = (byte)2;
-                                    //Update the output string value
-                                    GlobalVars.ICSettings[Cstation].UpdateOutText();
+                                    // quit the test and let them know about it...
+                                    // end the test!
+                                    //clear values from d
 
-                                    for (int i = 0; i < 5; i++)
+                                    //update the gui
+
+                                    //also tell the charger to stop
+                                    // now we need to stop the charger
+                                    updateD(station, 7, "Telling Charger to Stop");
+                                    if (MasterSlaveTest) { updateD(slaveRow, 7, "Telling Charger to Stop"); }
+
+                                    for (int j = 0; j < 5; j++)
                                     {
-                                        criticalNum[Cstation] = true;
-                                        Thread.Sleep(1000);
+                                        // set KE1 to 2 ("command")
+                                        GlobalVars.ICSettings[Cstation].KE1 = (byte)2;
+                                        // set KE3 to stop
+                                        GlobalVars.ICSettings[Cstation].KE3 = (byte)2;
+                                        //Update the output string value
+                                        GlobalVars.ICSettings[Cstation].UpdateOutText();
+
+                                        for (int i = 0; i < 5; i++)
+                                        {
+                                            criticalNum[Cstation] = true;
+                                            Thread.Sleep(1000);
+                                            if (d.Rows[station][11].ToString() == "HOLD" || d.Rows[station][11].ToString() == "END" || d.Rows[station][11].ToString() == "RESET")
+                                            {
+                                                break;
+                                            }
+
+                                        }
+
                                         if (d.Rows[station][11].ToString() == "HOLD" || d.Rows[station][11].ToString() == "END" || d.Rows[station][11].ToString() == "RESET")
                                         {
                                             break;
@@ -4257,242 +4267,242 @@ namespace NewBTASProto
 
                                     }
 
-                                    if (d.Rows[station][11].ToString() == "HOLD" || d.Rows[station][11].ToString() == "END" || d.Rows[station][11].ToString() == "RESET")
+                                    updateD(station, 7, ("FAILED ON " + (currentReading - 1).ToString() + " of " + readings.ToString()));
+                                    if (MasterSlaveTest) { updateD(slaveRow, 7, ("FAILED ON " + (currentReading - 1).ToString() + " of " + readings.ToString())); }
+                                    updateD(station, 5, false);
+                                    if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                                    cRunTest[station].Cancel();
+                                    //update the finish time
+                                    updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
+                                    this.Invoke((MethodInvoker)delegate()
                                     {
-                                        break;
-                                    }
+                                        sendNote(station, 3, "Test failed. Charger is not running as programmed.  Please check the charger comms.");
+                                        startNewTestToolStripMenuItem.Enabled = true;
+                                        resumeTestToolStripMenuItem.Enabled = true;
+                                        stopTestToolStripMenuItem.Enabled = false;
+                                        MessageBox.Show(this, "Test failed. Charger is not running as programmed.  Please check the charger comms.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    });
+                                    return;
+
+                                }
+                                #endregion
+                                #endregion
+                            }// end IC block
+                            #endregion
+                            #region CCA tests
+                            else if (d.Rows[station][10].ToString().Contains("CCA") && !startUpDelay && !runAsShunt)
+                            {
+                                // check that the C-Scan is still running...
+
+                                // this is the power fail case...
+                                if (d.Rows[station][11].ToString() == "Power Fail")
+                                {
+                                    stopwatch.Stop();
+                                    //set to hold
+                                    GlobalVars.cHold[station] = true;
+                                    //wait for a return of power..
+                                    updateD(station, 7, "Waiting For Charger");
+                                    if (MasterSlaveTest) { updateD(slaveRow, 7, "Waiting For Charger"); }
+
+                                    while (d.Rows[station][11].ToString() != "HOLD")
+                                    {
+
+
+                                        // check for a cancel
+                                        if (token.IsCancellationRequested)
+                                        {
+                                            //clear values from d
+                                            updateD(station, 7, ("Read " + (currentReading - 1).ToString() + " of " + readings.ToString()));
+                                            if (MasterSlaveTest) { updateD(slaveRow, 7, ("Read " + (currentReading - 1).ToString() + " of " + readings.ToString())); }
+                                            updateD(station, 5, false);
+                                            if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+
+                                            //update the gui
+
+                                            cRunTest[station].Cancel();
+                                            //update the finish time
+                                            updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
+                                            this.Invoke((MethodInvoker)delegate()
+                                            {
+                                                sendNote(station, 3, "Test canceled while in a power fail.");
+                                                startNewTestToolStripMenuItem.Enabled = true;
+                                                resumeTestToolStripMenuItem.Enabled = true;
+                                                stopTestToolStripMenuItem.Enabled = false;
+                                                MessageBox.Show(this, "Test canceled while in a power fail.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                            });
+                                            return;
+                                        }
+                                        // wait a little before testing again...
+                                        Thread.Sleep(200);
+                                    }// end power fail wait
+
+                                    //reset readings
+                                    updateD(station, 7, "Restarting Charger");
+                                    if (MasterSlaveTest) { updateD(slaveRow, 7, "Restarting Charger"); }
+                                    Thread.Sleep(1500);
+                                    stopwatch.Start();
+                                    GlobalVars.cHold[station] = false;
+                                    Thread.Sleep(500);
+                                    updateD(station, 7, ("Reading " + (currentReading - 1).ToString() + " of " + readings.ToString()));
+                                    if (MasterSlaveTest) { updateD(slaveRow, 7, ("Reading " + (currentReading - 1).ToString() + " of " + readings.ToString())); }
 
                                 }
 
-                                updateD(station, 7, ("FAILED ON " + (currentReading - 1).ToString() + " of " + readings.ToString()));
-                                if (MasterSlaveTest) { updateD(slaveRow, 7, ("FAILED ON " + (currentReading - 1).ToString() + " of " + readings.ToString())); }
+                                else if (Math.Abs(GlobalVars.CScanData[station].currentOne) < 0.2)
+                                {
+                                    int count = 0;
+                                    while (Math.Abs(GlobalVars.CScanData[station].currentOne) < 0.2)
+                                    {
+                                        count++;
+                                        Thread.Sleep(100);
+                                        if (count > 20)
+                                        {
+                                            //make sure the C-Scan is back on hold
+                                            GlobalVars.cHold[station] = true;
+
+                                            //clear values from d
+                                            updateD(station, 7, ("Read " + (currentReading - 1).ToString() + " of " + readings.ToString()));
+                                            if (MasterSlaveTest) { updateD(slaveRow, 7, ("Read " + (currentReading - 1).ToString() + " of " + readings.ToString())); }
+                                            updateD(station, 5, false);
+                                            if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+
+                                            //update the gui
+
+                                            cRunTest[station].Cancel();
+                                            //update the finish time
+                                            updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
+                                            this.Invoke((MethodInvoker)delegate()
+                                            {
+                                                sendNote(station, 3, "Current has fallen below minimum threshold. Please check the shunt connection and resume or restart the test.");
+                                                startNewTestToolStripMenuItem.Enabled = true;
+                                                resumeTestToolStripMenuItem.Enabled = true;
+                                                stopTestToolStripMenuItem.Enabled = false;
+                                                MessageBox.Show(this, "Current has fallen below minimum threshold. Please check the shunt connection and resume or restart the test.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                            });
+                                            return;
+                                        }
+                                    }
+                                }
+
+
+                            }
+                            #endregion
+                            #region Shunt Checks
+                            else if ((d.Rows[station][10].ToString().Contains("Shunt") || runAsShunt) && !startUpDelay)
+                            {
+                                //test that the current is still above the 0.2 threshold...
+                                // check that the C-Scan is still running...
+                                if (Math.Abs(GlobalVars.CScanData[station].currentOne) < 0.2)
+                                {
+                                    int count = 0;
+
+                                    while (Math.Abs(GlobalVars.CScanData[station].currentOne) < 0.2)
+                                    {
+                                        count++;
+                                        Thread.Sleep(100);
+                                        if (count > 20)
+                                        {
+                                            //clear values from d
+                                            updateD(station, 7, ("Read " + (currentReading - 1).ToString() + " of " + readings.ToString()));
+                                            if (MasterSlaveTest) { updateD(slaveRow, 7, ("Read " + (currentReading - 1).ToString() + " of " + readings.ToString())); }
+                                            updateD(station, 5, false);
+                                            if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+
+
+                                            cRunTest[station].Cancel();
+                                            //update the finish time
+                                            updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
+                                            //update the gui
+                                            this.Invoke((MethodInvoker)delegate()
+                                            {
+                                                sendNote(station, 3, "Current has fallen below minimum threshold.  Please check the shunt connection and resume or restart the test.");
+                                                startNewTestToolStripMenuItem.Enabled = true;
+                                                resumeTestToolStripMenuItem.Enabled = true;
+                                                stopTestToolStripMenuItem.Enabled = false;
+                                                MessageBox.Show(this, "Current has fallen below minimum threshold. Please check the shunt connection and resume or restart the test.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                            });
+                                            return;
+                                        }
+                                    }
+                                }
+
+                            }
+                            #endregion
+                            #region As Received and No Charger Tests
+                            else if (testType.Contains("As Received"))
+                            {
+                                // no test needed for now...
+                            }
+                            else if (!startUpDelay)
+                            {
+                                // we don't have a charger or a shunt anymore!!!!
+                                // stop the test!
+
+                                //make sure the C-Scan is back on hold
+                                GlobalVars.cHold[station] = true;
+
+                                //clear values from d
+                                updateD(station, 7, ("Read " + (currentReading - 1).ToString() + " of " + readings.ToString()));
+                                if (MasterSlaveTest) { updateD(slaveRow, 7, ("Read " + (currentReading - 1).ToString() + " of " + readings.ToString())); }
                                 updateD(station, 5, false);
                                 if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+
+                                //update the gui
+
                                 cRunTest[station].Cancel();
                                 //update the finish time
                                 updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
                                 this.Invoke((MethodInvoker)delegate()
                                 {
-                                    sendNote(station, 3, "Test failed. Charger is not running as programmed.  Please check the charger comms.");
+                                    sendNote(station, 3, "Charger disconnected.  Please check connection and resume or restart the test.");
                                     startNewTestToolStripMenuItem.Enabled = true;
                                     resumeTestToolStripMenuItem.Enabled = true;
                                     stopTestToolStripMenuItem.Enabled = false;
-                                    MessageBox.Show(this, "Test failed. Charger is not running as programmed.  Please check the charger comms.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    MessageBox.Show(this, "Charger disconnected.  Please check connection and resume or restart the test.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 });
                                 return;
 
                             }
                             #endregion
+
+
                             #endregion
-                        }// end IC block
-                        #endregion
-                        #region CCA tests
-                        else if (d.Rows[station][10].ToString().Contains("CCA") && !startUpDelay && !runAsShunt)
-                        {
-                            // check that the C-Scan is still running...
 
-                            // this is the power fail case...
-                            if (d.Rows[station][11].ToString() == "Power Fail")
+                            //Now we should check for a cancel
+                            #region cancel block
+                            if (token.IsCancellationRequested)
                             {
-                                stopwatch.Stop();
-                                //set to hold
-                                GlobalVars.cHold[station] = true;
-                                //wait for a return of power..
-                                updateD(station, 7, "Waiting For Charger");
-                                if (MasterSlaveTest) { updateD(slaveRow, 7, "Waiting For Charger"); }
 
-                                while (d.Rows[station][11].ToString() != "HOLD")
+                                if (testType == "As Received")
                                 {
-
-
-                                    // check for a cancel
-                                    if (token.IsCancellationRequested)
-                                    {
-                                        //clear values from d
-                                        updateD(station, 7, ("Read " + (currentReading - 1).ToString() + " of " + readings.ToString()));
-                                        if (MasterSlaveTest) { updateD(slaveRow, 7, ("Read " + (currentReading - 1).ToString() + " of " + readings.ToString())); }
-                                        updateD(station, 5, false);
-                                        if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
-
-                                        //update the gui
-
-                                        cRunTest[station].Cancel();
-                                        //update the finish time
-                                        updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
-                                        this.Invoke((MethodInvoker)delegate()
-                                        {
-                                            sendNote(station, 3, "Test canceled while in a power fail.");
-                                            startNewTestToolStripMenuItem.Enabled = true;
-                                            resumeTestToolStripMenuItem.Enabled = true;
-                                            stopTestToolStripMenuItem.Enabled = false;
-                                            MessageBox.Show(this, "Test canceled while in a power fail.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                        });
-                                        return;
-                                    }
-                                    // wait a little before testing again...
-                                    Thread.Sleep(200);
-                                }// end power fail wait
-
-                                //reset readings
-                                updateD(station, 7, "Restarting Charger");
-                                if (MasterSlaveTest) { updateD(slaveRow, 7, "Restarting Charger"); }
-                                Thread.Sleep(1500);
-                                stopwatch.Start();
-                                GlobalVars.cHold[station] = false;
-                                Thread.Sleep(500);
-                                updateD(station, 7, ("Reading " + (currentReading - 1).ToString() + " of " + readings.ToString()));
-                                if (MasterSlaveTest) { updateD(slaveRow, 7, ("Reading " + (currentReading - 1).ToString() + " of " + readings.ToString())); }
-
-                            }
-
-                            else if (Math.Abs(GlobalVars.CScanData[station].currentOne) < 0.2)
-                            {
-                                int count = 0;
-                                while (Math.Abs(GlobalVars.CScanData[station].currentOne) < 0.2)
-                                {
-                                    count++;
-                                    Thread.Sleep(100);
-                                    if (count > 20)
-                                    {
-                                        //make sure the C-Scan is back on hold
-                                        GlobalVars.cHold[station] = true;
-
-                                        //clear values from d
-                                        updateD(station, 7, ("Read " + (currentReading - 1).ToString() + " of " + readings.ToString()));
-                                        if (MasterSlaveTest) { updateD(slaveRow, 7, ("Read " + (currentReading - 1).ToString() + " of " + readings.ToString())); }
-                                        updateD(station, 5, false);
-                                        if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
-
-                                        //update the gui
-
-                                        cRunTest[station].Cancel();
-                                        //update the finish time
-                                        updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
-                                        this.Invoke((MethodInvoker)delegate()
-                                        {
-                                            sendNote(station, 3, "Current has fallen below minimum threshold. Please check the shunt connection and resume or restart the test.");
-                                            startNewTestToolStripMenuItem.Enabled = true;
-                                            resumeTestToolStripMenuItem.Enabled = true;
-                                            stopTestToolStripMenuItem.Enabled = false;
-                                            MessageBox.Show(this, "Current has fallen below minimum threshold. Please check the shunt connection and resume or restart the test.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                        });
-                                        return;
-                                    }
+                                    //nothing to do here...
                                 }
-                            }
-
-
-                        }
-                        #endregion
-                        #region Shunt Checks
-                        else if ((d.Rows[station][10].ToString().Contains("Shunt") || runAsShunt) && !startUpDelay)
-                        {
-                            //test that the current is still above the 0.2 threshold...
-                            // check that the C-Scan is still running...
-                            if (Math.Abs(GlobalVars.CScanData[station].currentOne) < 0.2)
-                            {
-                                int count = 0;
-
-                                while (Math.Abs(GlobalVars.CScanData[station].currentOne) < 0.2)
+                                else if (d.Rows[station][10].ToString().Contains("ICA") && !runAsShunt)
                                 {
-                                    count++;
-                                    Thread.Sleep(100);
-                                    if (count > 20)
+                                    // now we need to stop the charger
+                                    updateD(station, 7, "Telling Charger to Stop");
+                                    if (MasterSlaveTest) { updateD(slaveRow, 7, "Telling Charger to Stop"); }
+
+                                    for (int j = 0; j < 5; j++)
                                     {
-                                        //clear values from d
-                                        updateD(station, 7, ("Read " + (currentReading - 1).ToString() + " of " + readings.ToString()));
-                                        if (MasterSlaveTest) { updateD(slaveRow, 7, ("Read " + (currentReading - 1).ToString() + " of " + readings.ToString())); }
-                                        updateD(station, 5, false);
-                                        if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                                        // set KE1 to 2 ("command")
+                                        GlobalVars.ICSettings[Cstation].KE1 = (byte)2;
+                                        // set KE3 to stop
+                                        GlobalVars.ICSettings[Cstation].KE3 = (byte)2;
+                                        //Update the output string value
+                                        GlobalVars.ICSettings[Cstation].UpdateOutText();
 
-
-                                        cRunTest[station].Cancel();
-                                        //update the finish time
-                                        updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
-                                        //update the gui
-                                        this.Invoke((MethodInvoker)delegate()
+                                        for (int i = 0; i < 15; i++)
                                         {
-                                            sendNote(station, 3, "Current has fallen below minimum threshold.  Please check the shunt connection and resume or restart the test.");
-                                            startNewTestToolStripMenuItem.Enabled = true;
-                                            resumeTestToolStripMenuItem.Enabled = true;
-                                            stopTestToolStripMenuItem.Enabled = false;
-                                            MessageBox.Show(this, "Current has fallen below minimum threshold. Please check the shunt connection and resume or restart the test.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                        });
-                                        return;
-                                    }
-                                }
-                            }
+                                            criticalNum[Cstation] = true;
+                                            Thread.Sleep(1000);
+                                            if (d.Rows[station][11].ToString() == "HOLD" || d.Rows[station][11].ToString() == "END" || d.Rows[station][11].ToString() == "RESET")
+                                            {
+                                                break;
+                                            }
 
-                        }
-                        #endregion
-                        #region As Received and No Charger Tests
-                        else if (testType.Contains("As Received"))
-                        {
-                            // no test needed for now...
-                        }
-                        else if (!startUpDelay)
-                        {
-                            // we don't have a charger or a shunt anymore!!!!
-                            // stop the test!
+                                        }
 
-                            //make sure the C-Scan is back on hold
-                            GlobalVars.cHold[station] = true;
-
-                            //clear values from d
-                            updateD(station, 7, ("Read " + (currentReading - 1).ToString() + " of " + readings.ToString()));
-                            if (MasterSlaveTest) { updateD(slaveRow, 7, ("Read " + (currentReading - 1).ToString() + " of " + readings.ToString())); }
-                            updateD(station, 5, false);
-                            if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
-
-                            //update the gui
-
-                            cRunTest[station].Cancel();
-                            //update the finish time
-                            updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
-                            this.Invoke((MethodInvoker)delegate()
-                            {
-                                sendNote(station, 3, "Charger disconnected.  Please check connection and resume or restart the test.");
-                                startNewTestToolStripMenuItem.Enabled = true;
-                                resumeTestToolStripMenuItem.Enabled = true;
-                                stopTestToolStripMenuItem.Enabled = false;
-                                MessageBox.Show(this, "Charger disconnected.  Please check connection and resume or restart the test.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            });
-                            return;
-
-                        }
-                        #endregion
-
-
-                        #endregion
-
-                        //Now we should check for a cancel
-                        #region cancel block
-                        if (token.IsCancellationRequested)
-                        {
-
-                            if (testType == "As Received")
-                            {
-                                //nothing to do here...
-                            }
-                            else if (d.Rows[station][10].ToString().Contains("ICA") && !runAsShunt)
-                            {
-                                // now we need to stop the charger
-                                updateD(station, 7, "Telling Charger to Stop");
-                                if (MasterSlaveTest) { updateD(slaveRow, 7, "Telling Charger to Stop"); }
-
-                                for (int j = 0; j < 5; j++)
-                                {
-                                    // set KE1 to 2 ("command")
-                                    GlobalVars.ICSettings[Cstation].KE1 = (byte)2;
-                                    // set KE3 to stop
-                                    GlobalVars.ICSettings[Cstation].KE3 = (byte)2;
-                                    //Update the output string value
-                                    GlobalVars.ICSettings[Cstation].UpdateOutText();
-
-                                    for (int i = 0; i < 15; i++)
-                                    {
-                                        criticalNum[Cstation] = true;
-                                        Thread.Sleep(1000);
                                         if (d.Rows[station][11].ToString() == "HOLD" || d.Rows[station][11].ToString() == "END" || d.Rows[station][11].ToString() == "RESET")
                                         {
                                             break;
@@ -4500,49 +4510,47 @@ namespace NewBTASProto
 
                                     }
 
-                                    if (d.Rows[station][11].ToString() == "HOLD" || d.Rows[station][11].ToString() == "END" || d.Rows[station][11].ToString() == "RESET")
-                                    {
-                                        break;
-                                    }
-
+                                }
+                                else if (d.Rows[station][10].ToString().Contains("CCA") && !runAsShunt)
+                                {
+                                    // Put the charger back on hold...
+                                    GlobalVars.cHold[station] = true;
+                                }
+                                else if (d.Rows[station][10].ToString().Contains("Shunt") || runAsShunt)
+                                {
+                                    // Also nothing to do...
                                 }
 
-                            }
-                            else if (d.Rows[station][10].ToString().Contains("CCA") && !runAsShunt)
-                            {
-                                // Put the charger back on hold...
-                                GlobalVars.cHold[station] = true;
-                            }
-                            else if (d.Rows[station][10].ToString().Contains("Shunt") || runAsShunt)
-                            {
-                                // Also nothing to do...
-                            }
+                                //clear values from d
+                                updateD(station, 7, ("Read " + (currentReading - 1).ToString() + " of " + readings.ToString()));
+                                if (MasterSlaveTest) { updateD(slaveRow, 7, ("Read " + (currentReading - 1).ToString() + " of " + readings.ToString())); }
+                                // only clear the test checkbox if you are not doing a combo test
 
-                            //clear values from d
-                            updateD(station, 7, ("Read " + (currentReading - 1).ToString() + " of " + readings.ToString()));
-                            if (MasterSlaveTest) { updateD(slaveRow, 7, ("Read " + (currentReading - 1).ToString() + " of " + readings.ToString())); }
-                            // only clear the test checkbox if you are not doing a combo test
+                                updateD(station, 5, false);
+                                if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                                cRunTest[station].Cancel();
+                                //update the gui
+                                this.Invoke((MethodInvoker)delegate()
+                                {
+                                    sendNote(station, 3, "Test Cancelled");
+                                    startNewTestToolStripMenuItem.Enabled = true;
+                                    resumeTestToolStripMenuItem.Enabled = true;
+                                    stopTestToolStripMenuItem.Enabled = false;
+                                });
 
-                            updateD(station, 5, false);
-                            if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
-                            cRunTest[station].Cancel();
-                            //update the gui
-                            this.Invoke((MethodInvoker)delegate()
-                            {
-                                sendNote(station, 3, "Test Cancelled");
-                                startNewTestToolStripMenuItem.Enabled = true;
-                                resumeTestToolStripMenuItem.Enabled = true;
-                                stopTestToolStripMenuItem.Enabled = false;
-                            });
+                                //update the finish time
+                                updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
+                                return;
+                            }
+                            #endregion
 
-                            //update the finish time
-                            updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
-                            return;
+                            //every interval is defined in seconds to be safe, we'll test if we are at the correct interval every 200ms
+                            Thread.Sleep(200);
                         }
-                        #endregion
-
-                        //every interval is defined in seconds to be safe, we'll test if we are at the correct interval every 200ms
-                        Thread.Sleep(200);
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("Error in main test loop try:  " + ex.Message + Environment.NewLine + ex.StackTrace);
+                        }
 
                     } // end main test loop...
                     #endregion
@@ -4669,7 +4677,7 @@ namespace NewBTASProto
                 }
                 catch (Exception e)
                 {
-                    MessageBox.Show("Error in test poriton" + e.Message + Environment.NewLine + e.StackTrace);
+                    MessageBox.Show("Error in master test poriton try:  " + e.Message + Environment.NewLine + e.StackTrace);
                 }
 
             }, cRunTest[station].Token); // end thread

@@ -3441,7 +3441,7 @@ namespace NewBTASProto
                         }
                     }
 
-                    Thread.Sleep(100);
+                    Thread.Sleep(750);
 
                     if (!foundOne)
                     {
