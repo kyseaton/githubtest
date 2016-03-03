@@ -462,6 +462,102 @@ namespace NewBTASProto
 
             }
 
+            //now lets get the water data
+            // we need a data set..
+            DataSet WaterLevels = new DataSet();
+            // Open database containing all the battery data....
+            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+            strAccessSelect = @"SELECT WLID,WorkOrderNumber,Cell1,Cell2,Cell3,Cell4,Cell5,Cell6,Cell7,Cell8,Cell9,Cell10,Cell11,Cell12,Cell13,Cell14,Cell15,Cell16,Cell17,Cell18,Cell19,Cell20,Cell21,Cell22,Cell23,Cell24,AVE FROM WaterLevel WHERE WorkOrderNumber='" + ComboText + @"' ORDER BY WLID ASC";
+
+            //Here is where I load the form wide dataset which will both let me fill in the rest of the combo boxes and the graphs!
+            myAccessConn = null;
+            // try to open the DB
+            try
+            {
+                myAccessConn = new OleDbConnection(strAccessConn);
+            }
+            catch (Exception ex)
+            {
+                this.Invoke((MethodInvoker)delegate()
+                {
+                    MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                });
+                return;
+            }
+            //  now try to access it
+            try
+            {
+                OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                lock (Main_Form.dataBaseLock)
+                {
+                    myAccessConn.Open();
+                    myDataAdapter.Fill(WaterLevels, "WaterLevel");
+                    myAccessConn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                this.Invoke((MethodInvoker)delegate()
+                {
+                    MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                });
+                return;
+
+            }
+            finally
+            {
+
+            }
+
+            //now lets get the battery serial number and part number
+            // we need a data set..
+            DataSet BatInfo = new DataSet();
+            // Open database containing all the battery data....
+            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+            strAccessSelect = @"SELECT BatteryModel,BatterySerialNumber FROM WorkOrders WHERE WorkOrderNumber='" + ComboText + @"'";
+
+            //Here is where I load the form wide dataset which will both let me fill in the rest of the combo boxes and the graphs!
+            myAccessConn = null;
+            // try to open the DB
+            try
+            {
+                myAccessConn = new OleDbConnection(strAccessConn);
+            }
+            catch (Exception ex)
+            {
+                this.Invoke((MethodInvoker)delegate()
+                {
+                    MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                });
+                return;
+            }
+            //  now try to access it
+            try
+            {
+                OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                lock (Main_Form.dataBaseLock)
+                {
+                    myAccessConn.Open();
+                    myDataAdapter.Fill(BatInfo, "BatInfo");
+                    myAccessConn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                this.Invoke((MethodInvoker)delegate()
+                {
+                    MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                });
+                return;
+            }
+            finally
+            {
+
+            }
 
             // Now that we have the data in reportSet along with testsPerformed lets pass it over to the matching report
             /*************************Load reportSet into reportSet  ************************/
@@ -532,6 +628,8 @@ namespace NewBTASProto
             MetaDT.Rows.Add(GlobalVars.businessName, GlobalVars.useF, GlobalVars.Pos2Neg, testsPerformed.Tables[0].Rows[0][4].ToString() + " - " + testsPerformed.Tables[0].Rows[0][5].ToString(), testsPerformed.Tables[0].Rows[0][15].ToString(), testsPerformed.Tables[0].Rows[0][16].ToString(), testsPerformed.Tables[0].Rows[0][17].ToString());
 
             reportViewer1.LocalReport.DataSources.Add(new ReportDataSource("MetaData", MetaDT));
+
+            reportViewer1.LocalReport.DataSources.Add(new ReportDataSource("WaterLevelData", WaterLevels.Tables[0]));
             //now we will write the report to file...
             Warning[] warnings;
             string[] streamids;

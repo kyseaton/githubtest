@@ -4074,6 +4074,47 @@ namespace NewBTASProto
             f2.Show();
         }
 
+        private void markAllOpenWorkOrdersAsClosedToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show(this, "Are you sure you want to mark all open work orders as closed?", "Mark All Work Orders Closed", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+            {
+                //Mark all open work orders as closed...
+                string strAccessConn;
+                OleDbConnection myAccessConn;
+
+                // create the connection
+                try
+                {
+                    strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                    myAccessConn = new OleDbConnection(strAccessConn);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+
+                // we'll have execute a number of commands...
+                string cmdStr;
+                OleDbCommand cmd;
+
+                // Change hidden to closed in the work order table
+                cmdStr = "UPDATE WorkOrders SET OrderStatus='Closed' WHERE OrderStatus='Open'";
+                cmd = new OleDbCommand(cmdStr, myAccessConn);
+
+                lock (dataBaseLock)
+                {
+                    myAccessConn.Open();
+                    cmd.ExecuteNonQuery();
+                    myAccessConn.Close();
+                }
+
+                MessageBox.Show(this, "All open orders were marked as closed.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+
+            }
+        }
+
 
 
     }// end mainform class section...

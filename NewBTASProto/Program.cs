@@ -48,7 +48,15 @@ namespace NewBTASProto
         static void MyHandler(object sender, UnhandledExceptionEventArgs args)
         {
             Exception e = (Exception)args.ExceptionObject;
-            MessageBox.Show("Unhandled exception : " + e.Message + Environment.NewLine + e.StackTrace);
+            if (e is ThreadAbortException)
+            {
+                //do nothing
+            }
+            else
+            {
+                MessageBox.Show("Unhandled exception : " + e.Message + Environment.NewLine + e.StackTrace);
+            }
+            
             
             
         }
