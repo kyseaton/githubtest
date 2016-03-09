@@ -78,7 +78,7 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, "In Main_Form:  " + ex.ToString());
+                MessageBox.Show(this, "In Main_Form:  " + ex.Message + Environment.NewLine + ex.StackTrace, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
 
@@ -666,7 +666,7 @@ namespace NewBTASProto
             }
             catch
             {
-                MessageBox.Show(this, "Probablem loading battery data!");
+                MessageBox.Show(this, "Problem loading battery data!", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 
                 // we don't have battery data...
                 // reset to default...
@@ -721,7 +721,7 @@ namespace NewBTASProto
             {
                 if ((bool)d.Rows[i][5] == true)
                 {
-                    DialogResult dialogResult = MessageBox.Show(this, "There is a test running. If you quit, the test data will no longer be recorded. You will also need to attend to the charger associated with the test, as it will no longer be computer controlled.", "Are you sure you want to quit?", MessageBoxButtons.OKCancel);
+                    DialogResult dialogResult = MessageBox.Show(this, "There is a test running. If you quit, the test data will no longer be recorded. You will also need to attend to the charger associated with the test, as it will no longer be computer controlled.", "Are you sure you want to quit?", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
                     if (dialogResult == DialogResult.OK)
                     {
                         //loop through and cancel all of the tests...
@@ -746,6 +746,10 @@ namespace NewBTASProto
             {
                 for (int i = 0; i < 16; i++)
                 {
+                    if(d.Rows[i][2].ToString().Contains("Combo:")){
+                        // clear the >> and << 
+                        updateD(i,2,d.Rows[i][2].ToString().Replace("<<","").Replace(">>",""));
+                    }
                     updateD(i, 5, false);
                     updateD(i, 6, "");
                     updateD(i, 7, "");
@@ -2159,12 +2163,12 @@ namespace NewBTASProto
 
         private void masterToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(this, "Master Selected.  Needs to be implemented...");
+            MessageBox.Show(this, "Master Selected.  Needs to be implemented...", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private void slaveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(this, "Slave Selected.  Needs to be implemented...");
+            MessageBox.Show(this, "Slave Selected.  Needs to be implemented...", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private void cMSChargerType_Opening(object sender, CancelEventArgs e)
@@ -2467,7 +2471,7 @@ namespace NewBTASProto
                 {
                     if (frm is ICSettingsForm)
                     {
-                        MessageBox.Show(this, @"You must close the Intelligetnt Charger Configuration Interface before turning on AutoConfig");
+                        MessageBox.Show(this, @"You must close the Intelligetnt Charger Configuration Interface before turning on AutoConfig", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
                 }
@@ -2841,7 +2845,7 @@ namespace NewBTASProto
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(this, "Error:  " + ex.ToString());
+                    MessageBox.Show(this, "Error:  " + ex.ToString(), "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
 
             });
@@ -2861,11 +2865,11 @@ namespace NewBTASProto
                     //try to copy the database from the appdata folder to the selected folder...
 
                     File.Copy(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB", folder + @"\BTAS16NV_" + System.DateTime.Now.ToString("yyyyMMddHHmmssfff") + @".MDB");
-                    MessageBox.Show(this, "Database was backed up to:  " + folder);
+                    MessageBox.Show(this, "Database was backed up to:  " + folder, "Success!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(this, "Database was not backed up!" + Environment.NewLine + ex.ToString());
+                    MessageBox.Show(this, "Database was not backed up!" + Environment.NewLine + ex.ToString(), "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
 
             }
@@ -2884,7 +2888,7 @@ namespace NewBTASProto
             {
                 if ((bool)d.Rows[i][5] || d.Rows[i][2].ToString() != "")
                 {
-                    MessageBox.Show(this, "Please stop all tests and clear all workorders before restoring the database!");
+                    MessageBox.Show(this, "Please stop all tests and clear all workorders before restoring the database!", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
             }
@@ -2903,11 +2907,11 @@ namespace NewBTASProto
                     //try to copy the database from the appdata folder to the selected folder...
 
                     File.Copy(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB", folder + @"\BTAS16NV_" + System.DateTime.Now.ToString("yyyyMMddHHmmssfff") + @".MDB");
-                    MessageBox.Show(this, "Database was backed up to:  " + folder);
+                    MessageBox.Show(this, "Database was backed up to:  " + folder, "Success!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(this, "Database was not backed up!" + Environment.NewLine + ex.ToString());
+                    MessageBox.Show(this, "Database was not backed up!" + Environment.NewLine + ex.ToString(), "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
@@ -2925,11 +2929,11 @@ namespace NewBTASProto
                         //try to copy the database from the appdata folder to the selected folder...
 
                         File.Copy(file, Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB", true);
-                        MessageBox.Show(this, "Selected database has been restored");
+                        MessageBox.Show(this, "Selected database has been restored", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(this, "Database was not restored!" + Environment.NewLine + ex.ToString());
+                        MessageBox.Show(this, "Database was not restored!" + Environment.NewLine + ex.ToString(), "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
                 }
@@ -3109,7 +3113,7 @@ namespace NewBTASProto
 
         private void importDataBaseFromPreviousVersionOfProgramToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DialogResult dialogResult = MessageBox.Show(this, "Are you sure you want to continue? While the vast majority of the data from the old program will be imported, some items like standard batteries are no longer supported.  You will need to manually move this information over into the new program.", "Click Yes to continue or No to Cancel the Import.", MessageBoxButtons.YesNo);
+            DialogResult dialogResult = MessageBox.Show(this, "Are you sure you want to continue? While the vast majority of the data from the old program will be imported, some items like standard batteries are no longer supported.  You will need to manually move this information over into the new program.", "Click Yes to continue or No to Cancel the Import.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (dialogResult == DialogResult.No)
             {
                 return;
@@ -3120,7 +3124,7 @@ namespace NewBTASProto
             {
                 if ((bool)d.Rows[i][5] || d.Rows[i][2].ToString() != "")
                 {
-                    MessageBox.Show(this, "Please stop all tests and clear all workorders before restoring the database!");
+                    MessageBox.Show(this, "Please stop all tests and clear all workorders before restoring the database!", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
             }
@@ -3136,11 +3140,11 @@ namespace NewBTASProto
                 {
                     //try to copy the database from the appdata folder to the selected folder...
                     File.Copy(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB", folder + @"\BTAS16NV_" + System.DateTime.Now.ToString("yyyyMMddHHmmssfff") + @".MDB");
-                    MessageBox.Show(this, "Original database was backed up to:  " + folder);
+                    MessageBox.Show(this, "Original database was backed up to:  " + folder, "Success!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(this, "Database was not backed up!  Quiting DB import!" + Environment.NewLine + ex.ToString());
+                    MessageBox.Show(this, "Database was not backed up!  Quiting DB import!" + Environment.NewLine + ex.ToString(), "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
@@ -3159,7 +3163,7 @@ namespace NewBTASProto
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(this, "Database was not restored!" + Environment.NewLine + ex.ToString());
+                        MessageBox.Show(this, "Database was not restored!" + Environment.NewLine + ex.ToString(), "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
 
@@ -3272,12 +3276,12 @@ namespace NewBTASProto
                         //Now replace the old DB with the imported one...
                         File.Copy(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV_temp.MDB", Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB", true);
 
-                        MessageBox.Show(this, "DataBase successfully imported.");
+                        MessageBox.Show(this, "DataBase successfully imported.", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     }// end try
                     catch(Exception ex)
                     {
                         // that didn't work out!
-                        MessageBox.Show(this, "DataBase wasn't imported:  " + ex.ToString());
+                        MessageBox.Show(this, "DataBase wasn't imported:  " + ex.ToString(), "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
                 }// end if
@@ -3312,7 +3316,7 @@ namespace NewBTASProto
                     return;
                 }
             }
-            MasterFillerInterface f2 = new MasterFillerInterface(dataGridView1.CurrentRow.Index, d.Rows[dataGridView1.CurrentRow.Index][1].ToString());
+            MasterFillerInterface f2 = new MasterFillerInterface(dataGridView1.CurrentRow.Index, d.Rows[dataGridView1.CurrentRow.Index][1].ToString(),(int)pci.Rows[dataGridView1.CurrentRow.Index][3]);
             f2.Owner = this;
             f2.Show();
         }
@@ -3647,7 +3651,7 @@ namespace NewBTASProto
             {
                 if (frm is Battery_Reports || frm is Reports_Form || frm is WorkOrderReps)
                 {
-                    MessageBox.Show(this, "Please close all reports forms before changing the reports logo.");
+                    MessageBox.Show(this, "Please close all reports forms before changing the reports logo.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
             }
@@ -3665,11 +3669,11 @@ namespace NewBTASProto
                     //try to copy the database from the appdata folder to the selected folder...
 
                     File.Copy(file, Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\rp_logo.jpg", true);
-                    MessageBox.Show(this, "Icon file has been updated.");
+                    MessageBox.Show(this, "Icon file has been updated.", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(this, "Icon file was not updated!" + Environment.NewLine + ex.ToString());
+                    MessageBox.Show(this, "Icon file was not updated!" + Environment.NewLine + ex.ToString(), "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
             }// end if
@@ -3852,7 +3856,7 @@ namespace NewBTASProto
                     return;
                 }
             }
-            BatchReporting f2 = new BatchReporting();
+            BatchReporting f2 = new BatchReporting(d.Rows[dataGridView1.CurrentRow.Index][1].ToString());
             f2.Owner = this;
             f2.Show();
         }

@@ -170,6 +170,7 @@
             this.Text = "Batch Reporting";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.BatchReporting_FormClosing);
             this.Load += new System.EventHandler(this.BatchReporting_Load);
+            this.Shown += new System.EventHandler(this.BatchReporting_Shown);
             this.ResumeLayout(false);
             this.PerformLayout();
 

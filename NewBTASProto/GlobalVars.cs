@@ -85,12 +85,12 @@ namespace NewBTASProto
         /// <summary>
         /// this string holds the programversion text
         /// </summary>
-        public static string programVersion = "6.0.0.114";
+        public static string programVersion = "6.0.1";
 
         /// <summary>
         /// this string holds the program publish date
         /// </summary>
-        public static string programPubDate = "Mar 03 2016";
+        public static string programPubDate = "Mar 09 2016";
 
         /// <summary>
         /// this is where we hold our notification service settings...

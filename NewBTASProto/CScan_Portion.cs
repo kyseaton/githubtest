@@ -516,9 +516,11 @@ namespace NewBTASProto
                                             d.Rows[currentRow][10].ToString().Contains("CCA"))
                                         {
                                             updateD(currentRow, 10, "");
+                                            updateD(currentRow, 11, "");
                                             if (slaveRow > -1)
                                             {
                                                 updateD(slaveRow, 10, "");
+                                                updateD(slaveRow, 11, "");
                                             }
                                             this.Invoke((MethodInvoker)delegate
                                             { 
@@ -606,9 +608,11 @@ namespace NewBTASProto
                                         else if ((bool)d.Rows[currentRow][4] && d.Rows[currentRow][10].ToString() == "Shunt" && !d.Rows[currentRow][9].ToString().Contains("S") && GlobalVars.CScanData[currentRow].shuntCableType == "NONE")
                                         {
                                             updateD(currentRow, 10, "");
+                                            updateD(currentRow, 11, "");
                                             if (slaveRow > -1)
                                             {
                                                 updateD(slaveRow, 10, "");
+                                                updateD(slaveRow, 11, "");
                                             }
                                             this.Invoke((MethodInvoker)delegate 
                                             { 
@@ -897,9 +901,11 @@ namespace NewBTASProto
                                                 !d.Rows[j][9].ToString().Contains("S"))
                                             {
                                                 updateD(j, 10, "");
+                                                updateD(j, 11, "");
                                                 if (slaveRow > -1)
                                                 {
                                                     updateD(slaveRow, 10, "");
+                                                    updateD(slaveRow, 11, "");
                                                 }
                                                 this.Invoke((MethodInvoker)delegate 
                                                 { 
@@ -991,9 +997,11 @@ namespace NewBTASProto
                                             !d.Rows[j][9].ToString().Contains("S"))
                                         {
                                             updateD(j, 10, "");
+                                            updateD(j, 11, "");
                                             if (slaveRow > -1)
                                             {
                                                 updateD(slaveRow, 10, "");
+                                                updateD(slaveRow, 11, "");
                                             }
                                             this.Invoke((MethodInvoker)delegate 
                                             { 

@@ -19,8 +19,9 @@ namespace NewBTASProto
         int curRow = 0;
         string curWorkOrder = "";
         float average = 0;
+        int NumCells = 1;
 
-        public MasterFillerInterface(int currentRow = 0, string currentWorkOrder = "")
+        public MasterFillerInterface(int currentRow = 0, string currentWorkOrder = "",int NCells = 20)
         {
             InitializeComponent();
             loadWorkOrderList();
@@ -31,6 +32,15 @@ namespace NewBTASProto
             char[] delims = { ' ' };
             string[] A = tempWOS.Split(delims);
             curWorkOrder = A[0];
+            if (NCells < 1)
+            {
+                NumCells = 20;
+            }
+            else
+            {
+                NumCells = NCells;
+            }
+            
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -138,7 +148,7 @@ namespace NewBTASProto
 
                 if (GlobalVars.checkMasterFiller == true)
                 {
-                    MessageBox.Show(this, "Failed to Read MasterFiller Data.  Please check your set up and try again.");
+                    MessageBox.Show(this, "Failed to Read MasterFiller Data.  Please check your set up and try again.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     GlobalVars.checkMasterFiller = false;
                     this.Invoke((MethodInvoker)delegate
                     {
@@ -213,77 +223,115 @@ namespace NewBTASProto
             //do we have a station?
             if (comboBox1.Text == "")
             {
-                MessageBox.Show(this, "Please select a station to associate the MasterFiller data with");
+                MessageBox.Show(this, "Please select a station to associate the MasterFiller data with", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             //do we have a work order?
             if(comboBox2.Text == "")
             {
-                MessageBox.Show(this, "Please select a Work Order to associate the MasterFiller data with");
+                MessageBox.Show(this, "Please select a Work Order to associate the MasterFiller data with", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             // now fill recalc the average
             average = 0;
-            int count = 0;
-            average += (float) numericUpDown1.Value;
-            if (numericUpDown1.Value != 0) { count++; }
-            average += (float) numericUpDown2.Value;
-            if (numericUpDown2.Value != 0) { count++; }
-            average += (float)numericUpDown3.Value;
-            if (numericUpDown3.Value != 0) { count++; }
-            average += (float)numericUpDown4.Value;
-            if (numericUpDown4.Value != 0) { count++; }
-            average += (float)numericUpDown5.Value;
-            if (numericUpDown5.Value != 0) { count++; }
-            average += (float)numericUpDown6.Value;
-            if (numericUpDown6.Value != 0) { count++; }
-            average += (float)numericUpDown7.Value;
-            if (numericUpDown7.Value != 0) { count++; }
-            average += (float)numericUpDown8.Value;
-            if (numericUpDown8.Value != 0) { count++; }
-            average += (float)numericUpDown9.Value;
-            if (numericUpDown9.Value != 0) { count++; }
-            average += (float)numericUpDown10.Value;
-            if (numericUpDown10.Value != 0) { count++; }
-            average += (float)numericUpDown11.Value;
-            if (numericUpDown11.Value != 0) { count++; }
-            average += (float)numericUpDown12.Value;
-            if (numericUpDown12.Value != 0) { count++; }
-            average += (float)numericUpDown13.Value;
-            if (numericUpDown13.Value != 0) { count++; }
-            average += (float)numericUpDown14.Value;
-            if (numericUpDown14.Value != 0) { count++; }
-            average += (float)numericUpDown15.Value;
-            if (numericUpDown15.Value != 0) { count++; }
-            average += (float)numericUpDown16.Value;
-            if (numericUpDown16.Value != 0) { count++; }
-            average += (float)numericUpDown17.Value;
-            if (numericUpDown17.Value != 0) { count++; }
-            average += (float)numericUpDown18.Value;
-            if (numericUpDown18.Value != 0) { count++; }
-            average += (float)numericUpDown19.Value;
-            if (numericUpDown19.Value != 0) { count++; }
-            average += (float)numericUpDown20.Value;
-            if (numericUpDown20.Value != 0) { count++; }
-            average += (float)numericUpDown21.Value;
-            if (numericUpDown21.Value != 0) { count++; }
-            average += (float)numericUpDown22.Value;
-            if (numericUpDown22.Value != 0) { count++; }
-            average += (float)numericUpDown23.Value;
-            if (numericUpDown23.Value != 0) { count++; }
-            average += (float)numericUpDown24.Value;
-            if (numericUpDown24.Value != 0) { count++; }
+            average += (float) numericUpDown1.Value;        // always average the first cell...
+            if (numericUpDown26.Value > 1) {
+                average += (float)numericUpDown2.Value;
+            }
+            if (numericUpDown26.Value > 2)
+            {
+                average += (float)numericUpDown3.Value;
+            }
+            if (numericUpDown26.Value > 3)
+            {
+                average += (float)numericUpDown4.Value;
+            }
+            if (numericUpDown26.Value > 4)
+            {
+                average += (float)numericUpDown5.Value;
+            }
+            if (numericUpDown26.Value > 5)
+            {
+                average += (float)numericUpDown6.Value;
+            }
 
-            if (count == 0)
+            if (numericUpDown26.Value > 6)
             {
-                average = 0;
+                average += (float)numericUpDown7.Value;
             }
-            else
+            if (numericUpDown26.Value > 7)
             {
-                average /= count;
+                average += (float)numericUpDown8.Value;
             }
+            if (numericUpDown26.Value > 8)
+            {
+                average += (float)numericUpDown9.Value;
+            }
+            if (numericUpDown26.Value > 9)
+            {
+                average += (float)numericUpDown10.Value;
+            }
+            if (numericUpDown26.Value > 10)
+            {
+                average += (float)numericUpDown11.Value;
+            }
+            if (numericUpDown26.Value > 11)
+            {
+                average += (float)numericUpDown12.Value;
+            }
+            if (numericUpDown26.Value > 12)
+            {
+                average += (float)numericUpDown13.Value;
+            }
+            if (numericUpDown26.Value > 13)
+            {
+                average += (float)numericUpDown14.Value;
+            }
+            if (numericUpDown26.Value > 14)
+            {
+                average += (float)numericUpDown15.Value;
+            }
+            if (numericUpDown26.Value > 15)
+            {
+                average += (float)numericUpDown16.Value;
+            }
+            if (numericUpDown26.Value > 16)
+            {
+                average += (float)numericUpDown17.Value;
+            }
+            if (numericUpDown26.Value > 17)
+            {
+                average += (float)numericUpDown18.Value;
+            }
+            if (numericUpDown26.Value > 18)
+            {
+                average += (float)numericUpDown19.Value;
+            }
+            if (numericUpDown26.Value > 19)
+            {
+                average += (float)numericUpDown20.Value;
+            }
+            if (numericUpDown26.Value > 20)
+            {
+                average += (float)numericUpDown21.Value;
+            }
+            if (numericUpDown26.Value > 21)
+            {
+                average += (float)numericUpDown22.Value;
+            }
+            if (numericUpDown26.Value > 22)
+            {
+                average += (float)numericUpDown23.Value;
+            }
+            if (numericUpDown26.Value > 23)
+            {
+                average += (float)numericUpDown24.Value;
+            }
+
+            average /= (float) numericUpDown26.Value;
+
 
             numericUpDown25.Value = (decimal)average;
 
@@ -363,9 +411,25 @@ namespace NewBTASProto
             //Now set the comboboxes to the current station and workorder...
             comboBox1.Text = curRow.ToString();
             comboBox2.Text = curWorkOrder;
+            numericUpDown26.Value = NumCells;
         }
 
         private void label27_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void numericUpDown26_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label28_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void numericUpDown25_ValueChanged(object sender, EventArgs e)
         {
 
         }

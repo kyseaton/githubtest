@@ -181,7 +181,7 @@ namespace NewBTASProto
                 count++;
                 if (count > 3)
                 {
-                    MessageBox.Show(this, "Maximum of 3 Work Orders Per Channel!");
+                    MessageBox.Show(this, "Maximum of 3 Work Orders Per Channel!", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     break;
                 }
                 temp = dataGridView1[0, row.Index].Value + " " + temp;
@@ -262,7 +262,7 @@ namespace NewBTASProto
                 count++;
                 if (count > 3)
                 {
-                    MessageBox.Show(this, "Maximum of 3 Work Orders Per Channel!");
+                    MessageBox.Show(this, "Maximum of 3 Work Orders Per Channel!", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     break;
                 }
                 temp += dataGridView1[0, row.Index].Value + " ";

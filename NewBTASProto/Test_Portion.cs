@@ -3863,64 +3863,68 @@ namespace NewBTASProto
                             oldTempCon = tempCon;
                             oldCellCon = cellCon;
 
-                            //Lets also look for a temperature rise on the temp-plate...
-                            double tempTemp = (GlobalVars.CScanData[station].TP1 + GlobalVars.CScanData[station].TP2 + GlobalVars.CScanData[station].TP3 + GlobalVars.CScanData[station].TP4) / 4;
-                            if ((tempTemp > (startTemp + 5)) && memTemp == 0)
+                            //Lets also look for a temperature rise on the temp-plate if we are in charge mode....
+                            //Skip for discharge
+                            if (!(testType.Contains("Cap") || testType.Contains("Dis")))
                             {
-                                // we got the first 5 C rise
-                                // warn the user
-                                this.Invoke((MethodInvoker)delegate()
+                                double tempTemp = (GlobalVars.CScanData[station].TP1 + GlobalVars.CScanData[station].TP2 + GlobalVars.CScanData[station].TP3 + GlobalVars.CScanData[station].TP4) / 4;
+                                if ((tempTemp > (startTemp + 5)) && memTemp == 0)
                                 {
-                                    sendNote(station, 3, "Temperature has risen 5C on template");
-                                });
-                                //update memTemp
-                                memTemp += 1;
-                            }
-                            else if ((tempTemp > (startTemp + 10)) && memTemp == 1)
-                            {
-                                // we got the a  10 C rise
-                                // warn the user
-                                this.Invoke((MethodInvoker)delegate()
-                                {
-                                    sendNote(station, 2, "Temperature has risen 10C on template");
-                                });
-                                //update memTemp
-                                memTemp += 1;
-                            }
-                            else if ((tempTemp > (startTemp + 15)) && memTemp == 2)
-                            {
-                                // we got the a 15 C rise
-                                // warn the user
-                                this.Invoke((MethodInvoker)delegate()
-                                {
-                                    sendNote(station, 1, "Temperature has risen 15C on template");
-                                });
-                                //update memTemp
-                                memTemp += 1;
-                            }
-                            else if ((tempTemp > (startTemp + 20)) && memTemp == 3)
-                            {
-                                // we got the a 20 C rise
-                                // this is out of hand!  Lets quit the test. If we can...
-                                this.Invoke((MethodInvoker)delegate()
-                                {
-                                    sendNote(station, 1, "Temperature has risen 20C on template");
-                                });
-                                // here is where we cancel the test if we can...
-                                if (d.Rows[station][10].ToString().Contains("ICA") || d.Rows[station][10].ToString().Contains("CCA") && !runAsShunt)
-                                {
-                                    cRunTest[station].Cancel();
+                                    // we got the first 5 C rise
+                                    // warn the user
                                     this.Invoke((MethodInvoker)delegate()
                                     {
-                                        sendNote(station, 1, "Drastic temperature rise on the battery! Cancelling Test!");
+                                        sendNote(station, 3, "Temperature has risen 5C on template");
                                     });
+                                    //update memTemp
+                                    memTemp += 1;
                                 }
-                                else
+                                else if ((tempTemp > (startTemp + 10)) && memTemp == 1)
                                 {
+                                    // we got the a  10 C rise
+                                    // warn the user
                                     this.Invoke((MethodInvoker)delegate()
                                     {
-                                        sendNote(station, 1, "Drastic temperature rise on the battery! Cancel the test!");
+                                        sendNote(station, 2, "Temperature has risen 10C on template");
                                     });
+                                    //update memTemp
+                                    memTemp += 1;
+                                }
+                                else if ((tempTemp > (startTemp + 15)) && memTemp == 2)
+                                {
+                                    // we got the a 15 C rise
+                                    // warn the user
+                                    this.Invoke((MethodInvoker)delegate()
+                                    {
+                                        sendNote(station, 1, "Temperature has risen 15C on template");
+                                    });
+                                    //update memTemp
+                                    memTemp += 1;
+                                }
+                                else if ((tempTemp > (startTemp + 20)) && memTemp == 3)
+                                {
+                                    // we got the a 20 C rise
+                                    // this is out of hand!  Lets quit the test. If we can...
+                                    this.Invoke((MethodInvoker)delegate()
+                                    {
+                                        sendNote(station, 1, "Temperature has risen 20C on template");
+                                    });
+                                    // here is where we cancel the test if we can...
+                                    if (d.Rows[station][10].ToString().Contains("ICA") || d.Rows[station][10].ToString().Contains("CCA") && !runAsShunt)
+                                    {
+                                        cRunTest[station].Cancel();
+                                        this.Invoke((MethodInvoker)delegate()
+                                        {
+                                            sendNote(station, 1, "Drastic temperature rise on the battery! Cancelling Test!");
+                                        });
+                                    }
+                                    else
+                                    {
+                                        this.Invoke((MethodInvoker)delegate()
+                                        {
+                                            sendNote(station, 1, "Drastic temperature rise on the battery! Cancel the test!");
+                                        });
+                                    }
                                 }
                             }
 
@@ -4188,11 +4192,11 @@ namespace NewBTASProto
                                     ohmSet
                                      * */
 
-                                    Debug.Print("Current:" + GlobalVars.ICData[station].battCurrent.ToString());
-                                    Debug.Print("Voltage:" + GlobalVars.ICData[station].battVoltage.ToString());
+                                    Debug.Print("Current:" + GlobalVars.ICData[Cstation].battCurrent.ToString());
+                                    Debug.Print("Voltage:" + GlobalVars.ICData[Cstation].battVoltage.ToString());
                                     // we are past the startup dealy, so lets see if we are reasonably close to one of the currents
                                     //check the currents
-                                    if (GlobalVars.ICData[station].testMode.Contains("32"))
+                                    if (GlobalVars.ICData[Cstation].testMode.Contains("32"))
                                     {
                                         // resistance discharge
                                     }
@@ -4202,7 +4206,7 @@ namespace NewBTASProto
                                         {
                                             badReadingCount++;
                                         }
-                                        else if (GlobalVars.ICData[station].battVoltage < (vSet1 - 1))
+                                        else if (GlobalVars.ICData[Cstation].battVoltage < (vSet1 - 1))
                                         {
                                             badReadingCount++;
                                         }
@@ -4215,7 +4219,7 @@ namespace NewBTASProto
                                     {
                                         badReadingCount++;
                                     }
-                                    else if (GlobalVars.ICData[station].battVoltage > (vSet1 + 0.5) && GlobalVars.ICData[station].battVoltage > (vSet2 + 0.5))
+                                    else if (GlobalVars.ICData[Cstation].battVoltage > (vSet1 + 0.5) && GlobalVars.ICData[Cstation].battVoltage > (vSet2 + 0.5))
                                     {
                                         badReadingCount++;
                                     }
@@ -4549,7 +4553,20 @@ namespace NewBTASProto
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show("Error in main test loop try:  " + ex.Message + Environment.NewLine + ex.StackTrace);
+                            if (ex is IndexOutOfRangeException)
+                            {
+                                // wait a half second and then try again...
+                                this.Invoke((MethodInvoker)delegate()
+                                    {
+                                        sendNote(station, 3, "--------");
+                                    });
+                                Thread.Sleep(500);
+                            }
+                            else
+                            {
+                                MessageBox.Show(this, "Error in main test loop try:  " + ex.Message + Environment.NewLine + ex.TargetSite + Environment.NewLine + ex.HResult + Environment.NewLine + ex.StackTrace,"Main Test Loop Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+                            
                         }
 
                     } // end main test loop...
@@ -4675,9 +4692,9 @@ namespace NewBTASProto
                     #endregion
 
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    MessageBox.Show("Error in master test poriton try:  " + e.Message + Environment.NewLine + e.StackTrace);
+                    MessageBox.Show(this, "Error in master test poriton try:  " + ex.Message + Environment.NewLine + ex.TargetSite + Environment.NewLine + ex.HResult + Environment.NewLine + ex.StackTrace, "Main Test Catch Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
 
             }, cRunTest[station].Token); // end thread
@@ -4809,7 +4826,7 @@ namespace NewBTASProto
             // we need to make sure that this is being run on an ICA with the auto config set to on
             if(!(GlobalVars.autoConfig && (bool) d.Rows[station][12] && d.Rows[station][10].ToString().Contains("ICA")))
             {
-                MessageBox.Show(this, "Cannot run a combo test, unless you are using an ICA with AutoConfig");
+                MessageBox.Show(this, "Cannot run a combo test, unless you are using an ICA with AutoConfig", "Combo Test Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 

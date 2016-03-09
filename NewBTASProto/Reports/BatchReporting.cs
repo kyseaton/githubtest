@@ -28,11 +28,18 @@ namespace NewBTASProto
         bool cb5;
         bool cb6;
 
+        //for startup selection
+        string curWorkOrder = "";
 
-
-        public BatchReporting()
+        public BatchReporting( string currentWorkOrder = "")
         {
             InitializeComponent();
+            // we need to split up the work orders if we have multiple work orders on a single line...
+            string tempWOS = currentWorkOrder;
+            char[] delims = { ' ' };
+            string[] A = tempWOS.Split(delims);
+            curWorkOrder = A[0];
+
         }
 
         private void BatchReporting_Load(object sender, EventArgs e)
@@ -111,7 +118,7 @@ namespace NewBTASProto
             // launch the folder picker to figure out where the reports are to be saved...
             if (comboBox1.Text == "")
             {
-                MessageBox.Show(this, "Please Select a Work Order");
+                MessageBox.Show(this, "Please Select a Work Order", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -1231,6 +1238,12 @@ namespace NewBTASProto
             Properties.Settings.Default.cb5 = checkBox5.Checked;
             Properties.Settings.Default.cb6 = checkBox6.Checked;
             Properties.Settings.Default.Save();
+        }
+
+        private void BatchReporting_Shown(object sender, EventArgs e)
+        {
+            comboBox1.Text = curWorkOrder;
+            button1.Focus();
         }
         
     }

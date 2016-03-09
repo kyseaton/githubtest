@@ -429,7 +429,7 @@ namespace NewBTASProto
 
                     if ((string) d.Rows[e.RowIndex][9] == "")
                     {
-                        MessageBox.Show(this, "You Still Need to Select a Charger ID Number");
+                        MessageBox.Show(this, "You Still Need to Select a Charger ID Number", "Alert!", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     else
                     {

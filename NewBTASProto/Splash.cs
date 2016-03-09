@@ -401,7 +401,7 @@ namespace NewBTASProto
                 // if the number is bad, we'll return
                 if(licGood == false)
                 {
-                    MessageBox.Show(this, "Cannot continue without a good licence key.  Contact JFM if you need a valid licence key.");
+                    MessageBox.Show(this, "Cannot continue without a good licence key.  Contact JFM if you need a valid licence key.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     this.Dispose();
                 }
                 //otherwise let's write the number to file and continue

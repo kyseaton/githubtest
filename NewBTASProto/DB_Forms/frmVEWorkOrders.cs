@@ -888,7 +888,7 @@ namespace NewBTASProto
                 if (foundRows.Length != 0)
                 {
                     Inhibit = true;
-                    MessageBox.Show(this, "That battery is already assigned to an Open order");
+                    MessageBox.Show(this, "That battery is already assigned to an Open order", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
             }

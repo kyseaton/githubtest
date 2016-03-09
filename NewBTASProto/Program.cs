@@ -40,7 +40,7 @@ namespace NewBTASProto
             }
             else
             {
-                MessageBox.Show("BTAS-16K is already running! Check the task bar.");
+                MessageBox.Show("BTAS-16K is already running! Check the task bar.", "Check Task Bar!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
         }
