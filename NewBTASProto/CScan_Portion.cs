@@ -2242,6 +2242,22 @@ namespace NewBTASProto
                                 }
 
 
+
+                                //do we need to reformat...
+                                if (graphMainSet.Tables[0].Rows[0][15].ToString().Contains(","))
+                                {
+                                    //loop through everything and change the ,s to .s
+                                    foreach (DataRow dr in graphMainSet.Tables[0].Rows)
+                                    {
+                                        for (int i = 2; i < 27; i++)
+                                        {
+                                            dr[i] = dr[i].ToString().Replace(",", ".");
+                                        }
+
+                                    }
+                                }
+
+
                             }
                             catch (Exception ex)
                             {

@@ -24,7 +24,7 @@
     <MapFileExtensions>true</MapFileExtensions>
     <UpdateUrl>http://www.jfmeng.com/BTAS16_update/final_release/</UpdateUrl>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>118</ApplicationRevision>
+    <ApplicationRevision>119</ApplicationRevision>
     <ApplicationVersion>6.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>

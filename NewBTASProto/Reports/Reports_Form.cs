@@ -476,7 +476,7 @@ namespace NewBTASProto
                 // FIRST CLEAR THE OLD DATA SET!
                 reportSet.Clear();
                 // Open database containing all the battery data....
-                string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB;";
                 string strAccessSelect = @"SELECT * FROM ScanData WHERE BWO='" + comboBox1.Text + @"' ORDER BY DATE ASC";
 
                 //Here is where I load the form wide dataset which will both let me fill in the rest of the combo boxes and the graphs!
@@ -498,12 +498,36 @@ namespace NewBTASProto
                     OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
 
                     reportSet = new DataSet();
+                    System.Globalization.CultureInfo myCultureInfo = new System.Globalization.CultureInfo("en-us");
+                    reportSet.Locale = myCultureInfo;
+
+                    System.Globalization.CultureInfo customCulture = (System.Globalization.CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
+                    customCulture.NumberFormat.NumberDecimalSeparator = ".";
+
+                    System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
+
                     lock (Main_Form.dataBaseLock)
                     {
                         myAccessConn.Open();
                         myDataAdapter.Fill(reportSet, "ScanData");
                         myAccessConn.Close();
                     }
+
+                    //do we need to reformat...
+                    if (reportSet.Tables[0].Rows[0][15].ToString().Contains(","))
+                    {
+                        //loop through everything and change the ,s to .s
+                        foreach (DataRow dr in reportSet.Tables[0].Rows)
+                        {
+                            for (int i = 7; i < 51; i++)
+                            {
+                                dr[i] = dr[i].ToString().Replace(",", ".");
+                            }
+                                
+                        }
+                    }
+
+
 
                     //now come up with a mergeded table...
                     dtAll = new DataTable();
@@ -558,11 +582,7 @@ namespace NewBTASProto
                     MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
-                finally
-                {
-
-                }
-
+               
                 //now lets get the water data
                 // we need a data set..
                 DataSet WaterLevels = new DataSet();
@@ -600,10 +620,7 @@ namespace NewBTASProto
                     MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
-                finally
-                {
 
-                }
 
                 //now lets get the battery serial number and part number
                 // we need a data set..
@@ -888,10 +905,7 @@ namespace NewBTASProto
                     MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
-                finally
-                {
-                    
-                }
+
             }
 
             DataTable testTable = new DataTable();
@@ -992,6 +1006,20 @@ namespace NewBTASProto
                         myAccessConn.Open();
                         myDataAdapter.Fill(reportSet, "ScanData");
                         myAccessConn.Close();
+                    }
+
+                    //do we need to reformat...
+                    if (reportSet.Tables[0].Rows[0][15].ToString().Contains(","))
+                    {
+                        //loop through everything and change the ,s to .s
+                        foreach (DataRow dr in reportSet.Tables[0].Rows)
+                        {
+                            for (int i = 2; i < 27; i++)
+                            {
+                                dr[i] = dr[i].ToString().Replace(",", ".");
+                            }
+
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -1147,6 +1175,21 @@ namespace NewBTASProto
                         myDataAdapter.Fill(reportSet, "ScanData");
                         myAccessConn.Close();
                     }
+
+
+                    //do we need to reformat...
+                    if (reportSet.Tables[0].Rows[0][2].ToString().Contains(","))
+                    {
+                        //loop through everything and change the ,s to .s
+                        foreach (DataRow dr in reportSet.Tables[0].Rows)
+                        {
+                            for (int i = 2; i < 27; i++)
+                            {
+                                dr[i] = dr[i].ToString().Replace(",", ".");
+                            }
+
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -1273,6 +1316,20 @@ namespace NewBTASProto
                         myAccessConn.Open();
                         myDataAdapter.Fill(reportSet, "ScanData");
                         myAccessConn.Close();
+                    }
+
+                    //do we need to reformat...
+                    if (reportSet.Tables[0].Rows[0][2].ToString().Contains(","))
+                    {
+                        //loop through everything and change the ,s to .s
+                        foreach (DataRow dr in reportSet.Tables[0].Rows)
+                        {
+                            for (int i = 2; i < 14; i++)
+                            {
+                                dr[i] = dr[i].ToString().Replace(",", ".");
+                            }
+
+                        }
                     }
                 }
                 catch (Exception ex)

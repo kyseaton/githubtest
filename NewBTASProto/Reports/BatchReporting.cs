@@ -277,7 +277,10 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.Invoke((MethodInvoker)delegate()
+                {
+                    MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                });
                 return;
             }
             //  now try to access it
@@ -295,7 +298,10 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.Invoke((MethodInvoker)delegate()
+                {
+                    MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                });
                 return;
             }
             finally
@@ -406,6 +412,20 @@ namespace NewBTASProto
                     myAccessConn.Open();
                     myDataAdapter.Fill(reportSet, "ScanData");
                     myAccessConn.Close();
+                }
+
+                //do we need to reformat...
+                if (reportSet.Tables[0].Rows[0][15].ToString().Contains(","))
+                {
+                    //loop through everything and change the ,s to .s
+                    foreach (DataRow dr in reportSet.Tables[0].Rows)
+                    {
+                        for (int i = 7; i < 51; i++)
+                        {
+                            dr[i] = dr[i].ToString().Replace(",", ".");
+                        }
+
+                    }
                 }
 
                 //now come up with a merged table...
@@ -682,7 +702,10 @@ namespace NewBTASProto
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    this.Invoke((MethodInvoker)delegate()
+                    {
+                        MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    });
                     return;
                 }
                 //  now try to access it
@@ -698,10 +721,27 @@ namespace NewBTASProto
                         myDataAdapter.Fill(reportSet, "ScanData");
                         myAccessConn.Close();
                     }
+
+                    //do we need to reformat...
+                    if (reportSet.Tables[0].Rows[1][2].ToString().Contains(","))
+                    {
+                        //loop through everything and change the ,s to .s
+                        foreach (DataRow dr in reportSet.Tables[0].Rows)
+                        {
+                            for (int i = 2; i < 14; i++)
+                            {
+                                dr[i] = dr[i].ToString().Replace(",", ".");
+                            }
+
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    this.Invoke((MethodInvoker)delegate()
+                    {
+                        MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    });
                     return;
                 }
                 finally
@@ -811,7 +851,10 @@ namespace NewBTASProto
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    this.Invoke((MethodInvoker)delegate()
+                    {
+                        MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    });
                     return;
                 }
                 //  now try to access it
@@ -827,10 +870,27 @@ namespace NewBTASProto
                         myDataAdapter.Fill(reportSet, "ScanData");
                         myAccessConn.Close();
                     }
+
+                    //do we need to reformat...
+                    if (reportSet.Tables[0].Rows[0][15].ToString().Contains(","))
+                    {
+                        //loop through everything and change the ,s to .s
+                        foreach (DataRow dr in reportSet.Tables[0].Rows)
+                        {
+                            for (int i = 2; i < 27; i++)
+                            {
+                                dr[i] = dr[i].ToString().Replace(",", ".");
+                            }
+
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    this.Invoke((MethodInvoker)delegate()
+                    {
+                        MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    });
                     return;
                 }
                 finally
@@ -959,7 +1019,10 @@ namespace NewBTASProto
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    this.Invoke((MethodInvoker)delegate()
+                    {
+                        MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    });
                     return;
                 }
                 //  now try to access it
@@ -975,10 +1038,27 @@ namespace NewBTASProto
                         myDataAdapter.Fill(reportSet, "ScanData");
                         myAccessConn.Close();
                     }
+
+                    //do we need to reformat...
+                    if (reportSet.Tables[0].Rows[0][2].ToString().Contains(","))
+                    {
+                        //loop through everything and change the ,s to .s
+                        foreach (DataRow dr in reportSet.Tables[0].Rows)
+                        {
+                            for (int i = 2; i < 27; i++)
+                            {
+                                dr[i] = dr[i].ToString().Replace(",", ".");
+                            }
+
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    this.Invoke((MethodInvoker)delegate()
+                    {
+                        MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    });
                     return;
                 }
                 finally
@@ -1129,7 +1209,10 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.Invoke((MethodInvoker)delegate()
+                {
+                    MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                });
                 return;
             }
             //  now try to access it
@@ -1149,7 +1232,10 @@ namespace NewBTASProto
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.Invoke((MethodInvoker)delegate()
+                {
+                    MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                });
                 return;
             }
             finally

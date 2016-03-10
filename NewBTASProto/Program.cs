@@ -22,6 +22,7 @@ namespace NewBTASProto
 
             AppDomain currentDomain = AppDomain.CurrentDomain;
             currentDomain.UnhandledException += new UnhandledExceptionEventHandler(MyHandler);
+            Application.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
 
             if (mutex.WaitOne(TimeSpan.Zero, true))
             {
