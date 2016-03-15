@@ -30,8 +30,8 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main_Form));
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -41,6 +41,8 @@
             this.restoreDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem29 = new System.Windows.Forms.ToolStripSeparator();
             this.importDataBaseFromPreviousVersionOfProgramToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem46 = new System.Windows.Forms.ToolStripSeparator();
+            this.markAllOpenWorkOrdersAsClosedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -190,8 +192,7 @@
             this.cellsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripComboBox3 = new System.Windows.Forms.ToolStripComboBox();
             this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
-            this.toolStripMenuItem46 = new System.Windows.Forms.ToolStripSeparator();
-            this.markAllOpenWorkOrdersAsClosedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.resetTestSettingsToDefaultsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -289,7 +290,8 @@
             this.toolStripMenuItem29,
             this.importDataBaseFromPreviousVersionOfProgramToolStripMenuItem,
             this.toolStripMenuItem46,
-            this.markAllOpenWorkOrdersAsClosedToolStripMenuItem});
+            this.markAllOpenWorkOrdersAsClosedToolStripMenuItem,
+            this.resetTestSettingsToDefaultsToolStripMenuItem});
             this.databaseOperationsToolStripMenuItem.Name = "databaseOperationsToolStripMenuItem";
             this.databaseOperationsToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
             this.databaseOperationsToolStripMenuItem.Text = "Database Operations";
@@ -319,6 +321,18 @@
             this.importDataBaseFromPreviousVersionOfProgramToolStripMenuItem.Size = new System.Drawing.Size(345, 22);
             this.importDataBaseFromPreviousVersionOfProgramToolStripMenuItem.Text = "Import DataBase From Previous Version of Program";
             this.importDataBaseFromPreviousVersionOfProgramToolStripMenuItem.Click += new System.EventHandler(this.importDataBaseFromPreviousVersionOfProgramToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem46
+            // 
+            this.toolStripMenuItem46.Name = "toolStripMenuItem46";
+            this.toolStripMenuItem46.Size = new System.Drawing.Size(342, 6);
+            // 
+            // markAllOpenWorkOrdersAsClosedToolStripMenuItem
+            // 
+            this.markAllOpenWorkOrdersAsClosedToolStripMenuItem.Name = "markAllOpenWorkOrdersAsClosedToolStripMenuItem";
+            this.markAllOpenWorkOrdersAsClosedToolStripMenuItem.Size = new System.Drawing.Size(345, 22);
+            this.markAllOpenWorkOrdersAsClosedToolStripMenuItem.Text = "Mark All Open Work Orders As Closed";
+            this.markAllOpenWorkOrdersAsClosedToolStripMenuItem.Click += new System.EventHandler(this.markAllOpenWorkOrdersAsClosedToolStripMenuItem_Click);
             // 
             // toolStripSeparator4
             // 
@@ -1069,19 +1083,19 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.chart1.BorderlineColor = System.Drawing.Color.DimGray;
             this.chart1.BorderlineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
-            chartArea2.AxisX.IntervalAutoMode = System.Windows.Forms.DataVisualization.Charting.IntervalAutoMode.VariableCount;
-            chartArea2.AxisX.MajorGrid.Enabled = false;
-            chartArea2.AxisX.MajorTickMark.Enabled = false;
-            chartArea2.AxisX.Title = "Cells";
-            chartArea2.AxisY.IntervalAutoMode = System.Windows.Forms.DataVisualization.Charting.IntervalAutoMode.VariableCount;
-            chartArea2.AxisY.Title = "Voltage";
-            chartArea2.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea2);
+            chartArea1.AxisX.IntervalAutoMode = System.Windows.Forms.DataVisualization.Charting.IntervalAutoMode.VariableCount;
+            chartArea1.AxisX.MajorGrid.Enabled = false;
+            chartArea1.AxisX.MajorTickMark.Enabled = false;
+            chartArea1.AxisX.Title = "Cells";
+            chartArea1.AxisY.IntervalAutoMode = System.Windows.Forms.DataVisualization.Charting.IntervalAutoMode.VariableCount;
+            chartArea1.AxisY.Title = "Voltage";
+            chartArea1.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea1);
             this.chart1.Location = new System.Drawing.Point(6, 42);
             this.chart1.Name = "chart1";
-            series2.ChartArea = "ChartArea1";
-            series2.Name = "Series1";
-            this.chart1.Series.Add(series2);
+            series1.ChartArea = "ChartArea1";
+            series1.Name = "Series1";
+            this.chart1.Series.Add(series1);
             this.chart1.Size = new System.Drawing.Size(696, 267);
             this.chart1.TabIndex = 30;
             this.chart1.Text = "chart1";
@@ -1573,17 +1587,12 @@
             this.openFileDialog2.Filter = "JPG Files (*.jpg)|*.jpg";
             this.openFileDialog2.Title = "Select Logo File";
             // 
-            // toolStripMenuItem46
+            // resetTestSettingsToDefaultsToolStripMenuItem
             // 
-            this.toolStripMenuItem46.Name = "toolStripMenuItem46";
-            this.toolStripMenuItem46.Size = new System.Drawing.Size(342, 6);
-            // 
-            // markAllOpenWorkOrdersAsClosedToolStripMenuItem
-            // 
-            this.markAllOpenWorkOrdersAsClosedToolStripMenuItem.Name = "markAllOpenWorkOrdersAsClosedToolStripMenuItem";
-            this.markAllOpenWorkOrdersAsClosedToolStripMenuItem.Size = new System.Drawing.Size(345, 22);
-            this.markAllOpenWorkOrdersAsClosedToolStripMenuItem.Text = "Mark All Open Work Orders As Closed";
-            this.markAllOpenWorkOrdersAsClosedToolStripMenuItem.Click += new System.EventHandler(this.markAllOpenWorkOrdersAsClosedToolStripMenuItem_Click);
+            this.resetTestSettingsToDefaultsToolStripMenuItem.Name = "resetTestSettingsToDefaultsToolStripMenuItem";
+            this.resetTestSettingsToDefaultsToolStripMenuItem.Size = new System.Drawing.Size(345, 22);
+            this.resetTestSettingsToDefaultsToolStripMenuItem.Text = "Reset All Test Settings to Defaults";
+            this.resetTestSettingsToDefaultsToolStripMenuItem.Click += new System.EventHandler(this.resetTestSettingsToDefaultsToolStripMenuItem_Click);
             // 
             // Main_Form
             // 
@@ -1796,6 +1805,7 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem45;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem46;
         private System.Windows.Forms.ToolStripMenuItem markAllOpenWorkOrdersAsClosedToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem resetTestSettingsToDefaultsToolStripMenuItem;
     }
 }
 

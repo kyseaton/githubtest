@@ -820,31 +820,31 @@ namespace NewBTASProto
                                         //tempKMStore[2] = (byte)(48);                                                                            //time mins
                                         if (d.Rows[station][10].ToString().Contains("mini"))
                                         {
-                                            tempKMStore[3] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][45].ToString()) * 10));             //top current byte
-                                            tempKMStore[4] = (byte)(48 + Math.Round(float.Parse(battery.Tables[0].Rows[0][45].ToString()) * 1000) % 100);                                                                            //bottom current byte
+                                            tempKMStore[3] = (byte)(48 + ((float) GetDouble(battery.Tables[0].Rows[0][45].ToString()) * 10));             //top current byte
+                                            tempKMStore[4] = (byte)(48 + Math.Round((float) GetDouble(battery.Tables[0].Rows[0][45].ToString()) * 1000) % 100);                                                                            //bottom current byte
                                         }
                                         else
                                         {
-                                            tempKMStore[3] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][45].ToString()) / 10));             //top current byte
-                                            tempKMStore[4] = (byte)(48 + 10 * (float.Parse(battery.Tables[0].Rows[0][45].ToString()) % 10));        //bottom current byte
+                                            tempKMStore[3] = (byte)(48 + ((float) GetDouble(battery.Tables[0].Rows[0][45].ToString()) / 10));             //top current byte
+                                            tempKMStore[4] = (byte)(48 + 10 * ((float) GetDouble(battery.Tables[0].Rows[0][45].ToString()) % 10));        //bottom current byte
                                         }
-                                        tempKMStore[5] = (byte)(48 + ((MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][46].ToString())) : float.Parse(battery.Tables[0].Rows[0][46].ToString())) / 1));              //top voltage byte
-                                        tempKMStore[6] = (byte)(48 + 100 * ((MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][46].ToString())) : float.Parse(battery.Tables[0].Rows[0][46].ToString())) % 1));            //bottom voltage byte
+                                        tempKMStore[5] = (byte)(48 + ((MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][46].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][46].ToString())) / 1));              //top voltage byte
+                                        tempKMStore[6] = (byte)(48 + 100 * ((MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][46].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][46].ToString())) % 1));            //bottom voltage byte
 
                                         tempKMStore[7] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][47].ToString()));                          //time 2 hours
                                         tempKMStore[8] = (byte)(48);                                                                            //time 2 mins
                                         if (d.Rows[station][10].ToString().Contains("mini"))
                                         {
-                                            tempKMStore[9] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][49].ToString()) * 10));             //top current 2 byte
-                                            tempKMStore[10] = (byte)Math.Round(48 + (float.Parse(battery.Tables[0].Rows[0][49].ToString()) * 1000) % 100);                                                                           //bottom current 2 byte
+                                            tempKMStore[9] = (byte)(48 + ((float) GetDouble(battery.Tables[0].Rows[0][49].ToString()) * 10));             //top current 2 byte
+                                            tempKMStore[10] = (byte)Math.Round(48 + ((float) GetDouble(battery.Tables[0].Rows[0][49].ToString()) * 1000) % 100);                                                                           //bottom current 2 byte
                                         }
                                         else
                                         {
-                                            tempKMStore[9] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][49].ToString()) / 10));             //top current 2 byte
-                                            tempKMStore[10] = (byte)(48 + 10 * (float.Parse(battery.Tables[0].Rows[0][49].ToString()) % 10));       //bottom current 2 byte
+                                            tempKMStore[9] = (byte)(48 + ((float) GetDouble(battery.Tables[0].Rows[0][49].ToString()) / 10));             //top current 2 byte
+                                            tempKMStore[10] = (byte)(48 + 10 * ((float )GetDouble(battery.Tables[0].Rows[0][49].ToString()) % 10));       //bottom current 2 byte
                                         }
-                                        tempKMStore[11] = (byte)(48 + ((MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][50].ToString())) : float.Parse(battery.Tables[0].Rows[0][50].ToString())) / 1));                 //top voltage 2 byte
-                                        tempKMStore[12] = (byte)(48 + 100 * ((MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][50].ToString())) : float.Parse(battery.Tables[0].Rows[0][50].ToString())) % 1));           //bottom voltage 2 byte
+                                        tempKMStore[11] = (byte)(48 + ((MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][50].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][50].ToString())) / 1));                 //top voltage 2 byte
+                                        tempKMStore[12] = (byte)(48 + 100 * ((MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][50].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][50].ToString())) % 1));           //bottom voltage 2 byte
 
                                         tempKMStore[13] = (byte)48;                                                                                //discharge time hours
                                         tempKMStore[14] = (byte)48;                                                                                //discharge time mins
@@ -854,10 +854,10 @@ namespace NewBTASProto
                                         tempKMStore[18] = (byte)48;                                                                                //discharge voltage low byte
                                         tempKMStore[19] = (byte)48;                                                                                //discharge resistance high byte
                                         tempKMStore[20] = (byte)48;                                                                                //discharge resistance low byte
-                                        curSet1 = float.Parse(battery.Tables[0].Rows[0][45].ToString());
-                                        vSet1 = (MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][46].ToString())) : float.Parse(battery.Tables[0].Rows[0][46].ToString()));
-                                        curSet2 = float.Parse(battery.Tables[0].Rows[0][49].ToString());
-                                        vSet2 = (MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][50].ToString())) : float.Parse(battery.Tables[0].Rows[0][50].ToString()));
+                                        curSet1 = (float)GetDouble(battery.Tables[0].Rows[0][45].ToString());
+                                        vSet1 = (MasterSlaveTest ? (2 * (float)GetDouble(battery.Tables[0].Rows[0][46].ToString())) : (float)GetDouble(battery.Tables[0].Rows[0][46].ToString()));
+                                        curSet2 = (float) GetDouble(battery.Tables[0].Rows[0][49].ToString());
+                                        vSet2 = (MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][50].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][50].ToString()));
                                         break;
                                     case "Full Charge-4":
                                         tempKMStore[0] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][52].ToString().Substring(0, 2)));          //mode
@@ -865,31 +865,31 @@ namespace NewBTASProto
                                         //tempKMStore[2] = (byte)(48);                                                                            //time mins
                                         if (d.Rows[station][10].ToString().Contains("mini"))
                                         {
-                                            tempKMStore[3] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][55].ToString()) * 10));             //top current byte
-                                            tempKMStore[4] = (byte)(48 + Math.Round(float.Parse(battery.Tables[0].Rows[0][55].ToString()) * 1000) % 100);                                                                            //bottom current byte
+                                            tempKMStore[3] = (byte)(48 + ((float) GetDouble(battery.Tables[0].Rows[0][55].ToString()) * 10));             //top current byte
+                                            tempKMStore[4] = (byte)(48 + Math.Round((float) GetDouble(battery.Tables[0].Rows[0][55].ToString()) * 1000) % 100);                                                                            //bottom current byte
                                         }
                                         else
                                         {
-                                            tempKMStore[3] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][55].ToString()) / 10));             //top current byte
-                                            tempKMStore[4] = (byte)(48 + 10 * (float.Parse(battery.Tables[0].Rows[0][55].ToString()) % 10));        //bottom current byte
+                                            tempKMStore[3] = (byte)(48 + ((float) GetDouble(battery.Tables[0].Rows[0][55].ToString()) / 10));             //top current byte
+                                            tempKMStore[4] = (byte)(48 + 10 * ((float) GetDouble(battery.Tables[0].Rows[0][55].ToString()) % 10));        //bottom current byte
                                         }
-                                        tempKMStore[5] = (byte)(48 + ((MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][56].ToString())) : float.Parse(battery.Tables[0].Rows[0][56].ToString())) / 1));                  //top voltage byte
-                                        tempKMStore[6] = (byte)(48 + 100 * ((MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][56].ToString())) : float.Parse(battery.Tables[0].Rows[0][56].ToString())) % 1));            //bottom current byte
+                                        tempKMStore[5] = (byte)(48 + ((MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][56].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][56].ToString())) / 1));                  //top voltage byte
+                                        tempKMStore[6] = (byte)(48 + 100 * ((MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][56].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][56].ToString())) % 1));            //bottom current byte
 
                                         tempKMStore[7] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][57].ToString()));                          //time 2 hours
                                         tempKMStore[8] = (byte)(48);                                                                            //time 2 mins
                                         if (d.Rows[station][10].ToString().Contains("mini"))
                                         {
-                                            tempKMStore[9] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][59].ToString()) * 10));             //top current 2 byte
-                                            tempKMStore[10] = (byte)Math.Round(48 + (float.Parse(battery.Tables[0].Rows[0][59].ToString()) * 1000) % 100);                                                                           //bottom current 2 byte
+                                            tempKMStore[9] = (byte)(48 + ((float) GetDouble(battery.Tables[0].Rows[0][59].ToString()) * 10));             //top current 2 byte
+                                            tempKMStore[10] = (byte)Math.Round(48 + ((float) GetDouble(battery.Tables[0].Rows[0][59].ToString()) * 1000) % 100);                                                                           //bottom current 2 byte
                                         }
                                         else
                                         {
-                                            tempKMStore[9] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][59].ToString()) / 10));             //top current 2 byte
-                                            tempKMStore[10] = (byte)(48 + 10 * (float.Parse(battery.Tables[0].Rows[0][59].ToString()) % 10));       //bottom current 2 byte
+                                            tempKMStore[9] = (byte)(48 + ((float) GetDouble(battery.Tables[0].Rows[0][59].ToString()) / 10));             //top current 2 byte
+                                            tempKMStore[10] = (byte)(48 + 10 * ((float) GetDouble(battery.Tables[0].Rows[0][59].ToString()) % 10));       //bottom current 2 byte
                                         }
-                                        tempKMStore[11] = (byte)(48 + ((MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][60].ToString())) : float.Parse(battery.Tables[0].Rows[0][60].ToString())) / 1));                 //top voltage 2 byte
-                                        tempKMStore[12] = (byte)(48 + 100 * ((MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][60].ToString())) : float.Parse(battery.Tables[0].Rows[0][60].ToString())) % 1));           //bottom voltage 2 byte
+                                        tempKMStore[11] = (byte)(48 + ((MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][60].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][60].ToString())) / 1));                 //top voltage 2 byte
+                                        tempKMStore[12] = (byte)(48 + 100 * ((MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][60].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][60].ToString())) % 1));           //bottom voltage 2 byte
 
                                         tempKMStore[13] = (byte)48;                                                                                //discharge time hours
                                         tempKMStore[14] = (byte)48;                                                                              //discharge time mins
@@ -899,10 +899,10 @@ namespace NewBTASProto
                                         tempKMStore[18] = (byte)48;                                                                                //discharge voltage low byte
                                         tempKMStore[19] = (byte)48;                                                                                //discharge resistance high byte
                                         tempKMStore[20] = (byte)48;                                                                                //discharge resistance low byte
-                                        curSet1 = float.Parse(battery.Tables[0].Rows[0][55].ToString());
-                                        vSet1 = (MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][56].ToString())) : float.Parse(battery.Tables[0].Rows[0][56].ToString()));
-                                        curSet2 = float.Parse(battery.Tables[0].Rows[0][59].ToString());
-                                        vSet2 = (MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][60].ToString())) : float.Parse(battery.Tables[0].Rows[0][60].ToString()));
+                                        curSet1 = (float) GetDouble(battery.Tables[0].Rows[0][55].ToString());
+                                        vSet1 = (MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][56].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][56].ToString()));
+                                        curSet2 = (float) GetDouble(battery.Tables[0].Rows[0][59].ToString());
+                                        vSet2 = (MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][60].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][60].ToString()));
                                         break;
                                     case "Top Charge-4":
                                         tempKMStore[0] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][62].ToString().Substring(0, 2)));          //mode
@@ -910,16 +910,16 @@ namespace NewBTASProto
                                         tempKMStore[2] = (byte)(48);                                                                            //time mins
                                         if (d.Rows[station][10].ToString().Contains("mini"))
                                         {
-                                            tempKMStore[3] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][65].ToString()) * 10));             //top current byte
-                                            tempKMStore[4] = (byte)(48 + Math.Round(float.Parse(battery.Tables[0].Rows[0][65].ToString()) * 1000) % 100);                                                                            //bottom current byte
+                                            tempKMStore[3] = (byte)(48 + ((float) GetDouble(battery.Tables[0].Rows[0][65].ToString()) * 10));             //top current byte
+                                            tempKMStore[4] = (byte)(48 + Math.Round((float) GetDouble(battery.Tables[0].Rows[0][65].ToString()) * 1000) % 100);                                                                            //bottom current byte
                                         }
                                         else
                                         {
-                                            tempKMStore[3] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][65].ToString()) / 10));             //top current byte
-                                            tempKMStore[4] = (byte)(48 + 10 * (float.Parse(battery.Tables[0].Rows[0][65].ToString()) % 10));        //bottom current byte
+                                            tempKMStore[3] = (byte)(48 + ((float) GetDouble(battery.Tables[0].Rows[0][65].ToString()) / 10));             //top current byte
+                                            tempKMStore[4] = (byte)(48 + 10 * ((float) GetDouble(battery.Tables[0].Rows[0][65].ToString()) % 10));        //bottom current byte
                                         }
-                                        tempKMStore[5] = (byte)(48 + ((MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][66].ToString())) : float.Parse(battery.Tables[0].Rows[0][66].ToString())) / 1));              //top voltage byte
-                                        tempKMStore[6] = (byte)(48 + 100 * ((MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][66].ToString())) : float.Parse(battery.Tables[0].Rows[0][66].ToString())) % 1));            //bottom current byte
+                                        tempKMStore[5] = (byte)(48 + ((MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][66].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][66].ToString())) / 1));              //top voltage byte
+                                        tempKMStore[6] = (byte)(48 + 100 * ((MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][66].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][66].ToString())) % 1));            //bottom current byte
 
                                         tempKMStore[7] = (byte)48;                                                                                 //time 2 hours
                                         tempKMStore[8] = (byte)48;                                                                                 //time 2 mins
@@ -936,8 +936,8 @@ namespace NewBTASProto
                                         tempKMStore[18] = (byte)48;                                                                                //discharge voltage low byte
                                         tempKMStore[19] = (byte)48;                                                                                //discharge resistance high byte
                                         tempKMStore[20] = (byte)48;                                                                                //discharge resistance low byte
-                                        curSet1 = float.Parse(battery.Tables[0].Rows[0][65].ToString());
-                                        vSet1 = (MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][66].ToString())) : float.Parse(battery.Tables[0].Rows[0][66].ToString()));
+                                        curSet1 = (float) GetDouble(battery.Tables[0].Rows[0][65].ToString());
+                                        vSet1 = (MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][66].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][66].ToString()));
                                         curSet2 = 0;
                                         vSet2 = 0;
                                         break;
@@ -947,16 +947,16 @@ namespace NewBTASProto
                                         tempKMStore[2] = (byte)(48);                                                                            //time mins
                                         if (d.Rows[station][10].ToString().Contains("mini"))
                                         {
-                                            tempKMStore[3] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][75].ToString()) * 10));             //top current byte
-                                            tempKMStore[4] = (byte)(48 + Math.Round(float.Parse(battery.Tables[0].Rows[0][75].ToString()) * 1000) % 100);                                                                            //bottom current byte
+                                            tempKMStore[3] = (byte)(48 + ((float) GetDouble(battery.Tables[0].Rows[0][75].ToString()) * 10));             //top current byte
+                                            tempKMStore[4] = (byte)(48 + Math.Round((float) GetDouble(battery.Tables[0].Rows[0][75].ToString()) * 1000) % 100);                                                                            //bottom current byte
                                         }
                                         else
                                         {
-                                            tempKMStore[3] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][75].ToString()) / 10));             //top current byte
-                                            tempKMStore[4] = (byte)(48 + 10 * (float.Parse(battery.Tables[0].Rows[0][75].ToString()) % 10));        //bottom current byte
+                                            tempKMStore[3] = (byte)(48 + ((float) GetDouble(battery.Tables[0].Rows[0][75].ToString()) / 10));             //top current byte
+                                            tempKMStore[4] = (byte)(48 + 10 * ((float) GetDouble(battery.Tables[0].Rows[0][75].ToString()) % 10));        //bottom current byte
                                         }
-                                        tempKMStore[5] = (byte)(48 + ((MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][76].ToString())) : float.Parse(battery.Tables[0].Rows[0][76].ToString())) / 1));                  //top voltage byte
-                                        tempKMStore[6] = (byte)(48 + 100 * ((MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][76].ToString())) : float.Parse(battery.Tables[0].Rows[0][76].ToString())) % 1));            //bottom current byte
+                                        tempKMStore[5] = (byte)(48 + ((MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][76].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][76].ToString())) / 1));                  //top voltage byte
+                                        tempKMStore[6] = (byte)(48 + 100 * ((MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][76].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][76].ToString())) % 1));            //bottom current byte
 
                                         tempKMStore[7] = (byte)48;                                                                                 //time 2 hours
                                         tempKMStore[8] = (byte)48;                                                                                 //time 2 mins
@@ -973,8 +973,8 @@ namespace NewBTASProto
                                         tempKMStore[18] = (byte)48;                                                                                //discharge voltage low byte
                                         tempKMStore[19] = (byte)48;                                                                                //discharge resistance high byte
                                         tempKMStore[20] = (byte)48;                                                                                //discharge resistance low byte
-                                        curSet1 = float.Parse(battery.Tables[0].Rows[0][75].ToString());
-                                        vSet1 = (MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][76].ToString())) : float.Parse(battery.Tables[0].Rows[0][76].ToString()));
+                                        curSet1 = (float) GetDouble(battery.Tables[0].Rows[0][75].ToString());
+                                        vSet1 = (MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][76].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][76].ToString()));
                                         curSet2 = 0;
                                         vSet2 = 0;
                                         break;
@@ -984,16 +984,16 @@ namespace NewBTASProto
                                         tempKMStore[2] = (byte)(48);                                                                            //time mins
                                         if (d.Rows[station][10].ToString().Contains("mini"))
                                         {
-                                            tempKMStore[3] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][85].ToString()) * 10));             //top current byte
-                                            tempKMStore[4] = (byte)(48 + Math.Round(float.Parse(battery.Tables[0].Rows[0][85].ToString()) * 1000) % 100);                                                                            //bottom current byte
+                                            tempKMStore[3] = (byte)(48 + ((float) GetDouble(battery.Tables[0].Rows[0][85].ToString()) * 10));             //top current byte
+                                            tempKMStore[4] = (byte)(48 + Math.Round((float) GetDouble(battery.Tables[0].Rows[0][85].ToString()) * 1000) % 100);                                                                            //bottom current byte
                                         }
                                         else
                                         {
-                                            tempKMStore[3] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][85].ToString()) / 10));             //top current byte
-                                            tempKMStore[4] = (byte)(48 + 10 * (float.Parse(battery.Tables[0].Rows[0][85].ToString()) % 10));        //bottom current byte
+                                            tempKMStore[3] = (byte)(48 + ((float) GetDouble(battery.Tables[0].Rows[0][85].ToString()) / 10));             //top current byte
+                                            tempKMStore[4] = (byte)(48 + 10 * ((float) GetDouble(battery.Tables[0].Rows[0][85].ToString()) % 10));        //bottom current byte
                                         }
-                                        tempKMStore[5] = (byte)(48 + ((MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][86].ToString())) : float.Parse(battery.Tables[0].Rows[0][86].ToString())) / 1));                  //top voltage byte
-                                        tempKMStore[6] = (byte)(48 + 100 * ((MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][86].ToString())) : float.Parse(battery.Tables[0].Rows[0][86].ToString())) % 1));            //bottom current byte
+                                        tempKMStore[5] = (byte)(48 + ((MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][86].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][86].ToString())) / 1));                  //top voltage byte
+                                        tempKMStore[6] = (byte)(48 + 100 * ((MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][86].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][86].ToString())) % 1));            //bottom current byte
 
                                         tempKMStore[7] = (byte)48;                                                                                 //time 2 hours
                                         tempKMStore[8] = (byte)48;                                                                                 //time 2 mins
@@ -1010,8 +1010,8 @@ namespace NewBTASProto
                                         tempKMStore[18] = (byte)48;                                                                                //discharge voltage low byte
                                         tempKMStore[19] = (byte)48;                                                                                //discharge resistance high byte
                                         tempKMStore[20] = (byte)48;                                                                                //discharge resistance low byte
-                                        curSet1 = float.Parse(battery.Tables[0].Rows[0][85].ToString());
-                                        vSet1 = (MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][86].ToString())) : float.Parse(battery.Tables[0].Rows[0][86].ToString()));
+                                        curSet1 = (float) GetDouble(battery.Tables[0].Rows[0][85].ToString());
+                                        vSet1 = (MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][86].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][86].ToString()));
                                         curSet2 = 0;
                                         vSet2 = 0;
                                         break;
@@ -1037,24 +1037,24 @@ namespace NewBTASProto
                                         {
                                             if (d.Rows[station][10].ToString().Contains("mini"))
                                             {
-                                                tempKMStore[15] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][95].ToString()) * 1));         //discharge current high byte
-                                                tempKMStore[16] = (byte)(48 + Math.Round(100 * (float.Parse(battery.Tables[0].Rows[0][95].ToString()) % 1)));   //discharge current low byte
+                                                tempKMStore[15] = (byte)(48 + ((float) GetDouble(battery.Tables[0].Rows[0][95].ToString()) * 1));         //discharge current high byte
+                                                tempKMStore[16] = (byte)(48 + Math.Round(100 * ((float) GetDouble(battery.Tables[0].Rows[0][95].ToString()) % 1)));   //discharge current low byte
                                             }
                                             else
                                             {
-                                                tempKMStore[15] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][95].ToString()) / 10));        //discharge current high byte
-                                                tempKMStore[16] = (byte)(48 + 10 * (float.Parse(battery.Tables[0].Rows[0][95].ToString()) % 10));   //discharge current low byte
+                                                tempKMStore[15] = (byte)(48 + ((float) GetDouble(battery.Tables[0].Rows[0][95].ToString()) / 10));        //discharge current high byte
+                                                tempKMStore[16] = (byte)(48 + 10 * ((float) GetDouble(battery.Tables[0].Rows[0][95].ToString()) % 10));   //discharge current low byte
                                             }
                                         }
-                                        tempKMStore[17] = (byte)(48 + ((MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][96].ToString())) : float.Parse(battery.Tables[0].Rows[0][96].ToString())) / 1));                 //discharge voltage high byte
-                                        tempKMStore[18] = (byte)(48 + 100 * ((MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][96].ToString())) : float.Parse(battery.Tables[0].Rows[0][96].ToString())) % 1));           //discharge voltage low byte
+                                        tempKMStore[17] = (byte)(48 + ((MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][96].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][96].ToString())) / 1));                 //discharge voltage high byte
+                                        tempKMStore[18] = (byte)(48 + 100 * ((MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][96].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][96].ToString())) % 1));           //discharge voltage low byte
                                         if (tempKMStore[0] == 32 + 48)
                                         {
-                                            tempKMStore[19] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][101].ToString()) / 1));            //discharge resistance high byte
-                                            tempKMStore[20] = (byte)(48 + 100 * (float.Parse(battery.Tables[0].Rows[0][101].ToString()) % 1));      //discharge resistance low byte
+                                            tempKMStore[19] = (byte)(48 + ((float) GetDouble(battery.Tables[0].Rows[0][101].ToString()) / 1));            //discharge resistance high byte
+                                            tempKMStore[20] = (byte)(48 + 100 * ((float) GetDouble(battery.Tables[0].Rows[0][101].ToString()) % 1));      //discharge resistance low byte
                                         }
-                                        if (battery.Tables[0].Rows[0][95].ToString() != "") { curSet1 = float.Parse(battery.Tables[0].Rows[0][95].ToString()); }
-                                        vSet1 = (MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][96].ToString())) : float.Parse(battery.Tables[0].Rows[0][96].ToString()));
+                                        if (battery.Tables[0].Rows[0][95].ToString() != "") { curSet1 = (float) GetDouble(battery.Tables[0].Rows[0][95].ToString()); }
+                                        vSet1 = (MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][96].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][96].ToString()));
                                         curSet2 = 0;
                                         vSet2 = 0;
                                         break;
@@ -1078,19 +1078,19 @@ namespace NewBTASProto
                                         tempKMStore[14] = (byte)(48);                                                                           //discharge time mins
                                         if (d.Rows[station][10].ToString().Contains("mini"))
                                         {
-                                            tempKMStore[15] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][105].ToString()) * 1));            //discharge current high byte
-                                            tempKMStore[16] = (byte)(48 + Math.Round(100 * (float.Parse(battery.Tables[0].Rows[0][105].ToString()) % 1)));      //discharge current low byte
+                                            tempKMStore[15] = (byte)(48 + ((float) GetDouble(battery.Tables[0].Rows[0][105].ToString()) * 1));            //discharge current high byte
+                                            tempKMStore[16] = (byte)(48 + Math.Round(100 * ((float) GetDouble(battery.Tables[0].Rows[0][105].ToString()) % 1)));      //discharge current low byte
                                         }
                                         else
                                         {
-                                            tempKMStore[15] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][105].ToString()) / 10));           //discharge current high byte
-                                            tempKMStore[16] = (byte)(48 + 10 * (float.Parse(battery.Tables[0].Rows[0][105].ToString()) % 10));      //discharge current low byte
+                                            tempKMStore[15] = (byte)(48 + ((float) GetDouble(battery.Tables[0].Rows[0][105].ToString()) / 10));           //discharge current high byte
+                                            tempKMStore[16] = (byte)(48 + 10 * ((float) GetDouble(battery.Tables[0].Rows[0][105].ToString()) % 10));      //discharge current low byte
                                         }
                                         tempKMStore[17] = (byte)48;                                                                                //discharge voltage high byte
                                         tempKMStore[18] = (byte)48;                                                                                //discharge voltage low byte
                                         tempKMStore[19] = (byte)48;                                                                                //discharge resistance high byte
                                         tempKMStore[20] = (byte)48;                                                                                //discharge resistance low byte
-                                        curSet1 = float.Parse(battery.Tables[0].Rows[0][105].ToString());
+                                        curSet1 = (float) GetDouble(battery.Tables[0].Rows[0][105].ToString());
                                         vSet1 = 0;
                                         curSet2 = 0;
                                         vSet2 = 0;
@@ -1101,16 +1101,16 @@ namespace NewBTASProto
                                         tempKMStore[2] = (byte)(48);                         //time mins
                                         if (d.Rows[station][10].ToString().Contains("mini"))
                                         {
-                                            tempKMStore[3] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][115].ToString()) * 10));            //top current byte
-                                            tempKMStore[4] = (byte)(48 + Math.Round(float.Parse(battery.Tables[0].Rows[0][115].ToString()) * 1000) % 100);                                                                            //bottom current byte
+                                            tempKMStore[3] = (byte)(48 + ((float) GetDouble(battery.Tables[0].Rows[0][115].ToString()) * 10));            //top current byte
+                                            tempKMStore[4] = (byte)(48 + Math.Round((float) GetDouble(battery.Tables[0].Rows[0][115].ToString()) * 1000) % 100);                                                                            //bottom current byte
                                         }
                                         else
                                         {
-                                            tempKMStore[3] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][115].ToString()) / 10));            //top current byte
-                                            tempKMStore[4] = (byte)(48 + 10 * (float.Parse(battery.Tables[0].Rows[0][115].ToString()) % 10));       //bottom current byte
+                                            tempKMStore[3] = (byte)(48 + ((float) GetDouble(battery.Tables[0].Rows[0][115].ToString()) / 10));            //top current byte
+                                            tempKMStore[4] = (byte)(48 + 10 * ((float) GetDouble(battery.Tables[0].Rows[0][115].ToString()) % 10));       //bottom current byte
                                         }
-                                        tempKMStore[5] = (byte)(48 + ((MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][116].ToString())) : float.Parse(battery.Tables[0].Rows[0][116].ToString())) / 1));                 //top voltage byte
-                                        tempKMStore[6] = (byte)(48 + 100 * ((MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][116].ToString())) : float.Parse(battery.Tables[0].Rows[0][116].ToString())) % 1));           //bottom current byte
+                                        tempKMStore[5] = (byte)(48 + ((MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][116].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][116].ToString())) / 1));                 //top voltage byte
+                                        tempKMStore[6] = (byte)(48 + 100 * ((MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][116].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][116].ToString())) % 1));           //bottom current byte
 
                                         tempKMStore[7] = (byte)48;                                                                                 //time 2 hours
                                         tempKMStore[8] = (byte)48;                                                                                 //time 2 mins
@@ -1127,8 +1127,8 @@ namespace NewBTASProto
                                         tempKMStore[18] = (byte)48;                                                                                //discharge voltage low byte
                                         tempKMStore[19] = (byte)48;                                                                                //discharge resistance high byte
                                         tempKMStore[20] = (byte)48;                                                                                //discharge resistance low byte
-                                        curSet1 = float.Parse(battery.Tables[0].Rows[0][115].ToString());
-                                        vSet1 = (MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][116].ToString())) : float.Parse(battery.Tables[0].Rows[0][116].ToString()));
+                                        curSet1 = (float) GetDouble(battery.Tables[0].Rows[0][115].ToString());
+                                        vSet1 = (MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][116].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][116].ToString()));
                                         curSet2 = 0;
                                         vSet2 = 0;
                                         break;
@@ -1138,16 +1138,16 @@ namespace NewBTASProto
                                         tempKMStore[2] = (byte)(48);                         //time mins
                                         if (d.Rows[station][10].ToString().Contains("mini"))
                                         {
-                                            tempKMStore[3] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][125].ToString()) * 10));            //top current byte
-                                            tempKMStore[4] = (byte)(48 + Math.Round(float.Parse(battery.Tables[0].Rows[0][125].ToString()) * 1000) % 100);                                                                            //bottom current byte
+                                            tempKMStore[3] = (byte)(48 + ((float) GetDouble(battery.Tables[0].Rows[0][125].ToString()) * 10));            //top current byte
+                                            tempKMStore[4] = (byte)(48 + Math.Round((float) GetDouble(battery.Tables[0].Rows[0][125].ToString()) * 1000) % 100);                                                                            //bottom current byte
                                         }
                                         else
                                         {
-                                            tempKMStore[3] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][125].ToString()) / 10));            //top current byte
-                                            tempKMStore[4] = (byte)(48 + 10 * (float.Parse(battery.Tables[0].Rows[0][125].ToString()) % 10));       //bottom current byte
+                                            tempKMStore[3] = (byte)(48 + ((float) GetDouble(battery.Tables[0].Rows[0][125].ToString()) / 10));            //top current byte
+                                            tempKMStore[4] = (byte)(48 + 10 * ((float) GetDouble(battery.Tables[0].Rows[0][125].ToString()) % 10));       //bottom current byte
                                         }
-                                        tempKMStore[5] = (byte)(48 + ((MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][126].ToString())) : float.Parse(battery.Tables[0].Rows[0][126].ToString())) / 1));                 //top voltage byte
-                                        tempKMStore[6] = (byte)(48 + 100 * ((MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][126].ToString())) : float.Parse(battery.Tables[0].Rows[0][126].ToString())) % 1));           //bottom current byte
+                                        tempKMStore[5] = (byte)(48 + ((MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][126].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][126].ToString())) / 1));                 //top voltage byte
+                                        tempKMStore[6] = (byte)(48 + 100 * ((MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][126].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][126].ToString())) % 1));           //bottom current byte
 
                                         tempKMStore[7] = (byte)48;                                                                                 //time 2 hours
                                         tempKMStore[8] = (byte)48;                                                                                 //time 2 mins
@@ -1164,8 +1164,8 @@ namespace NewBTASProto
                                         tempKMStore[18] = (byte)48;                                                                                //discharge voltage low byte
                                         tempKMStore[19] = (byte)48;                                                                                //discharge resistance high byte
                                         tempKMStore[20] = (byte)48;                                                                                //discharge resistance low byte
-                                        curSet1 = float.Parse(battery.Tables[0].Rows[0][125].ToString());
-                                        vSet1 = (MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][126].ToString())) : float.Parse(battery.Tables[0].Rows[0][126].ToString()));
+                                        curSet1 = (float) GetDouble(battery.Tables[0].Rows[0][125].ToString());
+                                        vSet1 = (MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][126].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][126].ToString()));
                                         curSet2 = 0;
                                         vSet2 = 0;
                                         break;
@@ -1178,16 +1178,16 @@ namespace NewBTASProto
                                         }
                                         if (d.Rows[station][10].ToString().Contains("mini"))
                                         {
-                                            tempKMStore[3] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][135].ToString()) * 10));            //top current byte
-                                            tempKMStore[4] = (byte)(48 + Math.Round(float.Parse(battery.Tables[0].Rows[0][135].ToString()) * 1000) % 100);                                                                            //bottom current byte
+                                            tempKMStore[3] = (byte)(48 + ((float) GetDouble(battery.Tables[0].Rows[0][135].ToString()) * 10));            //top current byte
+                                            tempKMStore[4] = (byte)(48 + Math.Round((float) GetDouble(battery.Tables[0].Rows[0][135].ToString()) * 1000) % 100);                                                                            //bottom current byte
                                         }
                                         else
                                         {
-                                            tempKMStore[3] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][135].ToString()) / 10));            //top current byte
-                                            tempKMStore[4] = (byte)(48 + 10 * (float.Parse(battery.Tables[0].Rows[0][135].ToString()) % 10));       //bottom current byte
+                                            tempKMStore[3] = (byte)(48 + ((float) GetDouble(battery.Tables[0].Rows[0][135].ToString()) / 10));            //top current byte
+                                            tempKMStore[4] = (byte)(48 + 10 * ((float) GetDouble(battery.Tables[0].Rows[0][135].ToString()) % 10));       //bottom current byte
                                         }
-                                        tempKMStore[5] = (byte)(48 + ((MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][136].ToString())) : float.Parse(battery.Tables[0].Rows[0][136].ToString())) / 1));                 //top voltage byte
-                                        tempKMStore[6] = (byte)(48 + 100 * ((MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][136].ToString())) : float.Parse(battery.Tables[0].Rows[0][136].ToString())) % 1));           //bottom current byte
+                                        tempKMStore[5] = (byte)(48 + ((MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][136].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][136].ToString())) / 1));                 //top voltage byte
+                                        tempKMStore[6] = (byte)(48 + 100 * ((MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][136].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][136].ToString())) % 1));           //bottom current byte
 
                                         if (tempKMStore[0] == (20 + 48) || tempKMStore[0] == (21 + 48))
                                         {
@@ -1195,16 +1195,16 @@ namespace NewBTASProto
                                             tempKMStore[8] = (byte)(48);                                                                        //time 2 mins
                                             if (d.Rows[station][10].ToString().Contains("mini"))
                                             {
-                                                tempKMStore[9] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][139].ToString()) * 10));        //top current 2 byte
-                                                tempKMStore[10] = (byte)(48 + Math.Round(float.Parse(battery.Tables[0].Rows[0][139].ToString()) * 1000) % 100);                                                                       //bottom current 2 byte
+                                                tempKMStore[9] = (byte)(48 + ((float) GetDouble(battery.Tables[0].Rows[0][139].ToString()) * 10));        //top current 2 byte
+                                                tempKMStore[10] = (byte)(48 + Math.Round((float) GetDouble(battery.Tables[0].Rows[0][139].ToString()) * 1000) % 100);                                                                       //bottom current 2 byte
                                             }
                                             else
                                             {
-                                                tempKMStore[9] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][139].ToString()) / 10));        //top current 2 byte
-                                                tempKMStore[10] = (byte)(48 + 10 * (float.Parse(battery.Tables[0].Rows[0][139].ToString()) % 10));  //bottom current 2 byte
+                                                tempKMStore[9] = (byte)(48 + ((float) GetDouble(battery.Tables[0].Rows[0][139].ToString()) / 10));        //top current 2 byte
+                                                tempKMStore[10] = (byte)(48 + 10 * ((float) GetDouble(battery.Tables[0].Rows[0][139].ToString()) % 10));  //bottom current 2 byte
                                             }
-                                            tempKMStore[11] = (byte)(48 + ((MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][140].ToString())) : float.Parse(battery.Tables[0].Rows[0][140].ToString())) / 1));            //top voltage 2 byte
-                                            tempKMStore[12] = (byte)(48 + 100 * ((MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][140].ToString())) : float.Parse(battery.Tables[0].Rows[0][140].ToString())) % 1));      //bottom voltage 2 byte
+                                            tempKMStore[11] = (byte)(48 + ((MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][140].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][140].ToString())) / 1));            //top voltage 2 byte
+                                            tempKMStore[12] = (byte)(48 + 100 * ((MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][140].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][140].ToString())) % 1));      //bottom voltage 2 byte
                                         }
 
                                         tempKMStore[13] = (byte)48;                                                                                //discharge time hours
@@ -1215,10 +1215,10 @@ namespace NewBTASProto
                                         tempKMStore[18] = (byte)48;                                                                                //discharge voltage low byte
                                         tempKMStore[19] = (byte)48;                                                                                //discharge resistance high byte
                                         tempKMStore[20] = (byte)48;                                                                                //discharge resistance low byte
-                                        curSet1 = float.Parse(battery.Tables[0].Rows[0][135].ToString());
-                                        vSet1 = (MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][136].ToString())) : float.Parse(battery.Tables[0].Rows[0][136].ToString()));
-                                        if (battery.Tables[0].Rows[0][139].ToString() != "") { curSet2 = float.Parse(battery.Tables[0].Rows[0][139].ToString()); }
-                                        if (battery.Tables[0].Rows[0][140].ToString() != "") { vSet2 = (MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][140].ToString())) : float.Parse(battery.Tables[0].Rows[0][140].ToString())); }
+                                        curSet1 = (float) GetDouble(battery.Tables[0].Rows[0][135].ToString());
+                                        vSet1 = (MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][136].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][136].ToString()));
+                                        if (battery.Tables[0].Rows[0][139].ToString() != "") { curSet2 = (float) GetDouble(battery.Tables[0].Rows[0][139].ToString()); }
+                                        if (battery.Tables[0].Rows[0][140].ToString() != "") { vSet2 = (MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][140].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][140].ToString())); }
                                         break;
                                     case "Custom Cap":
                                         tempKMStore[0] = (byte)(48 + int.Parse(battery.Tables[0].Rows[0][142].ToString().Substring(0, 2)));         //mode
@@ -1242,27 +1242,27 @@ namespace NewBTASProto
                                         {
                                             if (d.Rows[station][10].ToString().Contains("mini"))
                                             {
-                                                tempKMStore[15] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][145].ToString()) * 1));        //discharge current high byte
-                                                tempKMStore[16] = (byte)(48 + Math.Round(100 * (float.Parse(battery.Tables[0].Rows[0][145].ToString()) % 1)));  //discharge current low byte
+                                                tempKMStore[15] = (byte)(48 + ((float) GetDouble(battery.Tables[0].Rows[0][145].ToString()) * 1));        //discharge current high byte
+                                                tempKMStore[16] = (byte)(48 + Math.Round(100 * ((float) GetDouble(battery.Tables[0].Rows[0][145].ToString()) % 1)));  //discharge current low byte
                                             }
                                             else
                                             {
-                                                tempKMStore[15] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][145].ToString()) / 10));       //discharge current high byte
-                                                tempKMStore[16] = (byte)(48 + 10 * (float.Parse(battery.Tables[0].Rows[0][145].ToString()) % 10));  //discharge current low byte
+                                                tempKMStore[15] = (byte)(48 + ((float) GetDouble(battery.Tables[0].Rows[0][145].ToString()) / 10));       //discharge current high byte
+                                                tempKMStore[16] = (byte)(48 + 10 * ((float) GetDouble(battery.Tables[0].Rows[0][145].ToString()) % 10));  //discharge current low byte
                                             }
                                         }
                                         if (tempKMStore[0] != 30 + 48)
                                         {
-                                            tempKMStore[17] = (byte)(48 + ((MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][146].ToString())) : float.Parse(battery.Tables[0].Rows[0][146].ToString())) / 1));            //discharge voltage high byte
-                                            tempKMStore[18] = (byte)(48 + 100 * ((MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][146].ToString())) : float.Parse(battery.Tables[0].Rows[0][146].ToString())) % 1));      //discharge voltage low byte
+                                            tempKMStore[17] = (byte)(48 + ((MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][146].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][146].ToString())) / 1));            //discharge voltage high byte
+                                            tempKMStore[18] = (byte)(48 + 100 * ((MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][146].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][146].ToString())) % 1));      //discharge voltage low byte
                                         }
                                         if (tempKMStore[0] == 32 + 48)
                                         {
-                                            tempKMStore[19] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][151].ToString()) / 1));            //discharge resistance high byte
-                                            tempKMStore[20] = (byte)(48 + 100 * (float.Parse(battery.Tables[0].Rows[0][151].ToString()) % 1));      //discharge resistance low byte
+                                            tempKMStore[19] = (byte)(48 + ((float) GetDouble(battery.Tables[0].Rows[0][151].ToString()) / 1));            //discharge resistance high byte
+                                            tempKMStore[20] = (byte)(48 + 100 * ((float) GetDouble(battery.Tables[0].Rows[0][151].ToString()) % 1));      //discharge resistance low byte
                                         }
-                                        if (battery.Tables[0].Rows[0][145].ToString() != "") { curSet1 = float.Parse(battery.Tables[0].Rows[0][145].ToString()); }
-                                        if (battery.Tables[0].Rows[0][146].ToString() != "") { vSet1 = (MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][146].ToString())) : float.Parse(battery.Tables[0].Rows[0][146].ToString())); }
+                                        if (battery.Tables[0].Rows[0][145].ToString() != "") { curSet1 = (float) GetDouble(battery.Tables[0].Rows[0][145].ToString()); }
+                                        if (battery.Tables[0].Rows[0][146].ToString() != "") { vSet1 = (MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][146].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][146].ToString())); }
                                         curSet2 = 0;
                                         vSet2 = 0;
                                         break;
@@ -1272,16 +1272,16 @@ namespace NewBTASProto
                                         tempKMStore[2] = (byte)(48);                                                                                //time mins
                                         if (d.Rows[station][10].ToString().Contains("mini"))
                                         {
-                                            tempKMStore[3] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][155].ToString()) * 10));            //top current byte
-                                            tempKMStore[4] = (byte)(48 + Math.Round(float.Parse(battery.Tables[0].Rows[0][155].ToString()) * 1000) % 100);                                                                            //bottom current byte
+                                            tempKMStore[3] = (byte)(48 + ((float) GetDouble(battery.Tables[0].Rows[0][155].ToString()) * 10));            //top current byte
+                                            tempKMStore[4] = (byte)(48 + Math.Round((float) GetDouble(battery.Tables[0].Rows[0][155].ToString()) * 1000) % 100);                                                                            //bottom current byte
                                         }
                                         else
                                         {
-                                            tempKMStore[3] = (byte)(48 + (float.Parse(battery.Tables[0].Rows[0][155].ToString()) / 10));            //top current byte
-                                            tempKMStore[4] = (byte)(48 + 10 * (float.Parse(battery.Tables[0].Rows[0][155].ToString()) % 10));       //bottom current byte
+                                            tempKMStore[3] = (byte)(48 + ((float) GetDouble(battery.Tables[0].Rows[0][155].ToString()) / 10));            //top current byte
+                                            tempKMStore[4] = (byte)(48 + 10 * ((float) GetDouble(battery.Tables[0].Rows[0][155].ToString()) % 10));       //bottom current byte
                                         }
-                                        tempKMStore[5] = (byte)(48 + ((MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][156].ToString())) : float.Parse(battery.Tables[0].Rows[0][156].ToString())) / 1));                 //top voltage byte
-                                        tempKMStore[6] = (byte)(48 + 100 * ((MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][156].ToString())) : float.Parse(battery.Tables[0].Rows[0][156].ToString())) % 1));           //bottom voltage byte
+                                        tempKMStore[5] = (byte)(48 + ((MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][156].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][156].ToString())) / 1));                 //top voltage byte
+                                        tempKMStore[6] = (byte)(48 + 100 * ((MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][156].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][156].ToString())) % 1));           //bottom voltage byte
 
                                         tempKMStore[7] = (byte)48;                                                                                 //time 2 hours
                                         tempKMStore[8] = (byte)48;                                                                                 //time 2 mins
@@ -1298,8 +1298,8 @@ namespace NewBTASProto
                                         tempKMStore[18] = (byte)48;                                                                                //discharge voltage low byte
                                         tempKMStore[19] = (byte)48;                                                                                //discharge resistance high byte
                                         tempKMStore[20] = (byte)48;                                                                                //discharge resistance low byte
-                                        curSet1 = float.Parse(battery.Tables[0].Rows[0][155].ToString());
-                                        vSet1 = (MasterSlaveTest ? (2 * float.Parse(battery.Tables[0].Rows[0][156].ToString())) : float.Parse(battery.Tables[0].Rows[0][156].ToString()));
+                                        curSet1 = (float) GetDouble(battery.Tables[0].Rows[0][155].ToString());
+                                        vSet1 = (MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][156].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][156].ToString()));
                                         curSet2 = 0;
                                         vSet2 = 0;
                                         break;

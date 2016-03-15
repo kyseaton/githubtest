@@ -514,7 +514,7 @@ namespace NewBTASProto
                     }
 
                     //do we need to reformat...
-                    if (reportSet.Tables[0].Rows[0][15].ToString().Contains(","))
+                    if (reportSet.Tables[0].Rows[0][15].ToString().Contains(",") && System.Globalization.CultureInfo.CurrentCulture.Name == "en-US")
                     {
                         //loop through everything and change the ,s to .s
                         foreach (DataRow dr in reportSet.Tables[0].Rows)
@@ -564,7 +564,7 @@ namespace NewBTASProto
                     // now get rid of the repeats...
                     for (int i = 0; i < dtAll.Rows.Count - 1; i++)
                     {
-                        if (dtAll.Rows[i]["TestName"].ToString().Contains("Cap") && (float.Parse(dtAll.Rows[i]["ETIME"].ToString())*24*60) > 50.5 && (float.Parse(dtAll.Rows[i]["ETIME"].ToString())*24*60) <= 51.5)
+                        if (dtAll.Rows[i]["TestName"].ToString().Contains("Cap") && ((float)GetDouble(dtAll.Rows[i]["ETIME"].ToString()) * 24 * 60) > 50.5 && ((float)GetDouble(dtAll.Rows[i]["ETIME"].ToString()) * 24 * 60) <= 51.5)
                         {
                             // skip the record if it is the 51 min of a cap test
                         }
@@ -1009,7 +1009,7 @@ namespace NewBTASProto
                     }
 
                     //do we need to reformat...
-                    if (reportSet.Tables[0].Rows[0][15].ToString().Contains(","))
+                    if (reportSet.Tables[0].Rows[0][15].ToString().Contains(",") && System.Globalization.CultureInfo.CurrentCulture.Name == "en-US")
                     {
                         //loop through everything and change the ,s to .s
                         foreach (DataRow dr in reportSet.Tables[0].Rows)
@@ -1058,13 +1058,13 @@ namespace NewBTASProto
                     }
                     else if (charge)
                     {
-                        if (double.Parse(reportSet.Tables[0].Rows[0][i].ToString()) > 1.5 && double.Parse(reportSet.Tables[0].Rows[0][i].ToString()) <1.75) {reportSet.Tables[0].Rows[1][i] = "OK";}
-                        else if (double.Parse(reportSet.Tables[0].Rows[0][i].ToString()) > 1.75) { reportSet.Tables[0].Rows[1][i] = "FAIL! Overvoltage!"; }
+                        if (GetDouble(reportSet.Tables[0].Rows[0][i].ToString()) > 1.5 && GetDouble(reportSet.Tables[0].Rows[0][i].ToString()) <1.75) {reportSet.Tables[0].Rows[1][i] = "OK";}
+                        else if (GetDouble(reportSet.Tables[0].Rows[0][i].ToString()) > 1.75) { reportSet.Tables[0].Rows[1][i] = "FAIL! Overvoltage!"; }
                         else { reportSet.Tables[0].Rows[1][i] = "FAIL!"; }
                     }
                     else
                     {
-                        if (double.Parse(reportSet.Tables[0].Rows[0][i].ToString()) > 1) { reportSet.Tables[0].Rows[1][i] = "OK"; }
+                        if (GetDouble(reportSet.Tables[0].Rows[0][i].ToString()) > 1) { reportSet.Tables[0].Rows[1][i] = "OK"; }
                         else { reportSet.Tables[0].Rows[1][i] = "FAIL!"; }
                     }
                 }  // end for
@@ -1178,7 +1178,7 @@ namespace NewBTASProto
 
 
                     //do we need to reformat...
-                    if (reportSet.Tables[0].Rows[0][2].ToString().Contains(","))
+                    if (reportSet.Tables[0].Rows[0][2].ToString().Contains(",") && System.Globalization.CultureInfo.CurrentCulture.Name == "en-US")
                     {
                         //loop through everything and change the ,s to .s
                         foreach (DataRow dr in reportSet.Tables[0].Rows)
@@ -1318,19 +1318,19 @@ namespace NewBTASProto
                         myAccessConn.Close();
                     }
 
-                    //do we need to reformat...
-                    if (reportSet.Tables[0].Rows[0][2].ToString().Contains(","))
-                    {
-                        //loop through everything and change the ,s to .s
-                        foreach (DataRow dr in reportSet.Tables[0].Rows)
-                        {
-                            for (int i = 2; i < 14; i++)
-                            {
-                                dr[i] = dr[i].ToString().Replace(",", ".");
-                            }
+                    ////do we need to reformat...
+                    //if (reportSet.Tables[0].Rows[0][2].ToString().Contains(",") && System.Globalization.CultureInfo.CurrentCulture.Name == "en-US")
+                    //{
+                    //    //loop through everything and change the ,s to .s
+                    //    foreach (DataRow dr in reportSet.Tables[0].Rows)
+                    //    {
+                    //        for (int i = 2; i < 14; i++)
+                    //        {
+                    //            dr[i] = dr[i].ToString().Replace(",", ".");
+                    //        }
 
-                        }
-                    }
+                    //    }
+                    //}
                 }
                 catch (Exception ex)
                 {
@@ -1468,6 +1468,29 @@ namespace NewBTASProto
         {
             reportSet = null;
             testsPerformed = null;
+        }
+
+        static double GetDouble(string s)
+        {
+            double d;
+
+            var formatinfo = new System.Globalization.NumberFormatInfo();
+
+            formatinfo.NumberDecimalSeparator = ".";
+
+            if (double.TryParse(s, System.Globalization.NumberStyles.Float, formatinfo, out d))
+            {
+                return d;
+            }
+
+            formatinfo.NumberDecimalSeparator = ",";
+
+            if (double.TryParse(s, System.Globalization.NumberStyles.Float, formatinfo, out d))
+            {
+                return d;
+            }
+
+            throw new SystemException(string.Format("strange number format '{0}'", s));
         }
 
 

@@ -617,7 +617,7 @@ namespace NewBTASProto
                     }
                     if (batData.Tables[0].Rows[0][1].ToString() != "")
                     {
-                        pci.Rows[channel][2] = float.Parse(batData.Tables[0].Rows[0][1].ToString());
+                        pci.Rows[channel][2] = (float) GetDouble(batData.Tables[0].Rows[0][1].ToString());
                     }
                     if (batData.Tables[0].Rows[0][2].ToString() != "")
                     {
@@ -625,15 +625,15 @@ namespace NewBTASProto
                     }
                     if (batData.Tables[0].Rows[0][3].ToString() != "")
                     {
-                        pci.Rows[channel][4] = float.Parse(batData.Tables[0].Rows[0][3].ToString());
+                        pci.Rows[channel][4] = (float )GetDouble(batData.Tables[0].Rows[0][3].ToString());
                     }
                     if (batData.Tables[0].Rows[0][4].ToString() != "")
                     {
-                        pci.Rows[channel][5] = float.Parse(batData.Tables[0].Rows[0][4].ToString());
+                        pci.Rows[channel][5] = (float) GetDouble(batData.Tables[0].Rows[0][4].ToString());
                     }
                     if (batData.Tables[0].Rows[0][5].ToString() != "")
                     {
-                        pci.Rows[channel][6] = float.Parse(batData.Tables[0].Rows[0][5].ToString());
+                        pci.Rows[channel][6] = (float) GetDouble(batData.Tables[0].Rows[0][5].ToString());
                     }
                     else if (batData.Tables[0].Rows[0][5].ToString() == "" && batData.Tables[0].Rows[0][0].ToString() == "NiCd ULM")
                     {
@@ -641,11 +641,11 @@ namespace NewBTASProto
                     }
                     if (batData.Tables[0].Rows[0][6].ToString() != "")
                     {
-                        pci.Rows[channel][7] = float.Parse(batData.Tables[0].Rows[0][6].ToString());
+                        pci.Rows[channel][7] = (float) GetDouble(batData.Tables[0].Rows[0][6].ToString());
                     }
                     if (batData.Tables[0].Rows[0][7].ToString() != "")
                     {
-                        pci.Rows[channel][8] = float.Parse(batData.Tables[0].Rows[0][7].ToString());
+                        pci.Rows[channel][8] = (float) GetDouble(batData.Tables[0].Rows[0][7].ToString());
                     }
                 }
                 else
@@ -4080,42 +4080,215 @@ namespace NewBTASProto
 
         private void markAllOpenWorkOrdersAsClosedToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show(this, "Are you sure you want to mark all open work orders as closed?", "Mark All Work Orders Closed", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+            try
             {
-                //Mark all open work orders as closed...
-                string strAccessConn;
-                OleDbConnection myAccessConn;
-
-                // create the connection
-                try
+                if (MessageBox.Show(this, "Are you sure you want to mark all open work orders as closed?", "Mark All Work Orders Closed", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                 {
-                    strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
-                    myAccessConn = new OleDbConnection(strAccessConn);
+                    //Mark all open work orders as closed...
+                    string strAccessConn;
+                    OleDbConnection myAccessConn;
+
+                    // create the connection
+                    try
+                    {
+                        strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                        myAccessConn = new OleDbConnection(strAccessConn);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+
+                    // we'll have execute a number of commands...
+                    string cmdStr;
+                    OleDbCommand cmd;
+
+                    // Change hidden to closed in the work order table
+                    cmdStr = "UPDATE WorkOrders SET OrderStatus='Closed' WHERE OrderStatus='Open'";
+                    cmd = new OleDbCommand(cmdStr, myAccessConn);
+
+                    lock (dataBaseLock)
+                    {
+                        myAccessConn.Open();
+                        cmd.ExecuteNonQuery();
+                        myAccessConn.Close();
+                    }
+
+                    MessageBox.Show(this, "All open orders were marked as closed.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+
                 }
-                catch (Exception ex)
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(this, "Error, operation did not work!" + ex.Message + Environment.NewLine + ex.StackTrace, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void resetTestSettingsToDefaultsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (MessageBox.Show(this, "Are you sure you want to reset all test settings to defaults?", "Reset Test Settings", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                 {
-                    MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
+                    //Mark all open work orders as closed...
+                    string strAccessConn;
+                    OleDbConnection myAccessConn;
+
+                    // create the connection
+                    try
+                    {
+                        strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                        myAccessConn = new OleDbConnection(strAccessConn);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+
+                    // we'll have to execute a number of commands...
+                    string cmdStr;
+                    OleDbCommand cmd;
+                    
+                    cmdStr = "UPDATE TestType SET Readings='61', [Interval]='240' WHERE TESTNAME='Top Charge-4';";
+                    cmd = new OleDbCommand(cmdStr, myAccessConn);
+
+                    lock (dataBaseLock)
+                    {
+                        myAccessConn.Open();
+                        cmd.ExecuteNonQuery();
+                        myAccessConn.Close();
+                    }
+
+                    cmdStr = "UPDATE TestType SET Readings='3', [Interval]='2' WHERE TESTNAME='As Received';";
+                    cmd = new OleDbCommand(cmdStr, myAccessConn);
+
+                    lock (dataBaseLock)
+                    {
+                        myAccessConn.Open();
+                        cmd.ExecuteNonQuery();
+                        myAccessConn.Close();
+                    }
+
+                    cmdStr = "UPDATE TestType SET Readings='61', [Interval]='240' WHERE TESTNAME='Full Charge-4';";
+                    cmd = new OleDbCommand(cmdStr, myAccessConn);
+
+                    lock (dataBaseLock)
+                    {
+                        myAccessConn.Open();
+                        cmd.ExecuteNonQuery();
+                        myAccessConn.Close();
+                    }
+
+                    cmdStr = "UPDATE TestType SET Readings='73', [Interval]='300' WHERE TESTNAME='Full Charge-6';";
+                    cmd = new OleDbCommand(cmdStr, myAccessConn);
+
+                    lock (dataBaseLock)
+                    {
+                        myAccessConn.Open();
+                        cmd.ExecuteNonQuery();
+                        myAccessConn.Close();
+                    }
+
+                    cmdStr = "UPDATE TestType SET Readings='61', [Interval]='60' WHERE TESTNAME='Capacity-1';";
+                    cmd = new OleDbCommand(cmdStr, myAccessConn);
+
+                    lock (dataBaseLock)
+                    {
+                        myAccessConn.Open();
+                        cmd.ExecuteNonQuery();
+                        myAccessConn.Close();
+                    }
+
+                    cmdStr = "UPDATE TestType SET Readings='41', [Interval]='180' WHERE TESTNAME='Top Charge-2';";
+                    cmd = new OleDbCommand(cmdStr, myAccessConn);
+
+                    lock (dataBaseLock)
+                    {
+                        myAccessConn.Open();
+                        cmd.ExecuteNonQuery();
+                        myAccessConn.Close();
+                    }
+
+                    cmdStr = "UPDATE TestType SET Readings='61', [Interval]='60' WHERE TESTNAME='Discharge';";
+                    cmd = new OleDbCommand(cmdStr, myAccessConn);
+
+                    lock (dataBaseLock)
+                    {
+                        myAccessConn.Open();
+                        cmd.ExecuteNonQuery();
+                        myAccessConn.Close();
+                    }
+
+                    cmdStr = "UPDATE TestType SET Readings='73', [Interval]='720' WHERE TESTNAME='Slow Charge-14';";
+                    cmd = new OleDbCommand(cmdStr, myAccessConn);
+
+                    lock (dataBaseLock)
+                    {
+                        myAccessConn.Open();
+                        cmd.ExecuteNonQuery();
+                        myAccessConn.Close();
+                    }
+
+                    cmdStr = "UPDATE TestType SET Readings='61', [Interval]='60' WHERE TESTNAME='Top Charge-1';";
+                    cmd = new OleDbCommand(cmdStr, myAccessConn);
+
+                    lock (dataBaseLock)
+                    {
+                        myAccessConn.Open();
+                        cmd.ExecuteNonQuery();
+                        myAccessConn.Close();
+                    }
+
+                    cmdStr = "UPDATE TestType SET Readings='61', [Interval]='960' WHERE TESTNAME='Slow Charge-16';";
+                    cmd = new OleDbCommand(cmdStr, myAccessConn);
+
+                    lock (dataBaseLock)
+                    {
+                        myAccessConn.Open();
+                        cmd.ExecuteNonQuery();
+                        myAccessConn.Close();
+                    }
+
+                    cmdStr = "UPDATE TestType SET Readings='73', [Interval]='300' WHERE TESTNAME='Constant Voltage';";
+                    cmd = new OleDbCommand(cmdStr, myAccessConn);
+
+                    lock (dataBaseLock)
+                    {
+                        myAccessConn.Open();
+                        cmd.ExecuteNonQuery();
+                        myAccessConn.Close();
+                    }
+
+                    cmdStr = "UPDATE TestType SET Readings='60', [Interval]='60' WHERE TESTNAME='Custom Cap';";
+                    cmd = new OleDbCommand(cmdStr, myAccessConn);
+
+                    lock (dataBaseLock)
+                    {
+                        myAccessConn.Open();
+                        cmd.ExecuteNonQuery();
+                        myAccessConn.Close();
+                    }
+
+                    cmdStr = "UPDATE TestType SET Readings='60', [Interval]='60' WHERE TESTNAME='Custom Chg';";
+                    cmd = new OleDbCommand(cmdStr, myAccessConn);
+
+                    lock (dataBaseLock)
+                    {
+                        myAccessConn.Open();
+                        cmd.ExecuteNonQuery();
+                        myAccessConn.Close();
+                    }
+
+                    MessageBox.Show(this, "All test settings reset to defaults.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
-
-
-                // we'll have execute a number of commands...
-                string cmdStr;
-                OleDbCommand cmd;
-
-                // Change hidden to closed in the work order table
-                cmdStr = "UPDATE WorkOrders SET OrderStatus='Closed' WHERE OrderStatus='Open'";
-                cmd = new OleDbCommand(cmdStr, myAccessConn);
-
-                lock (dataBaseLock)
-                {
-                    myAccessConn.Open();
-                    cmd.ExecuteNonQuery();
-                    myAccessConn.Close();
-                }
-
-                MessageBox.Show(this, "All open orders were marked as closed.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(this, "Error: Test settings were not reset!" + ex.Message + Environment.NewLine + ex.StackTrace, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

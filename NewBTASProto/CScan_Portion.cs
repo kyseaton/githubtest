@@ -1460,7 +1460,7 @@ namespace NewBTASProto
 
                         for (int i = 0; i < graphMainSet.Tables[0].Rows.Count; i++)
                         {
-                            series1.Points.AddXY(Math.Round(double.Parse(graphMainSet.Tables[0].Rows[i][7].ToString()) * 1440), float.Parse(graphMainSet.Tables[0].Rows[i][q].ToString()));
+                            series1.Points.AddXY(Math.Round(GetDouble(graphMainSet.Tables[0].Rows[i][7].ToString()) * 1440), GetDouble(graphMainSet.Tables[0].Rows[i][q].ToString()));
                             // color test
                             if (q == 8 || q == 7)
                             {
@@ -1474,7 +1474,7 @@ namespace NewBTASProto
                             }
                             else
                             {
-                                series1.Points[i].Color = pointColorMain(station, double.Parse(graphMainSet.Tables[0].Rows[i][q].ToString()), false);
+                                series1.Points[i].Color = pointColorMain(station, GetDouble(graphMainSet.Tables[0].Rows[i][q].ToString()), false);
                             }
                         }
 
@@ -1763,16 +1763,16 @@ namespace NewBTASProto
                             {
                                 series1.Points.AddXY(i + 1, graphMainSet.Tables[0].Rows[graphMainSet.Tables[0].Rows.Count - 1][i + 14]);
                                 // color test
-                                series1.Points[i].Color = pointColorMain(station, double.Parse(graphMainSet.Tables[0].Rows[graphMainSet.Tables[0].Rows.Count - 1][i + 14].ToString()), true);
+                                series1.Points[i].Color = pointColorMain(station, GetDouble(graphMainSet.Tables[0].Rows[graphMainSet.Tables[0].Rows.Count - 1][i + 14].ToString()), true);
                             }
                         }
                         else
                         {
                             for (int i = 0; i < graphMainSet.Tables[0].Rows.Count; i++)
                             {
-                                series1.Points.AddXY(Math.Round(double.Parse(graphMainSet.Tables[0].Rows[i][7].ToString()) * 1440), graphMainSet.Tables[0].Rows[i][q]);
+                                series1.Points.AddXY(Math.Round(GetDouble(graphMainSet.Tables[0].Rows[i][7].ToString()) * 1440), graphMainSet.Tables[0].Rows[i][q]);
                                 // color test
-                                series1.Points[i].Color = pointColorMain(station, double.Parse(graphMainSet.Tables[0].Rows[i][q].ToString()), true);
+                                series1.Points[i].Color = pointColorMain(station, GetDouble(graphMainSet.Tables[0].Rows[i][q].ToString()), true);
                             }
                             // pad with zero Vals to help with the look of the plot...
                             // first get the interval and total points
@@ -2210,7 +2210,7 @@ namespace NewBTASProto
                             graphMainSet.Clear();
                             // Open database containing all the battery data....
                             string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
-                            string strAccessSelect = @"SELECT * FROM ScanData WHERE BWO='" + workOrder + @"' AND STEP='" + Int32.Parse(testStep).ToString("00") + @"' ORDER BY RDG ASC";
+                            string strAccessSelect = @"SELECT * FROM ScanData WHERE BWO='" + workOrder + @"' AND STEP='" + GetDouble(testStep).ToString("00") + @"' ORDER BY RDG ASC";
 
                             //Here is where I load the form wide dataset which will both let me fill in the rest of the combo boxes and the graphs!
                             OleDbConnection myAccessConn = null;
@@ -2244,12 +2244,12 @@ namespace NewBTASProto
 
 
                                 //do we need to reformat...
-                                if (graphMainSet.Tables[0].Rows[0][15].ToString().Contains(","))
+                                if (graphMainSet.Tables[0].Rows[0][15].ToString().Contains(",") && System.Globalization.CultureInfo.CurrentCulture.Name == "en-US")
                                 {
                                     //loop through everything and change the ,s to .s
                                     foreach (DataRow dr in graphMainSet.Tables[0].Rows)
                                     {
-                                        for (int i = 2; i < 27; i++)
+                                        for (int i = 7; i < 27; i++)
                                         {
                                             dr[i] = dr[i].ToString().Replace(",", ".");
                                         }
@@ -2830,6 +2830,28 @@ namespace NewBTASProto
             return ((9.0 / 5.0) * c) + 32;
         }
 
+        static double GetDouble(string s)
+        {
+            double d;
+
+            var formatinfo = new System.Globalization.NumberFormatInfo();
+
+            formatinfo.NumberDecimalSeparator = ".";
+
+            if (double.TryParse(s, System.Globalization.NumberStyles.Float, formatinfo, out d))
+            {
+                return d;
+            }
+
+            formatinfo.NumberDecimalSeparator = ",";
+
+            if (double.TryParse(s, System.Globalization.NumberStyles.Float, formatinfo, out d))
+            {
+                return d;
+            }
+
+            throw new SystemException(string.Format("strange number format '{0}'", s));
+        }
         
 
     }

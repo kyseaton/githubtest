@@ -38,6 +38,8 @@ namespace NewBTASProto
             string strAccessSelect;
             // Open database containing all the battery data....
 
+            string sep = Thread.CurrentThread.CurrentCulture.DateTimeFormat.DateSeparator;
+
             strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
             if (toolStripCBWorkOrderStatus.Text != "" || toolStripCBCustomers.Text != "" || toolStripCBSerialNums.Text != "")
             {
@@ -48,11 +50,11 @@ namespace NewBTASProto
                     ((toolStripCBCustomers.Text != "" && toolStripCBSerialNums.Text != "") ? " AND " : "") +
                     ((toolStripCBWorkOrderStatus.Text != "" && toolStripCBCustomers.Text == "" && toolStripCBSerialNums.Text != "") ? " AND " : "") +
                     (toolStripCBSerialNums.Text != "" ? ("BatterySerialNumber='" + toolStripCBSerialNums.Text + "' ") : "")+
-                    "AND DateReceived BETWEEN #" + dateTimePicker1.Value.ToString() +@"# AND #" + dateTimePicker2.Value.ToString() + @"# ORDER BY WorkOrderNumber ASC";
+                    "AND DateReceived BETWEEN #" + dateTimePicker1.Value.ToString().Replace(".", sep) + @"# AND #" + dateTimePicker2.Value.ToString().Replace(".", sep) + @"# ORDER BY WorkOrderNumber ASC";
             }
             else
             {
-                strAccessSelect = @"SELECT * FROM WorkOrders WHERE DateReceived BETWEEN #" + dateTimePicker1.Value.ToString() +@"# AND #" + dateTimePicker2.Value.ToString() + @"# ORDER BY WorkOrderNumber ASC";
+                strAccessSelect = @"SELECT * FROM WorkOrders WHERE DateReceived BETWEEN #" + dateTimePicker1.Value.ToString().Replace(".", "/") + @"# AND #" + dateTimePicker2.Value.ToString().Replace(".", "/") + @"# ORDER BY WorkOrderNumber ASC";
             }
 
             WorkOrders.Clear();

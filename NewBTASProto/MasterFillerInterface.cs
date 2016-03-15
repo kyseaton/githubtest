@@ -345,31 +345,31 @@ namespace NewBTASProto
             string strUpdateCMD = "INSERT INTO WaterLevel (WorkOrderNumber,Cell1,Cell2,Cell3,Cell4,Cell5,Cell6,Cell7,Cell8,Cell9,Cell10,Cell11,Cell12,Cell13,Cell14,Cell15,Cell16,Cell17,Cell18,Cell19,Cell20,Cell21,Cell22,Cell23,Cell24,AVE) "
                 + "VALUES ('" +
                 comboBox2.Text + "'," +                                                 //WorkOrderNumber
-                numericUpDown1.Value.ToString("0") + "," +      //Cell1
-                numericUpDown2.Value.ToString("0") + "," +      //Cell2
-                numericUpDown3.Value.ToString("0") + "," +      //Cell3
-                numericUpDown4.Value.ToString("0") + "," +      //Cell4
-                numericUpDown5.Value.ToString("0") + "," +      //Cell5
-                numericUpDown6.Value.ToString("0") + "," +     //Cell6
-                numericUpDown7.Value.ToString("0") + "," +     //Cell7
-                numericUpDown8.Value.ToString("0") + "," +     //Cell8
-                numericUpDown9.Value.ToString("0") + "," +     //Cell9
-                numericUpDown10.Value.ToString("0") + "," +     //Cell10
-                numericUpDown11.Value.ToString("0") + "," +     //Cell11
-                numericUpDown12.Value.ToString("0") + "," +     //Cell12
-                numericUpDown13.Value.ToString("0") + "," +     //Cell13
-                numericUpDown14.Value.ToString("0") + "," +     //Cell14
-                numericUpDown15.Value.ToString("0") + "," +     //Cell15
-                numericUpDown16.Value.ToString("0") + "," +     //Cell16
-                numericUpDown17.Value.ToString("0") + "," +     //Cell17
-                numericUpDown18.Value.ToString("0") + "," +     //Cell18
-                numericUpDown19.Value.ToString("0") + "," +     //Cell19
-                numericUpDown20.Value.ToString("0") + "," +     //Cell20
-                numericUpDown21.Value.ToString("0") + "," +     //Cell21
-                numericUpDown22.Value.ToString("0") + "," +     //Cell22
-                numericUpDown23.Value.ToString("0") + "," +     //Cell23
-                numericUpDown24.Value.ToString("0") + "," +     //Cell24
-                average.ToString() +                                                    //Cell24
+                numericUpDown1.Value.ToString("0").Replace(',', '.') + "," +     //Cell1
+                numericUpDown2.Value.ToString("0").Replace(',', '.') + "," +     //Cell2
+                numericUpDown3.Value.ToString("0").Replace(',', '.') + "," +     //Cell3
+                numericUpDown4.Value.ToString("0").Replace(',', '.') + "," +     //Cell4
+                numericUpDown5.Value.ToString("0").Replace(',', '.') + "," +     //Cell5
+                numericUpDown6.Value.ToString("0").Replace(',', '.') + "," +     //Cell6
+                numericUpDown7.Value.ToString("0").Replace(',', '.') + "," +     //Cell7
+                numericUpDown8.Value.ToString("0").Replace(',', '.') + "," +     //Cell8
+                numericUpDown9.Value.ToString("0").Replace(',', '.') + "," +     //Cell9
+                numericUpDown10.Value.ToString("0").Replace(',', '.') + "," +    //Cell10
+                numericUpDown11.Value.ToString("0").Replace(',', '.') + "," +    //Cell11
+                numericUpDown12.Value.ToString("0").Replace(',', '.') + "," +    //Cell12
+                numericUpDown13.Value.ToString("0").Replace(',', '.') + "," +    //Cell13
+                numericUpDown14.Value.ToString("0").Replace(',', '.') + "," +    //Cell14
+                numericUpDown15.Value.ToString("0").Replace(',', '.') + "," +    //Cell15
+                numericUpDown16.Value.ToString("0").Replace(',', '.') + "," +    //Cell16
+                numericUpDown17.Value.ToString("0").Replace(',', '.') + "," +    //Cell17
+                numericUpDown18.Value.ToString("0").Replace(',', '.') + "," +    //Cell18
+                numericUpDown19.Value.ToString("0").Replace(',', '.') + "," +    //Cell19
+                numericUpDown20.Value.ToString("0").Replace(',', '.') + "," +    //Cell20
+                numericUpDown21.Value.ToString("0").Replace(',', '.') + "," +    //Cell21
+                numericUpDown22.Value.ToString("0").Replace(',', '.') + "," +    //Cell22
+                numericUpDown23.Value.ToString("0").Replace(',', '.') + "," +    //Cell23
+                numericUpDown24.Value.ToString("0").Replace(',', '.') +"," +     //Cell24
+                average.ToString().Replace(',', '.') +
                 ");";
 
             // try to open the DB

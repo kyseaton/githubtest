@@ -57,27 +57,27 @@ namespace NewBTASProto
                 WDO = char.Parse(ICDATA[8]);
                 QS1 = int.Parse(ICDATA[5]) - 1000;
                 QS2 = int.Parse(ICDATA[6]) - 1000;
-                refVolt = (float.Parse(ICDATA[9]) - 1000) / 1000;
+                refVolt = ((float) GetDouble(ICDATA[9]) - 1000) / 1000;
 
                 if (boardID < 2)
                 {
-                    battCurrent = (float.Parse(ICDATA[10]) - 1000) / 1000;
+                    battCurrent = ((float) GetDouble(ICDATA[10]) - 1000) / 1000;
                 }
                 else
                 {
-                    battCurrent = (float.Parse(ICDATA[10]) - 1000) / 10;
+                    battCurrent = ((float) GetDouble(ICDATA[10]) - 1000) / 10;
                 }
 
-                battVoltage = (float.Parse(ICDATA[11]) - 1000) / 10;
+                battVoltage = ((float) GetDouble(ICDATA[11]) - 1000) / 10;
                 ACVoltage = int.Parse(ICDATA[12]) - 1000;
-                backupBattVolt = (float.Parse(ICDATA[13]) - 1000) / 100;
-                BT1 = (float.Parse(ICDATA[14]) - 1000) / 10;
-                BT2 = (float.Parse(ICDATA[15]) - 1000) / 10;
-                BT3 = (float.Parse(ICDATA[16]) - 1000) / 10;
-                BT4 = (float.Parse(ICDATA[17]) - 1000) / 10;
-                AmbientTemp = (float.Parse(ICDATA[18]) - 1000) / 10;
-                HSTemp1 = (float.Parse(ICDATA[19]) - 1000) / 4;
-                HSTemp2 = (float.Parse(ICDATA[20]) - 1000) / 4;
+                backupBattVolt = ((float) GetDouble(ICDATA[13]) - 1000) / 100;
+                BT1 = ((float) GetDouble(ICDATA[14]) - 1000) / 10;
+                BT2 = ((float) GetDouble(ICDATA[15]) - 1000) / 10;
+                BT3 = ((float) GetDouble(ICDATA[16]) - 1000) / 10;
+                BT4 = ((float) GetDouble(ICDATA[17]) - 1000) / 10;
+                AmbientTemp = ((float) GetDouble(ICDATA[18]) - 1000) / 10;
+                HSTemp1 = ((float) GetDouble(ICDATA[19]) - 1000) / 4;
+                HSTemp2 = ((float) GetDouble(ICDATA[20]) - 1000) / 4;
                 AuxIn = int.Parse(ICDATA[21]) - 1000;
 
                 if ((QS1 & 0x01) == 1)
@@ -299,5 +299,29 @@ namespace NewBTASProto
             else { return -98; }
 
         }
+
+        static double GetDouble(string s)
+        {
+            double d;
+
+            var formatinfo = new System.Globalization.NumberFormatInfo();
+
+            formatinfo.NumberDecimalSeparator = ".";
+
+            if (double.TryParse(s, System.Globalization.NumberStyles.Float, formatinfo, out d))
+            {
+                return d;
+            }
+
+            formatinfo.NumberDecimalSeparator = ",";
+
+            if (double.TryParse(s, System.Globalization.NumberStyles.Float, formatinfo, out d))
+            {
+                return d;
+            }
+
+            throw new SystemException(string.Format("strange number format '{0}'", s));
+        }
     }
+
 }

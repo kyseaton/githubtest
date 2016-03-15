@@ -523,7 +523,7 @@ namespace NewBTASProto
                         }
 
                         //do we need to reformat...
-                        if (graph1Set.Tables[0].Rows[0][15].ToString().Contains(","))
+                        if (graph1Set.Tables[0].Rows[0][15].ToString().Contains(",") && System.Globalization.CultureInfo.CurrentCulture.Name == "en-US")
                         {
                             //loop through everything and change the ,s to .s
                             foreach (DataRow dr in graph1Set.Tables[0].Rows)
@@ -917,7 +917,7 @@ namespace NewBTASProto
 
                     try
                     {
-                        NomV1 = float.Parse(batInfo1.Tables[0].Rows[0][0].ToString());
+                        NomV1 = (float) GetDouble(batInfo1.Tables[0].Rows[0][0].ToString());
                     }
                     catch
                     {
@@ -925,7 +925,7 @@ namespace NewBTASProto
                     }
                     try
                     {
-                        CellV1 = float.Parse(batInfo1.Tables[0].Rows[0][1].ToString());
+                        CellV1 = (float) GetDouble(batInfo1.Tables[0].Rows[0][1].ToString());
                     }
                     catch
                     {
@@ -1027,7 +1027,7 @@ namespace NewBTASProto
                         }
 
                         //do we need to reformat...
-                        if (graph2Set.Tables[0].Rows[0][15].ToString().Contains(","))
+                        if (graph2Set.Tables[0].Rows[0][15].ToString().Contains(",") && System.Globalization.CultureInfo.CurrentCulture.Name == "en-US")
                         {
                             //loop through everything and change the ,s to .s
                             foreach (DataRow dr in graph2Set.Tables[0].Rows)
@@ -1442,7 +1442,7 @@ namespace NewBTASProto
 
                         try
                         {
-                            NomV2 = float.Parse(batInfo2.Tables[0].Rows[0][0].ToString());
+                            NomV2 = (float) GetDouble(batInfo2.Tables[0].Rows[0][0].ToString());
                         }
                         catch 
                         {
@@ -1450,7 +1450,7 @@ namespace NewBTASProto
                         }
                         try
                         {
-                            CellV2 = float.Parse(batInfo2.Tables[0].Rows[0][1].ToString());
+                            CellV2 = (float) GetDouble(batInfo2.Tables[0].Rows[0][1].ToString());
                         }
                         catch
                         {
@@ -1562,9 +1562,9 @@ namespace NewBTASProto
 
                 for (int i = 0; i < graph1Set.Tables[0].Rows.Count; i++)
                 {
-                    series1.Points.AddXY(Math.Round(double.Parse(graph1Set.Tables[0].Rows[i][7].ToString()) * 1440), graph1Set.Tables[0].Rows[i][q]);
+                    series1.Points.AddXY(Math.Round(GetDouble(graph1Set.Tables[0].Rows[i][7].ToString()) * 1440), graph1Set.Tables[0].Rows[i][q]);
                     // color test
-                    series1.Points[i].Color = pointColor(technology1, cell1, double.Parse(graph1Set.Tables[0].Rows[i][q].ToString()), type1);
+                    series1.Points[i].Color = pointColor(technology1, cell1, GetDouble(graph1Set.Tables[0].Rows[i][q].ToString()), type1);
                 }
 
                 // pad with zero Vals to help with the look of the plot...
@@ -1788,13 +1788,13 @@ namespace NewBTASProto
                         {
                             series1.Points.AddXY(i + 1, graph1Set.Tables[0].Rows[graph1Set.Tables[0].Rows.Count - 1][i + 14]);
                             // color test
-                            series1.Points[i].Color = pointColor(technology1, 1, double.Parse(graph1Set.Tables[0].Rows[graph1Set.Tables[0].Rows.Count - 1][i + 14].ToString()), type1);
+                            series1.Points[i].Color = pointColor(technology1, 1, GetDouble(graph1Set.Tables[0].Rows[graph1Set.Tables[0].Rows.Count - 1][i + 14].ToString()), type1);
                         }
                         else
                         {
                             series1.Points.AddXY(i + 1, graph1Set.Tables[0].Rows[graph1Set.Tables[0].Rows.Count - 1][cell1 - i - 1 + 14]);
                             // color test
-                            series1.Points[i].Color = pointColor(technology1, 1, double.Parse(graph1Set.Tables[0].Rows[graph1Set.Tables[0].Rows.Count - 1][cell1 - i - 1 + 14].ToString()), type1);
+                            series1.Points[i].Color = pointColor(technology1, 1, GetDouble(graph1Set.Tables[0].Rows[graph1Set.Tables[0].Rows.Count - 1][cell1 - i - 1 + 14].ToString()), type1);
                         }
                     }
                 }
@@ -1802,9 +1802,9 @@ namespace NewBTASProto
                 {
                     for (int i = 0; i < graph1Set.Tables[0].Rows.Count; i++)
                     {
-                        series1.Points.AddXY(Math.Round(double.Parse(graph1Set.Tables[0].Rows[i][7].ToString()) * 1440), graph1Set.Tables[0].Rows[i][q]);
+                        series1.Points.AddXY(Math.Round(GetDouble(graph1Set.Tables[0].Rows[i][7].ToString()) * 1440), graph1Set.Tables[0].Rows[i][q]);
                         // color test
-                        series1.Points[i].Color = pointColor(technology1, 1, double.Parse(graph1Set.Tables[0].Rows[i][q].ToString()), type1);
+                        series1.Points[i].Color = pointColor(technology1, 1, GetDouble(graph1Set.Tables[0].Rows[i][q].ToString()), type1);
                     }
 
 
@@ -2226,9 +2226,9 @@ namespace NewBTASProto
 
                 for (int i = 0; i < graph2Set.Tables[0].Rows.Count; i++)
                 {
-                    series2.Points.AddXY(Math.Round(double.Parse(graph2Set.Tables[0].Rows[i][7].ToString()) * 1440), graph2Set.Tables[0].Rows[i][q]);
+                    series2.Points.AddXY(Math.Round(GetDouble(graph2Set.Tables[0].Rows[i][7].ToString()) * 1440), graph2Set.Tables[0].Rows[i][q]);
                     // color test
-                    series2.Points[i].Color = pointColor2(technology2, cell2, double.Parse(graph2Set.Tables[0].Rows[i][q].ToString()), type2);
+                    series2.Points[i].Color = pointColor2(technology2, cell2, GetDouble(graph2Set.Tables[0].Rows[i][q].ToString()), type2);
                 }
 
                 // pad with zero Vals to help with the look of the plot...
@@ -2454,13 +2454,13 @@ namespace NewBTASProto
                         {
                             series2.Points.AddXY(i + 1, graph2Set.Tables[0].Rows[graph2Set.Tables[0].Rows.Count - 1][i + 14]);
                             // color test
-                            series2.Points[i].Color = pointColor2(technology2, 1, double.Parse(graph2Set.Tables[0].Rows[graph2Set.Tables[0].Rows.Count - 1][i + 14].ToString()), type2);
+                            series2.Points[i].Color = pointColor2(technology2, 1, GetDouble(graph2Set.Tables[0].Rows[graph2Set.Tables[0].Rows.Count - 1][i + 14].ToString()), type2);
                         }
                         else
                         {
                             series2.Points.AddXY(i + 1, graph2Set.Tables[0].Rows[graph2Set.Tables[0].Rows.Count - 1][cell2 - i - 1 + 14]);
                             // color test
-                            series2.Points[i].Color = pointColor2(technology2, 1, double.Parse(graph2Set.Tables[0].Rows[graph2Set.Tables[0].Rows.Count - 1][cell2 - i - 1 + 14].ToString()), type2);
+                            series2.Points[i].Color = pointColor2(technology2, 1, GetDouble(graph2Set.Tables[0].Rows[graph2Set.Tables[0].Rows.Count - 1][cell2 - i - 1 + 14].ToString()), type2);
                         }
                     
                     }
@@ -2469,9 +2469,9 @@ namespace NewBTASProto
                 {
                     for (int i = 0; i < graph2Set.Tables[0].Rows.Count; i++)
                     {
-                        series2.Points.AddXY(Math.Round(double.Parse(graph2Set.Tables[0].Rows[i][7].ToString()) * 1440), graph2Set.Tables[0].Rows[i][q]);
+                        series2.Points.AddXY(Math.Round(GetDouble(graph2Set.Tables[0].Rows[i][7].ToString()) * 1440), graph2Set.Tables[0].Rows[i][q]);
                         // color test
-                        series2.Points[i].Color = pointColor2(technology2, 1, double.Parse(graph2Set.Tables[0].Rows[i][q].ToString()), type2);
+                        series2.Points[i].Color = pointColor2(technology2, 1, GetDouble(graph2Set.Tables[0].Rows[i][q].ToString()), type2);
                     }
 
                     // pad with zero Vals to help with the look of the plot...
@@ -2629,7 +2629,30 @@ namespace NewBTASProto
         {
             Properties.Settings.Default.dualPlots = checkBox1.Checked;
             Properties.Settings.Default.Save();
-        }    
+        }
+
+        static double GetDouble(string s)
+        {
+            double d;
+
+            var formatinfo = new System.Globalization.NumberFormatInfo();
+
+            formatinfo.NumberDecimalSeparator = ".";
+
+            if (double.TryParse(s, System.Globalization.NumberStyles.Float, formatinfo, out d))
+            {
+                return d;
+            }
+
+            formatinfo.NumberDecimalSeparator = ",";
+
+            if (double.TryParse(s, System.Globalization.NumberStyles.Float, formatinfo, out d))
+            {
+                return d;
+            }
+
+            throw new SystemException(string.Format("strange number format '{0}'", s));
+        }
 
 
 

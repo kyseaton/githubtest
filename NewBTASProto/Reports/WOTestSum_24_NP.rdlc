@@ -2249,7 +2249,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Format(CDbl(Fields!CEL01.Value),"0.00")</Value>
+                                  <Value>=FormatNumber(CDbl(Fields!CEL01.Value),2)</Value>
                                   <Style>
                                     <FontSize>7pt</FontSize>
                                   </Style>
@@ -2281,7 +2281,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Format(CDbl(Fields!CEL02.Value),"0.00")</Value>
+                                  <Value>=FormatNumber(CDbl(Fields!CEL02.Value),2)</Value>
                                   <Style>
                                     <FontSize>7pt</FontSize>
                                   </Style>
@@ -2313,7 +2313,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Format(CDbl(Fields!CEL03.Value),"0.00")</Value>
+                                  <Value>=FormatNumber(CDbl(Fields!CEL03.Value),2)</Value>
                                   <Style>
                                     <FontSize>7pt</FontSize>
                                   </Style>
@@ -4985,7 +4985,7 @@
       <Width>8.72084in</Width>
       <Page>
         <PageHeader>
-          <Height>1.51041in</Height>
+          <Height>1.58333in</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
@@ -5056,7 +5056,7 @@
               <Top>0.47916in</Top>
               <Left>0.01172in</Left>
               <Height>0.25in</Height>
-              <Width>1.75in</Width>
+              <Width>2.60417in</Width>
               <ZIndex>2</ZIndex>
               <Style>
                 <Border>
@@ -5190,9 +5190,9 @@
               </Paragraphs>
               <rd:DefaultName>Textbox16</rd:DefaultName>
               <Top>0.72916in</Top>
-              <Left>3.49131in</Left>
+              <Left>2.86103in</Left>
               <Height>0.25in</Height>
-              <Width>1.75in</Width>
+              <Width>3in</Width>
               <ZIndex>6</ZIndex>
               <Style>
                 <Border>
@@ -5226,7 +5226,7 @@
               <Top>0.72916in</Top>
               <Left>0.01172in</Left>
               <Height>0.25in</Height>
-              <Width>1.75in</Width>
+              <Width>2.60417in</Width>
               <ZIndex>7</ZIndex>
               <Style>
                 <Border>
@@ -5258,9 +5258,9 @@
               </Paragraphs>
               <rd:DefaultName>Textbox18</rd:DefaultName>
               <Top>0.72916in</Top>
-              <Left>6.96172in</Left>
+              <Left>5.93047in</Left>
               <Height>0.25in</Height>
-              <Width>1.75in</Width>
+              <Width>2.78125in</Width>
               <ZIndex>8</ZIndex>
               <Style>
                 <Border>
@@ -5294,7 +5294,7 @@
               <Top>0.22916in</Top>
               <Left>0.01172in</Left>
               <Height>0.25in</Height>
-              <Width>1.75in</Width>
+              <Width>2.60417in</Width>
               <ZIndex>9</ZIndex>
               <Style>
                 <Border>
@@ -5326,9 +5326,9 @@
               </Paragraphs>
               <rd:DefaultName>Textbox18</rd:DefaultName>
               <Top>0.47916in</Top>
-              <Left>3.49131in</Left>
+              <Left>2.86103in</Left>
               <Height>0.25in</Height>
-              <Width>1.75in</Width>
+              <Width>3in</Width>
               <ZIndex>10</ZIndex>
               <Style>
                 <Border>
