@@ -400,10 +400,7 @@ namespace NewBTASProto
                 return;
             }
 
-            finally
-            {
-                
-            }
+            MessageBox.Show(this, "Water Level Data Saved", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
 
         private void MasterFillerInterface_Shown(object sender, EventArgs e)

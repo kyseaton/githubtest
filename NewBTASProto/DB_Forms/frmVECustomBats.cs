@@ -1280,13 +1280,13 @@ namespace NewBTASProto
                             //update the four rows and then break...
                             ((Main_Form)this.Owner).pci.Rows[i][0] = textBox2.Text.Replace("'", "''");
                             if (comboBox13.Text.Replace("'", "''") != "") { ((Main_Form)this.Owner).pci.Rows[i][1] = comboBox13.Text.Replace("'", "''"); }
-                            if (numericUpDown89.Text.Replace("'", "''") != "") { ((Main_Form)this.Owner).pci.Rows[i][2] = numericUpDown89.Text.Replace("'", "''"); }      // negative 1 is the default...
-                            if (numericUpDown88.Text.Replace("'", "''") != "") { ((Main_Form)this.Owner).pci.Rows[i][3] = numericUpDown88.Text.Replace("'", "''"); }        // negative 1 is the default...
-                            if (textBox21.Text.Replace("'", "''") != "") { ((Main_Form)this.Owner).pci.Rows[i][4] = textBox21.Text.Replace("'", "''"); }        // negative 1 is the default...
-                            if (textBox22.Text.Replace("'", "''") != "") { ((Main_Form)this.Owner).pci.Rows[i][5] = textBox22.Text.Replace("'", "''"); }        // 24 is the default...
-                            if (textBox27.Text.Replace("'", "''") != "") { ((Main_Form)this.Owner).pci.Rows[i][6] = textBox27.Text.Replace("'", "''"); }        // negative 1 is the default...
-                            if (textBox28.Text.Replace("'", "''") != "") { ((Main_Form)this.Owner).pci.Rows[i][7] = textBox28.Text.Replace("'", "''"); }        // 1.75 is the default...
-                            if (textBox29.Text.Replace("'", "''") != "") { ((Main_Form)this.Owner).pci.Rows[i][8] = textBox29.Text.Replace("'", "''"); }        // negative 1 is the default...
+                            if (numericUpDown89.Text.Replace("'", "''") != "") { ((Main_Form)this.Owner).pci.Rows[i][2] = (float) GetDouble(numericUpDown89.Text.Replace("'", "''")); }      // negative 1 is the default...
+                            if (numericUpDown88.Text.Replace("'", "''") != "") { ((Main_Form)this.Owner).pci.Rows[i][3] = (int) GetDouble(numericUpDown88.Text.Replace("'", "''")); }        // negative 1 is the default...
+                            if (textBox21.Text.Replace("'", "''") != "") { ((Main_Form)this.Owner).pci.Rows[i][4] = (float) GetDouble(textBox21.Text.Replace("'", "''")); }        // negative 1 is the default...
+                            if (textBox22.Text.Replace("'", "''") != "") { ((Main_Form)this.Owner).pci.Rows[i][5] = (float) GetDouble(textBox22.Text.Replace("'", "''")); }        // 24 is the default...
+                            if (textBox27.Text.Replace("'", "''") != "") { ((Main_Form)this.Owner).pci.Rows[i][6] = (float) GetDouble(textBox27.Text.Replace("'", "''")); }        // negative 1 is the default...
+                            if (textBox28.Text.Replace("'", "''") != "") { ((Main_Form)this.Owner).pci.Rows[i][7] = (float) GetDouble(textBox28.Text.Replace("'", "''")); }        // 1.75 is the default...
+                            if (textBox29.Text.Replace("'", "''") != "") { ((Main_Form)this.Owner).pci.Rows[i][8] = (float) GetDouble(textBox29.Text.Replace("'", "''")); }        // negative 1 is the default...
                         }
                     }
 
@@ -2188,6 +2188,29 @@ namespace NewBTASProto
         private void groupBox1_Leave(object sender, EventArgs e)
         {
 
+        }
+
+        static double GetDouble(string s)
+        {
+            double d;
+
+            var formatinfo = new System.Globalization.NumberFormatInfo();
+
+            formatinfo.NumberDecimalSeparator = ".";
+
+            if (double.TryParse(s, System.Globalization.NumberStyles.Float, formatinfo, out d))
+            {
+                return d;
+            }
+
+            formatinfo.NumberDecimalSeparator = ",";
+
+            if (double.TryParse(s, System.Globalization.NumberStyles.Float, formatinfo, out d))
+            {
+                return d;
+            }
+
+            throw new SystemException(string.Format("strange number format '{0}'", s));
         }
         
     }

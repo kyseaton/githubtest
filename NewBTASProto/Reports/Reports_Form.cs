@@ -513,21 +513,6 @@ namespace NewBTASProto
                         myAccessConn.Close();
                     }
 
-                    //do we need to reformat...
-                    if (reportSet.Tables[0].Rows[0][15].ToString().Contains(",") && System.Globalization.CultureInfo.CurrentCulture.Name == "en-US")
-                    {
-                        //loop through everything and change the ,s to .s
-                        foreach (DataRow dr in reportSet.Tables[0].Rows)
-                        {
-                            for (int i = 7; i < 51; i++)
-                            {
-                                dr[i] = dr[i].ToString().Replace(",", ".");
-                            }
-                                
-                        }
-                    }
-
-
 
                     //now come up with a mergeded table...
                     dtAll = new DataTable();
@@ -1008,19 +993,6 @@ namespace NewBTASProto
                         myAccessConn.Close();
                     }
 
-                    //do we need to reformat...
-                    if (reportSet.Tables[0].Rows[0][15].ToString().Contains(",") && System.Globalization.CultureInfo.CurrentCulture.Name == "en-US")
-                    {
-                        //loop through everything and change the ,s to .s
-                        foreach (DataRow dr in reportSet.Tables[0].Rows)
-                        {
-                            for (int i = 2; i < 27; i++)
-                            {
-                                dr[i] = dr[i].ToString().Replace(",", ".");
-                            }
-
-                        }
-                    }
                 }
                 catch (Exception ex)
                 {
@@ -1176,20 +1148,6 @@ namespace NewBTASProto
                         myAccessConn.Close();
                     }
 
-
-                    //do we need to reformat...
-                    if (reportSet.Tables[0].Rows[0][2].ToString().Contains(",") && System.Globalization.CultureInfo.CurrentCulture.Name == "en-US")
-                    {
-                        //loop through everything and change the ,s to .s
-                        foreach (DataRow dr in reportSet.Tables[0].Rows)
-                        {
-                            for (int i = 2; i < 27; i++)
-                            {
-                                dr[i] = dr[i].ToString().Replace(",", ".");
-                            }
-
-                        }
-                    }
                 }
                 catch (Exception ex)
                 {
@@ -1318,19 +1276,6 @@ namespace NewBTASProto
                         myAccessConn.Close();
                     }
 
-                    ////do we need to reformat...
-                    //if (reportSet.Tables[0].Rows[0][2].ToString().Contains(",") && System.Globalization.CultureInfo.CurrentCulture.Name == "en-US")
-                    //{
-                    //    //loop through everything and change the ,s to .s
-                    //    foreach (DataRow dr in reportSet.Tables[0].Rows)
-                    //    {
-                    //        for (int i = 2; i < 14; i++)
-                    //        {
-                    //            dr[i] = dr[i].ToString().Replace(",", ".");
-                    //        }
-
-                    //    }
-                    //}
                 }
                 catch (Exception ex)
                 {

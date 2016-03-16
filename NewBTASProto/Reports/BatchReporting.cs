@@ -27,6 +27,8 @@ namespace NewBTASProto
         bool cb4;
         bool cb5;
         bool cb6;
+        bool cb7;   // Close work order
+        bool cb8;   // Update Completion Date
 
         //for startup selection
         string curWorkOrder = "";
@@ -52,6 +54,9 @@ namespace NewBTASProto
             checkBox4.Checked = Properties.Settings.Default.cb4;
             checkBox5.Checked = Properties.Settings.Default.cb5;
             checkBox6.Checked = Properties.Settings.Default.cb6;
+            checkBox7.Checked = Properties.Settings.Default.cbComplete;
+            checkBox8.Checked = Properties.Settings.Default.cbUpdateCompleteDate;
+
         }
 
         private void loadWorkOrderLists()
@@ -129,6 +134,8 @@ namespace NewBTASProto
             cb4 = checkBox4.Checked;
             cb5 = checkBox5.Checked;
             cb6 = checkBox6.Checked;
+            cb7 = checkBox7.Checked;
+            cb8 = checkBox8.Checked;
 
             if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
             {
@@ -239,6 +246,26 @@ namespace NewBTASProto
                             });
                             workOrderLog();
                         }
+                        if (cb7)
+                        {
+                            //close the work order
+                            this.Invoke((MethodInvoker)delegate()
+                            {
+                                label2.Text = "Closing Work Order";
+                            });
+                            closeWO(ComboText);
+                            Thread.Sleep(500);
+                        }
+                        if (cb8)
+                        {
+                            //update the completion date for the work order
+                            this.Invoke((MethodInvoker)delegate()
+                            {
+                                label2.Text = "Updating Completion Date";
+                            });
+                            updateCompleteDate(ComboText);
+                            Thread.Sleep(500);
+                        }
                         this.Invoke((MethodInvoker)delegate()
                         {
                             label2.Text = "";
@@ -255,6 +282,40 @@ namespace NewBTASProto
                         });
                     }
                 });
+            }
+        }
+
+        private void closeWO(string workOrderToClose)
+        {
+            // set up the db Connection
+            string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+            OleDbConnection conn = new OleDbConnection(connectionString);
+
+            // Also update the model in the other tables!
+            string cmdStr = "UPDATE WorkOrders SET OrderStatus='Closed' WHERE WorkOrderNumber='" + workOrderToClose + "' AND OrderStatus = 'Open'";
+            OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
+            lock (Main_Form.dataBaseLock)
+            {
+                conn.Open();
+                cmd.ExecuteNonQuery();
+                conn.Close();
+            }
+        }
+
+        private void updateCompleteDate(string workOrderToUpdateDateCompleted)
+        {
+            // set up the db Connection
+            string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+            OleDbConnection conn = new OleDbConnection(connectionString);
+
+            // Also update the model in the other tables!
+            string cmdStr = "UPDATE WorkOrders SET DateCompleted='" + System.DateTime.Now.Date.ToString() + "' WHERE WorkOrderNumber='" + workOrderToUpdateDateCompleted + "'";
+            OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
+            lock (Main_Form.dataBaseLock)
+            {
+                conn.Open();
+                cmd.ExecuteNonQuery();
+                conn.Close();
             }
         }
 
@@ -412,20 +473,6 @@ namespace NewBTASProto
                     myAccessConn.Open();
                     myDataAdapter.Fill(reportSet, "ScanData");
                     myAccessConn.Close();
-                }
-
-                //do we need to reformat...
-                if (reportSet.Tables[0].Rows[0][15].ToString().Contains(",") && System.Globalization.CultureInfo.CurrentCulture.Name == "en-US")
-                {
-                    //loop through everything and change the ,s to .s
-                    foreach (DataRow dr in reportSet.Tables[0].Rows)
-                    {
-                        for (int i = 7; i < 51; i++)
-                        {
-                            dr[i] = dr[i].ToString().Replace(",", ".");
-                        }
-
-                    }
                 }
 
                 //now come up with a merged table...
@@ -722,19 +769,6 @@ namespace NewBTASProto
                         myAccessConn.Close();
                     }
 
-                    //do we need to reformat...
-                    if (reportSet.Tables[0].Rows[1][2].ToString().Contains(",") && System.Globalization.CultureInfo.CurrentCulture.Name == "en-US")
-                    {
-                        //loop through everything and change the ,s to .s
-                        foreach (DataRow dr in reportSet.Tables[0].Rows)
-                        {
-                            for (int i = 2; i < 14; i++)
-                            {
-                                dr[i] = dr[i].ToString().Replace(",", ".");
-                            }
-
-                        }
-                    }
                 }
                 catch (Exception ex)
                 {
@@ -871,19 +905,6 @@ namespace NewBTASProto
                         myAccessConn.Close();
                     }
 
-                    //do we need to reformat...
-                    if (reportSet.Tables[0].Rows[0][15].ToString().Contains(",") && System.Globalization.CultureInfo.CurrentCulture.Name == "en-US")
-                    {
-                        //loop through everything and change the ,s to .s
-                        foreach (DataRow dr in reportSet.Tables[0].Rows)
-                        {
-                            for (int i = 2; i < 27; i++)
-                            {
-                                dr[i] = dr[i].ToString().Replace(",", ".");
-                            }
-
-                        }
-                    }
                 }
                 catch (Exception ex)
                 {
@@ -1039,19 +1060,6 @@ namespace NewBTASProto
                         myAccessConn.Close();
                     }
 
-                    //do we need to reformat...
-                    if (reportSet.Tables[0].Rows[0][2].ToString().Contains(",") && System.Globalization.CultureInfo.CurrentCulture.Name == "en-US")
-                    {
-                        //loop through everything and change the ,s to .s
-                        foreach (DataRow dr in reportSet.Tables[0].Rows)
-                        {
-                            for (int i = 2; i < 27; i++)
-                            {
-                                dr[i] = dr[i].ToString().Replace(",", ".");
-                            }
-
-                        }
-                    }
                 }
                 catch (Exception ex)
                 {
@@ -1089,6 +1097,11 @@ namespace NewBTASProto
                     if (testsPerformed.Tables[0].Rows[j][15].ToString() == "10")
                     {
                         reportSet.Tables[0].Rows[1][i] = "No Data";
+                    }
+                    else if (reportSet.Tables[0].Rows[0][i].ToString() ==  "")
+                    {
+                        //bad data!
+                        break;
                     }
                     else if (charge)
                     {
@@ -1323,6 +1336,8 @@ namespace NewBTASProto
             Properties.Settings.Default.cb4 = checkBox4.Checked;
             Properties.Settings.Default.cb5 = checkBox5.Checked;
             Properties.Settings.Default.cb6 = checkBox6.Checked;
+            Properties.Settings.Default.cbComplete = checkBox7.Checked;
+            Properties.Settings.Default.cbUpdateCompleteDate = checkBox8.Checked;
             Properties.Settings.Default.Save();
         }
 
@@ -1353,6 +1368,16 @@ namespace NewBTASProto
             }
 
             throw new SystemException(string.Format("strange number format '{0}'", s));
+        }
+
+        private void checkBox7_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void checkBox8_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
         
     }

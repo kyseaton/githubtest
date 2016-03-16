@@ -522,20 +522,6 @@ namespace NewBTASProto
                             myAccessConn.Close();
                         }
 
-                        //do we need to reformat...
-                        if (graph1Set.Tables[0].Rows[0][15].ToString().Contains(",") && System.Globalization.CultureInfo.CurrentCulture.Name == "en-US")
-                        {
-                            //loop through everything and change the ,s to .s
-                            foreach (DataRow dr in graph1Set.Tables[0].Rows)
-                            {
-                                for (int i = 7; i < 51; i++)
-                                {
-                                    dr[i] = dr[i].ToString().Replace(",", ".");
-                                }
-
-                            }
-                        }
-
 
                     }
                     catch (Exception ex)
@@ -1024,20 +1010,6 @@ namespace NewBTASProto
                             myAccessConn.Open();
                             myDataAdapter.Fill(graph2Set, "ScanData");
                             myAccessConn.Close();
-                        }
-
-                        //do we need to reformat...
-                        if (graph2Set.Tables[0].Rows[0][15].ToString().Contains(",") && System.Globalization.CultureInfo.CurrentCulture.Name == "en-US")
-                        {
-                            //loop through everything and change the ,s to .s
-                            foreach (DataRow dr in graph2Set.Tables[0].Rows)
-                            {
-                                for (int i = 7; i < 51; i++)
-                                {
-                                    dr[i] = dr[i].ToString().Replace(",", ".");
-                                }
-
-                            }
                         }
 
 

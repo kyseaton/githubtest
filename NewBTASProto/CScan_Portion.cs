@@ -2077,12 +2077,20 @@ namespace NewBTASProto
 
         private void fillPlotCombos(int currentRow)
         {
-            if (currentRow == oldRow && oldTest == d.Rows[currentRow][2].ToString())
+            try
             {
+                if (currentRow == oldRow && oldTest == d.Rows[currentRow][2].ToString())
+                {
+                    return;
+                }
+
+                oldTest = d.Rows[currentRow][2].ToString();
+            }
+            catch
+            {
+                // didn't work
                 return;
             }
-
-            oldTest = d.Rows[currentRow][2].ToString();
 
             ThreadPool.QueueUserWorkItem(s =>
                 {
@@ -2242,27 +2250,51 @@ namespace NewBTASProto
                                 }
 
 
-
-                                //do we need to reformat...
-                                if (graphMainSet.Tables[0].Rows[0][15].ToString().Contains(",") && System.Globalization.CultureInfo.CurrentCulture.Name == "en-US")
-                                {
-                                    //loop through everything and change the ,s to .s
-                                    foreach (DataRow dr in graphMainSet.Tables[0].Rows)
-                                    {
-                                        for (int i = 7; i < 27; i++)
-                                        {
-                                            dr[i] = dr[i].ToString().Replace(",", ".");
-                                        }
-
-                                    }
-                                }
-
-
                             }
                             catch (Exception ex)
                             {
                                 myAccessConn.Close();
-                                MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                //MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                this.Invoke((MethodInvoker)delegate()
+                                {
+                                    try
+                                    {
+                                        // just set to the cells readings..
+                                        comboBox2.Items.Clear();
+                                        toolStripComboBox2.ComboBox.Items.Clear();
+                                        comboBox3.Items.Clear();
+                                        toolStripComboBox3.ComboBox.Items.Clear();
+                                        radioButton1.Enabled = false;
+                                        radioButton2.Enabled = false;
+                                        updateR2(true);
+                                        comboBox2.Enabled = false;
+                                        toolStripComboBox2.ComboBox.Enabled = false;
+                                        comboBox3.Enabled = false;
+                                        toolStripComboBox3.ComboBox.Enabled = false;
+                                        if (GlobalVars.CScanData[currentRow] == null)
+                                        {
+                                            radioButton2.Text = "Cells";
+                                            comboBox3.Items.Add("Cell Voltages");
+                                            toolStripComboBox3.ComboBox.Items.Add("Cell Voltages");
+                                            updateC3("Cell Voltages");
+                                        }
+                                        else if (GlobalVars.CScanData[currentRow].CCID == 10)
+                                        {
+                                            radioButton2.Text = " ";
+                                            comboBox3.Items.Add("Current Voltages");
+                                            toolStripComboBox3.ComboBox.Items.Add("Current Voltages");
+                                            updateC3("Current Voltages");
+                                        }
+                                        else
+                                        {
+                                            radioButton2.Text = "Cells";
+                                            comboBox3.Items.Add("Cell Voltages");
+                                            toolStripComboBox3.ComboBox.Items.Add("Cell Voltages");
+                                            updateC3("Cell Voltages");
+                                        }
+                                    }// end try
+                                    catch { }// end catch
+                                });
                                 lockUpdate = false;
                                 return;
                             }

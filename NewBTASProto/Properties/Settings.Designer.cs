@@ -248,5 +248,29 @@ namespace NewBTASProto.Properties {
                 this["FC6C1WaitTime"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool cbComplete {
+            get {
+                return ((bool)(this["cbComplete"]));
+            }
+            set {
+                this["cbComplete"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool cbUpdateCompleteDate {
+            get {
+                return ((bool)(this["cbUpdateCompleteDate"]));
+            }
+            set {
+                this["cbUpdateCompleteDate"] = value;
+            }
+        }
     }
 }
