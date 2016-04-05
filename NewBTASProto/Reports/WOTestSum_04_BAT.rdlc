@@ -697,7 +697,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=CStr(Floor((Fields!ETIME.Value * 24) / 1)) + ":" + Format(Round((Fields!ETIME.Value*24*60)) Mod 60,"00")</Value>
+                              <Value>=CStr(Floor((Fields!ETIME.Value * 24) / 1)) + ":" + Format(Round((Fields!ETIME.Value*24*60)) Mod 60,"00") + IIF((Fields!TestName.Value = "Capacity-1"),"  (" + Format(Round((Fields!ETIME.Value*24*60)) / 0.6,"0") + "%)","")</Value>
                               <Style>
                                 <FontSize>7pt</FontSize>
                               </Style>

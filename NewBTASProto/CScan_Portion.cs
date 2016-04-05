@@ -21,9 +21,6 @@ namespace NewBTASProto
         [DllImport("user32.dll")]
         static extern bool LockWindowUpdate(IntPtr hWndLock);
 
-        //ComPort.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(port_DataReceived_1);
-        //EventArgs E = new EventArgs();
-
         /// <summary>
         /// Serial Stuff defined here
         /// </summary>
@@ -197,7 +194,7 @@ namespace NewBTASProto
                                             tempText += Environment.NewLine;
                                             if (testData.cellCableType != "NONE")       // don't show these when we have no cable attached...
                                             {
-                                                if (testData.cellCableType == "4 BATT" || testData.cellCableType == "CELL SIM" || testData.cellCableType == "2X11 Cable" || testData.cellCableType == "3X7 Cable" || testData.cellCableType == "Unknown Cable")
+                                                if (testData.cellCableType == "4 BATT" || testData.cellCableType == "2 BATT" || testData.cellCableType == "CELL SIM" || testData.cellCableType == "2X11 Cable" || testData.cellCableType == "3X7 Cable" || testData.cellCableType == "Unknown Cable")
                                                 {
                                                     tempText += "Voltage Batt 1:  " + testData.VB1.ToString("00.00") + Environment.NewLine;
                                                 }
@@ -205,7 +202,7 @@ namespace NewBTASProto
                                                 {
                                                     tempText += "Voltage Batt:  " + testData.VB1.ToString("00.00") + Environment.NewLine;
                                                 }
-                                                if (testData.cellCableType == "4 BATT" || testData.cellCableType == "CELL SIM" || testData.cellCableType == "2X11 Cable" || testData.cellCableType == "3X7 Cable" || testData.cellCableType == "Unknown Cable")
+                                                if (testData.cellCableType == "4 BATT" || testData.cellCableType == "2 BATT" || testData.cellCableType == "CELL SIM" || testData.cellCableType == "2X11 Cable" || testData.cellCableType == "3X7 Cable" || testData.cellCableType == "Unknown Cable")
                                                 {
                                                     tempText += "Voltage Batt 2:  " + testData.VB2.ToString("00.00") + Environment.NewLine;
                                                     if (testData.cellCableType == "4 BATT" || testData.cellCableType == "CELL SIM" || testData.cellCableType == "3X7 Cable" || testData.cellCableType == "Unknown Cable")
@@ -1241,6 +1238,57 @@ namespace NewBTASProto
                     }
 
                 }
+                //special 2 batt case
+                else if ((comboBox2.Enabled == false || (radioButton2.Checked == true && comboBox3.Text == "Current Voltages")) && testData.CCID == 11)
+                {
+                    //In this case we have a 4 Batt cable, but do not have a current test running.  We will display V1, V2, V3 and V4 on the main graph
+                    chart1.Series.Clear();
+
+                    var series1 = new System.Windows.Forms.DataVisualization.Charting.Series
+                    {
+                        Name = "Series1",
+                        Color = System.Drawing.Color.Green,
+                        IsVisibleInLegend = false,
+                        IsXValueIndexed = true,
+                        ChartType = SeriesChartType.Column,
+                        BorderColor = System.Drawing.Color.DarkGray,
+                        BorderWidth = 1
+                    };
+                    this.chart1.Series.Add(series1);
+                    chart1.ChartAreas[0].AxisX.Title = "Battery";
+                    chart1.ChartAreas[0].AxisY.Title = "Voltage";
+
+                    series1.Points.AddXY(1, testData.VB1);
+                    series1.Points[0].Color = pointColorMain(station, testData.VB1, false);
+                    series1.Points[0].Label = "VB1";
+                    series1.Points.AddXY(2, testData.VB2);
+                    series1.Points[1].Color = pointColorMain(station, testData.VB2, false);
+                    series1.Points[1].Label = "VB2";
+
+                    chart1.Titles.Clear();
+                    chart1.Titles.Add("Current Voltages");
+                    chart1.Invalidate();
+                    chart1.ChartAreas[0].RecalculateAxesScale();
+
+                    double max = 0;
+                    for (int i = 0; i < 2; i++)
+                    {
+                        if (series1.Points[i].YValues[0] > max)
+                        {
+                            max = series1.Points[i].YValues[0];
+                        }
+                    }
+
+                    if (max < 0.1)
+                    {
+                        chart1.ChartAreas[0].AxisY.Maximum = 0.1;
+                    }
+                    else
+                    {
+                        chart1.ChartAreas[0].AxisY.Maximum = Double.NaN;
+                    }
+
+                }
                 //Normal Cell Voltage Only Case:
                 else if (comboBox2.Enabled == false || (radioButton2.Checked == true && comboBox3.Text == "Cell Voltages"))
                 {
@@ -1501,6 +1549,18 @@ namespace NewBTASProto
                                     points = 73;
                                 }
                                 break;
+                            case "Combo: FC-4 Cap-1":
+                                if (d.Rows[station][7].ToString() == "Complete")
+                                {
+                                    interval = 1;
+                                    points = 61;
+                                }
+                                else
+                                {
+                                    interval = 5;
+                                    points = 73;
+                                }
+                                break;
                             case "Full Charge-6":
                             case "Combo: >>FC-6<<  Cap-1":
                             case "Combo: FC-6 >><< Cap-1":
@@ -1508,6 +1568,8 @@ namespace NewBTASProto
                                 points = 73;
                                 break;
                             case "Full Charge-4":
+                            case "Combo: >>FC-4<<  Cap-1":
+                            case "Combo: FC-4 >><< Cap-1":
                                 interval = 4;
                                 points = 61;
                                 break;
@@ -1529,6 +1591,7 @@ namespace NewBTASProto
                                 break;
                             case "Capacity-1":
                             case "Combo: FC-6  >>Cap-1<<":
+                            case "Combo: FC-4  >>Cap-1<<":
                                 interval = 1;
                                 points = 61;
                                 break;
@@ -1791,6 +1854,8 @@ namespace NewBTASProto
                                     points = 73;
                                     break;
                                 case "Full Charge-4":
+                                case "Combo: >>FC-4<<  Cap-1":
+                                case "Combo: FC-4 >><< Cap-1":
                                     interval = 4;
                                     points = 61;
                                     break;
@@ -1812,6 +1877,7 @@ namespace NewBTASProto
                                     break;
                                 case "Capacity-1":
                                 case "Combo: FC-6  >>Cap-1<<":
+                                case "Combo: FC-4  >>Cap-1<<":
                                     interval = 1;
                                     points = 61;
                                     break;
@@ -2557,6 +2623,30 @@ namespace NewBTASProto
                                         comboBox3.Items.Add("Current Voltages");
                                         toolStripComboBox3.ComboBox.Items.Add("Current Voltages");
                                         break;
+                                    case "11":
+                                        // Battery combobox
+                                        comboBox2.Items.Clear();
+                                        toolStripComboBox2.ComboBox.Items.Clear();
+                                        comboBox2.Items.Add("Voltage 1");
+                                        toolStripComboBox2.ComboBox.Items.Add("Voltage 1");
+                                        comboBox2.Items.Add("Voltage 2");
+                                        toolStripComboBox2.ComboBox.Items.Add("Voltage 2");
+                                        comboBox2.Items.Add("Current");
+                                        toolStripComboBox2.ComboBox.Items.Add("Current");
+                                        comboBox2.Items.Add("Temperature 1");
+                                        toolStripComboBox2.ComboBox.Items.Add("Temperature 1");
+                                        comboBox2.Items.Add("Temperature 2");
+                                        toolStripComboBox2.ComboBox.Items.Add("Temperature 2");
+                                        comboBox2.Items.Add("Temperature 3");
+                                        toolStripComboBox2.ComboBox.Items.Add("Temperature 3");
+                                        comboBox2.Items.Add("Temperature 4");
+                                        toolStripComboBox2.ComboBox.Items.Add("Temperature 4");
+                                        // Cells combobox
+                                        comboBox3.Items.Clear();
+                                        toolStripComboBox3.ComboBox.Items.Clear();
+                                        comboBox3.Items.Add("Current Voltages");
+                                        toolStripComboBox3.ComboBox.Items.Add("Current Voltages");
+                                        break;
                                     case "21":
                                         // Battery combobox
                                         comboBox2.Items.Clear();
@@ -2620,6 +2710,72 @@ namespace NewBTASProto
                                         toolStripComboBox3.ComboBox.Items.Add("Cell 20");
                                         comboBox3.Items.Add("Cell 21");
                                         toolStripComboBox3.ComboBox.Items.Add("Cell 21");
+                                        break;
+                                    case "22":
+                                        // Battery combobox
+                                        comboBox2.Items.Clear();
+                                        toolStripComboBox2.ComboBox.Items.Clear();
+                                        comboBox2.Items.Add("Voltage");
+                                        toolStripComboBox2.ComboBox.Items.Add("Voltage");
+                                        comboBox2.Items.Add("Current");
+                                        toolStripComboBox2.ComboBox.Items.Add("Current");
+                                        comboBox2.Items.Add("Temperature 1");
+                                        toolStripComboBox2.ComboBox.Items.Add("Temperature 1");
+                                        comboBox2.Items.Add("Temperature 2");
+                                        toolStripComboBox2.ComboBox.Items.Add("Temperature 2");
+                                        comboBox2.Items.Add("Temperature 3");
+                                        toolStripComboBox2.ComboBox.Items.Add("Temperature 3");
+                                        comboBox2.Items.Add("Temperature 4");
+                                        toolStripComboBox2.ComboBox.Items.Add("Temperature 4");
+                                        // Cells combobox
+                                        comboBox3.Items.Clear();
+                                        toolStripComboBox3.ComboBox.Items.Clear();
+                                        comboBox3.Items.Add("Cell Voltages");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell Voltages");
+                                        comboBox3.Items.Add("Cell 1");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 1");
+                                        comboBox3.Items.Add("Cell 2");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 2");
+                                        comboBox3.Items.Add("Cell 3");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 3");
+                                        comboBox3.Items.Add("Cell 4");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 4");
+                                        comboBox3.Items.Add("Cell 5");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 5");
+                                        comboBox3.Items.Add("Cell 6");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 6");
+                                        comboBox3.Items.Add("Cell 7");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 7");
+                                        comboBox3.Items.Add("Cell 8");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 8");
+                                        comboBox3.Items.Add("Cell 9");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 9");
+                                        comboBox3.Items.Add("Cell 10");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 10");
+                                        comboBox3.Items.Add("Cell 11");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 11");
+                                        comboBox3.Items.Add("Cell 12");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 12");
+                                        comboBox3.Items.Add("Cell 13");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 13");
+                                        comboBox3.Items.Add("Cell 14");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 14");
+                                        comboBox3.Items.Add("Cell 15");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 15");
+                                        comboBox3.Items.Add("Cell 16");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 16");
+                                        comboBox3.Items.Add("Cell 17");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 17");
+                                        comboBox3.Items.Add("Cell 18");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 18");
+                                        comboBox3.Items.Add("Cell 19");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 19");
+                                        comboBox3.Items.Add("Cell 20");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 20");
+                                        comboBox3.Items.Add("Cell 21");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 21");
+                                        comboBox3.Items.Add("Cell 22");
+                                        toolStripComboBox3.ComboBox.Items.Add("Cell 22");
                                         break;
                                     default:
                                         // Battery combobox

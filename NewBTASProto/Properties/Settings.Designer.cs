@@ -272,5 +272,77 @@ namespace NewBTASProto.Properties {
                 this["cbUpdateCompleteDate"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool FC4C1MinimumCellVotageAfterChargeTestEnabled {
+            get {
+                return ((bool)(this["FC4C1MinimumCellVotageAfterChargeTestEnabled"]));
+            }
+            set {
+                this["FC4C1MinimumCellVotageAfterChargeTestEnabled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1.55")]
+        public decimal FC4C1MinimumCellVoltageThreshold {
+            get {
+                return ((decimal)(this["FC4C1MinimumCellVoltageThreshold"]));
+            }
+            set {
+                this["FC4C1MinimumCellVoltageThreshold"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool FC4C1WaitEnabled {
+            get {
+                return ((bool)(this["FC4C1WaitEnabled"]));
+            }
+            set {
+                this["FC4C1WaitEnabled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("15")]
+        public decimal FC4C1WaitTime {
+            get {
+                return ((decimal)(this["FC4C1WaitTime"]));
+            }
+            set {
+                this["FC4C1WaitTime"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool CapTestVarEnable {
+            get {
+                return ((bool)(this["CapTestVarEnable"]));
+            }
+            set {
+                this["CapTestVarEnable"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.05")]
+        public decimal CapTestVarValue {
+            get {
+                return ((decimal)(this["CapTestVarValue"]));
+            }
+            set {
+                this["CapTestVarValue"] = value;
+            }
+        }
     }
 }

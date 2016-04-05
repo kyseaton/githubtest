@@ -660,9 +660,16 @@ namespace NewBTASProto
                 case "10":
                     reportViewer1.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.WOTestSum_04_BAT.rdlc";
                     break;
+                case "11":
+                    reportViewer1.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.WOTestSum_02_BAT.rdlc";
+                    break;
                 case "21":
                     if (GlobalVars.Pos2Neg == true) { reportViewer1.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.WOTestSum_21_PN.rdlc"; }
                     else { reportViewer1.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.WOTestSum_21_NP.rdlc"; }
+                    break;
+                case "22":
+                    if (GlobalVars.Pos2Neg == true) { reportViewer1.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.WOTestSum_22_PN.rdlc"; }
+                    else { reportViewer1.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.WOTestSum_22_NP.rdlc"; }
                     break;
                 default:
                     if (GlobalVars.Pos2Neg == true) { reportViewer1.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.WOTestSum_24_PN.rdlc"; }

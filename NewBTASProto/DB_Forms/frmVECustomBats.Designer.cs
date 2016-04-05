@@ -4215,7 +4215,7 @@
             this.MaximizeBox = false;
             this.Name = "frmVECustomBats";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "View, Edit and Add Batteries";
+            this.Text = "View, Edit and Add Battery Models";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmVECustomBats_FormClosing);
             this.Load += new System.EventHandler(this.comboBox2_SelectedValueChanged);
             this.Shown += new System.EventHandler(this.frmVECustomBats_Shown);

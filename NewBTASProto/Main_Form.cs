@@ -22,7 +22,8 @@ namespace NewBTASProto
 
 
         public Main_Form()
-        {           
+        {
+            //this.AutoScaleMode = AutoScaleMode.Dpi;
 
             try
             {
@@ -746,9 +747,14 @@ namespace NewBTASProto
             {
                 for (int i = 0; i < 16; i++)
                 {
-                    if(d.Rows[i][2].ToString().Contains("Combo:")){
+                    if(d.Rows[i][2].ToString().Contains("FC-4")){
                         // clear the >> and << 
-                        updateD(i,2,d.Rows[i][2].ToString().Replace("<<","").Replace(">>",""));
+                        updateD(i, 2, "Combo: FC-4 Cap-1");
+                    }
+                    else if (d.Rows[i][2].ToString().Contains("FC-6"))
+                    {
+                        // clear the >> and << 
+                        updateD(i, 2, "Combo: FC-6 Cap-1");
                     }
                     updateD(i, 5, false);
                     updateD(i, 6, "");
@@ -1300,6 +1306,7 @@ namespace NewBTASProto
             updateD(dataGridView1.CurrentRow.Index, 11, "");
 
             //make sure we clear the current test
+            updateD(dataGridView1.CurrentRow.Index, 2, "");
             updateD(dataGridView1.CurrentRow.Index, 3, "");
             updateD(dataGridView1.CurrentRow.Index, 6, "");
             updateD(dataGridView1.CurrentRow.Index, 7, "");
@@ -2545,80 +2552,93 @@ namespace NewBTASProto
 
         private void dataGridView1_Resize(object sender, EventArgs e)
         {
-            int cumWidth = 0;
-            //Scale the columns to the new width!
-            if (GlobalVars.autoConfig)
+            try
             {
-                dataGridView1.Columns[0].Width = (40 * dataGridView1.Width) / 1057;
-                cumWidth += (40 * dataGridView1.Width) / 1057;
-                dataGridView1.Columns[1].Width = (180 * dataGridView1.Width) / 1057;
-                cumWidth += (180 * dataGridView1.Width) / 1057;
-                dataGridView1.Columns[2].Width = (140 * dataGridView1.Width) / 1057;
-                cumWidth += (140 * dataGridView1.Width) / 1057;
-                dataGridView1.Columns[3].Width = (40 * dataGridView1.Width) / 1057;
-                cumWidth += (40 * dataGridView1.Width) / 1057;
-                dataGridView1.Columns[4].Width = (44 * dataGridView1.Width) / 1057;
-                cumWidth += (44 * dataGridView1.Width) / 1057;
-                dataGridView1.Columns[5].Width = (44 * dataGridView1.Width) / 1057;
-                cumWidth += (44 * dataGridView1.Width) / 1057;
-                dataGridView1.Columns[6].Width = (100 * dataGridView1.Width) / 1057;
-                cumWidth += (100 * dataGridView1.Width) / 1057;
-                dataGridView1.Columns[7].Width = (120 * dataGridView1.Width) / 1057;
-                cumWidth += (120 * dataGridView1.Width) / 1057;
-                dataGridView1.Columns[8].Width = (60 * dataGridView1.Width) / 1057;
-                cumWidth += (60 * dataGridView1.Width) / 1057;
-                dataGridView1.Columns[9].Width = (50 * dataGridView1.Width) / 1057;
-                cumWidth += (50 * dataGridView1.Width) / 1057;
-                dataGridView1.Columns[10].Width = (78 * dataGridView1.Width) / 1057;
-                cumWidth += (78 * dataGridView1.Width) / 1057;
-                dataGridView1.Columns[11].Width = (78 * dataGridView1.Width) / 1057;
-                cumWidth += (78 * dataGridView1.Width) / 1057;
-                dataGridView1.Columns[12].Width = (dataGridView1.Width - 43) - cumWidth;
-            }
-            else
-            {
-                dataGridView1.Columns[0].Width = (40 * dataGridView1.Width) / 1017;
-                cumWidth += (40 * dataGridView1.Width) / 1017;
-                dataGridView1.Columns[1].Width = (180 * dataGridView1.Width) / 1017;
-                cumWidth += (180 * dataGridView1.Width) / 1017;
-                dataGridView1.Columns[2].Width = (140 * dataGridView1.Width) / 1017;
-                cumWidth += (140 * dataGridView1.Width) / 1017;
-                dataGridView1.Columns[3].Width = (40 * dataGridView1.Width) / 1017;
-                cumWidth += (40 * dataGridView1.Width) / 1017;
-                dataGridView1.Columns[4].Width = (44 * dataGridView1.Width) / 1017;
-                cumWidth += (44 * dataGridView1.Width) / 1017;
-                dataGridView1.Columns[5].Width = (44 * dataGridView1.Width) / 1017;
-                cumWidth += (44 * dataGridView1.Width) / 1017;
-                dataGridView1.Columns[6].Width = (100 * dataGridView1.Width) / 1017;
-                cumWidth += (100 * dataGridView1.Width) / 1017;
-                dataGridView1.Columns[7].Width = (120 * dataGridView1.Width) / 1017;
-                cumWidth += (120 * dataGridView1.Width) / 1017;
-                dataGridView1.Columns[8].Width = (60 * dataGridView1.Width) / 1017;
-                cumWidth += (60 * dataGridView1.Width) / 1017;
-                dataGridView1.Columns[9].Width = (50 * dataGridView1.Width) / 1017;
-                cumWidth += (50 * dataGridView1.Width) / 1017;
-                dataGridView1.Columns[10].Width = (78 * dataGridView1.Width) / 1017;
-                cumWidth += (78 * dataGridView1.Width) / 1017;
-                dataGridView1.Columns[11].Width = (dataGridView1.Width - 43) - cumWidth;
-            }
+                // get the right height first...
+                for(int i = 0; i < 16; i++)
+                {
+                    // go through each a scale them
+                    dataGridView1.Rows[i].Height = (dataGridView1.Height - 16) / 16;
+                }
+                int cumWidth = 0;
+                //Scale the columns to the new width!
+                if (GlobalVars.autoConfig)
+                {
+                    dataGridView1.Columns[0].Width = (40 * dataGridView1.Width) / 1057;
+                    cumWidth += (40 * dataGridView1.Width) / 1057;
+                    dataGridView1.Columns[1].Width = (180 * dataGridView1.Width) / 1057;
+                    cumWidth += (180 * dataGridView1.Width) / 1057;
+                    dataGridView1.Columns[2].Width = (140 * dataGridView1.Width) / 1057;
+                    cumWidth += (140 * dataGridView1.Width) / 1057;
+                    dataGridView1.Columns[3].Width = (40 * dataGridView1.Width) / 1057;
+                    cumWidth += (40 * dataGridView1.Width) / 1057;
+                    dataGridView1.Columns[4].Width = (44 * dataGridView1.Width) / 1057;
+                    cumWidth += (44 * dataGridView1.Width) / 1057;
+                    dataGridView1.Columns[5].Width = (44 * dataGridView1.Width) / 1057;
+                    cumWidth += (44 * dataGridView1.Width) / 1057;
+                    dataGridView1.Columns[6].Width = (100 * dataGridView1.Width) / 1057;
+                    cumWidth += (100 * dataGridView1.Width) / 1057;
+                    dataGridView1.Columns[7].Width = (120 * dataGridView1.Width) / 1057;
+                    cumWidth += (120 * dataGridView1.Width) / 1057;
+                    dataGridView1.Columns[8].Width = (60 * dataGridView1.Width) / 1057;
+                    cumWidth += (60 * dataGridView1.Width) / 1057;
+                    dataGridView1.Columns[9].Width = (50 * dataGridView1.Width) / 1057;
+                    cumWidth += (50 * dataGridView1.Width) / 1057;
+                    dataGridView1.Columns[10].Width = (78 * dataGridView1.Width) / 1057;
+                    cumWidth += (78 * dataGridView1.Width) / 1057;
+                    dataGridView1.Columns[11].Width = (78 * dataGridView1.Width) / 1057;
+                    cumWidth += (78 * dataGridView1.Width) / 1057;
+                    dataGridView1.Columns[12].Width = (dataGridView1.Width - 43) - cumWidth;
+                }
+                else
+                {
+                    dataGridView1.Columns[0].Width = (40 * dataGridView1.Width) / 1017;
+                    cumWidth += (40 * dataGridView1.Width) / 1017;
+                    dataGridView1.Columns[1].Width = (180 * dataGridView1.Width) / 1017;
+                    cumWidth += (180 * dataGridView1.Width) / 1017;
+                    dataGridView1.Columns[2].Width = (140 * dataGridView1.Width) / 1017;
+                    cumWidth += (140 * dataGridView1.Width) / 1017;
+                    dataGridView1.Columns[3].Width = (40 * dataGridView1.Width) / 1017;
+                    cumWidth += (40 * dataGridView1.Width) / 1017;
+                    dataGridView1.Columns[4].Width = (44 * dataGridView1.Width) / 1017;
+                    cumWidth += (44 * dataGridView1.Width) / 1017;
+                    dataGridView1.Columns[5].Width = (44 * dataGridView1.Width) / 1017;
+                    cumWidth += (44 * dataGridView1.Width) / 1017;
+                    dataGridView1.Columns[6].Width = (100 * dataGridView1.Width) / 1017;
+                    cumWidth += (100 * dataGridView1.Width) / 1017;
+                    dataGridView1.Columns[7].Width = (120 * dataGridView1.Width) / 1017;
+                    cumWidth += (120 * dataGridView1.Width) / 1017;
+                    dataGridView1.Columns[8].Width = (60 * dataGridView1.Width) / 1017;
+                    cumWidth += (60 * dataGridView1.Width) / 1017;
+                    dataGridView1.Columns[9].Width = (50 * dataGridView1.Width) / 1017;
+                    cumWidth += (50 * dataGridView1.Width) / 1017;
+                    dataGridView1.Columns[10].Width = (78 * dataGridView1.Width) / 1017;
+                    cumWidth += (78 * dataGridView1.Width) / 1017;
+                    dataGridView1.Columns[11].Width = (dataGridView1.Width - 43) - cumWidth;
+                }
 
 
-            // font adjustment section
-            if (dataGridView1.Width < 800)
-            {
-                dataGridView1.Font = new Font(dataGridView1.Font.Name, 6);
+                // font adjustment section
+                if (dataGridView1.Width < 800)
+                {
+                    dataGridView1.Font = new Font(dataGridView1.Font.Name, 6);
+                }
+                else if (dataGridView1.Width < 1000)
+                {
+                    dataGridView1.Font = new Font(dataGridView1.Font.Name, 7.125f);
+                }
+                else if (dataGridView1.Width < 1350)
+                {
+                    dataGridView1.Font = new Font(dataGridView1.Font.Name, 8.25f);
+                }
+                else
+                {
+                    dataGridView1.Font = new Font(dataGridView1.Font.Name, 10f);
+                }
             }
-            else if (dataGridView1.Width < 1000)
+            catch
             {
-                dataGridView1.Font = new Font(dataGridView1.Font.Name, 7.125f);
-            }
-            else if(dataGridView1.Width < 1350)
-            {
-                dataGridView1.Font = new Font(dataGridView1.Font.Name, 8.25f);
-            }
-            else
-            {
-                dataGridView1.Font = new Font(dataGridView1.Font.Name, 10f);
+                //didn't work...
             }
 
         }
@@ -4012,50 +4032,7 @@ namespace NewBTASProto
 
         private void label12_Click(object sender, EventArgs e)
         {
-            // lets launch the Work Order Dialog!
-            ThreadPool.QueueUserWorkItem(s =>
-            {
-                int i = 0;
 
-                // we double clicked on the work order dialog
-                // lets make sure that the form is open
-
-                this.Invoke((MethodInvoker)delegate()
-                {
-                    customerBatteriesToolStripMenuItem.PerformClick();
-                });
-
-                // now lets find it and set the comboboxes so the work orders shown are active and it points to the first work order selected..
-                FormCollection fc = Application.OpenForms;
-                foreach (Form frm in fc)
-                {
-                    if (frm is frmVECustomerBats)
-                    {
-                        frmVECustomerBats to_control = (frmVECustomerBats)frm;
-
-                        //wait for it to load
-                        Thread.Sleep(200);
-                        while (to_control.toolStripCBSerNum.Items.Count < 1)
-                        {
-                            Thread.Sleep(200);
-                            i++;
-                            if (i > 10) { return; } // didn't work out...
-                        }
-                        Thread.Sleep(200);
-
-                        this.Invoke((MethodInvoker)delegate()
-                        {
-                            
-                            to_control.toolStripCBSerNum.SelectedIndex = to_control.toolStripCBSerNum.FindString(label12.Text);
-                            to_control.clearStartUp();
-                        });
-
-                        break;
-                    }
-
-                }
-
-            });
         }
 
         private void toolStripMenuItem45_Click(object sender, EventArgs e)
@@ -4290,6 +4267,80 @@ namespace NewBTASProto
             {
                 MessageBox.Show(this, "Error: Test settings were not reset!" + ex.Message + Environment.NewLine + ex.StackTrace, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void toolStripMenuItem47_Click(object sender, EventArgs e)
+        {
+            updateD(dataGridView1.CurrentRow.Index, 2, "Combo: FC-4 Cap-1");
+            updateD(dataGridView1.CurrentRow.Index, 3, "");
+            updateD(dataGridView1.CurrentRow.Index, 6, "");
+            updateD(dataGridView1.CurrentRow.Index, 7, "");
+            fillPlotCombos(dataGridView1.CurrentRow.Index);
+
+            // also update the slave (if we have a master...)
+            if (d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Contains("M"))
+            {
+                //find the slave
+                string temp = d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Replace("-M", "");
+                for (int i = 0; i < 16; i++)
+                {
+                    if (d.Rows[i][9].ToString().Contains(temp) && d.Rows[i][9].ToString().Contains("S"))
+                    {
+                        updateD(i, 2, "Combo: FC-4 Cap-1");
+                        updateD(i, 3, "");
+                        updateD(i, 6, "");
+                        updateD(i, 7, "");
+                    }
+                }
+            }
+        }
+
+        private void label12_DoubleClick(object sender, EventArgs e)
+        {
+            // lets launch the Work Order Dialog!
+            ThreadPool.QueueUserWorkItem(s =>
+            {
+                int i = 0;
+
+                // we double clicked on the work order dialog
+                // lets make sure that the form is open
+
+                this.Invoke((MethodInvoker)delegate()
+                {
+                    customerBatteriesToolStripMenuItem.PerformClick();
+                });
+
+                // now lets find it and set the comboboxes so the work orders shown are active and it points to the first work order selected..
+                FormCollection fc = Application.OpenForms;
+                foreach (Form frm in fc)
+                {
+                    if (frm is frmVECustomerBats)
+                    {
+                        frmVECustomerBats to_control = (frmVECustomerBats)frm;
+
+                        //wait for it to load
+                        Thread.Sleep(200);
+                        while (to_control.toolStripCBSerNum.Items.Count < 1)
+                        {
+                            Thread.Sleep(200);
+                            i++;
+                            if (i > 10) { return; } // didn't work out...
+                        }
+                        Thread.Sleep(200);
+
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+
+                            to_control.toolStripCBSerNum.SelectedIndex = to_control.toolStripCBSerNum.FindString(label12.Text);
+                            to_control.clearStartUp();
+                        });
+
+                        break;
+                    }
+
+                }
+
+            });
         }
 
 

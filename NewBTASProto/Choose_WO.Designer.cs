@@ -41,9 +41,10 @@
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Location = new System.Drawing.Point(425, 450);
+            this.buttonCancel.Location = new System.Drawing.Point(567, 554);
+            this.buttonCancel.Margin = new System.Windows.Forms.Padding(4);
             this.buttonCancel.Name = "buttonCancel";
-            this.buttonCancel.Size = new System.Drawing.Size(75, 23);
+            this.buttonCancel.Size = new System.Drawing.Size(100, 28);
             this.buttonCancel.TabIndex = 1;
             this.buttonCancel.Text = "Cancel";
             this.buttonCancel.UseVisualStyleBackColor = true;
@@ -51,9 +52,10 @@
             // 
             // buttonOK
             // 
-            this.buttonOK.Location = new System.Drawing.Point(344, 450);
+            this.buttonOK.Location = new System.Drawing.Point(459, 554);
+            this.buttonOK.Margin = new System.Windows.Forms.Padding(4);
             this.buttonOK.Name = "buttonOK";
-            this.buttonOK.Size = new System.Drawing.Size(75, 23);
+            this.buttonOK.Size = new System.Drawing.Size(100, 28);
             this.buttonOK.TabIndex = 2;
             this.buttonOK.Text = "OK";
             this.buttonOK.UseVisualStyleBackColor = true;
@@ -61,9 +63,10 @@
             // 
             // buttonClear
             // 
-            this.buttonClear.Location = new System.Drawing.Point(12, 450);
+            this.buttonClear.Location = new System.Drawing.Point(16, 554);
+            this.buttonClear.Margin = new System.Windows.Forms.Padding(4);
             this.buttonClear.Name = "buttonClear";
-            this.buttonClear.Size = new System.Drawing.Size(75, 23);
+            this.buttonClear.Size = new System.Drawing.Size(100, 28);
             this.buttonClear.TabIndex = 3;
             this.buttonClear.Text = "Clear All";
             this.buttonClear.UseVisualStyleBackColor = true;
@@ -80,10 +83,11 @@
             this.WorkOrder,
             this.Customer,
             this.DateReceived});
-            this.dataGridView1.Location = new System.Drawing.Point(12, 12);
+            this.dataGridView1.Location = new System.Drawing.Point(16, 15);
+            this.dataGridView1.Margin = new System.Windows.Forms.Padding(4);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(488, 432);
+            this.dataGridView1.Size = new System.Drawing.Size(651, 532);
             this.dataGridView1.TabIndex = 4;
             this.dataGridView1.DoubleClick += new System.EventHandler(this.dataGridView1_DoubleClick);
             // 
@@ -113,14 +117,15 @@
             // 
             // Choose_WO
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(512, 485);
+            this.ClientSize = new System.Drawing.Size(683, 597);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.buttonClear);
             this.Controls.Add(this.buttonOK);
             this.Controls.Add(this.buttonCancel);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Choose_WO";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Select Work Orders";

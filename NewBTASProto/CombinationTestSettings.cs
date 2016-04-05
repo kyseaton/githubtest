@@ -24,6 +24,12 @@ namespace NewBTASProto
             numericUpDown1.Value = Properties.Settings.Default.FC6C1MinimumCellVoltageThreshold;
             checkBox3.Checked = Properties.Settings.Default.FC6C1WaitEnabled;
             numericUpDown2.Value = Properties.Settings.Default.FC6C1WaitTime;
+            checkBox5.Checked = Properties.Settings.Default.FC4C1MinimumCellVotageAfterChargeTestEnabled;
+            numericUpDown4.Value = Properties.Settings.Default.FC4C1MinimumCellVoltageThreshold;
+            checkBox4.Checked = Properties.Settings.Default.FC4C1WaitEnabled;
+            numericUpDown3.Value = Properties.Settings.Default.FC4C1WaitTime;
+            checkBox6.Checked = Properties.Settings.Default.CapTestVarEnable;
+            numericUpDown5.Value = Properties.Settings.Default.CapTestVarValue;
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -39,6 +45,12 @@ namespace NewBTASProto
             Properties.Settings.Default.FC6C1MinimumCellVoltageThreshold = numericUpDown1.Value;
             Properties.Settings.Default.FC6C1WaitEnabled = checkBox3.Checked;
             Properties.Settings.Default.FC6C1WaitTime = numericUpDown2.Value;
+            Properties.Settings.Default.FC4C1MinimumCellVotageAfterChargeTestEnabled = checkBox5.Checked;
+            Properties.Settings.Default.FC4C1MinimumCellVoltageThreshold = numericUpDown4.Value;
+            Properties.Settings.Default.FC4C1WaitEnabled = checkBox4.Checked;
+            Properties.Settings.Default.FC4C1WaitTime = numericUpDown3.Value;
+            Properties.Settings.Default.CapTestVarEnable = checkBox6.Checked;
+            Properties.Settings.Default.CapTestVarValue = numericUpDown5.Value;
             Properties.Settings.Default.Save();
             this.Close();
         }

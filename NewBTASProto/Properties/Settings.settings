@@ -70,5 +70,23 @@
     <Setting Name="cbUpdateCompleteDate" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="FC4C1MinimumCellVotageAfterChargeTestEnabled" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="FC4C1MinimumCellVoltageThreshold" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">1.55</Value>
+    </Setting>
+    <Setting Name="FC4C1WaitEnabled" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="FC4C1WaitTime" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">15</Value>
+    </Setting>
+    <Setting Name="CapTestVarEnable" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="CapTestVarValue" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">0.05</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

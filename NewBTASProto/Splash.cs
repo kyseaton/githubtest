@@ -26,7 +26,7 @@ namespace NewBTASProto
             "2013021954",                       // AOG
             "5388165955",                       // Bandi @ Scandinavian Avionics Norway
             "8303121362",                       // Benson Wong / Raymond Fung @ Topcast Hong Kong
-            "5735222138",
+            "5735222138",                       // Air New Zealand / Greg Donaldson
             
             "2995964807",
             "7121966571",
@@ -441,22 +441,24 @@ namespace NewBTASProto
             // pictureBox1
             // 
             this.pictureBox1.Image = global::NewBTASProto.Properties.Resources.splash6_K;
-            this.pictureBox1.Location = new System.Drawing.Point(-2, -1);
+            this.pictureBox1.Location = new System.Drawing.Point(-3, -1);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(492, 286);
+            this.pictureBox1.Size = new System.Drawing.Size(656, 352);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
             // Splash
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(490, 285);
+            this.ClientSize = new System.Drawing.Size(653, 351);
             this.Controls.Add(this.pictureBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
+            this.Margin = new System.Windows.Forms.Padding(8, 9, 8, 9);
             this.Name = "Splash";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Splash Screen";

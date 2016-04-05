@@ -43,6 +43,7 @@
             this.importDataBaseFromPreviousVersionOfProgramToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem46 = new System.Windows.Forms.ToolStripSeparator();
             this.markAllOpenWorkOrdersAsClosedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.resetTestSettingsToDefaultsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -145,6 +146,7 @@
             this.customCapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItem44 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem47 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.clearToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.cMSStartStop = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -192,7 +194,6 @@
             this.cellsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripComboBox3 = new System.Windows.Forms.ToolStripComboBox();
             this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
-            this.resetTestSettingsToDefaultsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -243,6 +244,7 @@
             // 
             // menuStrip1
             // 
+            this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.toolStripMenuItem1,
@@ -333,6 +335,13 @@
             this.markAllOpenWorkOrdersAsClosedToolStripMenuItem.Size = new System.Drawing.Size(345, 22);
             this.markAllOpenWorkOrdersAsClosedToolStripMenuItem.Text = "Mark All Open Work Orders As Closed";
             this.markAllOpenWorkOrdersAsClosedToolStripMenuItem.Click += new System.EventHandler(this.markAllOpenWorkOrdersAsClosedToolStripMenuItem_Click);
+            // 
+            // resetTestSettingsToDefaultsToolStripMenuItem
+            // 
+            this.resetTestSettingsToDefaultsToolStripMenuItem.Name = "resetTestSettingsToDefaultsToolStripMenuItem";
+            this.resetTestSettingsToDefaultsToolStripMenuItem.Size = new System.Drawing.Size(345, 22);
+            this.resetTestSettingsToDefaultsToolStripMenuItem.Text = "Reset All Test Settings to Defaults";
+            this.resetTestSettingsToDefaultsToolStripMenuItem.Click += new System.EventHandler(this.resetTestSettingsToDefaultsToolStripMenuItem_Click);
             // 
             // toolStripSeparator4
             // 
@@ -584,7 +593,7 @@
             // 
             this.bussinessNameToolStripMenuItem.Name = "bussinessNameToolStripMenuItem";
             this.bussinessNameToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
-            this.bussinessNameToolStripMenuItem.Text = "Bussiness Name";
+            this.bussinessNameToolStripMenuItem.Text = "Business Name";
             this.bussinessNameToolStripMenuItem.Click += new System.EventHandler(this.bussinessNameToolStripMenuItem_Click);
             // 
             // toolStripMenuItem40
@@ -734,6 +743,7 @@
             // 
             // statusStrip1
             // 
+            this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel3,
             this.toolStripStatusLabel4,
@@ -854,6 +864,7 @@
             this.label12.TabIndex = 23;
             this.label12.Text = "                       ";
             this.label12.Click += new System.EventHandler(this.label12_Click);
+            this.label12.DoubleClick += new System.EventHandler(this.label12_DoubleClick);
             // 
             // label14
             // 
@@ -1005,11 +1016,12 @@
             // 
             // label8
             // 
+            this.label8.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label8.BackColor = System.Drawing.Color.Red;
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(174, 115);
+            this.label8.Location = new System.Drawing.Point(214, 142);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(360, 120);
+            this.label8.Size = new System.Drawing.Size(612, 201);
             this.label8.TabIndex = 6;
             this.label8.Text = "Check Comports\' Settings";
             this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1020,7 +1032,6 @@
             this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox3.Controls.Add(this.label8);
             this.groupBox3.Controls.Add(this.comboBox3);
             this.groupBox3.Controls.Add(this.comboBox2);
             this.groupBox3.Controls.Add(this.radioButton2);
@@ -1103,6 +1114,7 @@
             // 
             // cMSTestType
             // 
+            this.cMSTestType.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.cMSTestType.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.asReceivedToolStripMenuItem,
             this.fullChargeToolStripMenuItem,
@@ -1119,10 +1131,11 @@
             this.customCapToolStripMenuItem,
             this.toolStripMenuItem4,
             this.toolStripMenuItem44,
+            this.toolStripMenuItem47,
             this.toolStripSeparator7,
             this.clearToolStripMenuItem2});
             this.cMSTestType.Name = "cMSTestType";
-            this.cMSTestType.Size = new System.Drawing.Size(181, 346);
+            this.cMSTestType.Size = new System.Drawing.Size(181, 368);
             this.cMSTestType.Opening += new System.ComponentModel.CancelEventHandler(this.cMSTestType_Opening);
             this.cMSTestType.MouseEnter += new System.EventHandler(this.cMSTestType_MouseEnter);
             this.cMSTestType.MouseLeave += new System.EventHandler(this.cMSTestType_MouseLeave);
@@ -1230,6 +1243,13 @@
             this.toolStripMenuItem44.Text = "Combo: FC-6 Cap-1";
             this.toolStripMenuItem44.Click += new System.EventHandler(this.toolStripMenuItem44_Click);
             // 
+            // toolStripMenuItem47
+            // 
+            this.toolStripMenuItem47.Name = "toolStripMenuItem47";
+            this.toolStripMenuItem47.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem47.Text = "Combo: FC-4 Cap-1";
+            this.toolStripMenuItem47.Click += new System.EventHandler(this.toolStripMenuItem47_Click);
+            // 
             // toolStripSeparator7
             // 
             this.toolStripSeparator7.Name = "toolStripSeparator7";
@@ -1244,6 +1264,7 @@
             // 
             // cMSStartStop
             // 
+            this.cMSStartStop.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.cMSStartStop.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.startNewTestToolStripMenuItem,
             this.resumeTestToolStripMenuItem,
@@ -1283,6 +1304,7 @@
             // 
             // cMSChargerChannel
             // 
+            this.cMSChargerChannel.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.cMSChargerChannel.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.clearToolStripMenuItem,
             this.toolStripMenuItem5,
@@ -1434,6 +1456,7 @@
             // 
             // cMSChargerType
             // 
+            this.cMSChargerType.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.cMSChargerType.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.otherToolStripMenuItem,
             this.toolStripMenuItem23,
@@ -1500,6 +1523,7 @@
             // 
             // contextMenuStripGraphPrint
             // 
+            this.contextMenuStripGraphPrint.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.contextMenuStripGraphPrint.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.printToolStripMenuItem});
             this.contextMenuStripGraphPrint.Name = "contextMenuStripGraphPrint";
@@ -1515,6 +1539,7 @@
             // 
             // contextMenuStripTextPrint
             // 
+            this.contextMenuStripTextPrint.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.contextMenuStripTextPrint.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem25});
             this.contextMenuStripTextPrint.Name = "contextMenuStripGraphPrint";
@@ -1529,6 +1554,7 @@
             // 
             // contextMenuStripClear
             // 
+            this.contextMenuStripClear.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.contextMenuStripClear.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem26});
             this.contextMenuStripClear.Name = "contextMenuStripGraphPrint";
@@ -1543,6 +1569,7 @@
             // 
             // contextMenuStripGraphSelect
             // 
+            this.contextMenuStripGraphSelect.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.contextMenuStripGraphSelect.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.batteryToolStripMenuItem,
             this.cellsToolStripMenuItem});
@@ -1587,19 +1614,13 @@
             this.openFileDialog2.Filter = "JPG Files (*.jpg)|*.jpg";
             this.openFileDialog2.Title = "Select Logo File";
             // 
-            // resetTestSettingsToDefaultsToolStripMenuItem
-            // 
-            this.resetTestSettingsToDefaultsToolStripMenuItem.Name = "resetTestSettingsToDefaultsToolStripMenuItem";
-            this.resetTestSettingsToDefaultsToolStripMenuItem.Size = new System.Drawing.Size(345, 22);
-            this.resetTestSettingsToDefaultsToolStripMenuItem.Text = "Reset All Test Settings to Defaults";
-            this.resetTestSettingsToDefaultsToolStripMenuItem.Click += new System.EventHandler(this.resetTestSettingsToDefaultsToolStripMenuItem_Click);
-            // 
             // Main_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(1282, 762);
+            this.Controls.Add(this.label8);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
@@ -1610,7 +1631,7 @@
             this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
-            this.MinimumSize = new System.Drawing.Size(270, 500);
+            this.MinimumSize = new System.Drawing.Size(270, 498);
             this.Name = "Main_Form";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_Form_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Main_Form_FormClosed);
@@ -1806,6 +1827,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem46;
         private System.Windows.Forms.ToolStripMenuItem markAllOpenWorkOrdersAsClosedToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem resetTestSettingsToDefaultsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem47;
     }
 }
 
