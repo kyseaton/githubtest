@@ -1528,7 +1528,7 @@ namespace NewBTASProto
 
                         // pad with zero Vals to help with the look of the plot...
                         // first get the interval and total points
-                        int interval = 1;
+                        double interval = 1;
                         int points = 1;
 
                         switch (d.Rows[station][2].ToString())
@@ -1609,8 +1609,17 @@ namespace NewBTASProto
                                 break;
                             default:
                                 //custom cap and charge get the default...
-                                //Custom Chg
-                                //Custom Cap
+                                //Look it up!
+                                for (int i = 0; i < customTestParams.Rows.Count; i++)
+                                {
+                                    if (customTestParams.Rows[i][1].ToString() == d.Rows[station][2].ToString())
+                                    {
+                                        interval = ((int) customTestParams.Rows[i][4]) / 60.0;
+                                        points = (int)customTestParams.Rows[i][3];
+                                        break;
+                                    }
+                                }
+                                chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0.0";
                                 break;
                         }
 
@@ -1817,7 +1826,7 @@ namespace NewBTASProto
                         };
                         this.chart1.Series.Add(series1);
 
-                        int interval = 1;
+                        double interval = 1;
                         int points = 1;
 
                         if (q == 999)
@@ -1895,8 +1904,18 @@ namespace NewBTASProto
                                     break;
                                 default:
                                     //custom cap and charge get the default...
-                                    //Custom Chg
-                                    //Custom Cap
+                                    //Look it UP!
+                                    for (int i = 0; i < customTestParams.Rows.Count; i++)
+                                    {
+                                        if (customTestParams.Rows[i][1].ToString() == d.Rows[station][2].ToString())
+                                        {
+                                            interval = ((int)customTestParams.Rows[i][4]) / 60.0;
+                                            points = (int)customTestParams.Rows[i][3];
+                                            break;
+                                        }
+                                    }
+
+                                    chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0.0";
                                     break;
                             }
 

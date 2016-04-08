@@ -2720,7 +2720,7 @@ namespace NewBTASProto
                             updateD(station, 7, "Telling Charger to Stop");
                             if (MasterSlaveTest) { updateD(slaveRow, 7, "Telling Charger to Stop"); }
 
-                            for (int j = 0; j < 5; j++)
+                            for (int j = 0; j < 3; j++)
                             {
 
                                 // set KE1 to 2 ("command")
@@ -2731,13 +2731,8 @@ namespace NewBTASProto
                                 GlobalVars.ICSettings[Cstation].UpdateOutText();
                                 criticalNum[Cstation] = true;
                                 //now we are going to create a thread to set KE1 back to data mode after 15 seconds
-                                Thread.Sleep(5000);
-
-                                // set KE1 to 1 ("query")
-                                GlobalVars.ICSettings[Cstation].KE1 = (byte)0;
-                                //Update the output string value
-                                GlobalVars.ICSettings[Cstation].UpdateOutText();
-                                for (int i = 0; i < 5; i++)
+                                
+                                for (int i = 0; i < 7; i++)
                                 {
                                     criticalNum[Cstation] = true;
                                     Thread.Sleep(1000);
@@ -4498,7 +4493,7 @@ namespace NewBTASProto
                                     updateD(station, 7, "Telling Charger to Stop");
                                     if (MasterSlaveTest) { updateD(slaveRow, 7, "Telling Charger to Stop"); }
 
-                                    for (int j = 0; j < 5; j++)
+                                    for (int j = 0; j < 3; j++)
                                     {
                                         // set KE1 to 2 ("command")
                                         GlobalVars.ICSettings[Cstation].KE1 = (byte)2;
@@ -4507,7 +4502,7 @@ namespace NewBTASProto
                                         //Update the output string value
                                         GlobalVars.ICSettings[Cstation].UpdateOutText();
 
-                                        for (int i = 0; i < 15; i++)
+                                        for (int i = 0; i < 7; i++)
                                         {
                                             criticalNum[Cstation] = true;
                                             Thread.Sleep(1000);
@@ -4604,7 +4599,7 @@ namespace NewBTASProto
                         // now we need to stop the charger
                         updateD(station, 7, "Telling Charger to Stop");
                         if (MasterSlaveTest) { updateD(slaveRow, 7, "Telling Charger to Stop"); }
-                        for (int j = 0; j < 5; j++)
+                        for (int j = 0; j < 3; j++)
                         {
                             // set KE1 to 2 ("command")
                             GlobalVars.ICSettings[Cstation].KE1 = (byte)2;
@@ -4613,7 +4608,7 @@ namespace NewBTASProto
                             //Update the output string value
                             GlobalVars.ICSettings[Cstation].UpdateOutText();
 
-                            for (int i = 0; i < 15; i++)
+                            for (int i = 0; i < 7; i++)
                             {
                                 criticalNum[Cstation] = true;
                                 Thread.Sleep(1000);

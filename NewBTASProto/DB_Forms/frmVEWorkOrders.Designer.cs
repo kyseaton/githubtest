@@ -72,16 +72,17 @@
             this.label12 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
-            this.Notes = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TestName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.StepNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.StepNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TestName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Notes = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label3 = new System.Windows.Forms.Label();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.dateTimePicker2 = new System.Windows.Forms.DateTimePicker();
             this.button1 = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
+            this.button2 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingNavigator1)).BeginInit();
             this.bindingNavigator1.SuspendLayout();
@@ -498,29 +499,6 @@
             this.label14.TabIndex = 29;
             this.label14.Text = "Customer:  ";
             // 
-            // Notes
-            // 
-            this.Notes.DataPropertyName = "Notes";
-            this.Notes.HeaderText = "Notes";
-            this.Notes.Name = "Notes";
-            this.Notes.Width = 164;
-            // 
-            // TestName
-            // 
-            this.TestName.DataPropertyName = "TestName";
-            this.TestName.HeaderText = "Test Name";
-            this.TestName.Name = "TestName";
-            this.TestName.ReadOnly = true;
-            this.TestName.Width = 165;
-            // 
-            // StepNumber
-            // 
-            this.StepNumber.DataPropertyName = "StepNumber";
-            this.StepNumber.HeaderText = "Step Number";
-            this.StepNumber.Name = "StepNumber";
-            this.StepNumber.ReadOnly = true;
-            this.StepNumber.Width = 165;
-            // 
             // dataGridView1
             // 
             this.dataGridView1.AllowUserToAddRows = false;
@@ -541,6 +519,27 @@
             this.dataGridView1.TabIndex = 30;
             this.dataGridView1.TabStop = false;
             this.dataGridView1.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellDoubleClick);
+            // 
+            // StepNumber
+            // 
+            this.StepNumber.DataPropertyName = "StepNumber";
+            this.StepNumber.HeaderText = "Step Number";
+            this.StepNumber.Name = "StepNumber";
+            this.StepNumber.ReadOnly = true;
+            // 
+            // TestName
+            // 
+            this.TestName.DataPropertyName = "TestName";
+            this.TestName.HeaderText = "Test Name";
+            this.TestName.Name = "TestName";
+            this.TestName.ReadOnly = true;
+            // 
+            // Notes
+            // 
+            this.Notes.DataPropertyName = "Notes";
+            this.Notes.HeaderText = "Notes";
+            this.Notes.Name = "Notes";
+            this.Notes.Width = 295;
             // 
             // label3
             // 
@@ -596,11 +595,24 @@
             this.label4.Size = new System.Drawing.Size(1070, 2);
             this.label4.TabIndex = 33;
             // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(879, 417);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(94, 23);
+            this.button2.TabIndex = 34;
+            this.button2.TabStop = false;
+            this.button2.Text = "Save Notes";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Visible = false;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
             // frmVEWorkOrders
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1093, 447);
+            this.Controls.Add(this.button2);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.dateTimePicker2);
@@ -691,9 +703,6 @@
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Notes;
-        private System.Windows.Forms.DataGridViewTextBoxColumn TestName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn StepNumber;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox comboBox2;
@@ -704,5 +713,9 @@
         public System.Windows.Forms.ToolStripComboBox toolStripCBWorkOrderStatus;
         public System.Windows.Forms.ToolStripComboBox toolStripCBWorkOrders;
         public System.Windows.Forms.ToolStripButton bindingNavigatorAddNewItem;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn StepNumber;
+        private System.Windows.Forms.DataGridViewTextBoxColumn TestName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Notes;
     }
 }

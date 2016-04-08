@@ -38,7 +38,6 @@ namespace NewBTASProto
             InitializeComponent();
             LoadData();
             bindingNavigator1.BindingSource = bindingSource1;
-
             bindingNavigator1.CausesValidation = true;
 
             Inhibit = false;

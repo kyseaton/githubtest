@@ -176,6 +176,14 @@ namespace NewBTASProto
                                                         updateD(slaveRow, 11, testData.endStatus);
                                                     }
                                                 }
+                                                else if (testData.availabilityStatus != "Enabled")
+                                                {
+                                                    updateD(j, 11, testData.availabilityStatus);
+                                                    if (slaveRow > -1)
+                                                    {
+                                                        updateD(slaveRow, 11, testData.availabilityStatus);
+                                                    }
+                                                }
                                                 else 
                                                 { 
                                                     updateD(j, 11, testData.runStatus);
@@ -571,6 +579,14 @@ namespace NewBTASProto
                                                         if (slaveRow > -1)
                                                         {
                                                             updateD(slaveRow, 11, testData.endStatus);
+                                                        }
+                                                    }
+                                                    else if (testData.availabilityStatus != "Enabled")
+                                                    {
+                                                        updateD(station, 11, testData.availabilityStatus);
+                                                        if (slaveRow > -1)
+                                                        {
+                                                            updateD(slaveRow, 11, testData.availabilityStatus);
                                                         }
                                                     }
                                                     else 

@@ -190,7 +190,7 @@ namespace NewBTASProto
 
                 //test mode
 
-                switch (QS2 & 0xF0 >> 4)
+                switch ((byte) (QS2 & 0xF0) >> 4)
                 {
                     case 0:
                         availabilityStatus = "Enabled";
@@ -238,7 +238,7 @@ namespace NewBTASProto
                         availabilityStatus = "x14x";
                         break;
                     case 15:
-                        availabilityStatus = "x15x";
+                        availabilityStatus = "Neg. Slope";
                         break;
                 }   // end availabilityStatus Switch
 

@@ -1595,6 +1595,7 @@ namespace NewBTASProto
                         //custom cap and charge get the default...
                         //Custom Chg
                         //Custom Cap
+                        chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0.0";
                         break;
                 }
 
@@ -1837,6 +1838,7 @@ namespace NewBTASProto
                             //custom cap and charge get the default...
                             //Custom Chg
                             //Custom Cap
+                            chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0.0";
                             break;
                     }
 
@@ -2259,6 +2261,7 @@ namespace NewBTASProto
                         //custom cap and charge get the default...
                         //Custom Chg
                         //Custom Cap
+                        chart2.ChartAreas[0].AxisX.LabelStyle.Format = "0.0";
                         break;
                 }
 
@@ -2502,6 +2505,7 @@ namespace NewBTASProto
                             //custom cap and charge get the default...
                             //Custom Chg
                             //Custom Cap
+                            chart2.ChartAreas[0].AxisX.LabelStyle.Format = "0.0";
                             break;
                     }
 

@@ -258,6 +258,81 @@ namespace NewBTASProto
 
             toolStripComboBox1.ComboBox.Text = GlobalVars.currentTech;
 
+            //Now lets pull in our custom tests...
+            updateCustomTestDropDown();
+            
+                        
+        }
+
+        DataTable customTestParams;
+
+        public void updateCustomTestDropDown()
+        {
+            //Now lets pull in our custom tests...
+            DataSet customTests = new DataSet();
+
+            string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+            string strAccessSelect = @"SELECT * FROM TestType WHERE TESTNAME<>'Top Charge-4' AND TESTNAME<>'As Received' AND TESTNAME<>'Full Charge-4' AND TESTNAME<>'Full Charge-6' AND TESTNAME<>'Capacity-1' AND TESTNAME<>'Top Charge-2' AND TESTNAME<>'Discharge' AND TESTNAME<>'Slow Charge-14' AND TESTNAME<>'Top Charge-1' AND TESTNAME<>'Slow Charge-16' AND TESTNAME<>'Constant Voltage' ORDER BY TESTNAME ASC";
+
+            OleDbConnection myAccessConn;
+            // try to open the DB
+            try
+            {
+                myAccessConn = new OleDbConnection(strAccessConn);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, "Error: Failed to create a database connection. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            //  now try to access it
+            try
+            {
+                OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                lock (Main_Form.dataBaseLock)
+                {
+                    myAccessConn.Open();
+                    myDataAdapter.Fill(customTests);
+                    myAccessConn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            finally
+            {
+
+            }
+
+            customTestParams = customTests.Tables[0];
+
+            List<string> CustomTests = customTests.Tables[0].AsEnumerable().Select(x => x[1].ToString()).Distinct().ToList();
+            CustomTests.Sort();
+
+            toolStripComboBox4.Items.Clear();
+
+            if (CustomTests.Count == 0)
+            {
+                toolStripComboBox4.Visible = false;
+                toolStripSeparator8.Visible = false;
+            }
+            else
+            {
+                foreach (string x in CustomTests)
+                {
+                    if (x != "Custom Cap" && x != "Custom Chg")
+                    {
+                        toolStripComboBox4.Items.Add(x);
+                    }
+                }
+
+                toolStripComboBox4.Visible = true;
+                toolStripSeparator8.Visible = true;
+            }
         }
 
 
@@ -4341,6 +4416,39 @@ namespace NewBTASProto
                 }
 
             });
+        }
+
+        private void statusStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
+        }
+
+        private void toolStripComboBox4_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            updateD(dataGridView1.CurrentRow.Index, 2, toolStripComboBox4.Text);
+            updateD(dataGridView1.CurrentRow.Index, 3, "");
+            updateD(dataGridView1.CurrentRow.Index, 6, "");
+            updateD(dataGridView1.CurrentRow.Index, 7, "");
+            fillPlotCombos(dataGridView1.CurrentRow.Index);
+
+            // also update the slave (if we have a master...)
+            if (d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Contains("M"))
+            {
+                //find the slave
+                string temp = d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Replace("-M", "");
+                for (int i = 0; i < 16; i++)
+                {
+                    if (d.Rows[i][9].ToString().Contains(temp) && d.Rows[i][9].ToString().Contains("S"))
+                    {
+                        updateD(i, 2, toolStripComboBox4.Text);
+                        updateD(i, 3, "");
+                        updateD(i, 6, "");
+                        updateD(i, 7, "");
+                    }
+                }
+            }
+
+            cMSTestType.Close();
         }
 
 

@@ -1067,8 +1067,6 @@ namespace NewBTASProto
 
                     if (current["WorkOrderID"].ToString() != "")
                     {
-                        //record already exist as we need to do an update
-
                         // first delete the tests and scandata!
                         string cmdStr = "DELETE FROM Tests WHERE WorkOrderNumber='" + current["WorkOrderNumber"].ToString() + "'";
                         OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
@@ -1196,6 +1194,7 @@ namespace NewBTASProto
                 saveToolStripButton.Enabled = true;
                 bindingNavigatorDeleteItem.Enabled = true;
                 bindingNavigatorAddNewItem.Enabled = true;
+                button2.Visible = false;
 
             }
             else if (comboBox2.Text == "Active")
@@ -1217,6 +1216,7 @@ namespace NewBTASProto
                 saveToolStripButton.Enabled = false;
                 bindingNavigatorDeleteItem.Enabled = false;
                 bindingNavigatorAddNewItem.Enabled = false;
+                button2.Visible = true;
             }
             else
             {
@@ -1237,6 +1237,7 @@ namespace NewBTASProto
                 saveToolStripButton.Enabled = true;
                 bindingNavigatorDeleteItem.Enabled = true;
                 bindingNavigatorAddNewItem.Enabled = true;
+                button2.Visible = false;
 
             }
 
@@ -1724,6 +1725,57 @@ namespace NewBTASProto
                 });
 
 
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            //now we are going to save the notes on the test page...
+            //first test to see if we have any tests before continuing
+            try
+            {
+                // set up the db Connection
+                string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                OleDbConnection conn = new OleDbConnection(connectionString);
+                
+                if (testList.Tables[0].Rows.Count < 1) return;
+                else
+                {
+                    dataGridView1.EndEdit();
+                    for (int i = 0; i < testList.Tables[0].Rows.Count; i++)
+                    {
+                        if (dataGridView1.Rows[i].Cells[2].Value.ToString().Replace("'", "''") != "")
+                        {
+                            string cmdStr = "UPDATE Tests SET Notes='" + dataGridView1.Rows[i].Cells[2].Value.ToString().Replace("'", "''") +
+                                "' WHERE WorkOrderNumber='" + textBox1.Text.Replace("'", "''") + "' AND StepNumber='" + dataGridView1.Rows[i].Cells[0].Value.ToString() + "'";
+                            OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
+                            lock (Main_Form.dataBaseLock)
+                            {
+                                conn.Open();
+                                cmd.ExecuteNonQuery();
+                                conn.Close();
+                            }
+                        }
+                        else
+                        {
+                            string cmdStr = "UPDATE Tests SET Notes= Null WHERE WorkOrderNumber='" + textBox1.Text.Replace("'", "''") + "' AND StepNumber='" + dataGridView1.Rows[i].Cells[0].Value.ToString() + "'";
+                            OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
+                            lock (Main_Form.dataBaseLock)
+                            {
+                                conn.Open();
+                                cmd.ExecuteNonQuery();
+                                conn.Close();
+                            }
+                        }
+
+                    }
+                }
+
+                MessageBox.Show(this, "Notes Saved","Success!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(this, "Note Saving Error" + ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
