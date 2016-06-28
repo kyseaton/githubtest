@@ -1214,6 +1214,7 @@ namespace NewBTASProto
                     series1.Points[3].Color = pointColorMain(station, testData.VB4, false);
                     series1.Points[3].Label = "VB4";
 
+
                     chart1.Titles.Clear();
                     chart1.Titles.Add("Current Voltages");
                     chart1.Invalidate();
@@ -1236,6 +1237,7 @@ namespace NewBTASProto
                     {
                         chart1.ChartAreas[0].AxisY.Maximum = Double.NaN;
                     }
+                    chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
 
                 }
                 //special 2 batt case
@@ -1287,6 +1289,7 @@ namespace NewBTASProto
                     {
                         chart1.ChartAreas[0].AxisY.Maximum = Double.NaN;
                     }
+                    chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
 
                 }
                 //Normal Cell Voltage Only Case:
@@ -1307,6 +1310,8 @@ namespace NewBTASProto
                     this.chart1.Series.Add(series1);
                     chart1.ChartAreas[0].AxisX.Title = "Cells";
                     chart1.ChartAreas[0].AxisY.Title = "Voltage";
+
+                    chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
 
                     //special cable cases first...
                     if (GlobalVars.CScanData[station].CCID == 3)
@@ -1536,6 +1541,7 @@ namespace NewBTASProto
                             case "As Received":
                                 interval = 1 / 30;
                                 points = 3;
+                                chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                                 break;
                             case "Combo: FC-6 Cap-1":
                                 if (d.Rows[station][7].ToString() == "Complete")
@@ -1548,6 +1554,7 @@ namespace NewBTASProto
                                     interval = 5;
                                     points = 73;
                                 }
+                                chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                                 break;
                             case "Combo: FC-4 Cap-1":
                                 if (d.Rows[station][7].ToString() == "Complete")
@@ -1560,52 +1567,63 @@ namespace NewBTASProto
                                     interval = 5;
                                     points = 73;
                                 }
+                                chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                                 break;
                             case "Full Charge-6":
                             case "Combo: >>FC-6<<  Cap-1":
                             case "Combo: FC-6 >><< Cap-1":
                                 interval = 5;
                                 points = 73;
+                                chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                                 break;
                             case "Full Charge-4":
                             case "Combo: >>FC-4<<  Cap-1":
                             case "Combo: FC-4 >><< Cap-1":
                                 interval = 4;
                                 points = 61;
+                                chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                                 break;
                             case "Top Charge-4":
                                 interval = 4;
                                 points = 61;
+                                chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                                 break;
                             case "Top Charge-2":
                                 interval = 3;
                                 points = 41;
+                                chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                                 break;
                             case "Top Charge-1":
                                 interval = 1;
                                 points = 61;
+                                chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                                 break;
                             case "Constant Voltage":
                                 interval = 5;
                                 points = 73;
+                                chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                                 break;
                             case "Capacity-1":
                             case "Combo: FC-6  >>Cap-1<<":
                             case "Combo: FC-4  >>Cap-1<<":
                                 interval = 1;
                                 points = 61;
+                                chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                                 break;
                             case "Discharge":
                                 interval = 1;
                                 points = 61;
+                                chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                                 break;
                             case "Slow Charge-14":
                                 interval = 12;
                                 points = 73;
+                                chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                                 break;
                             case "Slow Charge-16":
                                 interval = 16;
                                 points = 61;
+                                chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                                 break;
                             default:
                                 //custom cap and charge get the default...
@@ -1855,52 +1873,63 @@ namespace NewBTASProto
                                 case "As Received":
                                     interval = 1 / 30;
                                     points = 3;
+                                    chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                                     break;
                                 case "Full Charge-6":
                                 case "Combo: >>FC-6<<  Cap-1":
                                 case "Combo: FC-6 >><< Cap-1":
                                     interval = 5;
                                     points = 73;
+                                    chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                                     break;
                                 case "Full Charge-4":
                                 case "Combo: >>FC-4<<  Cap-1":
                                 case "Combo: FC-4 >><< Cap-1":
                                     interval = 4;
                                     points = 61;
+                                    chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                                     break;
                                 case "Top Charge-4":
                                     interval = 4;
                                     points = 61;
+                                    chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                                     break;
                                 case "Top Charge-2":
                                     interval = 3;
                                     points = 41;
+                                    chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                                     break;
                                 case "Top Charge-1":
                                     interval = 1;
                                     points = 61;
+                                    chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                                     break;
                                 case "Constant Voltage":
                                     interval = 5;
                                     points = 73;
+                                    chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                                     break;
                                 case "Capacity-1":
                                 case "Combo: FC-6  >>Cap-1<<":
                                 case "Combo: FC-4  >>Cap-1<<":
                                     interval = 1;
                                     points = 61;
+                                    chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                                     break;
                                 case "Discharge":
                                     interval = 1;
                                     points = 61;
+                                    chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                                     break;
                                 case "Slow Charge-14":
                                     interval = 12;
                                     points = 73;
+                                    chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                                     break;
                                 case "Slow Charge-16":
                                     interval = 16;
                                     points = 61;
+                                    chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                                     break;
                                 default:
                                     //custom cap and charge get the default...

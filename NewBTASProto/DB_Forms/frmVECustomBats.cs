@@ -177,6 +177,14 @@ namespace NewBTASProto
         decimal curTemp114;
         decimal curTemp115;
 
+        string curTemp116;
+
+        decimal curTemp117;
+        decimal curTemp118;
+        decimal curTemp119;
+        decimal curTemp120;
+        decimal curTemp121;
+
         public frmVECustomBats()
         {
             InitializeComponent();
@@ -372,6 +380,16 @@ namespace NewBTASProto
             numericUpDown82.DataBindings.Add("Text", bindingSource1, "T12Time2Min");
             numericUpDown81.DataBindings.Add("Text", bindingSource1, "T12Curr2");
             numericUpDown80.DataBindings.Add("Text", bindingSource1, "T12Volts2");
+            // Full Charge-4.5 Bindings ("T13Mode, T13Time1Hr, T13Time1Min, T13Curr1, T13Volts1, T13Time2Hr, T13Time2Min, T13Curr2, T13Volts2, T13Ohms")
+            //comboBox14.DataBindings.Add("Text", bindingSource1, "T13Mode");
+            //numericUpDown98.DataBindings.Add("Text", bindingSource1, "T13Time1Hr");
+            numericUpDown97.DataBindings.Add("Text", bindingSource1, "T13Time1Min");
+            numericUpDown96.DataBindings.Add("Text", bindingSource1, "T13Curr1");
+            numericUpDown95.DataBindings.Add("Text", bindingSource1, "T13Volts1");
+            //numericUpDown94.DataBindings.Add("Text", bindingSource1, "T13Time2Hr");
+            numericUpDown93.DataBindings.Add("Text", bindingSource1, "T13Time2Min");
+            numericUpDown92.DataBindings.Add("Text", bindingSource1, "T13Curr2");
+            numericUpDown91.DataBindings.Add("Text", bindingSource1, "T13Volts2");
 
             
 
@@ -676,6 +694,13 @@ namespace NewBTASProto
             curTemp113 = numericUpDown53.Value;
             curTemp114 = numericUpDown52.Value;
             curTemp115 = numericUpDown51.Value;
+
+            curTemp116 = comboBox14.Text;
+
+            curTemp117 = numericUpDown96.Value;
+            curTemp118 = numericUpDown95.Value;
+            curTemp119 = numericUpDown92.Value;
+            curTemp120 = numericUpDown91.Value;
         }
         
 
@@ -925,6 +950,13 @@ namespace NewBTASProto
                 decimal temp113 = numericUpDown53.Value;
                 decimal temp114 = numericUpDown52.Value;
                 decimal temp115 = numericUpDown51.Value;
+
+                string temp116 = comboBox14.Text;
+
+                decimal temp117 = numericUpDown96.Value;
+                decimal temp118 = numericUpDown95.Value;
+                decimal temp119 = numericUpDown92.Value;
+                decimal temp120 = numericUpDown91.Value;
                 
                 bindingNavigator1.BindingSource.AddNew();
                 bindingNavigator1.BindingSource.Position = 0;
@@ -1243,6 +1275,16 @@ namespace NewBTASProto
                         "', T12Time2Min='" + numericUpDown82.Text.Replace("'", "''") +
                         "', T12Curr2='" + numericUpDown81.Text.Replace("'", "''") +
                         "', T12Volts2='" + numericUpDown80.Text.Replace("'", "''") +
+                        // Full Charge-4.5 ("T13Mode, T13Time1Hr, T13Time1Min, T13Curr1, T13Volts1, T13Time2Hr, T13Time2Min, T13Curr2, T13Volts2, T13Ohms")
+                        "', T13Mode='" + comboBox14.Text.Replace("'", "''") +
+                        "', T13Time1Hr='" + numericUpDown98.Text.Replace("'", "''") +
+                        "', T13Time1Min='" + numericUpDown97.Text.Replace("'", "''") +
+                        "', T13Curr1='" + numericUpDown96.Text.Replace("'", "''") +
+                        "', T13Volts1='" + numericUpDown95.Text.Replace("'", "''") +
+                        "', T13Time2Hr='" + numericUpDown94.Text.Replace("'", "''") +
+                        "', T13Time2Min='" + numericUpDown93.Text.Replace("'", "''") +
+                        "', T13Curr2='" + numericUpDown92.Text.Replace("'", "''") +
+                        "', T13Volts2='" + numericUpDown91.Text.Replace("'", "''") +
                         // finished with inputs!
                         "' WHERE RecordID=" + current["RecordID"].ToString();
                     OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
@@ -1320,7 +1362,8 @@ namespace NewBTASProto
                        "[T9Mode], T9Time1Hr, T9Time1Min, T9Curr1, T9Volts1, T9Time2Hr, T9Time2Min, T9Curr2, T9Volts2, " +
                        "[T10Mode], T10Time1Hr, T10Time1Min, T10Curr1, T10Volts1, T10Time2Hr, T10Time2Min, T10Curr2, T10Volts2, " +
                        "[T11Mode], T11Time1Hr, T11Time1Min, T11Curr1, T11Volts1, T11Ohms, " +
-                       "[T12Mode], T12Time1Hr, T12Time1Min, T12Curr1, T12Volts1, T12Time2Hr, T12Time2Min, T12Curr2, T12Volts2) " +
+                       "[T12Mode], T12Time1Hr, T12Time1Min, T12Curr1, T12Volts1, T12Time2Hr, T12Time2Min, T12Curr2, T12Volts2, " +
+                       "[T13Mode], T13Time1Hr, T13Time1Min, T13Curr1, T13Volts1, T13Time2Hr, T13Time2Min, T13Curr2, T13Volts2) " +
                         "VALUES (" + (max + 1).ToString() + ",'" +
                         textBox1.Text.Replace("'", "''") + "','" +
                         textBox2.Text.Replace("'", "''") + "','" +
@@ -1437,7 +1480,7 @@ namespace NewBTASProto
                         numericUpDown53.Text.Replace("'", "''") + "','" +
                         numericUpDown52.Text.Replace("'", "''") + "','" +
                         numericUpDown51.Text.Replace("'", "''") + "','" +
-                        // Custom Chg ("T12Mode, T12Time1Hr, T12Time1Min, T12Curr1, T12Volts1, T12Time2Hr, T12Time2Min, T12Curr2, T12Volts2, T12Ohms")
+                        // Constant Voltage ("T12Mode, T12Time1Hr, T12Time1Min, T12Curr1, T12Volts1, T12Time2Hr, T12Time2Min, T12Curr2, T12Volts2, T12Ohms")
                         comboBox12.Text.Replace("'", "''") + "','" +
                         numericUpDown87.Text.Replace("'", "''") + "','" +
                         numericUpDown86.Text.Replace("'", "''") + "','" +
@@ -1446,7 +1489,17 @@ namespace NewBTASProto
                         numericUpDown83.Text.Replace("'", "''") + "','" +
                         numericUpDown82.Text.Replace("'", "''") + "','" +
                         numericUpDown81.Text.Replace("'", "''") + "','" +
-                        numericUpDown80.Text.Replace("'", "''")
+                        numericUpDown80.Text.Replace("'", "''") + "','" +
+                        // Constant Voltage ("T13Mode, T13Time1Hr, T13Time1Min, T13Curr1, T13Volts1, T13Time2Hr, T13Time2Min, T13Curr2, T13Volts2, T13Ohms")
+                        comboBox14.Text.Replace("'", "''") + "','" +
+                        numericUpDown98.Text.Replace("'", "''") + "','" +
+                        numericUpDown97.Text.Replace("'", "''") + "','" +
+                        numericUpDown96.Text.Replace("'", "''") + "','" +
+                        numericUpDown95.Text.Replace("'", "''") + "','" +
+                        numericUpDown94.Text.Replace("'", "''") + "','" +
+                        numericUpDown93.Text.Replace("'", "''") + "','" +
+                        numericUpDown92.Text.Replace("'", "''") + "','" +
+                        numericUpDown91.Text.Replace("'", "''")
                         // finished with inputs!
                         + "')";
 
@@ -2098,7 +2151,14 @@ namespace NewBTASProto
                 numericUpDown54.Value != curTemp112 ||
                 numericUpDown53.Value != curTemp113 ||
                 numericUpDown52.Value != curTemp114 ||
-                numericUpDown51.Value != curTemp115)
+                numericUpDown51.Value != curTemp115 ||
+                
+                curTemp116 != comboBox14.Text ||
+
+                curTemp117 != numericUpDown96.Value ||
+                curTemp118 != numericUpDown95.Value ||
+                curTemp119 != numericUpDown92.Value ||
+                curTemp120 != numericUpDown91.Value)
             {
                 // they don't match!
                 // ask if the user is sure that they want to continue...

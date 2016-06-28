@@ -156,9 +156,14 @@ namespace NewBTASProto
                     cellCableType = "22 CELLS";
                     cellsToDisplay = 22;
                     break;
+                case 9:
                 case 11:
                     cellCableType = "2 BATT";
                     cellsToDisplay = 0;
+                    break;
+                case 23:
+                    cellCableType = "AUTO SHORT";
+                    cellsToDisplay = 24;
                     break;
                 default:
                     cellCableType = "Unknown Cable";

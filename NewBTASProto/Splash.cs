@@ -28,7 +28,7 @@ namespace NewBTASProto
             "8303121362",                       // Benson Wong / Raymond Fung @ Topcast Hong Kong
             "5735222138",                       // Air New Zealand / Greg Donaldson
             
-            "2995964807",
+            "2995964807",                       // Lufthansa Technik Malta
             "7121966571",
             "2625219448",
             "9185399390",
@@ -266,12 +266,12 @@ namespace NewBTASProto
                 using (FileStream fs = new FileStream(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\noteSet.xml", FileMode.Open))
                 {
                     // This will read the XML from the file and create the new instance
-                    // of CustomerData
+                    // of settings
                     settings = xs.Deserialize(fs) as NoteSet;
                 }
 
                 // If the customer data was successfully deserialized we can transfer
-                // the data from the instance to the form.
+                // the data from the to global vars.
                 if (settings != null)
                 {
                     GlobalVars.server = settings.server;
@@ -517,7 +517,7 @@ namespace NewBTASProto
                 if (ex is OleDbException)
                 {
                     // we didn't find the table, so we need to create it!
-                    // we need to insert
+                    // we need to  insert
                     string strUpdateCMD = "ALTER TABLE WaterLevel ADD AVE Number";
                     OleDbCommand myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
                     myAccessCommand.ExecuteNonQuery();
@@ -529,8 +529,76 @@ namespace NewBTASProto
                     MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+
+            //  open the db and check to see if we have the 4.5 hours settings in the DB
+            try
+            {
+                strAccessSelect = @"SELECT T13Mode FROM BatteriesCustom";
+                DataSet test = new DataSet();
+                OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                myAccessConn.Open();
+                myDataAdapter.Fill(test, "test");
+                myAccessConn.Close();
+
+            }
+            catch (Exception ex)
+            {
+
+                if (ex is OleDbException)
+                {
+                    // we didn't find the table, so we need to create it!
+                    // we need to  insert
+                    string strUpdateCMD = "ALTER TABLE BatteriesCustom ADD T13Mode Text(255), T13Time1Hr Text(255), T13Time1Min Text(255), T13Curr1 Text(255), T13Volts1 Text(255), T13Time2Hr Text(255), T13Time2Min Text(255), T13Curr2 Text(255), T13Volts2 Text(255), T13Ohms Text(255)";
+                    OleDbCommand myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
+                    myAccessCommand.ExecuteNonQuery();
+                    myAccessConn.Close();
+
+                }
+                else
+                {
+                    myAccessConn.Close();
+                    MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+
+            //  open the db and check to see if we have the 4.5 hours test settings in the DB
+            try
+            {
+                strAccessSelect = @"SELECT * FROM TestType WHERE TESTNAME = 'Full Charge-4.5'";
+                DataSet test = new DataSet();
+                OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                myAccessConn.Open();
+                myDataAdapter.Fill(test, "test");
+                myAccessConn.Close();
+
+                // access for 0 to test if anything is there...
+                if (test.Tables[0].Rows.Count < 1)
+                {
+                    // we didn't find full charge 4.5 in the table, so we need to add it!
+                    // we need to  insert
+                    string strUpdateCMD = "INSERT INTO TestType ([TESTNAME], Readings, [Interval]) VALUES ('Full Charge-4.5', 55, 300)" ;
+                    myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
+                    myAccessConn.Open();
+                    myAccessCommand.ExecuteNonQuery();
+                    myAccessConn.Close();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                
+                myAccessConn.Close();
+                MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                
+            }
             
         }
+
+
 
 
     }

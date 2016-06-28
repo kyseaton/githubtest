@@ -190,7 +190,8 @@ namespace NewBTASProto
                         textBox1.Text == "Slow Charge-16" ||
                         textBox1.Text == "Constant Voltage" ||
                         textBox1.Text == "Custom Chg" ||
-                        textBox1.Text == "Custom Cap")
+                        textBox1.Text == "Custom Cap" ||
+                        textBox1.Text == "Full Charge-4.5")
                     {
                         MessageBox.Show(this, "That test name is protected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                         return;

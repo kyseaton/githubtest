@@ -272,7 +272,7 @@ namespace NewBTASProto
             DataSet customTests = new DataSet();
 
             string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
-            string strAccessSelect = @"SELECT * FROM TestType WHERE TESTNAME<>'Top Charge-4' AND TESTNAME<>'As Received' AND TESTNAME<>'Full Charge-4' AND TESTNAME<>'Full Charge-6' AND TESTNAME<>'Capacity-1' AND TESTNAME<>'Top Charge-2' AND TESTNAME<>'Discharge' AND TESTNAME<>'Slow Charge-14' AND TESTNAME<>'Top Charge-1' AND TESTNAME<>'Slow Charge-16' AND TESTNAME<>'Constant Voltage' ORDER BY TESTNAME ASC";
+            string strAccessSelect = @"SELECT * FROM TestType WHERE TESTNAME<>'Top Charge-4' AND TESTNAME<>'As Received' AND TESTNAME<>'Full Charge-4' AND TESTNAME<>'Full Charge-6' AND TESTNAME<>'Capacity-1' AND TESTNAME<>'Top Charge-2' AND TESTNAME<>'Discharge' AND TESTNAME<>'Slow Charge-14' AND TESTNAME<>'Top Charge-1' AND TESTNAME<>'Slow Charge-16' AND TESTNAME<>'Constant Voltage' AND TESTNAME<>'Full Charge-4.5' ORDER BY TESTNAME ASC";
 
             OleDbConnection myAccessConn;
             // try to open the DB
@@ -315,7 +315,7 @@ namespace NewBTASProto
 
             toolStripComboBox4.Items.Clear();
 
-            if (CustomTests.Count == 0)
+            if (CustomTests.Count == 2)
             {
                 toolStripComboBox4.Visible = false;
                 toolStripSeparator8.Visible = false;
@@ -3293,7 +3293,8 @@ namespace NewBTASProto
                             ", T9Mode Text(255), T9Time1Hr Text(255), T9Time1Min Text(255), T9Curr1 Text(255), T9Volts1 Text(255), T9Time2Hr Text(255), T9Time2Min Text(255), T9Curr2 Text(255), T9Volts2 Text(255), T9Ohms Text(255)" +
                             ", T10Mode Text(255), T10Time1Hr Text(255), T10Time1Min Text(255), T10Curr1 Text(255), T10Volts1 Text(255), T10Time2Hr Text(255), T10Time2Min Text(255), T10Curr2 Text(255), T10Volts2 Text(255), T10Ohms Text(255)" +
                             ", T11Mode Text(255), T11Time1Hr Text(255), T11Time1Min Text(255), T11Curr1 Text(255), T11Volts1 Text(255), T11Time2Hr Text(255), T11Time2Min Text(255), T11Curr2 Text(255), T11Volts2 Text(255), T11Ohms Text(255)" +
-                            ", T12Mode Text(255), T12Time1Hr Text(255), T12Time1Min Text(255), T12Curr1 Text(255), T12Volts1 Text(255), T12Time2Hr Text(255), T12Time2Min Text(255), T12Curr2 Text(255), T12Volts2 Text(255), T12Ohms Text(255)";
+                            ", T12Mode Text(255), T12Time1Hr Text(255), T12Time1Min Text(255), T12Curr1 Text(255), T12Volts1 Text(255), T12Time2Hr Text(255), T12Time2Min Text(255), T12Curr2 Text(255), T12Volts2 Text(255), T12Ohms Text(255)" +
+                            ", T13Mode Text(255), T13Time1Hr Text(255), T13Time1Min Text(255), T13Curr1 Text(255), T13Volts1 Text(255), T13Time2Hr Text(255), T13Time2Min Text(255), T13Curr2 Text(255), T13Volts2 Text(255), T13Ohms Text(255)";
                         cmd = new OleDbCommand(cmdStr, conn);
                         conn.Open();
                         cmd.ExecuteNonQuery();
@@ -4335,6 +4336,16 @@ namespace NewBTASProto
                         myAccessConn.Close();
                     }
 
+                    cmdStr = "UPDATE TestType SET Readings='55', [Interval]='300' WHERE TESTNAME='Full Charge-4.5';";
+                    cmd = new OleDbCommand(cmdStr, myAccessConn);
+
+                    lock (dataBaseLock)
+                    {
+                        myAccessConn.Open();
+                        cmd.ExecuteNonQuery();
+                        myAccessConn.Close();
+                    }
+
                     MessageBox.Show(this, "All test settings reset to defaults.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
             }
@@ -4449,6 +4460,34 @@ namespace NewBTASProto
             }
 
             cMSTestType.Close();
+        }
+
+        private void toolStripMenuItem48_Click(object sender, EventArgs e)
+        {
+
+            updateD(dataGridView1.CurrentRow.Index, 2, "Full Charge-4.5");
+            updateD(dataGridView1.CurrentRow.Index, 3, "");
+            updateD(dataGridView1.CurrentRow.Index, 6, "");
+            updateD(dataGridView1.CurrentRow.Index, 7, "");
+            fillPlotCombos(dataGridView1.CurrentRow.Index);
+
+            // also update the slave (if we have a master...)
+            if (d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Contains("M"))
+            {
+                //find the slave
+                string temp = d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Replace("-M", "");
+                for (int i = 0; i < 16; i++)
+                {
+                    if (d.Rows[i][9].ToString().Contains(temp) && d.Rows[i][9].ToString().Contains("S"))
+                    {
+                        updateD(i, 2, "Full Charge-4.5");
+                        updateD(i, 3, "");
+                        updateD(i, 6, "");
+                        updateD(i, 7, "");
+                    }
+                }
+
+            }
         }
 
 

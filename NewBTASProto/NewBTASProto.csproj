@@ -24,7 +24,7 @@
     <MapFileExtensions>true</MapFileExtensions>
     <UpdateUrl>http://www.jfmeng.com/BTAS16_update/final_release/</UpdateUrl>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>130</ApplicationRevision>
+    <ApplicationRevision>134</ApplicationRevision>
     <ApplicationVersion>6.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -50,10 +50,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>2B1D280189EAA0BB536349B2CABA108726D9BF3A</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>AEF007AF9D8C6EF534B7ABD764BDB48B5FC98582</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>NewBTASProto_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>NewBTASProto_1_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
@@ -397,6 +397,7 @@
     <None Include="DataSet1.xss">
       <DependentUpon>DataSet1.xsd</DependentUpon>
     </None>
+    <None Include="NewBTASProto_1_TemporaryKey.pfx" />
     <None Include="NewBTASProto_TemporaryKey.pfx" />
     <None Include="Properties\PT_Sans-Narrow-Web-Regular.ttf" />
     <None Include="Properties\Settings.settings">

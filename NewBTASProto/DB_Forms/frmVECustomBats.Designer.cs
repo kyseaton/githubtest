@@ -127,6 +127,31 @@
             this.label23 = new System.Windows.Forms.Label();
             this.label24 = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.tabPage13 = new System.Windows.Forms.TabPage();
+            this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.numericUpDown91 = new System.Windows.Forms.NumericUpDown();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.numericUpDown92 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown93 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown94 = new System.Windows.Forms.NumericUpDown();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label31 = new System.Windows.Forms.Label();
+            this.label34 = new System.Windows.Forms.Label();
+            this.label36 = new System.Windows.Forms.Label();
+            this.groupBox10 = new System.Windows.Forms.GroupBox();
+            this.numericUpDown95 = new System.Windows.Forms.NumericUpDown();
+            this.label166 = new System.Windows.Forms.Label();
+            this.label167 = new System.Windows.Forms.Label();
+            this.numericUpDown96 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown97 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown98 = new System.Windows.Forms.NumericUpDown();
+            this.label168 = new System.Windows.Forms.Label();
+            this.label169 = new System.Windows.Forms.Label();
+            this.label170 = new System.Windows.Forms.Label();
+            this.label171 = new System.Windows.Forms.Label();
+            this.label172 = new System.Windows.Forms.Label();
+            this.comboBox14 = new System.Windows.Forms.ComboBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.numericUpDown17 = new System.Windows.Forms.NumericUpDown();
@@ -202,31 +227,6 @@
             this.label85 = new System.Windows.Forms.Label();
             this.label86 = new System.Windows.Forms.Label();
             this.comboBox5 = new System.Windows.Forms.ComboBox();
-            this.tabPage12 = new System.Windows.Forms.TabPage();
-            this.groupBox26 = new System.Windows.Forms.GroupBox();
-            this.numericUpDown80 = new System.Windows.Forms.NumericUpDown();
-            this.label153 = new System.Windows.Forms.Label();
-            this.label154 = new System.Windows.Forms.Label();
-            this.numericUpDown81 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown82 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown83 = new System.Windows.Forms.NumericUpDown();
-            this.label155 = new System.Windows.Forms.Label();
-            this.label156 = new System.Windows.Forms.Label();
-            this.label157 = new System.Windows.Forms.Label();
-            this.label158 = new System.Windows.Forms.Label();
-            this.groupBox27 = new System.Windows.Forms.GroupBox();
-            this.numericUpDown84 = new System.Windows.Forms.NumericUpDown();
-            this.label159 = new System.Windows.Forms.Label();
-            this.label160 = new System.Windows.Forms.Label();
-            this.numericUpDown85 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown86 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown87 = new System.Windows.Forms.NumericUpDown();
-            this.label161 = new System.Windows.Forms.Label();
-            this.label162 = new System.Windows.Forms.Label();
-            this.label163 = new System.Windows.Forms.Label();
-            this.label164 = new System.Windows.Forms.Label();
-            this.label165 = new System.Windows.Forms.Label();
-            this.comboBox12 = new System.Windows.Forms.ComboBox();
             this.tabPage6 = new System.Windows.Forms.TabPage();
             this.groupBox17 = new System.Windows.Forms.GroupBox();
             this.numericUpDown41 = new System.Windows.Forms.NumericUpDown();
@@ -311,6 +311,31 @@
             this.label138 = new System.Windows.Forms.Label();
             this.label139 = new System.Windows.Forms.Label();
             this.comboBox10 = new System.Windows.Forms.ComboBox();
+            this.tabPage12 = new System.Windows.Forms.TabPage();
+            this.groupBox26 = new System.Windows.Forms.GroupBox();
+            this.numericUpDown80 = new System.Windows.Forms.NumericUpDown();
+            this.label153 = new System.Windows.Forms.Label();
+            this.label154 = new System.Windows.Forms.Label();
+            this.numericUpDown81 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown82 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown83 = new System.Windows.Forms.NumericUpDown();
+            this.label155 = new System.Windows.Forms.Label();
+            this.label156 = new System.Windows.Forms.Label();
+            this.label157 = new System.Windows.Forms.Label();
+            this.label158 = new System.Windows.Forms.Label();
+            this.groupBox27 = new System.Windows.Forms.GroupBox();
+            this.numericUpDown84 = new System.Windows.Forms.NumericUpDown();
+            this.label159 = new System.Windows.Forms.Label();
+            this.label160 = new System.Windows.Forms.Label();
+            this.numericUpDown85 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown86 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown87 = new System.Windows.Forms.NumericUpDown();
+            this.label161 = new System.Windows.Forms.Label();
+            this.label162 = new System.Windows.Forms.Label();
+            this.label163 = new System.Windows.Forms.Label();
+            this.label164 = new System.Windows.Forms.Label();
+            this.label165 = new System.Windows.Forms.Label();
+            this.comboBox12 = new System.Windows.Forms.ComboBox();
             this.tabPage10 = new System.Windows.Forms.TabPage();
             this.groupBox24 = new System.Windows.Forms.GroupBox();
             this.numericUpDown72 = new System.Windows.Forms.NumericUpDown();
@@ -386,6 +411,17 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown14)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown15)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown16)).BeginInit();
+            this.tabPage13.SuspendLayout();
+            this.groupBox9.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown91)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown92)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown93)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown94)).BeginInit();
+            this.groupBox10.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown95)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown96)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown97)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown98)).BeginInit();
             this.tabPage3.SuspendLayout();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown17)).BeginInit();
@@ -419,17 +455,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown38)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown39)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown40)).BeginInit();
-            this.tabPage12.SuspendLayout();
-            this.groupBox26.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown80)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown81)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown82)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown83)).BeginInit();
-            this.groupBox27.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown84)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown85)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown86)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown87)).BeginInit();
             this.tabPage6.SuspendLayout();
             this.groupBox17.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown41)).BeginInit();
@@ -466,6 +491,17 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown69)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown70)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown71)).BeginInit();
+            this.tabPage12.SuspendLayout();
+            this.groupBox26.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown80)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown81)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown82)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown83)).BeginInit();
+            this.groupBox27.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown84)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown85)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown86)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown87)).BeginInit();
             this.tabPage10.SuspendLayout();
             this.groupBox24.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown72)).BeginInit();
@@ -512,7 +548,7 @@
             this.bindingNavigator1.MovePreviousItem = this.bindingNavigatorMovePreviousItem;
             this.bindingNavigator1.Name = "bindingNavigator1";
             this.bindingNavigator1.PositionItem = this.bindingNavigatorPositionItem;
-            this.bindingNavigator1.Size = new System.Drawing.Size(991, 25);
+            this.bindingNavigator1.Size = new System.Drawing.Size(1044, 25);
             this.bindingNavigator1.TabIndex = 2;
             this.bindingNavigator1.Text = "bindingNavigator1";
             this.bindingNavigator1.RefreshItems += new System.EventHandler(this.bindingNavigator1_RefreshItems);
@@ -975,28 +1011,30 @@
             this.label37.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label37.Location = new System.Drawing.Point(10, 26);
             this.label37.Name = "label37";
-            this.label37.Size = new System.Drawing.Size(970, 2);
+            this.label37.Size = new System.Drawing.Size(1020, 2);
             this.label37.TabIndex = 97;
             // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage13);
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Controls.Add(this.tabPage5);
-            this.tabControl1.Controls.Add(this.tabPage12);
             this.tabControl1.Controls.Add(this.tabPage6);
             this.tabControl1.Controls.Add(this.tabPage7);
             this.tabControl1.Controls.Add(this.tabPage8);
             this.tabControl1.Controls.Add(this.tabPage9);
+            this.tabControl1.Controls.Add(this.tabPage12);
             this.tabControl1.Controls.Add(this.tabPage10);
             this.tabControl1.Controls.Add(this.tabPage11);
             this.tabControl1.Location = new System.Drawing.Point(501, 31);
             this.tabControl1.Multiline = true;
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(478, 455);
+            this.tabControl1.Size = new System.Drawing.Size(537, 455);
+            this.tabControl1.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight;
             this.tabControl1.TabIndex = 101;
             // 
             // tabPage1
@@ -1008,7 +1046,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 40);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(470, 411);
+            this.tabPage1.Size = new System.Drawing.Size(529, 411);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Full Charge-6";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -1308,7 +1346,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 40);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(470, 411);
+            this.tabPage2.Size = new System.Drawing.Size(529, 411);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Full Charge-4";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -1598,6 +1636,312 @@
             this.comboBox1.TabIndex = 24;
             this.comboBox1.SelectedValueChanged += new System.EventHandler(this.comboBox1_SelectedValueChanged);
             // 
+            // tabPage13
+            // 
+            this.tabPage13.Controls.Add(this.groupBox9);
+            this.tabPage13.Controls.Add(this.groupBox10);
+            this.tabPage13.Controls.Add(this.label172);
+            this.tabPage13.Controls.Add(this.comboBox14);
+            this.tabPage13.Location = new System.Drawing.Point(4, 40);
+            this.tabPage13.Name = "tabPage13";
+            this.tabPage13.Size = new System.Drawing.Size(529, 411);
+            this.tabPage13.TabIndex = 12;
+            this.tabPage13.Text = "Full Charge-4.5";
+            this.tabPage13.UseVisualStyleBackColor = true;
+            // 
+            // groupBox9
+            // 
+            this.groupBox9.Controls.Add(this.numericUpDown91);
+            this.groupBox9.Controls.Add(this.label4);
+            this.groupBox9.Controls.Add(this.label8);
+            this.groupBox9.Controls.Add(this.numericUpDown92);
+            this.groupBox9.Controls.Add(this.numericUpDown93);
+            this.groupBox9.Controls.Add(this.numericUpDown94);
+            this.groupBox9.Controls.Add(this.label10);
+            this.groupBox9.Controls.Add(this.label31);
+            this.groupBox9.Controls.Add(this.label34);
+            this.groupBox9.Controls.Add(this.label36);
+            this.groupBox9.Location = new System.Drawing.Point(82, 224);
+            this.groupBox9.Name = "groupBox9";
+            this.groupBox9.Size = new System.Drawing.Size(307, 165);
+            this.groupBox9.TabIndex = 122;
+            this.groupBox9.TabStop = false;
+            this.groupBox9.Text = "Topping Charge";
+            // 
+            // numericUpDown91
+            // 
+            this.numericUpDown91.DecimalPlaces = 2;
+            this.numericUpDown91.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            this.numericUpDown91.Location = new System.Drawing.Point(100, 130);
+            this.numericUpDown91.Maximum = new decimal(new int[] {
+            77,
+            0,
+            0,
+            0});
+            this.numericUpDown91.Name = "numericUpDown91";
+            this.numericUpDown91.Size = new System.Drawing.Size(201, 20);
+            this.numericUpDown91.TabIndex = 32;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(97, 111);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(148, 13);
+            this.label4.TabIndex = 44;
+            this.label4.Text = "Topping Charge Over Voltage";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(51, 132);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(39, 13);
+            this.label8.TabIndex = 43;
+            this.label8.Text = "Volts:  ";
+            // 
+            // numericUpDown92
+            // 
+            this.numericUpDown92.DecimalPlaces = 2;
+            this.numericUpDown92.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            this.numericUpDown92.Location = new System.Drawing.Point(100, 88);
+            this.numericUpDown92.Maximum = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            this.numericUpDown92.Name = "numericUpDown92";
+            this.numericUpDown92.Size = new System.Drawing.Size(201, 20);
+            this.numericUpDown92.TabIndex = 31;
+            // 
+            // numericUpDown93
+            // 
+            this.numericUpDown93.Enabled = false;
+            this.numericUpDown93.Location = new System.Drawing.Point(100, 46);
+            this.numericUpDown93.Name = "numericUpDown93";
+            this.numericUpDown93.Size = new System.Drawing.Size(201, 20);
+            this.numericUpDown93.TabIndex = 30;
+            this.numericUpDown93.Visible = false;
+            // 
+            // numericUpDown94
+            // 
+            this.numericUpDown94.Enabled = false;
+            this.numericUpDown94.Location = new System.Drawing.Point(100, 21);
+            this.numericUpDown94.Name = "numericUpDown94";
+            this.numericUpDown94.Size = new System.Drawing.Size(201, 20);
+            this.numericUpDown94.TabIndex = 29;
+            this.numericUpDown94.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(97, 69);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(120, 13);
+            this.label10.TabIndex = 39;
+            this.label10.Text = "Topping Charge Current";
+            // 
+            // label31
+            // 
+            this.label31.AutoSize = true;
+            this.label31.Location = new System.Drawing.Point(51, 90);
+            this.label31.Name = "label31";
+            this.label31.Size = new System.Drawing.Size(42, 13);
+            this.label31.TabIndex = 38;
+            this.label31.Text = "Amps:  ";
+            // 
+            // label34
+            // 
+            this.label34.AutoSize = true;
+            this.label34.Enabled = false;
+            this.label34.Location = new System.Drawing.Point(24, 49);
+            this.label34.Name = "label34";
+            this.label34.Size = new System.Drawing.Size(70, 13);
+            this.label34.TabIndex = 36;
+            this.label34.Text = "Time (Mins):  ";
+            this.label34.Visible = false;
+            // 
+            // label36
+            // 
+            this.label36.AutoSize = true;
+            this.label36.Location = new System.Drawing.Point(18, 23);
+            this.label36.Name = "label36";
+            this.label36.Size = new System.Drawing.Size(76, 13);
+            this.label36.TabIndex = 35;
+            this.label36.Text = "Time (Hours):  ";
+            // 
+            // groupBox10
+            // 
+            this.groupBox10.Controls.Add(this.numericUpDown95);
+            this.groupBox10.Controls.Add(this.label166);
+            this.groupBox10.Controls.Add(this.label167);
+            this.groupBox10.Controls.Add(this.numericUpDown96);
+            this.groupBox10.Controls.Add(this.numericUpDown97);
+            this.groupBox10.Controls.Add(this.numericUpDown98);
+            this.groupBox10.Controls.Add(this.label168);
+            this.groupBox10.Controls.Add(this.label169);
+            this.groupBox10.Controls.Add(this.label170);
+            this.groupBox10.Controls.Add(this.label171);
+            this.groupBox10.Location = new System.Drawing.Point(82, 53);
+            this.groupBox10.Name = "groupBox10";
+            this.groupBox10.Size = new System.Drawing.Size(307, 165);
+            this.groupBox10.TabIndex = 121;
+            this.groupBox10.TabStop = false;
+            this.groupBox10.Text = "Main Charge";
+            // 
+            // numericUpDown95
+            // 
+            this.numericUpDown95.DecimalPlaces = 2;
+            this.numericUpDown95.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            this.numericUpDown95.Location = new System.Drawing.Point(100, 128);
+            this.numericUpDown95.Maximum = new decimal(new int[] {
+            77,
+            0,
+            0,
+            0});
+            this.numericUpDown95.Name = "numericUpDown95";
+            this.numericUpDown95.Size = new System.Drawing.Size(201, 20);
+            this.numericUpDown95.TabIndex = 28;
+            // 
+            // label166
+            // 
+            this.label166.AutoSize = true;
+            this.label166.Location = new System.Drawing.Point(97, 109);
+            this.label166.Name = "label166";
+            this.label166.Size = new System.Drawing.Size(95, 13);
+            this.label166.TabIndex = 32;
+            this.label166.Text = "Main Over Voltage";
+            // 
+            // label167
+            // 
+            this.label167.AutoSize = true;
+            this.label167.Location = new System.Drawing.Point(51, 130);
+            this.label167.Name = "label167";
+            this.label167.Size = new System.Drawing.Size(39, 13);
+            this.label167.TabIndex = 31;
+            this.label167.Text = "Volts:  ";
+            // 
+            // numericUpDown96
+            // 
+            this.numericUpDown96.DecimalPlaces = 2;
+            this.numericUpDown96.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            this.numericUpDown96.Location = new System.Drawing.Point(100, 86);
+            this.numericUpDown96.Maximum = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            this.numericUpDown96.Name = "numericUpDown96";
+            this.numericUpDown96.Size = new System.Drawing.Size(201, 20);
+            this.numericUpDown96.TabIndex = 27;
+            // 
+            // numericUpDown97
+            // 
+            this.numericUpDown97.Enabled = false;
+            this.numericUpDown97.Location = new System.Drawing.Point(100, 44);
+            this.numericUpDown97.Name = "numericUpDown97";
+            this.numericUpDown97.Size = new System.Drawing.Size(201, 20);
+            this.numericUpDown97.TabIndex = 26;
+            this.numericUpDown97.Visible = false;
+            // 
+            // numericUpDown98
+            // 
+            this.numericUpDown98.DecimalPlaces = 1;
+            this.numericUpDown98.Enabled = false;
+            this.numericUpDown98.Location = new System.Drawing.Point(100, 19);
+            this.numericUpDown98.Maximum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.numericUpDown98.Name = "numericUpDown98";
+            this.numericUpDown98.Size = new System.Drawing.Size(201, 20);
+            this.numericUpDown98.TabIndex = 25;
+            this.numericUpDown98.Value = new decimal(new int[] {
+            25,
+            0,
+            0,
+            65536});
+            // 
+            // label168
+            // 
+            this.label168.AutoSize = true;
+            this.label168.Location = new System.Drawing.Point(97, 67);
+            this.label168.Name = "label168";
+            this.label168.Size = new System.Drawing.Size(104, 13);
+            this.label168.TabIndex = 27;
+            this.label168.Text = "Main Charge Current";
+            // 
+            // label169
+            // 
+            this.label169.AutoSize = true;
+            this.label169.Location = new System.Drawing.Point(51, 88);
+            this.label169.Name = "label169";
+            this.label169.Size = new System.Drawing.Size(42, 13);
+            this.label169.TabIndex = 26;
+            this.label169.Text = "Amps:  ";
+            // 
+            // label170
+            // 
+            this.label170.AutoSize = true;
+            this.label170.Enabled = false;
+            this.label170.Location = new System.Drawing.Point(24, 47);
+            this.label170.Name = "label170";
+            this.label170.Size = new System.Drawing.Size(70, 13);
+            this.label170.TabIndex = 25;
+            this.label170.Text = "Time (Mins):  ";
+            this.label170.Visible = false;
+            // 
+            // label171
+            // 
+            this.label171.AutoSize = true;
+            this.label171.Location = new System.Drawing.Point(18, 21);
+            this.label171.Name = "label171";
+            this.label171.Size = new System.Drawing.Size(76, 13);
+            this.label171.TabIndex = 24;
+            this.label171.Text = "Time (Hours):  ";
+            // 
+            // label172
+            // 
+            this.label172.AutoSize = true;
+            this.label172.Location = new System.Drawing.Point(133, 29);
+            this.label172.Name = "label172";
+            this.label172.Size = new System.Drawing.Size(43, 13);
+            this.label172.TabIndex = 120;
+            this.label172.Text = "Mode:  ";
+            // 
+            // comboBox14
+            // 
+            this.comboBox14.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox14.FormattingEnabled = true;
+            this.comboBox14.Items.AddRange(new object[] {
+            "20 Dual Rate",
+            "21 Dual Rate with Transfer At Peak"});
+            this.comboBox14.Location = new System.Drawing.Point(182, 26);
+            this.comboBox14.Name = "comboBox14";
+            this.comboBox14.Size = new System.Drawing.Size(201, 21);
+            this.comboBox14.TabIndex = 119;
+            // 
             // tabPage3
             // 
             this.tabPage3.Controls.Add(this.groupBox4);
@@ -1606,7 +1950,7 @@
             this.tabPage3.Controls.Add(this.comboBox3);
             this.tabPage3.Location = new System.Drawing.Point(4, 40);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(470, 411);
+            this.tabPage3.Size = new System.Drawing.Size(529, 411);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Top Charge-4";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -1884,7 +2228,7 @@
             this.tabPage4.Location = new System.Drawing.Point(4, 40);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(470, 411);
+            this.tabPage4.Size = new System.Drawing.Size(529, 411);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Top Charge-2";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -2160,7 +2504,7 @@
             this.tabPage5.Location = new System.Drawing.Point(4, 40);
             this.tabPage5.Name = "tabPage5";
             this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(470, 411);
+            this.tabPage5.Size = new System.Drawing.Size(529, 411);
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Text = "Top Charge-1";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -2427,6 +2771,967 @@
             this.comboBox5.TabIndex = 51;
             this.comboBox5.SelectedValueChanged += new System.EventHandler(this.comboBox5_SelectedValueChanged);
             // 
+            // tabPage6
+            // 
+            this.tabPage6.Controls.Add(this.groupBox17);
+            this.tabPage6.Controls.Add(this.label99);
+            this.tabPage6.Controls.Add(this.comboBox6);
+            this.tabPage6.Location = new System.Drawing.Point(4, 40);
+            this.tabPage6.Name = "tabPage6";
+            this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage6.Size = new System.Drawing.Size(529, 411);
+            this.tabPage6.TabIndex = 5;
+            this.tabPage6.Text = "Capacity-1  ";
+            this.tabPage6.UseVisualStyleBackColor = true;
+            // 
+            // groupBox17
+            // 
+            this.groupBox17.Controls.Add(this.numericUpDown41);
+            this.groupBox17.Controls.Add(this.label87);
+            this.groupBox17.Controls.Add(this.label88);
+            this.groupBox17.Controls.Add(this.numericUpDown42);
+            this.groupBox17.Controls.Add(this.label89);
+            this.groupBox17.Controls.Add(this.label90);
+            this.groupBox17.Controls.Add(this.numericUpDown43);
+            this.groupBox17.Controls.Add(this.numericUpDown44);
+            this.groupBox17.Controls.Add(this.numericUpDown45);
+            this.groupBox17.Controls.Add(this.label91);
+            this.groupBox17.Controls.Add(this.label92);
+            this.groupBox17.Controls.Add(this.label93);
+            this.groupBox17.Controls.Add(this.label94);
+            this.groupBox17.Location = new System.Drawing.Point(82, 53);
+            this.groupBox17.Name = "groupBox17";
+            this.groupBox17.Size = new System.Drawing.Size(307, 209);
+            this.groupBox17.TabIndex = 124;
+            this.groupBox17.TabStop = false;
+            // 
+            // numericUpDown41
+            // 
+            this.numericUpDown41.DecimalPlaces = 2;
+            this.numericUpDown41.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            this.numericUpDown41.Location = new System.Drawing.Point(100, 171);
+            this.numericUpDown41.Maximum = new decimal(new int[] {
+            99,
+            0,
+            0,
+            0});
+            this.numericUpDown41.Name = "numericUpDown41";
+            this.numericUpDown41.Size = new System.Drawing.Size(201, 20);
+            this.numericUpDown41.TabIndex = 74;
+            this.numericUpDown41.Visible = false;
+            // 
+            // label87
+            // 
+            this.label87.AutoSize = true;
+            this.label87.Location = new System.Drawing.Point(97, 152);
+            this.label87.Name = "label87";
+            this.label87.Size = new System.Drawing.Size(111, 13);
+            this.label87.TabIndex = 61;
+            this.label87.Text = "Discharge Resistance";
+            this.label87.Visible = false;
+            // 
+            // label88
+            // 
+            this.label88.AutoSize = true;
+            this.label88.Location = new System.Drawing.Point(51, 173);
+            this.label88.Name = "label88";
+            this.label88.Size = new System.Drawing.Size(43, 13);
+            this.label88.TabIndex = 60;
+            this.label88.Text = "Ohms:  ";
+            this.label88.Visible = false;
+            // 
+            // numericUpDown42
+            // 
+            this.numericUpDown42.DecimalPlaces = 2;
+            this.numericUpDown42.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            this.numericUpDown42.Location = new System.Drawing.Point(100, 127);
+            this.numericUpDown42.Maximum = new decimal(new int[] {
+            77,
+            0,
+            0,
+            0});
+            this.numericUpDown42.Name = "numericUpDown42";
+            this.numericUpDown42.Size = new System.Drawing.Size(201, 20);
+            this.numericUpDown42.TabIndex = 73;
+            // 
+            // label89
+            // 
+            this.label89.AutoSize = true;
+            this.label89.Location = new System.Drawing.Point(97, 108);
+            this.label89.Name = "label89";
+            this.label89.Size = new System.Drawing.Size(87, 13);
+            this.label89.TabIndex = 58;
+            this.label89.Text = "Minimum Voltage";
+            // 
+            // label90
+            // 
+            this.label90.AutoSize = true;
+            this.label90.Location = new System.Drawing.Point(51, 129);
+            this.label90.Name = "label90";
+            this.label90.Size = new System.Drawing.Size(39, 13);
+            this.label90.TabIndex = 57;
+            this.label90.Text = "Volts:  ";
+            // 
+            // numericUpDown43
+            // 
+            this.numericUpDown43.DecimalPlaces = 2;
+            this.numericUpDown43.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            this.numericUpDown43.Location = new System.Drawing.Point(100, 85);
+            this.numericUpDown43.Maximum = new decimal(new int[] {
+            60,
+            0,
+            0,
+            0});
+            this.numericUpDown43.Name = "numericUpDown43";
+            this.numericUpDown43.Size = new System.Drawing.Size(201, 20);
+            this.numericUpDown43.TabIndex = 72;
+            // 
+            // numericUpDown44
+            // 
+            this.numericUpDown44.Enabled = false;
+            this.numericUpDown44.Location = new System.Drawing.Point(100, 43);
+            this.numericUpDown44.Name = "numericUpDown44";
+            this.numericUpDown44.Size = new System.Drawing.Size(201, 20);
+            this.numericUpDown44.TabIndex = 71;
+            this.numericUpDown44.Visible = false;
+            // 
+            // numericUpDown45
+            // 
+            this.numericUpDown45.Enabled = false;
+            this.numericUpDown45.Location = new System.Drawing.Point(100, 18);
+            this.numericUpDown45.Name = "numericUpDown45";
+            this.numericUpDown45.Size = new System.Drawing.Size(201, 20);
+            this.numericUpDown45.TabIndex = 70;
+            this.numericUpDown45.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // label91
+            // 
+            this.label91.AutoSize = true;
+            this.label91.Location = new System.Drawing.Point(97, 66);
+            this.label91.Name = "label91";
+            this.label91.Size = new System.Drawing.Size(92, 13);
+            this.label91.TabIndex = 53;
+            this.label91.Text = "Discharge Current";
+            // 
+            // label92
+            // 
+            this.label92.AutoSize = true;
+            this.label92.Location = new System.Drawing.Point(51, 87);
+            this.label92.Name = "label92";
+            this.label92.Size = new System.Drawing.Size(42, 13);
+            this.label92.TabIndex = 52;
+            this.label92.Text = "Amps:  ";
+            // 
+            // label93
+            // 
+            this.label93.AutoSize = true;
+            this.label93.Enabled = false;
+            this.label93.Location = new System.Drawing.Point(24, 46);
+            this.label93.Name = "label93";
+            this.label93.Size = new System.Drawing.Size(70, 13);
+            this.label93.TabIndex = 50;
+            this.label93.Text = "Time (Mins):  ";
+            this.label93.Visible = false;
+            // 
+            // label94
+            // 
+            this.label94.AutoSize = true;
+            this.label94.Location = new System.Drawing.Point(18, 20);
+            this.label94.Name = "label94";
+            this.label94.Size = new System.Drawing.Size(76, 13);
+            this.label94.TabIndex = 49;
+            this.label94.Text = "Time (Hours):  ";
+            // 
+            // label99
+            // 
+            this.label99.AutoSize = true;
+            this.label99.Location = new System.Drawing.Point(133, 29);
+            this.label99.Name = "label99";
+            this.label99.Size = new System.Drawing.Size(43, 13);
+            this.label99.TabIndex = 123;
+            this.label99.Text = "Mode:  ";
+            // 
+            // comboBox6
+            // 
+            this.comboBox6.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox6.FormattingEnabled = true;
+            this.comboBox6.Items.AddRange(new object[] {
+            "31 Capacity Test",
+            "32 Constant Resistance"});
+            this.comboBox6.Location = new System.Drawing.Point(182, 26);
+            this.comboBox6.Name = "comboBox6";
+            this.comboBox6.Size = new System.Drawing.Size(201, 21);
+            this.comboBox6.TabIndex = 69;
+            this.comboBox6.SelectedValueChanged += new System.EventHandler(this.comboBox6_SelectedValueChanged);
+            // 
+            // tabPage7
+            // 
+            this.tabPage7.Controls.Add(this.groupBox18);
+            this.tabPage7.Controls.Add(this.label104);
+            this.tabPage7.Controls.Add(this.comboBox7);
+            this.tabPage7.Location = new System.Drawing.Point(4, 40);
+            this.tabPage7.Name = "tabPage7";
+            this.tabPage7.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage7.Size = new System.Drawing.Size(529, 411);
+            this.tabPage7.TabIndex = 6;
+            this.tabPage7.Text = "Discharge  ";
+            this.tabPage7.UseVisualStyleBackColor = true;
+            // 
+            // groupBox18
+            // 
+            this.groupBox18.Controls.Add(this.numericUpDown46);
+            this.groupBox18.Controls.Add(this.label95);
+            this.groupBox18.Controls.Add(this.label96);
+            this.groupBox18.Controls.Add(this.numericUpDown47);
+            this.groupBox18.Controls.Add(this.label97);
+            this.groupBox18.Controls.Add(this.label98);
+            this.groupBox18.Controls.Add(this.numericUpDown48);
+            this.groupBox18.Controls.Add(this.numericUpDown49);
+            this.groupBox18.Controls.Add(this.numericUpDown50);
+            this.groupBox18.Controls.Add(this.label100);
+            this.groupBox18.Controls.Add(this.label101);
+            this.groupBox18.Controls.Add(this.label102);
+            this.groupBox18.Controls.Add(this.label103);
+            this.groupBox18.Location = new System.Drawing.Point(82, 53);
+            this.groupBox18.Name = "groupBox18";
+            this.groupBox18.Size = new System.Drawing.Size(307, 209);
+            this.groupBox18.TabIndex = 124;
+            this.groupBox18.TabStop = false;
+            // 
+            // numericUpDown46
+            // 
+            this.numericUpDown46.DecimalPlaces = 2;
+            this.numericUpDown46.Enabled = false;
+            this.numericUpDown46.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            this.numericUpDown46.Location = new System.Drawing.Point(100, 171);
+            this.numericUpDown46.Name = "numericUpDown46";
+            this.numericUpDown46.Size = new System.Drawing.Size(201, 20);
+            this.numericUpDown46.TabIndex = 80;
+            this.numericUpDown46.Visible = false;
+            // 
+            // label95
+            // 
+            this.label95.AutoSize = true;
+            this.label95.Enabled = false;
+            this.label95.Location = new System.Drawing.Point(97, 152);
+            this.label95.Name = "label95";
+            this.label95.Size = new System.Drawing.Size(111, 13);
+            this.label95.TabIndex = 61;
+            this.label95.Text = "Discharge Resistance";
+            this.label95.Visible = false;
+            // 
+            // label96
+            // 
+            this.label96.AutoSize = true;
+            this.label96.Enabled = false;
+            this.label96.Location = new System.Drawing.Point(51, 173);
+            this.label96.Name = "label96";
+            this.label96.Size = new System.Drawing.Size(43, 13);
+            this.label96.TabIndex = 60;
+            this.label96.Text = "Ohms:  ";
+            this.label96.Visible = false;
+            // 
+            // numericUpDown47
+            // 
+            this.numericUpDown47.DecimalPlaces = 2;
+            this.numericUpDown47.Enabled = false;
+            this.numericUpDown47.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            this.numericUpDown47.Location = new System.Drawing.Point(100, 127);
+            this.numericUpDown47.Name = "numericUpDown47";
+            this.numericUpDown47.Size = new System.Drawing.Size(201, 20);
+            this.numericUpDown47.TabIndex = 79;
+            this.numericUpDown47.Visible = false;
+            // 
+            // label97
+            // 
+            this.label97.AutoSize = true;
+            this.label97.Enabled = false;
+            this.label97.Location = new System.Drawing.Point(97, 108);
+            this.label97.Name = "label97";
+            this.label97.Size = new System.Drawing.Size(68, 13);
+            this.label97.TabIndex = 58;
+            this.label97.Text = "Stop Voltage";
+            this.label97.Visible = false;
+            // 
+            // label98
+            // 
+            this.label98.AutoSize = true;
+            this.label98.Enabled = false;
+            this.label98.Location = new System.Drawing.Point(51, 129);
+            this.label98.Name = "label98";
+            this.label98.Size = new System.Drawing.Size(39, 13);
+            this.label98.TabIndex = 57;
+            this.label98.Text = "Volts:  ";
+            this.label98.Visible = false;
+            // 
+            // numericUpDown48
+            // 
+            this.numericUpDown48.DecimalPlaces = 2;
+            this.numericUpDown48.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            this.numericUpDown48.Location = new System.Drawing.Point(100, 85);
+            this.numericUpDown48.Maximum = new decimal(new int[] {
+            60,
+            0,
+            0,
+            0});
+            this.numericUpDown48.Name = "numericUpDown48";
+            this.numericUpDown48.Size = new System.Drawing.Size(201, 20);
+            this.numericUpDown48.TabIndex = 78;
+            // 
+            // numericUpDown49
+            // 
+            this.numericUpDown49.Enabled = false;
+            this.numericUpDown49.Location = new System.Drawing.Point(100, 43);
+            this.numericUpDown49.Name = "numericUpDown49";
+            this.numericUpDown49.Size = new System.Drawing.Size(201, 20);
+            this.numericUpDown49.TabIndex = 77;
+            this.numericUpDown49.Visible = false;
+            // 
+            // numericUpDown50
+            // 
+            this.numericUpDown50.Location = new System.Drawing.Point(100, 18);
+            this.numericUpDown50.Maximum = new decimal(new int[] {
+            99,
+            0,
+            0,
+            0});
+            this.numericUpDown50.Name = "numericUpDown50";
+            this.numericUpDown50.Size = new System.Drawing.Size(201, 20);
+            this.numericUpDown50.TabIndex = 76;
+            // 
+            // label100
+            // 
+            this.label100.AutoSize = true;
+            this.label100.Location = new System.Drawing.Point(97, 66);
+            this.label100.Name = "label100";
+            this.label100.Size = new System.Drawing.Size(92, 13);
+            this.label100.TabIndex = 53;
+            this.label100.Text = "Discharge Current";
+            // 
+            // label101
+            // 
+            this.label101.AutoSize = true;
+            this.label101.Location = new System.Drawing.Point(51, 87);
+            this.label101.Name = "label101";
+            this.label101.Size = new System.Drawing.Size(42, 13);
+            this.label101.TabIndex = 52;
+            this.label101.Text = "Amps:  ";
+            // 
+            // label102
+            // 
+            this.label102.AutoSize = true;
+            this.label102.Enabled = false;
+            this.label102.Location = new System.Drawing.Point(24, 46);
+            this.label102.Name = "label102";
+            this.label102.Size = new System.Drawing.Size(70, 13);
+            this.label102.TabIndex = 50;
+            this.label102.Text = "Time (Mins):  ";
+            this.label102.Visible = false;
+            // 
+            // label103
+            // 
+            this.label103.AutoSize = true;
+            this.label103.Location = new System.Drawing.Point(18, 20);
+            this.label103.Name = "label103";
+            this.label103.Size = new System.Drawing.Size(76, 13);
+            this.label103.TabIndex = 49;
+            this.label103.Text = "Time (Hours):  ";
+            // 
+            // label104
+            // 
+            this.label104.AutoSize = true;
+            this.label104.Location = new System.Drawing.Point(133, 29);
+            this.label104.Name = "label104";
+            this.label104.Size = new System.Drawing.Size(43, 13);
+            this.label104.TabIndex = 123;
+            this.label104.Text = "Mode:  ";
+            // 
+            // comboBox7
+            // 
+            this.comboBox7.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox7.Enabled = false;
+            this.comboBox7.FormattingEnabled = true;
+            this.comboBox7.Items.AddRange(new object[] {
+            "30 Full Discharge"});
+            this.comboBox7.Location = new System.Drawing.Point(182, 26);
+            this.comboBox7.Name = "comboBox7";
+            this.comboBox7.Size = new System.Drawing.Size(201, 21);
+            this.comboBox7.TabIndex = 75;
+            // 
+            // tabPage8
+            // 
+            this.tabPage8.Controls.Add(this.groupBox20);
+            this.tabPage8.Controls.Add(this.groupBox21);
+            this.tabPage8.Controls.Add(this.label126);
+            this.tabPage8.Controls.Add(this.comboBox9);
+            this.tabPage8.Location = new System.Drawing.Point(4, 40);
+            this.tabPage8.Name = "tabPage8";
+            this.tabPage8.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage8.Size = new System.Drawing.Size(529, 411);
+            this.tabPage8.TabIndex = 7;
+            this.tabPage8.Text = "Slow Charge-14  ";
+            this.tabPage8.UseVisualStyleBackColor = true;
+            // 
+            // groupBox20
+            // 
+            this.groupBox20.Controls.Add(this.numericUpDown56);
+            this.groupBox20.Controls.Add(this.label114);
+            this.groupBox20.Controls.Add(this.label115);
+            this.groupBox20.Controls.Add(this.numericUpDown57);
+            this.groupBox20.Controls.Add(this.numericUpDown58);
+            this.groupBox20.Controls.Add(this.numericUpDown59);
+            this.groupBox20.Controls.Add(this.label116);
+            this.groupBox20.Controls.Add(this.label117);
+            this.groupBox20.Controls.Add(this.label118);
+            this.groupBox20.Controls.Add(this.label119);
+            this.groupBox20.Enabled = false;
+            this.groupBox20.Location = new System.Drawing.Point(82, 224);
+            this.groupBox20.Name = "groupBox20";
+            this.groupBox20.Size = new System.Drawing.Size(307, 165);
+            this.groupBox20.TabIndex = 118;
+            this.groupBox20.TabStop = false;
+            this.groupBox20.Text = "Secondary Charge";
+            this.groupBox20.Visible = false;
+            // 
+            // numericUpDown56
+            // 
+            this.numericUpDown56.DecimalPlaces = 2;
+            this.numericUpDown56.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            this.numericUpDown56.Location = new System.Drawing.Point(100, 130);
+            this.numericUpDown56.Name = "numericUpDown56";
+            this.numericUpDown56.Size = new System.Drawing.Size(201, 20);
+            this.numericUpDown56.TabIndex = 89;
+            // 
+            // label114
+            // 
+            this.label114.AutoSize = true;
+            this.label114.Location = new System.Drawing.Point(97, 111);
+            this.label114.Name = "label114";
+            this.label114.Size = new System.Drawing.Size(89, 13);
+            this.label114.TabIndex = 44;
+            this.label114.Text = "Charge Voltage 2";
+            // 
+            // label115
+            // 
+            this.label115.AutoSize = true;
+            this.label115.Location = new System.Drawing.Point(51, 132);
+            this.label115.Name = "label115";
+            this.label115.Size = new System.Drawing.Size(39, 13);
+            this.label115.TabIndex = 43;
+            this.label115.Text = "Volts:  ";
+            // 
+            // numericUpDown57
+            // 
+            this.numericUpDown57.DecimalPlaces = 2;
+            this.numericUpDown57.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            this.numericUpDown57.Location = new System.Drawing.Point(100, 88);
+            this.numericUpDown57.Name = "numericUpDown57";
+            this.numericUpDown57.Size = new System.Drawing.Size(201, 20);
+            this.numericUpDown57.TabIndex = 88;
+            // 
+            // numericUpDown58
+            // 
+            this.numericUpDown58.Location = new System.Drawing.Point(100, 46);
+            this.numericUpDown58.Name = "numericUpDown58";
+            this.numericUpDown58.Size = new System.Drawing.Size(201, 20);
+            this.numericUpDown58.TabIndex = 87;
+            // 
+            // numericUpDown59
+            // 
+            this.numericUpDown59.Location = new System.Drawing.Point(100, 21);
+            this.numericUpDown59.Name = "numericUpDown59";
+            this.numericUpDown59.Size = new System.Drawing.Size(201, 20);
+            this.numericUpDown59.TabIndex = 86;
+            // 
+            // label116
+            // 
+            this.label116.AutoSize = true;
+            this.label116.Location = new System.Drawing.Point(97, 69);
+            this.label116.Name = "label116";
+            this.label116.Size = new System.Drawing.Size(87, 13);
+            this.label116.TabIndex = 39;
+            this.label116.Text = "Charge Current 2";
+            // 
+            // label117
+            // 
+            this.label117.AutoSize = true;
+            this.label117.Location = new System.Drawing.Point(51, 90);
+            this.label117.Name = "label117";
+            this.label117.Size = new System.Drawing.Size(42, 13);
+            this.label117.TabIndex = 38;
+            this.label117.Text = "Amps:  ";
+            // 
+            // label118
+            // 
+            this.label118.AutoSize = true;
+            this.label118.Location = new System.Drawing.Point(24, 49);
+            this.label118.Name = "label118";
+            this.label118.Size = new System.Drawing.Size(70, 13);
+            this.label118.TabIndex = 36;
+            this.label118.Text = "Time (Mins):  ";
+            // 
+            // label119
+            // 
+            this.label119.AutoSize = true;
+            this.label119.Location = new System.Drawing.Point(18, 23);
+            this.label119.Name = "label119";
+            this.label119.Size = new System.Drawing.Size(76, 13);
+            this.label119.TabIndex = 35;
+            this.label119.Text = "Time (Hours):  ";
+            // 
+            // groupBox21
+            // 
+            this.groupBox21.Controls.Add(this.numericUpDown60);
+            this.groupBox21.Controls.Add(this.label120);
+            this.groupBox21.Controls.Add(this.label121);
+            this.groupBox21.Controls.Add(this.numericUpDown61);
+            this.groupBox21.Controls.Add(this.numericUpDown62);
+            this.groupBox21.Controls.Add(this.numericUpDown63);
+            this.groupBox21.Controls.Add(this.label122);
+            this.groupBox21.Controls.Add(this.label123);
+            this.groupBox21.Controls.Add(this.label124);
+            this.groupBox21.Controls.Add(this.label125);
+            this.groupBox21.Location = new System.Drawing.Point(82, 53);
+            this.groupBox21.Name = "groupBox21";
+            this.groupBox21.Size = new System.Drawing.Size(307, 165);
+            this.groupBox21.TabIndex = 117;
+            this.groupBox21.TabStop = false;
+            // 
+            // numericUpDown60
+            // 
+            this.numericUpDown60.DecimalPlaces = 2;
+            this.numericUpDown60.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            this.numericUpDown60.Location = new System.Drawing.Point(100, 128);
+            this.numericUpDown60.Name = "numericUpDown60";
+            this.numericUpDown60.Size = new System.Drawing.Size(201, 20);
+            this.numericUpDown60.TabIndex = 85;
+            // 
+            // label120
+            // 
+            this.label120.AutoSize = true;
+            this.label120.Location = new System.Drawing.Point(97, 109);
+            this.label120.Name = "label120";
+            this.label120.Size = new System.Drawing.Size(106, 13);
+            this.label120.TabIndex = 32;
+            this.label120.Text = "Charge Over Voltage";
+            // 
+            // label121
+            // 
+            this.label121.AutoSize = true;
+            this.label121.Location = new System.Drawing.Point(51, 130);
+            this.label121.Name = "label121";
+            this.label121.Size = new System.Drawing.Size(39, 13);
+            this.label121.TabIndex = 31;
+            this.label121.Text = "Volts:  ";
+            // 
+            // numericUpDown61
+            // 
+            this.numericUpDown61.DecimalPlaces = 2;
+            this.numericUpDown61.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            this.numericUpDown61.Location = new System.Drawing.Point(100, 86);
+            this.numericUpDown61.Name = "numericUpDown61";
+            this.numericUpDown61.Size = new System.Drawing.Size(201, 20);
+            this.numericUpDown61.TabIndex = 84;
+            // 
+            // numericUpDown62
+            // 
+            this.numericUpDown62.Enabled = false;
+            this.numericUpDown62.Location = new System.Drawing.Point(100, 44);
+            this.numericUpDown62.Name = "numericUpDown62";
+            this.numericUpDown62.Size = new System.Drawing.Size(201, 20);
+            this.numericUpDown62.TabIndex = 83;
+            this.numericUpDown62.Visible = false;
+            // 
+            // numericUpDown63
+            // 
+            this.numericUpDown63.Enabled = false;
+            this.numericUpDown63.Location = new System.Drawing.Point(100, 19);
+            this.numericUpDown63.Name = "numericUpDown63";
+            this.numericUpDown63.Size = new System.Drawing.Size(201, 20);
+            this.numericUpDown63.TabIndex = 82;
+            this.numericUpDown63.Value = new decimal(new int[] {
+            14,
+            0,
+            0,
+            0});
+            // 
+            // label122
+            // 
+            this.label122.AutoSize = true;
+            this.label122.Location = new System.Drawing.Point(97, 67);
+            this.label122.Name = "label122";
+            this.label122.Size = new System.Drawing.Size(78, 13);
+            this.label122.TabIndex = 27;
+            this.label122.Text = "Charge Current";
+            // 
+            // label123
+            // 
+            this.label123.AutoSize = true;
+            this.label123.Location = new System.Drawing.Point(51, 88);
+            this.label123.Name = "label123";
+            this.label123.Size = new System.Drawing.Size(42, 13);
+            this.label123.TabIndex = 26;
+            this.label123.Text = "Amps:  ";
+            // 
+            // label124
+            // 
+            this.label124.AutoSize = true;
+            this.label124.Enabled = false;
+            this.label124.Location = new System.Drawing.Point(24, 47);
+            this.label124.Name = "label124";
+            this.label124.Size = new System.Drawing.Size(70, 13);
+            this.label124.TabIndex = 25;
+            this.label124.Text = "Time (Mins):  ";
+            this.label124.Visible = false;
+            // 
+            // label125
+            // 
+            this.label125.AutoSize = true;
+            this.label125.Location = new System.Drawing.Point(18, 21);
+            this.label125.Name = "label125";
+            this.label125.Size = new System.Drawing.Size(76, 13);
+            this.label125.TabIndex = 24;
+            this.label125.Text = "Time (Hours):  ";
+            // 
+            // label126
+            // 
+            this.label126.AutoSize = true;
+            this.label126.Location = new System.Drawing.Point(133, 29);
+            this.label126.Name = "label126";
+            this.label126.Size = new System.Drawing.Size(43, 13);
+            this.label126.TabIndex = 116;
+            this.label126.Text = "Mode:  ";
+            // 
+            // comboBox9
+            // 
+            this.comboBox9.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox9.FormattingEnabled = true;
+            this.comboBox9.Items.AddRange(new object[] {
+            "10 Single Rate",
+            "11 Single Rate with Peak Stop"});
+            this.comboBox9.Location = new System.Drawing.Point(182, 26);
+            this.comboBox9.Name = "comboBox9";
+            this.comboBox9.Size = new System.Drawing.Size(201, 21);
+            this.comboBox9.TabIndex = 81;
+            this.comboBox9.SelectedValueChanged += new System.EventHandler(this.comboBox9_SelectedValueChanged);
+            // 
+            // tabPage9
+            // 
+            this.tabPage9.Controls.Add(this.groupBox22);
+            this.tabPage9.Controls.Add(this.groupBox23);
+            this.tabPage9.Controls.Add(this.label139);
+            this.tabPage9.Controls.Add(this.comboBox10);
+            this.tabPage9.Location = new System.Drawing.Point(4, 40);
+            this.tabPage9.Name = "tabPage9";
+            this.tabPage9.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage9.Size = new System.Drawing.Size(529, 411);
+            this.tabPage9.TabIndex = 8;
+            this.tabPage9.Text = "Slow Charge-16  ";
+            this.tabPage9.UseVisualStyleBackColor = true;
+            // 
+            // groupBox22
+            // 
+            this.groupBox22.Controls.Add(this.numericUpDown64);
+            this.groupBox22.Controls.Add(this.label127);
+            this.groupBox22.Controls.Add(this.label128);
+            this.groupBox22.Controls.Add(this.numericUpDown65);
+            this.groupBox22.Controls.Add(this.numericUpDown66);
+            this.groupBox22.Controls.Add(this.numericUpDown67);
+            this.groupBox22.Controls.Add(this.label129);
+            this.groupBox22.Controls.Add(this.label130);
+            this.groupBox22.Controls.Add(this.label131);
+            this.groupBox22.Controls.Add(this.label132);
+            this.groupBox22.Enabled = false;
+            this.groupBox22.Location = new System.Drawing.Point(82, 224);
+            this.groupBox22.Name = "groupBox22";
+            this.groupBox22.Size = new System.Drawing.Size(307, 165);
+            this.groupBox22.TabIndex = 118;
+            this.groupBox22.TabStop = false;
+            this.groupBox22.Text = "Secondary Charge";
+            this.groupBox22.Visible = false;
+            // 
+            // numericUpDown64
+            // 
+            this.numericUpDown64.DecimalPlaces = 2;
+            this.numericUpDown64.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            this.numericUpDown64.Location = new System.Drawing.Point(100, 130);
+            this.numericUpDown64.Name = "numericUpDown64";
+            this.numericUpDown64.Size = new System.Drawing.Size(201, 20);
+            this.numericUpDown64.TabIndex = 98;
+            // 
+            // label127
+            // 
+            this.label127.AutoSize = true;
+            this.label127.Location = new System.Drawing.Point(97, 111);
+            this.label127.Name = "label127";
+            this.label127.Size = new System.Drawing.Size(89, 13);
+            this.label127.TabIndex = 44;
+            this.label127.Text = "Charge Voltage 2";
+            // 
+            // label128
+            // 
+            this.label128.AutoSize = true;
+            this.label128.Location = new System.Drawing.Point(51, 132);
+            this.label128.Name = "label128";
+            this.label128.Size = new System.Drawing.Size(39, 13);
+            this.label128.TabIndex = 43;
+            this.label128.Text = "Volts:  ";
+            // 
+            // numericUpDown65
+            // 
+            this.numericUpDown65.DecimalPlaces = 2;
+            this.numericUpDown65.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            this.numericUpDown65.Location = new System.Drawing.Point(100, 88);
+            this.numericUpDown65.Name = "numericUpDown65";
+            this.numericUpDown65.Size = new System.Drawing.Size(201, 20);
+            this.numericUpDown65.TabIndex = 97;
+            // 
+            // numericUpDown66
+            // 
+            this.numericUpDown66.Location = new System.Drawing.Point(100, 46);
+            this.numericUpDown66.Name = "numericUpDown66";
+            this.numericUpDown66.Size = new System.Drawing.Size(201, 20);
+            this.numericUpDown66.TabIndex = 96;
+            // 
+            // numericUpDown67
+            // 
+            this.numericUpDown67.Location = new System.Drawing.Point(100, 21);
+            this.numericUpDown67.Name = "numericUpDown67";
+            this.numericUpDown67.Size = new System.Drawing.Size(201, 20);
+            this.numericUpDown67.TabIndex = 95;
+            // 
+            // label129
+            // 
+            this.label129.AutoSize = true;
+            this.label129.Location = new System.Drawing.Point(97, 69);
+            this.label129.Name = "label129";
+            this.label129.Size = new System.Drawing.Size(87, 13);
+            this.label129.TabIndex = 39;
+            this.label129.Text = "Charge Current 2";
+            // 
+            // label130
+            // 
+            this.label130.AutoSize = true;
+            this.label130.Location = new System.Drawing.Point(51, 90);
+            this.label130.Name = "label130";
+            this.label130.Size = new System.Drawing.Size(42, 13);
+            this.label130.TabIndex = 38;
+            this.label130.Text = "Amps:  ";
+            // 
+            // label131
+            // 
+            this.label131.AutoSize = true;
+            this.label131.Location = new System.Drawing.Point(24, 49);
+            this.label131.Name = "label131";
+            this.label131.Size = new System.Drawing.Size(70, 13);
+            this.label131.TabIndex = 36;
+            this.label131.Text = "Time (Mins):  ";
+            // 
+            // label132
+            // 
+            this.label132.AutoSize = true;
+            this.label132.Location = new System.Drawing.Point(18, 23);
+            this.label132.Name = "label132";
+            this.label132.Size = new System.Drawing.Size(76, 13);
+            this.label132.TabIndex = 35;
+            this.label132.Text = "Time (Hours):  ";
+            // 
+            // groupBox23
+            // 
+            this.groupBox23.Controls.Add(this.numericUpDown68);
+            this.groupBox23.Controls.Add(this.label133);
+            this.groupBox23.Controls.Add(this.label134);
+            this.groupBox23.Controls.Add(this.numericUpDown69);
+            this.groupBox23.Controls.Add(this.numericUpDown70);
+            this.groupBox23.Controls.Add(this.numericUpDown71);
+            this.groupBox23.Controls.Add(this.label135);
+            this.groupBox23.Controls.Add(this.label136);
+            this.groupBox23.Controls.Add(this.label137);
+            this.groupBox23.Controls.Add(this.label138);
+            this.groupBox23.Location = new System.Drawing.Point(82, 53);
+            this.groupBox23.Name = "groupBox23";
+            this.groupBox23.Size = new System.Drawing.Size(307, 165);
+            this.groupBox23.TabIndex = 117;
+            this.groupBox23.TabStop = false;
+            // 
+            // numericUpDown68
+            // 
+            this.numericUpDown68.DecimalPlaces = 2;
+            this.numericUpDown68.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            this.numericUpDown68.Location = new System.Drawing.Point(100, 128);
+            this.numericUpDown68.Name = "numericUpDown68";
+            this.numericUpDown68.Size = new System.Drawing.Size(201, 20);
+            this.numericUpDown68.TabIndex = 94;
+            // 
+            // label133
+            // 
+            this.label133.AutoSize = true;
+            this.label133.Location = new System.Drawing.Point(97, 109);
+            this.label133.Name = "label133";
+            this.label133.Size = new System.Drawing.Size(106, 13);
+            this.label133.TabIndex = 32;
+            this.label133.Text = "Charge Over Voltage";
+            // 
+            // label134
+            // 
+            this.label134.AutoSize = true;
+            this.label134.Location = new System.Drawing.Point(51, 130);
+            this.label134.Name = "label134";
+            this.label134.Size = new System.Drawing.Size(39, 13);
+            this.label134.TabIndex = 31;
+            this.label134.Text = "Volts:  ";
+            // 
+            // numericUpDown69
+            // 
+            this.numericUpDown69.DecimalPlaces = 2;
+            this.numericUpDown69.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            this.numericUpDown69.Location = new System.Drawing.Point(100, 86);
+            this.numericUpDown69.Name = "numericUpDown69";
+            this.numericUpDown69.Size = new System.Drawing.Size(201, 20);
+            this.numericUpDown69.TabIndex = 93;
+            // 
+            // numericUpDown70
+            // 
+            this.numericUpDown70.Enabled = false;
+            this.numericUpDown70.Location = new System.Drawing.Point(100, 44);
+            this.numericUpDown70.Name = "numericUpDown70";
+            this.numericUpDown70.Size = new System.Drawing.Size(201, 20);
+            this.numericUpDown70.TabIndex = 92;
+            this.numericUpDown70.Visible = false;
+            // 
+            // numericUpDown71
+            // 
+            this.numericUpDown71.Enabled = false;
+            this.numericUpDown71.Location = new System.Drawing.Point(100, 19);
+            this.numericUpDown71.Name = "numericUpDown71";
+            this.numericUpDown71.Size = new System.Drawing.Size(201, 20);
+            this.numericUpDown71.TabIndex = 91;
+            this.numericUpDown71.Value = new decimal(new int[] {
+            16,
+            0,
+            0,
+            0});
+            // 
+            // label135
+            // 
+            this.label135.AutoSize = true;
+            this.label135.Location = new System.Drawing.Point(97, 67);
+            this.label135.Name = "label135";
+            this.label135.Size = new System.Drawing.Size(78, 13);
+            this.label135.TabIndex = 27;
+            this.label135.Text = "Charge Current";
+            // 
+            // label136
+            // 
+            this.label136.AutoSize = true;
+            this.label136.Location = new System.Drawing.Point(51, 88);
+            this.label136.Name = "label136";
+            this.label136.Size = new System.Drawing.Size(42, 13);
+            this.label136.TabIndex = 26;
+            this.label136.Text = "Amps:  ";
+            // 
+            // label137
+            // 
+            this.label137.AutoSize = true;
+            this.label137.Enabled = false;
+            this.label137.Location = new System.Drawing.Point(24, 47);
+            this.label137.Name = "label137";
+            this.label137.Size = new System.Drawing.Size(70, 13);
+            this.label137.TabIndex = 25;
+            this.label137.Text = "Time (Mins):  ";
+            this.label137.Visible = false;
+            // 
+            // label138
+            // 
+            this.label138.AutoSize = true;
+            this.label138.Location = new System.Drawing.Point(18, 21);
+            this.label138.Name = "label138";
+            this.label138.Size = new System.Drawing.Size(76, 13);
+            this.label138.TabIndex = 24;
+            this.label138.Text = "Time (Hours):  ";
+            // 
+            // label139
+            // 
+            this.label139.AutoSize = true;
+            this.label139.Location = new System.Drawing.Point(133, 29);
+            this.label139.Name = "label139";
+            this.label139.Size = new System.Drawing.Size(43, 13);
+            this.label139.TabIndex = 116;
+            this.label139.Text = "Mode:  ";
+            // 
+            // comboBox10
+            // 
+            this.comboBox10.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox10.FormattingEnabled = true;
+            this.comboBox10.Items.AddRange(new object[] {
+            "10 Single Rate",
+            "11 Single Rate with Peak Stop"});
+            this.comboBox10.Location = new System.Drawing.Point(182, 26);
+            this.comboBox10.Name = "comboBox10";
+            this.comboBox10.Size = new System.Drawing.Size(201, 21);
+            this.comboBox10.TabIndex = 90;
+            this.comboBox10.SelectedValueChanged += new System.EventHandler(this.comboBox10_SelectedValueChanged);
+            // 
             // tabPage12
             // 
             this.tabPage12.Controls.Add(this.groupBox26);
@@ -2435,7 +3740,7 @@
             this.tabPage12.Controls.Add(this.comboBox12);
             this.tabPage12.Location = new System.Drawing.Point(4, 40);
             this.tabPage12.Name = "tabPage12";
-            this.tabPage12.Size = new System.Drawing.Size(470, 411);
+            this.tabPage12.Size = new System.Drawing.Size(529, 411);
             this.tabPage12.TabIndex = 11;
             this.tabPage12.Text = "Constant Voltage";
             this.tabPage12.UseVisualStyleBackColor = true;
@@ -2720,967 +4025,6 @@
             this.comboBox12.Size = new System.Drawing.Size(201, 21);
             this.comboBox12.TabIndex = 60;
             // 
-            // tabPage6
-            // 
-            this.tabPage6.Controls.Add(this.groupBox17);
-            this.tabPage6.Controls.Add(this.label99);
-            this.tabPage6.Controls.Add(this.comboBox6);
-            this.tabPage6.Location = new System.Drawing.Point(4, 40);
-            this.tabPage6.Name = "tabPage6";
-            this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage6.Size = new System.Drawing.Size(470, 411);
-            this.tabPage6.TabIndex = 5;
-            this.tabPage6.Text = "Capacity-1  ";
-            this.tabPage6.UseVisualStyleBackColor = true;
-            // 
-            // groupBox17
-            // 
-            this.groupBox17.Controls.Add(this.numericUpDown41);
-            this.groupBox17.Controls.Add(this.label87);
-            this.groupBox17.Controls.Add(this.label88);
-            this.groupBox17.Controls.Add(this.numericUpDown42);
-            this.groupBox17.Controls.Add(this.label89);
-            this.groupBox17.Controls.Add(this.label90);
-            this.groupBox17.Controls.Add(this.numericUpDown43);
-            this.groupBox17.Controls.Add(this.numericUpDown44);
-            this.groupBox17.Controls.Add(this.numericUpDown45);
-            this.groupBox17.Controls.Add(this.label91);
-            this.groupBox17.Controls.Add(this.label92);
-            this.groupBox17.Controls.Add(this.label93);
-            this.groupBox17.Controls.Add(this.label94);
-            this.groupBox17.Location = new System.Drawing.Point(82, 53);
-            this.groupBox17.Name = "groupBox17";
-            this.groupBox17.Size = new System.Drawing.Size(307, 209);
-            this.groupBox17.TabIndex = 124;
-            this.groupBox17.TabStop = false;
-            // 
-            // numericUpDown41
-            // 
-            this.numericUpDown41.DecimalPlaces = 2;
-            this.numericUpDown41.Increment = new decimal(new int[] {
-            5,
-            0,
-            0,
-            65536});
-            this.numericUpDown41.Location = new System.Drawing.Point(100, 171);
-            this.numericUpDown41.Maximum = new decimal(new int[] {
-            99,
-            0,
-            0,
-            0});
-            this.numericUpDown41.Name = "numericUpDown41";
-            this.numericUpDown41.Size = new System.Drawing.Size(201, 20);
-            this.numericUpDown41.TabIndex = 74;
-            this.numericUpDown41.Visible = false;
-            // 
-            // label87
-            // 
-            this.label87.AutoSize = true;
-            this.label87.Location = new System.Drawing.Point(97, 152);
-            this.label87.Name = "label87";
-            this.label87.Size = new System.Drawing.Size(111, 13);
-            this.label87.TabIndex = 61;
-            this.label87.Text = "Discharge Resistance";
-            this.label87.Visible = false;
-            // 
-            // label88
-            // 
-            this.label88.AutoSize = true;
-            this.label88.Location = new System.Drawing.Point(51, 173);
-            this.label88.Name = "label88";
-            this.label88.Size = new System.Drawing.Size(43, 13);
-            this.label88.TabIndex = 60;
-            this.label88.Text = "Ohms:  ";
-            this.label88.Visible = false;
-            // 
-            // numericUpDown42
-            // 
-            this.numericUpDown42.DecimalPlaces = 2;
-            this.numericUpDown42.Increment = new decimal(new int[] {
-            5,
-            0,
-            0,
-            65536});
-            this.numericUpDown42.Location = new System.Drawing.Point(100, 127);
-            this.numericUpDown42.Maximum = new decimal(new int[] {
-            77,
-            0,
-            0,
-            0});
-            this.numericUpDown42.Name = "numericUpDown42";
-            this.numericUpDown42.Size = new System.Drawing.Size(201, 20);
-            this.numericUpDown42.TabIndex = 73;
-            // 
-            // label89
-            // 
-            this.label89.AutoSize = true;
-            this.label89.Location = new System.Drawing.Point(97, 108);
-            this.label89.Name = "label89";
-            this.label89.Size = new System.Drawing.Size(87, 13);
-            this.label89.TabIndex = 58;
-            this.label89.Text = "Minimum Voltage";
-            // 
-            // label90
-            // 
-            this.label90.AutoSize = true;
-            this.label90.Location = new System.Drawing.Point(51, 129);
-            this.label90.Name = "label90";
-            this.label90.Size = new System.Drawing.Size(39, 13);
-            this.label90.TabIndex = 57;
-            this.label90.Text = "Volts:  ";
-            // 
-            // numericUpDown43
-            // 
-            this.numericUpDown43.DecimalPlaces = 2;
-            this.numericUpDown43.Increment = new decimal(new int[] {
-            5,
-            0,
-            0,
-            65536});
-            this.numericUpDown43.Location = new System.Drawing.Point(100, 85);
-            this.numericUpDown43.Maximum = new decimal(new int[] {
-            60,
-            0,
-            0,
-            0});
-            this.numericUpDown43.Name = "numericUpDown43";
-            this.numericUpDown43.Size = new System.Drawing.Size(201, 20);
-            this.numericUpDown43.TabIndex = 72;
-            // 
-            // numericUpDown44
-            // 
-            this.numericUpDown44.Enabled = false;
-            this.numericUpDown44.Location = new System.Drawing.Point(100, 43);
-            this.numericUpDown44.Name = "numericUpDown44";
-            this.numericUpDown44.Size = new System.Drawing.Size(201, 20);
-            this.numericUpDown44.TabIndex = 71;
-            this.numericUpDown44.Visible = false;
-            // 
-            // numericUpDown45
-            // 
-            this.numericUpDown45.Enabled = false;
-            this.numericUpDown45.Location = new System.Drawing.Point(100, 18);
-            this.numericUpDown45.Name = "numericUpDown45";
-            this.numericUpDown45.Size = new System.Drawing.Size(201, 20);
-            this.numericUpDown45.TabIndex = 70;
-            this.numericUpDown45.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // label91
-            // 
-            this.label91.AutoSize = true;
-            this.label91.Location = new System.Drawing.Point(97, 66);
-            this.label91.Name = "label91";
-            this.label91.Size = new System.Drawing.Size(92, 13);
-            this.label91.TabIndex = 53;
-            this.label91.Text = "Discharge Current";
-            // 
-            // label92
-            // 
-            this.label92.AutoSize = true;
-            this.label92.Location = new System.Drawing.Point(51, 87);
-            this.label92.Name = "label92";
-            this.label92.Size = new System.Drawing.Size(42, 13);
-            this.label92.TabIndex = 52;
-            this.label92.Text = "Amps:  ";
-            // 
-            // label93
-            // 
-            this.label93.AutoSize = true;
-            this.label93.Enabled = false;
-            this.label93.Location = new System.Drawing.Point(24, 46);
-            this.label93.Name = "label93";
-            this.label93.Size = new System.Drawing.Size(70, 13);
-            this.label93.TabIndex = 50;
-            this.label93.Text = "Time (Mins):  ";
-            this.label93.Visible = false;
-            // 
-            // label94
-            // 
-            this.label94.AutoSize = true;
-            this.label94.Location = new System.Drawing.Point(18, 20);
-            this.label94.Name = "label94";
-            this.label94.Size = new System.Drawing.Size(76, 13);
-            this.label94.TabIndex = 49;
-            this.label94.Text = "Time (Hours):  ";
-            // 
-            // label99
-            // 
-            this.label99.AutoSize = true;
-            this.label99.Location = new System.Drawing.Point(133, 29);
-            this.label99.Name = "label99";
-            this.label99.Size = new System.Drawing.Size(43, 13);
-            this.label99.TabIndex = 123;
-            this.label99.Text = "Mode:  ";
-            // 
-            // comboBox6
-            // 
-            this.comboBox6.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox6.FormattingEnabled = true;
-            this.comboBox6.Items.AddRange(new object[] {
-            "31 Capacity Test",
-            "32 Constant Resistance"});
-            this.comboBox6.Location = new System.Drawing.Point(182, 26);
-            this.comboBox6.Name = "comboBox6";
-            this.comboBox6.Size = new System.Drawing.Size(201, 21);
-            this.comboBox6.TabIndex = 69;
-            this.comboBox6.SelectedValueChanged += new System.EventHandler(this.comboBox6_SelectedValueChanged);
-            // 
-            // tabPage7
-            // 
-            this.tabPage7.Controls.Add(this.groupBox18);
-            this.tabPage7.Controls.Add(this.label104);
-            this.tabPage7.Controls.Add(this.comboBox7);
-            this.tabPage7.Location = new System.Drawing.Point(4, 40);
-            this.tabPage7.Name = "tabPage7";
-            this.tabPage7.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage7.Size = new System.Drawing.Size(470, 411);
-            this.tabPage7.TabIndex = 6;
-            this.tabPage7.Text = "Discharge  ";
-            this.tabPage7.UseVisualStyleBackColor = true;
-            // 
-            // groupBox18
-            // 
-            this.groupBox18.Controls.Add(this.numericUpDown46);
-            this.groupBox18.Controls.Add(this.label95);
-            this.groupBox18.Controls.Add(this.label96);
-            this.groupBox18.Controls.Add(this.numericUpDown47);
-            this.groupBox18.Controls.Add(this.label97);
-            this.groupBox18.Controls.Add(this.label98);
-            this.groupBox18.Controls.Add(this.numericUpDown48);
-            this.groupBox18.Controls.Add(this.numericUpDown49);
-            this.groupBox18.Controls.Add(this.numericUpDown50);
-            this.groupBox18.Controls.Add(this.label100);
-            this.groupBox18.Controls.Add(this.label101);
-            this.groupBox18.Controls.Add(this.label102);
-            this.groupBox18.Controls.Add(this.label103);
-            this.groupBox18.Location = new System.Drawing.Point(82, 53);
-            this.groupBox18.Name = "groupBox18";
-            this.groupBox18.Size = new System.Drawing.Size(307, 209);
-            this.groupBox18.TabIndex = 124;
-            this.groupBox18.TabStop = false;
-            // 
-            // numericUpDown46
-            // 
-            this.numericUpDown46.DecimalPlaces = 2;
-            this.numericUpDown46.Enabled = false;
-            this.numericUpDown46.Increment = new decimal(new int[] {
-            5,
-            0,
-            0,
-            65536});
-            this.numericUpDown46.Location = new System.Drawing.Point(100, 171);
-            this.numericUpDown46.Name = "numericUpDown46";
-            this.numericUpDown46.Size = new System.Drawing.Size(201, 20);
-            this.numericUpDown46.TabIndex = 80;
-            this.numericUpDown46.Visible = false;
-            // 
-            // label95
-            // 
-            this.label95.AutoSize = true;
-            this.label95.Enabled = false;
-            this.label95.Location = new System.Drawing.Point(97, 152);
-            this.label95.Name = "label95";
-            this.label95.Size = new System.Drawing.Size(111, 13);
-            this.label95.TabIndex = 61;
-            this.label95.Text = "Discharge Resistance";
-            this.label95.Visible = false;
-            // 
-            // label96
-            // 
-            this.label96.AutoSize = true;
-            this.label96.Enabled = false;
-            this.label96.Location = new System.Drawing.Point(51, 173);
-            this.label96.Name = "label96";
-            this.label96.Size = new System.Drawing.Size(43, 13);
-            this.label96.TabIndex = 60;
-            this.label96.Text = "Ohms:  ";
-            this.label96.Visible = false;
-            // 
-            // numericUpDown47
-            // 
-            this.numericUpDown47.DecimalPlaces = 2;
-            this.numericUpDown47.Enabled = false;
-            this.numericUpDown47.Increment = new decimal(new int[] {
-            5,
-            0,
-            0,
-            65536});
-            this.numericUpDown47.Location = new System.Drawing.Point(100, 127);
-            this.numericUpDown47.Name = "numericUpDown47";
-            this.numericUpDown47.Size = new System.Drawing.Size(201, 20);
-            this.numericUpDown47.TabIndex = 79;
-            this.numericUpDown47.Visible = false;
-            // 
-            // label97
-            // 
-            this.label97.AutoSize = true;
-            this.label97.Enabled = false;
-            this.label97.Location = new System.Drawing.Point(97, 108);
-            this.label97.Name = "label97";
-            this.label97.Size = new System.Drawing.Size(68, 13);
-            this.label97.TabIndex = 58;
-            this.label97.Text = "Stop Voltage";
-            this.label97.Visible = false;
-            // 
-            // label98
-            // 
-            this.label98.AutoSize = true;
-            this.label98.Enabled = false;
-            this.label98.Location = new System.Drawing.Point(51, 129);
-            this.label98.Name = "label98";
-            this.label98.Size = new System.Drawing.Size(39, 13);
-            this.label98.TabIndex = 57;
-            this.label98.Text = "Volts:  ";
-            this.label98.Visible = false;
-            // 
-            // numericUpDown48
-            // 
-            this.numericUpDown48.DecimalPlaces = 2;
-            this.numericUpDown48.Increment = new decimal(new int[] {
-            5,
-            0,
-            0,
-            65536});
-            this.numericUpDown48.Location = new System.Drawing.Point(100, 85);
-            this.numericUpDown48.Maximum = new decimal(new int[] {
-            60,
-            0,
-            0,
-            0});
-            this.numericUpDown48.Name = "numericUpDown48";
-            this.numericUpDown48.Size = new System.Drawing.Size(201, 20);
-            this.numericUpDown48.TabIndex = 78;
-            // 
-            // numericUpDown49
-            // 
-            this.numericUpDown49.Enabled = false;
-            this.numericUpDown49.Location = new System.Drawing.Point(100, 43);
-            this.numericUpDown49.Name = "numericUpDown49";
-            this.numericUpDown49.Size = new System.Drawing.Size(201, 20);
-            this.numericUpDown49.TabIndex = 77;
-            this.numericUpDown49.Visible = false;
-            // 
-            // numericUpDown50
-            // 
-            this.numericUpDown50.Location = new System.Drawing.Point(100, 18);
-            this.numericUpDown50.Maximum = new decimal(new int[] {
-            99,
-            0,
-            0,
-            0});
-            this.numericUpDown50.Name = "numericUpDown50";
-            this.numericUpDown50.Size = new System.Drawing.Size(201, 20);
-            this.numericUpDown50.TabIndex = 76;
-            // 
-            // label100
-            // 
-            this.label100.AutoSize = true;
-            this.label100.Location = new System.Drawing.Point(97, 66);
-            this.label100.Name = "label100";
-            this.label100.Size = new System.Drawing.Size(92, 13);
-            this.label100.TabIndex = 53;
-            this.label100.Text = "Discharge Current";
-            // 
-            // label101
-            // 
-            this.label101.AutoSize = true;
-            this.label101.Location = new System.Drawing.Point(51, 87);
-            this.label101.Name = "label101";
-            this.label101.Size = new System.Drawing.Size(42, 13);
-            this.label101.TabIndex = 52;
-            this.label101.Text = "Amps:  ";
-            // 
-            // label102
-            // 
-            this.label102.AutoSize = true;
-            this.label102.Enabled = false;
-            this.label102.Location = new System.Drawing.Point(24, 46);
-            this.label102.Name = "label102";
-            this.label102.Size = new System.Drawing.Size(70, 13);
-            this.label102.TabIndex = 50;
-            this.label102.Text = "Time (Mins):  ";
-            this.label102.Visible = false;
-            // 
-            // label103
-            // 
-            this.label103.AutoSize = true;
-            this.label103.Location = new System.Drawing.Point(18, 20);
-            this.label103.Name = "label103";
-            this.label103.Size = new System.Drawing.Size(76, 13);
-            this.label103.TabIndex = 49;
-            this.label103.Text = "Time (Hours):  ";
-            // 
-            // label104
-            // 
-            this.label104.AutoSize = true;
-            this.label104.Location = new System.Drawing.Point(133, 29);
-            this.label104.Name = "label104";
-            this.label104.Size = new System.Drawing.Size(43, 13);
-            this.label104.TabIndex = 123;
-            this.label104.Text = "Mode:  ";
-            // 
-            // comboBox7
-            // 
-            this.comboBox7.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox7.Enabled = false;
-            this.comboBox7.FormattingEnabled = true;
-            this.comboBox7.Items.AddRange(new object[] {
-            "30 Full Discharge"});
-            this.comboBox7.Location = new System.Drawing.Point(182, 26);
-            this.comboBox7.Name = "comboBox7";
-            this.comboBox7.Size = new System.Drawing.Size(201, 21);
-            this.comboBox7.TabIndex = 75;
-            // 
-            // tabPage8
-            // 
-            this.tabPage8.Controls.Add(this.groupBox20);
-            this.tabPage8.Controls.Add(this.groupBox21);
-            this.tabPage8.Controls.Add(this.label126);
-            this.tabPage8.Controls.Add(this.comboBox9);
-            this.tabPage8.Location = new System.Drawing.Point(4, 40);
-            this.tabPage8.Name = "tabPage8";
-            this.tabPage8.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage8.Size = new System.Drawing.Size(470, 411);
-            this.tabPage8.TabIndex = 7;
-            this.tabPage8.Text = "Slow Charge-14  ";
-            this.tabPage8.UseVisualStyleBackColor = true;
-            // 
-            // groupBox20
-            // 
-            this.groupBox20.Controls.Add(this.numericUpDown56);
-            this.groupBox20.Controls.Add(this.label114);
-            this.groupBox20.Controls.Add(this.label115);
-            this.groupBox20.Controls.Add(this.numericUpDown57);
-            this.groupBox20.Controls.Add(this.numericUpDown58);
-            this.groupBox20.Controls.Add(this.numericUpDown59);
-            this.groupBox20.Controls.Add(this.label116);
-            this.groupBox20.Controls.Add(this.label117);
-            this.groupBox20.Controls.Add(this.label118);
-            this.groupBox20.Controls.Add(this.label119);
-            this.groupBox20.Enabled = false;
-            this.groupBox20.Location = new System.Drawing.Point(82, 224);
-            this.groupBox20.Name = "groupBox20";
-            this.groupBox20.Size = new System.Drawing.Size(307, 165);
-            this.groupBox20.TabIndex = 118;
-            this.groupBox20.TabStop = false;
-            this.groupBox20.Text = "Secondary Charge";
-            this.groupBox20.Visible = false;
-            // 
-            // numericUpDown56
-            // 
-            this.numericUpDown56.DecimalPlaces = 2;
-            this.numericUpDown56.Increment = new decimal(new int[] {
-            5,
-            0,
-            0,
-            65536});
-            this.numericUpDown56.Location = new System.Drawing.Point(100, 130);
-            this.numericUpDown56.Name = "numericUpDown56";
-            this.numericUpDown56.Size = new System.Drawing.Size(201, 20);
-            this.numericUpDown56.TabIndex = 89;
-            // 
-            // label114
-            // 
-            this.label114.AutoSize = true;
-            this.label114.Location = new System.Drawing.Point(97, 111);
-            this.label114.Name = "label114";
-            this.label114.Size = new System.Drawing.Size(89, 13);
-            this.label114.TabIndex = 44;
-            this.label114.Text = "Charge Voltage 2";
-            // 
-            // label115
-            // 
-            this.label115.AutoSize = true;
-            this.label115.Location = new System.Drawing.Point(51, 132);
-            this.label115.Name = "label115";
-            this.label115.Size = new System.Drawing.Size(39, 13);
-            this.label115.TabIndex = 43;
-            this.label115.Text = "Volts:  ";
-            // 
-            // numericUpDown57
-            // 
-            this.numericUpDown57.DecimalPlaces = 2;
-            this.numericUpDown57.Increment = new decimal(new int[] {
-            5,
-            0,
-            0,
-            65536});
-            this.numericUpDown57.Location = new System.Drawing.Point(100, 88);
-            this.numericUpDown57.Name = "numericUpDown57";
-            this.numericUpDown57.Size = new System.Drawing.Size(201, 20);
-            this.numericUpDown57.TabIndex = 88;
-            // 
-            // numericUpDown58
-            // 
-            this.numericUpDown58.Location = new System.Drawing.Point(100, 46);
-            this.numericUpDown58.Name = "numericUpDown58";
-            this.numericUpDown58.Size = new System.Drawing.Size(201, 20);
-            this.numericUpDown58.TabIndex = 87;
-            // 
-            // numericUpDown59
-            // 
-            this.numericUpDown59.Location = new System.Drawing.Point(100, 21);
-            this.numericUpDown59.Name = "numericUpDown59";
-            this.numericUpDown59.Size = new System.Drawing.Size(201, 20);
-            this.numericUpDown59.TabIndex = 86;
-            // 
-            // label116
-            // 
-            this.label116.AutoSize = true;
-            this.label116.Location = new System.Drawing.Point(97, 69);
-            this.label116.Name = "label116";
-            this.label116.Size = new System.Drawing.Size(87, 13);
-            this.label116.TabIndex = 39;
-            this.label116.Text = "Charge Current 2";
-            // 
-            // label117
-            // 
-            this.label117.AutoSize = true;
-            this.label117.Location = new System.Drawing.Point(51, 90);
-            this.label117.Name = "label117";
-            this.label117.Size = new System.Drawing.Size(42, 13);
-            this.label117.TabIndex = 38;
-            this.label117.Text = "Amps:  ";
-            // 
-            // label118
-            // 
-            this.label118.AutoSize = true;
-            this.label118.Location = new System.Drawing.Point(24, 49);
-            this.label118.Name = "label118";
-            this.label118.Size = new System.Drawing.Size(70, 13);
-            this.label118.TabIndex = 36;
-            this.label118.Text = "Time (Mins):  ";
-            // 
-            // label119
-            // 
-            this.label119.AutoSize = true;
-            this.label119.Location = new System.Drawing.Point(18, 23);
-            this.label119.Name = "label119";
-            this.label119.Size = new System.Drawing.Size(76, 13);
-            this.label119.TabIndex = 35;
-            this.label119.Text = "Time (Hours):  ";
-            // 
-            // groupBox21
-            // 
-            this.groupBox21.Controls.Add(this.numericUpDown60);
-            this.groupBox21.Controls.Add(this.label120);
-            this.groupBox21.Controls.Add(this.label121);
-            this.groupBox21.Controls.Add(this.numericUpDown61);
-            this.groupBox21.Controls.Add(this.numericUpDown62);
-            this.groupBox21.Controls.Add(this.numericUpDown63);
-            this.groupBox21.Controls.Add(this.label122);
-            this.groupBox21.Controls.Add(this.label123);
-            this.groupBox21.Controls.Add(this.label124);
-            this.groupBox21.Controls.Add(this.label125);
-            this.groupBox21.Location = new System.Drawing.Point(82, 53);
-            this.groupBox21.Name = "groupBox21";
-            this.groupBox21.Size = new System.Drawing.Size(307, 165);
-            this.groupBox21.TabIndex = 117;
-            this.groupBox21.TabStop = false;
-            // 
-            // numericUpDown60
-            // 
-            this.numericUpDown60.DecimalPlaces = 2;
-            this.numericUpDown60.Increment = new decimal(new int[] {
-            5,
-            0,
-            0,
-            65536});
-            this.numericUpDown60.Location = new System.Drawing.Point(100, 128);
-            this.numericUpDown60.Name = "numericUpDown60";
-            this.numericUpDown60.Size = new System.Drawing.Size(201, 20);
-            this.numericUpDown60.TabIndex = 85;
-            // 
-            // label120
-            // 
-            this.label120.AutoSize = true;
-            this.label120.Location = new System.Drawing.Point(97, 109);
-            this.label120.Name = "label120";
-            this.label120.Size = new System.Drawing.Size(106, 13);
-            this.label120.TabIndex = 32;
-            this.label120.Text = "Charge Over Voltage";
-            // 
-            // label121
-            // 
-            this.label121.AutoSize = true;
-            this.label121.Location = new System.Drawing.Point(51, 130);
-            this.label121.Name = "label121";
-            this.label121.Size = new System.Drawing.Size(39, 13);
-            this.label121.TabIndex = 31;
-            this.label121.Text = "Volts:  ";
-            // 
-            // numericUpDown61
-            // 
-            this.numericUpDown61.DecimalPlaces = 2;
-            this.numericUpDown61.Increment = new decimal(new int[] {
-            5,
-            0,
-            0,
-            65536});
-            this.numericUpDown61.Location = new System.Drawing.Point(100, 86);
-            this.numericUpDown61.Name = "numericUpDown61";
-            this.numericUpDown61.Size = new System.Drawing.Size(201, 20);
-            this.numericUpDown61.TabIndex = 84;
-            // 
-            // numericUpDown62
-            // 
-            this.numericUpDown62.Enabled = false;
-            this.numericUpDown62.Location = new System.Drawing.Point(100, 44);
-            this.numericUpDown62.Name = "numericUpDown62";
-            this.numericUpDown62.Size = new System.Drawing.Size(201, 20);
-            this.numericUpDown62.TabIndex = 83;
-            this.numericUpDown62.Visible = false;
-            // 
-            // numericUpDown63
-            // 
-            this.numericUpDown63.Enabled = false;
-            this.numericUpDown63.Location = new System.Drawing.Point(100, 19);
-            this.numericUpDown63.Name = "numericUpDown63";
-            this.numericUpDown63.Size = new System.Drawing.Size(201, 20);
-            this.numericUpDown63.TabIndex = 82;
-            this.numericUpDown63.Value = new decimal(new int[] {
-            14,
-            0,
-            0,
-            0});
-            // 
-            // label122
-            // 
-            this.label122.AutoSize = true;
-            this.label122.Location = new System.Drawing.Point(97, 67);
-            this.label122.Name = "label122";
-            this.label122.Size = new System.Drawing.Size(78, 13);
-            this.label122.TabIndex = 27;
-            this.label122.Text = "Charge Current";
-            // 
-            // label123
-            // 
-            this.label123.AutoSize = true;
-            this.label123.Location = new System.Drawing.Point(51, 88);
-            this.label123.Name = "label123";
-            this.label123.Size = new System.Drawing.Size(42, 13);
-            this.label123.TabIndex = 26;
-            this.label123.Text = "Amps:  ";
-            // 
-            // label124
-            // 
-            this.label124.AutoSize = true;
-            this.label124.Enabled = false;
-            this.label124.Location = new System.Drawing.Point(24, 47);
-            this.label124.Name = "label124";
-            this.label124.Size = new System.Drawing.Size(70, 13);
-            this.label124.TabIndex = 25;
-            this.label124.Text = "Time (Mins):  ";
-            this.label124.Visible = false;
-            // 
-            // label125
-            // 
-            this.label125.AutoSize = true;
-            this.label125.Location = new System.Drawing.Point(18, 21);
-            this.label125.Name = "label125";
-            this.label125.Size = new System.Drawing.Size(76, 13);
-            this.label125.TabIndex = 24;
-            this.label125.Text = "Time (Hours):  ";
-            // 
-            // label126
-            // 
-            this.label126.AutoSize = true;
-            this.label126.Location = new System.Drawing.Point(133, 29);
-            this.label126.Name = "label126";
-            this.label126.Size = new System.Drawing.Size(43, 13);
-            this.label126.TabIndex = 116;
-            this.label126.Text = "Mode:  ";
-            // 
-            // comboBox9
-            // 
-            this.comboBox9.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox9.FormattingEnabled = true;
-            this.comboBox9.Items.AddRange(new object[] {
-            "10 Single Rate",
-            "11 Single Rate with Peak Stop"});
-            this.comboBox9.Location = new System.Drawing.Point(182, 26);
-            this.comboBox9.Name = "comboBox9";
-            this.comboBox9.Size = new System.Drawing.Size(201, 21);
-            this.comboBox9.TabIndex = 81;
-            this.comboBox9.SelectedValueChanged += new System.EventHandler(this.comboBox9_SelectedValueChanged);
-            // 
-            // tabPage9
-            // 
-            this.tabPage9.Controls.Add(this.groupBox22);
-            this.tabPage9.Controls.Add(this.groupBox23);
-            this.tabPage9.Controls.Add(this.label139);
-            this.tabPage9.Controls.Add(this.comboBox10);
-            this.tabPage9.Location = new System.Drawing.Point(4, 40);
-            this.tabPage9.Name = "tabPage9";
-            this.tabPage9.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage9.Size = new System.Drawing.Size(470, 411);
-            this.tabPage9.TabIndex = 8;
-            this.tabPage9.Text = "Slow Charge-16  ";
-            this.tabPage9.UseVisualStyleBackColor = true;
-            // 
-            // groupBox22
-            // 
-            this.groupBox22.Controls.Add(this.numericUpDown64);
-            this.groupBox22.Controls.Add(this.label127);
-            this.groupBox22.Controls.Add(this.label128);
-            this.groupBox22.Controls.Add(this.numericUpDown65);
-            this.groupBox22.Controls.Add(this.numericUpDown66);
-            this.groupBox22.Controls.Add(this.numericUpDown67);
-            this.groupBox22.Controls.Add(this.label129);
-            this.groupBox22.Controls.Add(this.label130);
-            this.groupBox22.Controls.Add(this.label131);
-            this.groupBox22.Controls.Add(this.label132);
-            this.groupBox22.Enabled = false;
-            this.groupBox22.Location = new System.Drawing.Point(82, 224);
-            this.groupBox22.Name = "groupBox22";
-            this.groupBox22.Size = new System.Drawing.Size(307, 165);
-            this.groupBox22.TabIndex = 118;
-            this.groupBox22.TabStop = false;
-            this.groupBox22.Text = "Secondary Charge";
-            this.groupBox22.Visible = false;
-            // 
-            // numericUpDown64
-            // 
-            this.numericUpDown64.DecimalPlaces = 2;
-            this.numericUpDown64.Increment = new decimal(new int[] {
-            5,
-            0,
-            0,
-            65536});
-            this.numericUpDown64.Location = new System.Drawing.Point(100, 130);
-            this.numericUpDown64.Name = "numericUpDown64";
-            this.numericUpDown64.Size = new System.Drawing.Size(201, 20);
-            this.numericUpDown64.TabIndex = 98;
-            // 
-            // label127
-            // 
-            this.label127.AutoSize = true;
-            this.label127.Location = new System.Drawing.Point(97, 111);
-            this.label127.Name = "label127";
-            this.label127.Size = new System.Drawing.Size(89, 13);
-            this.label127.TabIndex = 44;
-            this.label127.Text = "Charge Voltage 2";
-            // 
-            // label128
-            // 
-            this.label128.AutoSize = true;
-            this.label128.Location = new System.Drawing.Point(51, 132);
-            this.label128.Name = "label128";
-            this.label128.Size = new System.Drawing.Size(39, 13);
-            this.label128.TabIndex = 43;
-            this.label128.Text = "Volts:  ";
-            // 
-            // numericUpDown65
-            // 
-            this.numericUpDown65.DecimalPlaces = 2;
-            this.numericUpDown65.Increment = new decimal(new int[] {
-            5,
-            0,
-            0,
-            65536});
-            this.numericUpDown65.Location = new System.Drawing.Point(100, 88);
-            this.numericUpDown65.Name = "numericUpDown65";
-            this.numericUpDown65.Size = new System.Drawing.Size(201, 20);
-            this.numericUpDown65.TabIndex = 97;
-            // 
-            // numericUpDown66
-            // 
-            this.numericUpDown66.Location = new System.Drawing.Point(100, 46);
-            this.numericUpDown66.Name = "numericUpDown66";
-            this.numericUpDown66.Size = new System.Drawing.Size(201, 20);
-            this.numericUpDown66.TabIndex = 96;
-            // 
-            // numericUpDown67
-            // 
-            this.numericUpDown67.Location = new System.Drawing.Point(100, 21);
-            this.numericUpDown67.Name = "numericUpDown67";
-            this.numericUpDown67.Size = new System.Drawing.Size(201, 20);
-            this.numericUpDown67.TabIndex = 95;
-            // 
-            // label129
-            // 
-            this.label129.AutoSize = true;
-            this.label129.Location = new System.Drawing.Point(97, 69);
-            this.label129.Name = "label129";
-            this.label129.Size = new System.Drawing.Size(87, 13);
-            this.label129.TabIndex = 39;
-            this.label129.Text = "Charge Current 2";
-            // 
-            // label130
-            // 
-            this.label130.AutoSize = true;
-            this.label130.Location = new System.Drawing.Point(51, 90);
-            this.label130.Name = "label130";
-            this.label130.Size = new System.Drawing.Size(42, 13);
-            this.label130.TabIndex = 38;
-            this.label130.Text = "Amps:  ";
-            // 
-            // label131
-            // 
-            this.label131.AutoSize = true;
-            this.label131.Location = new System.Drawing.Point(24, 49);
-            this.label131.Name = "label131";
-            this.label131.Size = new System.Drawing.Size(70, 13);
-            this.label131.TabIndex = 36;
-            this.label131.Text = "Time (Mins):  ";
-            // 
-            // label132
-            // 
-            this.label132.AutoSize = true;
-            this.label132.Location = new System.Drawing.Point(18, 23);
-            this.label132.Name = "label132";
-            this.label132.Size = new System.Drawing.Size(76, 13);
-            this.label132.TabIndex = 35;
-            this.label132.Text = "Time (Hours):  ";
-            // 
-            // groupBox23
-            // 
-            this.groupBox23.Controls.Add(this.numericUpDown68);
-            this.groupBox23.Controls.Add(this.label133);
-            this.groupBox23.Controls.Add(this.label134);
-            this.groupBox23.Controls.Add(this.numericUpDown69);
-            this.groupBox23.Controls.Add(this.numericUpDown70);
-            this.groupBox23.Controls.Add(this.numericUpDown71);
-            this.groupBox23.Controls.Add(this.label135);
-            this.groupBox23.Controls.Add(this.label136);
-            this.groupBox23.Controls.Add(this.label137);
-            this.groupBox23.Controls.Add(this.label138);
-            this.groupBox23.Location = new System.Drawing.Point(82, 53);
-            this.groupBox23.Name = "groupBox23";
-            this.groupBox23.Size = new System.Drawing.Size(307, 165);
-            this.groupBox23.TabIndex = 117;
-            this.groupBox23.TabStop = false;
-            // 
-            // numericUpDown68
-            // 
-            this.numericUpDown68.DecimalPlaces = 2;
-            this.numericUpDown68.Increment = new decimal(new int[] {
-            5,
-            0,
-            0,
-            65536});
-            this.numericUpDown68.Location = new System.Drawing.Point(100, 128);
-            this.numericUpDown68.Name = "numericUpDown68";
-            this.numericUpDown68.Size = new System.Drawing.Size(201, 20);
-            this.numericUpDown68.TabIndex = 94;
-            // 
-            // label133
-            // 
-            this.label133.AutoSize = true;
-            this.label133.Location = new System.Drawing.Point(97, 109);
-            this.label133.Name = "label133";
-            this.label133.Size = new System.Drawing.Size(106, 13);
-            this.label133.TabIndex = 32;
-            this.label133.Text = "Charge Over Voltage";
-            // 
-            // label134
-            // 
-            this.label134.AutoSize = true;
-            this.label134.Location = new System.Drawing.Point(51, 130);
-            this.label134.Name = "label134";
-            this.label134.Size = new System.Drawing.Size(39, 13);
-            this.label134.TabIndex = 31;
-            this.label134.Text = "Volts:  ";
-            // 
-            // numericUpDown69
-            // 
-            this.numericUpDown69.DecimalPlaces = 2;
-            this.numericUpDown69.Increment = new decimal(new int[] {
-            5,
-            0,
-            0,
-            65536});
-            this.numericUpDown69.Location = new System.Drawing.Point(100, 86);
-            this.numericUpDown69.Name = "numericUpDown69";
-            this.numericUpDown69.Size = new System.Drawing.Size(201, 20);
-            this.numericUpDown69.TabIndex = 93;
-            // 
-            // numericUpDown70
-            // 
-            this.numericUpDown70.Enabled = false;
-            this.numericUpDown70.Location = new System.Drawing.Point(100, 44);
-            this.numericUpDown70.Name = "numericUpDown70";
-            this.numericUpDown70.Size = new System.Drawing.Size(201, 20);
-            this.numericUpDown70.TabIndex = 92;
-            this.numericUpDown70.Visible = false;
-            // 
-            // numericUpDown71
-            // 
-            this.numericUpDown71.Enabled = false;
-            this.numericUpDown71.Location = new System.Drawing.Point(100, 19);
-            this.numericUpDown71.Name = "numericUpDown71";
-            this.numericUpDown71.Size = new System.Drawing.Size(201, 20);
-            this.numericUpDown71.TabIndex = 91;
-            this.numericUpDown71.Value = new decimal(new int[] {
-            16,
-            0,
-            0,
-            0});
-            // 
-            // label135
-            // 
-            this.label135.AutoSize = true;
-            this.label135.Location = new System.Drawing.Point(97, 67);
-            this.label135.Name = "label135";
-            this.label135.Size = new System.Drawing.Size(78, 13);
-            this.label135.TabIndex = 27;
-            this.label135.Text = "Charge Current";
-            // 
-            // label136
-            // 
-            this.label136.AutoSize = true;
-            this.label136.Location = new System.Drawing.Point(51, 88);
-            this.label136.Name = "label136";
-            this.label136.Size = new System.Drawing.Size(42, 13);
-            this.label136.TabIndex = 26;
-            this.label136.Text = "Amps:  ";
-            // 
-            // label137
-            // 
-            this.label137.AutoSize = true;
-            this.label137.Enabled = false;
-            this.label137.Location = new System.Drawing.Point(24, 47);
-            this.label137.Name = "label137";
-            this.label137.Size = new System.Drawing.Size(70, 13);
-            this.label137.TabIndex = 25;
-            this.label137.Text = "Time (Mins):  ";
-            this.label137.Visible = false;
-            // 
-            // label138
-            // 
-            this.label138.AutoSize = true;
-            this.label138.Location = new System.Drawing.Point(18, 21);
-            this.label138.Name = "label138";
-            this.label138.Size = new System.Drawing.Size(76, 13);
-            this.label138.TabIndex = 24;
-            this.label138.Text = "Time (Hours):  ";
-            // 
-            // label139
-            // 
-            this.label139.AutoSize = true;
-            this.label139.Location = new System.Drawing.Point(133, 29);
-            this.label139.Name = "label139";
-            this.label139.Size = new System.Drawing.Size(43, 13);
-            this.label139.TabIndex = 116;
-            this.label139.Text = "Mode:  ";
-            // 
-            // comboBox10
-            // 
-            this.comboBox10.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox10.FormattingEnabled = true;
-            this.comboBox10.Items.AddRange(new object[] {
-            "10 Single Rate",
-            "11 Single Rate with Peak Stop"});
-            this.comboBox10.Location = new System.Drawing.Point(182, 26);
-            this.comboBox10.Name = "comboBox10";
-            this.comboBox10.Size = new System.Drawing.Size(201, 21);
-            this.comboBox10.TabIndex = 90;
-            this.comboBox10.SelectedValueChanged += new System.EventHandler(this.comboBox10_SelectedValueChanged);
-            // 
             // tabPage10
             // 
             this.tabPage10.Controls.Add(this.groupBox24);
@@ -3690,7 +4034,7 @@
             this.tabPage10.Location = new System.Drawing.Point(4, 40);
             this.tabPage10.Name = "tabPage10";
             this.tabPage10.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage10.Size = new System.Drawing.Size(470, 411);
+            this.tabPage10.Size = new System.Drawing.Size(529, 411);
             this.tabPage10.TabIndex = 9;
             this.tabPage10.Text = "Custom Chg  ";
             this.tabPage10.UseVisualStyleBackColor = true;
@@ -3992,7 +4336,7 @@
             this.tabPage11.Location = new System.Drawing.Point(4, 40);
             this.tabPage11.Name = "tabPage11";
             this.tabPage11.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage11.Size = new System.Drawing.Size(470, 411);
+            this.tabPage11.Size = new System.Drawing.Size(529, 411);
             this.tabPage11.TabIndex = 10;
             this.tabPage11.Text = "Custom Cap   ";
             this.tabPage11.UseVisualStyleBackColor = true;
@@ -4201,7 +4545,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(991, 498);
+            this.ClientSize = new System.Drawing.Size(1044, 498);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.label37);
             this.Controls.Add(this.groupBox11);
@@ -4262,6 +4606,20 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown14)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown15)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown16)).EndInit();
+            this.tabPage13.ResumeLayout(false);
+            this.tabPage13.PerformLayout();
+            this.groupBox9.ResumeLayout(false);
+            this.groupBox9.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown91)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown92)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown93)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown94)).EndInit();
+            this.groupBox10.ResumeLayout(false);
+            this.groupBox10.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown95)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown96)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown97)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown98)).EndInit();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
             this.groupBox4.ResumeLayout(false);
@@ -4304,20 +4662,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown38)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown39)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown40)).EndInit();
-            this.tabPage12.ResumeLayout(false);
-            this.tabPage12.PerformLayout();
-            this.groupBox26.ResumeLayout(false);
-            this.groupBox26.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown80)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown81)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown82)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown83)).EndInit();
-            this.groupBox27.ResumeLayout(false);
-            this.groupBox27.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown84)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown85)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown86)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown87)).EndInit();
             this.tabPage6.ResumeLayout(false);
             this.tabPage6.PerformLayout();
             this.groupBox17.ResumeLayout(false);
@@ -4364,6 +4708,20 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown69)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown70)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown71)).EndInit();
+            this.tabPage12.ResumeLayout(false);
+            this.tabPage12.PerformLayout();
+            this.groupBox26.ResumeLayout(false);
+            this.groupBox26.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown80)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown81)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown82)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown83)).EndInit();
+            this.groupBox27.ResumeLayout(false);
+            this.groupBox27.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown84)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown85)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown86)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown87)).EndInit();
             this.tabPage10.ResumeLayout(false);
             this.tabPage10.PerformLayout();
             this.groupBox24.ResumeLayout(false);
@@ -4719,5 +5077,30 @@
         private System.Windows.Forms.NumericUpDown numericUpDown89;
         private System.Windows.Forms.NumericUpDown numericUpDown90;
         public System.Windows.Forms.ToolStripComboBox toolStripCBBats;
+        private System.Windows.Forms.TabPage tabPage13;
+        private System.Windows.Forms.GroupBox groupBox9;
+        private System.Windows.Forms.NumericUpDown numericUpDown91;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.NumericUpDown numericUpDown92;
+        private System.Windows.Forms.NumericUpDown numericUpDown93;
+        private System.Windows.Forms.NumericUpDown numericUpDown94;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label31;
+        private System.Windows.Forms.Label label34;
+        private System.Windows.Forms.Label label36;
+        private System.Windows.Forms.GroupBox groupBox10;
+        private System.Windows.Forms.NumericUpDown numericUpDown95;
+        private System.Windows.Forms.Label label166;
+        private System.Windows.Forms.Label label167;
+        private System.Windows.Forms.NumericUpDown numericUpDown96;
+        private System.Windows.Forms.NumericUpDown numericUpDown97;
+        private System.Windows.Forms.NumericUpDown numericUpDown98;
+        private System.Windows.Forms.Label label168;
+        private System.Windows.Forms.Label label169;
+        private System.Windows.Forms.Label label170;
+        private System.Windows.Forms.Label label171;
+        private System.Windows.Forms.Label label172;
+        private System.Windows.Forms.ComboBox comboBox14;
     }
 }
