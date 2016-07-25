@@ -205,7 +205,7 @@ namespace NewBTASProto
                             cRunTest[station].Cancel();
                             return;
                         }
-                        else if (dataGridView1.Rows[station].Cells[4].Style.BackColor != Color.Green)
+                        else if (dataGridView1.Rows[station].Cells[4].Style.BackColor != Color.Green && dataGridView1.Rows[station].Cells[4].Style.BackColor != Color.YellowGreen)
                         {
                             this.Invoke((MethodInvoker)delegate()
                             {
@@ -4243,8 +4243,8 @@ namespace NewBTASProto
                                     ohmSet
                                      * */
 
-                                    Debug.Print("Current:" + GlobalVars.ICData[Cstation].battCurrent.ToString());
-                                    Debug.Print("Voltage:" + GlobalVars.ICData[Cstation].battVoltage.ToString());
+                                    //Debug.Print("Current:" + GlobalVars.ICData[Cstation].battCurrent.ToString());
+                                    //Debug.Print("Voltage:" + GlobalVars.ICData[Cstation].battVoltage.ToString());
                                     // we are past the startup dealy, so lets see if we are reasonably close to one of the currents
                                     //check the currents
                                     if (GlobalVars.ICData[Cstation].testMode.Contains("32"))

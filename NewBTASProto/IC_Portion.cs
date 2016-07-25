@@ -39,6 +39,9 @@ namespace NewBTASProto
          byte[] comErrorNum = new byte[16] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
          byte[] comGoodNum = new byte[16] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
+        //Shorting Board?
+         bool[] autoShort = new bool[16] { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
+
         public void pollICs()
         {
 
@@ -836,6 +839,142 @@ namespace NewBTASProto
                                     else { throw ex; }
                                 }       // end catch
                             } // end MasterFiller if
+
+                            ////////////////////////////////////////////AUTO SHORT BOARDS ARE SET HERE///////////////////////
+                            if (autoShort[j] == true && d.Rows[j][2].ToString() == "Discharge" && (bool) d.Rows[j][5] == true)
+                            {
+                                try
+                                {
+                                    // first lets create our output string
+
+                                    string toAutoShort = "~" + (j + 32).ToString() + "L";
+                                    //Create the 48 bit output
+                                    char tempStore = (char)0;
+                                    byte checkSum = 0;
+
+                                    System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                                    for (int b = 0; b < 24; b++)
+                                    {
+                                        if (GlobalVars.CScanData[j].orderedCells[b] < 0.1 && b < GlobalVars.CScanData[j].cellsToDisplay)
+                                        {
+                                            //set the 1 bit
+                                            tempStore += (char)Math.Pow(2, ((2 * b) % 8));
+                                        }
+                                        if (GlobalVars.CScanData[j].orderedCells[b] < 1 && b < GlobalVars.CScanData[j].cellsToDisplay)
+                                        {
+                                            //set the 0 bit
+                                            tempStore += (char)Math.Pow(2, ((2 * b + 1) % 8)); 
+                                        }
+
+                                        // do we need to add the char to the output string?
+                                        if((b+1) % 4 == 0)
+                                        {
+                                            sb.Append(tempStore);
+                                            checkSum += (byte) tempStore;
+                                            tempStore = (char) 0;
+                                        }
+                                    }
+                                    toAutoShort += sb.ToString();
+                                    toAutoShort += (char) checkSum;
+                                    toAutoShort += "Z";
+
+                                    Thread.Sleep(10);
+                                    // send the short command to the masterfiller
+                                    // set up the comport
+                                    ICComPort = new SerialPort();
+                                    ICComPort.Encoding = Encoding.GetEncoding(1252);
+                                    ICComPort.ReadTimeout = 20;
+                                    ICComPort.PortName = GlobalVars.ICComPort;
+                                    ICComPort.BaudRate = 19200;
+                                    ICComPort.DataBits = 8;
+                                    ICComPort.StopBits = StopBits.One;
+                                    ICComPort.Handshake = Handshake.None;
+                                    ICComPort.Parity = Parity.None;
+                                    ICComPort.DtrEnable = true;
+                                    ICComPort.RtsEnable = false;
+                                    ICComPort.Open();
+                                    ICComPort.Write(toAutoShort);
+                                    // wait for a response
+                                    tempBuff = ICComPort.ReadTo("Z");
+                                    if (!tempBuff.Equals(toAutoShort.Substring(0, 11), StringComparison.Ordinal))
+                                    {
+                                        Debug.Print("toAutoShort");
+                                        char[] chars = toAutoShort.ToCharArray();
+                                        StringBuilder stringBuilder = new StringBuilder();
+                                        foreach (char c in chars)
+                                        {
+                                            stringBuilder.Append(((Int16)c).ToString("x"));
+                                        }
+                                        String textAsHex = stringBuilder.ToString();
+                                        Debug.Print(textAsHex);
+                                    }
+                                    ICComPort.Close();
+                                    ICComPort.Dispose();
+                                    // we got a response so lets update the grid and the status box
+                                    //A[1] has the terminal ID in it
+
+                                }
+                                catch (Exception ex)
+                                {
+                                    if (ex is System.TimeoutException)
+                                    {
+                                        Debug.Print("time out");
+                                        // didn't get anything...
+                                        ICComPort.Close();
+                                        ICComPort.Dispose();
+                                    }
+                                    else if (ex is System.IO.IOException || ex is System.InvalidOperationException)
+                                    {
+                                        this.Invoke((MethodInvoker)delegate
+                                        {
+                                            //let the user know that the comports are no longer working
+                                            label8.Text = "Check Comports' Settings";
+                                            label8.Visible = true;
+                                            sendNote(0, 1, "COMPORTS DISCONNECTED. PLEASE CHECK.");
+                                        });
+
+                                        //cancel
+                                        this.cPollIC.Cancel();
+                                        this.cPollCScans.Cancel();
+                                        this.sequentialScanT.Cancel();
+                                        // close the com ports
+                                        CSCANComPort.Close();
+                                        CSCANComPort.Dispose();
+                                        ICComPort.Close();
+                                        ICComPort.Dispose();
+
+                                        for (int q = 0; q < 16; q++)
+                                        {
+                                            cRunTest[q].Cancel();
+                                        }
+
+                                        return;
+                                    }
+                                    else if (ex is System.ObjectDisposedException)
+                                    {
+                                        this.Invoke((MethodInvoker)delegate
+                                        {
+                                            //let the user know that the comports are no longer working
+                                            label8.Text = "Check Comports' Settings";
+                                            label8.Visible = true;
+                                            sendNote(0, 1, "COMPORTS DISCONNECTED. PLEASE CHECK.");
+                                        });
+
+                                        //cancel
+                                        this.cPollIC.Cancel();
+                                        this.cPollCScans.Cancel();
+                                        this.sequentialScanT.Cancel();
+
+                                        for (int q = 0; q < 16; q++)
+                                        {
+                                            cRunTest[q].Cancel();
+                                        }
+
+                                        return;
+                                    }
+                                    else { throw ex; }
+                                } // end catch
+                            } // end main if
 
                         }           // end for
                     }               // end try

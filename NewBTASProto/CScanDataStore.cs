@@ -101,7 +101,7 @@ namespace NewBTASProto
             // TCB = 0 for TEST PLUG
             switch(TCAB){
                 case 0:
-                    tempPlateType = "TEST BOX";
+                    tempPlateType = "CELL SIM";
                     break;
                 case 1:
                     tempPlateType = "TEMP-PLATE";
@@ -194,7 +194,7 @@ namespace NewBTASProto
                     shuntCableType = "2A / 10A";
                     break;
                 case 7:
-                    shuntCableType = "TEST BOX";
+                    shuntCableType = "CELL SIM";
                     break;
                 default:
                     break;

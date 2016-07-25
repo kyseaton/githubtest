@@ -134,6 +134,7 @@ namespace NewBTASProto
                                     //A[1] has the terminal ID in it
                                     testData = new CScanDataStore(A);
                                     GlobalVars.CScanData[currentRow] = testData;
+                                    // Set the autoShort to true if we have a auto short board              
 
                                     int chargerNum = -1;
                                     //figure out which charger you have on that channel.
@@ -161,8 +162,20 @@ namespace NewBTASProto
                                         this.Invoke((MethodInvoker)delegate
                                         {
 
-                                            // first set the cell to green
-                                            dataGridView1.Rows[currentRow].Cells[4].Style.BackColor = Color.Green;
+                                            if (testData.CCID == 23)
+                                            {
+                                                autoShort[currentRow] = true;
+                                                // first set the cell to green
+                                                dataGridView1.Rows[currentRow].Cells[4].Style.BackColor = Color.YellowGreen;
+                                            }
+                                            else
+                                            {
+                                                autoShort[currentRow] = false;
+                                                // first set the cell to green
+                                                dataGridView1.Rows[currentRow].Cells[4].Style.BackColor = Color.Green;
+                                            }
+
+                                            
 
                                             //update chart function
                                             updateChart(testData);
@@ -672,7 +685,11 @@ namespace NewBTASProto
                                         {
                                             this.Invoke((MethodInvoker)delegate
                                             {
-                                                if ((bool)d.Rows[tempClick][4] == true) { dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[4].Style.BackColor = Color.Red; }
+                                                if ((bool)d.Rows[tempClick][4] == true) 
+                                                { 
+                                                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[4].Style.BackColor = Color.Red;
+                                                    autoShort[dataGridView1.CurrentRow.Index] = false;
+                                                }
                                                 if (!d.Rows[dataGridView1.CurrentRow.Index][10].ToString().Contains("ICA")) { dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.Gainsboro; }
                                                 chart1.Series.Clear();
                                                 chart1.Invalidate();
@@ -809,8 +826,19 @@ namespace NewBTASProto
                                         {
                                             this.Invoke((MethodInvoker)delegate
                                             {
-                                                // set the cell to green
-                                                dataGridView1.Rows[j].Cells[4].Style.BackColor = Color.Green;
+                                                if (testData.CCID == 23)
+                                                {
+                                                    autoShort[j] = true;
+                                                    // set the cell to yellow green
+                                                    dataGridView1.Rows[j].Cells[4].Style.BackColor = Color.YellowGreen;
+                                                }
+                                                else
+                                                {
+                                                    autoShort[j] = false;
+                                                    // set the cell to green
+                                                    dataGridView1.Rows[j].Cells[4].Style.BackColor = Color.Green;
+                                                }
+
                                             });
                                         }  // end if
 
@@ -1061,8 +1089,12 @@ namespace NewBTASProto
                                             {
                                                 this.Invoke((MethodInvoker)delegate
                                                 {
-                                                    // set the cell to green
-                                                    if ((bool)d.Rows[j][4]){dataGridView1.Rows[j].Cells[4].Style.BackColor = Color.Red;}
+                                                    // set the cell to red
+                                                    if ((bool)d.Rows[j][4])
+                                                    {
+                                                        dataGridView1.Rows[j].Cells[4].Style.BackColor = Color.Red;
+                                                        autoShort[j] = false;                                                        
+                                                    }
                                                     if(!d.Rows[j][10].ToString().Contains("ICA")){ dataGridView1.Rows[j].Cells[8].Style.BackColor = Color.Gainsboro;}
                                                 });
                                             }
