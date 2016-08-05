@@ -95,22 +95,22 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(154, 9);
+            this.label3.Location = new System.Drawing.Point(167, 9);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(120, 13);
+            this.label3.Size = new System.Drawing.Size(95, 13);
             this.label3.TabIndex = 8;
-            this.label3.Text = "View Help Manual PDF:";
+            this.label3.Text = "View Manual PDF:";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // linkLabel3
             // 
             this.linkLabel3.AutoSize = true;
-            this.linkLabel3.Location = new System.Drawing.Point(200, 22);
+            this.linkLabel3.Location = new System.Drawing.Point(193, 22);
             this.linkLabel3.Name = "linkLabel3";
-            this.linkLabel3.Size = new System.Drawing.Size(29, 13);
+            this.linkLabel3.Size = new System.Drawing.Size(42, 13);
             this.linkLabel3.TabIndex = 9;
             this.linkLabel3.TabStop = true;
-            this.linkLabel3.Text = "Help";
+            this.linkLabel3.Text = "Manual";
             this.linkLabel3.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel3_LinkClicked);
             // 
             // pictureBox1
@@ -140,7 +140,7 @@
             this.MaximizeBox = false;
             this.Name = "Help";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Program Version";
+            this.Text = "Help";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

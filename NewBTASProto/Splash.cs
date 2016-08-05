@@ -30,8 +30,8 @@ namespace NewBTASProto
             
             "2995964807",                       // Lufthansa Technik Malta
             "7121966571",                       // Global Aerospace
-            "2625219448",
-            "9185399390",
+            "2625219448",                       // Yardimcilar
+            "9185399390",                       // Yardimcilar
             "1555832326",
             "6800782161",
             "9238872250",

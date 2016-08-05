@@ -841,7 +841,9 @@ namespace NewBTASProto
                             } // end MasterFiller if
 
                             ////////////////////////////////////////////AUTO SHORT BOARDS ARE SET HERE///////////////////////
-                            if (autoShort[j] == true && d.Rows[j][2].ToString() == "Discharge" && (bool) d.Rows[j][5] == true)
+                            #region AutoShort Comms
+
+                            if (false)//autoShort[j] == true && d.Rows[j][2].ToString() == "Discharge" && (bool) d.Rows[j][5] == true)
                             {
                                 try
                                 {
@@ -853,14 +855,14 @@ namespace NewBTASProto
                                     byte checkSum = 0;
 
                                     System.Text.StringBuilder sb = new System.Text.StringBuilder();
-                                    for (int b = 0; b < 24; b++)
+                                    for (int b = 0; b < GlobalVars.CScanData[j].cellsToDisplay; b++)
                                     {
-                                        if (GlobalVars.CScanData[j].orderedCells[b] < 0.1 && b < GlobalVars.CScanData[j].cellsToDisplay)
+                                        if (Math.Abs(GlobalVars.CScanData[j].orderedCells[b]) < 0.1)
                                         {
                                             //set the 1 bit
                                             tempStore += (char)Math.Pow(2, ((2 * b) % 8));
                                         }
-                                        if (GlobalVars.CScanData[j].orderedCells[b] < 1 && b < GlobalVars.CScanData[j].cellsToDisplay)
+                                        if (Math.Abs(GlobalVars.CScanData[j].orderedCells[b]) < 1)
                                         {
                                             //set the 0 bit
                                             tempStore += (char)Math.Pow(2, ((2 * b + 1) % 8)); 
@@ -882,7 +884,7 @@ namespace NewBTASProto
                                     // send the short command to the masterfiller
                                     // set up the comport
                                     ICComPort = new SerialPort();
-                                    ICComPort.Encoding = Encoding.GetEncoding(1252);
+                                    ICComPort.Encoding = Encoding.GetEncoding(28591);
                                     ICComPort.ReadTimeout = 20;
                                     ICComPort.PortName = GlobalVars.ICComPort;
                                     ICComPort.BaudRate = 19200;
@@ -975,6 +977,8 @@ namespace NewBTASProto
                                     else { throw ex; }
                                 } // end catch
                             } // end main if
+
+#endregion
 
                         }           // end for
                     }               // end try
