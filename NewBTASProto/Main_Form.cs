@@ -3273,12 +3273,125 @@ namespace NewBTASProto
                         string cmdStr;
                         OleDbCommand cmd;
 
-                        //Delete BatteryApp
-                        cmdStr = "DROP TABLE BatteriesSTD, BatteryApp, BatteryMfr, BatteryTechnology, Cables, CellWaterLevel, Chargers, OrderStatus, SolicitedTest, SystemOptions, Terminals";
-                        cmd = new OleDbCommand(cmdStr, conn);
-                        conn.Open();
-                        cmd.ExecuteNonQuery();
-                        conn.Close();
+                        // Make sure we have an Options Table
+                        //Delete Unused Tables
+                        try
+                        {
+                            cmdStr = "CREATE TABLE Options (Degree Memo, CellOrder Memo, BusinessName Memo)";
+                            cmd = new OleDbCommand(cmdStr, conn);
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                            conn.Close();
+
+                            cmdStr = "INSERT INTO Options (Degree, CellOrder, BusinessName) VALUES ('C.', 'Neg. to Pos.', 'Business Name');";
+                            cmd = new OleDbCommand(cmdStr, conn);
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                            conn.Close();
+                        }
+                        catch { conn.Close(); }
+
+                        //Delete Unused Tables
+                        try
+                        {
+                            cmdStr = "DROP TABLE BatteriesSTD";
+                            cmd = new OleDbCommand(cmdStr, conn);
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                            conn.Close();
+                        }
+                        catch { conn.Close(); }
+                        try
+                        {
+                            cmdStr = "DROP TABLE BatteryApp";
+                            cmd = new OleDbCommand(cmdStr, conn);
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                            conn.Close();
+                        }
+                        catch { conn.Close(); }
+                        try
+                        {
+                            cmdStr = "DROP TABLE BatteryMfr";
+                            cmd = new OleDbCommand(cmdStr, conn);
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                            conn.Close();
+                        }
+                        catch { conn.Close(); }
+                        try
+                        {
+                            cmdStr = "DROP TABLE BatteryTechnology";
+                            cmd = new OleDbCommand(cmdStr, conn);
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                            conn.Close();
+                        }
+                        catch { conn.Close(); }
+                        try
+                        {
+                            cmdStr = "DROP TABLE Cables";
+                            cmd = new OleDbCommand(cmdStr, conn);
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                            conn.Close();
+                        }
+                        catch { conn.Close(); }
+                        try
+                        {
+                            cmdStr = "DROP TABLE CellWaterLevel";
+                            cmd = new OleDbCommand(cmdStr, conn);
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                            conn.Close();
+                        }
+                        catch { conn.Close(); }
+                        try
+                        {
+                            cmdStr = "DROP TABLE Chargers";
+                            cmd = new OleDbCommand(cmdStr, conn);
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                            conn.Close();
+                        }
+                        catch { conn.Close(); }
+                        try
+                        {
+                            cmdStr = "DROP TABLE OrderStatus";
+                            cmd = new OleDbCommand(cmdStr, conn);
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                            conn.Close();
+                        }
+                        catch { conn.Close(); }
+                        try
+                        {
+                            cmdStr = "DROP TABLE SolicitedTest";
+                            cmd = new OleDbCommand(cmdStr, conn);
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                            conn.Close();
+                        }
+                        catch { conn.Close(); }
+                        try
+                        {
+                            cmdStr = "DROP TABLE SystemOptions";
+                            cmd = new OleDbCommand(cmdStr, conn);
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                            conn.Close();
+                        }
+                        catch { conn.Close(); }
+                        try
+                        {
+                            cmdStr = "DROP TABLE Terminals";
+                            cmd = new OleDbCommand(cmdStr, conn);
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                            conn.Close();
+                        }
+                        catch { conn.Close(); }
+
 
                         //Add columns to BatteriesCustom
                         cmdStr = "ALTER TABLE BatteriesCustom ADD AFLD31 Text(255), AFLD41 Text(255)" +
