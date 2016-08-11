@@ -71,7 +71,7 @@ namespace NewBTASProto
             tt2.Text = "";
             chart2.Titles.Add(tt2);
 
-            checkBox1.Checked = Properties.Settings.Default.dualPlots;
+            checkBox1.Checked = GlobalVars.dualPlots;
 
             //myDataSet.Tables[0].
 
@@ -1549,47 +1549,58 @@ namespace NewBTASProto
                     case "As Received":
                         interval = 1 / 30;
                         points = 3;
+                        chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                         break;
                     case "Full Charge-6":
                         interval = 5;
                         points = 73;
+                        chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                         break;
                     case "Full Charge-4":
                         interval = 4;
                         points = 61;
+                        chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                         break;
                     case "Top Charge-4":
                         interval = 4;
                         points = 61;
+                        chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                         break;
                     case "Top Charge-2":
                         interval = 3;
                         points = 41;
+                        chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                         break;
                     case "Top Charge-1":
                         interval = 1;
                         points = 61;
+                        chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                         break;
                     case "Constant Voltage":
                         interval = 5;
                         points = 73;
+                        chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                         break;
                     case "Capacity-1":
                     case "Capacity":
                         interval = 1;
                         points = 61;
+                        chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                         break;
                     case "Discharge":
                         interval = 1;
                         points = 61;
+                        chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                         break;
                     case "Slow Charge-14":
                         interval = 12;
                         points = 73;
+                        chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                         break;
                     case "SlowCharge-16":
                         interval = 16;
                         points = 61;
+                        chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                         break;
                     default:
                         //custom cap and charge get the default...
@@ -1792,47 +1803,58 @@ namespace NewBTASProto
                         case "As Received":
                             interval = 1 / 30;
                             points = 3;
+                            chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                             break;
                         case "Full Charge-6":
                             interval = 5;
                             points = 73;
+                            chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                             break;
                         case "Full Charge-4":
                             interval = 4;
                             points = 61;
+                            chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                             break;
                         case "Top Charge-4":
                             interval = 4;
                             points = 61;
+                            chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                             break;
                         case "Top Charge-2":
                             interval = 3;
                             points = 41;
+                            chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                             break;
                         case "Top Charge-1":
                             interval = 1;
                             points = 61;
+                            chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                             break;
                         case "Constant Voltage":
                             interval = 5;
                             points = 73;
+                            chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                             break;
                         case "Capacity-1":
                         case "Capacity":
                             interval = 1;
                             points = 61;
+                            chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                             break;
                         case "Discharge":
                             interval = 1;
                             points = 61;
+                            chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                             break;
                         case "Slow Charge-14":
                             interval = 12;
                             points = 73;
+                            chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                             break;
                         case "SlowCharge-16":
                             interval = 16;
                             points = 61;
+                            chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                             break;
                         default:
                             //custom cap and charge get the default...
@@ -2215,47 +2237,58 @@ namespace NewBTASProto
                     case "As Received":
                         interval = 1 / 30;
                         points = 3;
+                        chart2.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                         break;
                     case "Full Charge-6":
                         interval = 5;
                         points = 73;
+                        chart2.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                         break;
                     case "Full Charge-4":
                         interval = 4;
                         points = 61;
+                        chart2.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                         break;
                     case "Top Charge-4":
                         interval = 4;
                         points = 61;
+                        chart2.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                         break;
                     case "Top Charge-2":
                         interval = 3;
                         points = 41;
+                        chart2.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                         break;
                     case "Top Charge-1":
                         interval = 1;
                         points = 61;
+                        chart2.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                         break;
                     case "Constant Voltage":
                         interval = 5;
                         points = 73;
+                        chart2.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                         break;
                     case "Capacity-1":
                     case "Capacity":
                         interval = 1;
                         points = 61;
+                        chart2.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                         break;
                     case "Discharge":
                         interval = 1;
                         points = 61;
+                        chart2.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                         break;
                     case "Slow Charge-14":
                         interval = 12;
                         points = 73;
+                        chart2.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                         break;
                     case "SlowCharge-16":
                         interval = 16;
                         points = 61;
+                        chart2.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                         break;
                     default:
                         //custom cap and charge get the default...
@@ -2459,47 +2492,58 @@ namespace NewBTASProto
                         case "As Received":
                             interval = 1 / 30;
                             points = 3;
+                            chart2.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                             break;
                         case "Full Charge-6":
                             interval = 5;
                             points = 73;
+                            chart2.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                             break;
                         case "Full Charge-4":
                             interval = 4;
                             points = 61;
+                            chart2.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                             break;
                         case "Top Charge-4":
                             interval = 4;
                             points = 61;
+                            chart2.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                             break;
                         case "Top Charge-2":
                             interval = 3;
                             points = 41;
+                            chart2.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                             break;
                         case "Top Charge-1":
                             interval = 1;
                             points = 61;
+                            chart2.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                             break;
                         case "Constant Voltage":
                             interval = 5;
                             points = 73;
+                            chart2.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                             break;
                         case "Capacity-1":
                         case "Capacity":
                             interval = 1;
                             points = 61;
+                            chart2.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                             break;
                         case "Discharge":
                             interval = 1;
                             points = 61;
+                            chart2.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                             break;
                         case "Slow Charge-14":
                             interval = 12;
                             points = 73;
+                            chart2.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                             break;
                         case "SlowCharge-16":
                             interval = 16;
                             points = 61;
+                            chart2.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                             break;
                         default:
                             //custom cap and charge get the default...
@@ -2603,8 +2647,7 @@ namespace NewBTASProto
 
         private void Graphics_Form_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Properties.Settings.Default.dualPlots = checkBox1.Checked;
-            Properties.Settings.Default.Save();
+            GlobalVars.dualPlots = checkBox1.Checked;
         }
 
         static double GetDouble(string s)

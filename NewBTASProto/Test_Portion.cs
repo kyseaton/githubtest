@@ -3868,7 +3868,7 @@ namespace NewBTASProto
                             //only check once every 20 secs...
 
                             //if we have the cell check turned on and the we are in charge check the cells for negative slopes...
-                            if (DateTime.Now.Ticks - cellCheckTimer.Ticks > 200000000 && Properties.Settings.Default.DecliningCellVoltageTestEnabled && !(testType.Contains("Cap") || testType.Contains("Dis")))
+                            if (DateTime.Now.Ticks - cellCheckTimer.Ticks > 200000000 && GlobalVars.DecliningCellVoltageTestEnabled && !(testType.Contains("Cap") || testType.Contains("Dis")))
                             {
                                 cellCheckTimer = DateTime.Now;
 
@@ -4753,7 +4753,7 @@ namespace NewBTASProto
                     ////////////////////////////////POST TEST CHECKS SECTION////////////////////////////////////////////////////////////////////////////////////////////////////
                     #region POST TEST CHECKS
 
-                    if (Properties.Settings.Default.CapTestVarEnable && testType.Contains("As"))
+                    if (GlobalVars.CapTestVarEnable && testType.Contains("As"))
                     {
                         //start with the master
                         int Cells;
@@ -4781,7 +4781,7 @@ namespace NewBTASProto
                         //now recalculate the average after throwing out the outliers..
                         for (int i = 0; i < Cells; i++)
                         {
-                            if (Math.Abs(lastReading.orderedCells[i] - average) < (double)Properties.Settings.Default.CapTestVarValue)
+                            if (Math.Abs(lastReading.orderedCells[i] - average) < (double)GlobalVars.CapTestVarValue)
                             {
                                 cleanAverage += lastReading.orderedCells[i];
                                 goodCells++;
@@ -4835,7 +4835,7 @@ namespace NewBTASProto
                             //now recalculate the average after throwing out the outliers..
                             for (int i = 0; i < Cells; i++)
                             {
-                                if (Math.Abs(lastSlaveReading.orderedCells[i] - average) < (double)Properties.Settings.Default.CapTestVarValue)
+                                if (Math.Abs(lastSlaveReading.orderedCells[i] - average) < (double)GlobalVars.CapTestVarValue)
                                 {
                                     cleanAverage += lastSlaveReading.orderedCells[i];
                                     goodCells++;
@@ -5116,11 +5116,11 @@ namespace NewBTASProto
 
 
                         // do the cell test check
-                        if (Properties.Settings.Default.FC6C1MinimumCellVotageAfterChargeTestEnabled)
+                        if (GlobalVars.FC6C1MinimumCellVotageAfterChargeTestEnabled)
                         {
                             for (int i = 0; i < (int)pci.Rows[station][3]; i++)
                             {
-                                if (GlobalVars.CScanData[station].orderedCells[i] < (double)Properties.Settings.Default.FC6C1MinimumCellVoltageThreshold)
+                                if (GlobalVars.CScanData[station].orderedCells[i] < (double)GlobalVars.FC6C1MinimumCellVoltageThreshold)
                                 {
                                     // one of the cells didn't meet the minimum voltage threshold
                                     // kill the combo test
@@ -5165,7 +5165,7 @@ namespace NewBTASProto
                         }
 
                         //defined wait
-                        if (Properties.Settings.Default.FC6C1WaitEnabled)
+                        if (GlobalVars.FC6C1WaitEnabled)
                         {
 
                             var stopwatch = new Stopwatch();
@@ -5177,7 +5177,7 @@ namespace NewBTASProto
 
                             stopwatch.Start();
 
-                            while (stopwatch.ElapsedMilliseconds < (Properties.Settings.Default.FC6C1WaitTime * 60 * 1000))
+                            while (stopwatch.ElapsedMilliseconds < (GlobalVars.FC6C1WaitTime * 60 * 1000))
                             {
                                 Thread.Sleep(100);
                                 if (cRunTest[station].IsCancellationRequested)
@@ -5337,11 +5337,11 @@ namespace NewBTASProto
 
 
                         // do the cell test check
-                        if (Properties.Settings.Default.FC4C1MinimumCellVotageAfterChargeTestEnabled)
+                        if (GlobalVars.FC4C1MinimumCellVotageAfterChargeTestEnabled)
                         {
                             for (int i = 0; i < (int)pci.Rows[station][3]; i++)
                             {
-                                if (GlobalVars.CScanData[station].orderedCells[i] < (double)Properties.Settings.Default.FC4C1MinimumCellVoltageThreshold)
+                                if (GlobalVars.CScanData[station].orderedCells[i] < (double)GlobalVars.FC4C1MinimumCellVoltageThreshold)
                                 {
                                     // one of the cells didn't meet the minimum voltage threshold
                                     // kill the combo test
@@ -5386,7 +5386,7 @@ namespace NewBTASProto
                         }
 
                         //defined wait
-                        if (Properties.Settings.Default.FC4C1WaitEnabled)
+                        if (GlobalVars.FC4C1WaitEnabled)
                         {
 
                             var stopwatch = new Stopwatch();
@@ -5398,7 +5398,7 @@ namespace NewBTASProto
 
                             stopwatch.Start();
 
-                            while (stopwatch.ElapsedMilliseconds < (Properties.Settings.Default.FC4C1WaitTime * 60 * 1000))
+                            while (stopwatch.ElapsedMilliseconds < (GlobalVars.FC4C1WaitTime * 60 * 1000))
                             {
                                 Thread.Sleep(100);
                                 if (cRunTest[station].IsCancellationRequested)

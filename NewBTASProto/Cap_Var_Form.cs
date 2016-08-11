@@ -59,31 +59,9 @@ namespace NewBTASProto
             chart1.Invalidate();
             chart1.ChartAreas[0].RecalculateAxesScale();
 
-            chart1.ChartAreas[0].AxisY.Maximum = Math.Round(average + 2.5 * (double) Properties.Settings.Default.CapTestVarValue, 3);
-            chart1.ChartAreas[0].AxisY.Minimum = Math.Round(average - 2.5 * (double)Properties.Settings.Default.CapTestVarValue, 3);
-            chart1.ChartAreas[0].AxisY.Interval = Math.Round((double) Properties.Settings.Default.CapTestVarValue, 3);
-
-            
-            //StripLine stripline = new StripLine();
-            //stripline.Interval = 0;
-            //stripline.IntervalOffset = average;
-            //stripline.StripWidth = (double) Properties.Settings.Default.CapTestVarValue / 25;
-            //stripline.BackColor = Color.YellowGreen;
-            //chart1.ChartAreas[0].AxisY.StripLines.Add(stripline);
-
-            //StripLine upper = new StripLine();
-            //upper.Interval = 0;
-            //upper.IntervalOffset = average + (double)Properties.Settings.Default.CapTestVarValue;
-            //upper.StripWidth = (double) Properties.Settings.Default.CapTestVarValue / 25;
-            //upper.BackColor = Color.Red;
-            //chart1.ChartAreas[0].AxisY.StripLines.Add(upper);
-
-            //StripLine lower = new StripLine();
-            //lower.Interval = 0;
-            //lower.IntervalOffset = average - (double)Properties.Settings.Default.CapTestVarValue;
-            //lower.StripWidth = (double) Properties.Settings.Default.CapTestVarValue / 25;
-            //lower.BackColor = Color.Red;
-            //chart1.ChartAreas[0].AxisY.StripLines.Add(lower);
+            chart1.ChartAreas[0].AxisY.Maximum = Math.Round(average + 2.5 * (double)GlobalVars.CapTestVarValue, 3);
+            chart1.ChartAreas[0].AxisY.Minimum = Math.Round(average - 2.5 * (double)GlobalVars.CapTestVarValue, 3);
+            chart1.ChartAreas[0].AxisY.Interval = Math.Round((double)GlobalVars.CapTestVarValue, 3);
 
             //average
             LineAnnotation annotation = new LineAnnotation();
@@ -106,7 +84,7 @@ namespace NewBTASProto
             upper.AxisX = chart1.ChartAreas[0].AxisX;
             upper.AxisY = chart1.ChartAreas[0].AxisY;
             upper.AnchorX = 0;
-            upper.AnchorY = average + (double)Properties.Settings.Default.CapTestVarValue;
+            upper.AnchorY = average + (double)GlobalVars.CapTestVarValue;
             upper.Height = 0;
             upper.Width = Cells + 1;
             upper.LineWidth = 4;
@@ -121,7 +99,7 @@ namespace NewBTASProto
             lower.AxisX = chart1.ChartAreas[0].AxisX;
             lower.AxisY = chart1.ChartAreas[0].AxisY;
             lower.AnchorX = 0;
-            lower.AnchorY = average - (double)Properties.Settings.Default.CapTestVarValue;
+            lower.AnchorY = average - (double)GlobalVars.CapTestVarValue;
             lower.Height = 0;
             lower.Width = Cells + 1;
             lower.LineWidth = 4;
@@ -133,7 +111,7 @@ namespace NewBTASProto
             //should we show the warning label
             for (int i = 0; i < Cells; i++)
             {
-                if (Math.Abs(average - lastReading.orderedCells[i]) > (double)Properties.Settings.Default.CapTestVarValue)
+                if (Math.Abs(average - lastReading.orderedCells[i]) > (double)GlobalVars.CapTestVarValue)
                 {
                     label1.Visible = true;
                     break;

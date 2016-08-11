@@ -48,14 +48,14 @@ namespace NewBTASProto
         {
             // Load all of the work orders into the combo box.
             loadWorkOrderLists();
-            checkBox1.Checked = Properties.Settings.Default.cb1;
-            checkBox2.Checked = Properties.Settings.Default.cb2;
-            checkBox3.Checked = Properties.Settings.Default.cb3;
-            checkBox4.Checked = Properties.Settings.Default.cb4;
-            checkBox5.Checked = Properties.Settings.Default.cb5;
-            checkBox6.Checked = Properties.Settings.Default.cb6;
-            checkBox7.Checked = Properties.Settings.Default.cbComplete;
-            checkBox8.Checked = Properties.Settings.Default.cbUpdateCompleteDate;
+            checkBox1.Checked = GlobalVars.cb1;
+            checkBox2.Checked = GlobalVars.cb2;
+            checkBox3.Checked = GlobalVars.cb3;
+            checkBox4.Checked = GlobalVars.cb4;
+            checkBox5.Checked = GlobalVars.cb5;
+            checkBox6.Checked = GlobalVars.cb6;
+            checkBox7.Checked = GlobalVars.cbComplete;
+            checkBox8.Checked = GlobalVars.cbUpdateCompleteDate;
 
         }
 
@@ -1337,15 +1337,14 @@ namespace NewBTASProto
 
         private void BatchReporting_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Properties.Settings.Default.cb1 = checkBox1.Checked;
-            Properties.Settings.Default.cb2 = checkBox2.Checked;
-            Properties.Settings.Default.cb3 = checkBox3.Checked;
-            Properties.Settings.Default.cb4 = checkBox4.Checked;
-            Properties.Settings.Default.cb5 = checkBox5.Checked;
-            Properties.Settings.Default.cb6 = checkBox6.Checked;
-            Properties.Settings.Default.cbComplete = checkBox7.Checked;
-            Properties.Settings.Default.cbUpdateCompleteDate = checkBox8.Checked;
-            Properties.Settings.Default.Save();
+            GlobalVars.cb1 = checkBox1.Checked;
+            GlobalVars.cb2 = checkBox2.Checked;
+            GlobalVars.cb3 = checkBox3.Checked;
+            GlobalVars.cb4 = checkBox4.Checked;
+            GlobalVars.cb5 = checkBox5.Checked;
+            GlobalVars.cb6 = checkBox6.Checked;
+            GlobalVars.cbComplete = checkBox7.Checked;
+            GlobalVars.cbUpdateCompleteDate = checkBox8.Checked;
         }
 
         private void BatchReporting_Shown(object sender, EventArgs e)

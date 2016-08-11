@@ -344,5 +344,17 @@ namespace NewBTASProto.Properties {
                 this["CapTestVarValue"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public decimal CSErr2Allow {
+            get {
+                return ((decimal)(this["CSErr2Allow"]));
+            }
+            set {
+                this["CSErr2Allow"] = value;
+            }
+        }
     }
 }

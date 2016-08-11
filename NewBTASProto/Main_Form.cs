@@ -47,14 +47,56 @@ namespace NewBTASProto
 
                 GlobalVars.loading = false;
 
-                if ((int)Properties.Settings.Default.FormHeight > 499 && (int)Properties.Settings.Default.FormWidth > 269)
+                // now we will read in all of the properties.settings in to their global equivalents
+                // this was done due to prevent the .config file from being corrupted
+
+                try
                 {
-                    this.Height = (int)Properties.Settings.Default.FormHeight;
-                    this.Width = (int)Properties.Settings.Default.FormWidth;
+                    GlobalVars.FormWidth = Properties.Settings.Default.FormWidth;
+                    GlobalVars.FormHeight = Properties.Settings.Default.FormHeight;
+                    GlobalVars.PositionX = Properties.Settings.Default.PositionX;
+                    GlobalVars.PositionY = Properties.Settings.Default.PositionY;
+                    GlobalVars.maximized = Properties.Settings.Default.maximized;
+                    GlobalVars.showSels = Properties.Settings.Default.showSels;
+                    GlobalVars.dualPlots = Properties.Settings.Default.dualPlots;
+                    GlobalVars.cb1 = Properties.Settings.Default.cb1;
+                    GlobalVars.cb2 = Properties.Settings.Default.cb2;
+                    GlobalVars.cb3 = Properties.Settings.Default.cb3;
+                    GlobalVars.cb4 = Properties.Settings.Default.cb4;
+                    GlobalVars.cb5 = Properties.Settings.Default.cb5;
+                    GlobalVars.cb6 = Properties.Settings.Default.cb6;
+                    GlobalVars.FC6C1MinimumCellVotageAfterChargeTestEnabled = Properties.Settings.Default.FC6C1MinimumCellVotageAfterChargeTestEnabled;
+                    GlobalVars.FC6C1MinimumCellVoltageThreshold = Properties.Settings.Default.FC6C1MinimumCellVoltageThreshold;
+                    GlobalVars.DecliningCellVoltageTestEnabled = Properties.Settings.Default.DecliningCellVoltageTestEnabled;
+                    GlobalVars.FC6C1WaitEnabled = Properties.Settings.Default.FC6C1WaitEnabled;
+                    GlobalVars.FC6C1WaitTime = Properties.Settings.Default.FC6C1WaitTime;
+                    GlobalVars.cbComplete = Properties.Settings.Default.cbComplete;
+                    GlobalVars.cbUpdateCompleteDate = Properties.Settings.Default.cbUpdateCompleteDate;
+                    GlobalVars.FC4C1MinimumCellVotageAfterChargeTestEnabled = Properties.Settings.Default.FC4C1MinimumCellVotageAfterChargeTestEnabled;
+                    GlobalVars.FC4C1MinimumCellVoltageThreshold = Properties.Settings.Default.FC4C1MinimumCellVoltageThreshold;
+                    GlobalVars.FC4C1WaitEnabled = Properties.Settings.Default.FC4C1WaitEnabled;
+                    GlobalVars.FC4C1WaitTime = Properties.Settings.Default.FC4C1WaitTime;
+                    GlobalVars.CapTestVarEnable = Properties.Settings.Default.CapTestVarEnable;
+                    GlobalVars.CapTestVarValue = Properties.Settings.Default.CapTestVarValue;
+                    GlobalVars.CSErr2Allow = Properties.Settings.Default.CSErr2Allow;
+
+                }
+                catch
+                {
+                    //delete the settings file and warn the user
+                    MessageBox.Show("There was an issue loading you configuration file.  Settings will be returned to defaults.");
+                    System.IO.File.Delete(AppDomain.CurrentDomain.SetupInformation.ConfigurationFile);
+                    Properties.Settings.Default.Reset();            
+                }
+
+                if ((int)GlobalVars.FormHeight > 499 && (int)GlobalVars.FormWidth > 269)
+                {
+                    this.Height = (int)GlobalVars.FormHeight;
+                    this.Width = (int)GlobalVars.FormWidth;
                 }
 
                 // graph selection option...
-                if (Properties.Settings.Default.showSels == true)
+                if (GlobalVars.showSels == true)
                 {
                     toolStripMenuItem41.Checked = true;
                     radioButton1.Visible = true;
@@ -870,6 +912,30 @@ namespace NewBTASProto
             //save the graph selection setting
             Properties.Settings.Default.showSels = toolStripMenuItem41.Checked;
 
+            //save all other settings
+            Properties.Settings.Default.dualPlots = GlobalVars.dualPlots;
+            Properties.Settings.Default.cb1 = GlobalVars.cb1;
+            Properties.Settings.Default.cb2 = GlobalVars.cb2;
+            Properties.Settings.Default.cb3 = GlobalVars.cb3;
+            Properties.Settings.Default.cb4 = GlobalVars.cb4;
+            Properties.Settings.Default.cb5 = GlobalVars.cb5;
+            Properties.Settings.Default.cb6 = GlobalVars.cb6;
+            Properties.Settings.Default.FC6C1MinimumCellVotageAfterChargeTestEnabled = GlobalVars.FC6C1MinimumCellVotageAfterChargeTestEnabled;
+            Properties.Settings.Default.FC6C1MinimumCellVoltageThreshold = GlobalVars.FC6C1MinimumCellVoltageThreshold;
+            Properties.Settings.Default.DecliningCellVoltageTestEnabled = GlobalVars.DecliningCellVoltageTestEnabled;
+            Properties.Settings.Default.FC6C1WaitEnabled = GlobalVars.FC6C1WaitEnabled;
+            Properties.Settings.Default.FC6C1WaitTime = GlobalVars.FC6C1WaitTime;
+            Properties.Settings.Default.cbComplete = GlobalVars.cbComplete;
+            Properties.Settings.Default.cbUpdateCompleteDate = GlobalVars.cbUpdateCompleteDate;
+            Properties.Settings.Default.FC4C1MinimumCellVotageAfterChargeTestEnabled = GlobalVars.FC4C1MinimumCellVotageAfterChargeTestEnabled;
+            Properties.Settings.Default.FC4C1MinimumCellVoltageThreshold = GlobalVars.FC4C1MinimumCellVoltageThreshold;
+            Properties.Settings.Default.FC4C1WaitEnabled = GlobalVars.FC4C1WaitEnabled;
+            Properties.Settings.Default.FC4C1WaitTime = GlobalVars.FC4C1WaitTime;
+            Properties.Settings.Default.CapTestVarEnable = GlobalVars.CapTestVarEnable;
+            Properties.Settings.Default.CapTestVarValue = GlobalVars.CapTestVarValue;
+            Properties.Settings.Default.CSErr2Allow = GlobalVars.CSErr2Allow;
+
+
             Properties.Settings.Default.Save();
 
             // tell those threadpool work items to stop!!!!!
@@ -916,13 +982,13 @@ namespace NewBTASProto
         private void Main_Form_Load(object sender, EventArgs e)
         {
             dataGridView1.ClearSelection();
-            if ((bool)Properties.Settings.Default.maximized == true)
+            if ((bool)GlobalVars.maximized == true)
             {
                 this.WindowState = FormWindowState.Maximized;
             }
-            else if (Properties.Settings.Default.PositionX > 100 && Properties.Settings.Default.PositionY > 100)
+            else if (GlobalVars.PositionX > 100 && GlobalVars.PositionY > 100)
             {
-                this.Location = new Point((int)Properties.Settings.Default.PositionX, (int)Properties.Settings.Default.PositionY);
+                this.Location = new Point((int)GlobalVars.PositionX, (int)GlobalVars.PositionY);
             }
 
         }

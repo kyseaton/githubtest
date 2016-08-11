@@ -51,6 +51,9 @@ namespace NewBTASProto
         //to prevent plot gitter
         bool lockUpdate = false;
 
+        //Com Error Count
+        byte[] comCSErrorNum = new byte[16] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
 
         public void pollCScans()
         {
@@ -126,6 +129,7 @@ namespace NewBTASProto
                                     // close the comport
                                     CSCANComPort.Close();
                                     CSCANComPort.Dispose();
+                                    comCSErrorNum[currentRow] = 0;
                                     //we got a good read...
                                     goodRead = true;
                                     //do something with the new data
@@ -680,24 +684,32 @@ namespace NewBTASProto
                                 {
                                     if (ex is System.TimeoutException)
                                     {
-                                        // make sure there haven't been any clicks in the mean time...
-                                        if ((bool)d.Rows[tempClick][4] && tempClick == dataGridView1.CurrentRow.Index)
+                                        if (comCSErrorNum[tempClick] < GlobalVars.CSErr2Allow)
                                         {
-                                            this.Invoke((MethodInvoker)delegate
+                                            comCSErrorNum[tempClick]++;
+                                        }
+                                        else
+                                        {
+                                            // make sure there haven't been any clicks in the mean time...
+                                            if ((bool)d.Rows[tempClick][4] && tempClick == dataGridView1.CurrentRow.Index)
                                             {
-                                                if ((bool)d.Rows[tempClick][4] == true) 
-                                                { 
-                                                    dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[4].Style.BackColor = Color.Red;
-                                                    autoShort[dataGridView1.CurrentRow.Index] = false;
-                                                }
-                                                if (!d.Rows[dataGridView1.CurrentRow.Index][10].ToString().Contains("ICA")) { dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.Gainsboro; }
-                                                chart1.Series.Clear();
-                                                chart1.Invalidate();
-                                                LockWindowUpdate(this.Handle);
-                                                label1.Text = "";
-                                                LockWindowUpdate(IntPtr.Zero);
-                                                
-                                            });
+                                                this.Invoke((MethodInvoker)delegate
+                                                {
+                                                    if ((bool)d.Rows[tempClick][4] == true)
+                                                    {
+                                                        dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[4].Style.BackColor = Color.Red;
+                                                        autoShort[dataGridView1.CurrentRow.Index] = false;
+                                                    }
+                                                    if (!d.Rows[dataGridView1.CurrentRow.Index][10].ToString().Contains("ICA")) { dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.Gainsboro; }
+                                                    chart1.Series.Clear();
+                                                    chart1.Invalidate();
+                                                    LockWindowUpdate(this.Handle);
+                                                    label1.Text = "";
+                                                    LockWindowUpdate(IntPtr.Zero);
+
+                                                });
+                                                comCSErrorNum[tempClick] = 0;
+                                            }
                                         }
                                         CSCANComPort.Close();
                                         CSCANComPort.Dispose();
@@ -726,7 +738,12 @@ namespace NewBTASProto
                                         CSCANComPort.Dispose();
                                         ICComPort.Close();
                                         ICComPort.Dispose();
-                                        
+
+                                        //reset all of comCSError
+                                        for (int i = 0; i < 16; i++)
+                                        {
+                                            comCSErrorNum[i] = 0;
+                                        }
                                         return;
                                     }
                                     else if (ex is System.ObjectDisposedException)
@@ -815,6 +832,7 @@ namespace NewBTASProto
                                         // close the comport
                                         CSCANComPort.Close();
                                         CSCANComPort.Dispose();
+                                        comCSErrorNum[j] = 0;
                                         //do something with the new data
                                         char[] delims = { ' ' };
                                         string[] A = tempBuff.Split(delims);
@@ -1085,18 +1103,26 @@ namespace NewBTASProto
                                         CSCANComPort.Dispose();
                                         if (ex is System.TimeoutException)
                                         {
-                                            if ((bool)d.Rows[j][4] && dataGridView1.CurrentRow.Index != j)  // added to help with gui look
+                                            if (comCSErrorNum[j] < GlobalVars.CSErr2Allow)
                                             {
-                                                this.Invoke((MethodInvoker)delegate
+                                                comCSErrorNum[j]++;
+                                            }
+                                            else
+                                            {
+                                                if ((bool)d.Rows[j][4] && dataGridView1.CurrentRow.Index != j)  // added to help with gui look
                                                 {
-                                                    // set the cell to red
-                                                    if ((bool)d.Rows[j][4])
+                                                    this.Invoke((MethodInvoker)delegate
                                                     {
-                                                        dataGridView1.Rows[j].Cells[4].Style.BackColor = Color.Red;
-                                                        autoShort[j] = false;                                                        
-                                                    }
-                                                    if(!d.Rows[j][10].ToString().Contains("ICA")){ dataGridView1.Rows[j].Cells[8].Style.BackColor = Color.Gainsboro;}
-                                                });
+                                                        // set the cell to red
+                                                        if ((bool)d.Rows[j][4])
+                                                        {
+                                                            dataGridView1.Rows[j].Cells[4].Style.BackColor = Color.Red;
+                                                            autoShort[j] = false;
+                                                        }
+                                                        if (!d.Rows[j][10].ToString().Contains("ICA")) { dataGridView1.Rows[j].Cells[8].Style.BackColor = Color.Gainsboro; }
+                                                    });
+                                                    comCSErrorNum[j] = 0;
+                                                }
                                             }
                                         }  // end if
                                         else if (ex is System.IO.IOException || ex is System.InvalidOperationException)
@@ -1122,6 +1148,12 @@ namespace NewBTASProto
                                             CSCANComPort.Dispose();
                                             ICComPort.Close();
                                             ICComPort.Dispose();
+
+                                            //reset all of comCSError
+                                            for (int i = 0; i < 16; i++)
+                                            {
+                                                comCSErrorNum[i] = 0;
+                                            }
 
                                             return;
                                         }

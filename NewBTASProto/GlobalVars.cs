@@ -90,7 +90,7 @@ namespace NewBTASProto
         /// <summary>
         /// this string holds the program publish date
         /// </summary>
-        public static string programPubDate = "June 27 2016";
+        public static string programPubDate = "Aug 09 2016";
 
         /// <summary>
         /// this is where we hold our notification service settings...
@@ -134,6 +134,36 @@ namespace NewBTASProto
         public static bool checkMasterFiller = false;
 
         public static string[] MFData = new string[30];
+
+        // Here we are going to store the saved setting values
+        public static string BTAS16NVConnectionString;
+        public static int FormWidth;
+        public static int FormHeight;
+        public static int PositionX;
+        public static int PositionY;
+        public static bool maximized;
+        public static bool showSels;
+        public static bool dualPlots;
+        public static bool cb1;
+        public static bool cb2;
+        public static bool cb3;
+        public static bool cb4;
+        public static bool cb5;
+        public static bool cb6;
+        public static bool FC6C1MinimumCellVotageAfterChargeTestEnabled;
+        public static decimal FC6C1MinimumCellVoltageThreshold;
+        public static bool DecliningCellVoltageTestEnabled;
+        public static bool FC6C1WaitEnabled;
+        public static decimal FC6C1WaitTime;
+        public static bool cbComplete;
+        public static bool cbUpdateCompleteDate;
+        public static bool FC4C1MinimumCellVotageAfterChargeTestEnabled;
+        public static decimal FC4C1MinimumCellVoltageThreshold;
+        public static bool FC4C1WaitEnabled;
+        public static decimal FC4C1WaitTime;
+        public static bool CapTestVarEnable;
+        public static decimal CapTestVarValue;
+        public static decimal CSErr2Allow;
 
     }
 }

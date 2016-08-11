@@ -843,7 +843,7 @@ namespace NewBTASProto
                             ////////////////////////////////////////////AUTO SHORT BOARDS ARE SET HERE///////////////////////
                             #region AutoShort Comms
 
-                            if (false)//autoShort[j] == true && d.Rows[j][2].ToString() == "Discharge" && (bool) d.Rows[j][5] == true)
+                            if (false)//autoShort[j] == true && d.Rows[j][2].ToString() == "Discharge" ) //&& (bool) d.Rows[j][5] == true)
                             {
                                 try
                                 {
@@ -862,7 +862,7 @@ namespace NewBTASProto
                                             //set the 1 bit
                                             tempStore += (char)Math.Pow(2, ((2 * b) % 8));
                                         }
-                                        if (Math.Abs(GlobalVars.CScanData[j].orderedCells[b]) < 1)
+                                        if (Math.Abs(GlobalVars.CScanData[j].orderedCells[b]) < 1.5)
                                         {
                                             //set the 0 bit
                                             tempStore += (char)Math.Pow(2, ((2 * b + 1) % 8)); 

@@ -88,5 +88,8 @@
     <Setting Name="CapTestVarValue" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">0.05</Value>
     </Setting>
+    <Setting Name="CSErr2Allow" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
