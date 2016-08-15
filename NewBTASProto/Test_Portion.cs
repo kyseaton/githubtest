@@ -5022,6 +5022,10 @@ namespace NewBTASProto
 
             ThreadPool.QueueUserWorkItem(s =>
             {
+
+                //First look up the test info in the DB!!!!!
+                // We need number of steps and all of the tests to run.....
+
                 // SETUP //////////////////////////////////////////////////////////////////////////////////////////////////////
                 //try to pull in the start temp
                 double startTemp = (GlobalVars.CScanData[station].TP1 + GlobalVars.CScanData[station].TP2 + GlobalVars.CScanData[station].TP3 + GlobalVars.CScanData[station].TP4) / 4;

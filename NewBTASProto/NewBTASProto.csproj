@@ -24,7 +24,7 @@
     <MapFileExtensions>true</MapFileExtensions>
     <UpdateUrl>http://www.jfmeng.com/BTAS16_update/final_release/</UpdateUrl>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>136</ApplicationRevision>
+    <ApplicationRevision>137</ApplicationRevision>
     <ApplicationVersion>6.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -106,6 +106,12 @@
     </Compile>
     <Compile Include="CombinationTestSettings.Designer.cs">
       <DependentUpon>CombinationTestSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DB_Forms\frmVEComboTests.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DB_Forms\frmVEComboTests.Designer.cs">
+      <DependentUpon>frmVEComboTests.cs</DependentUpon>
     </Compile>
     <Compile Include="Reports\BatchReporting.cs">
       <SubType>Form</SubType>
@@ -262,6 +268,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CombinationTestSettings.resx">
       <DependentUpon>CombinationTestSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DB_Forms\frmVEComboTests.resx">
+      <DependentUpon>frmVEComboTests.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MasterFillerInterface.resx">
       <DependentUpon>MasterFillerInterface.cs</DependentUpon>

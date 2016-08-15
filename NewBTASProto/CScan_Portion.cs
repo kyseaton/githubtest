@@ -243,7 +243,7 @@ namespace NewBTASProto
                                                 {
                                                     //skip the current
                                                 }
-                                                else if (GlobalVars.CScanData[masterRow].shuntCableType == "TEST BOX")
+                                                else if (GlobalVars.CScanData[masterRow].shuntCableType == "CELL SIM")
                                                 {
                                                     //dispaly both ...
                                                     tempText += "Current#1:  " + GlobalVars.CScanData[masterRow].currentOne.ToString("00.00") + Environment.NewLine;
@@ -278,7 +278,7 @@ namespace NewBTASProto
                                                 {
                                                     //skip it...
                                                 }
-                                                else if (testData.shuntCableType == "TEST BOX")
+                                                else if (testData.shuntCableType == "CELL SIM")
                                                 {
                                                     //dispaly both ...
                                                     tempText += "Current#1:  " + testData.currentOne.ToString("00.00") + Environment.NewLine;

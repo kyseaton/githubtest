@@ -30,8 +30,8 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main_Form));
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -64,6 +64,7 @@
             this.toolStripMenuItem32 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem31 = new System.Windows.Forms.ToolStripSeparator();
             this.editTestSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.setupCombinationTestsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem45 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem35 = new System.Windows.Forms.ToolStripSeparator();
             this.notificationServiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -134,6 +135,7 @@
             this.asReceivedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fullChargeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fullCharge4ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem48 = new System.Windows.Forms.ToolStripMenuItem();
             this.topCharge4ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.topCharge2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.topCharge1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -147,8 +149,7 @@
             this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripComboBox4 = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripMenuItem44 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem47 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripComboBox5 = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.clearToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.cMSStartStop = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -196,7 +197,6 @@
             this.cellsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripComboBox3 = new System.Windows.Forms.ToolStripComboBox();
             this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
-            this.toolStripMenuItem48 = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -416,6 +416,7 @@
             this.toolStripMenuItem32,
             this.toolStripMenuItem31,
             this.editTestSettingsToolStripMenuItem,
+            this.setupCombinationTestsToolStripMenuItem,
             this.toolStripMenuItem45,
             this.toolStripMenuItem35,
             this.notificationServiceToolStripMenuItem});
@@ -491,6 +492,13 @@
             this.editTestSettingsToolStripMenuItem.Size = new System.Drawing.Size(298, 22);
             this.editTestSettingsToolStripMenuItem.Text = "Edit Custom Test Settings";
             this.editTestSettingsToolStripMenuItem.Click += new System.EventHandler(this.editTestSettingsToolStripMenuItem_Click);
+            // 
+            // setupCombinationTestsToolStripMenuItem
+            // 
+            this.setupCombinationTestsToolStripMenuItem.Name = "setupCombinationTestsToolStripMenuItem";
+            this.setupCombinationTestsToolStripMenuItem.Size = new System.Drawing.Size(298, 22);
+            this.setupCombinationTestsToolStripMenuItem.Text = "Setup Combination Tests";
+            this.setupCombinationTestsToolStripMenuItem.Click += new System.EventHandler(this.setupCombinationTestsToolStripMenuItem_Click);
             // 
             // toolStripMenuItem45
             // 
@@ -1098,19 +1106,19 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.chart1.BorderlineColor = System.Drawing.Color.DimGray;
             this.chart1.BorderlineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
-            chartArea2.AxisX.IntervalAutoMode = System.Windows.Forms.DataVisualization.Charting.IntervalAutoMode.VariableCount;
-            chartArea2.AxisX.MajorGrid.Enabled = false;
-            chartArea2.AxisX.MajorTickMark.Enabled = false;
-            chartArea2.AxisX.Title = "Cells";
-            chartArea2.AxisY.IntervalAutoMode = System.Windows.Forms.DataVisualization.Charting.IntervalAutoMode.VariableCount;
-            chartArea2.AxisY.Title = "Voltage";
-            chartArea2.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea2);
+            chartArea1.AxisX.IntervalAutoMode = System.Windows.Forms.DataVisualization.Charting.IntervalAutoMode.VariableCount;
+            chartArea1.AxisX.MajorGrid.Enabled = false;
+            chartArea1.AxisX.MajorTickMark.Enabled = false;
+            chartArea1.AxisX.Title = "Cells";
+            chartArea1.AxisY.IntervalAutoMode = System.Windows.Forms.DataVisualization.Charting.IntervalAutoMode.VariableCount;
+            chartArea1.AxisY.Title = "Voltage";
+            chartArea1.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea1);
             this.chart1.Location = new System.Drawing.Point(6, 42);
             this.chart1.Name = "chart1";
-            series2.ChartArea = "ChartArea1";
-            series2.Name = "Series1";
-            this.chart1.Series.Add(series2);
+            series1.ChartArea = "ChartArea1";
+            series1.Name = "Series1";
+            this.chart1.Series.Add(series1);
             this.chart1.Size = new System.Drawing.Size(696, 267);
             this.chart1.TabIndex = 30;
             this.chart1.Text = "chart1";
@@ -1137,12 +1145,11 @@
             this.toolStripSeparator8,
             this.toolStripComboBox4,
             this.toolStripMenuItem4,
-            this.toolStripMenuItem44,
-            this.toolStripMenuItem47,
+            this.toolStripComboBox5,
             this.toolStripSeparator7,
             this.clearToolStripMenuItem2});
             this.cMSTestType.Name = "cMSTestType";
-            this.cMSTestType.Size = new System.Drawing.Size(182, 445);
+            this.cMSTestType.Size = new System.Drawing.Size(182, 406);
             this.cMSTestType.Opening += new System.ComponentModel.CancelEventHandler(this.cMSTestType_Opening);
             this.cMSTestType.MouseEnter += new System.EventHandler(this.cMSTestType_MouseEnter);
             this.cMSTestType.MouseLeave += new System.EventHandler(this.cMSTestType_MouseLeave);
@@ -1167,6 +1174,13 @@
             this.fullCharge4ToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
             this.fullCharge4ToolStripMenuItem.Text = "Full Charge-4";
             this.fullCharge4ToolStripMenuItem.Click += new System.EventHandler(this.fullCharge4ToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem48
+            // 
+            this.toolStripMenuItem48.Name = "toolStripMenuItem48";
+            this.toolStripMenuItem48.Size = new System.Drawing.Size(181, 22);
+            this.toolStripMenuItem48.Text = "Full Charge-4.5";
+            this.toolStripMenuItem48.Click += new System.EventHandler(this.toolStripMenuItem48_Click);
             // 
             // topCharge4ToolStripMenuItem
             // 
@@ -1255,19 +1269,12 @@
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
             this.toolStripMenuItem4.Size = new System.Drawing.Size(178, 6);
             // 
-            // toolStripMenuItem44
+            // toolStripComboBox5
             // 
-            this.toolStripMenuItem44.Name = "toolStripMenuItem44";
-            this.toolStripMenuItem44.Size = new System.Drawing.Size(181, 22);
-            this.toolStripMenuItem44.Text = "Combo: FC-6 Cap-1";
-            this.toolStripMenuItem44.Click += new System.EventHandler(this.toolStripMenuItem44_Click);
-            // 
-            // toolStripMenuItem47
-            // 
-            this.toolStripMenuItem47.Name = "toolStripMenuItem47";
-            this.toolStripMenuItem47.Size = new System.Drawing.Size(181, 22);
-            this.toolStripMenuItem47.Text = "Combo: FC-4 Cap-1";
-            this.toolStripMenuItem47.Click += new System.EventHandler(this.toolStripMenuItem47_Click);
+            this.toolStripComboBox5.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.toolStripComboBox5.Name = "toolStripComboBox5";
+            this.toolStripComboBox5.Size = new System.Drawing.Size(121, 23);
+            this.toolStripComboBox5.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox5_SelectedIndexChanged);
             // 
             // toolStripSeparator7
             // 
@@ -1290,13 +1297,13 @@
             this.toolStripMenuItem2,
             this.stopTestToolStripMenuItem});
             this.cMSStartStop.Name = "cMSStartStop";
-            this.cMSStartStop.Size = new System.Drawing.Size(151, 76);
+            this.cMSStartStop.Size = new System.Drawing.Size(153, 98);
             this.cMSStartStop.Opening += new System.ComponentModel.CancelEventHandler(this.cMSStartStop_Opening);
             // 
             // startNewTestToolStripMenuItem
             // 
             this.startNewTestToolStripMenuItem.Name = "startNewTestToolStripMenuItem";
-            this.startNewTestToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
+            this.startNewTestToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.startNewTestToolStripMenuItem.Text = "Start New Test";
             this.startNewTestToolStripMenuItem.Click += new System.EventHandler(this.startNewTestToolStripMenuItem_Click);
             // 
@@ -1304,20 +1311,20 @@
             // 
             this.resumeTestToolStripMenuItem.Enabled = false;
             this.resumeTestToolStripMenuItem.Name = "resumeTestToolStripMenuItem";
-            this.resumeTestToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
+            this.resumeTestToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.resumeTestToolStripMenuItem.Text = "Resume Test";
             this.resumeTestToolStripMenuItem.Click += new System.EventHandler(this.resumeTestToolStripMenuItem_Click);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(147, 6);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(149, 6);
             // 
             // stopTestToolStripMenuItem
             // 
             this.stopTestToolStripMenuItem.Enabled = false;
             this.stopTestToolStripMenuItem.Name = "stopTestToolStripMenuItem";
-            this.stopTestToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
+            this.stopTestToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.stopTestToolStripMenuItem.Text = "Stop Test";
             this.stopTestToolStripMenuItem.Click += new System.EventHandler(this.stopTestToolStripMenuItem_Click);
             // 
@@ -1633,13 +1640,6 @@
             this.openFileDialog2.Filter = "JPG Files (*.jpg)|*.jpg";
             this.openFileDialog2.Title = "Select Logo File";
             // 
-            // toolStripMenuItem48
-            // 
-            this.toolStripMenuItem48.Name = "toolStripMenuItem48";
-            this.toolStripMenuItem48.Size = new System.Drawing.Size(181, 22);
-            this.toolStripMenuItem48.Text = "Full Charge-4.5";
-            this.toolStripMenuItem48.Click += new System.EventHandler(this.toolStripMenuItem48_Click);
-            // 
             // Main_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1847,16 +1847,16 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem43;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem44;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem45;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem46;
         private System.Windows.Forms.ToolStripMenuItem markAllOpenWorkOrdersAsClosedToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem resetTestSettingsToDefaultsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem47;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
         private System.Windows.Forms.ToolStripComboBox toolStripComboBox4;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem48;
+        private System.Windows.Forms.ToolStripMenuItem setupCombinationTestsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripComboBox toolStripComboBox5;
     }
 }
 

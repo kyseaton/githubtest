@@ -90,7 +90,7 @@ namespace NewBTASProto
         /// <summary>
         /// this string holds the program publish date
         /// </summary>
-        public static string programPubDate = "Aug 09 2016";
+        public static string programPubDate = "Aug 11 2016";
 
         /// <summary>
         /// this is where we hold our notification service settings...

@@ -163,7 +163,8 @@ namespace NewBTASProto
                 if (current["TESTID"].ToString() != "")
                 {
                     //record already exist as we need to do an update
-                    string cmdStr = "UPDATE TestType SET Readings='" + numericUpDown1.Text +
+                    string cmdStr = "UPDATE TestType SET TESTNAME ='" + textBox1.Text + 
+                        "', Readings='" + numericUpDown1.Text +
                         "', [Interval]='" + numericUpDown2.Text.Trim() +
                         "' WHERE TESTID=" + current["TESTID"].ToString();
 

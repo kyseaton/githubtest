@@ -498,7 +498,7 @@ namespace NewBTASProto
                 return;
             }
 
-            //  open the db and try to get something out of the "BatteryProfiles" table
+            //  open the db and try to get Ave out of the "WaterLevel" table
             try
             {
                 strAccessSelect = @"SELECT AVE FROM WaterLevel";
@@ -516,8 +516,8 @@ namespace NewBTASProto
 
                 if (ex is OleDbException)
                 {
-                    // we didn't find the table, so we need to create it!
-                    // we need to  insert
+                    // we didn't find the Ave field, so we need to create it!
+                    // we need to  alter table
                     string strUpdateCMD = "ALTER TABLE WaterLevel ADD AVE Number";
                     OleDbCommand myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
                     myAccessCommand.ExecuteNonQuery();
@@ -525,6 +525,57 @@ namespace NewBTASProto
 
                 }
                 else {
+                    myAccessConn.Close();
+                    MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+
+            //Now lets see if we have the combination test table and add it if we don't
+            try
+            {
+                strAccessSelect = @"SELECT Steps FROM ComboTest";
+                DataSet test = new DataSet();
+                OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                myAccessConn.Open();
+                myDataAdapter.Fill(test, "test");
+                myAccessConn.Close();
+
+            }
+            catch (Exception ex)
+            {
+                myAccessConn.Close();
+
+                if (ex is OleDbException)
+                {
+                    // we didn't find the ComboTest Table
+                    // lets add it!
+
+                    try
+                    {
+                        strAccessSelect = "CREATE TABLE ComboTest (CTID AUTOINCREMENT PRIMARY KEY, ComboTestName Text, Steps Number, Step1 Text, Step2 Text, Step3 Text, Step4 Text, Step5 Text, Step6 Text, Step7 Text, Step8 Text, Step9 Text, Step10 Text, Step11 Text, Step12 Text, Step13 Text, Step14 Text, Step15 Text)";
+                        OleDbCommand cmd = new OleDbCommand(strAccessSelect, myAccessConn);
+                        myAccessConn.Open();
+                        cmd.ExecuteNonQuery();
+                        myAccessConn.Close();
+
+                        strAccessSelect = "INSERT INTO ComboTest (ComboTestName, Steps, Step1, Step2) VALUES ('FC-6 Cap-1', 2, 'Full Charge-6', 'Capacity-1')";
+                        cmd = new OleDbCommand(strAccessSelect, myAccessConn);
+                        myAccessConn.Open();
+                        cmd.ExecuteNonQuery();
+                        myAccessConn.Close();
+
+                        strAccessSelect = "INSERT INTO ComboTest (ComboTestName, Steps, Step1, Step2) VALUES ('FC-4 Cap-1', 2, 'Full Charge-4', 'Capacity-1')";
+                        cmd = new OleDbCommand(strAccessSelect, myAccessConn);
+                        myAccessConn.Open();
+                        cmd.ExecuteNonQuery();
+                        myAccessConn.Close();
+                    }
+                    catch { myAccessConn.Close(); }
+                }
+                else
+                {
                     myAccessConn.Close();
                     MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }

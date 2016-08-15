@@ -843,7 +843,7 @@ namespace NewBTASProto
                             ////////////////////////////////////////////AUTO SHORT BOARDS ARE SET HERE///////////////////////
                             #region AutoShort Comms
 
-                            if (false)//autoShort[j] == true && d.Rows[j][2].ToString() == "Discharge" ) //&& (bool) d.Rows[j][5] == true)
+                            if (autoShort[j] == true && d.Rows[j][2].ToString() == "Discharge" ) //&& (bool) d.Rows[j][5] == true)
                             {
                                 try
                                 {

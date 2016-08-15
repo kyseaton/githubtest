@@ -294,7 +294,7 @@ namespace NewBTASProto
             {
                 this.automaticallyConfigureChargerToolStripMenuItem.Checked = true;
                 this.chargerConfigurationInterfaceToolStripMenuItem.Enabled = false;
-                this.toolStripMenuItem44.Enabled = true;
+                this.toolStripComboBox5.Enabled = true;
             }
             else { this.automaticallyConfigureChargerToolStripMenuItem.Checked = false; }
 
@@ -302,6 +302,7 @@ namespace NewBTASProto
 
             //Now lets pull in our custom tests...
             updateCustomTestDropDown();
+            updateComboTestDropDown();
             
                         
         }
@@ -374,6 +375,72 @@ namespace NewBTASProto
 
                 toolStripComboBox4.Visible = true;
                 toolStripSeparator8.Visible = true;
+            }
+        }
+
+        public void updateComboTestDropDown()
+        {
+            //Now lets pull in our custom tests...
+            DataSet comboTests = new DataSet();
+
+            string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+            string strAccessSelect = @"SELECT ComboTestName FROM ComboTest ORDER BY ComboTestName ASC";
+
+            OleDbConnection myAccessConn;
+            // try to open the DB
+            try
+            {
+                myAccessConn = new OleDbConnection(strAccessConn);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, "Error: Failed to create a database connection. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            //  now try to access it
+            try
+            {
+                OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                lock (Main_Form.dataBaseLock)
+                {
+                    myAccessConn.Open();
+                    myDataAdapter.Fill(comboTests);
+                    myAccessConn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            finally
+            {
+
+            }
+
+            customTestParams = comboTests.Tables[0];
+
+            List<string> ComboTests = comboTests.Tables[0].AsEnumerable().Select(x => x[0].ToString()).Distinct().ToList();
+            ComboTests.Sort();
+
+            toolStripComboBox5.Items.Clear();
+
+            if (ComboTests.Count == 0)
+            {
+                toolStripComboBox5.Visible = false;
+                toolStripSeparator7.Visible = false;
+            }
+            else
+            {
+                foreach (string x in ComboTests)
+                {
+                    toolStripComboBox5.Items.Add(x);
+                }
+
+                toolStripComboBox5.Visible = true;
+                toolStripSeparator7.Visible = true;
             }
         }
 
@@ -2628,14 +2695,14 @@ namespace NewBTASProto
                 automaticallyConfigureChargerToolStripMenuItem.Checked = true;
                 GlobalVars.autoConfig = true;
                 chargerConfigurationInterfaceToolStripMenuItem.Enabled = false;
-                this.toolStripMenuItem44.Enabled = true;
+                this.toolStripComboBox5.Enabled = true;
             }
             else
             {
                 automaticallyConfigureChargerToolStripMenuItem.Checked = false;
                 GlobalVars.autoConfig = false;
                 chargerConfigurationInterfaceToolStripMenuItem.Enabled = true;
-                this.toolStripMenuItem44.Enabled = false;
+                this.toolStripComboBox5.Enabled = false;
             }
 
             dataGridView1_Resize(this, null);
@@ -4667,6 +4734,54 @@ namespace NewBTASProto
                 }
 
             }
+        }
+
+        private void setupCombinationTestsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormCollection fc = Application.OpenForms;
+
+            foreach (Form frm in fc)
+            {
+                if (frm is frmVEComboTests)
+                {
+                    if (frm.WindowState == FormWindowState.Minimized)
+                    {
+                        frm.WindowState = FormWindowState.Normal;
+                    }
+                    return;
+                }
+            }
+            frmVEComboTests f2 = new frmVEComboTests();
+            f2.Owner = this;
+            f2.Show();
+        }
+
+        private void toolStripComboBox5_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            updateD(dataGridView1.CurrentRow.Index, 2, "Combo: " + toolStripComboBox5.Text);
+            updateD(dataGridView1.CurrentRow.Index, 3, "");
+            updateD(dataGridView1.CurrentRow.Index, 6, "");
+            updateD(dataGridView1.CurrentRow.Index, 7, "");
+            fillPlotCombos(dataGridView1.CurrentRow.Index);
+
+            // also update the slave (if we have a master...)
+            if (d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Contains("M"))
+            {
+                //find the slave
+                string temp = d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Replace("-M", "");
+                for (int i = 0; i < 16; i++)
+                {
+                    if (d.Rows[i][9].ToString().Contains(temp) && d.Rows[i][9].ToString().Contains("S"))
+                    {
+                        updateD(i, 2, toolStripComboBox5.Text);
+                        updateD(i, 3, "");
+                        updateD(i, 6, "");
+                        updateD(i, 7, "");
+                    }
+                }
+            }
+
+            cMSTestType.Close();
         }
 
 
