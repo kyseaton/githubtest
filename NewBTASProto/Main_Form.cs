@@ -315,7 +315,7 @@ namespace NewBTASProto
             DataSet customTests = new DataSet();
 
             string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
-            string strAccessSelect = @"SELECT * FROM TestType WHERE TESTNAME<>'Top Charge-4' AND TESTNAME<>'As Received' AND TESTNAME<>'Full Charge-4' AND TESTNAME<>'Full Charge-6' AND TESTNAME<>'Capacity-1' AND TESTNAME<>'Top Charge-2' AND TESTNAME<>'Discharge' AND TESTNAME<>'Slow Charge-14' AND TESTNAME<>'Top Charge-1' AND TESTNAME<>'Slow Charge-16' AND TESTNAME<>'Constant Voltage' AND TESTNAME<>'Full Charge-4.5' ORDER BY TESTNAME ASC";
+            string strAccessSelect = @"SELECT * FROM TestType WHERE TESTNAME<>'Top Charge-4' AND TESTNAME<>'As Received' AND TESTNAME<>'Full Charge-4' AND TESTNAME<>'Full Charge-4.5' AND TESTNAME<>'Full Charge-6' AND TESTNAME<>'Capacity-1' AND TESTNAME<>'Top Charge-2' AND TESTNAME<>'Discharge' AND TESTNAME<>'Slow Charge-14' AND TESTNAME<>'Top Charge-1' AND TESTNAME<>'Slow Charge-16' AND TESTNAME<>'Constant Voltage' AND TESTNAME<>'Full Charge-4.5' AND TESTNAME<>'Shorting-16' ORDER BY TESTNAME ASC";
 
             OleDbConnection myAccessConn;
             // try to open the DB
@@ -360,7 +360,7 @@ namespace NewBTASProto
 
             if (CustomTests.Count == 2)
             {
-                toolStripComboBox4.Visible = false;
+                toolStripMenuItem47.Visible = false;
                 toolStripSeparator8.Visible = false;
             }
             else
@@ -373,7 +373,7 @@ namespace NewBTASProto
                     }
                 }
 
-                toolStripComboBox4.Visible = true;
+                toolStripMenuItem47.Visible = true;
                 toolStripSeparator8.Visible = true;
             }
         }
@@ -420,8 +420,6 @@ namespace NewBTASProto
 
             }
 
-            customTestParams = comboTests.Tables[0];
-
             List<string> ComboTests = comboTests.Tables[0].AsEnumerable().Select(x => x[0].ToString()).Distinct().ToList();
             ComboTests.Sort();
 
@@ -429,7 +427,7 @@ namespace NewBTASProto
 
             if (ComboTests.Count == 0)
             {
-                toolStripComboBox5.Visible = false;
+                toolStripMenuItem44.Visible = false;
                 toolStripSeparator7.Visible = false;
             }
             else
@@ -439,7 +437,7 @@ namespace NewBTASProto
                     toolStripComboBox5.Items.Add(x);
                 }
 
-                toolStripComboBox5.Visible = true;
+                toolStripMenuItem44.Visible = true;
                 toolStripSeparator7.Visible = true;
             }
         }
@@ -1631,6 +1629,12 @@ namespace NewBTASProto
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
+
+                    if ((bool) d.Rows[i][5] == true)
+                    {
+                        MessageBox.Show(this, "Master is already running a test.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
                     updateD(i, 9, "0-M");
                     // and the current one the slave
                     updateD(dataGridView1.CurrentRow.Index, 9, "0-S");
@@ -1679,6 +1683,11 @@ namespace NewBTASProto
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
+                    if ((bool)d.Rows[i][5] == true)
+                    {
+                        MessageBox.Show(this, "Master is already running a test.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
                     updateD(i, 9, "1-M");
                     // and the current one the slave
                     updateD(dataGridView1.CurrentRow.Index, 9, "1-S");
@@ -1726,6 +1735,11 @@ namespace NewBTASProto
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
+                    if ((bool)d.Rows[i][5] == true)
+                    {
+                        MessageBox.Show(this, "Master is already running a test.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
                     updateD(i, 9, "2-M");
                     // and the current one the slave
                     updateD(dataGridView1.CurrentRow.Index, 9, "2-S");
@@ -1773,6 +1787,11 @@ namespace NewBTASProto
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
+                    if ((bool)d.Rows[i][5] == true)
+                    {
+                        MessageBox.Show(this, "Master is already running a test.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
                     updateD(i, 9, "3-M");
                     // and the current one the slave
                     updateD(dataGridView1.CurrentRow.Index, 9, "3-S");
@@ -1820,6 +1839,11 @@ namespace NewBTASProto
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
+                    if ((bool)d.Rows[i][5] == true)
+                    {
+                        MessageBox.Show(this, "Master is already running a test.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
                     updateD(i, 9, "4-M");
                     // and the current one the slave
                     updateD(dataGridView1.CurrentRow.Index, 9, "4-S");
@@ -1868,6 +1892,11 @@ namespace NewBTASProto
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
+                    if ((bool)d.Rows[i][5] == true)
+                    {
+                        MessageBox.Show(this, "Master is already running a test.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
                     updateD(i, 9, "5-M");
                     // and the current one the slave
                     updateD(dataGridView1.CurrentRow.Index, 9, "5-S");
@@ -1915,6 +1944,11 @@ namespace NewBTASProto
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
+                    if ((bool)d.Rows[i][5] == true)
+                    {
+                        MessageBox.Show(this, "Master is already running a test.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
                     updateD(i, 9, "6-M");
                     // and the current one the slave
                     updateD(dataGridView1.CurrentRow.Index, 9, "6-S");
@@ -1962,6 +1996,11 @@ namespace NewBTASProto
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
+                    if ((bool)d.Rows[i][5] == true)
+                    {
+                        MessageBox.Show(this, "Master is already running a test.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
                     updateD(i, 9, "7-M");
                     // and the current one the slave
                     updateD(dataGridView1.CurrentRow.Index, 9, "7-S");
@@ -2009,6 +2048,11 @@ namespace NewBTASProto
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
+                    if ((bool)d.Rows[i][5] == true)
+                    {
+                        MessageBox.Show(this, "Master is already running a test.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
                     updateD(i, 9, "8-M");
                     // and the current one the slave
                     updateD(dataGridView1.CurrentRow.Index, 9, "8-S");
@@ -2056,6 +2100,11 @@ namespace NewBTASProto
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
+                    if ((bool)d.Rows[i][5] == true)
+                    {
+                        MessageBox.Show(this, "Master is already running a test.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
                     updateD(i, 9, "9-M");
                     // and the current one the slave
                     updateD(dataGridView1.CurrentRow.Index, 9, "9-S");
@@ -2103,6 +2152,11 @@ namespace NewBTASProto
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
+                    if ((bool)d.Rows[i][5] == true)
+                    {
+                        MessageBox.Show(this, "Master is already running a test.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
                     updateD(i, 9, "10-M");
                     // and the current one the slave
                     updateD(dataGridView1.CurrentRow.Index, 9, "10-S");
@@ -2150,6 +2204,11 @@ namespace NewBTASProto
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
+                    if ((bool)d.Rows[i][5] == true)
+                    {
+                        MessageBox.Show(this, "Master is already running a test.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
                     updateD(i, 9, "11-M");
                     // and the current one the slave
                     updateD(dataGridView1.CurrentRow.Index, 9, "11-S");
@@ -2197,6 +2256,11 @@ namespace NewBTASProto
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
+                    if ((bool)d.Rows[i][5] == true)
+                    {
+                        MessageBox.Show(this, "Master is already running a test.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
                     updateD(i, 9, "12-M");
                     // and the current one the slave
                     updateD(dataGridView1.CurrentRow.Index, 9, "12-S");
@@ -2244,6 +2308,11 @@ namespace NewBTASProto
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
+                    if ((bool)d.Rows[i][5] == true)
+                    {
+                        MessageBox.Show(this, "Master is already running a test.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
                     updateD(i, 9, "13-M");
                     // and the current one the slave
                     updateD(dataGridView1.CurrentRow.Index, 9, "13-S");
@@ -2291,6 +2360,11 @@ namespace NewBTASProto
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
+                    if ((bool)d.Rows[i][5] == true)
+                    {
+                        MessageBox.Show(this, "Master is already running a test.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
                     updateD(i, 9, "14-M");
                     // and the current one the slave
                     updateD(dataGridView1.CurrentRow.Index, 9, "14-S");
@@ -2338,6 +2412,11 @@ namespace NewBTASProto
                 {
                     // there is already a zero in one of the other rows!
                     // make that one the master
+                    if ((bool)d.Rows[i][5] == true)
+                    {
+                        MessageBox.Show(this, "Master is already running a test.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
                     updateD(i, 9, "15-M");
                     // and the current one the slave
                     updateD(dataGridView1.CurrentRow.Index, 9, "15-S");
@@ -2429,7 +2508,34 @@ namespace NewBTASProto
 
         private void cMSStartStop_Opening(object sender, CancelEventArgs e)
         {
-
+            if (d.Rows[dataGridView1.CurrentRow.Index][2].ToString().Contains("(")) 
+            { 
+                if((bool) d.Rows[dataGridView1.CurrentRow.Index][5])
+                {
+                    if (d.Rows[dataGridView1.CurrentRow.Index][6].ToString().Contains(":")) { stopCurrentAndGoToNextToolStripMenuItem.Visible = true; toolStripSeparator9.Visible = true; 
+                    }
+                    else { stopCurrentAndGoToNextToolStripMenuItem.Visible = false; toolStripSeparator9.Visible = false; }
+                    
+                    nextTestToolStripMenuItem.Visible = false;
+                    previousTestToolStripMenuItem.Visible = false;
+                    
+                }
+                else
+                {
+                    stopCurrentAndGoToNextToolStripMenuItem.Visible = false;
+                    nextTestToolStripMenuItem.Visible = true;
+                    previousTestToolStripMenuItem.Visible = true;
+                    toolStripSeparator9.Visible = true;
+                }
+                
+            }
+            else 
+            {
+                stopCurrentAndGoToNextToolStripMenuItem.Visible = false;
+                nextTestToolStripMenuItem.Visible = false;
+                previousTestToolStripMenuItem.Visible = false;
+                toolStripSeparator9.Visible = false;
+            } 
         }
 
         private void startNewTestToolStripMenuItem_Click(object sender, EventArgs e)
@@ -3305,7 +3411,8 @@ namespace NewBTASProto
 
         private void cMSTestType_Opening(object sender, CancelEventArgs e)
         {
-
+            if (d.Rows[dataGridView1.CurrentRow.Index][2].ToString().Contains("(")) { toolStripMenuItem49.Visible = true; }
+            else { toolStripMenuItem49.Visible = false; }
         }
 
         private void Main_Form_Shown(object sender, EventArgs e)
@@ -3617,6 +3724,10 @@ namespace NewBTASProto
 
                         //Now replace the old DB with the imported one...
                         File.Copy(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV_temp.MDB", Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB", true);
+
+                        // now we need to run checkDB to make sure that the DB has the latest and greatest...
+                        ((Splash) this.Owner).checkDB();
+
 
                         MessageBox.Show(this, "DataBase successfully imported.", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     }// end try
@@ -4680,7 +4791,7 @@ namespace NewBTASProto
 
         }
 
-        private void toolStripComboBox4_SelectedIndexChanged(object sender, EventArgs e)
+        private void toolStripComboBox4_SelectedIndexChanged_1(object sender, EventArgs e)
         {
             updateD(dataGridView1.CurrentRow.Index, 2, toolStripComboBox4.Text);
             updateD(dataGridView1.CurrentRow.Index, 3, "");
@@ -4756,7 +4867,7 @@ namespace NewBTASProto
             f2.Show();
         }
 
-        private void toolStripComboBox5_SelectedIndexChanged(object sender, EventArgs e)
+        private void toolStripComboBox5_SelectedIndexChanged_1(object sender, EventArgs e)
         {
             updateD(dataGridView1.CurrentRow.Index, 2, "Combo: " + toolStripComboBox5.Text);
             updateD(dataGridView1.CurrentRow.Index, 3, "");
@@ -4784,7 +4895,260 @@ namespace NewBTASProto
             cMSTestType.Close();
         }
 
+        private void toolStripMenuItem47_Click_1(object sender, EventArgs e)
+        {
 
+        }
+
+        private void toolStripMenuItem49_Click(object sender, EventArgs e)
+        {
+            updateD(dataGridView1.CurrentRow.Index, 2, d.Rows[dataGridView1.CurrentRow.Index][2].ToString().Substring(0, d.Rows[dataGridView1.CurrentRow.Index][2].ToString().IndexOf("(")).Trim());
+            updateD(dataGridView1.CurrentRow.Index, 6, "");
+            updateD(dataGridView1.CurrentRow.Index, 7, "");
+        }
+
+        bool forceNext = false;
+        private void stopCurrentAndGoToNextToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                cRunTest[dataGridView1.CurrentRow.Index].Cancel();
+                forceNext = true;
+            }
+            catch
+            {
+                updateD(dataGridView1.CurrentRow.Index, 5, false);
+                forceNext = true;
+            }
+        }
+
+        private void nextTestToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ThreadPool.QueueUserWorkItem(s =>
+            {
+                // SETUP //////////////////////////////////////////////////////////////////////////////////////////////////////
+                //First look up the test info in the DB!!!!!
+                // We need number of steps and all of the tests to run.....
+
+                //first lets get the start temp and find if there is a master/slave relationship for special non-tests...
+                int station = dataGridView1.CurrentRow.Index;
+                #region master slave test check
+                // we will use this bool to say if we need to do slave stuff..
+                bool MasterSlaveTest = false;
+                int slaveRow = -1;
+
+                if (d.Rows[station][9].ToString().Length > 2)  // this is the case where we have a master and slave config
+                {
+                    MasterSlaveTest = true;
+                    // also assign the slave channel...
+                    string temp = d.Rows[station][9].ToString().Replace("-M", "");
+
+                    for (int i = 0; i < 16; i++)
+                    {
+                        if (d.Rows[i][9].ToString().Contains(temp) && d.Rows[i][9].ToString().Contains("S"))
+                        {
+                            //found the slave
+                            slaveRow = i;
+                            break;
+                        }
+                    }
+                }  // end the master slave find...
+
+                #endregion
+
+                // Now on to finding the specifics of the Combo Test
+                OleDbConnection myAccessConn;
+                string strAccessConn;
+
+                try
+                {
+                    strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                    myAccessConn = new OleDbConnection(strAccessConn);
+                }
+                catch (Exception ex)
+                {
+                    this.Invoke((MethodInvoker)delegate()
+                    {
+                        MessageBox.Show(this, "Error: Failed to create a database connection. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    });
+                    return;
+                }
+
+                try
+                {
+                    // is this a resume or a new test?
+                    string strAccessSelect;
+                    int currentStep = 0;
+
+                    strAccessSelect = @"SELECT * FROM ComboTest WHERE ComboTestName='" + d.Rows[station][2].ToString().Substring(7, (d.Rows[station][2].ToString().IndexOf("(") - 8)) + "';";
+                    currentStep = int.Parse(d.Rows[station][2].ToString().Substring(d.Rows[station][2].ToString().IndexOf("(") + 1, 2)) - 1;
+
+                    DataSet CustTest = new DataSet();
+                    OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                    OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                    lock (dataBaseLock)
+                    {
+                        myAccessConn.Open();
+                        myDataAdapter.Fill(CustTest, "ComboTest");
+                        myAccessConn.Close();
+                    }
+
+
+                    int steps = int.Parse(CustTest.Tables[0].Rows[0][2].ToString());
+
+                    if (currentStep < steps - 1)
+                    {
+                        currentStep++;
+                        updateD(station, 2, "Combo: " + CustTest.Tables[0].Rows[0][1].ToString() + " (" + (currentStep + 1).ToString() + " " + CustTest.Tables[0].Rows[0][currentStep + 3].ToString() + ")");
+                        if (MasterSlaveTest) { updateD(slaveRow, 2, "Combo: " + CustTest.Tables[0].Rows[0][1].ToString() + " (" + (currentStep + 1).ToString() + " " + CustTest.Tables[0].Rows[0][currentStep + 3].ToString() + ")"); }
+                    }
+
+
+                }
+                catch (Exception ex)
+                {
+                    this.Invoke((MethodInvoker)delegate()
+                    {
+                        MessageBox.Show(this, "Error: Something went wrong in the Combo Test increment code. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    });
+
+                    return;
+                }
+
+            }); // end thread
+
+        }
+
+        private void previousTestToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ThreadPool.QueueUserWorkItem(s =>
+            {
+                // SETUP //////////////////////////////////////////////////////////////////////////////////////////////////////
+                //First look up the test info in the DB!!!!!
+                // We need number of steps and all of the tests to run.....
+
+                //first lets get the start temp and find if there is a master/slave relationship for special non-tests...
+                int station = dataGridView1.CurrentRow.Index;
+                #region master slave test check
+                // we will use this bool to say if we need to do slave stuff..
+                bool MasterSlaveTest = false;
+                int slaveRow = -1;
+
+                if (d.Rows[station][9].ToString().Length > 2)  // this is the case where we have a master and slave config
+                {
+                    MasterSlaveTest = true;
+                    // also assign the slave channel...
+                    string temp = d.Rows[station][9].ToString().Replace("-M", "");
+
+                    for (int i = 0; i < 16; i++)
+                    {
+                        if (d.Rows[i][9].ToString().Contains(temp) && d.Rows[i][9].ToString().Contains("S"))
+                        {
+                            //found the slave
+                            slaveRow = i;
+                            break;
+                        }
+                    }
+                }  // end the master slave find...
+
+                #endregion
+
+                // Now on to finding the specifics of the Combo Test
+                OleDbConnection myAccessConn;
+                string strAccessConn;
+
+                try
+                {
+                    strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                    myAccessConn = new OleDbConnection(strAccessConn);
+                }
+                catch (Exception ex)
+                {
+                    this.Invoke((MethodInvoker)delegate()
+                    {
+                        MessageBox.Show(this, "Error: Failed to create a database connection. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    });
+                    return;
+                }
+
+                try
+                {
+                    // is this a resume or a new test?
+                    string strAccessSelect;
+                    int currentStep = 0;
+
+                    strAccessSelect = @"SELECT * FROM ComboTest WHERE ComboTestName='" + d.Rows[station][2].ToString().Substring(7, (d.Rows[station][2].ToString().IndexOf("(") - 8)) + "';";
+                    currentStep = int.Parse(d.Rows[station][2].ToString().Substring(d.Rows[station][2].ToString().IndexOf("(") + 1, 2)) - 1;
+
+                    DataSet CustTest = new DataSet();
+                    OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                    OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                    lock (dataBaseLock)
+                    {
+                        myAccessConn.Open();
+                        myDataAdapter.Fill(CustTest, "ComboTest");
+                        myAccessConn.Close();
+                    }
+
+
+                    int steps = int.Parse(CustTest.Tables[0].Rows[0][2].ToString());
+
+                    if (currentStep > 0)
+                    {
+                        currentStep--;
+                        updateD(station, 2, "Combo: " + CustTest.Tables[0].Rows[0][1].ToString() + " (" + (currentStep + 1).ToString() + " " + CustTest.Tables[0].Rows[0][currentStep + 3].ToString() + ")");
+                        if (MasterSlaveTest) { updateD(slaveRow, 2, "Combo: " + CustTest.Tables[0].Rows[0][1].ToString() + " (" + (currentStep + 1).ToString() + " " + CustTest.Tables[0].Rows[0][currentStep + 3].ToString() + ")"); }
+                    }
+
+
+                }
+                catch (Exception ex)
+                {
+                    this.Invoke((MethodInvoker)delegate()
+                    {
+                        MessageBox.Show(this, "Error: Something went wrong in the Combo Test increment code. \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    });
+
+                    return;
+                }
+
+            }); // end thread
+        }
+
+        private void shorting16ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void toolStripMenuItem50_Click(object sender, EventArgs e)
+        {
+            updateD(dataGridView1.CurrentRow.Index, 2, "Shorting-16");
+            updateD(dataGridView1.CurrentRow.Index, 3, "");
+            updateD(dataGridView1.CurrentRow.Index, 6, "");
+            updateD(dataGridView1.CurrentRow.Index, 7, "");
+            fillPlotCombos(dataGridView1.CurrentRow.Index);
+
+            // also update the slave (if we have a master...)
+            if (d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Contains("M"))
+            {
+                //find the slave
+                string temp = d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Replace("-M", "");
+                for (int i = 0; i < 16; i++)
+                {
+                    if (d.Rows[i][9].ToString().Contains(temp) && d.Rows[i][9].ToString().Contains("S"))
+                    {
+                        updateD(i, 2, "Shorting-16");
+                        updateD(i, 3, "");
+                        updateD(i, 6, "");
+                        updateD(i, 7, "");
+                    }
+                }
+
+                MessageBox.Show(this, "Warning!  You will need to clear the Slave channel before runiing the Shorting test (Does not work in Master/Slave mode).", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
 
     }// end mainform class section...
 }

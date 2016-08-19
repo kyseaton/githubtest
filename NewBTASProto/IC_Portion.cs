@@ -39,9 +39,6 @@ namespace NewBTASProto
          byte[] comErrorNum = new byte[16] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
          byte[] comGoodNum = new byte[16] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
-        //Shorting Board?
-         bool[] autoShort = new bool[16] { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
-
         public void pollICs()
         {
 
@@ -843,7 +840,7 @@ namespace NewBTASProto
                             ////////////////////////////////////////////AUTO SHORT BOARDS ARE SET HERE///////////////////////
                             #region AutoShort Comms
 
-                            if (autoShort[j] == true && d.Rows[j][2].ToString() == "Discharge" ) //&& (bool) d.Rows[j][5] == true)
+                            if (d.Rows[j][2].ToString().Contains("Shorting") && GlobalVars.CScanData[j].CCID == 23) //&& (bool) d.Rows[j][5] == true)
                             {
                                 try
                                 {
@@ -857,15 +854,19 @@ namespace NewBTASProto
                                     System.Text.StringBuilder sb = new System.Text.StringBuilder();
                                     for (int b = 0; b < GlobalVars.CScanData[j].cellsToDisplay; b++)
                                     {
-                                        if (Math.Abs(GlobalVars.CScanData[j].orderedCells[b]) < 0.1)
+                                        // only set bits if the test is running, otherwise clear everything by leaving them zero
+                                        if ((bool)d.Rows[j][5])
                                         {
-                                            //set the 1 bit
-                                            tempStore += (char)Math.Pow(2, ((2 * b) % 8));
-                                        }
-                                        if (Math.Abs(GlobalVars.CScanData[j].orderedCells[b]) < 1.5)
-                                        {
-                                            //set the 0 bit
-                                            tempStore += (char)Math.Pow(2, ((2 * b + 1) % 8)); 
+                                            if (Math.Abs(GlobalVars.CScanData[j].orderedCells[b]) < 0.1)
+                                            {
+                                                //set the 1 bit
+                                                tempStore += (char)Math.Pow(2, ((2 * b) % 8));
+                                            }
+                                            if (Math.Abs(GlobalVars.CScanData[j].orderedCells[b]) < 1.5)
+                                            {
+                                                //set the 0 bit
+                                                tempStore += (char)Math.Pow(2, ((2 * b + 1) % 8));
+                                            }
                                         }
 
                                         // do we need to add the char to the output string?
@@ -876,6 +877,8 @@ namespace NewBTASProto
                                             tempStore = (char) 0;
                                         }
                                     }
+
+
                                     toAutoShort += sb.ToString();
                                     toAutoShort += (char) checkSum;
                                     toAutoShort += "Z";

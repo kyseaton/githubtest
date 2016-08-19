@@ -35,7 +35,7 @@ namespace NewBTASProto
             // Open database containing all the battery data....
 
             strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
-            strAccessSelect = @"SELECT * FROM TestType WHERE TESTNAME<>'Top Charge-4' AND TESTNAME<>'As Received' AND TESTNAME<>'Full Charge-4' AND TESTNAME<>'Full Charge-6' AND TESTNAME<>'Capacity-1' AND TESTNAME<>'Top Charge-2' AND TESTNAME<>'Discharge' AND TESTNAME<>'Slow Charge-14' AND TESTNAME<>'Top Charge-1' AND TESTNAME<>'Slow Charge-16' AND TESTNAME<>'Constant Voltage' ORDER BY TESTNAME ASC";
+            strAccessSelect = @"SELECT * FROM TestType WHERE TESTNAME<>'Top Charge-4' AND TESTNAME<>'As Received' AND TESTNAME<>'Full Charge-4' AND TESTNAME<>'Full Charge-4.5' AND TESTNAME<>'Full Charge-6' AND TESTNAME<>'Capacity-1' AND TESTNAME<>'Top Charge-2' AND TESTNAME<>'Discharge' AND TESTNAME<>'Slow Charge-14' AND TESTNAME<>'Top Charge-1' AND TESTNAME<>'Slow Charge-16' AND TESTNAME<>'Constant Voltage' AND TESTNAME<>'Shorting-16' ORDER BY TESTNAME ASC";
 
             Tests = new DataSet();
             OleDbConnection myAccessConn = null;
@@ -84,6 +84,21 @@ namespace NewBTASProto
             textBox1.DataBindings.Add("Text", bindingSource1, "TESTNAME");
             numericUpDown1.DataBindings.Add("Text", bindingSource1, "Readings");
             numericUpDown2.DataBindings.Add("Text", bindingSource1, "Interval");
+            comboBox2.DataBindings.Add("Text", bindingSource1, "TMode");
+            numericUpDown6.DataBindings.Add("Text", bindingSource1, "TTime1Hr");
+            numericUpDown5.DataBindings.Add("Text", bindingSource1, "TTime1Min");
+            numericUpDown3.DataBindings.Add("Text", bindingSource1, "TCurr1");
+            numericUpDown4.DataBindings.Add("Text", bindingSource1, "TVolts1");
+            numericUpDown10.DataBindings.Add("Text", bindingSource1, "TTime2Hr");
+            numericUpDown9.DataBindings.Add("Text", bindingSource1, "TTime2Min");
+            numericUpDown8.DataBindings.Add("Text", bindingSource1, "TCurr2");
+            numericUpDown7.DataBindings.Add("Text", bindingSource1, "TVolts2");
+            numericUpDown13.DataBindings.Add("Text", bindingSource1, "TOhms");
+            numericUpDown15.DataBindings.Add("Text", bindingSource1, "TTimeDHr");
+            numericUpDown14.DataBindings.Add("Text", bindingSource1, "TTimeDMin");
+            numericUpDown12.DataBindings.Add("Text", bindingSource1, "TCurrD");
+            numericUpDown11.DataBindings.Add("Text", bindingSource1, "TVoltsD");
+
 
             #endregion
 
@@ -101,37 +116,6 @@ namespace NewBTASProto
         private void textBox5_Leave(object sender, EventArgs e)
         {
 
-            // Maybe down the line...
-
-            /*            ulong num;
-
-                        if (textBox5.Text.Length == 11 && ulong.TryParse(textBox5.Text, out num))
-                        {
-
-                            string pn = textBox5.Text;
-
-                            textBox5.Text = String.Format("({0}) {1}-{2}", pn.Substring(0, 3), pn.Substring(3, 3), pn.Substring(6));
-
-                        }
-                        if (textBox5.Text.Length == 11 && ulong.TryParse(textBox5.Text, out num))
-                        {
-
-                            string pn = textBox5.Text;
-
-                            textBox5.Text = String.Format("({0}) {1}-{2}", pn.Substring(0, 3), pn.Substring(3, 3), pn.Substring(6));
-
-                        }
-
-                        else
-                        {
-
-                            MessageBox.Show(this, "Invalid phone number, please change");
-
-                            textBox5.Focus();
-
-
-                        }
-             *  * */
         }
 
         private void toolStripCBCustomers_SelectedIndexChanged(object sender, EventArgs e)
@@ -166,6 +150,20 @@ namespace NewBTASProto
                     string cmdStr = "UPDATE TestType SET TESTNAME ='" + textBox1.Text + 
                         "', Readings='" + numericUpDown1.Text +
                         "', [Interval]='" + numericUpDown2.Text.Trim() +
+                        "', TMode='" + comboBox2.Text +
+                        "', TTime1Hr='" + numericUpDown6.Text.Trim() +
+                        "', TTime1Min='" + numericUpDown5.Text.Trim() +
+                        "', TCurr1='" + numericUpDown3.Text.Trim() +
+                        "', TVolts1='" + numericUpDown4.Text.Trim() +
+                        "', TTime2Hr='" + numericUpDown10.Text.Trim() +
+                        "', TTime2Min='" + numericUpDown9.Text.Trim() +
+                        "', TCurr2='" + numericUpDown8.Text.Trim() +
+                        "', TVolts2='" + numericUpDown7.Text.Trim() +
+                        "', TOhms='" + numericUpDown13.Text.Trim() +
+                        "', TTimeDHr='" + numericUpDown15.Text.Trim() +
+                        "', TTimeDMin='" + numericUpDown14.Text.Trim() +
+                        "', TCurrD='" + numericUpDown12.Text.Trim() +
+                        "', TVoltsD='" + numericUpDown11.Text.Trim() +
                         "' WHERE TESTID=" + current["TESTID"].ToString();
 
                     OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
@@ -192,17 +190,32 @@ namespace NewBTASProto
                         textBox1.Text == "Constant Voltage" ||
                         textBox1.Text == "Custom Chg" ||
                         textBox1.Text == "Custom Cap" ||
-                        textBox1.Text == "Full Charge-4.5")
+                        textBox1.Text == "Full Charge-4.5" ||
+                        textBox1.Text == "Shorting-16")
                     {
                         MessageBox.Show(this, "That test name is protected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                         return;
                     }
 
-                    //somehow we are renamed the test and that's not good
-                    string cmdStr = "INSERT INTO TestType (TESTNAME, Readings, [Interval]) VALUES('" 
+                    string cmdStr = "INSERT INTO TestType (TESTNAME, Readings, [Interval], TMode, TTime1Hr, TTime1Min, TCurr1, TVolts1, TTime2Hr, TTime2Min, TCurr2, TVolts2, TOhms, TTimeDHr, TTimeDMin, TCurrD, TVoltsD) VALUES('" 
                         + textBox1.Text.Replace("'","''") + "','" 
-                        + numericUpDown1.Text + "','" 
-                        + numericUpDown2.Text.Trim() + "')";
+                        + numericUpDown1.Text + "','"
+                        + numericUpDown2.Text.Trim() + "','"
+                        + comboBox2.Text + "','"
+                        + numericUpDown6.Text + "','"
+                        + numericUpDown5.Text + "','"
+                        + numericUpDown3.Text + "','"
+                        + numericUpDown4.Text + "','"
+                        + numericUpDown10.Text + "','"
+                        + numericUpDown9.Text + "','"
+                        + numericUpDown8.Text + "','"
+                        + numericUpDown7.Text + "','"
+                        + numericUpDown13.Text + "','"
+                        + numericUpDown15.Text + "','"
+                        + numericUpDown14.Text + "','"
+                        + numericUpDown12.Text + "','"
+                        + numericUpDown11.Text
+                        + "')";
 
                     OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
                     lock (Main_Form.dataBaseLock)
@@ -242,11 +255,42 @@ namespace NewBTASProto
             {
                 textBox1.Enabled = false;
                 bindingNavigatorDeleteItem.Enabled = false;
+                label15.Visible = true;
+                comboBox2.Enabled = false;
+                numericUpDown6.Enabled = false;
+                numericUpDown5.Enabled = false;
+                numericUpDown3.Enabled = false;
+                numericUpDown4.Enabled = false;
+                numericUpDown10.Enabled = false;
+                numericUpDown9.Enabled = false;
+                numericUpDown8.Enabled = false;
+                numericUpDown7.Enabled = false;
+                numericUpDown15.Enabled = false;
+                numericUpDown14.Enabled = false;
+                numericUpDown12.Enabled = false;
+                numericUpDown11.Enabled = false;
+                numericUpDown13.Enabled = false;
+
             }
             else
             {
                 textBox1.Enabled = true;
                 bindingNavigatorDeleteItem.Enabled = true;
+                label15.Visible = false;
+                comboBox2.Enabled = true;
+                numericUpDown6.Enabled = true;
+                numericUpDown5.Enabled = true;
+                numericUpDown3.Enabled = true;
+                numericUpDown4.Enabled = true;
+                numericUpDown10.Enabled = true;
+                numericUpDown9.Enabled = true;
+                numericUpDown8.Enabled = true;
+                numericUpDown7.Enabled = true;
+                numericUpDown15.Enabled = true;
+                numericUpDown14.Enabled = true;
+                numericUpDown12.Enabled = true;
+                numericUpDown11.Enabled = true;
+                numericUpDown13.Enabled = true;
             }
         }
 

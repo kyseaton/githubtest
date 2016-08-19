@@ -168,13 +168,11 @@ namespace NewBTASProto
 
                                             if (testData.CCID == 23)
                                             {
-                                                autoShort[currentRow] = true;
                                                 // first set the cell to green
                                                 dataGridView1.Rows[currentRow].Cells[4].Style.BackColor = Color.YellowGreen;
                                             }
                                             else
                                             {
-                                                autoShort[currentRow] = false;
                                                 // first set the cell to green
                                                 dataGridView1.Rows[currentRow].Cells[4].Style.BackColor = Color.Green;
                                             }
@@ -698,7 +696,6 @@ namespace NewBTASProto
                                                     if ((bool)d.Rows[tempClick][4] == true)
                                                     {
                                                         dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[4].Style.BackColor = Color.Red;
-                                                        autoShort[dataGridView1.CurrentRow.Index] = false;
                                                     }
                                                     if (!d.Rows[dataGridView1.CurrentRow.Index][10].ToString().Contains("ICA")) { dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.Gainsboro; }
                                                     chart1.Series.Clear();
@@ -846,13 +843,11 @@ namespace NewBTASProto
                                             {
                                                 if (testData.CCID == 23)
                                                 {
-                                                    autoShort[j] = true;
                                                     // set the cell to yellow green
                                                     dataGridView1.Rows[j].Cells[4].Style.BackColor = Color.YellowGreen;
                                                 }
                                                 else
                                                 {
-                                                    autoShort[j] = false;
                                                     // set the cell to green
                                                     dataGridView1.Rows[j].Cells[4].Style.BackColor = Color.Green;
                                                 }
@@ -1117,7 +1112,6 @@ namespace NewBTASProto
                                                         if ((bool)d.Rows[j][4])
                                                         {
                                                             dataGridView1.Rows[j].Cells[4].Style.BackColor = Color.Red;
-                                                            autoShort[j] = false;
                                                         }
                                                         if (!d.Rows[j][10].ToString().Contains("ICA")) { dataGridView1.Rows[j].Cells[8].Style.BackColor = Color.Gainsboro; }
                                                     });
@@ -1560,7 +1554,22 @@ namespace NewBTASProto
                                 break;
                         }
 
-                        //we need to graph the col 7 as time and q as the value
+
+                        // first get the interval and total points
+                        double interval;
+                        int points;
+                        try
+                        {
+                            interval = this.chart1.Series[0].Points[1].XValue;
+                            points = this.chart1.Series[0].Points.Count;
+                            if (points > 18 && points < 25) { points = 1; }
+                        }
+                        catch
+                        {
+                            interval = 1;
+                            points = 1;
+                        }
+
                         this.chart1.Series.Clear();
                         var series1 = new System.Windows.Forms.DataVisualization.Charting.Series
                         {
@@ -1596,53 +1605,27 @@ namespace NewBTASProto
                         }
 
                         // pad with zero Vals to help with the look of the plot...
-                        // first get the interval and total points
-                        double interval = 1;
-                        int points = 1;
 
-                        switch (d.Rows[station][2].ToString())
+                        string forPlot = d.Rows[station][2].ToString();
+                        if (forPlot.Contains("("))
+                        {
+                            //we need to pull out the actual test being done...
+                            forPlot = forPlot.Substring(forPlot.IndexOf("(") + 3, forPlot.Length - forPlot.IndexOf("(") - 4).Trim();
+                        }
+
+                        switch (forPlot)
                         {
                             case "As Received":
                                 interval = 1 / 30;
                                 points = 3;
                                 chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                                 break;
-                            case "Combo: FC-6 Cap-1":
-                                if (d.Rows[station][7].ToString() == "Complete")
-                                {
-                                    interval = 1;
-                                    points = 61;
-                                }
-                                else
-                                {
-                                    interval = 5;
-                                    points = 73;
-                                }
-                                chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
-                                break;
-                            case "Combo: FC-4 Cap-1":
-                                if (d.Rows[station][7].ToString() == "Complete")
-                                {
-                                    interval = 1;
-                                    points = 61;
-                                }
-                                else
-                                {
-                                    interval = 5;
-                                    points = 73;
-                                }
-                                chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
-                                break;
                             case "Full Charge-6":
-                            case "Combo: >>FC-6<<  Cap-1":
-                            case "Combo: FC-6 >><< Cap-1":
                                 interval = 5;
                                 points = 73;
                                 chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                                 break;
                             case "Full Charge-4":
-                            case "Combo: >>FC-4<<  Cap-1":
-                            case "Combo: FC-4 >><< Cap-1":
                                 interval = 4;
                                 points = 61;
                                 chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
@@ -1668,8 +1651,6 @@ namespace NewBTASProto
                                 chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                                 break;
                             case "Capacity-1":
-                            case "Combo: FC-6  >>Cap-1<<":
-                            case "Combo: FC-4  >>Cap-1<<":
                                 interval = 1;
                                 points = 61;
                                 chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
@@ -1685,6 +1666,7 @@ namespace NewBTASProto
                                 chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                                 break;
                             case "Slow Charge-16":
+                            case "Shorting-16":
                                 interval = 16;
                                 points = 61;
                                 chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
@@ -1698,10 +1680,11 @@ namespace NewBTASProto
                                     {
                                         interval = ((int) customTestParams.Rows[i][4]) / 60.0;
                                         points = (int)customTestParams.Rows[i][3];
+                                        chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0.0";
                                         break;
                                     }
                                 }
-                                chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0.0";
+                                
                                 break;
                         }
 
@@ -1894,7 +1877,21 @@ namespace NewBTASProto
                                 break;
                         }
 
-                        //we need to graph the col 7 as time and q as the value
+                        // first get the interval and total points
+                        double interval;
+                        int points;
+                        try
+                        {
+                            interval = this.chart1.Series[0].Points[1].XValue;
+                            points = this.chart1.Series[0].Points.Count;
+                            if (points > 18 && points < 25) { points = 1; }
+                        }
+                        catch
+                        {
+                            interval = 1;
+                            points = 1;
+                        }
+
                         this.chart1.Series.Clear();
                         var series1 = new System.Windows.Forms.DataVisualization.Charting.Series
                         {
@@ -1907,9 +1904,6 @@ namespace NewBTASProto
                             BorderWidth = 1
                         };
                         this.chart1.Series.Add(series1);
-
-                        double interval = 1;
-                        int points = 1;
 
                         if (q == 999)
                         {
@@ -1930,9 +1924,16 @@ namespace NewBTASProto
                             }
                             // pad with zero Vals to help with the look of the plot...
                             // first get the interval and total points
-                            
 
-                            switch (d.Rows[station][2].ToString())
+
+                            string forPlot = d.Rows[station][2].ToString();
+                            if (forPlot.Contains("("))
+                            {
+                                //we need to pull out the actual test being done...
+                                forPlot = forPlot.Substring(forPlot.IndexOf("(") + 3, forPlot.Length - forPlot.IndexOf("(") - 4).Trim();
+                            }
+
+                            switch (forPlot)
                             {
                                 case "As Received":
                                     interval = 1 / 30;
@@ -1940,15 +1941,11 @@ namespace NewBTASProto
                                     chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                                     break;
                                 case "Full Charge-6":
-                                case "Combo: >>FC-6<<  Cap-1":
-                                case "Combo: FC-6 >><< Cap-1":
                                     interval = 5;
                                     points = 73;
                                     chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                                     break;
                                 case "Full Charge-4":
-                                case "Combo: >>FC-4<<  Cap-1":
-                                case "Combo: FC-4 >><< Cap-1":
                                     interval = 4;
                                     points = 61;
                                     chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
@@ -1974,8 +1971,6 @@ namespace NewBTASProto
                                     chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                                     break;
                                 case "Capacity-1":
-                                case "Combo: FC-6  >>Cap-1<<":
-                                case "Combo: FC-4  >>Cap-1<<":
                                     interval = 1;
                                     points = 61;
                                     chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
@@ -1991,6 +1986,7 @@ namespace NewBTASProto
                                     chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                                     break;
                                 case "Slow Charge-16":
+                                case "Shorting-16":
                                     interval = 16;
                                     points = 61;
                                     chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
@@ -2004,11 +2000,12 @@ namespace NewBTASProto
                                         {
                                             interval = ((int)customTestParams.Rows[i][4]) / 60.0;
                                             points = (int)customTestParams.Rows[i][3];
+                                            chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0.0";
                                             break;
                                         }
                                     }
 
-                                    chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0.0";
+                                    
                                     break;
                             }
 
@@ -2158,7 +2155,16 @@ namespace NewBTASProto
             }
 
             string tech = pci.Rows[station][1].ToString();
+
             string test_type = d.Rows[station][2].ToString();
+            if (test_type.Contains("("))
+            {
+                //we need to pull out the actual test being done...
+                test_type = test_type.Substring(test_type.IndexOf("(") + 3, test_type.Length - test_type.IndexOf("(") - 4).Trim();
+            }
+
+
+
 
             // test_type is the type of test we are generating the colors for
 
@@ -2175,7 +2181,7 @@ namespace NewBTASProto
             {
                 case "NiCd":
                     // Discharge
-                    if (test_type == "As Received" || test_type == "Capacity-1" || test_type == "Discharge" || test_type == "Custom Cap" || (test_type == "Combo: FC-6 Cap-1" && d.Rows[station][7].ToString() == "Complete") || test_type == "Combo: FC-6  >>Cap-1<<" || test_type == "")
+                    if (test_type == "As Received" || test_type == "Capacity-1" || test_type == "Discharge" || test_type == "Custom Cap" || test_type.Contains("Shorting") || test_type == "")
                     {
                         Min4 = 1 * Cells;
                         Max = 1.05 * Cells;
@@ -2201,7 +2207,7 @@ namespace NewBTASProto
                     }
                 case "Sealed Lead Acid":
                     // Discharge
-                    if (test_type == "As Received" || test_type == "Capacity-1" || test_type == "Discharge" || test_type == "Custom Cap" || test_type == "")
+                    if (test_type == "As Received" || test_type == "Capacity-1" || test_type == "Discharge" || test_type == "Custom Cap" || test_type.Contains("Shorting") || test_type == "")
                     {
 
                         Min4 = (20.0 / 24) * (float)pci.Rows[station][2];
@@ -2220,7 +2226,7 @@ namespace NewBTASProto
                     }
                 case "NiCd ULM":
                     // Discharge
-                    if (test_type == "As Received" || test_type == "Capacity-1" || test_type == "Discharge" || test_type == "Custom Cap" || test_type == "")
+                    if (test_type == "As Received" || test_type == "Capacity-1" || test_type == "Discharge" || test_type == "Custom Cap" || test_type.Contains("Shorting") || test_type == "")
                     {
                         Min4 = 1 * Cells;
                         Max = 1.05 * Cells;
@@ -2336,7 +2342,7 @@ namespace NewBTASProto
                         }
 
                         //make sure we have the info with which to act on...
-                        if (workOrder == "" || testStep == "")
+                        if (workOrder == "" || testStep == "" || (d.Rows[currentRow][2].ToString().Contains("Combo") && !d.Rows[currentRow][2].ToString().Contains("(")))
                         {
                             this.Invoke((MethodInvoker)delegate()
                             {
@@ -2522,9 +2528,9 @@ namespace NewBTASProto
                                         comboBox2.Items.Add("Temperature 2");
                                         toolStripComboBox2.ComboBox.Items.Add("Temperature 2");
                                         comboBox2.Items.Add("Temperature 3");
-                                        toolStripComboBox2.ComboBox.Items.Add("Voltage");
+                                        toolStripComboBox2.ComboBox.Items.Add("Temperature 3");
                                         comboBox2.Items.Add("Temperature 4");
-                                        toolStripComboBox2.ComboBox.Items.Add("Voltage");
+                                        toolStripComboBox2.ComboBox.Items.Add("Temperature 4");
                                         // Cells combobox
                                         comboBox3.Items.Clear();
                                         toolStripComboBox3.ComboBox.Items.Clear();

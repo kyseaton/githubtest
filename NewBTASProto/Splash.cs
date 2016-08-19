@@ -342,7 +342,7 @@ namespace NewBTASProto
             tmr.Start();
             tmr.Tick += tmr_Tick;
 
-            //load the licence xml file and comare it to the licence list
+            //load the licence xml file and compare it to the licence list
 
             try
             {
@@ -474,7 +474,7 @@ namespace NewBTASProto
         }
 
         // this function will check the DB and update it accordingly
-        private void checkDB()
+        public void checkDB()
         {
 
             // USE this function to update the DB!
@@ -581,6 +581,46 @@ namespace NewBTASProto
                 }
             }
 
+            // we also need to make sure we have the wait and temp columns
+            try
+            {
+                strAccessSelect = @"SELECT Wait AND Time FROM ComboTest";
+                DataSet test = new DataSet();
+                OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                myAccessConn.Open();
+                myDataAdapter.Fill(test, "test");
+                myAccessConn.Close();
+
+            }
+            catch (Exception ex)
+            {
+                myAccessConn.Close();
+
+                if (ex is OleDbException)
+                {
+                    // we didn't find the Wait and Time columns in the ComboTest Table
+                    // lets add them!
+
+                    try
+                    {
+                        strAccessSelect = "ALTER TABLE ComboTest ADD WaitTime Number, TempMar Number";
+                        OleDbCommand cmd = new OleDbCommand(strAccessSelect, myAccessConn);
+                        myAccessConn.Open();
+                        cmd.ExecuteNonQuery();
+                        myAccessConn.Close();
+                    }
+                    catch { myAccessConn.Close(); }
+                }
+                else
+                {
+                    myAccessConn.Close();
+                    MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+ 
+
             //  open the db and check to see if we have the 4.5 hours settings in the DB
             try
             {
@@ -645,6 +685,72 @@ namespace NewBTASProto
                 myAccessConn.Close();
                 MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 
+            }
+
+            //  open the db and check to see if we have the Shorting-16 test settings in the DB
+            try
+            {
+                strAccessSelect = @"SELECT * FROM TestType WHERE TESTNAME = 'Shorting-16'";
+                DataSet test = new DataSet();
+                OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                myAccessConn.Open();
+                myDataAdapter.Fill(test, "test");
+                myAccessConn.Close();
+
+                // access for 0 to test if anything is there...
+                if (test.Tables[0].Rows.Count < 1)
+                {
+                    // we didn't find Shorting-16 in the table, so we need to add it!
+                    // we need to  insert
+                    string strUpdateCMD = "INSERT INTO TestType ([TESTNAME], Readings, [Interval]) VALUES ('Shorting-16', 61, 960)";
+                    myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
+                    myAccessConn.Open();
+                    myAccessCommand.ExecuteNonQuery();
+                    myAccessConn.Close();
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                myAccessConn.Close();
+                MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            }
+
+            //  open the db and check to see if we have the test setting fields in the testtype table
+            try
+            {
+                strAccessSelect = @"SELECT TMode FROM TestType";
+                DataSet test = new DataSet();
+                OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                myAccessConn.Open();
+                myDataAdapter.Fill(test, "test");
+                myAccessConn.Close();
+
+            }
+            catch (Exception ex)
+            {
+
+                if (ex is OleDbException)
+                {
+                    // we didn't find the table, so we need to create it!
+                    // we need to  insert
+                    string strUpdateCMD = "ALTER TABLE TestType ADD TMode Text(255), TTime1Hr Text(255), TTime1Min Text(255), TCurr1 Text(255), TVolts1 Text(255), TTime2Hr Text(255), TTime2Min Text(255), TCurr2 Text(255), TVolts2 Text(255), TOhms Text(255), TTimeDHr Text(255), TTimeDMin Text(255), TCurrD Text(255), TVoltsD Text(255)";
+                    OleDbCommand myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
+                    myAccessCommand.ExecuteNonQuery();
+                    myAccessConn.Close();
+
+                }
+                else
+                {
+                    myAccessConn.Close();
+                    MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
             
         }

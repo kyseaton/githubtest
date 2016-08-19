@@ -71,7 +71,8 @@ namespace NewBTASProto
 
             List<string> SerialNums = Tests.Tables[0].AsEnumerable().Select(x => x[0].ToString()).Distinct().ToList();
             SerialNums.Sort();
-            SerialNums.Insert(0, "");
+            SerialNums.Insert(SerialNums.Count,"Wait");
+            SerialNums.Insert(SerialNums.Count,"Temp Settle");
 
             foreach (string x in SerialNums)
             {
@@ -161,6 +162,8 @@ namespace NewBTASProto
             comboBox13.DataBindings.Add("Text", bindingSource1, "Step13");
             comboBox14.DataBindings.Add("Text", bindingSource1, "Step14");
             comboBox15.DataBindings.Add("Text", bindingSource1, "Step15");
+            numericUpDown2.DataBindings.Add("Text", bindingSource1, "WaitTime");
+            numericUpDown3.DataBindings.Add("Text", bindingSource1, "TempMar");
 
             #endregion
 
@@ -187,6 +190,61 @@ namespace NewBTASProto
 
         private void saveToolStripButton_Click_1(object sender, EventArgs e)
         {
+            if (numericUpDown2.Text == "")
+            {
+                numericUpDown2.Text = "1";
+            }
+            if (numericUpDown3.Text == "")
+            {
+                numericUpDown3.Text = "1";
+            }
+
+            if (bindingNavigator1.BindingSource.Position == -1)
+            {
+                string temp1 = textBox1.Text;
+                string temp2 = numericUpDown1.Text;
+                string temp3 = comboBox1.Text;
+                string temp4 = comboBox2.Text;
+                string temp5 = comboBox3.Text;
+                string temp6 = comboBox4.Text;
+                string temp7 = comboBox5.Text;
+                string temp8 = comboBox6.Text;
+                string temp9 = comboBox7.Text;
+                string temp10 = comboBox8.Text;
+                string temp11 = comboBox9.Text;
+                string temp12 = comboBox10.Text;
+                string temp13 = comboBox11.Text;
+                string temp14 = comboBox12.Text;
+                string temp15 = comboBox13.Text;
+                string temp16 = comboBox14.Text;
+                string temp17 = comboBox15.Text;
+                string temp18 = numericUpDown2.Text;
+                string temp19 = numericUpDown3.Text;
+
+                bindingNavigator1.BindingSource.AddNew();
+                bindingNavigator1.BindingSource.Position = 0;
+
+                textBox1.Text = temp1;
+                numericUpDown1.Text = temp2;
+                comboBox1.Text = temp3;
+                comboBox2.Text = temp4;
+                comboBox3.Text = temp5;
+                comboBox4.Text = temp6;
+                comboBox5.Text = temp7;
+                comboBox6.Text = temp8;
+                comboBox7.Text = temp9;
+                comboBox8.Text = temp10;
+                comboBox9.Text = temp11;
+                comboBox10.Text = temp12;
+                comboBox11.Text = temp13;
+                comboBox12.Text = temp14;
+                comboBox13.Text = temp15;
+                comboBox14.Text = temp16;
+                comboBox15.Text = temp17;
+                numericUpDown2.Text = temp18;
+                numericUpDown3.Text = temp19;
+
+            }
 
             try
             {
@@ -226,6 +284,8 @@ namespace NewBTASProto
                         "', Step13='" + comboBox13.Text.Replace("'", "''") +
                         "', Step14='" + comboBox14.Text.Replace("'", "''") +
                         "', Step15='" + comboBox15.Text.Replace("'", "''") +
+                        "', WaitTime='" + numericUpDown2.Text.Replace("'", "''") +
+                        "', TempMar='" + numericUpDown3.Text.Replace("'", "''") +
                         "' WHERE CTID=" + current["CTID"].ToString();
 
                     OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
@@ -241,7 +301,7 @@ namespace NewBTASProto
                 {
 
                     //somehow we are renamed the test and that's not good
-                    string cmdStr = "INSERT INTO ComboTest (ComboTestName, Steps, Step1, Step2, Step3, Step4, Step5, Step6, Step7, Step8, Step9, Step10, Step11, Step12, Step13, Step14, Step15) VALUES('" +
+                    string cmdStr = "INSERT INTO ComboTest (ComboTestName, Steps, Step1, Step2, Step3, Step4, Step5, Step6, Step7, Step8, Step9, Step10, Step11, Step12, Step13, Step14, Step15, WaitTime, TempMar) VALUES('" +
                         textBox1.Text.Replace("'","''") + "'," +
                         numericUpDown1.Text.Replace("'", "''") + ",'" +
                         comboBox1.Text.Replace("'", "''") + "','" +
@@ -258,7 +318,9 @@ namespace NewBTASProto
                         comboBox12.Text.Replace("'","''") + "','" +
                         comboBox13.Text.Replace("'","''") + "','" +
                         comboBox14.Text.Replace("'","''") + "','" +
-                        comboBox15.Text.Replace("'","''") + "')";
+                        comboBox15.Text.Replace("'", "''") + "','" +
+                        numericUpDown2.Text.Replace("'", "''") + "','" +
+                        numericUpDown3.Text.Replace("'", "''") + "')";
 
                     OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
                     lock (Main_Form.dataBaseLock)
