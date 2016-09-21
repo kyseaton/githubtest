@@ -305,7 +305,6 @@ namespace NewBTASProto
                                                 }
                                             }
 
-                                            tempText += Environment.NewLine;
 
                                             int cellsToDisplay = 0;
                                             if ((int) pci.Rows[currentRow][3] != -1 && (int) pci.Rows[currentRow][3] <= GlobalVars.CScanData[currentRow].cellsToDisplay)
@@ -316,19 +315,74 @@ namespace NewBTASProto
                                             {
                                                 cellsToDisplay = GlobalVars.CScanData[currentRow].cellsToDisplay;
                                             }
+
+                                            if (testData.CCID == 3)
+                                            {
+                                                cellsToDisplay += 1;
+                                            }
+                                            else if (testData.CCID == 4)
+                                            {
+                                                cellsToDisplay += 2;
+                                            }
+
                                             if (GlobalVars.Pos2Neg == false)
                                             {
+                                                int cc = 0;
                                                 for (int i = 0; i < cellsToDisplay; i++)
                                                 {
-                                                    tempText += "Cell #" + (i + 1).ToString() + ":  " + testData.orderedCells[i].ToString("0.000") + Environment.NewLine;
+                                                    
+                                                    if (testData.CCID == 3)
+                                                    {
+                                                        cc = cc % 11;
+                                                    }
+                                                    else if (testData.CCID == 4)
+                                                    {
+                                                        cc = cc % 7;
+                                                    }
+
+                                                    if (cc == 0)
+                                                    {
+                                                        if (i != 0)
+                                                        {
+                                                            i++;
+                                                        }
+                                                        
+                                                        tempText += Environment.NewLine;
+                                                    }
+
+                                                    tempText += "Cell #" + (cc + 1).ToString() + ":  " + testData.orderedCells[i].ToString("0.000") + Environment.NewLine;
+                                                    cc++;
                                                 }
+                                               
                                             }
                                             else
                                             {
+                                                int cc = 0;
                                                 for (int i = 0; i < cellsToDisplay; i++)
                                                 {
-                                                    tempText += "Cell #" + (i + 1).ToString() + ":  " + testData.orderedCells[cellsToDisplay - i - 1].ToString("0.000") + Environment.NewLine;
+                                                    
+                                                    if (testData.CCID == 3)
+                                                    {
+                                                        cc = cc % 11;
+                                                    }
+                                                    else if (testData.CCID == 4)
+                                                    {
+                                                        cc = cc % 7;
+                                                    }
+
+                                                    if (cc == 0)
+                                                    {
+                                                        if (i != 0)
+                                                        {
+                                                            i++;
+                                                        }
+                                                        tempText += Environment.NewLine;
+                                                    }
+
+                                                    tempText += "Cell #" + (cc + 1).ToString() + ":  " + testData.orderedCells[cellsToDisplay - i - 1].ToString("0.000") + Environment.NewLine;
+                                                    cc++;
                                                 }
+                                                
                                             }
 
                                             
@@ -1374,59 +1428,69 @@ namespace NewBTASProto
                     //special cable cases first...
                     if (GlobalVars.CScanData[station].CCID == 3)
                     {
+                        int cc = 0;
                         // this is the 2X 11 cable
-                        for (int i = 0; i < Cells; i++)
+                        for (int i = 0; i < Cells + 1; i++)
                         {
                             if (GlobalVars.Pos2Neg == false)
                             {
-                                series1.Points.AddXY(i % 11 + 1, testData.orderedCells[i]);
+                                series1.Points.AddXY(cc % 11 + 1, testData.orderedCells[i]);
                                 // color test
-                                series1.Points[i].Color = pointColorMain(station, testData.orderedCells[i], true);
+                                series1.Points[series1.Points.Count - 1].Color = pointColorMain(station, testData.orderedCells[i], true);
                                 if (i == 10)
                                 {
+                                    i++; // skip cell 12
                                     // add a blank point
                                     series1.Points.AddXY(" ", 0);
                                 }
+                                cc++;
                             }
                             else
                             {
-                                series1.Points.AddXY(i % 11 + 1, testData.orderedCells[Cells - i - 1]);
+                                series1.Points.AddXY(cc % 11 + 1, testData.orderedCells[Cells - i]);
                                 // color test
-                                series1.Points[i].Color = pointColorMain(station, testData.orderedCells[Cells - i - 1], true);
-                                if (i == 6 || i == 13)
+                                series1.Points[series1.Points.Count - 1].Color = pointColorMain(station, testData.orderedCells[Cells - i], true);
+                                if (i == 10)
                                 {
+                                    i++;  // skip cell 12
                                     // add a blank point
                                     series1.Points.AddXY(" ", 0);
                                 }
+                                cc++;
                             }
                         }
                     }
                     else if (GlobalVars.CScanData[station].CCID == 4)
                     {
+                        int cc = 0;
                         // this is the 3X7 cable
-                        for (int i = 0; i < Cells; i++)
+                        for (int i = 0; i < Cells + 2; i++)
                         {
                             if (GlobalVars.Pos2Neg == false)
                             {
-                                series1.Points.AddXY(i % 7 + 1, testData.orderedCells[i]);
+                                series1.Points.AddXY(cc % 7 + 1, testData.orderedCells[i]);
                                 // color test
-                                series1.Points[i].Color = pointColorMain(station, testData.orderedCells[i], true);
-                                if (i == 10)
+                                series1.Points[series1.Points.Count - 1].Color = pointColorMain(station, testData.orderedCells[i], true);
+                                if (i == 6 || i == 14)
                                 {
+                                    i++;
                                     // add a blank point
                                     series1.Points.AddXY(" ", 0);
                                 }
+                                cc++;
                             }
                             else
                             {
-                                series1.Points.AddXY(i % 7 + 1, testData.orderedCells[Cells - i - 1]);
+                                series1.Points.AddXY(cc % 7 + 1, testData.orderedCells[Cells - i + 1]);
                                 // color test
-                                series1.Points[i].Color = pointColorMain(station, testData.orderedCells[Cells - i - 1], true);
-                                if (i == 6 || i == 13)
+                                series1.Points[series1.Points.Count - 1].Color = pointColorMain(station, testData.orderedCells[Cells - i + 1], true);
+                                if (i == 6 || i == 14)
                                 {
+                                    i++;
                                     // add a blank point
                                     series1.Points.AddXY(" ", 0);
                                 }
+                                cc++;
                             }
                         }
                     }
@@ -2170,7 +2234,6 @@ namespace NewBTASProto
 
             // Three types of batteries (NiCd, SLA and NiCd ULM) and two directions (charge discharge)
 
-            // normal vented NiCds
             double Min1 = 0;
             double Min2 = 0;
             double Min3 = 0;
@@ -2183,11 +2246,13 @@ namespace NewBTASProto
                     // Discharge
                     if (test_type == "As Received" || test_type == "Capacity-1" || test_type == "Discharge" || test_type == "Custom Cap" || test_type.Contains("Shorting") || test_type == "")
                     {
+                        Min3 = 0.5 * Cells;
                         Min4 = 1 * Cells;
                         Max = 1.05 * Cells;
 
                         if (Value > Max) { return Color.Green; }
                         else if (Value > Min4) { return Color.Orange; }
+                        else if (Value < Min3) { return Color.PaleGreen; }
                         else { return Color.Red; }
 
                     }
@@ -2228,11 +2293,13 @@ namespace NewBTASProto
                     // Discharge
                     if (test_type == "As Received" || test_type == "Capacity-1" || test_type == "Discharge" || test_type == "Custom Cap" || test_type.Contains("Shorting") || test_type == "")
                     {
+                        Min3 = 0.5 * Cells;
                         Min4 = 1 * Cells;
                         Max = 1.05 * Cells;
 
                         if (Value > Max) { return Color.Green; }
                         else if (Value > Min4) { return Color.Orange; }
+                        else if (Value < Min3) { return Color.PaleGreen; }
                         else { return Color.Red; }
 
                     }

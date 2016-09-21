@@ -308,7 +308,7 @@ namespace NewBTASProto
 
 
                         //2x11 case
-                        if (GlobalVars.CScanData[station].CCID == 3 && (int)pci.Rows[station][3] != (GlobalVars.CScanData[station].cellsToDisplay / 2) && (int)pci.Rows[station][3] != -1)
+                        if (GlobalVars.CScanData[station].CCID == 3 && (int)pci.Rows[station][3] != (GlobalVars.CScanData[station].cellsToDisplay) && (int)pci.Rows[station][3] != -1)
                         {
                             // warn the user that the number of cells set in the database does not match the work order...
                             this.Invoke((MethodInvoker)delegate()
@@ -324,7 +324,7 @@ namespace NewBTASProto
                             if (cRunTest[station].IsCancellationRequested == true) { return; }
                         }
                         //3X7 case
-                        else if (GlobalVars.CScanData[station].CCID == 4 && (int)pci.Rows[station][3] != (GlobalVars.CScanData[station].cellsToDisplay / 3) && (int)pci.Rows[station][3] != -1)
+                        else if (GlobalVars.CScanData[station].CCID == 4 && (int)pci.Rows[station][3] != (GlobalVars.CScanData[station].cellsToDisplay) && (int)pci.Rows[station][3] != -1)
                         {
                             // warn the user that the number of cells set in the database does not match the work order...
                             this.Invoke((MethodInvoker)delegate()
@@ -446,7 +446,7 @@ namespace NewBTASProto
                             }
 
                             //2x11 case
-                            if (GlobalVars.CScanData[slaveRow].CCID == 3 && (int)pci.Rows[slaveRow][3] != (GlobalVars.CScanData[slaveRow].cellsToDisplay / 2) && (int)pci.Rows[station][3] != -1)
+                            if (GlobalVars.CScanData[slaveRow].CCID == 3 && (int)pci.Rows[slaveRow][3] != (GlobalVars.CScanData[slaveRow].cellsToDisplay) && (int)pci.Rows[station][3] != -1)
                             {
                                 // warn the user that the number of cells set in the database does not match the work order...
                                 this.Invoke((MethodInvoker)delegate()
@@ -461,7 +461,7 @@ namespace NewBTASProto
                                 if (cRunTest[station].IsCancellationRequested == true) { return; }
                             }
                             //3X7 case
-                            if (GlobalVars.CScanData[slaveRow].CCID == 3 && (int)pci.Rows[slaveRow][3] != (GlobalVars.CScanData[slaveRow].cellsToDisplay / 3) && (int)pci.Rows[station][3] != -1)
+                            if (GlobalVars.CScanData[slaveRow].CCID == 3 && (int)pci.Rows[slaveRow][3] != (GlobalVars.CScanData[slaveRow].cellsToDisplay) && (int)pci.Rows[station][3] != -1)
                             {
                                 // warn the user that the number of cells set in the database does not match the work order...
                                 this.Invoke((MethodInvoker)delegate()
@@ -1090,7 +1090,7 @@ namespace NewBTASProto
                                             tempKMStore[19] = (byte)(48 + ((float) GetDouble(battery.Tables[0].Rows[0][101].ToString()) / 1));            //discharge resistance high byte
                                             tempKMStore[20] = (byte)(48 + 100 * ((float) GetDouble(battery.Tables[0].Rows[0][101].ToString()) % 1));      //discharge resistance low byte
                                         }
-                                        if (battery.Tables[0].Rows[0][95].ToString() != "") { curSet1 = (float) GetDouble(battery.Tables[0].Rows[0][95].ToString()); }
+                                        if (tempKMStore[0] == 31 + 48) { curSet1 = (float)GetDouble(battery.Tables[0].Rows[0][95].ToString()); }
                                         vSet1 = (MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][96].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][96].ToString()));
                                         curSet2 = 0;
                                         vSet2 = 0;
@@ -1420,20 +1420,62 @@ namespace NewBTASProto
                                         tempKMStore[11] = (byte)(48 + ((MasterSlaveTest ? (2 * (float)GetDouble(testSettings.Tables[0].Rows[0][14].ToString())) : (float)GetDouble(testSettings.Tables[0].Rows[0][14].ToString())) / 1));                 //top voltage 2 byte
                                         tempKMStore[12] = (byte)(48 + 100 * ((MasterSlaveTest ? (2 * (float)GetDouble(testSettings.Tables[0].Rows[0][14].ToString())) : (float)GetDouble(testSettings.Tables[0].Rows[0][14].ToString())) % 1));           //bottom voltage 2 byte
 
-                                        tempKMStore[13] = (byte)48;                                                                                //discharge time hours
-                                        tempKMStore[14] = (byte)48;                                                                              //discharge time mins
-                                        tempKMStore[15] = (byte)48;                                                                                //discharge current high byte
-                                        tempKMStore[16] = (byte)48;                                                                                //discharge current low byte
-                                        tempKMStore[17] = (byte)48;                                                                                //discharge voltage high byte
-                                        tempKMStore[18] = (byte)48;                                                                                //discharge voltage low byte
-                                        tempKMStore[19] = (byte)48;                                                                                //discharge resistance high byte
-                                        tempKMStore[20] = (byte)48;                                                                                //discharge resistance low byte
+                                        tempKMStore[13] = (byte)(48 + int.Parse(testSettings.Tables[0].Rows[0][16].ToString()));                         //discharge time hours
+                                        tempKMStore[14] = (byte)(48 + int.Parse(testSettings.Tables[0].Rows[0][17].ToString()));                         //discharge time mins
+                                        if (tempKMStore[0] == 31 + 48 || tempKMStore[0] == 30 + 48)
+                                        {
+                                            if (d.Rows[station][10].ToString().Contains("mini"))
+                                            {
+                                                tempKMStore[15] = (byte)(48 + ((float)GetDouble(testSettings.Tables[0].Rows[0][18].ToString()) * 1));         //discharge current high byte
+                                                tempKMStore[16] = (byte)(48 + Math.Round(100 * ((float)GetDouble(testSettings.Tables[0].Rows[0][18].ToString()) % 1)));   //discharge current low byte
+                                            }
+                                            else
+                                            {
+                                                tempKMStore[15] = (byte)(48 + ((float)GetDouble(testSettings.Tables[0].Rows[0][18].ToString()) / 10));        //discharge current high byte
+                                                tempKMStore[16] = (byte)(48 + 10 * ((float)GetDouble(testSettings.Tables[0].Rows[0][18].ToString()) % 10));   //discharge current low byte
+                                            }
+                                        }
+                                        if (tempKMStore[0] == 31 + 48 || tempKMStore[0] == 32 + 48)
+                                        {
+                                            tempKMStore[17] = (byte)(48 + ((MasterSlaveTest ? (2 * (float)GetDouble(testSettings.Tables[0].Rows[0][19].ToString())) : (float)GetDouble(testSettings.Tables[0].Rows[0][19].ToString())) / 1));                 //discharge voltage high byte
+                                            tempKMStore[18] = (byte)(48 + 100 * ((MasterSlaveTest ? (2 * (float)GetDouble(testSettings.Tables[0].Rows[0][19].ToString())) : (float)GetDouble(testSettings.Tables[0].Rows[0][19].ToString())) % 1));           //discharge voltage low byte
+                                        }
+                                        if (tempKMStore[0] == 32 + 48)
+                                        {
+                                            tempKMStore[19] = (byte)(48 + ((float)GetDouble(testSettings.Tables[0].Rows[0][15].ToString()) / 1));            //discharge resistance high byte
+                                            tempKMStore[20] = (byte)(48 + 100 * ((float)GetDouble(testSettings.Tables[0].Rows[0][15].ToString()) % 1));      //discharge resistance low byte
+                                        }
                                         
                                         // needs to be based on mode...
-                                        curSet1 = (float)GetDouble(battery.Tables[0].Rows[0][165].ToString());
-                                        vSet1 = (MasterSlaveTest ? (2 * (float)GetDouble(battery.Tables[0].Rows[0][166].ToString())) : (float)GetDouble(battery.Tables[0].Rows[0][166].ToString()));
-                                        curSet2 = (float)GetDouble(battery.Tables[0].Rows[0][169].ToString());
-                                        vSet2 = (MasterSlaveTest ? (2 * (float)GetDouble(battery.Tables[0].Rows[0][170].ToString())) : (float)GetDouble(battery.Tables[0].Rows[0][170].ToString()));
+                                        if (tempKMStore[0] == 10 + 48 || tempKMStore[0] == 11 + 48 || tempKMStore[0] == 12 + 48)
+                                        {
+                                            curSet1 = (float)GetDouble(testSettings.Tables[0].Rows[0][9].ToString());
+                                            vSet1 = (MasterSlaveTest ? (2 * (float)GetDouble(testSettings.Tables[0].Rows[0][10].ToString())) : (float)GetDouble(testSettings.Tables[0].Rows[0][10].ToString()));
+                                            curSet2 = 0;
+                                            vSet2 = 0;
+                                        }
+                                        else if (tempKMStore[0] == 20 + 48 || tempKMStore[0] == 21 + 48)
+                                        {
+                                            curSet1 = (float)GetDouble(testSettings.Tables[0].Rows[0][9].ToString());
+                                            vSet1 = (MasterSlaveTest ? (2 * (float)GetDouble(testSettings.Tables[0].Rows[0][10].ToString())) : (float)GetDouble(testSettings.Tables[0].Rows[0][10].ToString()));
+                                            curSet2 = (float)GetDouble(testSettings.Tables[0].Rows[0][13].ToString());
+                                            vSet2 = (MasterSlaveTest ? (2 * (float)GetDouble(testSettings.Tables[0].Rows[0][14].ToString())) : (float)GetDouble(testSettings.Tables[0].Rows[0][14].ToString()));
+
+                                        }
+                                        else if (tempKMStore[0] == 30 + 48)
+                                        {
+                                            curSet1 = (float)GetDouble(testSettings.Tables[0].Rows[0][18].ToString());
+                                            vSet1 = 0;
+                                            curSet2 = 0;
+                                            vSet2 = 0;
+                                        }
+                                        else if (tempKMStore[0] == 31 + 48 || tempKMStore[0] == 32 + 48)
+                                        {
+                                            if (tempKMStore[0] == 31 + 48) { curSet1 = (float)GetDouble(testSettings.Tables[0].Rows[0][18].ToString()); }
+                                            vSet1 = (MasterSlaveTest ? (2 * (float)GetDouble(testSettings.Tables[0].Rows[0][19].ToString())) : (float)GetDouble(testSettings.Tables[0].Rows[0][19].ToString()));
+                                            curSet2 = 0;
+                                            vSet2 = 0;
+                                        }
                                         break;
                                 }// end switch
                             }
@@ -2296,7 +2338,7 @@ namespace NewBTASProto
                     {
                         updateD(station, 7, "Starting Test");
                         if (MasterSlaveTest) { updateD(slaveRow, 7, "Starting Test"); }
-                        this.Invoke((MethodInvoker)delegate() { sendNote(station, 3, "Test Initiated"); });
+                        this.Invoke((MethodInvoker)delegate() { sendNote(station, 3, "Test Initiated -> " + testType); });
                         //fresh test!
                         offset = new TimeSpan();
                         currentReading = 1;
@@ -3134,17 +3176,17 @@ namespace NewBTASProto
                                         GlobalVars.CScanData[station].VB2.ToString("0.00") + "','" +                  //VB2
                                         GlobalVars.CScanData[station].VB3.ToString("0.00") + "','" +                  //VB3
                                         GlobalVars.CScanData[station].VB4.ToString("0.00") + "','" +                  //VB4
-                                        GlobalVars.CScanData[station].orderedCells[11].ToString("0.000") + "','" +      //CEL01
-                                        GlobalVars.CScanData[station].orderedCells[12].ToString("0.000") + "','" +      //CEL02
-                                        GlobalVars.CScanData[station].orderedCells[13].ToString("0.000") + "','" +      //CEL03
-                                        GlobalVars.CScanData[station].orderedCells[14].ToString("0.000") + "','" +      //CEL04
-                                        GlobalVars.CScanData[station].orderedCells[15].ToString("0.000") + "','" +      //CEL05
-                                        GlobalVars.CScanData[station].orderedCells[16].ToString("0.000") + "','" +      //CEL06
-                                        GlobalVars.CScanData[station].orderedCells[17].ToString("0.000") + "','" +      //CEL07
-                                        GlobalVars.CScanData[station].orderedCells[18].ToString("0.000") + "','" +      //CEL08
-                                        GlobalVars.CScanData[station].orderedCells[19].ToString("0.000") + "','" +      //CEL09
-                                        GlobalVars.CScanData[station].orderedCells[20].ToString("0.000") + "','" +      //CEL10
-                                        GlobalVars.CScanData[station].orderedCells[21].ToString("0.000") + "','" +     //CEL11
+                                        GlobalVars.CScanData[station].orderedCells[12].ToString("0.000") + "','" +      //CEL01
+                                        GlobalVars.CScanData[station].orderedCells[13].ToString("0.000") + "','" +      //CEL02
+                                        GlobalVars.CScanData[station].orderedCells[14].ToString("0.000") + "','" +      //CEL03
+                                        GlobalVars.CScanData[station].orderedCells[15].ToString("0.000") + "','" +      //CEL04
+                                        GlobalVars.CScanData[station].orderedCells[16].ToString("0.000") + "','" +      //CEL05
+                                        GlobalVars.CScanData[station].orderedCells[17].ToString("0.000") + "','" +      //CEL06
+                                        GlobalVars.CScanData[station].orderedCells[18].ToString("0.000") + "','" +      //CEL07
+                                        GlobalVars.CScanData[station].orderedCells[19].ToString("0.000") + "','" +      //CEL08
+                                        GlobalVars.CScanData[station].orderedCells[20].ToString("0.000") + "','" +      //CEL09
+                                        GlobalVars.CScanData[station].orderedCells[21].ToString("0.000") + "','" +      //CEL10
+                                        GlobalVars.CScanData[station].orderedCells[22].ToString("0.000") + "','" +     //CEL11
                                         GlobalVars.CScanData[station].orderedCells[0].ToString("0.000") + "','" +     //CEL12
                                         GlobalVars.CScanData[station].orderedCells[1].ToString("0.000") + "','" +     //CEL13
                                         GlobalVars.CScanData[station].orderedCells[2].ToString("0.000") + "','" +     //CEL14
@@ -3156,7 +3198,7 @@ namespace NewBTASProto
                                         GlobalVars.CScanData[station].orderedCells[8].ToString("0.000") + "','" +     //CEL20
                                         GlobalVars.CScanData[station].orderedCells[9].ToString("0.000") + "','" +     //CEL21
                                         GlobalVars.CScanData[station].orderedCells[10].ToString("0.000") + "','" +     //CEL22
-                                        GlobalVars.CScanData[station].orderedCells[22].ToString("0.000") + "','" +     //CEL23
+                                        GlobalVars.CScanData[station].orderedCells[11].ToString("0.000") + "','" +     //CEL23
                                         GlobalVars.CScanData[station].orderedCells[23].ToString("0.000") + "','" +     //CEL24
                                         GlobalVars.CScanData[station].TP1.ToString("0.0") + "','" +                  //TP1
                                         GlobalVars.CScanData[station].TP2.ToString("0.0") + "','" +                  //TP2
@@ -3202,30 +3244,30 @@ namespace NewBTASProto
                                         GlobalVars.CScanData[station].VB2.ToString("0.00") + "','" +                  //VB2
                                         GlobalVars.CScanData[station].VB3.ToString("0.00") + "','" +                  //VB3
                                         GlobalVars.CScanData[station].VB4.ToString("0.00") + "','" +                  //VB4
-                                        GlobalVars.CScanData[station].orderedCells[7].ToString("0.000") + "','" +      //CEL01
-                                        GlobalVars.CScanData[station].orderedCells[8].ToString("0.000") + "','" +      //CEL02
-                                        GlobalVars.CScanData[station].orderedCells[9].ToString("0.000") + "','" +      //CEL03
-                                        GlobalVars.CScanData[station].orderedCells[10].ToString("0.000") + "','" +      //CEL04
-                                        GlobalVars.CScanData[station].orderedCells[11].ToString("0.000") + "','" +      //CEL05
-                                        GlobalVars.CScanData[station].orderedCells[12].ToString("0.000") + "','" +      //CEL06
-                                        GlobalVars.CScanData[station].orderedCells[13].ToString("0.000") + "','" +      //CEL07
-                                        GlobalVars.CScanData[station].orderedCells[14].ToString("0.000") + "','" +      //CEL08
-                                        GlobalVars.CScanData[station].orderedCells[15].ToString("0.000") + "','" +      //CEL09
-                                        GlobalVars.CScanData[station].orderedCells[16].ToString("0.000") + "','" +      //CEL10
-                                        GlobalVars.CScanData[station].orderedCells[17].ToString("0.000") + "','" +     //CEL11
-                                        GlobalVars.CScanData[station].orderedCells[18].ToString("0.000") + "','" +     //CEL12
-                                        GlobalVars.CScanData[station].orderedCells[19].ToString("0.000") + "','" +     //CEL13
-                                        GlobalVars.CScanData[station].orderedCells[20].ToString("0.000") + "','" +     //CEL14
-                                        GlobalVars.CScanData[station].orderedCells[21].ToString("0.000") + "','" +     //CEL15
-                                        GlobalVars.CScanData[station].orderedCells[22].ToString("0.000") + "','" +     //CEL16
-                                        GlobalVars.CScanData[station].orderedCells[23].ToString("0.000") + "','" +     //CEL17
-                                        GlobalVars.CScanData[station].orderedCells[0].ToString("0.000") + "','" +     //CEL18
-                                        GlobalVars.CScanData[station].orderedCells[1].ToString("0.000") + "','" +     //CEL19
-                                        GlobalVars.CScanData[station].orderedCells[2].ToString("0.000") + "','" +     //CEL20
-                                        GlobalVars.CScanData[station].orderedCells[3].ToString("0.000") + "','" +     //CEL21
-                                        GlobalVars.CScanData[station].orderedCells[4].ToString("0.000") + "','" +     //CEL22
-                                        GlobalVars.CScanData[station].orderedCells[5].ToString("0.000") + "','" +     //CEL23
-                                        GlobalVars.CScanData[station].orderedCells[6].ToString("0.000") + "','" +     //CEL24
+                                        GlobalVars.CScanData[station].orderedCells[8].ToString("0.000") + "','" +      //CEL01
+                                        GlobalVars.CScanData[station].orderedCells[9].ToString("0.000") + "','" +      //CEL02
+                                        GlobalVars.CScanData[station].orderedCells[10].ToString("0.000") + "','" +      //CEL03
+                                        GlobalVars.CScanData[station].orderedCells[11].ToString("0.000") + "','" +      //CEL04
+                                        GlobalVars.CScanData[station].orderedCells[12].ToString("0.000") + "','" +      //CEL05
+                                        GlobalVars.CScanData[station].orderedCells[13].ToString("0.000") + "','" +      //CEL06
+                                        GlobalVars.CScanData[station].orderedCells[14].ToString("0.000") + "','" +      //CEL07
+                                        GlobalVars.CScanData[station].orderedCells[15].ToString("0.000") + "','" +      //CEL08
+                                        GlobalVars.CScanData[station].orderedCells[16].ToString("0.000") + "','" +      //CEL09
+                                        GlobalVars.CScanData[station].orderedCells[17].ToString("0.000") + "','" +      //CEL10
+                                        GlobalVars.CScanData[station].orderedCells[18].ToString("0.000") + "','" +     //CEL11
+                                        GlobalVars.CScanData[station].orderedCells[19].ToString("0.000") + "','" +     //CEL12
+                                        GlobalVars.CScanData[station].orderedCells[20].ToString("0.000") + "','" +     //CEL13
+                                        GlobalVars.CScanData[station].orderedCells[21].ToString("0.000") + "','" +     //CEL14
+                                        GlobalVars.CScanData[station].orderedCells[22].ToString("0.000") + "','" +     //CEL15
+                                        GlobalVars.CScanData[station].orderedCells[23].ToString("0.000") + "','" +     //CEL16
+                                        GlobalVars.CScanData[station].orderedCells[0].ToString("0.000") + "','" +     //CEL17
+                                        GlobalVars.CScanData[station].orderedCells[1].ToString("0.000") + "','" +     //CEL18
+                                        GlobalVars.CScanData[station].orderedCells[2].ToString("0.000") + "','" +     //CEL19
+                                        GlobalVars.CScanData[station].orderedCells[3].ToString("0.000") + "','" +     //CEL20
+                                        GlobalVars.CScanData[station].orderedCells[4].ToString("0.000") + "','" +     //CEL21
+                                        GlobalVars.CScanData[station].orderedCells[5].ToString("0.000") + "','" +     //CEL22
+                                        GlobalVars.CScanData[station].orderedCells[6].ToString("0.000") + "','" +     //CEL23
+                                        GlobalVars.CScanData[station].orderedCells[7].ToString("0.000") + "','" +     //CEL24
                                         GlobalVars.CScanData[station].TP1.ToString("0.0") + "','" +                  //TP1
                                         GlobalVars.CScanData[station].TP2.ToString("0.0") + "','" +                  //TP2
                                         GlobalVars.CScanData[station].TP3.ToString("0.0") + "','" +                  //TP3
@@ -3271,30 +3313,30 @@ namespace NewBTASProto
                                         GlobalVars.CScanData[station].VB2.ToString("0.00") + "','" +                  //VB2
                                         GlobalVars.CScanData[station].VB3.ToString("0.00") + "','" +                  //VB3
                                         GlobalVars.CScanData[station].VB4.ToString("0.00") + "','" +                  //VB4
-                                        GlobalVars.CScanData[station].orderedCells[14].ToString("0.000") + "','" +      //CEL01
-                                        GlobalVars.CScanData[station].orderedCells[15].ToString("0.000") + "','" +      //CEL02
-                                        GlobalVars.CScanData[station].orderedCells[16].ToString("0.000") + "','" +      //CEL03
-                                        GlobalVars.CScanData[station].orderedCells[17].ToString("0.000") + "','" +      //CEL04
-                                        GlobalVars.CScanData[station].orderedCells[18].ToString("0.000") + "','" +      //CEL05
-                                        GlobalVars.CScanData[station].orderedCells[19].ToString("0.000") + "','" +      //CEL06
-                                        GlobalVars.CScanData[station].orderedCells[20].ToString("0.000") + "','" +      //CEL07
-                                        GlobalVars.CScanData[station].orderedCells[21].ToString("0.000") + "','" +      //CEL08
-                                        GlobalVars.CScanData[station].orderedCells[22].ToString("0.000") + "','" +      //CEL09
-                                        GlobalVars.CScanData[station].orderedCells[23].ToString("0.000") + "','" +      //CEL10
-                                        GlobalVars.CScanData[station].orderedCells[0].ToString("0.000") + "','" +     //CEL11
-                                        GlobalVars.CScanData[station].orderedCells[1].ToString("0.000") + "','" +     //CEL12
-                                        GlobalVars.CScanData[station].orderedCells[2].ToString("0.000") + "','" +     //CEL13
-                                        GlobalVars.CScanData[station].orderedCells[3].ToString("0.000") + "','" +     //CEL14
-                                        GlobalVars.CScanData[station].orderedCells[4].ToString("0.000") + "','" +     //CEL15
-                                        GlobalVars.CScanData[station].orderedCells[5].ToString("0.000") + "','" +     //CEL16
-                                        GlobalVars.CScanData[station].orderedCells[6].ToString("0.000") + "','" +     //CEL17
-                                        GlobalVars.CScanData[station].orderedCells[7].ToString("0.000") + "','" +     //CEL18
-                                        GlobalVars.CScanData[station].orderedCells[8].ToString("0.000") + "','" +     //CEL19
-                                        GlobalVars.CScanData[station].orderedCells[9].ToString("0.000") + "','" +     //CEL20
-                                        GlobalVars.CScanData[station].orderedCells[10].ToString("0.000") + "','" +     //CEL21
-                                        GlobalVars.CScanData[station].orderedCells[11].ToString("0.000") + "','" +     //CEL22
-                                        GlobalVars.CScanData[station].orderedCells[12].ToString("0.000") + "','" +     //CEL23
-                                        GlobalVars.CScanData[station].orderedCells[13].ToString("0.000") + "','" +     //CEL24
+                                        GlobalVars.CScanData[station].orderedCells[16].ToString("0.000") + "','" +      //CEL01
+                                        GlobalVars.CScanData[station].orderedCells[17].ToString("0.000") + "','" +      //CEL02
+                                        GlobalVars.CScanData[station].orderedCells[18].ToString("0.000") + "','" +      //CEL03
+                                        GlobalVars.CScanData[station].orderedCells[19].ToString("0.000") + "','" +      //CEL04
+                                        GlobalVars.CScanData[station].orderedCells[20].ToString("0.000") + "','" +      //CEL05
+                                        GlobalVars.CScanData[station].orderedCells[21].ToString("0.000") + "','" +      //CEL06
+                                        GlobalVars.CScanData[station].orderedCells[22].ToString("0.000") + "','" +      //CEL07
+                                        GlobalVars.CScanData[station].orderedCells[23].ToString("0.000") + "','" +      //CEL08
+                                        GlobalVars.CScanData[station].orderedCells[0].ToString("0.000") + "','" +      //CEL09
+                                        GlobalVars.CScanData[station].orderedCells[1].ToString("0.000") + "','" +      //CEL10
+                                        GlobalVars.CScanData[station].orderedCells[2].ToString("0.000") + "','" +     //CEL11
+                                        GlobalVars.CScanData[station].orderedCells[3].ToString("0.000") + "','" +     //CEL12
+                                        GlobalVars.CScanData[station].orderedCells[4].ToString("0.000") + "','" +     //CEL13
+                                        GlobalVars.CScanData[station].orderedCells[5].ToString("0.000") + "','" +     //CEL14
+                                        GlobalVars.CScanData[station].orderedCells[6].ToString("0.000") + "','" +     //CEL15
+                                        GlobalVars.CScanData[station].orderedCells[7].ToString("0.000") + "','" +     //CEL16
+                                        GlobalVars.CScanData[station].orderedCells[8].ToString("0.000") + "','" +     //CEL17
+                                        GlobalVars.CScanData[station].orderedCells[9].ToString("0.000") + "','" +     //CEL18
+                                        GlobalVars.CScanData[station].orderedCells[10].ToString("0.000") + "','" +     //CEL19
+                                        GlobalVars.CScanData[station].orderedCells[11].ToString("0.000") + "','" +     //CEL20
+                                        GlobalVars.CScanData[station].orderedCells[12].ToString("0.000") + "','" +     //CEL21
+                                        GlobalVars.CScanData[station].orderedCells[13].ToString("0.000") + "','" +     //CEL22
+                                        GlobalVars.CScanData[station].orderedCells[14].ToString("0.000") + "','" +     //CEL23
+                                        GlobalVars.CScanData[station].orderedCells[15].ToString("0.000") + "','" +     //CEL24
                                         GlobalVars.CScanData[station].TP1.ToString("0.0") + "','" +                  //TP1
                                         GlobalVars.CScanData[station].TP2.ToString("0.0") + "','" +                  //TP2
                                         GlobalVars.CScanData[station].TP3.ToString("0.0") + "','" +                  //TP3
@@ -3409,17 +3451,17 @@ namespace NewBTASProto
                                                 GlobalVars.CScanData[slaveRow].VB2.ToString("0.00") + "','" +                  //VB2
                                                 GlobalVars.CScanData[slaveRow].VB3.ToString("0.00") + "','" +                  //VB3
                                                 GlobalVars.CScanData[slaveRow].VB4.ToString("0.00") + "','" +                  //VB4
-                                                GlobalVars.CScanData[slaveRow].orderedCells[11].ToString("0.000") + "','" +      //CEL01
-                                                GlobalVars.CScanData[slaveRow].orderedCells[12].ToString("0.000") + "','" +      //CEL02
-                                                GlobalVars.CScanData[slaveRow].orderedCells[13].ToString("0.000") + "','" +      //CEL03
-                                                GlobalVars.CScanData[slaveRow].orderedCells[14].ToString("0.000") + "','" +      //CEL04
-                                                GlobalVars.CScanData[slaveRow].orderedCells[15].ToString("0.000") + "','" +      //CEL05
-                                                GlobalVars.CScanData[slaveRow].orderedCells[16].ToString("0.000") + "','" +      //CEL06
-                                                GlobalVars.CScanData[slaveRow].orderedCells[17].ToString("0.000") + "','" +      //CEL07
-                                                GlobalVars.CScanData[slaveRow].orderedCells[18].ToString("0.000") + "','" +      //CEL08
-                                                GlobalVars.CScanData[slaveRow].orderedCells[19].ToString("0.000") + "','" +      //CEL09
-                                                GlobalVars.CScanData[slaveRow].orderedCells[20].ToString("0.000") + "','" +      //CEL10
-                                                GlobalVars.CScanData[slaveRow].orderedCells[21].ToString("0.000") + "','" +     //CEL11
+                                                GlobalVars.CScanData[slaveRow].orderedCells[12].ToString("0.000") + "','" +      //CEL01
+                                                GlobalVars.CScanData[slaveRow].orderedCells[13].ToString("0.000") + "','" +      //CEL02
+                                                GlobalVars.CScanData[slaveRow].orderedCells[14].ToString("0.000") + "','" +      //CEL03
+                                                GlobalVars.CScanData[slaveRow].orderedCells[15].ToString("0.000") + "','" +      //CEL04
+                                                GlobalVars.CScanData[slaveRow].orderedCells[16].ToString("0.000") + "','" +      //CEL05
+                                                GlobalVars.CScanData[slaveRow].orderedCells[17].ToString("0.000") + "','" +      //CEL06
+                                                GlobalVars.CScanData[slaveRow].orderedCells[18].ToString("0.000") + "','" +      //CEL07
+                                                GlobalVars.CScanData[slaveRow].orderedCells[19].ToString("0.000") + "','" +      //CEL08
+                                                GlobalVars.CScanData[slaveRow].orderedCells[20].ToString("0.000") + "','" +      //CEL09
+                                                GlobalVars.CScanData[slaveRow].orderedCells[21].ToString("0.000") + "','" +      //CEL10
+                                                GlobalVars.CScanData[slaveRow].orderedCells[22].ToString("0.000") + "','" +     //CEL11
                                                 GlobalVars.CScanData[slaveRow].orderedCells[0].ToString("0.000") + "','" +     //CEL12
                                                 GlobalVars.CScanData[slaveRow].orderedCells[1].ToString("0.000") + "','" +     //CEL13
                                                 GlobalVars.CScanData[slaveRow].orderedCells[2].ToString("0.000") + "','" +     //CEL14
@@ -3431,7 +3473,7 @@ namespace NewBTASProto
                                                 GlobalVars.CScanData[slaveRow].orderedCells[8].ToString("0.000") + "','" +     //CEL20
                                                 GlobalVars.CScanData[slaveRow].orderedCells[9].ToString("0.000") + "','" +     //CEL21
                                                 GlobalVars.CScanData[slaveRow].orderedCells[10].ToString("0.000") + "','" +     //CEL22
-                                                GlobalVars.CScanData[slaveRow].orderedCells[22].ToString("0.000") + "','" +     //CEL23
+                                                GlobalVars.CScanData[slaveRow].orderedCells[11].ToString("0.000") + "','" +     //CEL23
                                                 GlobalVars.CScanData[slaveRow].orderedCells[23].ToString("0.000") + "','" +     //CEL24
                                                 GlobalVars.CScanData[station].TP1.ToString("0.0") + "','" +                  //TP1
                                                 GlobalVars.CScanData[station].TP2.ToString("0.0") + "','" +                  //TP2
@@ -3477,30 +3519,30 @@ namespace NewBTASProto
                                             GlobalVars.CScanData[slaveRow].VB2.ToString("0.00") + "','" +                  //VB2
                                             GlobalVars.CScanData[slaveRow].VB3.ToString("0.00") + "','" +                  //VB3
                                             GlobalVars.CScanData[slaveRow].VB4.ToString("0.00") + "','" +                  //VB4
-                                            GlobalVars.CScanData[slaveRow].orderedCells[7].ToString("0.000") + "','" +      //CEL01
-                                            GlobalVars.CScanData[slaveRow].orderedCells[8].ToString("0.000") + "','" +      //CEL02
-                                            GlobalVars.CScanData[slaveRow].orderedCells[9].ToString("0.000") + "','" +      //CEL03
-                                            GlobalVars.CScanData[slaveRow].orderedCells[10].ToString("0.000") + "','" +      //CEL04
-                                            GlobalVars.CScanData[slaveRow].orderedCells[11].ToString("0.000") + "','" +      //CEL05
-                                            GlobalVars.CScanData[slaveRow].orderedCells[12].ToString("0.000") + "','" +      //CEL06
-                                            GlobalVars.CScanData[slaveRow].orderedCells[13].ToString("0.000") + "','" +      //CEL07
-                                            GlobalVars.CScanData[slaveRow].orderedCells[14].ToString("0.000") + "','" +      //CEL08
-                                            GlobalVars.CScanData[slaveRow].orderedCells[15].ToString("0.000") + "','" +      //CEL09
-                                            GlobalVars.CScanData[slaveRow].orderedCells[16].ToString("0.000") + "','" +      //CEL10
-                                            GlobalVars.CScanData[slaveRow].orderedCells[17].ToString("0.000") + "','" +     //CEL11
-                                            GlobalVars.CScanData[slaveRow].orderedCells[18].ToString("0.000") + "','" +     //CEL12
-                                            GlobalVars.CScanData[slaveRow].orderedCells[19].ToString("0.000") + "','" +     //CEL13
-                                            GlobalVars.CScanData[slaveRow].orderedCells[20].ToString("0.000") + "','" +     //CEL14
-                                            GlobalVars.CScanData[slaveRow].orderedCells[21].ToString("0.000") + "','" +     //CEL15
-                                            GlobalVars.CScanData[slaveRow].orderedCells[22].ToString("0.000") + "','" +     //CEL16
-                                            GlobalVars.CScanData[slaveRow].orderedCells[23].ToString("0.000") + "','" +     //CEL17
-                                            GlobalVars.CScanData[slaveRow].orderedCells[0].ToString("0.000") + "','" +     //CEL18
-                                            GlobalVars.CScanData[slaveRow].orderedCells[1].ToString("0.000") + "','" +     //CEL19
-                                            GlobalVars.CScanData[slaveRow].orderedCells[2].ToString("0.000") + "','" +     //CEL20
-                                            GlobalVars.CScanData[slaveRow].orderedCells[3].ToString("0.000") + "','" +     //CEL21
-                                            GlobalVars.CScanData[slaveRow].orderedCells[4].ToString("0.000") + "','" +     //CEL22
-                                            GlobalVars.CScanData[slaveRow].orderedCells[5].ToString("0.000") + "','" +     //CEL23
-                                            GlobalVars.CScanData[slaveRow].orderedCells[6].ToString("0.000") + "','" +     //CEL24
+                                            GlobalVars.CScanData[slaveRow].orderedCells[8].ToString("0.000") + "','" +      //CEL01
+                                            GlobalVars.CScanData[slaveRow].orderedCells[9].ToString("0.000") + "','" +      //CEL02
+                                            GlobalVars.CScanData[slaveRow].orderedCells[10].ToString("0.000") + "','" +      //CEL03
+                                            GlobalVars.CScanData[slaveRow].orderedCells[11].ToString("0.000") + "','" +      //CEL04
+                                            GlobalVars.CScanData[slaveRow].orderedCells[12].ToString("0.000") + "','" +      //CEL05
+                                            GlobalVars.CScanData[slaveRow].orderedCells[13].ToString("0.000") + "','" +      //CEL06
+                                            GlobalVars.CScanData[slaveRow].orderedCells[14].ToString("0.000") + "','" +      //CEL07
+                                            GlobalVars.CScanData[slaveRow].orderedCells[15].ToString("0.000") + "','" +      //CEL08
+                                            GlobalVars.CScanData[slaveRow].orderedCells[16].ToString("0.000") + "','" +      //CEL09
+                                            GlobalVars.CScanData[slaveRow].orderedCells[17].ToString("0.000") + "','" +      //CEL10
+                                            GlobalVars.CScanData[slaveRow].orderedCells[18].ToString("0.000") + "','" +     //CEL11
+                                            GlobalVars.CScanData[slaveRow].orderedCells[19].ToString("0.000") + "','" +     //CEL12
+                                            GlobalVars.CScanData[slaveRow].orderedCells[20].ToString("0.000") + "','" +     //CEL13
+                                            GlobalVars.CScanData[slaveRow].orderedCells[21].ToString("0.000") + "','" +     //CEL14
+                                            GlobalVars.CScanData[slaveRow].orderedCells[22].ToString("0.000") + "','" +     //CEL15
+                                            GlobalVars.CScanData[slaveRow].orderedCells[23].ToString("0.000") + "','" +     //CEL16
+                                            GlobalVars.CScanData[slaveRow].orderedCells[0].ToString("0.000") + "','" +     //CEL17
+                                            GlobalVars.CScanData[slaveRow].orderedCells[1].ToString("0.000") + "','" +     //CEL18
+                                            GlobalVars.CScanData[slaveRow].orderedCells[2].ToString("0.000") + "','" +     //CEL19
+                                            GlobalVars.CScanData[slaveRow].orderedCells[3].ToString("0.000") + "','" +     //CEL20
+                                            GlobalVars.CScanData[slaveRow].orderedCells[4].ToString("0.000") + "','" +     //CEL21
+                                            GlobalVars.CScanData[slaveRow].orderedCells[5].ToString("0.000") + "','" +     //CEL22
+                                            GlobalVars.CScanData[slaveRow].orderedCells[6].ToString("0.000") + "','" +     //CEL23
+                                            GlobalVars.CScanData[slaveRow].orderedCells[7].ToString("0.000") + "','" +     //CEL24
                                             GlobalVars.CScanData[station].TP1.ToString("0.0") + "','" +                  //TP1
                                             GlobalVars.CScanData[station].TP2.ToString("0.0") + "','" +                  //TP2
                                             GlobalVars.CScanData[station].TP3.ToString("0.0") + "','" +                  //TP3
@@ -3546,30 +3588,30 @@ namespace NewBTASProto
                                             GlobalVars.CScanData[slaveRow].VB2.ToString("0.00") + "','" +                  //VB2
                                             GlobalVars.CScanData[slaveRow].VB3.ToString("0.00") + "','" +                  //VB3
                                             GlobalVars.CScanData[slaveRow].VB4.ToString("0.00") + "','" +                  //VB4
-                                            GlobalVars.CScanData[slaveRow].orderedCells[14].ToString("0.000") + "','" +      //CEL01
-                                            GlobalVars.CScanData[slaveRow].orderedCells[15].ToString("0.000") + "','" +      //CEL02
-                                            GlobalVars.CScanData[slaveRow].orderedCells[16].ToString("0.000") + "','" +      //CEL03
-                                            GlobalVars.CScanData[slaveRow].orderedCells[17].ToString("0.000") + "','" +      //CEL04
-                                            GlobalVars.CScanData[slaveRow].orderedCells[18].ToString("0.000") + "','" +      //CEL05
-                                            GlobalVars.CScanData[slaveRow].orderedCells[19].ToString("0.000") + "','" +      //CEL06
-                                            GlobalVars.CScanData[slaveRow].orderedCells[20].ToString("0.000") + "','" +      //CEL07
-                                            GlobalVars.CScanData[slaveRow].orderedCells[21].ToString("0.000") + "','" +      //CEL08
-                                            GlobalVars.CScanData[slaveRow].orderedCells[22].ToString("0.000") + "','" +      //CEL09
-                                            GlobalVars.CScanData[slaveRow].orderedCells[23].ToString("0.000") + "','" +      //CEL10
-                                            GlobalVars.CScanData[slaveRow].orderedCells[0].ToString("0.000") + "','" +     //CEL11
-                                            GlobalVars.CScanData[slaveRow].orderedCells[1].ToString("0.000") + "','" +     //CEL12
-                                            GlobalVars.CScanData[slaveRow].orderedCells[2].ToString("0.000") + "','" +     //CEL13
-                                            GlobalVars.CScanData[slaveRow].orderedCells[3].ToString("0.000") + "','" +     //CEL14
-                                            GlobalVars.CScanData[slaveRow].orderedCells[4].ToString("0.000") + "','" +     //CEL15
-                                            GlobalVars.CScanData[slaveRow].orderedCells[5].ToString("0.000") + "','" +     //CEL16
-                                            GlobalVars.CScanData[slaveRow].orderedCells[6].ToString("0.000") + "','" +     //CEL17
-                                            GlobalVars.CScanData[slaveRow].orderedCells[7].ToString("0.000") + "','" +     //CEL18
-                                            GlobalVars.CScanData[slaveRow].orderedCells[8].ToString("0.000") + "','" +     //CEL19
-                                            GlobalVars.CScanData[slaveRow].orderedCells[9].ToString("0.000") + "','" +     //CEL20
-                                            GlobalVars.CScanData[slaveRow].orderedCells[10].ToString("0.000") + "','" +     //CEL21
-                                            GlobalVars.CScanData[slaveRow].orderedCells[11].ToString("0.000") + "','" +     //CEL22
-                                            GlobalVars.CScanData[slaveRow].orderedCells[12].ToString("0.000") + "','" +     //CEL23
-                                            GlobalVars.CScanData[slaveRow].orderedCells[13].ToString("0.000") + "','" +     //CEL24
+                                            GlobalVars.CScanData[slaveRow].orderedCells[16].ToString("0.000") + "','" +      //CEL01
+                                            GlobalVars.CScanData[slaveRow].orderedCells[17].ToString("0.000") + "','" +      //CEL02
+                                            GlobalVars.CScanData[slaveRow].orderedCells[18].ToString("0.000") + "','" +      //CEL03
+                                            GlobalVars.CScanData[slaveRow].orderedCells[19].ToString("0.000") + "','" +      //CEL04
+                                            GlobalVars.CScanData[slaveRow].orderedCells[20].ToString("0.000") + "','" +      //CEL05
+                                            GlobalVars.CScanData[slaveRow].orderedCells[21].ToString("0.000") + "','" +      //CEL06
+                                            GlobalVars.CScanData[slaveRow].orderedCells[22].ToString("0.000") + "','" +      //CEL07
+                                            GlobalVars.CScanData[slaveRow].orderedCells[23].ToString("0.000") + "','" +      //CEL08
+                                            GlobalVars.CScanData[slaveRow].orderedCells[0].ToString("0.000") + "','" +      //CEL09
+                                            GlobalVars.CScanData[slaveRow].orderedCells[1].ToString("0.000") + "','" +      //CEL10
+                                            GlobalVars.CScanData[slaveRow].orderedCells[2].ToString("0.000") + "','" +     //CEL11
+                                            GlobalVars.CScanData[slaveRow].orderedCells[3].ToString("0.000") + "','" +     //CEL12
+                                            GlobalVars.CScanData[slaveRow].orderedCells[4].ToString("0.000") + "','" +     //CEL13
+                                            GlobalVars.CScanData[slaveRow].orderedCells[5].ToString("0.000") + "','" +     //CEL14
+                                            GlobalVars.CScanData[slaveRow].orderedCells[6].ToString("0.000") + "','" +     //CEL15
+                                            GlobalVars.CScanData[slaveRow].orderedCells[7].ToString("0.000") + "','" +     //CEL16
+                                            GlobalVars.CScanData[slaveRow].orderedCells[8].ToString("0.000") + "','" +     //CEL17
+                                            GlobalVars.CScanData[slaveRow].orderedCells[9].ToString("0.000") + "','" +     //CEL18
+                                            GlobalVars.CScanData[slaveRow].orderedCells[10].ToString("0.000") + "','" +     //CEL19
+                                            GlobalVars.CScanData[slaveRow].orderedCells[11].ToString("0.000") + "','" +     //CEL20
+                                            GlobalVars.CScanData[slaveRow].orderedCells[12].ToString("0.000") + "','" +     //CEL21
+                                            GlobalVars.CScanData[slaveRow].orderedCells[13].ToString("0.000") + "','" +     //CEL22
+                                            GlobalVars.CScanData[slaveRow].orderedCells[14].ToString("0.000") + "','" +     //CEL23
+                                            GlobalVars.CScanData[slaveRow].orderedCells[15].ToString("0.000") + "','" +     //CEL24
                                             GlobalVars.CScanData[station].TP1.ToString("0.0") + "','" +                  //TP1
                                             GlobalVars.CScanData[station].TP2.ToString("0.0") + "','" +                  //TP2
                                             GlobalVars.CScanData[station].TP3.ToString("0.0") + "','" +                  //TP3
@@ -4321,8 +4363,12 @@ namespace NewBTASProto
                                     if (GlobalVars.ICData[Cstation].testMode.Contains("32"))
                                     {
                                         // resistance discharge
+                                        if (GlobalVars.ICData[Cstation].battVoltage < (vSet1 - 1))
+                                        {
+                                            badReadingCount++;
+                                        }
                                     }
-                                    else if (testType.Contains("Cap") || testType.Contains("Dis"))
+                                    else if (GlobalVars.ICData[Cstation].testMode.Contains("30") || GlobalVars.ICData[Cstation].testMode.Contains("31"))
                                     {
                                         if (Math.Abs(-1 * GlobalVars.CScanData[station].currentOne - curSet1) > (0.1 + curSet1 * 0.05) && Math.Abs(-1 * GlobalVars.CScanData[station].currentOne - curSet2) > (0.1 + curSet2 * 0.05))
                                         {

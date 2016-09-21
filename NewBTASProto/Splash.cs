@@ -32,9 +32,9 @@ namespace NewBTASProto
             "7121966571",                       // Global Aerospace
             "2625219448",                       // Yardimcilar
             "9185399390",                       // Yardimcilar
-            "1555832326",
-            "6800782161",
-            "9238872250",
+            "1555832326",                       // John Burns @ Gulf Stream
+            "6800782161",                       // Eric @ Will Air
+            "9238872250",                       // Satair
             "2885597260",
             "6346677964",
             "2328164969",
@@ -420,6 +420,7 @@ namespace NewBTASProto
             {
                 Main_Form mf = new Main_Form();
                 // update the options menu
+                mf.Owner = this;
                 mf.Show();
                 //hide this form
                 this.Hide();
@@ -654,6 +655,105 @@ namespace NewBTASProto
                 }
             }
 
+            //  open the db and check to see if we have the As Recieved test settings in the DB
+            try
+            {
+                strAccessSelect = @"SELECT * FROM TestType WHERE TESTNAME = 'As Received'";
+                DataSet test = new DataSet();
+                OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                myAccessConn.Open();
+                myDataAdapter.Fill(test, "test");
+                myAccessConn.Close();
+
+                // access for 0 to test if anything is there...
+                if (test.Tables[0].Rows.Count < 1)
+                {
+                    // we didn't find full charge 4.5 in the table, so we need to add it!
+                    // we need to  insert
+                    string strUpdateCMD = "INSERT INTO TestType ([TESTNAME], Readings, [Interval]) VALUES ('As Received', 3, 2)";
+                    myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
+                    myAccessConn.Open();
+                    myAccessCommand.ExecuteNonQuery();
+                    myAccessConn.Close();
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                myAccessConn.Close();
+                MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            }
+
+            //  open the db and check to see if we have the Full Charge-6 test settings in the DB
+            try
+            {
+                strAccessSelect = @"SELECT * FROM TestType WHERE TESTNAME = 'Full Charge-6'";
+                DataSet test = new DataSet();
+                OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                myAccessConn.Open();
+                myDataAdapter.Fill(test, "test");
+                myAccessConn.Close();
+
+                // access for 0 to test if anything is there...
+                if (test.Tables[0].Rows.Count < 1)
+                {
+                    // we didn't find full charge 4.5 in the table, so we need to add it!
+                    // we need to  insert
+                    string strUpdateCMD = "INSERT INTO TestType ([TESTNAME], Readings, [Interval]) VALUES ('Full Charge-6', 73, 300)";
+                    myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
+                    myAccessConn.Open();
+                    myAccessCommand.ExecuteNonQuery();
+                    myAccessConn.Close();
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                myAccessConn.Close();
+                MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            }
+
+            //  open the db and check to see if we have the Full Charge-4 test settings in the DB
+            try
+            {
+                strAccessSelect = @"SELECT * FROM TestType WHERE TESTNAME = 'Full Charge-4'";
+                DataSet test = new DataSet();
+                OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                myAccessConn.Open();
+                myDataAdapter.Fill(test, "test");
+                myAccessConn.Close();
+
+                // access for 0 to test if anything is there...
+                if (test.Tables[0].Rows.Count < 1)
+                {
+                    // we didn't find full charge 4.5 in the table, so we need to add it!
+                    // we need to  insert
+                    string strUpdateCMD = "INSERT INTO TestType ([TESTNAME], Readings, [Interval]) VALUES ('Full Charge-4', 61, 240)";
+                    myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
+                    myAccessConn.Open();
+                    myAccessCommand.ExecuteNonQuery();
+                    myAccessConn.Close();
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                myAccessConn.Close();
+                MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            }
+
             //  open the db and check to see if we have the 4.5 hours test settings in the DB
             try
             {
@@ -679,12 +779,345 @@ namespace NewBTASProto
                 }
 
             }
+
+
             catch (Exception ex)
             {
                 
                 myAccessConn.Close();
                 MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 
+            }
+
+            //  open the db and check to see if we have the Top Charge-4 test settings in the DB
+            try
+            {
+                strAccessSelect = @"SELECT * FROM TestType WHERE TESTNAME = 'Top Charge-4'";
+                DataSet test = new DataSet();
+                OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                myAccessConn.Open();
+                myDataAdapter.Fill(test, "test");
+                myAccessConn.Close();
+
+                // access for 0 to test if anything is there...
+                if (test.Tables[0].Rows.Count < 1)
+                {
+                    // we didn't find full charge 4.5 in the table, so we need to add it!
+                    // we need to  insert
+                    string strUpdateCMD = "INSERT INTO TestType ([TESTNAME], Readings, [Interval]) VALUES ('Top Charge-4', 61, 240)";
+                    myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
+                    myAccessConn.Open();
+                    myAccessCommand.ExecuteNonQuery();
+                    myAccessConn.Close();
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                myAccessConn.Close();
+                MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            }
+
+            //  open the db and check to see if we have the Top Charge-2 test settings in the DB
+            try
+            {
+                strAccessSelect = @"SELECT * FROM TestType WHERE TESTNAME = 'Top Charge-2'";
+                DataSet test = new DataSet();
+                OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                myAccessConn.Open();
+                myDataAdapter.Fill(test, "test");
+                myAccessConn.Close();
+
+                // access for 0 to test if anything is there...
+                if (test.Tables[0].Rows.Count < 1)
+                {
+                    // we didn't find full charge 4.5 in the table, so we need to add it!
+                    // we need to  insert
+                    string strUpdateCMD = "INSERT INTO TestType ([TESTNAME], Readings, [Interval]) VALUES ('Top Charge-2', 41, 180)";
+                    myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
+                    myAccessConn.Open();
+                    myAccessCommand.ExecuteNonQuery();
+                    myAccessConn.Close();
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                myAccessConn.Close();
+                MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            }
+
+            //  open the db and check to see if we have the Top Charge-1 test settings in the DB
+            try
+            {
+                strAccessSelect = @"SELECT * FROM TestType WHERE TESTNAME = 'Top Charge-1'";
+                DataSet test = new DataSet();
+                OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                myAccessConn.Open();
+                myDataAdapter.Fill(test, "test");
+                myAccessConn.Close();
+
+                // access for 0 to test if anything is there...
+                if (test.Tables[0].Rows.Count < 1)
+                {
+                    // we didn't find full charge 4.5 in the table, so we need to add it!
+                    // we need to  insert
+                    string strUpdateCMD = "INSERT INTO TestType ([TESTNAME], Readings, [Interval]) VALUES ('Top Charge-1', 61, 60)";
+                    myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
+                    myAccessConn.Open();
+                    myAccessCommand.ExecuteNonQuery();
+                    myAccessConn.Close();
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                myAccessConn.Close();
+                MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            }
+
+            //  open the db and check to see if we have the Constant Voltage test settings in the DB
+            try
+            {
+                strAccessSelect = @"SELECT * FROM TestType WHERE TESTNAME = 'Constant Voltage'";
+                DataSet test = new DataSet();
+                OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                myAccessConn.Open();
+                myDataAdapter.Fill(test, "test");
+                myAccessConn.Close();
+
+                // access for 0 to test if anything is there...
+                if (test.Tables[0].Rows.Count < 1)
+                {
+                    // we didn't find full charge 4.5 in the table, so we need to add it!
+                    // we need to  insert
+                    string strUpdateCMD = "INSERT INTO TestType ([TESTNAME], Readings, [Interval]) VALUES ('Constant Voltage', 73, 300)";
+                    myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
+                    myAccessConn.Open();
+                    myAccessCommand.ExecuteNonQuery();
+                    myAccessConn.Close();
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                myAccessConn.Close();
+                MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            }
+
+            //  open the db and check to see if we have the Capacity-1 test settings in the DB
+            try
+            {
+                strAccessSelect = @"SELECT * FROM TestType WHERE TESTNAME = 'Capacity-1'";
+                DataSet test = new DataSet();
+                OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                myAccessConn.Open();
+                myDataAdapter.Fill(test, "test");
+                myAccessConn.Close();
+
+                // access for 0 to test if anything is there...
+                if (test.Tables[0].Rows.Count < 1)
+                {
+                    // we didn't find full charge 4.5 in the table, so we need to add it!
+                    // we need to  insert
+                    string strUpdateCMD = "INSERT INTO TestType ([TESTNAME], Readings, [Interval]) VALUES ('Capacity-1', 61, 60)";
+                    myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
+                    myAccessConn.Open();
+                    myAccessCommand.ExecuteNonQuery();
+                    myAccessConn.Close();
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                myAccessConn.Close();
+                MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            }
+
+            //  open the db and check to see if we have the Discharge test settings in the DB
+            try
+            {
+                strAccessSelect = @"SELECT * FROM TestType WHERE TESTNAME = 'Discharge'";
+                DataSet test = new DataSet();
+                OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                myAccessConn.Open();
+                myDataAdapter.Fill(test, "test");
+                myAccessConn.Close();
+
+                // access for 0 to test if anything is there...
+                if (test.Tables[0].Rows.Count < 1)
+                {
+                    // we didn't find full charge 4.5 in the table, so we need to add it!
+                    // we need to  insert
+                    string strUpdateCMD = "INSERT INTO TestType ([TESTNAME], Readings, [Interval]) VALUES ('Discharge', 61, 60)";
+                    myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
+                    myAccessConn.Open();
+                    myAccessCommand.ExecuteNonQuery();
+                    myAccessConn.Close();
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                myAccessConn.Close();
+                MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            }
+
+            //  open the db and check to see if we have the Slow Charge-16 test settings in the DB
+            try
+            {
+                strAccessSelect = @"SELECT * FROM TestType WHERE TESTNAME = 'Slow Charge-16'";
+                DataSet test = new DataSet();
+                OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                myAccessConn.Open();
+                myDataAdapter.Fill(test, "test");
+                myAccessConn.Close();
+
+                // access for 0 to test if anything is there...
+                if (test.Tables[0].Rows.Count < 1)
+                {
+                    // we didn't find full charge 4.5 in the table, so we need to add it!
+                    // we need to  insert
+                    string strUpdateCMD = "INSERT INTO TestType ([TESTNAME], Readings, [Interval]) VALUES ('Slow Charge-16', 61, 960)";
+                    myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
+                    myAccessConn.Open();
+                    myAccessCommand.ExecuteNonQuery();
+                    myAccessConn.Close();
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                myAccessConn.Close();
+                MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            }
+
+            //  open the db and check to see if we have the Slow Charge-14 test settings in the DB
+            try
+            {
+                strAccessSelect = @"SELECT * FROM TestType WHERE TESTNAME = 'Slow Charge-14'";
+                DataSet test = new DataSet();
+                OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                myAccessConn.Open();
+                myDataAdapter.Fill(test, "test");
+                myAccessConn.Close();
+
+                // access for 0 to test if anything is there...
+                if (test.Tables[0].Rows.Count < 1)
+                {
+                    // we didn't find full charge 4.5 in the table, so we need to add it!
+                    // we need to  insert
+                    string strUpdateCMD = "INSERT INTO TestType ([TESTNAME], Readings, [Interval]) VALUES ('Slow Charge-14', 73, 720)";
+                    myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
+                    myAccessConn.Open();
+                    myAccessCommand.ExecuteNonQuery();
+                    myAccessConn.Close();
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                myAccessConn.Close();
+                MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            }
+
+            //  open the db and check to see if we have the Custom Chg test settings in the DB
+            try
+            {
+                strAccessSelect = @"SELECT * FROM TestType WHERE TESTNAME = 'Custom Chg'";
+                DataSet test = new DataSet();
+                OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                myAccessConn.Open();
+                myDataAdapter.Fill(test, "test");
+                myAccessConn.Close();
+
+                // access for 0 to test if anything is there...
+                if (test.Tables[0].Rows.Count < 1)
+                {
+                    // we didn't find full charge 4.5 in the table, so we need to add it!
+                    // we need to  insert
+                    string strUpdateCMD = "INSERT INTO TestType ([TESTNAME], Readings, [Interval]) VALUES ('Custom Chg', 60, 60)";
+                    myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
+                    myAccessConn.Open();
+                    myAccessCommand.ExecuteNonQuery();
+                    myAccessConn.Close();
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                myAccessConn.Close();
+                MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            }
+
+
+            //  open the db and check to see if we have the Custom Chg test settings in the DB
+            try
+            {
+                strAccessSelect = @"SELECT * FROM TestType WHERE TESTNAME = 'Custom Cap'";
+                DataSet test = new DataSet();
+                OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                myAccessConn.Open();
+                myDataAdapter.Fill(test, "test");
+                myAccessConn.Close();
+
+                // access for 0 to test if anything is there...
+                if (test.Tables[0].Rows.Count < 1)
+                {
+                    // we didn't find full charge 4.5 in the table, so we need to add it!
+                    // we need to  insert
+                    string strUpdateCMD = "INSERT INTO TestType ([TESTNAME], Readings, [Interval]) VALUES ('Custom Cap', 60, 60)";
+                    myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
+                    myAccessConn.Open();
+                    myAccessCommand.ExecuteNonQuery();
+                    myAccessConn.Close();
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                myAccessConn.Close();
+                MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
             }
 
             //  open the db and check to see if we have the Shorting-16 test settings in the DB

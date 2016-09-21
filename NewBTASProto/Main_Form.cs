@@ -804,7 +804,8 @@ namespace NewBTASProto
                     }
                     if (batData.Tables[0].Rows[0][2].ToString() != "")
                     {
-                        pci.Rows[channel][3] = int.Parse(batData.Tables[0].Rows[0][2].ToString());
+                        pci.Rows[channel][3] =  (A.Length - 1) * int.Parse(batData.Tables[0].Rows[0][2].ToString());
+                        
                     }
                     if (batData.Tables[0].Rows[0][3].ToString() != "")
                     {
@@ -3684,6 +3685,15 @@ namespace NewBTASProto
 
                         // Also change Assigned to Open in the work order table
                         cmdStr = "UPDATE WorkOrders SET OrderStatus='Open' WHERE OrderStatus='Assigned'";
+                        cmd = new OleDbCommand(cmdStr, conn);
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                        conn.Close();
+
+                        //make sure the standard tests are correctly named
+
+                        // Also change Assigned to Open in the work order table
+                        cmdStr = "UPDATE TestType SET TESTNAME='Capacity-1' WHERE TESTNAME='Capacity'";
                         cmd = new OleDbCommand(cmdStr, conn);
                         conn.Open();
                         cmd.ExecuteNonQuery();

@@ -972,7 +972,7 @@ namespace NewBTASProto
                 reportSet.Clear();
                 // Open database containing all the battery data....
                 string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
-                string strAccessSelect = @"SELECT TOP 1 DATE,RDG,ETIME,CEL01,CEL02,CEL03,CEL04,CEL05,CEL06,CEL07,CEL08,CEL09,CEL10,CEL11,CEL12,CEL13,CEL14,CEL15,CEL16,CEL17,CEL18,CEL19,CEL20,CEL21,CEL22,CEL23,CEL24 FROM ScanData WHERE BWO='" + comboBox1.Text + @"' AND STEP='" + comboBox2.Text.Substring(0, 2) + @"' ORDER BY DATE DESC";
+                string strAccessSelect = @"SELECT DATE,RDG,ETIME,CEL01,CEL02,CEL03,CEL04,CEL05,CEL06,CEL07,CEL08,CEL09,CEL10,CEL11,CEL12,CEL13,CEL14,CEL15,CEL16,CEL17,CEL18,CEL19,CEL20,CEL21,CEL22,CEL23,CEL24 FROM ScanData WHERE BWO='" + comboBox1.Text + @"' AND STEP='" + comboBox2.Text.Substring(0, 2) + @"'";
 
                 //Here is where I load the form wide dataset which will both let me fill in the rest of the combo boxes and the graphs!
                 OleDbConnection myAccessConn = null;
@@ -1010,43 +1010,87 @@ namespace NewBTASProto
                 {
                     
                 }
-                //  Here is where we do the Cell voltage PASS/FAIL determinations
+                //Now lets go through the data and come up with a pass fail for each cell
+                DataSet passFailSet = new DataSet();
+                passFailSet.Tables.Add("PassFail");
+                passFailSet.Tables[0].Columns.Add("Date");
+                passFailSet.Tables[0].Columns.Add("RDG");
+                passFailSet.Tables[0].Columns.Add("CEL01");
+                passFailSet.Tables[0].Columns.Add("Ref");
 
-                bool charge = false;        // default to discharge
+                bool charge = true;        // default to discharge
 
-                if (testsPerformed.Tables[0].Rows[comboBox2.SelectedIndex][5].ToString() == "Full Charge-6" ||
-                    testsPerformed.Tables[0].Rows[comboBox2.SelectedIndex][5].ToString() == "Full Charge-4" ||
-                    testsPerformed.Tables[0].Rows[comboBox2.SelectedIndex][5].ToString() == "Top Charge-4" ||
-                    testsPerformed.Tables[0].Rows[comboBox2.SelectedIndex][5].ToString() == "Top Charge-2" ||
-                    testsPerformed.Tables[0].Rows[comboBox2.SelectedIndex][5].ToString() == "Top Charge-1" ||
-                    testsPerformed.Tables[0].Rows[comboBox2.SelectedIndex][5].ToString() == "Slow Charge" ||
-                    testsPerformed.Tables[0].Rows[comboBox2.SelectedIndex][5].ToString() == "Custom Chg #1" ||
-                    testsPerformed.Tables[0].Rows[comboBox2.SelectedIndex][5].ToString() == "Custom Chg #2" ||
-                    testsPerformed.Tables[0].Rows[comboBox2.SelectedIndex][5].ToString() == "Custom Chg #3" ||
-                    testsPerformed.Tables[0].Rows[comboBox2.SelectedIndex][5].ToString() == "Reflex Chg-1" ||
-                    testsPerformed.Tables[0].Rows[comboBox2.SelectedIndex][5].ToString() == "Custom Chg") 
-                    { charge = true; }
+                if (testsPerformed.Tables[0].Rows[comboBox2.SelectedIndex][5].ToString().Contains("Cap") || testsPerformed.Tables[0].Rows[comboBox2.SelectedIndex][5].ToString().Contains("Dis") || testsPerformed.Tables[0].Rows[comboBox2.SelectedIndex][5].ToString() == "As Received")
+                { charge = false; }
 
-                // now run tests on final cell voltages and add to reportSet
-                reportSet.Tables[0].Rows.Add();
-                for (int i = 3; i < 27; i++)
+                if (charge)
                 {
-                    if (testsPerformed.Tables[0].Rows[comboBox2.SelectedIndex][15].ToString() == "10")
+
+                    for (int i = 0; i < 24; i++)
                     {
-                        reportSet.Tables[0].Rows[1][i] = "No Data"; 
+                        for (int j = 0; j < reportSet.Tables[0].Rows.Count; j++)
+                        {
+                            //check to see where we get below 1. When we do log it in passFailSet
+                            if (float.Parse(reportSet.Tables[0].Rows[j][i + 3].ToString()) > 1.75)
+                            {
+                                passFailSet.Tables[0].Rows.Add(); // add a row
+                                passFailSet.Tables[0].Rows[i][0] = reportSet.Tables[0].Rows[j][0];// record the time
+                                passFailSet.Tables[0].Rows[i][1] = reportSet.Tables[0].Rows[j][1];// record the rdg
+                                passFailSet.Tables[0].Rows[i][2] = reportSet.Tables[0].Rows[j][i + 3];// record the cell voltage
+                                passFailSet.Tables[0].Rows[i][3] = "FAIL! Overvoltage!";// record the status
+                                break; // move to the next cell
+                            }
+                        }
+
+                        //check to see if it didn't over volt passed everything
+                        if (float.Parse(reportSet.Tables[0].Rows[reportSet.Tables[0].Rows.Count - 1][i + 3].ToString()) >= 1)
+                        {
+                            passFailSet.Tables[0].Rows.Add(); // add a row
+                            passFailSet.Tables[0].Rows[i][0] = reportSet.Tables[0].Rows[reportSet.Tables[0].Rows.Count - 1][0];// record the time
+                            passFailSet.Tables[0].Rows[i][1] = reportSet.Tables[0].Rows[reportSet.Tables[0].Rows.Count - 1][1];// record the rdg
+                            passFailSet.Tables[0].Rows[i][2] = reportSet.Tables[0].Rows[reportSet.Tables[0].Rows.Count - 1][i + 3];// record the cell voltage
+                            //check for under voltage
+                            if (float.Parse(reportSet.Tables[0].Rows[reportSet.Tables[0].Rows.Count - 1][i + 3].ToString()) < 1)
+                            {
+                                passFailSet.Tables[0].Rows[i][3] = "FAIL!";// record the status
+                            }
+                            else
+                            {
+                                passFailSet.Tables[0].Rows[i][3] = "OK";// record the status
+                            }
+                            
+                        }
                     }
-                    else if (charge)
+                }
+                else
+                {
+                    for (int i = 0; i < 24; i++)
                     {
-                        if (GetDouble(reportSet.Tables[0].Rows[0][i].ToString()) > 1.5 && GetDouble(reportSet.Tables[0].Rows[0][i].ToString()) <1.75) {reportSet.Tables[0].Rows[1][i] = "OK";}
-                        else if (GetDouble(reportSet.Tables[0].Rows[0][i].ToString()) > 1.75) { reportSet.Tables[0].Rows[1][i] = "FAIL! Overvoltage!"; }
-                        else { reportSet.Tables[0].Rows[1][i] = "FAIL!"; }
+                        for (int j = 0; j < reportSet.Tables[0].Rows.Count; j++)
+                        {
+                            //check to see where we get below 1. When we do log it in passFailSet
+                            if (float.Parse(reportSet.Tables[0].Rows[j][i + 3].ToString()) < 1)
+                            {
+                                passFailSet.Tables[0].Rows.Add(); // add a row
+                                passFailSet.Tables[0].Rows[i][0] = reportSet.Tables[0].Rows[j][0];// record the time
+                                passFailSet.Tables[0].Rows[i][1] = reportSet.Tables[0].Rows[j][1];// record the rdg
+                                passFailSet.Tables[0].Rows[i][2] = reportSet.Tables[0].Rows[j][i + 3];// record the cell voltage
+                                passFailSet.Tables[0].Rows[i][3] = "FAIL!";// record the status
+                                break; // move to the next cell
+                            }
+                        }
+
+                        //check to see if it passed everything
+                        if (float.Parse(reportSet.Tables[0].Rows[reportSet.Tables[0].Rows.Count - 1][i + 3].ToString()) >= 1)
+                        {
+                            passFailSet.Tables[0].Rows.Add(); // add a row
+                            passFailSet.Tables[0].Rows[i][0] = reportSet.Tables[0].Rows[reportSet.Tables[0].Rows.Count - 1][0];// record the time
+                            passFailSet.Tables[0].Rows[i][1] = reportSet.Tables[0].Rows[reportSet.Tables[0].Rows.Count - 1][1];// record the rdg
+                            passFailSet.Tables[0].Rows[i][2] = reportSet.Tables[0].Rows[reportSet.Tables[0].Rows.Count - 1][i + 3];// record the cell voltage
+                            passFailSet.Tables[0].Rows[i][3] = "OK";// record the status
+                        }
                     }
-                    else
-                    {
-                        if (GetDouble(reportSet.Tables[0].Rows[0][i].ToString()) > 1) { reportSet.Tables[0].Rows[1][i] = "OK"; }
-                        else { reportSet.Tables[0].Rows[1][i] = "FAIL!"; }
-                    }
-                }  // end for
+                }
 
 
 
@@ -1104,7 +1148,7 @@ namespace NewBTASProto
 
 
 
-                this.reportViewer.LocalReport.DataSources.Add(new ReportDataSource("reportSet", reportSet.Tables[0]));
+                this.reportViewer.LocalReport.DataSources.Add(new ReportDataSource("reportSet", passFailSet.Tables[0]));
 
                 /*************************Load testsPerformed into Tests  ************************/
 
