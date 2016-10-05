@@ -349,7 +349,7 @@ namespace NewBTASProto
             //now we are going to create a thread to set KE1 back to data mode after 15 seconds
             ThreadPool.QueueUserWorkItem(s =>
             {
-                Thread.Sleep(15000);
+                Thread.Sleep(2000);
                 // set KE1 to 0 ("data")
                 GlobalVars.ICSettings[inVal].KE1 = (byte) 0;
                 GlobalVars.ICSettings[inVal].UpdateOutText();
@@ -371,7 +371,7 @@ namespace NewBTASProto
             //now we are going to create a thread to set KE1 back to data mode after 15 seconds
             ThreadPool.QueueUserWorkItem(s =>
             {
-                Thread.Sleep(15000);
+                Thread.Sleep(2000);
                 // set KE1 to 1 ("query")
                 GlobalVars.ICSettings[inVal].KE1 = (byte) 0;
                 GlobalVars.ICSettings[inVal].UpdateOutText();

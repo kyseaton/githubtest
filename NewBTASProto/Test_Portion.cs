@@ -1494,7 +1494,26 @@ namespace NewBTASProto
                                 this.Invoke((MethodInvoker)delegate()
                                 {
                                     sendNote(station, 3, "Error:  Fail to pull the settings from the DataBase.");
-                                    MessageBox.Show(this, "Fail to pull the settings from the DataBase. \r\nPlease make sure you have the battery model setup for this test under the Manage Battery Models menu.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    if (testType == "Full Charge-4.5" ||
+                                        testType == "Full Charge-4" ||
+                                        testType == "Full Charge-6" ||
+                                        testType == "Custom Cap" ||
+                                        testType == "Constant Voltage" ||
+                                        testType == "Custom Chg" ||
+                                        testType == "Slow Charge-16"||
+                                        testType == "Slow Charge-14" ||
+                                        testType == "Discharge" ||
+                                        testType == "Capacity-1" ||
+                                        testType == "Top Charge-1" ||
+                                        testType == "Top Charge-2" ||
+                                        testType == "Top Charge-4")
+                                    {
+                                        MessageBox.Show(this, "Failed to pull the settings from the DataBase. \r\nPlease make sure you have the battery model setup for this test under the Manage Battery Models menu.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    }
+                                    else
+                                    {
+                                        MessageBox.Show(this, "Failed to pull the settings from the DataBase. \r\nPlease make sure you have the Test completely setup under the Edit Custom Test Settings menu.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    }
                                 });
 
                                 return;

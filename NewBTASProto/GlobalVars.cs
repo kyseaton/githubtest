@@ -90,7 +90,7 @@ namespace NewBTASProto
         /// <summary>
         /// this string holds the program publish date
         /// </summary>
-        public static string programPubDate = "Sep 21 2016";
+        public static string programPubDate = "Oct 05 2016";
 
         /// <summary>
         /// this is where we hold our notification service settings...
@@ -164,6 +164,7 @@ namespace NewBTASProto
         public static bool CapTestVarEnable;
         public static decimal CapTestVarValue;
         public static decimal CSErr2Allow;
+        public static bool showDeepDis;
 
     }
 }

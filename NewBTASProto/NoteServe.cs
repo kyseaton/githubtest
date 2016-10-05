@@ -232,8 +232,10 @@ namespace NewBTASProto
 
                     // Send the message
                     smtp.Send(message);
-                    MessageBox.Show(this, "Test Message Sent!", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-
+                    this.Invoke((MethodInvoker)delegate()
+                    {
+                        MessageBox.Show(this, "Test Message Sent!", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    });
                 }
                 catch (Exception ex)
                 {

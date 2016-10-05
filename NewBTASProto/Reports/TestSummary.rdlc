@@ -2,74 +2,23 @@
 <Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
   <Body>
     <ReportItems>
-      <Textbox Name="Textbox2">
-        <CanGrow>true</CanGrow>
-        <KeepTogether>true</KeepTogether>
-        <Paragraphs>
-          <Paragraph>
-            <TextRuns>
-              <TextRun>
-                <Value>="Total Voltage:  " &amp; Format((
-CDbl(First(Fields!CEL01.Value, "reportSet")) +
-CDbl(First(Fields!CEL02.Value, "reportSet")) +
-CDbl(First(Fields!CEL03.Value, "reportSet")) +
-CDbl(First(Fields!CEL04.Value, "reportSet")) +
-CDbl(First(Fields!CEL05.Value, "reportSet")) +
-CDbl(First(Fields!CEL06.Value, "reportSet")) +
-CDbl(First(Fields!CEL07.Value, "reportSet")) +
-CDbl(First(Fields!CEL08.Value, "reportSet")) +
-CDbl(First(Fields!CEL09.Value, "reportSet")) +
-CDbl(First(Fields!CEL10.Value, "reportSet")) +
-CDbl(First(Fields!CEL12.Value, "reportSet")) +
-CDbl(First(Fields!CEL11.Value, "reportSet")) +
-CDbl(First(Fields!CEL13.Value, "reportSet")) +
-CDbl(First(Fields!CEL14.Value, "reportSet")) +
-CDbl(First(Fields!CEL15.Value, "reportSet")) +
-CDbl(First(Fields!CEL16.Value, "reportSet")) +
-CDbl(First(Fields!CEL17.Value, "reportSet")) +
-CDbl(First(Fields!CEL18.Value, "reportSet")) +
-CDbl(First(Fields!CEL19.Value, "reportSet")) +
-CDbl(First(Fields!CEL20.Value, "reportSet"))),"00.00")</Value>
-                <Style>
-                  <FontFamily>Lucida Sans</FontFamily>
-                </Style>
-              </TextRun>
-            </TextRuns>
-            <Style />
-          </Paragraph>
-        </Paragraphs>
-        <rd:DefaultName>Textbox2</rd:DefaultName>
-        <Top>1.16687in</Top>
-        <Left>4.37042in</Left>
-        <Height>0.20139in</Height>
-        <Width>1.90917in</Width>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-          <PaddingLeft>2pt</PaddingLeft>
-          <PaddingRight>2pt</PaddingRight>
-          <PaddingTop>2pt</PaddingTop>
-          <PaddingBottom>2pt</PaddingBottom>
-        </Style>
-      </Textbox>
       <Tablix Name="Tablix1">
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>1in</Width>
+              <Width>1.74033in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.60584in</Width>
+              <Width>1.74033in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1in</Width>
+              <Width>1.74033in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.90056in</Width>
+              <Width>1.74033in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.90056in</Width>
+              <Width>1.74033in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -408,8 +357,7 @@ CDbl(First(Fields!CEL20.Value, "reportSet"))),"00.00")</Value>
         <Top>0.18625in</Top>
         <Left>0.00917in</Left>
         <Height>0.47916in</Height>
-        <Width>9.40696in</Width>
-        <ZIndex>1</ZIndex>
+        <Width>8.70167in</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -417,10 +365,10 @@ CDbl(First(Fields!CEL20.Value, "reportSet"))),"00.00")</Value>
         </Style>
       </Tablix>
     </ReportItems>
-    <Height>1.67076in</Height>
+    <Height>0.66541in</Height>
     <Style />
   </Body>
-  <Width>10.71085in</Width>
+  <Width>8.71084in</Width>
   <Page>
     <PageHeader>
       <Height>1.29167in</Height>

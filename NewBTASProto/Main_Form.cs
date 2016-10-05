@@ -79,6 +79,7 @@ namespace NewBTASProto
                     GlobalVars.CapTestVarEnable = Properties.Settings.Default.CapTestVarEnable;
                     GlobalVars.CapTestVarValue = Properties.Settings.Default.CapTestVarValue;
                     GlobalVars.CSErr2Allow = Properties.Settings.Default.CSErr2Allow;
+                    GlobalVars.showDeepDis = Properties.Settings.Default.showDeepDis;
 
                 }
                 catch
@@ -1000,6 +1001,7 @@ namespace NewBTASProto
             Properties.Settings.Default.CapTestVarEnable = GlobalVars.CapTestVarEnable;
             Properties.Settings.Default.CapTestVarValue = GlobalVars.CapTestVarValue;
             Properties.Settings.Default.CSErr2Allow = GlobalVars.CSErr2Allow;
+            Properties.Settings.Default.showDeepDis = GlobalVars.showDeepDis;
 
 
             Properties.Settings.Default.Save();
@@ -3449,7 +3451,7 @@ namespace NewBTASProto
 
         private void importDataBaseFromPreviousVersionOfProgramToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DialogResult dialogResult = MessageBox.Show(this, "Are you sure you want to continue? While the vast majority of the data from the old program will be imported, some items like standard batteries are no longer supported.  You will need to manually move this information over into the new program.", "Click Yes to continue or No to Cancel the Import.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            DialogResult dialogResult = MessageBox.Show(this, "Are you sure you want to continue? To insure the best results, provide your old Database to JFM Engineering for a compatibility check before proceeding.", "Click Yes to continue or No to Cancel the Import.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (dialogResult == DialogResult.No)
             {
                 return;

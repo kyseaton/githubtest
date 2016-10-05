@@ -142,6 +142,7 @@ namespace NewBTASProto
                                     ICComPort.RtsEnable = false;
                                     ICComPort.Open();
                                     ICComPort.Write(GlobalVars.ICSettings[chargerID].outText, 0, 28);
+                                    Debug.Print(System.Text.Encoding.Default.GetString(GlobalVars.ICSettings[chargerID].outText));
                                     // wait for a response
                                     tempBuff = ICComPort.ReadTo("Z");
                                     ICComPort.Close();

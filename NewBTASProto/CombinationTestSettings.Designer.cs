@@ -40,6 +40,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.numericUpDown5 = new System.Windows.Forms.NumericUpDown();
             this.label11 = new System.Windows.Forms.Label();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown6)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).BeginInit();
@@ -67,6 +69,8 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.checkBox1);
+            this.groupBox2.Controls.Add(this.label1);
             this.groupBox2.Controls.Add(this.label12);
             this.groupBox2.Controls.Add(this.numericUpDown6);
             this.groupBox2.Controls.Add(this.label10);
@@ -78,7 +82,7 @@
             this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox2.Location = new System.Drawing.Point(12, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(590, 88);
+            this.groupBox2.Size = new System.Drawing.Size(590, 122);
             this.groupBox2.TabIndex = 8;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Global Settings";
@@ -97,21 +101,21 @@
             // numericUpDown6
             // 
             this.numericUpDown6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown6.Location = new System.Drawing.Point(532, 63);
+            this.numericUpDown6.Location = new System.Drawing.Point(525, 63);
             this.numericUpDown6.Maximum = new decimal(new int[] {
             5,
             0,
             0,
             0});
             this.numericUpDown6.Name = "numericUpDown6";
-            this.numericUpDown6.Size = new System.Drawing.Size(52, 20);
+            this.numericUpDown6.Size = new System.Drawing.Size(59, 20);
             this.numericUpDown6.TabIndex = 15;
             // 
             // label10
             // 
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(377, 39);
+            this.label10.Location = new System.Drawing.Point(370, 39);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(149, 13);
             this.label10.TabIndex = 14;
@@ -158,14 +162,14 @@
             0,
             0,
             65536});
-            this.numericUpDown5.Location = new System.Drawing.Point(532, 37);
+            this.numericUpDown5.Location = new System.Drawing.Point(525, 37);
             this.numericUpDown5.Maximum = new decimal(new int[] {
             2,
             0,
             0,
             0});
             this.numericUpDown5.Name = "numericUpDown5";
-            this.numericUpDown5.Size = new System.Drawing.Size(52, 20);
+            this.numericUpDown5.Size = new System.Drawing.Size(59, 20);
             this.numericUpDown5.TabIndex = 12;
             // 
             // label11
@@ -177,6 +181,27 @@
             this.label11.Size = new System.Drawing.Size(218, 13);
             this.label11.TabIndex = 11;
             this.label11.Text = "Cell Balance Test After Capicty (NiCd Only):  ";
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox1.Location = new System.Drawing.Point(525, 99);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(59, 17);
+            this.checkBox1.TabIndex = 18;
+            this.checkBox1.Text = "Enable";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(6, 100);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(361, 13);
+            this.label1.TabIndex = 17;
+            this.label1.Text = "Indicate When Cells are Below 0.5V in Discharge by Coloring Light Green:  ";
             // 
             // CombinationTestSettings
             // 
@@ -215,5 +240,7 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.NumericUpDown numericUpDown6;
+        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.Label label1;
     }
 }

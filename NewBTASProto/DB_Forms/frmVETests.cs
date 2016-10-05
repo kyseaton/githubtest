@@ -125,6 +125,21 @@ namespace NewBTASProto
 
         private void saveToolStripButton_Click_1(object sender, EventArgs e)
         {
+            if (numericUpDown1.Text == "") { numericUpDown1.Text = "0"; }
+            if (numericUpDown2.Text == "") { numericUpDown2.Text = "0"; }
+            if (numericUpDown3.Text == "") { numericUpDown3.Text = "0"; }
+            if (numericUpDown4.Text == "") { numericUpDown4.Text = "0"; }
+            if (numericUpDown5.Text == "") { numericUpDown5.Text = "0"; }
+            if (numericUpDown6.Text == "") { numericUpDown6.Text = "0"; }
+            if (numericUpDown7.Text == "") { numericUpDown7.Text = "0"; }
+            if (numericUpDown8.Text == "") { numericUpDown8.Text = "0"; }
+            if (numericUpDown9.Text == "") { numericUpDown9.Text = "0"; }
+            if (numericUpDown10.Text == "") { numericUpDown10.Text = "0"; }
+            if (numericUpDown11.Text == "") { numericUpDown11.Text = "0"; }
+            if (numericUpDown12.Text == "") { numericUpDown12.Text = "0"; }
+            if (numericUpDown13.Text == "") { numericUpDown13.Text = "0"; }
+            if (numericUpDown14.Text == "") { numericUpDown14.Text = "0"; }
+            if (numericUpDown15.Text == "") { numericUpDown15.Text = "0"; }
 
             try
             {
@@ -147,7 +162,7 @@ namespace NewBTASProto
                 if (current["TESTID"].ToString() != "")
                 {
                     //record already exist as we need to do an update
-                    string cmdStr = "UPDATE TestType SET TESTNAME ='" + textBox1.Text + 
+                    string cmdStr = "UPDATE TestType SET TESTNAME ='" + textBox1.Text.Replace("'", "''") + 
                         "', Readings='" + numericUpDown1.Text +
                         "', [Interval]='" + numericUpDown2.Text.Trim() +
                         "', TMode='" + comboBox2.Text +

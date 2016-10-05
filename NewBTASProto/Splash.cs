@@ -35,8 +35,8 @@ namespace NewBTASProto
             "1555832326",                       // John Burns @ Gulf Stream
             "6800782161",                       // Eric @ Will Air
             "9238872250",                       // Satair
-            "2885597260",
-            "6346677964",
+            "2885597260",                       // Jon Ravenhall @ Satair
+            "6346677964",                       // Rotortech Services
             "2328164969",
             
             "8289656377",

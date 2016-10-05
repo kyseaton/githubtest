@@ -2252,7 +2252,7 @@ namespace NewBTASProto
 
                         if (Value > Max) { return Color.Green; }
                         else if (Value > Min4) { return Color.Orange; }
-                        else if (Value < Min3) { return Color.PaleGreen; }
+                        else if (Value < Min3 && GlobalVars.showDeepDis) { return Color.PaleGreen; }
                         else { return Color.Red; }
 
                     }
@@ -2299,7 +2299,7 @@ namespace NewBTASProto
 
                         if (Value > Max) { return Color.Green; }
                         else if (Value > Min4) { return Color.Orange; }
-                        else if (Value < Min3) { return Color.PaleGreen; }
+                        else if (Value < Min3 && GlobalVars.showDeepDis) { return Color.PaleGreen; }
                         else { return Color.Red; }
 
                     }
