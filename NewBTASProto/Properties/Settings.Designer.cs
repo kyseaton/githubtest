@@ -368,5 +368,17 @@ namespace NewBTASProto.Properties {
                 this["showDeepDis"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool allowZeroTest {
+            get {
+                return ((bool)(this["allowZeroTest"]));
+            }
+            set {
+                this["allowZeroTest"] = value;
+            }
+        }
     }
 }

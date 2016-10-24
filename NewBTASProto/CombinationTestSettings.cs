@@ -25,6 +25,7 @@ namespace NewBTASProto
             numericUpDown5.Value = GlobalVars.CapTestVarValue;
             numericUpDown6.Value = GlobalVars.CSErr2Allow;
             checkBox1.Checked = GlobalVars.showDeepDis;
+            checkBox3.Checked = GlobalVars.allowZeroTest;
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -40,6 +41,7 @@ namespace NewBTASProto
             GlobalVars.CapTestVarValue = numericUpDown5.Value;
             GlobalVars.CSErr2Allow = numericUpDown6.Value;
             GlobalVars.showDeepDis = checkBox1.Checked;
+            GlobalVars.allowZeroTest = checkBox3.Checked;
             this.Close();
         }
 

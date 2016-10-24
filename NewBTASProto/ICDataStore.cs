@@ -232,13 +232,13 @@ namespace NewBTASProto
                         availabilityStatus = "x12x";
                         break;
                     case 13:
-                        availabilityStatus = "x13x";
+                        availabilityStatus = "Negative Delta";
                         break;
                     case 14:
-                        availabilityStatus = "x14x";
+                        availabilityStatus = "Bad Backup Batt";
                         break;
                     case 15:
-                        availabilityStatus = "Neg. Slope";
+                        availabilityStatus = "Power Fail Rcv";
                         break;
                 }   // end availabilityStatus Switch
 

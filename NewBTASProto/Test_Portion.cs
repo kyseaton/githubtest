@@ -2877,14 +2877,14 @@ namespace NewBTASProto
                                 {
                                     criticalNum[Cstation] = true;
                                     Thread.Sleep(1000);
-                                    if (d.Rows[station][11].ToString() == "RUN")
+                                    if (d.Rows[station][11].ToString() != "HOLD" && d.Rows[station][11].ToString() != "RESET")
                                     {
                                         break;
                                     }
                                 }
 
                                 //make sure the charger has priority
-                                if (d.Rows[station][11].ToString() == "RUN")
+                                if (d.Rows[station][11].ToString() != "HOLD" && d.Rows[station][11].ToString() != "RESET")
                                 {
                                     break;
                                 }
@@ -2926,6 +2926,10 @@ namespace NewBTASProto
                                 }
                                 if (d.Rows[station][11].ToString() == "HOLD" || d.Rows[station][11].ToString() == "RESET")
                                 {
+                                    // set KE1 to 0 ("query")
+                                    GlobalVars.ICSettings[Cstation].KE1 = (byte)0;
+                                    //Update the output string value
+                                    GlobalVars.ICSettings[Cstation].UpdateOutText();
                                     break;
                                 }
                             }
@@ -3930,7 +3934,7 @@ namespace NewBTASProto
 
                             //Lets also look for a temperature rise on the temp-plate if we are in charge mode....
                             //Skip for discharge
-                            if (!(testType.Contains("Cap") || testType.Contains("Dis") || testType.Contains("Shorting")))
+                            if (!(GlobalVars.ICData[Cstation].testMode.ToString().Contains("30") || GlobalVars.ICData[Cstation].testMode.ToString().Contains("31") || GlobalVars.ICData[Cstation].testMode.ToString().Contains("32") || testType.Contains("Shorting")))
                             {
                                 double tempTemp = (GlobalVars.CScanData[station].TP1 + GlobalVars.CScanData[station].TP2 + GlobalVars.CScanData[station].TP3 + GlobalVars.CScanData[station].TP4) / 4;
                                 if ((tempTemp > (startTemp + 5)) && memTemp == 0)
@@ -4000,7 +4004,7 @@ namespace NewBTASProto
                             //only check once every 20 secs...
 
                             //if we have the cell check turned on and the we are in charge check the cells for negative slopes...
-                            if (DateTime.Now.Ticks - cellCheckTimer.Ticks > 200000000 && GlobalVars.DecliningCellVoltageTestEnabled && !(testType.Contains("Cap") || testType.Contains("Dis") || testType.Contains("Shorting")))
+                            if (DateTime.Now.Ticks - cellCheckTimer.Ticks > 200000000 && GlobalVars.DecliningCellVoltageTestEnabled && !(GlobalVars.ICData[Cstation].testMode.ToString().Contains("30") || GlobalVars.ICData[Cstation].testMode.ToString().Contains("31") || GlobalVars.ICData[Cstation].testMode.ToString().Contains("32") || testType.Contains("Shorting")))
                             {
                                 cellCheckTimer = DateTime.Now;
 
@@ -4118,31 +4122,38 @@ namespace NewBTASProto
                             {
                                 //current check part...
                                 //if we have a mini that is charging...
-                                if (d.Rows[station][10].ToString().Contains("mini") && !(testType.Contains("Cap") || testType.Contains("Discharge") || testType.Contains("Shorting")))
+                                if (!GlobalVars.allowZeroTest)
                                 {
-                                    //badCurCount looks at current two...
-                                    // for the mini case
-                                    if (Math.Abs(GlobalVars.CScanData[station].currentTwo) < 0.005)
+                                    if (d.Rows[station][10].ToString().Contains("mini") && !(testType.Contains("Cap") || testType.Contains("Discharge") || testType.Contains("Shorting")))
                                     {
-                                        badCurCount++;
+                                        //badCurCount looks at current two...
+                                        // for the mini case
+                                        if (Math.Abs(GlobalVars.CScanData[station].currentTwo) < 0.005)
+                                        {
+                                            badCurCount++;
+                                        }
+                                        else
+                                        {
+                                            badCurCount = 0;
+                                        }
                                     }
                                     else
                                     {
-                                        badCurCount = 0;
+                                        // all other cases
+                                        // for the mini case
+                                        if (Math.Abs(GlobalVars.CScanData[station].currentOne) < 0.05)
+                                        {
+                                            badCurCount++;
+                                        }
+                                        else
+                                        {
+                                            badCurCount = 0;
+                                        }
                                     }
                                 }
                                 else
                                 {
-                                    // all other cases
-                                    // for the mini case
-                                    if (Math.Abs(GlobalVars.CScanData[station].currentOne) < 0.05)
-                                    {
-                                        badCurCount++;
-                                    }
-                                    else
-                                    {
-                                        badCurCount = 0;
-                                    }
+                                    badCurCount = 0;
                                 }
 
 
@@ -4179,6 +4190,10 @@ namespace NewBTASProto
 
                                         if (d.Rows[station][11].ToString() == "HOLD" || d.Rows[station][11].ToString() == "END" || d.Rows[station][11].ToString() == "RESET")
                                         {
+                                            // set KE1 to 0 ("query")
+                                            GlobalVars.ICSettings[Cstation].KE1 = (byte)0;
+                                            //Update the output string value
+                                            GlobalVars.ICSettings[Cstation].UpdateOutText();
                                             break;
                                         }
 
@@ -4238,7 +4253,7 @@ namespace NewBTASProto
                                         stopwatch.Stop();
                                         Thread.Sleep(5000);
 
-                                        if ((string)d.Rows[station][11] == "Power Fail" || (string)d.Rows[station][11] == "HOLD")
+                                        if (d.Rows[station][11].ToString().Contains("Power") || (string)d.Rows[station][11] == "HOLD")
                                         {
 
                                             updateD(station, 7, "Waiting For Charger");
@@ -4333,6 +4348,8 @@ namespace NewBTASProto
                                         }// end power fail if
                                         else
                                         {
+                                            //make sure the out string says to stop...
+
                                             // end the test!
                                             //clear values from d
 
@@ -4453,6 +4470,10 @@ namespace NewBTASProto
 
                                         if (d.Rows[station][11].ToString() == "HOLD" || d.Rows[station][11].ToString() == "END" || d.Rows[station][11].ToString() == "RESET")
                                         {
+                                            // set KE1 to 0 ("query")
+                                            GlobalVars.ICSettings[Cstation].KE1 = (byte)0;
+                                            //Update the output string value
+                                            GlobalVars.ICSettings[Cstation].UpdateOutText();
                                             break;
                                         }
 
@@ -4486,7 +4507,7 @@ namespace NewBTASProto
                                 // check that the C-Scan is still running...
 
                                 // this is the power fail case...
-                                if (d.Rows[station][11].ToString() == "Power Fail")
+                                if (d.Rows[station][11].ToString().Contains("Power"))
                                 {
                                     stopwatch.Stop();
                                     //set to hold
@@ -4696,6 +4717,10 @@ namespace NewBTASProto
 
                                         if (d.Rows[station][11].ToString() == "HOLD" || d.Rows[station][11].ToString() == "END" || d.Rows[station][11].ToString() == "RESET")
                                         {
+                                            // set KE1 to 0 ("query")
+                                            GlobalVars.ICSettings[Cstation].KE1 = (byte)0;
+                                            //Update the output string value
+                                            GlobalVars.ICSettings[Cstation].UpdateOutText();
                                             break;
                                         }
 
@@ -4802,6 +4827,10 @@ namespace NewBTASProto
 
                             if (d.Rows[station][11].ToString() == "HOLD" || d.Rows[station][11].ToString() == "END" || d.Rows[station][11].ToString() == "RESET")
                             {
+                                // set KE1 to 0 ("query")
+                                GlobalVars.ICSettings[Cstation].KE1 = (byte)0;
+                                //Update the output string value
+                                GlobalVars.ICSettings[Cstation].UpdateOutText();
                                 break;
                             }
 

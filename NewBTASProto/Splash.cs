@@ -37,7 +37,7 @@ namespace NewBTASProto
             "9238872250",                       // Satair
             "2885597260",                       // Jon Ravenhall @ Satair
             "6346677964",                       // Rotortech Services
-            "2328164969",
+            "2328164969",                       // Aviation Parts EXE
             
             "8289656377",
             "5241029672",

@@ -39,6 +39,8 @@ namespace NewBTASProto
          byte[] comErrorNum = new byte[16] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
          byte[] comGoodNum = new byte[16] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
+         bool[] BBB_Toggle = new bool[16] { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
+
         public void pollICs()
         {
 
@@ -179,20 +181,45 @@ namespace NewBTASProto
                                                 }
                                                 else if (testData.availabilityStatus != "Enabled")
                                                 {
-                                                    updateD(j, 11, testData.availabilityStatus);
-                                                    if (slaveRow > -1)
+                                                    //if the status is Bad Backup Batt we will do a send note, otherwise add it to the grid
+                                                    if (testData.availabilityStatus == "Bad Backup Batt")
                                                     {
-                                                        updateD(slaveRow, 11, testData.availabilityStatus);
+                                                        if (BBB_Toggle[j] == false)
+                                                        {
+                                                            BBB_Toggle[j] = true;
+                                                            //do a send note!
+                                                            this.Invoke((MethodInvoker)delegate()
+                                                            {
+                                                                sendNote(j, 3, "Bad Backup Batt");
+                                                            });
+                                                        }
+                                                        updateD(j, 11, testData.runStatus);
+                                                        if (slaveRow > -1)
+                                                        {
+                                                            updateD(slaveRow, 11, testData.runStatus);
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        updateD(j, 11, testData.availabilityStatus);
+                                                        if (slaveRow > -1)
+                                                        {
+                                                            updateD(slaveRow, 11, testData.availabilityStatus);
+                                                        }
                                                     }
                                                 }
                                                 else 
-                                                { 
+                                                {
+                                                    //clear the non critical fault status
+                                                    BBB_Toggle[j] = false;
                                                     updateD(j, 11, testData.runStatus);
                                                     if (slaveRow > -1)
                                                     {
                                                         updateD(slaveRow, 11, testData.runStatus);
                                                     }
                                                 }
+
+
                                                 if (dataGridView1.Rows[j].Cells[4].Style.BackColor != Color.Red)
                                                 {
                                                     dataGridView1.Rows[j].Cells[8].Style.BackColor = Color.YellowGreen;
@@ -584,20 +611,47 @@ namespace NewBTASProto
                                                     }
                                                     else if (testData.availabilityStatus != "Enabled")
                                                     {
-                                                        updateD(station, 11, testData.availabilityStatus);
-                                                        if (slaveRow > -1)
+
+                                                        //if the status is Bad Backup Batt we will do a send note, otherwise add it to the grid
+                                                        if (testData.availabilityStatus == "Bad Backup Batt")
                                                         {
-                                                            updateD(slaveRow, 11, testData.availabilityStatus);
+                                                            if (BBB_Toggle[station] == false)
+                                                            {
+                                                                BBB_Toggle[station] = true;
+                                                                //do a send note!
+                                                                this.Invoke((MethodInvoker)delegate()
+                                                                {
+                                                                    sendNote(station, 3, "Bad Backup Batt");
+                                                                });
+                                                            }
+                                                            updateD(station, 11, testData.runStatus);
+                                                            if (slaveRow > -1)
+                                                            {
+                                                                updateD(slaveRow, 11, testData.runStatus);
+                                                            }
                                                         }
+                                                        else
+                                                        {
+                                                            updateD(station, 11, testData.availabilityStatus);
+                                                            if (slaveRow > -1)
+                                                            {
+                                                                updateD(slaveRow, 11, testData.availabilityStatus);
+                                                            }
+                                                        }
+
                                                     }
                                                     else 
-                                                    { 
+                                                    {
+                                                        //clear the non critical fault status
+                                                        BBB_Toggle[station] = false;
                                                         updateD(station, 11, testData.runStatus);
                                                         if (slaveRow > -1)
                                                         {
                                                             updateD(slaveRow, 11, testData.runStatus);
                                                         }
                                                     }
+
+
                                                     if (dataGridView1.Rows[station].Cells[4].Style.BackColor != Color.Red)
                                                     {
                                                         dataGridView1.Rows[station].Cells[8].Style.BackColor = Color.YellowGreen;

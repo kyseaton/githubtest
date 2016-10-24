@@ -80,6 +80,7 @@ namespace NewBTASProto
                     GlobalVars.CapTestVarValue = Properties.Settings.Default.CapTestVarValue;
                     GlobalVars.CSErr2Allow = Properties.Settings.Default.CSErr2Allow;
                     GlobalVars.showDeepDis = Properties.Settings.Default.showDeepDis;
+                    GlobalVars.allowZeroTest = Properties.Settings.Default.allowZeroTest;
 
                 }
                 catch
@@ -1002,6 +1003,7 @@ namespace NewBTASProto
             Properties.Settings.Default.CapTestVarValue = GlobalVars.CapTestVarValue;
             Properties.Settings.Default.CSErr2Allow = GlobalVars.CSErr2Allow;
             Properties.Settings.Default.showDeepDis = GlobalVars.showDeepDis;
+            Properties.Settings.Default.allowZeroTest = GlobalVars.allowZeroTest;
 
 
             Properties.Settings.Default.Save();

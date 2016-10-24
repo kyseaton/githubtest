@@ -64,7 +64,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>DATE</Value>
+                              <Value>ETIME</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
@@ -178,7 +178,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.23958in</Height>
+              <Height>0.225in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -219,7 +219,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!DATE.Value</Value>
+                              <Value>=Format(Fields!ETIME.Value*24*60*60\(60*60),"00") &amp; ":" &amp; Format(Round(Fields!ETIME.Value*24*60*60\60) Mod 60,"00") &amp; ":" &amp; Format(Round(Fields!ETIME.Value*24*60*60) Mod 60,"00")</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
@@ -238,6 +238,7 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -356,8 +357,8 @@
         <DataSetName>reportSet</DataSetName>
         <Top>0.18625in</Top>
         <Left>0.00917in</Left>
-        <Height>0.47916in</Height>
-        <Width>8.70167in</Width>
+        <Height>0.46458in</Height>
+        <Width>8.70165in</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -371,7 +372,7 @@
   <Width>8.71084in</Width>
   <Page>
     <PageHeader>
-      <Height>1.29167in</Height>
+      <Height>1.22916in</Height>
       <PrintOnFirstPage>true</PrintOnFirstPage>
       <PrintOnLastPage>true</PrintOnLastPage>
       <ReportItems>

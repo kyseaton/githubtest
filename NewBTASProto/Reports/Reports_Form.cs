@@ -1014,10 +1014,11 @@ namespace NewBTASProto
                 DataSet passFailSet = new DataSet();
                 passFailSet.Tables.Add("PassFail");
                 passFailSet.Tables[0].Columns.Add("Station");
-                passFailSet.Tables[0].Columns.Add("Date");
+                passFailSet.Tables[0].Columns.Add("ETIME");
                 passFailSet.Tables[0].Columns.Add("RDG");
                 passFailSet.Tables[0].Columns.Add("CEL01");
                 passFailSet.Tables[0].Columns.Add("Ref");
+                passFailSet.Tables[0].Columns.Add("DATE");
 
                 bool charge = true;        // default to discharge
 
@@ -1084,10 +1085,11 @@ namespace NewBTASProto
                                 {
                                     passFailSet.Tables[0].Rows.Add(); // add a row
                                     passFailSet.Tables[0].Rows[i][0] = "Cell" + (i + 1).ToString();// record the cell number
-                                    passFailSet.Tables[0].Rows[i][1] = reportSet.Tables[0].Rows[j][0];// record the time
+                                    passFailSet.Tables[0].Rows[i][1] = reportSet.Tables[0].Rows[j][2];// record the time
                                     passFailSet.Tables[0].Rows[i][2] = reportSet.Tables[0].Rows[j][1];// record the rdg
                                     passFailSet.Tables[0].Rows[i][3] = reportSet.Tables[0].Rows[j][i + 3];// record the cell voltage
                                     passFailSet.Tables[0].Rows[i][4] = "FAIL! Overvoltage!";// record the status
+                                    passFailSet.Tables[0].Rows[i][5] = reportSet.Tables[0].Rows[j][0];// record the time
                                     break; // move to the next cell
                                 }
                             }
@@ -1097,9 +1099,10 @@ namespace NewBTASProto
                             {
                                 passFailSet.Tables[0].Rows.Add(); // add a row
                                 passFailSet.Tables[0].Rows[i][0] = "Cell" + (i + 1).ToString();// record the cell number
-                                passFailSet.Tables[0].Rows[i][1] = reportSet.Tables[0].Rows[reportSet.Tables[0].Rows.Count - 1][0];// record the time
+                                passFailSet.Tables[0].Rows[i][1] = reportSet.Tables[0].Rows[reportSet.Tables[0].Rows.Count - 1][2];// record the time
                                 passFailSet.Tables[0].Rows[i][2] = reportSet.Tables[0].Rows[reportSet.Tables[0].Rows.Count - 1][1];// record the rdg
                                 passFailSet.Tables[0].Rows[i][3] = reportSet.Tables[0].Rows[reportSet.Tables[0].Rows.Count - 1][i + 3];// record the cell voltage
+                                passFailSet.Tables[0].Rows[i][5] = reportSet.Tables[0].Rows[reportSet.Tables[0].Rows.Count - 1][0];
                                 //check for under voltage
                                 if (float.Parse(reportSet.Tables[0].Rows[reportSet.Tables[0].Rows.Count - 1][i + 3].ToString()) < 1)
                                 {
@@ -1124,10 +1127,11 @@ namespace NewBTASProto
                                 {
                                     passFailSet.Tables[0].Rows.Add(); // add a row
                                     passFailSet.Tables[0].Rows[i][0] = "Cell" + (i + 1).ToString();// record the cell number
-                                    passFailSet.Tables[0].Rows[i][1] = reportSet.Tables[0].Rows[j][0];// record the time
+                                    passFailSet.Tables[0].Rows[i][1] = reportSet.Tables[0].Rows[j][2];// record the time
                                     passFailSet.Tables[0].Rows[i][2] = reportSet.Tables[0].Rows[j][1];// record the rdg
                                     passFailSet.Tables[0].Rows[i][3] = reportSet.Tables[0].Rows[j][i + 3];// record the cell voltage
                                     passFailSet.Tables[0].Rows[i][4] = "FAIL!";// record the status
+                                    passFailSet.Tables[0].Rows[i][5] = reportSet.Tables[0].Rows[j][0];// record the time
                                     break; // move to the next cell
                                 }
                             }
@@ -1137,10 +1141,11 @@ namespace NewBTASProto
                             {
                                 passFailSet.Tables[0].Rows.Add(); // add a row
                                 passFailSet.Tables[0].Rows[i][0] = "Cell" + (i + 1).ToString();// record the cell number
-                                passFailSet.Tables[0].Rows[i][1] = reportSet.Tables[0].Rows[reportSet.Tables[0].Rows.Count - 1][0];// record the time
+                                passFailSet.Tables[0].Rows[i][1] = reportSet.Tables[0].Rows[reportSet.Tables[0].Rows.Count - 1][2];// record the time
                                 passFailSet.Tables[0].Rows[i][2] = reportSet.Tables[0].Rows[reportSet.Tables[0].Rows.Count - 1][1];// record the rdg
                                 passFailSet.Tables[0].Rows[i][3] = reportSet.Tables[0].Rows[reportSet.Tables[0].Rows.Count - 1][i + 3];// record the cell voltage
                                 passFailSet.Tables[0].Rows[i][4] = "OK";// record the status
+                                passFailSet.Tables[0].Rows[i][5] = reportSet.Tables[0].Rows[reportSet.Tables[0].Rows.Count - 1][0];// record the time
                             }
                         }
                     }
@@ -1160,10 +1165,11 @@ namespace NewBTASProto
                                 {
                                     passFailSet.Tables[0].Rows.Add(); // add a row
                                     passFailSet.Tables[0].Rows[cells - i - 1][0] = "Cell" + (cells - i - 1 + 1).ToString();// record the cell number
-                                    passFailSet.Tables[0].Rows[cells - i - 1][1] = reportSet.Tables[0].Rows[j][0];// record the time
+                                    passFailSet.Tables[0].Rows[cells - i - 1][1] = reportSet.Tables[0].Rows[j][2];// record the time
                                     passFailSet.Tables[0].Rows[cells - i - 1][2] = reportSet.Tables[0].Rows[j][1];// record the rdg
                                     passFailSet.Tables[0].Rows[cells - i - 1][3] = reportSet.Tables[0].Rows[j][i + 3];// record the cell voltage
                                     passFailSet.Tables[0].Rows[cells - i - 1][4] = "FAIL! Overvoltage!";// record the status
+                                    passFailSet.Tables[0].Rows[cells - i - 1][5] = reportSet.Tables[0].Rows[j][0];// record the time
                                     break; // move to the next cell
                                 }
                             }
@@ -1173,11 +1179,12 @@ namespace NewBTASProto
                             {
                                 passFailSet.Tables[0].Rows.Add(); // add a row
                                 passFailSet.Tables[0].Rows[cells - i - 1][0] = "Cell" + (cells - i - 1 + 1).ToString();// record the cell number
-                                passFailSet.Tables[0].Rows[cells - i - 1][1] = reportSet.Tables[0].Rows[reportSet.Tables[0].Rows.Count - 1][0];// record the time
+                                passFailSet.Tables[0].Rows[cells - i - 1][1] = reportSet.Tables[0].Rows[reportSet.Tables[0].Rows.Count - 1][2];// record the time
                                 passFailSet.Tables[0].Rows[cells - i - 1][2] = reportSet.Tables[0].Rows[reportSet.Tables[0].Rows.Count - 1][1];// record the rdg
                                 passFailSet.Tables[0].Rows[cells - i - 1][3] = reportSet.Tables[0].Rows[reportSet.Tables[0].Rows.Count - 1][i + 3];// record the cell voltage
+                                passFailSet.Tables[0].Rows[cells - i - 1][5] = reportSet.Tables[0].Rows[reportSet.Tables[0].Rows.Count - 1][0];// record the time
                                 //check for under voltage
-                                if (float.Parse(reportSet.Tables[0].Rows[reportSet.Tables[0].Rows.Count - 1][cells - i - 1 + 3].ToString()) < 1)
+                                if (float.Parse(reportSet.Tables[0].Rows[reportSet.Tables[0].Rows.Count - 1][i + 3].ToString()) < 1)
                                 {
                                     passFailSet.Tables[0].Rows[cells - i - 1][4] = "FAIL!";// record the status
                                 }
@@ -1196,27 +1203,29 @@ namespace NewBTASProto
                             for (int j = 0; j < reportSet.Tables[0].Rows.Count; j++)
                             {
                                 //check to see where we get below 1. When we do log it in passFailSet
-                                if (float.Parse(reportSet.Tables[0].Rows[j][cells - i - 1 + 3].ToString()) < 1)
+                                if (float.Parse(reportSet.Tables[0].Rows[j][i + 3].ToString()) < 1)
                                 {
                                     passFailSet.Tables[0].Rows.Add(); // add a row
                                     passFailSet.Tables[0].Rows[cells - i - 1][0] = "Cell" + (cells - i - 1 + 1).ToString();// record the cell number
-                                    passFailSet.Tables[0].Rows[cells - i - 1][1] = reportSet.Tables[0].Rows[j][0];// record the time
+                                    passFailSet.Tables[0].Rows[cells - i - 1][1] = reportSet.Tables[0].Rows[j][2];// record the time
                                     passFailSet.Tables[0].Rows[cells - i - 1][2] = reportSet.Tables[0].Rows[j][1];// record the rdg
                                     passFailSet.Tables[0].Rows[cells - i - 1][3] = reportSet.Tables[0].Rows[j][i + 3];// record the cell voltage
                                     passFailSet.Tables[0].Rows[cells - i - 1][4] = "FAIL!";// record the status
+                                    passFailSet.Tables[0].Rows[cells - i - 1][5] = reportSet.Tables[0].Rows[j][0];// record the time
                                     break; // move to the next cell
                                 }
                             }
 
                             //check to see if it passed everything
-                            if (float.Parse(reportSet.Tables[0].Rows[reportSet.Tables[0].Rows.Count - 1][cells - i - 1 + 3].ToString()) >= 1)
+                            if (float.Parse(reportSet.Tables[0].Rows[reportSet.Tables[0].Rows.Count - 1][i + 3].ToString()) >= 1)
                             {
                                 passFailSet.Tables[0].Rows.Add(); // add a row
                                 passFailSet.Tables[0].Rows[cells - i - 1][0] = "Cell" + (cells - i + 1).ToString();// record the cell number
-                                passFailSet.Tables[0].Rows[cells - i - 1][1] = reportSet.Tables[0].Rows[reportSet.Tables[0].Rows.Count - 1][0];// record the time
+                                passFailSet.Tables[0].Rows[cells - i - 1][1] = reportSet.Tables[0].Rows[reportSet.Tables[0].Rows.Count - 1][2];// record the time
                                 passFailSet.Tables[0].Rows[cells - i - 1][2] = reportSet.Tables[0].Rows[reportSet.Tables[0].Rows.Count - 1][1];// record the rdg
                                 passFailSet.Tables[0].Rows[cells - i - 1][3] = reportSet.Tables[0].Rows[reportSet.Tables[0].Rows.Count - 1][i + 3];// record the cell voltage
                                 passFailSet.Tables[0].Rows[cells - i - 1][4] = "OK";// record the status
+                                passFailSet.Tables[0].Rows[cells - i - 1][5] = reportSet.Tables[0].Rows[reportSet.Tables[0].Rows.Count - 1][0];// record the time
                             }
                         }
                     }
