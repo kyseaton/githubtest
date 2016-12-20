@@ -78,7 +78,7 @@ namespace NewBTASProto
             string strAccessConn;
             string strAccessSelect;
             // Open database containing all the battery data....
-            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
             strAccessSelect = @"SELECT WorkOrderNumber FROM WorkOrders";
 
             DataSet workOrderList1 = new DataSet();
@@ -341,7 +341,7 @@ namespace NewBTASProto
             OleDbConnection myAccessConn = null;
 
             // Open database containing all the battery data....
-            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
             string strUpdateCMD = "INSERT INTO WaterLevel (WorkOrderNumber,Cell1,Cell2,Cell3,Cell4,Cell5,Cell6,Cell7,Cell8,Cell9,Cell10,Cell11,Cell12,Cell13,Cell14,Cell15,Cell16,Cell17,Cell18,Cell19,Cell20,Cell21,Cell22,Cell23,Cell24,AVE) "
                 + "VALUES ('" +
                 comboBox2.Text + "'," +                                                 //WorkOrderNumber

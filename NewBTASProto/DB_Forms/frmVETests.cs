@@ -34,7 +34,7 @@ namespace NewBTASProto
             string strAccessSelect;
             // Open database containing all the battery data....
 
-            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
             strAccessSelect = @"SELECT * FROM TestType WHERE TESTNAME<>'Top Charge-4' AND TESTNAME<>'As Received' AND TESTNAME<>'Full Charge-4' AND TESTNAME<>'Full Charge-4.5' AND TESTNAME<>'Full Charge-6' AND TESTNAME<>'Capacity-1' AND TESTNAME<>'Top Charge-2' AND TESTNAME<>'Discharge' AND TESTNAME<>'Slow Charge-14' AND TESTNAME<>'Top Charge-1' AND TESTNAME<>'Slow Charge-16' AND TESTNAME<>'Constant Voltage' AND TESTNAME<>'Shorting-16' ORDER BY TESTNAME ASC";
 
             Tests = new DataSet();
@@ -145,7 +145,7 @@ namespace NewBTASProto
             {
 
                 // set up the db Connection
-                string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
                 OleDbConnection conn = new OleDbConnection(connectionString);
 
                 //MAKE SURE YOU SELECT THE CURRENT ROW FOR DOUBLE SAVES!!!!!!!!!!!!!!!!!
@@ -161,6 +161,7 @@ namespace NewBTASProto
 
                 if (current["TESTID"].ToString() != "")
                 {
+
                     //record already exist as we need to do an update
                     string cmdStr = "UPDATE TestType SET TESTNAME ='" + textBox1.Text.Replace("'", "''") + 
                         "', Readings='" + numericUpDown1.Text +
@@ -210,6 +211,33 @@ namespace NewBTASProto
                     {
                         MessageBox.Show(this, "That test name is protected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                         return;
+                    }
+
+                    //also make sure the we are not reusing a name
+                    try
+                    {
+                        string testStr = @"SELECT * FROM TestType WHERE TESTNAME = '" + textBox1.Text.Replace("'", "''") + "'";
+                        DataSet testSet = new DataSet();
+                        OleDbCommand testCMD = new OleDbCommand(testStr, conn);
+                        OleDbDataAdapter testDataAdapter = new OleDbDataAdapter(testCMD);
+
+                        lock (Main_Form.dataBaseLock)
+                        {
+                            conn.Open();
+                            testDataAdapter.Fill(testSet, "testSet");
+                            conn.Close();
+                        }
+
+                        if (testSet.Tables[0].Rows.Count > 0)
+                        {
+                            //we already have a test in the table with that name!
+                            MessageBox.Show(this, "That test name is already in use. Please select a differnet name", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                            return;
+                        }
+                    }
+                    catch
+                    {
+                        // didn't work out
                     }
 
                     string cmdStr = "INSERT INTO TestType (TESTNAME, Readings, [Interval], TMode, TTime1Hr, TTime1Min, TCurr1, TVolts1, TTime2Hr, TTime2Min, TCurr2, TVolts2, TOhms, TTimeDHr, TTimeDMin, TCurrD, TVoltsD) VALUES('" 
@@ -345,7 +373,7 @@ namespace NewBTASProto
                 if (MessageBox.Show(this, "Are you sure you want to remove this custom test?", "Delete Record", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                 {
                     // set up the db Connection
-                    string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                    string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
                     OleDbConnection conn = new OleDbConnection(connectionString);
 
                     //get the current row
@@ -365,8 +393,10 @@ namespace NewBTASProto
                             conn.Close();
                         }
 
+                        
                         // Also update the binding source
                         Tests.Tables[0].Rows[bindingNavigator1.BindingSource.Position].Delete();
+                        bindingNavigator1.Update();
 
                     }
                     else

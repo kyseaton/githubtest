@@ -34,7 +34,7 @@ namespace NewBTASProto
 
         private void linkLabel3_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            String openPDFFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTAS16_HELP.pdf";
+            String openPDFFile = GlobalVars.folderString + @"\BTAS16_DB\BTAS16_HELP.pdf";
             System.IO.File.WriteAllBytes(openPDFFile, Properties.Resources.Help);
             System.Diagnostics.Process.Start(openPDFFile);    
         }

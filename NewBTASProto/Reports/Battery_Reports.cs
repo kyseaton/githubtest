@@ -37,7 +37,7 @@ namespace NewBTASProto
             string strAccessSelect;
             // Open database containing all the battery data....
 
-            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
             strAccessSelect = @"SELECT * FROM Batteries ORDER BY BatterySerialNumber ASC";
 
             Bats.Clear();
@@ -96,7 +96,7 @@ namespace NewBTASProto
 
             // Open database containing all the customer names data....
 
-            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
             strAccessSelect = @"SELECT CustomerName FROM CUSTOMERS ORDER BY CustomerName ASC";
 
             DataSet Custs = new DataSet();
@@ -145,7 +145,7 @@ namespace NewBTASProto
 
             // Open database containing all the customer names data....
 
-            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
             strAccessSelect = @"SELECT BatteryModel FROM BatteriesCustom ORDER BY BatteryModel ASC";
 
             DataSet BatsList = new DataSet();
@@ -260,7 +260,7 @@ namespace NewBTASProto
             string strAccessConn;
             string strAccessSelect;
             // Open database containing all the battery data....
-            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
 
             if (toolStripCBCustomers.Text == "" && toolStripCBBatMod.Text == "")
             {
@@ -399,7 +399,7 @@ namespace NewBTASProto
             // we need a data set..
             DataSet BatteryInfo = new DataSet();
             // Open database containing all the battery data....
-            string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+            string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
             string strAccessSelect = @"SELECT * FROM WorkOrders WHERE BatterySerialNumber='" + toolStripCBSerNum.Text + @"'";
 
             //Here is where I load the form wide dataset which will both let me fill in the rest of the combo boxes and the graphs!
@@ -449,7 +449,7 @@ namespace NewBTASProto
             this.reportViewer1.LocalReport.DataSources.Clear();
 
             this.reportViewer1.LocalReport.EnableExternalImages = true;
-            ReportParameter parameter = new ReportParameter("Path", "file:////" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\rp_logo.jpg");
+            ReportParameter parameter = new ReportParameter("Path", "file:////" + GlobalVars.folderString + @"\BTAS16_DB\rp_logo.jpg");
             this.reportViewer1.LocalReport.SetParameters(parameter);
 
             this.reportViewer1.LocalReport.DataSources.Add(new ReportDataSource("WorkOrders", BatteryInfo.Tables[0]));

@@ -33,7 +33,7 @@ namespace NewBTASProto
             string strAccessSelect;
             // Open database containing all the battery data....
 
-            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
             strAccessSelect = @"SELECT * FROM Operators ORDER BY OperatorName ASC";
 
             Operators = new DataSet();
@@ -195,7 +195,7 @@ namespace NewBTASProto
                 if (MessageBox.Show(this, "Are you sure you want to remove this Technician?", "Delete Record", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                 {
                     // set up the db Connection
-                    string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                    string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
                     OleDbConnection conn = new OleDbConnection(connectionString);
 
                     //get the current row
@@ -248,7 +248,7 @@ namespace NewBTASProto
             {
 
                 // set up the db Connection
-                string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
                 OleDbConnection conn = new OleDbConnection(connectionString);
 
                 //MAKE SURE YOU SELECT THE CURRENT ROW FOR DOUBLE SAVES!!!!!!!!!!!!!!!!!

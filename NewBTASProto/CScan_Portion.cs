@@ -483,13 +483,23 @@ namespace NewBTASProto
                                                 }
                                             }
 
-                                            tempText += Environment.NewLine;
+                                            if (GlobalVars.robustCSCAN)
+                                            {
 
-                                            tempText += "Reference Voltage:  " + testData.ref95V.ToString("0.000") + Environment.NewLine;
+                                                tempText += Environment.NewLine;
 
-                                            tempText += Environment.NewLine;
+                                                tempText += "Reference Voltage:  " + testData.ref95V.ToString("0.000") + Environment.NewLine;
 
-                                            tempText += "CSCAN Program Version: " + testData.programVersion + Environment.NewLine;
+                                                tempText += "5V: " + testData.plus5V + Environment.NewLine;
+
+                                                tempText += "Positive Supply: " + testData.plus15 + Environment.NewLine;
+
+                                                tempText += "Negative Supply: " + testData.minus15 + Environment.NewLine;
+
+                                                tempText += "CSCAN Program Version: " + testData.programVersion + Environment.NewLine;
+                                                tempText += Environment.NewLine;
+
+                                            }
                                             if (d.Rows[currentRow][10].ToString().Contains("ICA"))
                                             {
                                                 tempText += "IC Program Version: " + GlobalVars.ICData[chargerNum].PV1.ToString() + Environment.NewLine;
@@ -1562,6 +1572,35 @@ namespace NewBTASProto
                             }
                             return; 
                         }
+
+                        //Fist lets look up the test name a figure out if it is custom
+                        
+                        string forPlot = d.Rows[station][2].ToString();
+                        if (forPlot.Contains("("))
+                        {
+                            //we need to pull out the actual test being done...
+                            forPlot = forPlot.Substring(forPlot.IndexOf("(") + 3, forPlot.Length - forPlot.IndexOf("(") - 4).Trim();
+                        }
+
+                        bool customTest = false;
+
+                        if(forPlot == "As Received" ||
+                            forPlot == "Full Charge-6" ||
+                            forPlot == "Full Charge-4" ||
+                            forPlot == "Top Charge-4" ||
+                            forPlot == "Top Charge-2"||
+                            forPlot == "Top Charge-1" ||
+                            forPlot == "Constant Voltage" ||
+                            forPlot == "Capacity-1" ||
+                            forPlot == "Discharge" ||
+                            forPlot == "Slow Charge-14"||
+                            forPlot == "Slow Charge-16" ||
+                            forPlot == "Shorting-16")
+                        {
+                            customTest = true;
+                        }
+
+
                         // Here we will look at the Value selected and then plot graph1Set
 
                         //find out which graph to plot from the selected text
@@ -1620,19 +1659,8 @@ namespace NewBTASProto
 
 
                         // first get the interval and total points
-                        double interval;
-                        int points;
-                        try
-                        {
-                            interval = this.chart1.Series[0].Points[1].XValue;
-                            points = this.chart1.Series[0].Points.Count;
-                            if (points > 18 && points < 25) { points = 1; }
-                        }
-                        catch
-                        {
-                            interval = 1;
-                            points = 1;
-                        }
+                        double interval = 1;
+                        int points = 1;
 
                         this.chart1.Series.Clear();
                         var series1 = new System.Windows.Forms.DataVisualization.Charting.Series
@@ -1648,9 +1676,10 @@ namespace NewBTASProto
                         this.chart1.Series.Add(series1);
                         chart1.ChartAreas[0].AxisX.Title = "Time";
 
+
                         for (int i = 0; i < graphMainSet.Tables[0].Rows.Count; i++)
                         {
-                            series1.Points.AddXY(Math.Round(GetDouble(graphMainSet.Tables[0].Rows[i][7].ToString()) * 1440), GetDouble(graphMainSet.Tables[0].Rows[i][q].ToString()));
+                            series1.Points.AddXY(Math.Round(GetDouble(graphMainSet.Tables[0].Rows[i][7].ToString()) * 1440, (customTest ? 0 : 1)), GetDouble(graphMainSet.Tables[0].Rows[i][q].ToString()));
                             // color test
                             if (q == 8 || q == 7)
                             {
@@ -1669,13 +1698,6 @@ namespace NewBTASProto
                         }
 
                         // pad with zero Vals to help with the look of the plot...
-
-                        string forPlot = d.Rows[station][2].ToString();
-                        if (forPlot.Contains("("))
-                        {
-                            //we need to pull out the actual test being done...
-                            forPlot = forPlot.Substring(forPlot.IndexOf("(") + 3, forPlot.Length - forPlot.IndexOf("(") - 4).Trim();
-                        }
 
                         switch (forPlot)
                         {
@@ -1757,7 +1779,7 @@ namespace NewBTASProto
                         {
                             for (int i = graphMainSet.Tables[0].Rows.Count; i <= points - 1; i++)
                             {
-                                series1.Points.AddXY(i * interval, 0);
+                                series1.Points.AddXY(Math.Round(i * interval,(customTest ? 0 : 1)), 0);
                             }
                         }
 
@@ -1799,6 +1821,33 @@ namespace NewBTASProto
                 {
                     try
                     {
+                        //Fist lets look up the test name a figure out if it is custom
+
+                        string forPlot = d.Rows[station][2].ToString();
+                        if (forPlot.Contains("("))
+                        {
+                            //we need to pull out the actual test being done...
+                            forPlot = forPlot.Substring(forPlot.IndexOf("(") + 3, forPlot.Length - forPlot.IndexOf("(") - 4).Trim();
+                        }
+
+                        bool customTest = false;
+
+                        if (forPlot == "As Received" ||
+                            forPlot == "Full Charge-6" ||
+                            forPlot == "Full Charge-4" ||
+                            forPlot == "Top Charge-4" ||
+                            forPlot == "Top Charge-2" ||
+                            forPlot == "Top Charge-1" ||
+                            forPlot == "Constant Voltage" ||
+                            forPlot == "Capacity-1" ||
+                            forPlot == "Discharge" ||
+                            forPlot == "Slow Charge-14" ||
+                            forPlot == "Slow Charge-16" ||
+                            forPlot == "Shorting-16")
+                        {
+                            customTest = true;
+                        }
+
 
                         // we need to get the number of cells incase we are reversing...
                         int numCells;
@@ -1982,20 +2031,12 @@ namespace NewBTASProto
                         {
                             for (int i = 0; i < graphMainSet.Tables[0].Rows.Count; i++)
                             {
-                                series1.Points.AddXY(Math.Round(GetDouble(graphMainSet.Tables[0].Rows[i][7].ToString()) * 1440), graphMainSet.Tables[0].Rows[i][q]);
+                                series1.Points.AddXY(Math.Round(GetDouble(graphMainSet.Tables[0].Rows[i][7].ToString()) * 1440, (customTest ? 0 : 1)), graphMainSet.Tables[0].Rows[i][q]);
                                 // color test
                                 series1.Points[i].Color = pointColorMain(station, GetDouble(graphMainSet.Tables[0].Rows[i][q].ToString()), true);
                             }
                             // pad with zero Vals to help with the look of the plot...
                             // first get the interval and total points
-
-
-                            string forPlot = d.Rows[station][2].ToString();
-                            if (forPlot.Contains("("))
-                            {
-                                //we need to pull out the actual test being done...
-                                forPlot = forPlot.Substring(forPlot.IndexOf("(") + 3, forPlot.Length - forPlot.IndexOf("(") - 4).Trim();
-                            }
 
                             switch (forPlot)
                             {
@@ -2078,7 +2119,7 @@ namespace NewBTASProto
                             {
                                 for (int i = graphMainSet.Tables[0].Rows.Count; i <= points - 1; i++)
                                 {
-                                    series1.Points.AddXY(i * interval, 0);
+                                    series1.Points.AddXY(Math.Round(i * interval, (customTest ? 0 : 1)), 0);
                                 }
                             }
                         }
@@ -2252,7 +2293,7 @@ namespace NewBTASProto
 
                         if (Value > Max) { return Color.Green; }
                         else if (Value > Min4) { return Color.Orange; }
-                        else if (Value < Min3 && GlobalVars.showDeepDis) { return Color.PaleGreen; }
+                        else if (Value < Min3 && GlobalVars.showDeepDis && Value > 0) { return Color.PaleGreen; }
                         else { return Color.Red; }
 
                     }
@@ -2299,7 +2340,7 @@ namespace NewBTASProto
 
                         if (Value > Max) { return Color.Green; }
                         else if (Value > Min4) { return Color.Orange; }
-                        else if (Value < Min3 && GlobalVars.showDeepDis) { return Color.PaleGreen; }
+                        else if (Value < Min3 && GlobalVars.showDeepDis && Value > 0) { return Color.PaleGreen; }
                         else { return Color.Red; }
 
                     }
@@ -2468,7 +2509,7 @@ namespace NewBTASProto
                             // FIRST CLEAR THE OLD DATA SET!
                             graphMainSet.Clear();
                             // Open database containing all the battery data....
-                            string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                            string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
                             string strAccessSelect = @"SELECT * FROM ScanData WHERE BWO='" + workOrder + @"' AND STEP='" + GetDouble(testStep).ToString("00") + @"' ORDER BY RDG ASC";
 
                             //Here is where I load the form wide dataset which will both let me fill in the rest of the combo boxes and the graphs!

@@ -48,7 +48,7 @@ namespace NewBTASProto
             string strAccessSelect;
             // Open database containing all the battery data....
 
-            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
             strAccessSelect = @"SELECT * FROM Batteries ORDER BY BatterySerialNumber ASC";
 
             Bats.Clear();
@@ -113,7 +113,7 @@ namespace NewBTASProto
 
             // Open database containing all the customer names data....
 
-            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
             strAccessSelect = @"SELECT CustomerName FROM CUSTOMERS ORDER BY CustomerName ASC";
 
             DataSet Custs = new DataSet();
@@ -164,7 +164,7 @@ namespace NewBTASProto
 
             // Open database containing all the customer names data....
 
-            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
             strAccessSelect = @"SELECT BatteryModel FROM BatteriesCustom ORDER BY BatteryModel ASC";
 
             DataSet BatsList = new DataSet();
@@ -212,7 +212,7 @@ namespace NewBTASProto
 
             // Open database containing all the customer names data....
 
-            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
             strAccessSelect = @"SELECT DISTINCT BatteryBCN FROM Batteries ORDER BY BatteryBCN ASC";
 
             DataSet BarList = new DataSet();
@@ -370,7 +370,7 @@ namespace NewBTASProto
             string strAccessConn;
             string strAccessSelect;
             // Open database containing all the battery data....
-            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
 
             //adding master if/else to the barcodenumber drop down...
             if (toolStripCBBarCode.Text != "")
@@ -467,7 +467,7 @@ namespace NewBTASProto
                 if (MessageBox.Show(this, "Are you sure you want to remove this Battery?", "Delete Record", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                 {
                     // set up the db Connection
-                    string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                    string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
                     OleDbConnection conn = new OleDbConnection(connectionString);
 
                     //get the current row
@@ -534,7 +534,7 @@ namespace NewBTASProto
                 return;
             }
             // set up the db Connection
-            string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+            string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
             OleDbConnection conn = new OleDbConnection(connectionString);
 
             try

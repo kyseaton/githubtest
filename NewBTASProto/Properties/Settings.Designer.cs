@@ -380,5 +380,53 @@ namespace NewBTASProto.Properties {
                 this["allowZeroTest"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string folderString {
+            get {
+                return ((string)(this["folderString"]));
+            }
+            set {
+                this["folderString"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("16")]
+        public decimal rows2Dis {
+            get {
+                return ((decimal)(this["rows2Dis"]));
+            }
+            set {
+                this["rows2Dis"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool advance2Short {
+            get {
+                return ((bool)(this["advance2Short"]));
+            }
+            set {
+                this["advance2Short"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool robustCSCAN {
+            get {
+                return ((bool)(this["robustCSCAN"]));
+            }
+            set {
+                this["robustCSCAN"] = value;
+            }
+        }
     }
 }

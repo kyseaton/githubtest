@@ -44,6 +44,9 @@
             this.toolStripMenuItem46 = new System.Windows.Forms.ToolStripSeparator();
             this.markAllOpenWorkOrdersAsClosedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resetTestSettingsToDefaultsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem51 = new System.Windows.Forms.ToolStripSeparator();
+            this.placeDatabaseInCBTAS16DBToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.resetDataLocationToDefaultToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -108,12 +111,12 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
-            this.label14 = new System.Windows.Forms.Label();
-            this.label13 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -205,6 +208,7 @@
             this.toolStripMenuItem47 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripComboBox4 = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripMenuItem49 = new System.Windows.Forms.ToolStripMenuItem();
+            this.folderBrowserDialog3 = new System.Windows.Forms.FolderBrowserDialog();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -304,7 +308,10 @@
             this.importDataBaseFromPreviousVersionOfProgramToolStripMenuItem,
             this.toolStripMenuItem46,
             this.markAllOpenWorkOrdersAsClosedToolStripMenuItem,
-            this.resetTestSettingsToDefaultsToolStripMenuItem});
+            this.resetTestSettingsToDefaultsToolStripMenuItem,
+            this.toolStripMenuItem51,
+            this.placeDatabaseInCBTAS16DBToolStripMenuItem,
+            this.resetDataLocationToDefaultToolStripMenuItem});
             this.databaseOperationsToolStripMenuItem.Name = "databaseOperationsToolStripMenuItem";
             this.databaseOperationsToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
             this.databaseOperationsToolStripMenuItem.Text = "Database Operations";
@@ -353,6 +360,25 @@
             this.resetTestSettingsToDefaultsToolStripMenuItem.Size = new System.Drawing.Size(345, 22);
             this.resetTestSettingsToDefaultsToolStripMenuItem.Text = "Reset All Test Settings to Defaults";
             this.resetTestSettingsToDefaultsToolStripMenuItem.Click += new System.EventHandler(this.resetTestSettingsToDefaultsToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem51
+            // 
+            this.toolStripMenuItem51.Name = "toolStripMenuItem51";
+            this.toolStripMenuItem51.Size = new System.Drawing.Size(342, 6);
+            // 
+            // placeDatabaseInCBTAS16DBToolStripMenuItem
+            // 
+            this.placeDatabaseInCBTAS16DBToolStripMenuItem.Name = "placeDatabaseInCBTAS16DBToolStripMenuItem";
+            this.placeDatabaseInCBTAS16DBToolStripMenuItem.Size = new System.Drawing.Size(345, 22);
+            this.placeDatabaseInCBTAS16DBToolStripMenuItem.Text = "Select Where to Place Program Data";
+            this.placeDatabaseInCBTAS16DBToolStripMenuItem.Click += new System.EventHandler(this.placeDatabaseInCBTAS16DBToolStripMenuItem_Click);
+            // 
+            // resetDataLocationToDefaultToolStripMenuItem
+            // 
+            this.resetDataLocationToDefaultToolStripMenuItem.Name = "resetDataLocationToDefaultToolStripMenuItem";
+            this.resetDataLocationToDefaultToolStripMenuItem.Size = new System.Drawing.Size(345, 22);
+            this.resetDataLocationToDefaultToolStripMenuItem.Text = "Reset Data Location to Default";
+            this.resetDataLocationToDefaultToolStripMenuItem.Click += new System.EventHandler(this.resetDataLocationToDefaultToolStripMenuItem_Click);
             // 
             // toolStripSeparator4
             // 
@@ -860,6 +886,37 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Enter += new System.EventHandler(this.groupBox2_Enter);
             // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label13.Location = new System.Drawing.Point(708, 13);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(25, 13);
+            this.label13.TabIndex = 22;
+            this.label13.Text = "SN:";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.Location = new System.Drawing.Point(571, 13);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(26, 13);
+            this.label11.TabIndex = 20;
+            this.label11.Text = "BM:";
+            this.label11.Click += new System.EventHandler(this.label11_Click);
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label14.Location = new System.Drawing.Point(431, 13);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(29, 13);
+            this.label14.TabIndex = 24;
+            this.label14.Text = "WO:";
+            // 
             // label15
             // 
             this.label15.AutoSize = true;
@@ -886,26 +943,6 @@
             this.label12.Click += new System.EventHandler(this.label12_Click);
             this.label12.DoubleClick += new System.EventHandler(this.label12_DoubleClick);
             // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label14.Location = new System.Drawing.Point(431, 13);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(29, 13);
-            this.label14.TabIndex = 24;
-            this.label14.Text = "WO:";
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.Location = new System.Drawing.Point(708, 13);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(25, 13);
-            this.label13.TabIndex = 22;
-            this.label13.Text = "SN:";
-            // 
             // label7
             // 
             this.label7.AutoSize = true;
@@ -917,17 +954,6 @@
             this.label7.TabIndex = 21;
             this.label7.Text = "                       ";
             this.label7.DoubleClick += new System.EventHandler(this.label7_DoubleClick);
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.Location = new System.Drawing.Point(571, 13);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(26, 13);
-            this.label11.TabIndex = 20;
-            this.label11.Text = "BM:";
-            this.label11.Click += new System.EventHandler(this.label11_Click);
             // 
             // label6
             // 
@@ -1714,6 +1740,10 @@
             this.toolStripMenuItem49.Text = "Reset Combination Test";
             this.toolStripMenuItem49.Click += new System.EventHandler(this.toolStripMenuItem49_Click);
             // 
+            // folderBrowserDialog3
+            // 
+            this.folderBrowserDialog3.Description = "Select the directory where you want the Program Data to be stored.";
+            // 
             // Main_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1737,6 +1767,7 @@
             this.Load += new System.EventHandler(this.Main_Form_Load);
             this.Shown += new System.EventHandler(this.Main_Form_Shown);
             this.ResizeEnd += new System.EventHandler(this.Main_Form_ResizeEnd);
+            this.Validated += new System.EventHandler(this.Main_Form_Validated);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -1806,7 +1837,6 @@
         private System.Windows.Forms.ToolStripMenuItem programVersionToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem1;
-        private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.RadioButton radioButton2;
         private System.Windows.Forms.RadioButton radioButton1;
         private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
@@ -1850,7 +1880,6 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel4;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel5;
         private System.Windows.Forms.ToolStripMenuItem editTestSettingsToolStripMenuItem;
-        private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.ToolStripMenuItem notificationServiceToolStripMenuItem;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog2;
@@ -1938,6 +1967,12 @@
         private System.Windows.Forms.ToolStripMenuItem nextTestToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem previousTestToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem50;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem51;
+        private System.Windows.Forms.ToolStripMenuItem placeDatabaseInCBTAS16DBToolStripMenuItem;
+        private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog3;
+        private System.Windows.Forms.ToolStripMenuItem resetDataLocationToDefaultToolStripMenuItem;
+        public System.Windows.Forms.GroupBox groupBox3;
+        public System.Windows.Forms.GroupBox groupBox4;
     }
 }
 

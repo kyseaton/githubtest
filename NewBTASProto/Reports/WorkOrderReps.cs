@@ -40,7 +40,7 @@ namespace NewBTASProto
 
             string sep = Thread.CurrentThread.CurrentCulture.DateTimeFormat.DateSeparator;
 
-            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
             if (toolStripCBWorkOrderStatus.Text != "" || toolStripCBCustomers.Text != "" || toolStripCBSerialNums.Text != "")
             {
                 strAccessSelect = @"SELECT * FROM WorkOrders WHERE " +
@@ -105,7 +105,7 @@ namespace NewBTASProto
 
                 // Open database containing all the customer names data....
 
-                strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
                 strAccessSelect = @"SELECT CustomerName FROM CUSTOMERS ORDER BY CustomerName ASC";
 
                 DataSet Custs = new DataSet();
@@ -157,7 +157,7 @@ namespace NewBTASProto
 
                 // Open database containing all the customer names data....
 
-                strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
                 strAccessSelect = @"SELECT BatterySerialNumber FROM Batteries ORDER BY BatterySerialNumber ASC";
 
                 DataSet Serials = new DataSet();
@@ -214,7 +214,7 @@ namespace NewBTASProto
             this.reportViewer1.LocalReport.DataSources.Clear();
             
             this.reportViewer1.LocalReport.EnableExternalImages = true;
-            ReportParameter parameter = new ReportParameter("Path", "file:////" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\rp_logo.jpg");
+            ReportParameter parameter = new ReportParameter("Path", "file:////" + GlobalVars.folderString + @"\BTAS16_DB\rp_logo.jpg");
             this.reportViewer1.LocalReport.SetParameters(parameter);
 
             this.reportViewer1.LocalReport.DataSources.Add(new ReportDataSource("WorkOrders", WorkOrders.Tables[0]));

@@ -452,7 +452,6 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -753,7 +752,7 @@
       <Image Name="Image4">
         <Source>External</Source>
         <Value>=Parameters!Path.Value</Value>
-        <Sizing>Fit</Sizing>
+        <Sizing>FitProportional</Sizing>
         <Left>7.99959in</Left>
         <Height>0.71875in</Height>
         <Width>0.71875in</Width>

@@ -69,7 +69,7 @@ namespace NewBTASProto
             this.reportViewer.LocalReport.DataSources.Clear();
 
             this.reportViewer.LocalReport.EnableExternalImages = true;
-            ReportParameter parameter = new ReportParameter("Path", "file:////" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\rp_logo.jpg");
+            ReportParameter parameter = new ReportParameter("Path", "file:////" + GlobalVars.folderString + @"\BTAS16_DB\rp_logo.jpg");
             this.reportViewer.LocalReport.SetParameters(parameter);
 
             this.reportViewer.LocalReport.DataSources.Add(new ReportDataSource("MetaData", MetaDT));
@@ -90,12 +90,12 @@ namespace NewBTASProto
             // Open database containing all the battery data....
             if (checkBox2.Checked == true)
             {
-                strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
                 strAccessSelect = @"SELECT WorkOrderNumber FROM WorkOrders";
             }
             else
             {
-                strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
                 strAccessSelect = @"SELECT WorkOrderNumber FROM WorkOrders WHERE OrderStatus<>'Archived'";
             }
 
@@ -199,7 +199,7 @@ namespace NewBTASProto
             else
             {
                 // Open database containing all the battery data....
-                string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
                 string strAccessSelect = @"SELECT * FROM Tests WHERE WorkOrderNumber='" + comboBox1.Text + @"' ORDER BY StepNumber ASC";
 
                 OleDbConnection myAccessConn = null;
@@ -314,7 +314,7 @@ namespace NewBTASProto
                 // we need a data set..
                 DataSet WaterLevels = new DataSet();
                 // Open database containing all the battery data....
-                string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
                 string strAccessSelect = @"SELECT WLID,WorkOrderNumber,Cell1,Cell2,Cell3,Cell4,Cell5,Cell6,Cell7,Cell8,Cell9,Cell10,Cell11,Cell12,Cell13,Cell14,Cell15,Cell16,Cell17,Cell18,Cell19,Cell20,Cell21,Cell22,Cell23,Cell24,AVE FROM WaterLevel WHERE WorkOrderNumber='" + comboBox1.Text + @"' ORDER BY WLID ASC";
 
                 //Here is where I load the form wide dataset which will both let me fill in the rest of the combo boxes and the graphs!
@@ -364,7 +364,7 @@ namespace NewBTASProto
                 this.reportViewer.LocalReport.DataSources.Clear();
 
                 this.reportViewer.LocalReport.EnableExternalImages = true;
-                ReportParameter parameter = new ReportParameter("Path", "file:////" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\rp_logo.jpg");
+                ReportParameter parameter = new ReportParameter("Path", "file:////" + GlobalVars.folderString + @"\BTAS16_DB\rp_logo.jpg");
                 this.reportViewer.LocalReport.SetParameters(parameter);
 
                 this.reportViewer.LocalReport.DataSources.Add(new ReportDataSource("DataSet1", WaterLevels.Tables[0]));
@@ -457,7 +457,7 @@ namespace NewBTASProto
             this.reportViewer.LocalReport.DataSources.Clear();
 
             this.reportViewer.LocalReport.EnableExternalImages = true;
-            ReportParameter parameter = new ReportParameter("Path", "file:////" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\rp_logo.jpg");
+            ReportParameter parameter = new ReportParameter("Path", "file:////" + GlobalVars.folderString + @"\BTAS16_DB\rp_logo.jpg");
             this.reportViewer.LocalReport.SetParameters(parameter);
 
             this.reportViewer.LocalReport.DataSources.Add(new ReportDataSource("MetaData", MetaDT));
@@ -476,7 +476,7 @@ namespace NewBTASProto
                 // FIRST CLEAR THE OLD DATA SET!
                 reportSet.Clear();
                 // Open database containing all the battery data....
-                string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB;";
+                string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB;";
                 string strAccessSelect = @"SELECT * FROM ScanData WHERE BWO='" + comboBox1.Text + @"' ORDER BY DATE ASC";
 
                 //Here is where I load the form wide dataset which will both let me fill in the rest of the combo boxes and the graphs!
@@ -572,7 +572,7 @@ namespace NewBTASProto
                 // we need a data set..
                 DataSet WaterLevels = new DataSet();
                 // Open database containing all the battery data....
-                strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
                 strAccessSelect = @"SELECT WLID,WorkOrderNumber,Cell1,Cell2,Cell3,Cell4,Cell5,Cell6,Cell7,Cell8,Cell9,Cell10,Cell11,Cell12,Cell13,Cell14,Cell15,Cell16,Cell17,Cell18,Cell19,Cell20,Cell21,Cell22,Cell23,Cell24,AVE FROM WaterLevel WHERE WorkOrderNumber='" + comboBox1.Text + @"' ORDER BY WLID ASC";
 
                 //Here is where I load the form wide dataset which will both let me fill in the rest of the combo boxes and the graphs!
@@ -611,7 +611,7 @@ namespace NewBTASProto
                 // we need a data set..
                 DataSet BatInfo = new DataSet();
                 // Open database containing all the battery data....
-                strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
                 strAccessSelect = @"SELECT BatteryModel,BatterySerialNumber FROM WorkOrders WHERE WorkOrderNumber='" + comboBox1.Text + @"'";
 
                 //Here is where I load the form wide dataset which will both let me fill in the rest of the combo boxes and the graphs!
@@ -698,7 +698,7 @@ namespace NewBTASProto
 
                 this.reportViewer.LocalReport.DataSources.Clear();
                 this.reportViewer.LocalReport.EnableExternalImages = true;
-                ReportParameter parameter = new ReportParameter("Path", "file:////" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\rp_logo.jpg");
+                ReportParameter parameter = new ReportParameter("Path", "file:////" + GlobalVars.folderString + @"\BTAS16_DB\rp_logo.jpg");
                 this.reportViewer.LocalReport.SetParameters(parameter);
 
 
@@ -753,7 +753,7 @@ namespace NewBTASProto
         //        // FIRST CLEAR THE OLD DATA SET!
         //        reportSet.Clear();
         //        // Open database containing all the battery data....
-        //        string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+        //        string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
         //        string strAccessSelect = @"SELECT DATE FROM ScanData WHERE BWO='" + comboBox1.Text + "' ORDER BY RDG ASC";
 
         //        //Here is where I load the form wide dataset which will both let me fill in the rest of the combo boxes and the graphs!
@@ -811,7 +811,7 @@ namespace NewBTASProto
         //        this.reportViewer.LocalReport.DataSources.Clear();
 
         //        this.reportViewer.LocalReport.EnableExternalImages = true;
-        //        ReportParameter parameter = new ReportParameter("Path", "file:////" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\rp_logo.jpg");
+        //        ReportParameter parameter = new ReportParameter("Path", "file:////" + GlobalVars.folderString + @"\BTAS16_DB\rp_logo.jpg");
         //        this.reportViewer.LocalReport.SetParameters(parameter);
 
         //        this.reportViewer.LocalReport.DataSources.Add(new ReportDataSource("reportSet", reportSet.Tables[0]));
@@ -862,7 +862,7 @@ namespace NewBTASProto
                 // FIRST CLEAR THE OLD DATA SET!
                 reportSet.Clear();
                 // Open database containing all the battery data....
-                string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
                 string strAccessSelect = @"SELECT DATE FROM ScanData WHERE BWO='" + comboBox1.Text + "'  ORDER BY RDG ASC";
 
                 //Here is where I load the form wide dataset which will both let me fill in the rest of the combo boxes and the graphs!
@@ -924,7 +924,7 @@ namespace NewBTASProto
                 this.reportViewer.LocalReport.DataSources.Clear();
 
                 this.reportViewer.LocalReport.EnableExternalImages = true;
-                ReportParameter parameter = new ReportParameter("Path", "file:////" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\rp_logo.jpg");
+                ReportParameter parameter = new ReportParameter("Path", "file:////" + GlobalVars.folderString + @"\BTAS16_DB\rp_logo.jpg");
                 this.reportViewer.LocalReport.SetParameters(parameter);
 
                 this.reportViewer.LocalReport.DataSources.Add(new ReportDataSource("reportSet", reportSet.Tables[0]));
@@ -971,7 +971,7 @@ namespace NewBTASProto
                 // FIRST CLEAR THE OLD DATA SET!
                 reportSet.Clear();
                 // Open database containing all the battery data....
-                string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
                 string strAccessSelect = @"SELECT DATE,RDG,ETIME,CEL01,CEL02,CEL03,CEL04,CEL05,CEL06,CEL07,CEL08,CEL09,CEL10,CEL11,CEL12,CEL13,CEL14,CEL15,CEL16,CEL17,CEL18,CEL19,CEL20,CEL21,CEL22,CEL23,CEL24 FROM ScanData WHERE BWO='" + comboBox1.Text + @"' AND STEP='" + comboBox2.Text.Substring(0, 2) + @"'";
 
                 //Here is where I load the form wide dataset which will both let me fill in the rest of the combo boxes and the graphs!
@@ -1245,7 +1245,7 @@ namespace NewBTASProto
 
                 this.reportViewer.LocalReport.DataSources.Clear();
                 this.reportViewer.LocalReport.EnableExternalImages = true;
-                ReportParameter parameter = new ReportParameter("Path", "file:////" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\rp_logo.jpg");
+                ReportParameter parameter = new ReportParameter("Path", "file:////" + GlobalVars.folderString + @"\BTAS16_DB\rp_logo.jpg");
                 this.reportViewer.LocalReport.SetParameters(parameter);
 
 
@@ -1291,7 +1291,7 @@ namespace NewBTASProto
                 // FIRST CLEAR THE OLD DATA SET!
                 reportSet.Clear();
                 // Open database containing all the battery data....
-                string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
                 string strAccessSelect = @"SELECT DATE,RDG,ETIME,CEL01,CEL02,CEL03,CEL04,CEL05,CEL06,CEL07,CEL08,CEL09,CEL10,CEL11,CEL12,CEL13,CEL14,CEL15,CEL16,CEL17,CEL18,CEL19,CEL20,CEL21,CEL22,CEL23,CEL24 FROM ScanData WHERE BWO='" + comboBox1.Text + @"' AND STEP='" + comboBox2.Text.Substring(0, 2) + @"'  ORDER BY RDG ASC";
 
                 //Here is where I load the form wide dataset which will both let me fill in the rest of the combo boxes and the graphs!
@@ -1379,7 +1379,7 @@ namespace NewBTASProto
 
                 this.reportViewer.LocalReport.DataSources.Clear();
                 this.reportViewer.LocalReport.EnableExternalImages = true;
-                ReportParameter parameter = new ReportParameter("Path", "file:////" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\rp_logo.jpg");
+                ReportParameter parameter = new ReportParameter("Path", "file:////" + GlobalVars.folderString + @"\BTAS16_DB\rp_logo.jpg");
                 this.reportViewer.LocalReport.SetParameters(parameter);
 
 
@@ -1424,7 +1424,7 @@ namespace NewBTASProto
                 // FIRST CLEAR THE OLD DATA SET!
                 reportSet.Clear();
                 // Open database containing all the battery data....
-                string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
                 string strAccessSelect = @"SELECT RDG,DATE,ETIME,CUR1,VB1,VB2,VB3,VB4,BT1,BT2,BT3,BT4,REF,BT5 FROM ScanData WHERE BWO='" + comboBox1.Text + @"' AND STEP='" + comboBox2.Text.Substring(0, 2) + @"'  ORDER BY RDG ASC";
 
                 //Here is where I load the form wide dataset which will both let me fill in the rest of the combo boxes and the graphs!
@@ -1491,7 +1491,7 @@ namespace NewBTASProto
 
                 this.reportViewer.LocalReport.DataSources.Clear();
                 this.reportViewer.LocalReport.EnableExternalImages = true;
-                ReportParameter parameter = new ReportParameter("Path", "file:////" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\rp_logo.jpg");
+                ReportParameter parameter = new ReportParameter("Path", "file:////" + GlobalVars.folderString + @"\BTAS16_DB\rp_logo.jpg");
                 this.reportViewer.LocalReport.SetParameters(parameter);
 
                 this.reportViewer.LocalReport.DataSources.Add(new ReportDataSource("reportSet", reportSet.Tables[0]));

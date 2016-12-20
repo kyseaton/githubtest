@@ -1669,7 +1669,6 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
               </TablixCells>
@@ -1719,7 +1718,7 @@
         <DataSetName>reportSet</DataSetName>
         <Top>0.15in</Top>
         <Height>0.40624in</Height>
-        <Width>8.7in</Width>
+        <Width>8.70006in</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2154,7 +2153,7 @@
         <Image Name="Image4">
           <Source>External</Source>
           <Value>=Parameters!Path.Value</Value>
-          <Sizing>Fit</Sizing>
+          <Sizing>FitProportional</Sizing>
           <Top>0.01041in</Top>
           <Left>7.98125in</Left>
           <Height>0.71875in</Height>

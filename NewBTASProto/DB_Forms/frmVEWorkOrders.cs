@@ -60,7 +60,7 @@ namespace NewBTASProto
             string strAccessSelect;
             // Open database containing all the battery data....
 
-            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
             strAccessSelect = @"SELECT WorkOrderID,WorkOrderNumber,DateReceived,PlaneType,TailNumber,TestRequested,DateCompleted,OrderStatus,Notes,Batteries.BatteryModel,Batteries.BatterySerialNumber,Batteries.BatteryBCN,Batteries.CustomerName" +
                 @" FROM WorkOrders LEFT JOIN Batteries ON WorkOrders.BID=Batteries.BID WHERE OrderStatus='Open' ORDER BY WorkOrders.WorkOrderNumber ASC";
             
@@ -140,7 +140,7 @@ namespace NewBTASProto
 
             // Open database containing all the customer names data....
 
-            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
             strAccessSelect = @"SELECT CustomerName FROM CUSTOMERS ORDER BY CustomerName ASC";
 
             DataSet Custs = new DataSet();
@@ -193,7 +193,7 @@ namespace NewBTASProto
 
             // Open database containing all the customer names data....
 
-            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
             strAccessSelect = @"SELECT BatterySerialNumber FROM Batteries ORDER BY BatterySerialNumber ASC";
 
             DataSet Serials = new DataSet();
@@ -247,7 +247,7 @@ namespace NewBTASProto
 
             //set the max
 
-            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
             strAccessSelect = @"SELECT WorkOrderID FROM WorkOrders";
 
             DataSet countSet = new DataSet();
@@ -361,7 +361,7 @@ namespace NewBTASProto
             string strAccessConn;
             string strAccessSelect;
 
-            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
             strAccessSelect = @"SELECT * FROM Batteries Where BatterySerialNumber='" + comboBox1.Text + @"' ORDER BY BatterySerialNumber ASC";
 
             DataSet Serials = new DataSet();
@@ -417,7 +417,7 @@ namespace NewBTASProto
             string strAccessSelect;
             // Open database containing all the battery data....
 
-            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
             strAccessSelect = @"SELECT StepNumber,TestName,Notes FROM Tests WHERE WorkOrderNumber='" + toolStripCBWorkOrders.Text + @"' ORDER BY StepNumber ASC";
 
             
@@ -528,7 +528,7 @@ namespace NewBTASProto
             string strAccessSelect;
             // Open database containing all the battery data....
 
-            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
 
             // show everything
             if (toolStripCBWorkOrderStatus.Text == "Open and Closed" && toolStripCBCustomers.Text == "" && toolStripCBSerialNums.Text == "")
@@ -840,7 +840,7 @@ namespace NewBTASProto
                 string strAccessSelect;
                 // Open database containing all the battery data....
 
-                strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
 
                 strAccessSelect = @"SELECT OrderStatus,Batteries.BatterySerialNumber" +
                     @" FROM WorkOrders LEFT JOIN Batteries ON WorkOrders.BID=Batteries.BID WHERE OrderStatus <> 'Closed' AND WorkOrderNumber <> '" + current["WorkOrderNumber"] + "'";
@@ -897,7 +897,7 @@ namespace NewBTASProto
             {
 
                 // set up the db Connection
-                string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
                 OleDbConnection conn = new OleDbConnection(connectionString);
                 
 
@@ -1057,7 +1057,7 @@ namespace NewBTASProto
                 if (MessageBox.Show(this, "Are you sure you want to remove this work order?", "Delete Record", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                 {
                     // set up the db Connection
-                    string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                    string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
                     OleDbConnection conn = new OleDbConnection(connectionString);
 
                     //get the current row
@@ -1129,7 +1129,7 @@ namespace NewBTASProto
                 else if (MessageBox.Show(this, "Are you sure you want to remove this test?", "Delete Record", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                 {
                     // set up the db Connection
-                    string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                    string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
                     OleDbConnection conn = new OleDbConnection(connectionString);
 
                     // first get rid of the scan data from the test
@@ -1735,7 +1735,7 @@ namespace NewBTASProto
             try
             {
                 // set up the db Connection
-                string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
                 OleDbConnection conn = new OleDbConnection(connectionString);
                 
                 if (testList.Tables[0].Rows.Count < 1) return;

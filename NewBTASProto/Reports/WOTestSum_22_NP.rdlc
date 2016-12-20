@@ -4688,7 +4688,7 @@
             <Top>1.03125in</Top>
             <Left>0.01042in</Left>
             <Height>0.75in</Height>
-            <Width>8.6981in</Width>
+            <Width>8.69814in</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
@@ -5095,7 +5095,7 @@
             <Image Name="Image4">
               <Source>External</Source>
               <Value>=Parameters!Path.Value</Value>
-              <Sizing>Fit</Sizing>
+              <Sizing>FitProportional</Sizing>
               <Top>0.01041in</Top>
               <Left>7.99292in</Left>
               <Height>0.71875in</Height>

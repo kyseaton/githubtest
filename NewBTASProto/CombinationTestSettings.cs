@@ -26,6 +26,10 @@ namespace NewBTASProto
             numericUpDown6.Value = GlobalVars.CSErr2Allow;
             checkBox1.Checked = GlobalVars.showDeepDis;
             checkBox3.Checked = GlobalVars.allowZeroTest;
+            numericUpDown1.Value = GlobalVars.rows2Dis;
+            checkBox7.Checked = GlobalVars.advance2Short;
+            checkBox4.Checked = GlobalVars.robustCSCAN;
+
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -42,10 +46,23 @@ namespace NewBTASProto
             GlobalVars.CSErr2Allow = numericUpDown6.Value;
             GlobalVars.showDeepDis = checkBox1.Checked;
             GlobalVars.allowZeroTest = checkBox3.Checked;
+            GlobalVars.rows2Dis = numericUpDown1.Value;
+            GlobalVars.robustCSCAN = checkBox4.Checked;
+            GlobalVars.advance2Short = checkBox7.Checked;
+            ((Main_Form)this.Owner).dataGridView1.Height = Convert.ToInt32(27 + GlobalVars.rows2Dis * 20);
+            ((Main_Form)this.Owner).groupBox3.Location = new Point(12, 422 - ((16 - Convert.ToInt32(GlobalVars.rows2Dis)) * 20));
+            ((Main_Form)this.Owner).groupBox3.Height = ((Main_Form)this.Owner).Height - 485 + ((16 - Convert.ToInt32(GlobalVars.rows2Dis)) * 20);
+            ((Main_Form)this.Owner).groupBox4.Location = new Point(((Main_Form)this.Owner).groupBox4.Location.X, 422 - ((16 - Convert.ToInt32(GlobalVars.rows2Dis)) * 20));
+            ((Main_Form)this.Owner).groupBox4.Height = ((Main_Form)this.Owner).Height - 485 + ((16 - Convert.ToInt32(GlobalVars.rows2Dis)) * 20);
             this.Close();
         }
 
         private void label12_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void checkBox7_CheckedChanged(object sender, EventArgs e)
         {
 
         }

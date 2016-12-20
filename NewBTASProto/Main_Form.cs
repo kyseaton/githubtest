@@ -81,6 +81,10 @@ namespace NewBTASProto
                     GlobalVars.CSErr2Allow = Properties.Settings.Default.CSErr2Allow;
                     GlobalVars.showDeepDis = Properties.Settings.Default.showDeepDis;
                     GlobalVars.allowZeroTest = Properties.Settings.Default.allowZeroTest;
+                    GlobalVars.rows2Dis = Properties.Settings.Default.rows2Dis;
+                    GlobalVars.robustCSCAN = Properties.Settings.Default.robustCSCAN;
+                    GlobalVars.advance2Short = Properties.Settings.Default.advance2Short;
+                    //GlobalVars.folderString = Properties.Settings.Default.folderString;  NEED TODO THIS ON THE SPLASH SCREEN!
 
                 }
                 catch
@@ -96,6 +100,13 @@ namespace NewBTASProto
                     this.Height = (int)GlobalVars.FormHeight;
                     this.Width = (int)GlobalVars.FormWidth;
                 }
+
+                //account for rows2Dis
+                dataGridView1.Height = Convert.ToInt32(27 + GlobalVars.rows2Dis * 20);
+                groupBox3.Location = new Point(12, 422 - ((16 - Convert.ToInt32(GlobalVars.rows2Dis)) * 20));
+                groupBox3.Height = this.Height - 485 + ((16 - Convert.ToInt32(GlobalVars.rows2Dis)) * 20);
+                groupBox4.Location = new Point(groupBox4.Location.X, 422 - ((16 - Convert.ToInt32(GlobalVars.rows2Dis)) * 20));
+                groupBox4.Height = this.Height - 485 + ((16 - Convert.ToInt32(GlobalVars.rows2Dis)) * 20);
 
                 // graph selection option...
                 if (GlobalVars.showSels == true)
@@ -216,7 +227,7 @@ namespace NewBTASProto
             string strAccessConn;
             string strAccessSelect;
             // Open database containing all the battery data....
-            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
             strAccessSelect = @"SELECT * FROM Operators";
             OleDbConnection myAccessConn;
             DataSet operators = new DataSet();
@@ -316,7 +327,7 @@ namespace NewBTASProto
             //Now lets pull in our custom tests...
             DataSet customTests = new DataSet();
 
-            string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+            string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
             string strAccessSelect = @"SELECT * FROM TestType WHERE TESTNAME<>'Top Charge-4' AND TESTNAME<>'As Received' AND TESTNAME<>'Full Charge-4' AND TESTNAME<>'Full Charge-4.5' AND TESTNAME<>'Full Charge-6' AND TESTNAME<>'Capacity-1' AND TESTNAME<>'Top Charge-2' AND TESTNAME<>'Discharge' AND TESTNAME<>'Slow Charge-14' AND TESTNAME<>'Top Charge-1' AND TESTNAME<>'Slow Charge-16' AND TESTNAME<>'Constant Voltage' AND TESTNAME<>'Full Charge-4.5' AND TESTNAME<>'Shorting-16' ORDER BY TESTNAME ASC";
 
             OleDbConnection myAccessConn;
@@ -385,7 +396,7 @@ namespace NewBTASProto
             //Now lets pull in our custom tests...
             DataSet comboTests = new DataSet();
 
-            string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+            string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
             string strAccessSelect = @"SELECT ComboTestName FROM ComboTest ORDER BY ComboTestName ASC";
 
             OleDbConnection myAccessConn;
@@ -480,7 +491,7 @@ namespace NewBTASProto
             string strAccessConn;
             string strUpdateCMD;
             // Open database containing all the battery data....
-            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+            strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
             strUpdateCMD = "UPDATE Options SET Degree='" + (GlobalVars.useF ? "F." : "C.") + "', CellOrder='" + (GlobalVars.Pos2Neg ? "Pos. to Neg." : "Neg. to Pos.") + "', BusinessName='" + GlobalVars.businessName + "';";
             OleDbConnection myAccessConn;
 
@@ -728,7 +739,7 @@ namespace NewBTASProto
                     // find out the nominal voltage 
                     // first get the battery Model from the work order..
                     // Open database containing all the battery data....
-                    string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                    string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
                     string strAccessSelect = @"SELECT BatteryModel,BatterySerialNumber FROM WorkOrders WHERE WorkOrderNumber='" + workOrder.Trim() + @"'";
 
                     OleDbConnection myAccessConn = null;
@@ -928,7 +939,7 @@ namespace NewBTASProto
 
 
             //save the grid for the next time we restart
-            using (StreamWriter writer = new StreamWriter(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\main_grid.xml", false))
+            using (StreamWriter writer = new StreamWriter(GlobalVars.folderString + @"\BTAS16_DB\main_grid.xml", false))
             {
                 for (int i = 0; i < 16; i++)
                 {
@@ -952,13 +963,13 @@ namespace NewBTASProto
             }
 
             //save the grid for the next time we restart
-            using (StreamWriter writer = new StreamWriter(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\graph_set.xml", false))
+            using (StreamWriter writer = new StreamWriter(GlobalVars.folderString + @"\BTAS16_DB\graph_set.xml", false))
             {
                 gs.WriteXml(writer);
             }
 
             //save the pci grid for the next time we restart
-            using (StreamWriter writer = new StreamWriter(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\pci_set.xml", false))
+            using (StreamWriter writer = new StreamWriter(GlobalVars.folderString + @"\BTAS16_DB\pci_set.xml", false))
             {
                 pci.WriteXml(writer);
             }
@@ -1004,6 +1015,10 @@ namespace NewBTASProto
             Properties.Settings.Default.CSErr2Allow = GlobalVars.CSErr2Allow;
             Properties.Settings.Default.showDeepDis = GlobalVars.showDeepDis;
             Properties.Settings.Default.allowZeroTest = GlobalVars.allowZeroTest;
+            Properties.Settings.Default.folderString = GlobalVars.folderString;
+            Properties.Settings.Default.rows2Dis = GlobalVars.rows2Dis;
+            Properties.Settings.Default.advance2Short = GlobalVars.advance2Short;
+            Properties.Settings.Default.robustCSCAN = GlobalVars.robustCSCAN;
 
 
             Properties.Settings.Default.Save();
@@ -1522,6 +1537,9 @@ namespace NewBTASProto
             updateD(dataGridView1.CurrentRow.Index, 6, "");
             updateD(dataGridView1.CurrentRow.Index, 7, "");
             fillPlotCombos(dataGridView1.CurrentRow.Index);
+
+            //finally make sure the charger color doesn't stick around
+            dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.Gainsboro;
 
 
         }
@@ -2874,10 +2892,10 @@ namespace NewBTASProto
             try
             {
                 // get the right height first...
-                for(int i = 0; i < 16; i++)
+                for(int i = 0; i < GlobalVars.rows2Dis; i++)
                 {
                     // go through each a scale them
-                    dataGridView1.Rows[i].Height = (dataGridView1.Height - 16) / 16;
+                    dataGridView1.Rows[i].Height = (dataGridView1.Height - 27) / Convert.ToInt32(GlobalVars.rows2Dis);
                 }
                 int cumWidth = 0;
                 //Scale the columns to the new width!
@@ -3203,7 +3221,7 @@ namespace NewBTASProto
                 {
                     //try to copy the database from the appdata folder to the selected folder...
 
-                    File.Copy(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB", folder + @"\BTAS16NV_" + System.DateTime.Now.ToString("yyyyMMddHHmmssfff") + @".MDB");
+                    File.Copy(GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB", folder + @"\BTAS16NV_" + System.DateTime.Now.ToString("yyyyMMddHHmmssfff") + @".MDB");
                     MessageBox.Show(this, "Database was backed up to:  " + folder, "Success!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
                 catch (Exception ex)
@@ -3245,7 +3263,7 @@ namespace NewBTASProto
                 {
                     //try to copy the database from the appdata folder to the selected folder...
 
-                    File.Copy(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB", folder + @"\BTAS16NV_" + System.DateTime.Now.ToString("yyyyMMddHHmmssfff") + @".MDB");
+                    File.Copy(GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB", folder + @"\BTAS16NV_" + System.DateTime.Now.ToString("yyyyMMddHHmmssfff") + @".MDB");
                     MessageBox.Show(this, "Database was backed up to:  " + folder, "Success!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
                 catch (Exception ex)
@@ -3267,7 +3285,7 @@ namespace NewBTASProto
                     {
                         //try to copy the database from the appdata folder to the selected folder...
 
-                        File.Copy(file, Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB", true);
+                        File.Copy(file, GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB", true);
                         MessageBox.Show(this, "Selected database has been restored", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     }
                     catch (Exception ex)
@@ -3479,7 +3497,7 @@ namespace NewBTASProto
                 try
                 {
                     //try to copy the database from the appdata folder to the selected folder...
-                    File.Copy(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB", folder + @"\BTAS16NV_" + System.DateTime.Now.ToString("yyyyMMddHHmmssfff") + @".MDB");
+                    File.Copy(GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB", folder + @"\BTAS16NV_" + System.DateTime.Now.ToString("yyyyMMddHHmmssfff") + @".MDB");
                     MessageBox.Show(this, "Original database was backed up to:  " + folder, "Success!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
                 catch (Exception ex)
@@ -3499,7 +3517,7 @@ namespace NewBTASProto
                     try
                     {
                         //try to copy the database from the appdata folder to the selected folder...
-                        File.Copy(file, Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV_temp.MDB", true);
+                        File.Copy(file, GlobalVars.folderString + @"\BTAS16_DB\BTS16NV_temp.MDB", true);
                     }
                     catch (Exception ex)
                     {
@@ -3511,7 +3529,7 @@ namespace NewBTASProto
                     try
                     {
                         // set up the db Connection
-                        string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV_temp.MDB";
+                        string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV_temp.MDB";
                         OleDbConnection conn = new OleDbConnection(connectionString);
 
                         // we'll have execute a number of commands...
@@ -3737,7 +3755,7 @@ namespace NewBTASProto
                         }
 
                         //Now replace the old DB with the imported one...
-                        File.Copy(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV_temp.MDB", Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB", true);
+                        File.Copy(GlobalVars.folderString + @"\BTAS16_DB\BTS16NV_temp.MDB", GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB", true);
 
                         // now we need to run checkDB to make sure that the DB has the latest and greatest...
                         ((Splash) this.Owner).checkDB();
@@ -4135,7 +4153,7 @@ namespace NewBTASProto
                 {
                     //try to copy the database from the appdata folder to the selected folder...
 
-                    File.Copy(file, Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\rp_logo.jpg", true);
+                    File.Copy(file, GlobalVars.folderString + @"\BTAS16_DB\rp_logo.jpg", true);
                     MessageBox.Show(this, "Icon file has been updated.", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
                 catch (Exception ex)
@@ -4515,7 +4533,7 @@ namespace NewBTASProto
                     // create the connection
                     try
                     {
-                        strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                        strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
                         myAccessConn = new OleDbConnection(strAccessConn);
                     }
                     catch (Exception ex)
@@ -4563,7 +4581,7 @@ namespace NewBTASProto
                     // create the connection
                     try
                     {
-                        strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                        strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
                         myAccessConn = new OleDbConnection(strAccessConn);
                     }
                     catch (Exception ex)
@@ -4976,7 +4994,7 @@ namespace NewBTASProto
 
                 try
                 {
-                    strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                    strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
                     myAccessConn = new OleDbConnection(strAccessConn);
                 }
                 catch (Exception ex)
@@ -5074,7 +5092,7 @@ namespace NewBTASProto
 
                 try
                 {
-                    strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                    strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
                     myAccessConn = new OleDbConnection(strAccessConn);
                 }
                 catch (Exception ex)
@@ -5162,6 +5180,93 @@ namespace NewBTASProto
 
                 MessageBox.Show(this, "Warning!  You will need to clear the Slave channel before runiing the Shorting test (Does not work in Master/Slave mode).", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
+        }
+
+        private void placeDatabaseInCBTAS16DBToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult dialogResult = MessageBox.Show(this, "Are you sure you want to continue? Any data saved in your current database will be left where it is.  If you want to move it over you will have to back it up, change the data directory and then restore the database to the new location.", "Click Yes to continue or No to Cancel the Import.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (dialogResult == DialogResult.No)
+            {
+                return;
+            }
+
+            //first check if there is a test running and return if so
+            for (int i = 0; i < 16; i++)
+            {
+                if ((bool)d.Rows[i][5] || d.Rows[i][2].ToString() != "")
+                {
+                    MessageBox.Show(this, "Please stop all tests and clear all workorders before restoring the database!", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+            }
+            string folder = "";
+
+            folderBrowserDialog3.SelectedPath = "";
+            if (folderBrowserDialog3.ShowDialog() == DialogResult.OK)
+            {
+                //here we export the old DB
+                folder = folderBrowserDialog3.SelectedPath;
+                // Let the user know what happned!
+                try
+                {
+
+                    //set the global folder variable to the selected folder
+                    GlobalVars.folderString = folder;
+                    //set the setting to the folder also, incase of a crash.
+                    Properties.Settings.Default.folderString = folder;
+                    Properties.Settings.Default.Save();
+
+                    ((Splash)this.Owner).Load_Globals();
+                    ((Splash)this.Owner).checkDB();
+
+                    // tell the user!
+                    MessageBox.Show(this, "All data is now stored in:  " + folder, "Success!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(this, "Changing the directories didn't work!" + Environment.NewLine + ex.ToString(), "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+            }// end if
+        }
+
+        private void resetDataLocationToDefaultToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult dialogResult = MessageBox.Show(this, "Are you sure you want to continue? Any data saved in your current database will be left where it is.  If you want to move it over you will have to back it up, change the data directory and then restore the database to the new location.", "Click Yes to continue or No to Cancel the Import.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (dialogResult == DialogResult.No)
+            {
+                return;
+            }
+
+            //first check if there is a test running and return if so
+            for (int i = 0; i < 16; i++)
+            {
+                if ((bool)d.Rows[i][5] || d.Rows[i][2].ToString() != "")
+                {
+                    MessageBox.Show(this, "Please stop all tests and clear all workorders before restoring the database!", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+            }
+            string folder = "";
+
+
+            //set the global folder variable to the selected folder
+            GlobalVars.folderString = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            //set the setting to the folder also, incase of a crash.
+            Properties.Settings.Default.folderString = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            Properties.Settings.Default.Save();
+
+            ((Splash)this.Owner).Load_Globals();
+            ((Splash)this.Owner).checkDB();
+
+            // tell the user!
+            MessageBox.Show(this, "Data folder now set to default.", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        }
+
+        private void Main_Form_Validated(object sender, EventArgs e)
+        {
+
         }
 
     }// end mainform class section...

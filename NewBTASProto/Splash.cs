@@ -39,9 +39,9 @@ namespace NewBTASProto
             "6346677964",                       // Rotortech Services
             "2328164969",                       // Aviation Parts EXE
             
-            "8289656377",
-            "5241029672",
-            "4187028983",
+            "8289656377",                       // Topcast Aviation
+            "5241029672",                       // Saft Demo
+            "4187028983",                       // Cook Aviation
             "7712998423",
             "3844940117",
             "5568154526",
@@ -60,16 +60,26 @@ namespace NewBTASProto
             InitializeComponent();
         }
 
-        private void Load_Globals()
+        public void Load_Globals()
         {
             string strAccessConn;
             string strAccessSelect;        
             OleDbConnection myAccessConn = null;
 
+            //first we need to setup the folder string
+            GlobalVars.folderString = Properties.Settings.Default.folderString;
+
+            // make sure the program data location is set
+            if (GlobalVars.folderString == "")
+            {
+                // reset it to the application folder path
+                GlobalVars.folderString = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            }
+
             // create the connection
             try
             {
-                strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
                 myAccessConn = new OleDbConnection(strAccessConn);
             }
             catch (Exception ex)
@@ -99,7 +109,7 @@ namespace NewBTASProto
                     //make the DB folder
                     try
                     {
-                        System.IO.Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB");
+                        System.IO.Directory.CreateDirectory(GlobalVars.folderString + @"\BTAS16_DB");
                     }
                     catch
                     {
@@ -109,7 +119,7 @@ namespace NewBTASProto
                     //now copy the file over
                     try
                     {
-                        System.IO.File.WriteAllBytes(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB", Properties.Resources.BTS16NV_clean);
+                        System.IO.File.WriteAllBytes(GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB", Properties.Resources.BTS16NV_clean);
                     }
                     catch (Exception ex)
                     {
@@ -263,7 +273,7 @@ namespace NewBTASProto
             {
                 NoteSet settings;
                 XmlSerializer xs = new XmlSerializer(typeof(NoteSet));
-                using (FileStream fs = new FileStream(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\noteSet.xml", FileMode.Open))
+                using (FileStream fs = new FileStream(GlobalVars.folderString + @"\BTAS16_DB\noteSet.xml", FileMode.Open))
                 {
                     // This will read the XML from the file and create the new instance
                     // of settings
@@ -305,21 +315,21 @@ namespace NewBTASProto
                     GlobalVars.all = settings.all;
 
                     GlobalVars.noteOn = settings.on;
-                    GlobalVars.noteOff = settings.off;
 
                 }
             }// end try
             catch
             {
-                // do nothing...
+                // we aren't sending anything out, so turn off the notification service.
+                GlobalVars.noteOn = false;
             }
 
             //final step is to make sure we have a workorder logo.  If we don't we need to copy the one from resources to the correct location...
             try
             {
-                if (!File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\rp_logo.jpg"))
+                if (!File.Exists(GlobalVars.folderString + @"\BTAS16_DB\rp_logo.jpg"))
                 {
-                    Properties.Resources.rp_logo.Save(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\rp_logo.jpg");
+                    Properties.Resources.rp_logo.Save(GlobalVars.folderString + @"\BTAS16_DB\rp_logo.jpg");
                 }
             }
             catch
@@ -351,7 +361,7 @@ namespace NewBTASProto
                 //name the table
                 lic.TableName = "lic_file";
                 //now read in what we got!
-                lic.ReadXml(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\lic_file.xml");
+                lic.ReadXml(GlobalVars.folderString + @"\BTAS16_DB\lic_file.xml");
 
                 //now try to compare the lic # to the approved list...
                 foreach (string posLic in lics)
@@ -409,7 +419,7 @@ namespace NewBTASProto
                 {
                     lic.Rows.Add();
                     lic.Rows[0][0] = temp;
-                    lic.WriteXml(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\lic_file.xml");
+                    lic.WriteXml(GlobalVars.folderString + @"\BTAS16_DB\lic_file.xml");
                 }
 
             }
@@ -490,7 +500,7 @@ namespace NewBTASProto
             // create the connection
             try
             {
-                strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
                 myAccessConn = new OleDbConnection(strAccessConn);
             }
             catch (Exception ex)

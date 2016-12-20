@@ -144,7 +144,7 @@ namespace NewBTASProto
                                     ICComPort.RtsEnable = false;
                                     ICComPort.Open();
                                     ICComPort.Write(GlobalVars.ICSettings[chargerID].outText, 0, 28);
-                                    Debug.Print(System.Text.Encoding.Default.GetString(GlobalVars.ICSettings[chargerID].outText));
+                                    //Debug.Print(System.Text.Encoding.Default.GetString(GlobalVars.ICSettings[chargerID].outText));
                                     // wait for a response
                                     tempBuff = ICComPort.ReadTo("Z");
                                     ICComPort.Close();
@@ -907,17 +907,17 @@ namespace NewBTASProto
                                     byte checkSum = 0;
 
                                     System.Text.StringBuilder sb = new System.Text.StringBuilder();
-                                    for (int b = 0; b < GlobalVars.CScanData[j].cellsToDisplay; b++)
+                                    for (int b = 0; b < 24; b++)
                                     {
                                         // only set bits if the test is running, otherwise clear everything by leaving them zero
-                                        if ((bool)d.Rows[j][5])
+                                        if ((bool)d.Rows[j][5] && b < GlobalVars.CScanData[j].cellsToDisplay)
                                         {
                                             if (Math.Abs(GlobalVars.CScanData[j].orderedCells[b]) < 0.1)
                                             {
                                                 //set the 1 bit
                                                 tempStore += (char)Math.Pow(2, ((2 * b) % 8));
                                             }
-                                            if (Math.Abs(GlobalVars.CScanData[j].orderedCells[b]) < 1.5)
+                                            if (Math.Abs(GlobalVars.CScanData[j].orderedCells[b]) < 1.3)
                                             {
                                                 //set the 0 bit
                                                 tempStore += (char)Math.Pow(2, ((2 * b + 1) % 8));
@@ -943,7 +943,7 @@ namespace NewBTASProto
                                     // set up the comport
                                     ICComPort = new SerialPort();
                                     ICComPort.Encoding = Encoding.GetEncoding(28591);
-                                    ICComPort.ReadTimeout = 20;
+                                    ICComPort.ReadTimeout = 100;
                                     ICComPort.PortName = GlobalVars.ICComPort;
                                     ICComPort.BaudRate = 19200;
                                     ICComPort.DataBits = 8;

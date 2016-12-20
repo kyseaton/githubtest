@@ -60,7 +60,7 @@
         <Image Name="Image4">
           <Source>External</Source>
           <Value>=Parameters!Path.Value</Value>
-          <Sizing>Fit</Sizing>
+          <Sizing>FitProportional</Sizing>
           <Top>0.02431in</Top>
           <Left>7.99042in</Left>
           <Height>0.71875in</Height>

@@ -25,7 +25,7 @@ namespace NewBTASProto
             {
                 NoteSet settings;
                 XmlSerializer xs = new XmlSerializer(typeof(NoteSet));
-                using (FileStream fs = new FileStream(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\noteSet.xml", FileMode.Open))
+                using (FileStream fs = new FileStream(GlobalVars.folderString + @"\BTAS16_DB\noteSet.xml", FileMode.Open))
                 {
                     // This will read the XML from the file and create the new instance
                     // of CustomerData
@@ -133,7 +133,7 @@ namespace NewBTASProto
 
             //Create and XmlSerializer to serialize the data to a file
             XmlSerializer xs = new XmlSerializer(typeof(NoteSet));
-            using (FileStream fs = new FileStream(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\noteSet.xml", FileMode.Create))
+            using (FileStream fs = new FileStream(GlobalVars.folderString + @"\BTAS16_DB\noteSet.xml", FileMode.Create))
             {
                 xs.Serialize(fs, settings);
             }
@@ -170,7 +170,6 @@ namespace NewBTASProto
             GlobalVars.all = settings.all;
 
             GlobalVars.noteOn = settings.on;
-            GlobalVars.noteOff = settings.off;
 
             this.Close();
 

@@ -2185,7 +2185,7 @@
         <DataSetName>WOSumSet</DataSetName>
         <Left>0.00839in</Left>
         <Height>1in</Height>
-        <Width>8.7in</Width>
+        <Width>8.70007in</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -3910,7 +3910,7 @@
         <Top>1.04167in</Top>
         <Left>0.00985in</Left>
         <Height>0.75in</Height>
-        <Width>8.6962in</Width>
+        <Width>8.69626in</Width>
         <ZIndex>1</ZIndex>
         <Style>
           <Border>
@@ -3922,7 +3922,7 @@
     <Height>1.79167in</Height>
     <Style />
   </Body>
-  <Width>8.70839in</Width>
+  <Width>8.70846in</Width>
   <Page>
     <PageHeader>
       <Height>1.61458in</Height>
@@ -4317,7 +4317,7 @@
         <Image Name="Image4">
           <Source>External</Source>
           <Value>=Parameters!Path.Value</Value>
-          <Sizing>Fit</Sizing>
+          <Sizing>FitProportional</Sizing>
           <Top>0.01041in</Top>
           <Left>7.98959in</Left>
           <Height>0.71875in</Height>

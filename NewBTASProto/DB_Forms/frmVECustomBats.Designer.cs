@@ -738,7 +738,7 @@
             this.numericUpDown90.Location = new System.Drawing.Point(348, 38);
             this.numericUpDown90.Name = "numericUpDown90";
             this.numericUpDown90.Size = new System.Drawing.Size(129, 20);
-            this.numericUpDown90.TabIndex = 84;
+            this.numericUpDown90.TabIndex = 6;
             this.numericUpDown90.Value = new decimal(new int[] {
             1,
             0,
@@ -761,7 +761,7 @@
             0});
             this.numericUpDown89.Name = "numericUpDown89";
             this.numericUpDown89.Size = new System.Drawing.Size(129, 20);
-            this.numericUpDown89.TabIndex = 83;
+            this.numericUpDown89.TabIndex = 5;
             this.numericUpDown89.Value = new decimal(new int[] {
             1,
             0,
@@ -783,7 +783,7 @@
             0});
             this.numericUpDown88.Name = "numericUpDown88";
             this.numericUpDown88.Size = new System.Drawing.Size(129, 20);
-            this.numericUpDown88.TabIndex = 82;
+            this.numericUpDown88.TabIndex = 7;
             this.numericUpDown88.Value = new decimal(new int[] {
             1,
             0,
@@ -1035,7 +1035,7 @@
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(537, 455);
             this.tabControl1.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight;
-            this.tabControl1.TabIndex = 101;
+            this.tabControl1.TabIndex = 33;
             // 
             // tabPage1
             // 
@@ -1684,7 +1684,7 @@
             0});
             this.numericUpDown91.Name = "numericUpDown91";
             this.numericUpDown91.Size = new System.Drawing.Size(201, 20);
-            this.numericUpDown91.TabIndex = 32;
+            this.numericUpDown91.TabIndex = 41;
             // 
             // label4
             // 
@@ -1720,7 +1720,7 @@
             0});
             this.numericUpDown92.Name = "numericUpDown92";
             this.numericUpDown92.Size = new System.Drawing.Size(201, 20);
-            this.numericUpDown92.TabIndex = 31;
+            this.numericUpDown92.TabIndex = 40;
             // 
             // numericUpDown93
             // 
@@ -1728,7 +1728,7 @@
             this.numericUpDown93.Location = new System.Drawing.Point(100, 46);
             this.numericUpDown93.Name = "numericUpDown93";
             this.numericUpDown93.Size = new System.Drawing.Size(201, 20);
-            this.numericUpDown93.TabIndex = 30;
+            this.numericUpDown93.TabIndex = 39;
             this.numericUpDown93.Visible = false;
             // 
             // numericUpDown94
@@ -1737,7 +1737,7 @@
             this.numericUpDown94.Location = new System.Drawing.Point(100, 21);
             this.numericUpDown94.Name = "numericUpDown94";
             this.numericUpDown94.Size = new System.Drawing.Size(201, 20);
-            this.numericUpDown94.TabIndex = 29;
+            this.numericUpDown94.TabIndex = 38;
             this.numericUpDown94.Value = new decimal(new int[] {
             2,
             0,
@@ -1817,7 +1817,7 @@
             0});
             this.numericUpDown95.Name = "numericUpDown95";
             this.numericUpDown95.Size = new System.Drawing.Size(201, 20);
-            this.numericUpDown95.TabIndex = 28;
+            this.numericUpDown95.TabIndex = 37;
             // 
             // label166
             // 
@@ -1853,7 +1853,7 @@
             0});
             this.numericUpDown96.Name = "numericUpDown96";
             this.numericUpDown96.Size = new System.Drawing.Size(201, 20);
-            this.numericUpDown96.TabIndex = 27;
+            this.numericUpDown96.TabIndex = 36;
             // 
             // numericUpDown97
             // 
@@ -1861,7 +1861,7 @@
             this.numericUpDown97.Location = new System.Drawing.Point(100, 44);
             this.numericUpDown97.Name = "numericUpDown97";
             this.numericUpDown97.Size = new System.Drawing.Size(201, 20);
-            this.numericUpDown97.TabIndex = 26;
+            this.numericUpDown97.TabIndex = 35;
             this.numericUpDown97.Visible = false;
             // 
             // numericUpDown98
@@ -1876,7 +1876,7 @@
             0});
             this.numericUpDown98.Name = "numericUpDown98";
             this.numericUpDown98.Size = new System.Drawing.Size(201, 20);
-            this.numericUpDown98.TabIndex = 25;
+            this.numericUpDown98.TabIndex = 34;
             this.numericUpDown98.Value = new decimal(new int[] {
             25,
             0,

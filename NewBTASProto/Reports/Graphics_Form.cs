@@ -128,12 +128,12 @@ namespace NewBTASProto
                 // Open database containing all the battery data....
                 if (checkBox2.Checked == true)
                 {
-                    strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                    strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
                     strAccessSelect = @"SELECT WorkOrderNumber FROM WorkOrders";
                 }
                 else
                 {
-                    strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                    strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
                     strAccessSelect = @"SELECT WorkOrderNumber FROM WorkOrders WHERE OrderStatus<>'Archived'";
                 }
 
@@ -264,7 +264,7 @@ namespace NewBTASProto
                     });
 
                     // Open database containing all the battery data....
-                    string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                    string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
                     string strAccessSelect = @"SELECT StepNumber,TestName, Technology, CustomNoCells FROM Tests WHERE WorkOrderNumber='" + combo1Text + @"' ORDER BY StepNumber ASC";
 
 
@@ -380,7 +380,7 @@ namespace NewBTASProto
                     });
 
                     // Open database containing all the battery data....
-                    string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                    string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
                     string strAccessSelect = @"SELECT StepNumber,TestName, Technology, CustomNoCells FROM Tests WHERE WorkOrderNumber='" + combo3Text + @"' ORDER BY StepNumber ASC";
 
 
@@ -491,7 +491,7 @@ namespace NewBTASProto
                     // FIRST CLEAR THE OLD DATA SET!
                     graph1Set.Clear();
                     // Open database containing all the battery data....
-                    string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                    string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
                     string strAccessSelect = @"SELECT * FROM ScanData WHERE BWO='" + combo1Text + @"' AND STEP='" + combo2Text.Substring(0, 2) + @"' ORDER BY RDG ASC";
 
                     //Here is where I load the form wide dataset which will both let me fill in the rest of the combo boxes and the graphs!
@@ -981,7 +981,7 @@ namespace NewBTASProto
                     // FIRST CLEAR THE OLD DATA SET!
                     graph2Set.Clear();
                     // Open database containing all the battery data....
-                    string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                    string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
                     string strAccessSelect = @"SELECT * FROM ScanData WHERE BWO='" + combo3Text + @"' AND STEP='" + combo4Text.Substring(0, 2) + @"' ORDER BY RDG ASC";
 
                     //Here is where I load the form wide dataset which will both let me fill in the rest of the combo boxes and the graphs!

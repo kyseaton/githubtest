@@ -110,7 +110,7 @@ namespace NewBTASProto
             {
                 d.TableName = "main_grid";
                 //System.IO.FileStream streamRead = new System.IO.FileStream(@"C:\Users\Kyle\Documents\Visual Studio 2013\Projects\NewBTASProto\main_grid.xml", System.IO.FileMode.Open, System.IO.FileAccess.Read);
-                d.ReadXml(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\main_grid.xml");
+                d.ReadXml(GlobalVars.folderString + @"\BTAS16_DB\main_grid.xml");
                 //streamRead.Close();
 
                 if (d.Rows.Count == 1)
@@ -223,7 +223,7 @@ namespace NewBTASProto
             // create the connection
             try
             {
-                strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\BTS16NV.MDB";
+                strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
                 myAccessConn = new OleDbConnection(strAccessConn);
             }
             catch (Exception ex)
@@ -624,7 +624,7 @@ namespace NewBTASProto
                 //name the table
                 gs.TableName = "graph_set";
                 //now read in what we got!
-                gs.ReadXml(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\graph_set.xml");
+                gs.ReadXml(GlobalVars.folderString + @"\BTAS16_DB\graph_set.xml");
 
                 // do we have a good datatable?
                 if (gs.Rows.Count != 16)
@@ -673,7 +673,7 @@ namespace NewBTASProto
                 //name the table
                 pci.TableName = "pci_set";
                 //now read in what we got!
-                pci.ReadXml(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\BTAS16_DB\pci_set.xml");
+                pci.ReadXml(GlobalVars.folderString + @"\BTAS16_DB\pci_set.xml");
 
                 // do we have a good datatable? Lets do some basic checks...
                 if (pci.Rows.Count != 16 ||
