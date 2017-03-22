@@ -64,11 +64,12 @@ namespace NewBTASProto
                 while (true)
                 {
                     
-                    try
+
+
+
+                    for (int j = 0; j < 16; j++)
                     {
-
-
-                        for (int j = 0; j < 16; j++)
+                        try
                         {
                             //sleep a little each time as to not overload the host
                             Thread.Sleep(10);
@@ -262,10 +263,10 @@ namespace NewBTASProto
                                             }
                                             else if (testData.boardID == 8) 
                                             { 
-                                                updateD(j, 10, "ICA SMC ED");
+                                                updateD(j, 10, "ICA SMC EXD");
                                                 if (slaveRow > -1)
                                                 {
-                                                    updateD(slaveRow, 10, "ICA SMC ED");
+                                                    updateD(slaveRow, 10, "ICA SMC EXD");
                                                 }
                                             }
                                             else if (testData.boardID == 4) 
@@ -274,6 +275,14 @@ namespace NewBTASProto
                                                 if (slaveRow > -1)
                                                 {
                                                     updateD(slaveRow, 10, "ICA SMI");
+                                                }
+                                            }
+                                            else if (testData.boardID == 20)
+                                            {
+                                                updateD(j, 10, "MFC-10");
+                                                if (slaveRow > -1)
+                                                {
+                                                    updateD(slaveRow, 10, "MCF-10");
                                                 }
                                             }
                                         }
@@ -294,7 +303,7 @@ namespace NewBTASProto
                                         if (comErrorNum[j] < 3) { comErrorNum[j]++; }
                                         this.Invoke((MethodInvoker)delegate
                                         {
-                                            if (comErrorNum[j] > 2 && d.Rows[j][10].ToString().Contains("ICA"))
+                                            if (comErrorNum[j] > 2 && (d.Rows[j][10].ToString().Contains("ICA") || d.Rows[j][10].ToString().Contains("MFC")))
                                             {
                                                 updateD(j, 11, "");
                                                 updateD(j, 10, "");
@@ -366,7 +375,7 @@ namespace NewBTASProto
                                 }       // end catch
                             }       // end if
 
-                            else if (d.Rows[j][10].ToString().Contains("ICA") ) // || (bool) d.Rows[j][8] == false) 
+                            else if ((d.Rows[j][10].ToString().Contains("ICA") || d.Rows[j][10].ToString().Contains("MFC"))) // || (bool) d.Rows[j][8] == false) 
                             {
                                 if ((string)d.Rows[j][11] != "" && !d.Rows[j][9].ToString().Contains("S"))
                                 {
@@ -420,8 +429,9 @@ namespace NewBTASProto
                                     {
                                         if (testData.boardID == 1) { updateD(chanNum, 10, "ICA mini"); }
                                         else if (testData.boardID == 6) { updateD(chanNum, 10, "ICA SMC"); }
-                                        else if (testData.boardID == 8) { updateD(chanNum, 10, "ICA SMC ED"); }
+                                        else if (testData.boardID == 8) { updateD(chanNum, 10, "ICA SMC EXD"); }
                                         else if (testData.boardID == 4) { updateD(chanNum, 10, "ICA SMI"); }
+                                        else if (testData.boardID == 20) { updateD(chanNum, 10, "MFC-10"); }
                                     }
                                     // and we don't need to check any more
                                     check = false;
@@ -706,10 +716,10 @@ namespace NewBTASProto
                                                 }
                                                 else if (testData.boardID == 8) 
                                                 { 
-                                                    updateD(station, 10, "ICA SMC ED");
+                                                    updateD(station, 10, "ICA SMC EXD");
                                                     if (slaveRow > -1)
                                                     {
-                                                        updateD(slaveRow, 10, "ICA SMC ED");
+                                                        updateD(slaveRow, 10, "ICA SMC EXD");
                                                     }
                                                 }
                                                 else if (testData.boardID == 4) 
@@ -718,6 +728,14 @@ namespace NewBTASProto
                                                     if (slaveRow > -1)
                                                     {
                                                         updateD(slaveRow, 10, "ICA SMI");
+                                                    }
+                                                }
+                                                else if (testData.boardID == 20)
+                                                {
+                                                    updateD(station, 10, "MFC-10");
+                                                    if (slaveRow > -1)
+                                                    {
+                                                        updateD(slaveRow, 10, "MFC-10");
                                                     }
                                                 }
                                             }
@@ -895,7 +913,7 @@ namespace NewBTASProto
                             ////////////////////////////////////////////AUTO SHORT BOARDS ARE SET HERE///////////////////////
                             #region AutoShort Comms
 
-                            if (d.Rows[j][2].ToString().Contains("Shorting") && GlobalVars.CScanData[j].CCID == 23) //&& (bool) d.Rows[j][5] == true)
+                            if (d.Rows[j][2].ToString().Contains("Shorting") && (bool)d.Rows[j][4] && GlobalVars.CScanData[j] != null && (GlobalVars.CScanData[j].CCID == 23 || GlobalVars.CScanData[j].CCID == 24)) //&& (bool) d.Rows[j][5] == true)
                             {
                                 try
                                 {
@@ -917,7 +935,7 @@ namespace NewBTASProto
                                                 //set the 1 bit
                                                 tempStore += (char)Math.Pow(2, ((2 * b) % 8));
                                             }
-                                            if (Math.Abs(GlobalVars.CScanData[j].orderedCells[b]) < 1.3)
+                                            if (Math.Abs(GlobalVars.CScanData[j].orderedCells[b]) < 1.5)
                                             {
                                                 //set the 0 bit
                                                 tempStore += (char)Math.Pow(2, ((2 * b + 1) % 8));
@@ -939,7 +957,7 @@ namespace NewBTASProto
                                     toAutoShort += "Z";
 
                                     Thread.Sleep(10);
-                                    // send the short command to the masterfiller
+                                    // send the short command to the autoshort box
                                     // set up the comport
                                     ICComPort = new SerialPort();
                                     ICComPort.Encoding = Encoding.GetEncoding(28591);
@@ -1035,19 +1053,20 @@ namespace NewBTASProto
                                     else { throw ex; }
                                 } // end catch
                             } // end main if
+                        }               // end try
+                        catch (Exception ex)
+                        {
+                            if (token.IsCancellationRequested) return;
+                            else
+                            {
+                                //MessageBox.Show(ex.ToString());
+                            }
+                        }
 
 #endregion
 
-                        }           // end for
-                    }               // end try
-                    catch (Exception ex)
-                    {
-                        if (token.IsCancellationRequested) return;
-                        else
-                        {
-                            //MessageBox.Show(ex.ToString());
-                        }
-                    }
+                    }           // end for
+
 
                 }                   // end while
             },cPollIC.Token); // end thread

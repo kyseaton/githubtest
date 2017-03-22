@@ -599,6 +599,27 @@ namespace NewBTASProto
                 }
                 else
                 {
+                    // first check to see if the serial number is already in use.
+                    string checkString = "SELECT * FROM Batteries WHERE BatterySerialNumber = '" + textBox3.Text.Replace("'", "''") + "'";
+                    DataSet checkSet = new DataSet();
+                    OleDbCommand checkCmd = new OleDbCommand(checkString, conn);
+                    OleDbDataAdapter checkAdapter = new OleDbDataAdapter(checkCmd);
+                    lock (Main_Form.dataBaseLock)
+                    {
+                        conn.Open();
+                        checkAdapter.Fill(checkSet);
+                        conn.Close();
+                    }
+
+                    if (checkSet.Tables[0].Rows.Count > 0)
+                    {
+                        //we already have that serial number in the DB
+                        // tell the user about that and return...
+                        MessageBox.Show(this, "That serial number is already in the database!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        updateCurVals();
+                        return;
+                    }
+                    
                     // we need to insert a new record...
                     // find the max value in the CustomerID column so we know what to assign to the new record
                     max++;
@@ -869,11 +890,18 @@ namespace NewBTASProto
             {
                 // they don't match!
                 // ask if the user is sure that they want to continue...
-                DialogResult dialogResult = MessageBox.Show(this, "Looks like this record has been updated without being saved.  Are you sure you want to navigate away without saving?", "Click Yes to continue or No to stop the test.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                DialogResult dialogResult = MessageBox.Show(this, "Looks like this record has been updated without being saved.  Are you sure you want to navigate away without saving?", "Click Yes to continue or No to stay here.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                 if (dialogResult == DialogResult.No)
                 {
                     lastValid = false;
+                    updateCurVals();
                     return true;
+                }
+                else
+                {
+                    //sync everything..
+                    updateCurVals();
+
                 }
             }
             lastValid = true;

@@ -47,7 +47,10 @@ namespace NewBTASProto
 
         private void Reports_Form_Load(object sender, EventArgs e)
         {
+            //System.Globalization.CultureInfo customCulture = (System.Globalization.CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
+            //customCulture.NumberFormat.NumberDecimalSeparator = ".";
 
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
             /*************************Load Global data into MetaData data Table ************************/
 
             // create datatable
@@ -498,19 +501,28 @@ namespace NewBTASProto
                     OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
 
                     reportSet = new DataSet();
-                    System.Globalization.CultureInfo myCultureInfo = new System.Globalization.CultureInfo("en-us");
-                    reportSet.Locale = myCultureInfo;
+                    //System.Globalization.CultureInfo myCultureInfo = new System.Globalization.CultureInfo("en-us");
+                    //reportSet.Locale = myCultureInfo;
 
-                    System.Globalization.CultureInfo customCulture = (System.Globalization.CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
-                    customCulture.NumberFormat.NumberDecimalSeparator = ".";
+                    //System.Globalization.CultureInfo customCulture = (System.Globalization.CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
+                    //customCulture.NumberFormat.NumberDecimalSeparator = ".";
 
-                    System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
+                    //System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
 
                     lock (Main_Form.dataBaseLock)
                     {
                         myAccessConn.Open();
                         myDataAdapter.Fill(reportSet, "ScanData");
                         myAccessConn.Close();
+                    }
+
+                    //OK now lets clean up the data to match our reports...
+                    for (int i = 0; i < reportSet.Tables[0].Rows.Count; i++)
+                    {
+                        for (int j = 7; j < 40; j++)
+                        {
+                            reportSet.Tables[0].Rows[i][j] = reportSet.Tables[0].Rows[i][j].ToString().Replace(",", ".");
+                        }
                     }
 
 
@@ -1010,6 +1022,15 @@ namespace NewBTASProto
                 {
                     
                 }
+                //OK now lets clean up the data to match our reports...
+                for (int i = 0; i < reportSet.Tables[0].Rows.Count; i++)
+                {
+                    for (int j = 2; j < 27; j++)
+                    {
+                        reportSet.Tables[0].Rows[i][j] = reportSet.Tables[0].Rows[i][j].ToString().Replace(",", ".");
+                    }
+                }
+
                 //Now lets go through the data and come up with a pass fail for each cell
                 DataSet passFailSet = new DataSet();
                 passFailSet.Tables.Add("PassFail");
@@ -1164,7 +1185,7 @@ namespace NewBTASProto
                                 if (float.Parse(reportSet.Tables[0].Rows[j][i + 3].ToString()) > 1.75)
                                 {
                                     passFailSet.Tables[0].Rows.Add(); // add a row
-                                    passFailSet.Tables[0].Rows[cells - i - 1][0] = "Cell" + (cells - i - 1 + 1).ToString();// record the cell number
+                                    passFailSet.Tables[0].Rows[cells - i - 1][0] = "Cell" + (cells - i).ToString();// record the cell number
                                     passFailSet.Tables[0].Rows[cells - i - 1][1] = reportSet.Tables[0].Rows[j][2];// record the time
                                     passFailSet.Tables[0].Rows[cells - i - 1][2] = reportSet.Tables[0].Rows[j][1];// record the rdg
                                     passFailSet.Tables[0].Rows[cells - i - 1][3] = reportSet.Tables[0].Rows[j][i + 3];// record the cell voltage
@@ -1178,7 +1199,7 @@ namespace NewBTASProto
                             if (float.Parse(reportSet.Tables[0].Rows[reportSet.Tables[0].Rows.Count - 1][i + 3].ToString()) <= 1.75)
                             {
                                 passFailSet.Tables[0].Rows.Add(); // add a row
-                                passFailSet.Tables[0].Rows[cells - i - 1][0] = "Cell" + (cells - i - 1 + 1).ToString();// record the cell number
+                                passFailSet.Tables[0].Rows[cells - i - 1][0] = "Cell" + (cells - i).ToString();// record the cell number
                                 passFailSet.Tables[0].Rows[cells - i - 1][1] = reportSet.Tables[0].Rows[reportSet.Tables[0].Rows.Count - 1][2];// record the time
                                 passFailSet.Tables[0].Rows[cells - i - 1][2] = reportSet.Tables[0].Rows[reportSet.Tables[0].Rows.Count - 1][1];// record the rdg
                                 passFailSet.Tables[0].Rows[cells - i - 1][3] = reportSet.Tables[0].Rows[reportSet.Tables[0].Rows.Count - 1][i + 3];// record the cell voltage
@@ -1198,7 +1219,7 @@ namespace NewBTASProto
                     }
                     else
                     {
-                        for (int i = cells - 1; i > 0; i--)
+                        for (int i = cells - 1; i > -1; i--)
                         {
                             for (int j = 0; j < reportSet.Tables[0].Rows.Count; j++)
                             {
@@ -1206,7 +1227,7 @@ namespace NewBTASProto
                                 if (float.Parse(reportSet.Tables[0].Rows[j][i + 3].ToString()) < 1)
                                 {
                                     passFailSet.Tables[0].Rows.Add(); // add a row
-                                    passFailSet.Tables[0].Rows[cells - i - 1][0] = "Cell" + (cells - i - 1 + 1).ToString();// record the cell number
+                                    passFailSet.Tables[0].Rows[cells - i - 1][0] = "Cell" + (cells - i).ToString();// record the cell number
                                     passFailSet.Tables[0].Rows[cells - i - 1][1] = reportSet.Tables[0].Rows[j][2];// record the time
                                     passFailSet.Tables[0].Rows[cells - i - 1][2] = reportSet.Tables[0].Rows[j][1];// record the rdg
                                     passFailSet.Tables[0].Rows[cells - i - 1][3] = reportSet.Tables[0].Rows[j][i + 3];// record the cell voltage
@@ -1220,7 +1241,7 @@ namespace NewBTASProto
                             if (float.Parse(reportSet.Tables[0].Rows[reportSet.Tables[0].Rows.Count - 1][i + 3].ToString()) >= 1)
                             {
                                 passFailSet.Tables[0].Rows.Add(); // add a row
-                                passFailSet.Tables[0].Rows[cells - i - 1][0] = "Cell" + (cells - i + 1).ToString();// record the cell number
+                                passFailSet.Tables[0].Rows[cells - i - 1][0] = "Cell" + (cells - i).ToString();// record the cell number
                                 passFailSet.Tables[0].Rows[cells - i - 1][1] = reportSet.Tables[0].Rows[reportSet.Tables[0].Rows.Count - 1][2];// record the time
                                 passFailSet.Tables[0].Rows[cells - i - 1][2] = reportSet.Tables[0].Rows[reportSet.Tables[0].Rows.Count - 1][1];// record the rdg
                                 passFailSet.Tables[0].Rows[cells - i - 1][3] = reportSet.Tables[0].Rows[reportSet.Tables[0].Rows.Count - 1][i + 3];// record the cell voltage
@@ -1329,6 +1350,15 @@ namespace NewBTASProto
                 finally
                 {
                     
+                }
+
+                //OK now lets clean up the data to match our reports...
+                for (int i = 0; i < reportSet.Tables[0].Rows.Count; i++)
+                {
+                    for (int j = 2; j < 27; j++)
+                    {
+                        reportSet.Tables[0].Rows[i][j] = reportSet.Tables[0].Rows[i][j].ToString().Replace(",", ".");
+                    }
                 }
 
 
@@ -1464,6 +1494,14 @@ namespace NewBTASProto
 
                 }
 
+                //OK now lets clean up the data to match our reports...
+                for (int i = 0; i < reportSet.Tables[0].Rows.Count; i++)
+                {
+                    for (int j = 2; j < 14; j++)
+                    {
+                        reportSet.Tables[0].Rows[i][j] = reportSet.Tables[0].Rows[i][j].ToString().Replace(",", ".");
+                    }
+                }
 
                 // Now that we have the data in reportSet along with testsPerformed lets pass it over to the matching report
                 /*************************Load reportSet into reportSet  ************************/

@@ -428,5 +428,209 @@ namespace NewBTASProto.Properties {
                 this["robustCSCAN"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SS0 {
+            get {
+                return ((bool)(this["SS0"]));
+            }
+            set {
+                this["SS0"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SS1 {
+            get {
+                return ((bool)(this["SS1"]));
+            }
+            set {
+                this["SS1"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SS2 {
+            get {
+                return ((bool)(this["SS2"]));
+            }
+            set {
+                this["SS2"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SS3 {
+            get {
+                return ((bool)(this["SS3"]));
+            }
+            set {
+                this["SS3"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SS4 {
+            get {
+                return ((bool)(this["SS4"]));
+            }
+            set {
+                this["SS4"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SS5 {
+            get {
+                return ((bool)(this["SS5"]));
+            }
+            set {
+                this["SS5"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SS6 {
+            get {
+                return ((bool)(this["SS6"]));
+            }
+            set {
+                this["SS6"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SS7 {
+            get {
+                return ((bool)(this["SS7"]));
+            }
+            set {
+                this["SS7"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SS8 {
+            get {
+                return ((bool)(this["SS8"]));
+            }
+            set {
+                this["SS8"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SS9 {
+            get {
+                return ((bool)(this["SS9"]));
+            }
+            set {
+                this["SS9"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SS10 {
+            get {
+                return ((bool)(this["SS10"]));
+            }
+            set {
+                this["SS10"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SS11 {
+            get {
+                return ((bool)(this["SS11"]));
+            }
+            set {
+                this["SS11"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SS12 {
+            get {
+                return ((bool)(this["SS12"]));
+            }
+            set {
+                this["SS12"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SS13 {
+            get {
+                return ((bool)(this["SS13"]));
+            }
+            set {
+                this["SS13"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SS14 {
+            get {
+                return ((bool)(this["SS14"]));
+            }
+            set {
+                this["SS14"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SS15 {
+            get {
+                return ((bool)(this["SS15"]));
+            }
+            set {
+                this["SS15"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("-0.02")]
+        public decimal DecliningCellVoltageThres {
+            get {
+                return ((decimal)(this["DecliningCellVoltageThres"]));
+            }
+            set {
+                this["DecliningCellVoltageThres"] = value;
+            }
+        }
     }
 }

@@ -42,11 +42,11 @@ namespace NewBTASProto
             "8289656377",                       // Topcast Aviation
             "5241029672",                       // Saft Demo
             "4187028983",                       // Cook Aviation
-            "7712998423",
-            "3844940117",
-            "5568154526",
-            "5900397404",
-            "1924146292",
+            "7712998423",                       // New Zealand Air Defense 1
+            "3844940117",                       // New Zealand Air Defense 2
+            "5568154526",                       // New Zealand Air Defense 3
+            "5900397404",                       // RB171 LLC
+            "1924146292",                       // Satair Miami
             "4646305542",
             "6690621576"
         };

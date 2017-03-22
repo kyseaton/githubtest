@@ -25,7 +25,7 @@ namespace NewBTASProto
         public byte KE2;                                           //KE2 not used for now (3 bits, available)
         public byte KE3;                                           //action: 0=clear, 1=run, 2=stop, 3=reset
         public byte KM0;    //first command [type + test + action] lower 8 bits   KM0 = (byte)((KE1 + 4 * KE2 + 64 * KE3) + 48)
-        public byte KM1;                            //'Mode (10, 11, 12, 21, 21, 30, 31, 32 [for now] )  KM1 = (byte)(10 + 48)
+        public byte KM1;                            //'Mode (10, 11, 12, 21, 22, 30, 31, 32 [for now] )  KM1 = (byte)(10 + 48)
 
         //--- A ---
         public byte KM2;                             //CT1H, Charge Time 1, Hours

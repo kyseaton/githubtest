@@ -21,6 +21,7 @@ namespace NewBTASProto
         {
 
             checkBox2.Checked = GlobalVars.DecliningCellVoltageTestEnabled;
+            numericUpDown2.Value = GlobalVars.DecliningCellVoltageThres;
             checkBox6.Checked = GlobalVars.CapTestVarEnable;
             numericUpDown5.Value = GlobalVars.CapTestVarValue;
             numericUpDown6.Value = GlobalVars.CSErr2Allow;
@@ -29,7 +30,7 @@ namespace NewBTASProto
             numericUpDown1.Value = GlobalVars.rows2Dis;
             checkBox7.Checked = GlobalVars.advance2Short;
             checkBox4.Checked = GlobalVars.robustCSCAN;
-
+            
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -41,6 +42,7 @@ namespace NewBTASProto
         {
             //save the values and then close
             GlobalVars.DecliningCellVoltageTestEnabled = checkBox2.Checked;
+            GlobalVars.DecliningCellVoltageThres = numericUpDown2.Value;
             GlobalVars.CapTestVarEnable = checkBox6.Checked;
             GlobalVars.CapTestVarValue = numericUpDown5.Value;
             GlobalVars.CSErr2Allow = numericUpDown6.Value;

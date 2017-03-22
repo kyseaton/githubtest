@@ -90,7 +90,7 @@ namespace NewBTASProto
         /// <summary>
         /// this string holds the program publish date
         /// </summary>
-        public static string programPubDate = "Dec 5 2016";
+        public static string programPubDate = "Mar 10 2017";
 
         /// <summary>
         /// this is where we hold our notification service settings...
@@ -169,6 +169,26 @@ namespace NewBTASProto
         public static decimal rows2Dis;
         public static bool advance2Short;
         public static bool robustCSCAN;
+        public static decimal DecliningCellVoltageThres;
+        
+        // these are all of the sequncial scan ones....
+        public static bool SS0;
+        public static bool SS1;
+        public static bool SS2;
+        public static bool SS3;
+        public static bool SS4;
+        public static bool SS5;
+        public static bool SS6;
+        public static bool SS7;
+        public static bool SS8;
+        public static bool SS9;
+        public static bool SS10;
+        public static bool SS11;
+        public static bool SS12;
+        public static bool SS13;
+        public static bool SS14;
+        public static bool SS15;
+
 
     }
 }

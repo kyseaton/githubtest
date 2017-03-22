@@ -77,7 +77,7 @@ namespace NewBTASProto
             numericUpDown11.Minimum = 0;             //mins
             numericUpDown11.Maximum = 59;
             numericUpDown10.Minimum = 0;             //discharge current
-            numericUpDown10.Maximum = 60;
+            numericUpDown10.Maximum = 80;
             numericUpDown9.Minimum = 0;             //discharge voltage
             numericUpDown9.Maximum = 77;
             numericUpDown13.Minimum = 0;             //discharge resistance
@@ -346,7 +346,7 @@ namespace NewBTASProto
             ((Main_Form)this.Owner).criticalNum[comboBox1.SelectedIndex] = true;
             
             int inVal = comboBox1.SelectedIndex;
-            //now we are going to create a thread to set KE1 back to data mode after 15 seconds
+            //now we are going to create a thread to set KE1 back to query mode after 15 seconds
             ThreadPool.QueueUserWorkItem(s =>
             {
                 Thread.Sleep(2000);

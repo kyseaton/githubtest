@@ -299,6 +299,27 @@ namespace NewBTASProto
                 }
                 else
                 {
+                    // we need to insert a new record...
+                    // we need to insert a new record...
+                    // first check to see if the serial number is already in use.
+                    string checkString = "SELECT * FROM ComboTest WHERE ComboTestName = '" + textBox1.Text.Replace("'", "''") + "'";
+                    DataSet checkSet = new DataSet();
+                    OleDbCommand checkCmd = new OleDbCommand(checkString, conn);
+                    OleDbDataAdapter checkAdapter = new OleDbDataAdapter(checkCmd);
+                    lock (Main_Form.dataBaseLock)
+                    {
+                        conn.Open();
+                        checkAdapter.Fill(checkSet);
+                        conn.Close();
+                    }
+
+                    if (checkSet.Tables[0].Rows.Count > 0)
+                    {
+                        //we already have that serial number in the DB
+                        // tell the user about that and return...
+                        MessageBox.Show(this, "That combination test is already in the database!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
 
                     //somehow we are renamed the test and that's not good
                     string cmdStr = "INSERT INTO ComboTest (ComboTestName, Steps, Step1, Step2, Step3, Step4, Step5, Step6, Step7, Step8, Step9, Step10, Step11, Step12, Step13, Step14, Step15, WaitTime, TempMar) VALUES('" +

@@ -283,7 +283,28 @@ namespace NewBTASProto
                 }
                 else
                 {
+
                     // we need to insert a new record...
+                    // first check to see if the serial number is already in use.
+                    string checkString = "SELECT * FROM Operators WHERE OperatorName = '" + textBox1.Text.Replace("'", "''") + "'";
+                    DataSet checkSet = new DataSet();
+                    OleDbCommand checkCmd = new OleDbCommand(checkString, conn);
+                    OleDbDataAdapter checkAdapter = new OleDbDataAdapter(checkCmd);
+                    lock (Main_Form.dataBaseLock)
+                    {
+                        conn.Open();
+                        checkAdapter.Fill(checkSet);
+                        conn.Close();
+                    }
+
+                    if (checkSet.Tables[0].Rows.Count > 0)
+                    {
+                        //we already have that serial number in the DB
+                        // tell the user about that and return...
+                        MessageBox.Show(this, "That combination test is already in the database!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
                     // find the max value in the CustomerID column so we know what to assign to the new record
                     int max;
                     try
@@ -296,7 +317,7 @@ namespace NewBTASProto
                     }
                     string cmdStr = "INSERT INTO Operators (ID, OperatorName) " +
                         "VALUES (" + (max + 1).ToString() + ",'" +
-                        textBox1.Text + "')";
+                        textBox1.Text.Replace("'", "''") + "')";
                     OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
                     lock (Main_Form.dataBaseLock)
                     {

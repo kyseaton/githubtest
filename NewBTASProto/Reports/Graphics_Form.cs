@@ -61,6 +61,7 @@ namespace NewBTASProto
 
         private void Graphics_Form_Load(object sender, EventArgs e)
         {
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
             loadWorkOrderLists();
 
             // Need to set up the title for the charts...
@@ -2000,8 +2001,8 @@ namespace NewBTASProto
                     else
                     {
                         Min1 = 0.25 * Cells;
-                        Min2 = 1.5 * Cells;
-                        Min3 = 1.55 * Cells;
+                        Min2 = 1.55 * Cells;
+                        Min3 = 1.6 * Cells;
                         Max = ((-1 == CellV1) ? 1.82 : CellV1) * Cells;
 
                         if (Value > Max) { return Color.Red; }
@@ -2116,8 +2117,8 @@ namespace NewBTASProto
                     else
                     {
                         Min1 = 0.25 * Cells;
-                        Min2 = 1.5 * Cells;
-                        Min3 = 1.55 * Cells;
+                        Min2 = 1.55 * Cells;
+                        Min3 = 1.6 * Cells;
                         Max = CellV2 * Cells;
 
                         if (Value > Max) { return Color.Red; }

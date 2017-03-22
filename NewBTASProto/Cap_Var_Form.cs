@@ -181,8 +181,8 @@ namespace NewBTASProto
                     else
                     {
                         Min1 = 0.25;
-                        Min2 = 1.5;
-                        Min3 = 1.55;
+                        Min2 = 1.55;
+                        Min3 = 1.6;
                         Max = ((-1 == cellLim) ? 1.82 : cellLim);
 
                         if (Value > Max) { return Color.Red; }

@@ -183,7 +183,7 @@ namespace NewBTASProto
                         return;
                     }
                     //also make sure we have the shorting cable connected when running a shorting test
-                    if (d.Rows[station][2].ToString().Contains("Shorting") && GlobalVars.CScanData[station].CCID != 23)
+                    if (d.Rows[station][2].ToString().Contains("Shorting") && !(GlobalVars.CScanData[station].CCID == 23 || GlobalVars.CScanData[station].CCID == 24))
                     {
                         this.Invoke((MethodInvoker)delegate()
                         {
@@ -245,11 +245,11 @@ namespace NewBTASProto
                             cRunTest[station].Cancel();
                             return;
                         }
-                        else if (GlobalVars.CScanData[station].shuntCableType == "NONE" && testType != "As Received")
+                        else if (GlobalVars.CScanData[station].shuntCableType == "NONE" && !(testType == "As Received" || testType.Contains("Short")))
                         {
                             this.Invoke((MethodInvoker)delegate()
                             {
-                                MessageBox.Show(this, "CScan is not connected to a cells Shunt cable.  Please connect a shunt cable to this CSCAN to run a test.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                MessageBox.Show(this, "CScan is not connected to a Shunt cable.  Please connect a shunt cable to this CSCAN to run a test.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             });
                             cRunTest[station].Cancel();
                             return;
@@ -376,7 +376,7 @@ namespace NewBTASProto
                                 cRunTest[station].Cancel();
                                 return;
                             }
-                            else if (dataGridView1.Rows[slaveRow].Cells[4].Style.BackColor != Color.Green)
+                            else if (dataGridView1.Rows[slaveRow].Cells[4].Style.BackColor != Color.Green && dataGridView1.Rows[slaveRow].Cells[4].Style.BackColor != Color.YellowGreen)
                             {
                                 this.Invoke((MethodInvoker)delegate()
                                 {
@@ -541,7 +541,7 @@ namespace NewBTASProto
                                 // we got both so let's compare!
                                 if (batMod1.Tables[0].Rows[0][0].ToString() != batMod2.Tables[0].Rows[0][0].ToString())
                                 {
-                                    if (GlobalVars.autoConfig && (bool)d.Rows[station][12] && d.Rows[station][10].ToString().Contains("ICA"))
+                                    if (GlobalVars.autoConfig && (bool)d.Rows[station][12] && (d.Rows[station][10].ToString().Contains("ICA") || d.Rows[station][10].ToString().Contains("MFC")))
                                     {
                                         //we are setup for AutoConfig, but we have different types of batteries in the master slave, which will not work
                                         this.Invoke((MethodInvoker)delegate()
@@ -581,7 +581,7 @@ namespace NewBTASProto
                         {
                             runAsShunt = true;
                         }
-                        else if ((bool)d.Rows[station][8] == false && testType != "As Received")
+                        else if ((bool)d.Rows[station][8] == false && !(testType == "As Received" || testType.ToString().Contains("Shorting")))
                         {
                             this.Invoke((MethodInvoker)delegate()
                             {
@@ -597,7 +597,7 @@ namespace NewBTASProto
                         }
 
 
-                        if ((string)d.Rows[station][11] == "offline!" && testType != "As Received" && d.Rows[station][10].ToString().Contains("ICA") && !runAsShunt)
+                        if ((string)d.Rows[station][11] == "offline!" && !(testType == "As Received" || testType.ToString().Contains("Shorting")) && (d.Rows[station][10].ToString().Contains("ICA") || d.Rows[station][10].ToString().Contains("MFC")) && !runAsShunt)
                         {
                             this.Invoke((MethodInvoker)delegate()
                             {
@@ -607,12 +607,12 @@ namespace NewBTASProto
                             return;
                         }
 
-                        else if ((d.Rows[station][9].ToString() == "" || d.Rows[station][10].ToString() == "") && testType != "As Received")
+                        else if ((d.Rows[station][9].ToString() == "" || d.Rows[station][10].ToString() == "") && !(testType == "As Received" || testType.ToString().Contains("Shorting")))
                         {
                             // we don't have a charger linked. Do we still want to continue...
                             this.Invoke((MethodInvoker)delegate()
                             {
-                                MessageBox.Show(this, "There is no charger ID entered.  You must enter a charger ID to run any test other than 'As Received'", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                MessageBox.Show(this, "There is no charger ID entered.  You must enter a charger ID to run any test other than 'As Received' or 'Shorting'", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             });
                             cRunTest[station].Cancel();
                             return;
@@ -620,7 +620,7 @@ namespace NewBTASProto
 
 
                         //Finally Lets check if the charger is running also...
-                        else if (d.Rows[station][11].ToString() == "RUN" && d.Rows[station][10].ToString().Contains("ICA") && !runAsShunt)
+                        else if (d.Rows[station][11].ToString() == "RUN" && (d.Rows[station][10].ToString().Contains("ICA") || d.Rows[station][10].ToString().Contains("MFC")) && !runAsShunt)
                         {
                             //looks like that charger is already running.  Lets ask the user if we should stop the charger or not.
                             this.Invoke((MethodInvoker)delegate()
@@ -676,10 +676,14 @@ namespace NewBTASProto
 
                         }
 
-                        shuntCon = true;
+                        
                         cellCon = true;
-                        oldShuntCon = true;
                         oldCellCon = true;
+                        if (GlobalVars.CScanData[station].shuntCableType != "NONE")
+                        {
+                            shuntCon = true;
+                            oldShuntCon = true;
+                        }
                         if (GlobalVars.CScanData[station].tempPlateType != "NONE")
                         {
                             tempCon = true;
@@ -728,7 +732,7 @@ namespace NewBTASProto
                     if (MasterSlaveTest) { updateD(slaveRow, 5, true); }
 
                     #region test startup wait (only for the ICAs...)
-                    if (d.Rows[station][10].ToString().Contains("ICA") && !runAsShunt)
+                    if ((d.Rows[station][10].ToString().Contains("ICA") || d.Rows[station][10].ToString().Contains("MFC")) && !runAsShunt)
                     {
                         if (readTLock() == true)
                         {
@@ -786,7 +790,7 @@ namespace NewBTASProto
                     float vSet2 = 0;
 
                     // we'll tell the charger what to do! (if we have an IC and the user wants us to...)
-                    if (GlobalVars.autoConfig && (bool)d.Rows[station][12] && d.Rows[station][10].ToString().Contains("ICA") && testType != "As Received" && !runAsShunt && !testType.Contains("Shorting"))
+                    if (GlobalVars.autoConfig && (bool)d.Rows[station][12] && (d.Rows[station][10].ToString().Contains("ICA") || d.Rows[station][10].ToString().Contains("MFC")) && testType != "As Received" && !runAsShunt && !testType.Contains("Shorting"))
                     {
 
                         // GENERAL PROCEDURE
@@ -2414,7 +2418,7 @@ namespace NewBTASProto
                         // nothing to do! if it's an "As Received" or a shorting test... 
                         stopwatch.Start();
                     }
-                    else if (d.Rows[station][10].ToString().Contains("ICA") && !runAsShunt)
+                    else if ((d.Rows[station][10].ToString().Contains("ICA") || d.Rows[station][10].ToString().Contains("MFC")) && !runAsShunt)
                     {
                         #region             mode test
                         //update the GUI and pause...
@@ -2955,10 +2959,14 @@ namespace NewBTASProto
                         //Update the output string value
                         GlobalVars.ICSettings[Cstation].UpdateOutText();
 
-                        // add 1 second
-                        firstCheat = true;
-                        offset = offset.Add(new TimeSpan(0, 0, 0, 0, 2500));
+                        // add 2.5 seconds to help out the ICAs (don't need for MFCs)
+                        if (!d.Rows[station][10].ToString().Contains("MFC"))
+                        {
+                            firstCheat = true;
+                            offset = offset.Add(new TimeSpan(0, 0, 0, 0, 2500));
+                        }
                         stopwatch.Start();
+                        
                         //Thread.Sleep(500);
 
 
@@ -3952,7 +3960,7 @@ namespace NewBTASProto
                             if (!(testType.Contains("Dis") || testType.Contains("Cap") || testType.Contains("Shorting")))
                             {
                                 //also check that we don't have an ICA running in a custom discharge mode...
-                                if (d.Rows[station][10].ToString().Contains("ICA") && (GlobalVars.ICData[Cstation].testMode.ToString().Contains("30") || GlobalVars.ICData[Cstation].testMode.ToString().Contains("31") || GlobalVars.ICData[Cstation].testMode.ToString().Contains("32")))
+                                if ((d.Rows[station][10].ToString().Contains("ICA") || d.Rows[station][10].ToString().Contains("MFC")) && (GlobalVars.ICData[Cstation].testMode.ToString().Contains("30") || GlobalVars.ICData[Cstation].testMode.ToString().Contains("31") || GlobalVars.ICData[Cstation].testMode.ToString().Contains("32")))
                                 {
                                     // we have a custom ICA discharge test...
                                 }
@@ -4001,7 +4009,7 @@ namespace NewBTASProto
                                             sendNote(station, 1, "Temperature has risen 20C on template");
                                         });
                                         // here is where we cancel the test if we can...
-                                        if (d.Rows[station][10].ToString().Contains("ICA") || d.Rows[station][10].ToString().Contains("CCA") && !runAsShunt)
+                                        if ((d.Rows[station][10].ToString().Contains("ICA") || d.Rows[station][10].ToString().Contains("MFC")) || d.Rows[station][10].ToString().Contains("CCA") && !runAsShunt)
                                         {
                                             cRunTest[station].Cancel();
                                             this.Invoke((MethodInvoker)delegate()
@@ -4031,7 +4039,7 @@ namespace NewBTASProto
                             {
 
                                 //also check that we don't have an ICA running in a custom discharge mode...
-                                if (d.Rows[station][10].ToString().Contains("ICA") && (GlobalVars.ICData[Cstation].testMode.ToString().Contains("30") || GlobalVars.ICData[Cstation].testMode.ToString().Contains("31") || GlobalVars.ICData[Cstation].testMode.ToString().Contains("32")))
+                                if ((d.Rows[station][10].ToString().Contains("ICA") || d.Rows[station][10].ToString().Contains("MFC")) && (GlobalVars.ICData[Cstation].testMode.ToString().Contains("30") || GlobalVars.ICData[Cstation].testMode.ToString().Contains("31") || GlobalVars.ICData[Cstation].testMode.ToString().Contains("32")))
                                 {
                                     // we have a custom ICA discharge test...
                                     // skip this step...
@@ -4068,11 +4076,11 @@ namespace NewBTASProto
                                     //finally test the cells for three consecutive negative slopes..
                                     for (int j = 0; j < Cells; j++)
                                     {
-                                        if ((cellHistory[j, 1] - cellHistory[j, 0]) < -0.01 && (cellHistory[j, 2] - cellHistory[j, 1]) < -0.01 && (cellHistory[j, 3] - cellHistory[j, 2]) < -0.01)
+                                        if ((cellHistory[j, 1] - cellHistory[j, 0]) < (double)(GlobalVars.DecliningCellVoltageThres) && (cellHistory[j, 2] - cellHistory[j, 1]) < (double)(GlobalVars.DecliningCellVoltageThres) && (cellHistory[j, 3] - cellHistory[j, 2]) < (double)(GlobalVars.DecliningCellVoltageThres))
                                         {
                                             //we need to quit...
                                             // here is where we cancel the test if we can...
-                                            if (d.Rows[station][10].ToString().Contains("ICA") || d.Rows[station][10].ToString().Contains("CCA") && !runAsShunt)
+                                            if ((d.Rows[station][10].ToString().Contains("ICA") || d.Rows[station][10].ToString().Contains("MFC")) || d.Rows[station][10].ToString().Contains("CCA") && !runAsShunt)
                                             {
                                                 cRunTest[station].Cancel();
                                                 this.Invoke((MethodInvoker)delegate()
@@ -4120,11 +4128,11 @@ namespace NewBTASProto
                                         //finally test the cells for three consecutive negative slopes..
                                         for (int j = 0; j < Cells; j++)
                                         {
-                                            if ((slaveCellHistory[j, 1] - slaveCellHistory[j, 0]) < -0.01 && (slaveCellHistory[j, 2] - slaveCellHistory[j, 1]) < -0.01 && (slaveCellHistory[j, 3] - slaveCellHistory[j, 2]) < -0.01)
+                                            if ((slaveCellHistory[j, 1] - slaveCellHistory[j, 0]) < (double)(GlobalVars.DecliningCellVoltageThres) && (slaveCellHistory[j, 2] - slaveCellHistory[j, 1]) < (double)(GlobalVars.DecliningCellVoltageThres) && (slaveCellHistory[j, 3] - slaveCellHistory[j, 2]) < (double)(GlobalVars.DecliningCellVoltageThres))
                                             {
                                                 //we need to quit...
                                                 // here is where we cancel the test if we can...
-                                                if (d.Rows[slaveRow][10].ToString().Contains("ICA") || d.Rows[slaveRow][10].ToString().Contains("CCA") && !runAsShunt)
+                                                if ((d.Rows[station][10].ToString().Contains("ICA") || d.Rows[station][10].ToString().Contains("MFC")) || d.Rows[slaveRow][10].ToString().Contains("CCA") && !runAsShunt)
                                                 {
                                                     cRunTest[slaveRow].Cancel();
                                                     this.Invoke((MethodInvoker)delegate()
@@ -4150,8 +4158,10 @@ namespace NewBTASProto
 
                             #endregion
                             //charger specific tests
+
+                            // No need to check for "As Received" because of the start up delay
                             #region IC checks
-                            if (d.Rows[station][10].ToString().Contains("ICA") && !startUpDelay && !runAsShunt && !testType.Contains("Shorting"))
+                            if ((d.Rows[station][10].ToString().Contains("ICA") || d.Rows[station][10].ToString().Contains("MFC")) && !startUpDelay && !runAsShunt && !testType.Contains("Shorting"))
                             {
                                 //current check part...
                                 //if we have a mini that is charging...
@@ -4440,9 +4450,25 @@ namespace NewBTASProto
                                             badReadingCount++;
                                         }
                                     }
-                                    else if (GlobalVars.ICData[Cstation].testMode.Contains("30") || GlobalVars.ICData[Cstation].testMode.Contains("31"))
+                                    else if (GlobalVars.ICData[Cstation].testMode.Contains("31"))
                                     {
                                         if (Math.Abs(-1 * GlobalVars.CScanData[station].currentOne - curSet1) > (0.1 + curSet1 * 0.05) && Math.Abs(-1 * GlobalVars.CScanData[station].currentOne - curSet2) > (0.1 + curSet2 * 0.05))
+                                        {
+                                            badReadingCount++;
+                                        }
+                                        else if (GlobalVars.ICData[Cstation].battVoltage < (vSet1 - 1))
+                                        {
+                                            badReadingCount++;
+                                        }
+                                        else
+                                        {
+                                            badReadingCount = 0;
+                                        }
+                                    }
+                                    else if (GlobalVars.ICData[Cstation].testMode.Contains("30"))
+                                    {
+                                        // only test is you are over for discharge...
+                                        if ((-1 * GlobalVars.CScanData[station].currentOne - curSet1) > (0.1 + curSet1 * 0.05) && (-1 * GlobalVars.CScanData[station].currentOne - curSet2) > (0.1 + curSet2 * 0.05))
                                         {
                                             badReadingCount++;
                                         }
@@ -4725,7 +4751,7 @@ namespace NewBTASProto
                                 {
                                     //nothing to do here...
                                 }
-                                else if (d.Rows[station][10].ToString().Contains("ICA") && !runAsShunt)
+                                else if ((d.Rows[station][10].ToString().Contains("ICA") || d.Rows[station][10].ToString().Contains("MFC")) && !runAsShunt)
                                 {
                                     // now we need to stop the charger
                                     updateD(station, 7, "Telling Charger to Stop");
@@ -4836,7 +4862,7 @@ namespace NewBTASProto
                     {
                         // nothing to do...
                     }
-                    else if ((string)d.Rows[station][9] != "" && d.Rows[station][10].ToString().Contains("ICA") && !runAsShunt)
+                    else if ((string)d.Rows[station][9] != "" && (d.Rows[station][10].ToString().Contains("ICA") || d.Rows[station][10].ToString().Contains("MFC")) && !runAsShunt)
                     {
                         // now we need to stop the charger
                         updateD(station, 7, "Telling Charger to Stop");
@@ -5204,9 +5230,9 @@ namespace NewBTASProto
             // set the station
             int station = dataGridView1.CurrentRow.Index;
             // we need to make sure that this is being run on an ICA with the auto config set to on
-            if (!(GlobalVars.autoConfig && (bool)d.Rows[station][12] && d.Rows[station][10].ToString().Contains("ICA") && !d.Rows[station][11].ToString().Contains("offline")))
+            if (!(GlobalVars.autoConfig && (bool)d.Rows[station][12] && (d.Rows[station][10].ToString().Contains("ICA") || d.Rows[station][10].ToString().Contains("MFC")) && !d.Rows[station][11].ToString().Contains("offline") && (bool)d.Rows[station][8]))
             {
-                MessageBox.Show(this, "Cannot run a combo test, unless you are using an online ICA with AutoConfig", "Combo Test Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, "Cannot run a combo test, unless you are using a linked online ICA with AutoConfig", "Combo Test Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 

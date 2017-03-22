@@ -69,6 +69,7 @@
             this.editTestSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setupCombinationTestsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem45 = new System.Windows.Forms.ToolStripMenuItem();
+            this.sequentialScanningSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem35 = new System.Windows.Forms.ToolStripSeparator();
             this.notificationServiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -452,6 +453,7 @@
             this.editTestSettingsToolStripMenuItem,
             this.setupCombinationTestsToolStripMenuItem,
             this.toolStripMenuItem45,
+            this.sequentialScanningSettingsToolStripMenuItem,
             this.toolStripMenuItem35,
             this.notificationServiceToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
@@ -540,6 +542,13 @@
             this.toolStripMenuItem45.Size = new System.Drawing.Size(298, 22);
             this.toolStripMenuItem45.Text = "Advanced Test Settings";
             this.toolStripMenuItem45.Click += new System.EventHandler(this.toolStripMenuItem45_Click);
+            // 
+            // sequentialScanningSettingsToolStripMenuItem
+            // 
+            this.sequentialScanningSettingsToolStripMenuItem.Name = "sequentialScanningSettingsToolStripMenuItem";
+            this.sequentialScanningSettingsToolStripMenuItem.Size = new System.Drawing.Size(298, 22);
+            this.sequentialScanningSettingsToolStripMenuItem.Text = "Sequential Scanning Settings";
+            this.sequentialScanningSettingsToolStripMenuItem.Click += new System.EventHandler(this.sequentialScanningSettingsToolStripMenuItem_Click);
             // 
             // toolStripMenuItem35
             // 
@@ -816,7 +825,7 @@
             // 
             this.toolStripStatusLabel5.Name = "toolStripStatusLabel5";
             this.toolStripStatusLabel5.Size = new System.Drawing.Size(216, 17);
-            this.toolStripStatusLabel5.Text = "Copyright © 2016 JFM Engineering, Inc.";
+            this.toolStripStatusLabel5.Text = "Copyright © 2017 JFM Engineering, Inc.";
             // 
             // toolStripStatusLabel1
             // 
@@ -1973,6 +1982,7 @@
         private System.Windows.Forms.ToolStripMenuItem resetDataLocationToDefaultToolStripMenuItem;
         public System.Windows.Forms.GroupBox groupBox3;
         public System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.ToolStripMenuItem sequentialScanningSettingsToolStripMenuItem;
     }
 }
 

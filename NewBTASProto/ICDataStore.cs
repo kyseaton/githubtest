@@ -63,6 +63,10 @@ namespace NewBTASProto
                 {
                     battCurrent = ((float) GetDouble(ICDATA[10]) - 1000) / 1000;
                 }
+                else if (boardID == 20)
+                {
+                    battCurrent = ((float)GetDouble(ICDATA[10]) - 1000) / 100;
+                }
                 else
                 {
                     battCurrent = ((float) GetDouble(ICDATA[10]) - 1000) / 10;

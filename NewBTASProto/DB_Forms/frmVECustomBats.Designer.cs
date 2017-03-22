@@ -1343,10 +1343,10 @@
             this.tabPage2.Controls.Add(this.groupBox3);
             this.tabPage2.Controls.Add(this.label24);
             this.tabPage2.Controls.Add(this.comboBox1);
-            this.tabPage2.Location = new System.Drawing.Point(4, 40);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(529, 411);
+            this.tabPage2.Size = new System.Drawing.Size(529, 429);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Full Charge-4";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -1642,9 +1642,9 @@
             this.tabPage13.Controls.Add(this.groupBox10);
             this.tabPage13.Controls.Add(this.label172);
             this.tabPage13.Controls.Add(this.comboBox14);
-            this.tabPage13.Location = new System.Drawing.Point(4, 40);
+            this.tabPage13.Location = new System.Drawing.Point(4, 22);
             this.tabPage13.Name = "tabPage13";
-            this.tabPage13.Size = new System.Drawing.Size(529, 411);
+            this.tabPage13.Size = new System.Drawing.Size(529, 429);
             this.tabPage13.TabIndex = 12;
             this.tabPage13.Text = "Full Charge-4.5";
             this.tabPage13.UseVisualStyleBackColor = true;
@@ -1948,9 +1948,9 @@
             this.tabPage3.Controls.Add(this.groupBox5);
             this.tabPage3.Controls.Add(this.label60);
             this.tabPage3.Controls.Add(this.comboBox3);
-            this.tabPage3.Location = new System.Drawing.Point(4, 40);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(529, 411);
+            this.tabPage3.Size = new System.Drawing.Size(529, 429);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Top Charge-4";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -2225,10 +2225,10 @@
             this.tabPage4.Controls.Add(this.groupBox12);
             this.tabPage4.Controls.Add(this.label73);
             this.tabPage4.Controls.Add(this.comboBox4);
-            this.tabPage4.Location = new System.Drawing.Point(4, 40);
+            this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(529, 411);
+            this.tabPage4.Size = new System.Drawing.Size(529, 429);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Top Charge-2";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -2501,10 +2501,10 @@
             this.tabPage5.Controls.Add(this.groupBox16);
             this.tabPage5.Controls.Add(this.label86);
             this.tabPage5.Controls.Add(this.comboBox5);
-            this.tabPage5.Location = new System.Drawing.Point(4, 40);
+            this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
             this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(529, 411);
+            this.tabPage5.Size = new System.Drawing.Size(529, 429);
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Text = "Top Charge-1";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -2776,10 +2776,10 @@
             this.tabPage6.Controls.Add(this.groupBox17);
             this.tabPage6.Controls.Add(this.label99);
             this.tabPage6.Controls.Add(this.comboBox6);
-            this.tabPage6.Location = new System.Drawing.Point(4, 40);
+            this.tabPage6.Location = new System.Drawing.Point(4, 22);
             this.tabPage6.Name = "tabPage6";
             this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage6.Size = new System.Drawing.Size(529, 411);
+            this.tabPage6.Size = new System.Drawing.Size(529, 429);
             this.tabPage6.TabIndex = 5;
             this.tabPage6.Text = "Capacity-1  ";
             this.tabPage6.UseVisualStyleBackColor = true;
@@ -2890,7 +2890,7 @@
             65536});
             this.numericUpDown43.Location = new System.Drawing.Point(100, 85);
             this.numericUpDown43.Maximum = new decimal(new int[] {
-            60,
+            80,
             0,
             0,
             0});
@@ -3098,7 +3098,7 @@
             65536});
             this.numericUpDown48.Location = new System.Drawing.Point(100, 85);
             this.numericUpDown48.Maximum = new decimal(new int[] {
-            60,
+            80,
             0,
             0,
             0});
@@ -4444,7 +4444,7 @@
             65536});
             this.numericUpDown53.Location = new System.Drawing.Point(100, 85);
             this.numericUpDown53.Maximum = new decimal(new int[] {
-            60,
+            80,
             0,
             0,
             0});

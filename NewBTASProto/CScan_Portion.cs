@@ -138,7 +138,7 @@ namespace NewBTASProto
                                     //A[1] has the terminal ID in it
                                     testData = new CScanDataStore(A);
                                     GlobalVars.CScanData[currentRow] = testData;
-                                    // Set the autoShort to true if we have a auto short board              
+                                    
 
                                     int chargerNum = -1;
                                     //figure out which charger you have on that channel.
@@ -159,6 +159,14 @@ namespace NewBTASProto
                                         chargerNum = int.Parse(d.Rows[currentRow][9].ToString().Substring(0, 2));
                                     }
 
+                                    //now lets replace the C-Scan shunt and current data if we have an MFC
+                                    if (d.Rows[currentRow][10].ToString().Contains("MFC"))
+                                    {
+                                        GlobalVars.CScanData[currentRow].SHCID = 9;
+                                        GlobalVars.CScanData[currentRow].shuntCableType = "MFC";
+                                        GlobalVars.CScanData[currentRow].currentOne = GlobalVars.ICData[chargerNum].battCurrent;
+                                    }
+
                                     if ((bool)d.Rows[currentRow][4] && tempClick == currentRow)  // test to see if we've clicked in the mean time...
                                     {
 
@@ -166,7 +174,7 @@ namespace NewBTASProto
                                         this.Invoke((MethodInvoker)delegate
                                         {
 
-                                            if (testData.CCID == 23)
+                                            if (testData.CCID == 23 || testData.CCID == 24)
                                             {
                                                 // first set the cell to green
                                                 dataGridView1.Rows[currentRow].Cells[4].Style.BackColor = Color.YellowGreen;
@@ -490,20 +498,21 @@ namespace NewBTASProto
 
                                                 tempText += "Reference Voltage:  " + testData.ref95V.ToString("0.000") + Environment.NewLine;
 
-                                                tempText += "5V: " + testData.plus5V + Environment.NewLine;
+                                                tempText += "5V: " + testData.plus5V.ToString("0.000") + Environment.NewLine;
 
-                                                tempText += "Positive Supply: " + testData.plus15 + Environment.NewLine;
+                                                tempText += "Positive Supply: " + testData.plus15.ToString("0.000") + Environment.NewLine;
 
-                                                tempText += "Negative Supply: " + testData.minus15 + Environment.NewLine;
+                                                tempText += "Negative Supply: " + testData.minus15.ToString("0.000") + Environment.NewLine;
 
                                                 tempText += "CSCAN Program Version: " + testData.programVersion + Environment.NewLine;
                                                 tempText += Environment.NewLine;
 
-                                            }
-                                            if (d.Rows[currentRow][10].ToString().Contains("ICA"))
-                                            {
-                                                tempText += "IC Program Version: " + GlobalVars.ICData[chargerNum].PV1.ToString() + Environment.NewLine;
-                                                tempText += "IC COMS Program Version:  " + GlobalVars.ICData[chargerNum].PV2.ToString() + "";
+
+                                                if ((d.Rows[currentRow][10].ToString().Contains("ICA") || d.Rows[currentRow][10].ToString().Contains("MFC")))
+                                                {
+                                                    tempText += "IC Program Version: " + GlobalVars.ICData[chargerNum].PV1.ToString() + Environment.NewLine;
+                                                    tempText += "IC COMS Program Version:  " + GlobalVars.ICData[chargerNum].PV2.ToString() + "";
+                                                }
                                             }
 
                                             LockWindowUpdate(label1.Handle);
@@ -536,7 +545,7 @@ namespace NewBTASProto
                                             //(bool)d.Rows[currentRow][8] &&
                                             !d.Rows[currentRow][9].ToString().Contains("S") &&
                                             GlobalVars.CScanData[currentRow].connected &&
-                                            !d.Rows[currentRow][10].ToString().Contains("ICA") &&
+                                            !(d.Rows[currentRow][10].ToString().Contains("ICA") || d.Rows[currentRow][10].ToString().Contains("MFC")) &&
                                             (d.Rows[currentRow][10].ToString() == "" || dataGridView1.Rows[currentRow].Cells[8].Style.BackColor != Color.Olive || dataGridView1.Rows[currentRow].Cells[8].Style.BackColor != Color.Red))  // if a charger type isn't already there maybe we need to update with a CSCAN controlled charger...
                                         {
                                             // we got a CSCAN connected charger...
@@ -761,7 +770,7 @@ namespace NewBTASProto
                                                     {
                                                         dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[4].Style.BackColor = Color.Red;
                                                     }
-                                                    if (!d.Rows[dataGridView1.CurrentRow.Index][10].ToString().Contains("ICA")) { dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.Gainsboro; }
+                                                    if (!(d.Rows[dataGridView1.CurrentRow.Index][10].ToString().Contains("ICA") || d.Rows[dataGridView1.CurrentRow.Index][10].ToString().Contains("MFC"))) { dataGridView1.Rows[dataGridView1.CurrentRow.Index].Cells[8].Style.BackColor = Color.Gainsboro; }
                                                     chart1.Series.Clear();
                                                     chart1.Invalidate();
                                                     LockWindowUpdate(this.Handle);
@@ -901,11 +910,39 @@ namespace NewBTASProto
                                         testData = new CScanDataStore(A);
                                         GlobalVars.CScanData[j] = testData;
 
+
+                                        int chargerNum = -1;
+                                        //figure out which charger you have on that channel.
+                                        if (d.Rows[j][9].ToString().Length == 0)
+                                        {
+                                            //no id
+                                        }
+                                        else if (d.Rows[j][9].ToString().Length < 3)
+                                        {
+                                            chargerNum = int.Parse(d.Rows[j][9].ToString());
+                                        }
+                                        else if (d.Rows[j][9].ToString().Length == 3)
+                                        {
+                                            chargerNum = int.Parse(d.Rows[j][9].ToString().Substring(0, 1));
+                                        }
+                                        else if (d.Rows[j][9].ToString().Length == 4)
+                                        {
+                                            chargerNum = int.Parse(d.Rows[j][9].ToString().Substring(0, 2));
+                                        }
+
+                                        //now lets replace the C-Scan shunt and current data if we have an MFC
+                                        if (d.Rows[j][10].ToString().Contains("MFC"))
+                                        {
+                                            GlobalVars.CScanData[j].SHCID = 9;
+                                            GlobalVars.CScanData[j].shuntCableType = "MFC";
+                                            GlobalVars.CScanData[j].currentOne = GlobalVars.ICData[chargerNum].battCurrent;
+                                        }
+
                                         if ((bool)d.Rows[j][4])  // added to help with gui look
                                         {
                                             this.Invoke((MethodInvoker)delegate
                                             {
-                                                if (testData.CCID == 23)
+                                                if (testData.CCID == 23 || testData.CCID == 24)
                                                 {
                                                     // set the cell to yellow green
                                                     dataGridView1.Rows[j].Cells[4].Style.BackColor = Color.YellowGreen;
@@ -947,7 +984,7 @@ namespace NewBTASProto
                                             if ((bool)d.Rows[j][4] &&
                                                 //(bool)d.Rows[j][8] &&
                                                 GlobalVars.CScanData[j].connected &&
-                                                !d.Rows[j][10].ToString().Contains("ICA") &&
+                                                !(d.Rows[j][10].ToString().Contains("ICA") || d.Rows[j][10].ToString().Contains("MFC")) &&
                                                 (d.Rows[j][10].ToString() == "" || dataGridView1.Rows[j].Cells[8].Style.BackColor != Color.Olive || dataGridView1.Rows[j].Cells[8].Style.BackColor != Color.Red))  // if a charger type isn't already there maybe we need to update with a CSCAN controlled charger...
                                             {
                                                 // we got a CSCAN connected charger...
@@ -1177,7 +1214,7 @@ namespace NewBTASProto
                                                         {
                                                             dataGridView1.Rows[j].Cells[4].Style.BackColor = Color.Red;
                                                         }
-                                                        if (!d.Rows[j][10].ToString().Contains("ICA")) { dataGridView1.Rows[j].Cells[8].Style.BackColor = Color.Gainsboro; }
+                                                        if (!(d.Rows[j][10].ToString().Contains("ICA") || d.Rows[j][10].ToString().Contains("MFC"))) { dataGridView1.Rows[j].Cells[8].Style.BackColor = Color.Gainsboro; }
                                                     });
                                                     comCSErrorNum[j] = 0;
                                                 }
@@ -2185,14 +2222,68 @@ namespace NewBTASProto
                         if (token.IsCancellationRequested) return;
                         Thread.Sleep(500);             // loop every 0.5 seconds
                         multi += 1;                    // increment multi
-                        multi %= 10;                     // test every fourth count
+                        multi %= 10;                     // test every tenth count
                         if (toolStripMenuItem30.Checked && multi == 0 && toolStripMenuItem34.Enabled == true && !sshold)          // sequential scanning is turned on
                         {
                             tempClick = dataGridView1.CurrentRow.Index;
                             //search from tempclick onto the next "in use" row
                             for (int q = 1; q < 16; q++)
                             {
-                                if ((bool)d.Rows[(tempClick + q) % 16][4])
+                                // we need to test if that row has been turned on in sequencial scan now...
+                                bool doIt = false;
+                                switch ((tempClick + q) % 16)
+                                {
+                                    case 0:
+                                        if (GlobalVars.SS0) { doIt = true; }
+                                        break;
+                                    case 1:
+                                        if (GlobalVars.SS1) { doIt = true; }
+                                        break;
+                                    case 2:
+                                        if (GlobalVars.SS2) { doIt = true; }
+                                        break;
+                                    case 3:
+                                        if (GlobalVars.SS3) { doIt = true; }
+                                        break;
+                                    case 4:
+                                        if (GlobalVars.SS4) { doIt = true; }
+                                        break;
+                                    case 5:
+                                        if (GlobalVars.SS5) { doIt = true; }
+                                        break;
+                                    case 6:
+                                        if (GlobalVars.SS6) { doIt = true; }
+                                        break;
+                                    case 7:
+                                        if (GlobalVars.SS7) { doIt = true; }
+                                        break;
+                                    case 8:
+                                        if (GlobalVars.SS8) { doIt = true; }
+                                        break;
+                                    case 9:
+                                        if (GlobalVars.SS9) { doIt = true; }
+                                        break;
+                                    case 10:
+                                        if (GlobalVars.SS10) { doIt = true; }
+                                        break;
+                                    case 11:
+                                        if (GlobalVars.SS11) { doIt = true; }
+                                        break;
+                                    case 12:
+                                        if (GlobalVars.SS12) { doIt = true; }
+                                        break;
+                                    case 13:
+                                        if (GlobalVars.SS13) { doIt = true; }
+                                        break;
+                                    case 14:
+                                        if (GlobalVars.SS14) { doIt = true; }
+                                        break;
+                                    case 15:
+                                        if (GlobalVars.SS15) { doIt = true; }
+                                        break;
+                                }
+
+                                if ((bool)d.Rows[(tempClick + q) % 16][4] && doIt)
                                 {
                                     this.Invoke((MethodInvoker)delegate
                                     {
@@ -2348,8 +2439,8 @@ namespace NewBTASProto
                     else
                     {
                         Min1 = 0.25 * Cells;
-                        Min2 = 1.5 * Cells;
-                        Min3 = 1.55 * Cells;
+                        Min2 = 1.55 * Cells;
+                        Min3 = 1.6 * Cells;
                         Max = ((-1 == (float)pci.Rows[station][7]) ? 1.82 : (float)pci.Rows[station][7]) * Cells;
 
                         if (Value > Max) { return Color.Red; }

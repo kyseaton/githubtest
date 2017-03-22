@@ -68,6 +68,7 @@ namespace NewBTASProto
                     GlobalVars.FC6C1MinimumCellVotageAfterChargeTestEnabled = Properties.Settings.Default.FC6C1MinimumCellVotageAfterChargeTestEnabled;
                     GlobalVars.FC6C1MinimumCellVoltageThreshold = Properties.Settings.Default.FC6C1MinimumCellVoltageThreshold;
                     GlobalVars.DecliningCellVoltageTestEnabled = Properties.Settings.Default.DecliningCellVoltageTestEnabled;
+                    GlobalVars.DecliningCellVoltageThres = Properties.Settings.Default.DecliningCellVoltageThres;
                     GlobalVars.FC6C1WaitEnabled = Properties.Settings.Default.FC6C1WaitEnabled;
                     GlobalVars.FC6C1WaitTime = Properties.Settings.Default.FC6C1WaitTime;
                     GlobalVars.cbComplete = Properties.Settings.Default.cbComplete;
@@ -85,6 +86,22 @@ namespace NewBTASProto
                     GlobalVars.robustCSCAN = Properties.Settings.Default.robustCSCAN;
                     GlobalVars.advance2Short = Properties.Settings.Default.advance2Short;
                     //GlobalVars.folderString = Properties.Settings.Default.folderString;  NEED TODO THIS ON THE SPLASH SCREEN!
+                    GlobalVars.SS0 = Properties.Settings.Default.SS0;
+                    GlobalVars.SS1 = Properties.Settings.Default.SS1;
+                    GlobalVars.SS2 = Properties.Settings.Default.SS2;
+                    GlobalVars.SS3 = Properties.Settings.Default.SS3;
+                    GlobalVars.SS4 = Properties.Settings.Default.SS4;
+                    GlobalVars.SS5 = Properties.Settings.Default.SS5;
+                    GlobalVars.SS6 = Properties.Settings.Default.SS6;
+                    GlobalVars.SS7 = Properties.Settings.Default.SS7;
+                    GlobalVars.SS8 = Properties.Settings.Default.SS8;
+                    GlobalVars.SS9 = Properties.Settings.Default.SS9;
+                    GlobalVars.SS10 = Properties.Settings.Default.SS10;
+                    GlobalVars.SS11 = Properties.Settings.Default.SS11;
+                    GlobalVars.SS12 = Properties.Settings.Default.SS12;
+                    GlobalVars.SS13 = Properties.Settings.Default.SS13;
+                    GlobalVars.SS14 = Properties.Settings.Default.SS14;
+                    GlobalVars.SS15 = Properties.Settings.Default.SS15;
 
                 }
                 catch
@@ -1002,6 +1019,7 @@ namespace NewBTASProto
             Properties.Settings.Default.FC6C1MinimumCellVotageAfterChargeTestEnabled = GlobalVars.FC6C1MinimumCellVotageAfterChargeTestEnabled;
             Properties.Settings.Default.FC6C1MinimumCellVoltageThreshold = GlobalVars.FC6C1MinimumCellVoltageThreshold;
             Properties.Settings.Default.DecliningCellVoltageTestEnabled = GlobalVars.DecliningCellVoltageTestEnabled;
+            Properties.Settings.Default.DecliningCellVoltageThres = GlobalVars.DecliningCellVoltageThres;
             Properties.Settings.Default.FC6C1WaitEnabled = GlobalVars.FC6C1WaitEnabled;
             Properties.Settings.Default.FC6C1WaitTime = GlobalVars.FC6C1WaitTime;
             Properties.Settings.Default.cbComplete = GlobalVars.cbComplete;
@@ -1019,6 +1037,23 @@ namespace NewBTASProto
             Properties.Settings.Default.rows2Dis = GlobalVars.rows2Dis;
             Properties.Settings.Default.advance2Short = GlobalVars.advance2Short;
             Properties.Settings.Default.robustCSCAN = GlobalVars.robustCSCAN;
+            Properties.Settings.Default.SS0 = GlobalVars.SS0;
+            Properties.Settings.Default.SS1 = GlobalVars.SS1;
+            Properties.Settings.Default.SS2 = GlobalVars.SS2;
+            Properties.Settings.Default.SS3 = GlobalVars.SS3;
+            Properties.Settings.Default.SS4 = GlobalVars.SS4;
+            Properties.Settings.Default.SS5 = GlobalVars.SS5;
+            Properties.Settings.Default.SS6 = GlobalVars.SS6;
+            Properties.Settings.Default.SS7 = GlobalVars.SS7;
+            Properties.Settings.Default.SS8 = GlobalVars.SS8;
+            Properties.Settings.Default.SS9 = GlobalVars.SS9;
+            Properties.Settings.Default.SS10 = GlobalVars.SS10;
+            Properties.Settings.Default.SS11 = GlobalVars.SS11;
+            Properties.Settings.Default.SS12 = GlobalVars.SS12;
+            Properties.Settings.Default.SS13 = GlobalVars.SS13;
+            Properties.Settings.Default.SS14 = GlobalVars.SS14;
+            Properties.Settings.Default.SS15 = GlobalVars.SS15;
+            
 
 
             Properties.Settings.Default.Save();
@@ -5267,6 +5302,26 @@ namespace NewBTASProto
         private void Main_Form_Validated(object sender, EventArgs e)
         {
 
+        }
+
+        private void sequentialScanningSettingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormCollection fc = Application.OpenForms;
+
+            foreach (Form frm in fc)
+            {
+                if (frm is SS_Settings)
+                {
+                    if (frm.WindowState == FormWindowState.Minimized)
+                    {
+                        frm.WindowState = FormWindowState.Normal;
+                    }
+                    return;
+                }
+            }
+            SS_Settings f2 = new SS_Settings();
+            f2.Owner = this;
+            f2.Show();
         }
 
     }// end mainform class section...

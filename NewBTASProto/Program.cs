@@ -24,6 +24,8 @@ namespace NewBTASProto
             currentDomain.UnhandledException += new UnhandledExceptionEventHandler(MyHandler);
             //Application.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
 
+            System.Globalization.CultureInfo.DefaultThreadCurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
+
             if (mutex.WaitOne(TimeSpan.Zero, true))
             {
                 try

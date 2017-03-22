@@ -1249,7 +1249,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=CStr(Floor((Fields!ETIME.Value * 24) / 1)) + ":" + Format(Round((Fields!ETIME.Value*24*60)) Mod 60,"00")</Value>
+                              <Value>=Format(Fields!ETIME.Value*24*60*60\(60*60),"00") + ":" + Format(Round(Fields!ETIME.Value*24*60*60\60) Mod 60,"00")</Value>
                               <Style>
                                 <FontSize>7pt</FontSize>
                               </Style>
@@ -1270,6 +1270,7 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -4924,6 +4925,7 @@ lSwBOCMmu+/bl/4J7eC/2/8ARPC9j4y1DxFp8PhPUW1KzOk3EcLPIyhSH3xvlcDtg+9fT0OJMtw+Y4H2
 q3gab/g3++CNrY3HhdvF8XiaczwwNF/aKndqHnFwP3g4MO4t1Bi/2a/cL4CpLF8DPBazKyzLoViJA3UN9nTOfxr448Df8G6X7Pvgf4vW/ijb4u1Wxs7lbq30G/1BJdPVlIZVfEYlkjBH3XkORw24ZB+8Y08uNVGAFGAAMCuzi/PMDjKUKOClKS56lRuStZ1GnyrV7W3+45eGMnxmFqTq4tRj7sIJRd78ia5notx1FFFfCH2B/9k=</ImageData>
     </EmbeddedImage>
   </EmbeddedImages>
+  <Language>en-US</Language>
   <rd:ReportUnitType>Inch</rd:ReportUnitType>
   <rd:ReportID>5ecb54be-6287-4ca1-81ed-09afcaf1a805</rd:ReportID>
 </Report>
