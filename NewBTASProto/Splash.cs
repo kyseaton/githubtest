@@ -16,7 +16,7 @@ namespace NewBTASProto
 
         bool licGood = false;
         // here are the valid licence numbers
-        static string[] lics = new string[30] {
+        static string[] lics = new string[50] {
             "1111111111",                       // jfm
             "2222222222",                       // jfm
             "3333333333",                       // jfm
@@ -47,8 +47,30 @@ namespace NewBTASProto
             "5568154526",                       // New Zealand Air Defense 3
             "5900397404",                       // RB171 LLC
             "1924146292",                       // Satair Miami
-            "4646305542",
-            "6690621576"
+            "4646305542",                       // Piedmont
+            "6690621576",                       // TAP
+
+            "4411606388",                       // Professional Technology Repairs
+            "8799674435",                       // 
+            "8082544274",                       // 
+            "9007356233",                       // 
+            "3230706410",                       // 
+            "8610841593",                       // 
+            "4555182535",                       // 
+            "1098738068",                       // 
+            "6529065984",                       // 
+            "1439108005",                       // 
+            
+            "8278416243",                       // 
+            "4526565694",                       // 
+            "9075232581",                       // 
+            "3201866946",                       // 
+            "4873699807",                       // 
+            "3115904672",                       // 
+            "4806744307",                       // 
+            "1492059149",                       // 
+            "1917371840",                       // 
+            "5999493295"                        // 
         };
         // this is the lic dataTable (here for its writexml and readxml methods
         DataTable lic = new DataTable();
@@ -665,6 +687,39 @@ namespace NewBTASProto
                 }
             }
 
+            //  open the db and check to see if we have the custom charge #2 and #3 in the DB
+            try
+            {
+                strAccessSelect = @"SELECT T14Mode FROM BatteriesCustom";
+                DataSet test = new DataSet();
+                OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                myAccessConn.Open();
+                myDataAdapter.Fill(test, "test");
+                myAccessConn.Close();
+
+            }
+            catch (Exception ex)
+            {
+
+                if (ex is OleDbException)
+                {
+                    // we didn't find the table, so we need to create it!
+                    // we need to  insert
+                    string strUpdateCMD = "ALTER TABLE BatteriesCustom ADD T14Mode Text(255), T14Time1Hr Text(255), T14Time1Min Text(255), T14Curr1 Text(255), T14Volts1 Text(255), T14Time2Hr Text(255), T14Time2Min Text(255), T14Curr2 Text(255), T14Volts2 Text(255), T14Ohms Text(255), T15Mode Text(255), T15Time1Hr Text(255), T15Time1Min Text(255), T15Curr1 Text(255), T15Volts1 Text(255), T15Time2Hr Text(255), T15Time2Min Text(255), T15Curr2 Text(255), T15Volts2 Text(255), T15Ohms Text(255)";
+                    OleDbCommand myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
+                    myAccessCommand.ExecuteNonQuery();
+                    myAccessConn.Close();
+
+                }
+                else
+                {
+                    myAccessConn.Close();
+                    MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+
             //  open the db and check to see if we have the As Recieved test settings in the DB
             try
             {
@@ -814,7 +869,7 @@ namespace NewBTASProto
                 // access for 0 to test if anything is there...
                 if (test.Tables[0].Rows.Count < 1)
                 {
-                    // we didn't find full charge 4.5 in the table, so we need to add it!
+                    // we didn't find top charge 4 in the table, so we need to add it!
                     // we need to  insert
                     string strUpdateCMD = "INSERT INTO TestType ([TESTNAME], Readings, [Interval]) VALUES ('Top Charge-4', 61, 240)";
                     myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
@@ -847,7 +902,7 @@ namespace NewBTASProto
                 // access for 0 to test if anything is there...
                 if (test.Tables[0].Rows.Count < 1)
                 {
-                    // we didn't find full charge 4.5 in the table, so we need to add it!
+                    // we didn't find top charge 2 in the table, so we need to add it!
                     // we need to  insert
                     string strUpdateCMD = "INSERT INTO TestType ([TESTNAME], Readings, [Interval]) VALUES ('Top Charge-2', 41, 180)";
                     myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
@@ -880,7 +935,7 @@ namespace NewBTASProto
                 // access for 0 to test if anything is there...
                 if (test.Tables[0].Rows.Count < 1)
                 {
-                    // we didn't find full charge 4.5 in the table, so we need to add it!
+                    // we didn't find top charge 1 in the table, so we need to add it!
                     // we need to  insert
                     string strUpdateCMD = "INSERT INTO TestType ([TESTNAME], Readings, [Interval]) VALUES ('Top Charge-1', 61, 60)";
                     myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
@@ -913,7 +968,7 @@ namespace NewBTASProto
                 // access for 0 to test if anything is there...
                 if (test.Tables[0].Rows.Count < 1)
                 {
-                    // we didn't find full charge 4.5 in the table, so we need to add it!
+                    // we didn't find constant voltage in the table, so we need to add it!
                     // we need to  insert
                     string strUpdateCMD = "INSERT INTO TestType ([TESTNAME], Readings, [Interval]) VALUES ('Constant Voltage', 73, 300)";
                     myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
@@ -946,7 +1001,7 @@ namespace NewBTASProto
                 // access for 0 to test if anything is there...
                 if (test.Tables[0].Rows.Count < 1)
                 {
-                    // we didn't find full charge 4.5 in the table, so we need to add it!
+                    // we didn't find capactiy 1 in the table, so we need to add it!
                     // we need to  insert
                     string strUpdateCMD = "INSERT INTO TestType ([TESTNAME], Readings, [Interval]) VALUES ('Capacity-1', 61, 60)";
                     myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
@@ -979,7 +1034,7 @@ namespace NewBTASProto
                 // access for 0 to test if anything is there...
                 if (test.Tables[0].Rows.Count < 1)
                 {
-                    // we didn't find full charge 4.5 in the table, so we need to add it!
+                    // we didn't find Discharge in the table, so we need to add it!
                     // we need to  insert
                     string strUpdateCMD = "INSERT INTO TestType ([TESTNAME], Readings, [Interval]) VALUES ('Discharge', 61, 60)";
                     myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
@@ -1012,7 +1067,7 @@ namespace NewBTASProto
                 // access for 0 to test if anything is there...
                 if (test.Tables[0].Rows.Count < 1)
                 {
-                    // we didn't find full charge 4.5 in the table, so we need to add it!
+                    // we didn't find slow charge 16 in the table, so we need to add it!
                     // we need to  insert
                     string strUpdateCMD = "INSERT INTO TestType ([TESTNAME], Readings, [Interval]) VALUES ('Slow Charge-16', 61, 960)";
                     myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
@@ -1045,7 +1100,7 @@ namespace NewBTASProto
                 // access for 0 to test if anything is there...
                 if (test.Tables[0].Rows.Count < 1)
                 {
-                    // we didn't find full charge 4.5 in the table, so we need to add it!
+                    // we didn't find slow charge 14 in the table, so we need to add it!
                     // we need to  insert
                     string strUpdateCMD = "INSERT INTO TestType ([TESTNAME], Readings, [Interval]) VALUES ('Slow Charge-14', 73, 720)";
                     myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
@@ -1078,7 +1133,7 @@ namespace NewBTASProto
                 // access for 0 to test if anything is there...
                 if (test.Tables[0].Rows.Count < 1)
                 {
-                    // we didn't find full charge 4.5 in the table, so we need to add it!
+                    // we didn't find custom charge in the table, so we need to add it!
                     // we need to  insert
                     string strUpdateCMD = "INSERT INTO TestType ([TESTNAME], Readings, [Interval]) VALUES ('Custom Chg', 60, 60)";
                     myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
@@ -1096,8 +1151,74 @@ namespace NewBTASProto
 
             }
 
+            //  open the db and check to see if we have the Custom Chg 2 test settings in the DB
+            try
+            {
+                strAccessSelect = @"SELECT * FROM TestType WHERE TESTNAME = 'Custom Chg 2'";
+                DataSet test = new DataSet();
+                OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
 
-            //  open the db and check to see if we have the Custom Chg test settings in the DB
+                myAccessConn.Open();
+                myDataAdapter.Fill(test, "test");
+                myAccessConn.Close();
+
+                // access for 0 to test if anything is there...
+                if (test.Tables[0].Rows.Count < 1)
+                {
+                    // we didn't find custom charge 2 in the table, so we need to add it!
+                    // we need to  insert
+                    string strUpdateCMD = "INSERT INTO TestType ([TESTNAME], Readings, [Interval]) VALUES ('Custom Chg 2', 60, 60)";
+                    myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
+                    myAccessConn.Open();
+                    myAccessCommand.ExecuteNonQuery();
+                    myAccessConn.Close();
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                myAccessConn.Close();
+                MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            }
+
+            //  open the db and check to see if we have the Custom Chg 3 test settings in the DB
+            try
+            {
+                strAccessSelect = @"SELECT * FROM TestType WHERE TESTNAME = 'Custom Chg 3'";
+                DataSet test = new DataSet();
+                OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                myAccessConn.Open();
+                myDataAdapter.Fill(test, "test");
+                myAccessConn.Close();
+
+                // access for 0 to test if anything is there...
+                if (test.Tables[0].Rows.Count < 1)
+                {
+                    // we didn't find custom charge 3 in the table, so we need to add it!
+                    // we need to  insert
+                    string strUpdateCMD = "INSERT INTO TestType ([TESTNAME], Readings, [Interval]) VALUES ('Custom Chg 3', 60, 60)";
+                    myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);
+                    myAccessConn.Open();
+                    myAccessCommand.ExecuteNonQuery();
+                    myAccessConn.Close();
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                myAccessConn.Close();
+                MessageBox.Show(this, "Error: Failed to create a database connection.  \n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            }
+
+
+            //  open the db and check to see if we have the Custom Cap test settings in the DB
             try
             {
                 strAccessSelect = @"SELECT * FROM TestType WHERE TESTNAME = 'Custom Cap'";
@@ -1112,7 +1233,7 @@ namespace NewBTASProto
                 // access for 0 to test if anything is there...
                 if (test.Tables[0].Rows.Count < 1)
                 {
-                    // we didn't find full charge 4.5 in the table, so we need to add it!
+                    // we didn't find custom cap in the table, so we need to add it!
                     // we need to  insert
                     string strUpdateCMD = "INSERT INTO TestType ([TESTNAME], Readings, [Interval]) VALUES ('Custom Cap', 60, 60)";
                     myAccessCommand = new OleDbCommand(strUpdateCMD, myAccessConn);

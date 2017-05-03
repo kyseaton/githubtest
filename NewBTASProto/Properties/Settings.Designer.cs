@@ -632,5 +632,17 @@ namespace NewBTASProto.Properties {
                 this["DecliningCellVoltageThres"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool InterpolateTime {
+            get {
+                return ((bool)(this["InterpolateTime"]));
+            }
+            set {
+                this["InterpolateTime"] = value;
+            }
+        }
     }
 }

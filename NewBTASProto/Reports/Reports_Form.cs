@@ -1148,7 +1148,27 @@ namespace NewBTASProto
                                 {
                                     passFailSet.Tables[0].Rows.Add(); // add a row
                                     passFailSet.Tables[0].Rows[i][0] = "Cell" + (i + 1).ToString();// record the cell number
-                                    passFailSet.Tables[0].Rows[i][1] = reportSet.Tables[0].Rows[j][2];// record the time
+
+                                    if (GlobalVars.InterpolateTime && j != 0)
+                                    {
+                                        // we need to come up with a new time!
+                                        float x1 = float.Parse(reportSet.Tables[0].Rows[j - 1][2].ToString());
+                                        float y1 = float.Parse(reportSet.Tables[0].Rows[j - 1][i + 3].ToString());
+                                        float x2 = float.Parse(reportSet.Tables[0].Rows[j][2].ToString());
+                                        float y2 = float.Parse(reportSet.Tables[0].Rows[j][i + 3].ToString());
+
+                                        float m = ((y2 - y1) / (x2 - x1));
+                                        float b = (y1 - m * x1);
+
+                                        passFailSet.Tables[0].Rows[i][1] = ((1 - b) / m).ToString();// record the time
+                                    }
+                                    else
+                                    {
+                                        passFailSet.Tables[0].Rows[i][1] = reportSet.Tables[0].Rows[j][2];// record the time
+                                    }
+
+
+                                    //passFailSet.Tables[0].Rows[i][1] = reportSet.Tables[0].Rows[j][2];// record the time
                                     passFailSet.Tables[0].Rows[i][2] = reportSet.Tables[0].Rows[j][1];// record the rdg
                                     passFailSet.Tables[0].Rows[i][3] = reportSet.Tables[0].Rows[j][i + 3];// record the cell voltage
                                     passFailSet.Tables[0].Rows[i][4] = "FAIL!";// record the status
@@ -1520,6 +1540,8 @@ namespace NewBTASProto
                         this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.BatteryData3.rdlc";
                         break;
                     case "3":
+                    case"9":
+                    case"11":
                         this.reportViewer.LocalReport.ReportEmbeddedResource = "NewBTASProto.Reports.BatteryData2.rdlc";
                         break;
                     default:

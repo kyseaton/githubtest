@@ -205,6 +205,8 @@ namespace NewBTASProto
                         textBox1.Text == "Slow Charge-16" ||
                         textBox1.Text == "Constant Voltage" ||
                         textBox1.Text == "Custom Chg" ||
+                        textBox1.Text == "Custom Chg 2" ||
+                        textBox1.Text == "Custom Chg 3" ||
                         textBox1.Text == "Custom Cap" ||
                         textBox1.Text == "Full Charge-4.5" ||
                         textBox1.Text == "Shorting-16")
@@ -294,7 +296,7 @@ namespace NewBTASProto
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            if (textBox1.Text == "Custom Cap" || textBox1.Text == "Custom Chg")
+            if (textBox1.Text == "Custom Cap" || textBox1.Text == "Custom Chg" || textBox1.Text == "Custom Chg 2" || textBox1.Text == "Custom Chg 3")
             {
                 textBox1.Enabled = false;
                 bindingNavigatorDeleteItem.Enabled = false;

@@ -69,6 +69,7 @@ namespace NewBTASProto
                     GlobalVars.FC6C1MinimumCellVoltageThreshold = Properties.Settings.Default.FC6C1MinimumCellVoltageThreshold;
                     GlobalVars.DecliningCellVoltageTestEnabled = Properties.Settings.Default.DecliningCellVoltageTestEnabled;
                     GlobalVars.DecliningCellVoltageThres = Properties.Settings.Default.DecliningCellVoltageThres;
+                    GlobalVars.InterpolateTime = Properties.Settings.Default.InterpolateTime;
                     GlobalVars.FC6C1WaitEnabled = Properties.Settings.Default.FC6C1WaitEnabled;
                     GlobalVars.FC6C1WaitTime = Properties.Settings.Default.FC6C1WaitTime;
                     GlobalVars.cbComplete = Properties.Settings.Default.cbComplete;
@@ -337,7 +338,7 @@ namespace NewBTASProto
                         
         }
 
-        DataTable customTestParams;
+        public DataTable customTestParams;
 
         public void updateCustomTestDropDown()
         {
@@ -345,7 +346,7 @@ namespace NewBTASProto
             DataSet customTests = new DataSet();
 
             string strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
-            string strAccessSelect = @"SELECT * FROM TestType WHERE TESTNAME<>'Top Charge-4' AND TESTNAME<>'As Received' AND TESTNAME<>'Full Charge-4' AND TESTNAME<>'Full Charge-4.5' AND TESTNAME<>'Full Charge-6' AND TESTNAME<>'Capacity-1' AND TESTNAME<>'Top Charge-2' AND TESTNAME<>'Discharge' AND TESTNAME<>'Slow Charge-14' AND TESTNAME<>'Top Charge-1' AND TESTNAME<>'Slow Charge-16' AND TESTNAME<>'Constant Voltage' AND TESTNAME<>'Full Charge-4.5' AND TESTNAME<>'Shorting-16' ORDER BY TESTNAME ASC";
+            string strAccessSelect = @"SELECT * FROM TestType WHERE TESTNAME<>'Top Charge-4' AND TESTNAME<>'As Received' AND TESTNAME<>'Full Charge-4' AND TESTNAME<>'Full Charge-6' AND TESTNAME<>'Capacity-1' AND TESTNAME<>'Top Charge-2' AND TESTNAME<>'Discharge' AND TESTNAME<>'Slow Charge-14' AND TESTNAME<>'Top Charge-1' AND TESTNAME<>'Slow Charge-16' AND TESTNAME<>'Constant Voltage' AND TESTNAME<>'Full Charge-4.5' AND TESTNAME<>'Shorting-16' ORDER BY TESTNAME ASC";
 
             OleDbConnection myAccessConn;
             // try to open the DB
@@ -397,7 +398,7 @@ namespace NewBTASProto
             {
                 foreach (string x in CustomTests)
                 {
-                    if (x != "Custom Cap" && x != "Custom Chg")
+                    if (x != "Custom Cap" && x != "Custom Chg" && x != "Custom Chg 2" && x != "Custom Chg 3")
                     {
                         toolStripComboBox4.Items.Add(x);
                     }
@@ -1020,6 +1021,7 @@ namespace NewBTASProto
             Properties.Settings.Default.FC6C1MinimumCellVoltageThreshold = GlobalVars.FC6C1MinimumCellVoltageThreshold;
             Properties.Settings.Default.DecliningCellVoltageTestEnabled = GlobalVars.DecliningCellVoltageTestEnabled;
             Properties.Settings.Default.DecliningCellVoltageThres = GlobalVars.DecliningCellVoltageThres;
+            Properties.Settings.Default.InterpolateTime = GlobalVars.InterpolateTime;
             Properties.Settings.Default.FC6C1WaitEnabled = GlobalVars.FC6C1WaitEnabled;
             Properties.Settings.Default.FC6C1WaitTime = GlobalVars.FC6C1WaitTime;
             Properties.Settings.Default.cbComplete = GlobalVars.cbComplete;
@@ -4760,6 +4762,26 @@ namespace NewBTASProto
                         myAccessConn.Close();
                     }
 
+                    cmdStr = "UPDATE TestType SET Readings='60', [Interval]='60' WHERE TESTNAME='Custom Chg 2';";
+                    cmd = new OleDbCommand(cmdStr, myAccessConn);
+
+                    lock (dataBaseLock)
+                    {
+                        myAccessConn.Open();
+                        cmd.ExecuteNonQuery();
+                        myAccessConn.Close();
+                    }
+
+                    cmdStr = "UPDATE TestType SET Readings='60', [Interval]='60' WHERE TESTNAME='Custom Chg 3';";
+                    cmd = new OleDbCommand(cmdStr, myAccessConn);
+
+                    lock (dataBaseLock)
+                    {
+                        myAccessConn.Open();
+                        cmd.ExecuteNonQuery();
+                        myAccessConn.Close();
+                    }
+
                     cmdStr = "UPDATE TestType SET Readings='55', [Interval]='300' WHERE TESTNAME='Full Charge-4.5';";
                     cmd = new OleDbCommand(cmdStr, myAccessConn);
 
@@ -5322,6 +5344,58 @@ namespace NewBTASProto
             SS_Settings f2 = new SS_Settings();
             f2.Owner = this;
             f2.Show();
+        }
+
+        private void customChg2ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            updateD(dataGridView1.CurrentRow.Index, 2, "Custom Chg 2");
+            updateD(dataGridView1.CurrentRow.Index, 3, "");
+            updateD(dataGridView1.CurrentRow.Index, 6, "");
+            updateD(dataGridView1.CurrentRow.Index, 7, "");
+            fillPlotCombos(dataGridView1.CurrentRow.Index);
+
+            // also update the slave (if we have a master...)
+            if (d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Contains("M"))
+            {
+                //find the slave
+                string temp = d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Replace("-M", "");
+                for (int i = 0; i < 16; i++)
+                {
+                    if (d.Rows[i][9].ToString().Contains(temp) && d.Rows[i][9].ToString().Contains("S"))
+                    {
+                        updateD(i, 2, "Custom Chg 2");
+                        updateD(i, 3, "");
+                        updateD(i, 6, "");
+                        updateD(i, 7, "");
+                    }
+                }
+            }
+        }
+
+        private void customChg3ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            updateD(dataGridView1.CurrentRow.Index, 2, "Custom Chg 3");
+            updateD(dataGridView1.CurrentRow.Index, 3, "");
+            updateD(dataGridView1.CurrentRow.Index, 6, "");
+            updateD(dataGridView1.CurrentRow.Index, 7, "");
+            fillPlotCombos(dataGridView1.CurrentRow.Index);
+
+            // also update the slave (if we have a master...)
+            if (d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Contains("M"))
+            {
+                //find the slave
+                string temp = d.Rows[dataGridView1.CurrentRow.Index][9].ToString().Replace("-M", "");
+                for (int i = 0; i < 16; i++)
+                {
+                    if (d.Rows[i][9].ToString().Contains(temp) && d.Rows[i][9].ToString().Contains("S"))
+                    {
+                        updateD(i, 2, "Custom Chg 3");
+                        updateD(i, 3, "");
+                        updateD(i, 6, "");
+                        updateD(i, 7, "");
+                    }
+                }
+            }
         }
 
     }// end mainform class section...

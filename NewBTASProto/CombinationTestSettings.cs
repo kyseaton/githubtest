@@ -30,6 +30,7 @@ namespace NewBTASProto
             numericUpDown1.Value = GlobalVars.rows2Dis;
             checkBox7.Checked = GlobalVars.advance2Short;
             checkBox4.Checked = GlobalVars.robustCSCAN;
+            checkBox5.Checked = GlobalVars.InterpolateTime;
             
         }
 
@@ -43,6 +44,7 @@ namespace NewBTASProto
             //save the values and then close
             GlobalVars.DecliningCellVoltageTestEnabled = checkBox2.Checked;
             GlobalVars.DecliningCellVoltageThres = numericUpDown2.Value;
+            GlobalVars.InterpolateTime = checkBox5.Checked;
             GlobalVars.CapTestVarEnable = checkBox6.Checked;
             GlobalVars.CapTestVarValue = numericUpDown5.Value;
             GlobalVars.CSErr2Allow = numericUpDown6.Value;

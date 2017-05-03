@@ -8,22 +8,23 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NewBTASProto</RootNamespace>
-    <AssemblyName>BTAS-16Knu</AssemblyName>
+    <AssemblyName>BTAS-16K</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>publish\final_release\nu\</PublishUrl>
+    <PublishUrl>publish\final_release\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateEnabled>true</UpdateEnabled>
     <UpdateMode>Foreground</UpdateMode>
     <UpdateInterval>7</UpdateInterval>
     <UpdateIntervalUnits>Days</UpdateIntervalUnits>
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
+    <UpdateUrl>http://www.jfmeng.com/BTAS16_update/final_release/</UpdateUrl>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>166</ApplicationRevision>
+    <ApplicationRevision>169</ApplicationRevision>
     <ApplicationVersion>6.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -97,6 +98,11 @@
     </Compile>
     <Compile Include="Cap_Var_Form.Designer.cs">
       <DependentUpon>Cap_Var_Form.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Resource1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource1.resx</DependentUpon>
     </Compile>
     <Compile Include="SS_Settings.cs">
       <SubType>Form</SubType>
@@ -277,6 +283,10 @@
     <EmbeddedResource Include="Cap_Var_Form.resx">
       <DependentUpon>Cap_Var_Form.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Resource1.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource1.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="SS_Settings.resx">
       <DependentUpon>SS_Settings.cs</DependentUpon>
@@ -470,8 +480,8 @@
     <None Include="Resources\BTAS16 Manual-K0.11.pdf" />
     <None Include="Resources\BTAS16 Manual-K0.13.pdf" />
     <None Include="Resources\BTAS16 Manual-K0.14.pdf" />
+    <None Include="Resources\BTAS16 Manual-K0.15.pdf" />
     <None Include="Resources\BTAS16 Manual-K0.6.pdf" />
-    <None Include="Resources\Help.pdf" />
     <None Include="Resources\JFM Engineering Logo_small1.jpg" />
   </ItemGroup>
   <ItemGroup>

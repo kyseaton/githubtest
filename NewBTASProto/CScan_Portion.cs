@@ -1341,7 +1341,7 @@ namespace NewBTASProto
                     return;
                 }
                 //special 4 batt case
-                else if ((comboBox2.Enabled == false || (radioButton2.Checked == true && comboBox3.Text == "Current Voltages")) && testData.CCID == 10)
+                else if ((comboBox2.Enabled == false || (radioButton2.Checked == true && comboBox3.Text == "Real Time Voltages")) && testData.CCID == 10)
                 {
                     //In this case we have a 4 Batt cable, but do not have a current test running.  We will display V1, V2, V3 and V4 on the main graph
                     chart1.Series.Clear();
@@ -1375,7 +1375,7 @@ namespace NewBTASProto
 
 
                     chart1.Titles.Clear();
-                    chart1.Titles.Add("Current Voltages");
+                    chart1.Titles.Add("Real Time Voltages");
                     chart1.Invalidate();
                     chart1.ChartAreas[0].RecalculateAxesScale();
 
@@ -1400,7 +1400,7 @@ namespace NewBTASProto
 
                 }
                 //special 2 batt case
-                else if ((comboBox2.Enabled == false || (radioButton2.Checked == true && comboBox3.Text == "Current Voltages")) && testData.CCID == 11)
+                else if ((comboBox2.Enabled == false || (radioButton2.Checked == true && comboBox3.Text == "Real Time Voltages")) && testData.CCID == 11)
                 {
                     //In this case we have a 4 Batt cable, but do not have a current test running.  We will display V1, V2, V3 and V4 on the main graph
                     chart1.Series.Clear();
@@ -1427,7 +1427,7 @@ namespace NewBTASProto
                     series1.Points[1].Label = "VB2";
 
                     chart1.Titles.Clear();
-                    chart1.Titles.Add("Current Voltages");
+                    chart1.Titles.Add("Real Time Voltages");
                     chart1.Invalidate();
                     chart1.ChartAreas[0].RecalculateAxesScale();
 
@@ -1797,9 +1797,17 @@ namespace NewBTASProto
                             default:
                                 //custom cap and charge get the default...
                                 //Look it up!
+                                string tempString = d.Rows[station][2].ToString();
+                                if (tempString.Contains("Combo:") && tempString.Contains("("))
+                                {
+                                    tempString = tempString.Substring(tempString.IndexOf("("), tempString.IndexOf(")") - tempString.IndexOf("("));
+                                    tempString = tempString.Substring(tempString.IndexOf(" ") + 1);
+                                    
+                                }
+
                                 for (int i = 0; i < customTestParams.Rows.Count; i++)
                                 {
-                                    if (customTestParams.Rows[i][1].ToString() == d.Rows[station][2].ToString())
+                                    if (customTestParams.Rows[i][1].ToString() == tempString)
                                     {
                                         interval = ((int) customTestParams.Rows[i][4]) / 60.0;
                                         points = (int)customTestParams.Rows[i][3];
@@ -1807,7 +1815,8 @@ namespace NewBTASProto
                                         break;
                                     }
                                 }
-                                
+
+                                chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0.0";
                                 break;
                         }
 
@@ -2376,7 +2385,7 @@ namespace NewBTASProto
             {
                 case "NiCd":
                     // Discharge
-                    if (test_type == "As Received" || test_type == "Capacity-1" || test_type == "Discharge" || test_type == "Custom Cap" || test_type.Contains("Shorting") || test_type == "")
+                    if (test_type == "As Received" || test_type.Contains("Cap") || test_type == "Discharge" || test_type.Contains("Shorting") || test_type == "")
                     {
                         Min3 = 0.5 * Cells;
                         Min4 = 1 * Cells;
@@ -2569,9 +2578,9 @@ namespace NewBTASProto
                                     else if (GlobalVars.CScanData[currentRow].CCID == 10)
                                     {
                                         radioButton2.Text = " ";
-                                        comboBox3.Items.Add("Current Voltages");
-                                        toolStripComboBox3.ComboBox.Items.Add("Current Voltages");
-                                        updateC3("Current Voltages");
+                                        comboBox3.Items.Add("Real Time Voltages");
+                                        toolStripComboBox3.ComboBox.Items.Add("Real Time Voltages");
+                                        updateC3("Real Time Voltages");
                                     }
                                     else
                                     {
@@ -2664,9 +2673,9 @@ namespace NewBTASProto
                                         else if (GlobalVars.CScanData[currentRow].CCID == 10)
                                         {
                                             radioButton2.Text = " ";
-                                            comboBox3.Items.Add("Current Voltages");
-                                            toolStripComboBox3.ComboBox.Items.Add("Current Voltages");
-                                            updateC3("Current Voltages");
+                                            comboBox3.Items.Add("Real Time Voltages");
+                                            toolStripComboBox3.ComboBox.Items.Add("Real Time Voltages");
+                                            updateC3("Real Time Voltages");
                                         }
                                         else
                                         {
@@ -2937,8 +2946,8 @@ namespace NewBTASProto
                                         // Cells combobox
                                         comboBox3.Items.Clear();
                                         toolStripComboBox3.ComboBox.Items.Clear();
-                                        comboBox3.Items.Add("Current Voltages");
-                                        toolStripComboBox3.ComboBox.Items.Add("Current Voltages");
+                                        comboBox3.Items.Add("Real Time Voltages");
+                                        toolStripComboBox3.ComboBox.Items.Add("Real Time Voltages");
                                         break;
                                     case "11":
                                         // Battery combobox
@@ -2961,8 +2970,8 @@ namespace NewBTASProto
                                         // Cells combobox
                                         comboBox3.Items.Clear();
                                         toolStripComboBox3.ComboBox.Items.Clear();
-                                        comboBox3.Items.Add("Current Voltages");
-                                        toolStripComboBox3.ComboBox.Items.Add("Current Voltages");
+                                        comboBox3.Items.Add("Real Time Voltages");
+                                        toolStripComboBox3.ComboBox.Items.Add("Real Time Voltages");
                                         break;
                                     case "21":
                                         // Battery combobox

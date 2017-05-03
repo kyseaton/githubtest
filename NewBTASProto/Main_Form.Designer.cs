@@ -205,6 +205,8 @@
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.clearToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.cMSTestType = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.customChg2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.customChg3ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem50 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem47 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripComboBox4 = new System.Windows.Forms.ToolStripComboBox();
@@ -1703,6 +1705,8 @@
             this.slowCharge14ToolStripMenuItem,
             this.slowCharge16ToolStripMenuItem,
             this.customChrgToolStripMenuItem,
+            this.customChg2ToolStripMenuItem,
+            this.customChg3ToolStripMenuItem,
             this.customCapToolStripMenuItem,
             this.toolStripMenuItem50,
             this.toolStripSeparator8,
@@ -1713,10 +1717,24 @@
             this.toolStripSeparator7,
             this.clearToolStripMenuItem2});
             this.cMSTestType.Name = "cMSTestType";
-            this.cMSTestType.Size = new System.Drawing.Size(201, 440);
+            this.cMSTestType.Size = new System.Drawing.Size(201, 484);
             this.cMSTestType.Opening += new System.ComponentModel.CancelEventHandler(this.cMSTestType_Opening);
             this.cMSTestType.MouseEnter += new System.EventHandler(this.cMSTestType_MouseEnter);
             this.cMSTestType.MouseLeave += new System.EventHandler(this.cMSTestType_MouseLeave);
+            // 
+            // customChg2ToolStripMenuItem
+            // 
+            this.customChg2ToolStripMenuItem.Name = "customChg2ToolStripMenuItem";
+            this.customChg2ToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
+            this.customChg2ToolStripMenuItem.Text = "Custom Chg 2";
+            this.customChg2ToolStripMenuItem.Click += new System.EventHandler(this.customChg2ToolStripMenuItem_Click);
+            // 
+            // customChg3ToolStripMenuItem
+            // 
+            this.customChg3ToolStripMenuItem.Name = "customChg3ToolStripMenuItem";
+            this.customChg3ToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
+            this.customChg3ToolStripMenuItem.Text = "Custom Chg 3";
+            this.customChg3ToolStripMenuItem.Click += new System.EventHandler(this.customChg3ToolStripMenuItem_Click);
             // 
             // toolStripMenuItem50
             // 
@@ -1983,6 +2001,8 @@
         public System.Windows.Forms.GroupBox groupBox3;
         public System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.ToolStripMenuItem sequentialScanningSettingsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem customChg2ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem customChg3ToolStripMenuItem;
     }
 }
 

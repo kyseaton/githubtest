@@ -38,5 +38,10 @@ namespace NewBTASProto
             System.IO.File.WriteAllBytes(openPDFFile, Properties.Resources.Help);
             System.Diagnostics.Process.Start(openPDFFile);    
         }
+
+        private void linkLabel4_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("www.jfmeng.com/btas-16k-change-log");
+        }
     }
 }

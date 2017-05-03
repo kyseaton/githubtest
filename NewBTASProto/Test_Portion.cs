@@ -759,7 +759,7 @@ namespace NewBTASProto
                                     //update the gui
                                     this.Invoke((MethodInvoker)delegate()
                                     {
-                                        sendNote(station, 3, "Test Cancelled");
+                                        sendNote(station, 2, "Test Cancelled");
                                     });
                                     cRunTest[station].Cancel();
                                     return;
@@ -1389,6 +1389,108 @@ namespace NewBTASProto
                                         curSet2 = (float)GetDouble(battery.Tables[0].Rows[0][169].ToString());
                                         vSet2 = (MasterSlaveTest ? (2 * (float)GetDouble(battery.Tables[0].Rows[0][170].ToString())) : (float)GetDouble(battery.Tables[0].Rows[0][170].ToString()));
                                         break;
+                                    case "Custom Chg 2":
+                                        tempKMStore[0] = Convert.ToByte(48 + int.Parse(battery.Tables[0].Rows[0][172].ToString().Substring(0, 2)));         //mode
+                                        tempKMStore[1] = Convert.ToByte(48 + int.Parse(battery.Tables[0].Rows[0][173].ToString()));                         //time hours
+                                        if (tempKMStore[0] != 20 && tempKMStore[0] != 21)
+                                        {
+                                            tempKMStore[2] = (byte)(48);                                                                        //time mins
+                                        }
+                                        if (d.Rows[station][10].ToString().Contains("mini"))
+                                        {
+                                            tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][175].ToString()) * 10)));            //top current byte
+                                            tempKMStore[4] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][175].ToString()) * 1000) % 100);                                                                            //bottom current byte
+                                        }
+                                        else
+                                        {
+                                            tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][175].ToString()) / 10)));            //top current byte
+                                            tempKMStore[4] = Convert.ToByte(48 + 10 * ((GetDouble(battery.Tables[0].Rows[0][175].ToString())) % 10));       //bottom current byte
+                                        }
+                                        tempKMStore[5] = Convert.ToByte(48 + ((MasterSlaveTest ? (2 * Math.Floor(GetDouble(battery.Tables[0].Rows[0][176].ToString()))) : Math.Floor(GetDouble(battery.Tables[0].Rows[0][176].ToString()))) / 1));                 //top voltage byte
+                                        tempKMStore[6] = Convert.ToByte(48 + 100 * ((MasterSlaveTest ? (2 * (GetDouble(battery.Tables[0].Rows[0][176].ToString()))) : (GetDouble(battery.Tables[0].Rows[0][176].ToString()))) % 1));           //bottom current byte
+
+                                        if (tempKMStore[0] == (20 + 48) || tempKMStore[0] == (21 + 48))
+                                        {
+                                            tempKMStore[7] = Convert.ToByte(48 + int.Parse(battery.Tables[0].Rows[0][177].ToString()));                     //time 2 hours
+                                            tempKMStore[8] = (byte)(48);                                                                        //time 2 mins
+                                            if (d.Rows[station][10].ToString().Contains("mini"))
+                                            {
+                                                tempKMStore[9] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][179].ToString())) * 10));        //top current 2 byte
+                                                tempKMStore[10] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][179].ToString()) * 1000) % 100);                                                                       //bottom current 2 byte
+                                            }
+                                            else
+                                            {
+                                                tempKMStore[9] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][179].ToString()) / 10)));        //top current 2 byte
+                                                tempKMStore[10] = Convert.ToByte(48 + 10 * ((GetDouble(battery.Tables[0].Rows[0][179].ToString())) % 10));  //bottom current 2 byte
+                                            }
+                                            tempKMStore[11] = Convert.ToByte(48 + ((MasterSlaveTest ? (2 * Math.Floor(GetDouble(battery.Tables[0].Rows[0][180].ToString()))) : Math.Floor(GetDouble(battery.Tables[0].Rows[0][180].ToString()))) / 1));            //top voltage 2 byte
+                                            tempKMStore[12] = Convert.ToByte(48 + 100 * ((MasterSlaveTest ? (2 * (GetDouble(battery.Tables[0].Rows[0][180].ToString()))) : (GetDouble(battery.Tables[0].Rows[0][180].ToString()))) % 1));      //bottom voltage 2 byte
+                                        }
+
+                                        tempKMStore[13] = (byte)48;                                                                                //discharge time hours
+                                        tempKMStore[14] = (byte)48;                                                                                //discharge time mins
+                                        tempKMStore[15] = (byte)48;                                                                                //discharge current high byte
+                                        tempKMStore[16] = (byte)48;                                                                                //discharge current low byte
+                                        tempKMStore[17] = (byte)48;                                                                                //discharge voltage high byte
+                                        tempKMStore[18] = (byte)48;                                                                                //discharge voltage low byte
+                                        tempKMStore[19] = (byte)48;                                                                                //discharge resistance high byte
+                                        tempKMStore[20] = (byte)48;                                                                                //discharge resistance low byte
+                                        curSet1 = (float)GetDouble(battery.Tables[0].Rows[0][175].ToString());
+                                        vSet1 = (MasterSlaveTest ? (2 * (float)GetDouble(battery.Tables[0].Rows[0][176].ToString())) : (float)GetDouble(battery.Tables[0].Rows[0][176].ToString()));
+                                        if (battery.Tables[0].Rows[0][179].ToString() != "") { curSet2 = (float)GetDouble(battery.Tables[0].Rows[0][179].ToString()); }
+                                        if (battery.Tables[0].Rows[0][180].ToString() != "") { vSet2 = (MasterSlaveTest ? (2 * (float)GetDouble(battery.Tables[0].Rows[0][180].ToString())) : (float)GetDouble(battery.Tables[0].Rows[0][180].ToString())); }
+                                        break;
+                                    case "Custom Chg 3":
+                                        tempKMStore[0] = Convert.ToByte(48 + int.Parse(battery.Tables[0].Rows[0][182].ToString().Substring(0, 2)));         //mode
+                                        tempKMStore[1] = Convert.ToByte(48 + int.Parse(battery.Tables[0].Rows[0][183].ToString()));                         //time hours
+                                        if (tempKMStore[0] != 20 && tempKMStore[0] != 21)
+                                        {
+                                            tempKMStore[2] = (byte)(48);                                                                        //time mins
+                                        }
+                                        if (d.Rows[station][10].ToString().Contains("mini"))
+                                        {
+                                            tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][185].ToString()) * 10)));            //top current byte
+                                            tempKMStore[4] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][185].ToString()) * 1000) % 100);                                                                            //bottom current byte
+                                        }
+                                        else
+                                        {
+                                            tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][185].ToString()) / 10)));            //top current byte
+                                            tempKMStore[4] = Convert.ToByte(48 + 10 * ((GetDouble(battery.Tables[0].Rows[0][185].ToString())) % 10));       //bottom current byte
+                                        }
+                                        tempKMStore[5] = Convert.ToByte(48 + ((MasterSlaveTest ? (2 * Math.Floor(GetDouble(battery.Tables[0].Rows[0][186].ToString()))) : Math.Floor(GetDouble(battery.Tables[0].Rows[0][186].ToString()))) / 1));                 //top voltage byte
+                                        tempKMStore[6] = Convert.ToByte(48 + 100 * ((MasterSlaveTest ? (2 * (GetDouble(battery.Tables[0].Rows[0][186].ToString()))) : (GetDouble(battery.Tables[0].Rows[0][186].ToString()))) % 1));           //bottom current byte
+
+                                        if (tempKMStore[0] == (20 + 48) || tempKMStore[0] == (21 + 48))
+                                        {
+                                            tempKMStore[7] = Convert.ToByte(48 + int.Parse(battery.Tables[0].Rows[0][187].ToString()));                     //time 2 hours
+                                            tempKMStore[8] = (byte)(48);                                                                        //time 2 mins
+                                            if (d.Rows[station][10].ToString().Contains("mini"))
+                                            {
+                                                tempKMStore[9] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][189].ToString())) * 10));        //top current 2 byte
+                                                tempKMStore[10] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][189].ToString()) * 1000) % 100);                                                                       //bottom current 2 byte
+                                            }
+                                            else
+                                            {
+                                                tempKMStore[9] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][189].ToString()) / 10)));        //top current 2 byte
+                                                tempKMStore[10] = Convert.ToByte(48 + 10 * ((GetDouble(battery.Tables[0].Rows[0][189].ToString())) % 10));  //bottom current 2 byte
+                                            }
+                                            tempKMStore[11] = Convert.ToByte(48 + ((MasterSlaveTest ? (2 * Math.Floor(GetDouble(battery.Tables[0].Rows[0][190].ToString()))) : Math.Floor(GetDouble(battery.Tables[0].Rows[0][190].ToString()))) / 1));            //top voltage 2 byte
+                                            tempKMStore[12] = Convert.ToByte(48 + 100 * ((MasterSlaveTest ? (2 * (GetDouble(battery.Tables[0].Rows[0][190].ToString()))) : (GetDouble(battery.Tables[0].Rows[0][190].ToString()))) % 1));      //bottom voltage 2 byte
+                                        }
+
+                                        tempKMStore[13] = (byte)48;                                                                                //discharge time hours
+                                        tempKMStore[14] = (byte)48;                                                                                //discharge time mins
+                                        tempKMStore[15] = (byte)48;                                                                                //discharge current high byte
+                                        tempKMStore[16] = (byte)48;                                                                                //discharge current low byte
+                                        tempKMStore[17] = (byte)48;                                                                                //discharge voltage high byte
+                                        tempKMStore[18] = (byte)48;                                                                                //discharge voltage low byte
+                                        tempKMStore[19] = (byte)48;                                                                                //discharge resistance high byte
+                                        tempKMStore[20] = (byte)48;                                                                                //discharge resistance low byte
+                                        curSet1 = (float)GetDouble(battery.Tables[0].Rows[0][185].ToString());
+                                        vSet1 = (MasterSlaveTest ? (2 * (float)GetDouble(battery.Tables[0].Rows[0][186].ToString())) : (float)GetDouble(battery.Tables[0].Rows[0][186].ToString()));
+                                        if (battery.Tables[0].Rows[0][189].ToString() != "") { curSet2 = (float)GetDouble(battery.Tables[0].Rows[0][189].ToString()); }
+                                        if (battery.Tables[0].Rows[0][190].ToString() != "") { vSet2 = (MasterSlaveTest ? (2 * (float)GetDouble(battery.Tables[0].Rows[0][190].ToString())) : (float)GetDouble(battery.Tables[0].Rows[0][190].ToString())); }
+                                        break;
                                     default:
                                         // we got a custom test!
                                         //Lets load the custom test setting and try to load those then!
@@ -1497,13 +1599,15 @@ namespace NewBTASProto
                                 cRunTest[station].Cancel();
                                 this.Invoke((MethodInvoker)delegate()
                                 {
-                                    sendNote(station, 3, "Error:  Fail to pull the settings from the DataBase.");
+                                    sendNote(station, 2, "Error:  Fail to pull the settings from the DataBase.");
                                     if (testType == "Full Charge-4.5" ||
                                         testType == "Full Charge-4" ||
                                         testType == "Full Charge-6" ||
                                         testType == "Custom Cap" ||
                                         testType == "Constant Voltage" ||
                                         testType == "Custom Chg" ||
+                                        testType == "Custom Chg 2" ||
+                                        testType == "Custom Chg 3" ||
                                         testType == "Slow Charge-16"||
                                         testType == "Slow Charge-14" ||
                                         testType == "Discharge" ||
@@ -1605,7 +1709,7 @@ namespace NewBTASProto
 
                             this.Invoke((MethodInvoker)delegate()
                             {
-                                sendNote(station, 3, "Error:  Failed to Auto Load settings into the Charger.");
+                                sendNote(station, 2, "Error:  Failed to Auto Load settings into the Charger.");
                                 MessageBox.Show(this, "Error: Failed to Auto Load settings into the Charger.\n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             });
                             return;
@@ -2629,6 +2733,8 @@ namespace NewBTASProto
                                 } // end if
                                 break;
                             case "Custom Chg":
+                            case "Custom Chg 2":
+                            case "Custom Chg 3":
                                 if (!(temp.Contains("10") || temp.Contains("11") || temp.Contains("12") || temp.Contains("20") || temp.Contains("21")))
                                 {
                                     this.Invoke((MethodInvoker)delegate()
@@ -2712,7 +2818,7 @@ namespace NewBTASProto
                             //update the gui
                             this.Invoke((MethodInvoker)delegate()
                             {
-                                sendNote(station, 3, "Test Cancelled");
+                                sendNote(station, 2, "Test Cancelled");
                                 startNewTestToolStripMenuItem.Enabled = true;
                                 resumeTestToolStripMenuItem.Enabled = true;
                                 stopTestToolStripMenuItem.Enabled = false;
@@ -2778,7 +2884,7 @@ namespace NewBTASProto
                             //update the gui
                             this.Invoke((MethodInvoker)delegate()
                             {
-                                sendNote(station, 3, "Test Cancelled");
+                                sendNote(station, 2, "Test Cancelled");
                                 startNewTestToolStripMenuItem.Enabled = true;
                                 resumeTestToolStripMenuItem.Enabled = true;
                                 stopTestToolStripMenuItem.Enabled = false;
@@ -2845,7 +2951,7 @@ namespace NewBTASProto
                             //update the gui
                             this.Invoke((MethodInvoker)delegate()
                             {
-                                sendNote(station, 3, "Test Cancelled");
+                                sendNote(station, 2, "Test Cancelled");
                                 startNewTestToolStripMenuItem.Enabled = true;
                                 resumeTestToolStripMenuItem.Enabled = true;
                                 stopTestToolStripMenuItem.Enabled = false;
@@ -2939,7 +3045,7 @@ namespace NewBTASProto
                                 //update the gui
                                 this.Invoke((MethodInvoker)delegate()
                                 {
-                                    sendNote(station, 3, "Test Cancelled");
+                                    sendNote(station, 2, "Test Cancelled");
                                     startNewTestToolStripMenuItem.Enabled = true;
                                     resumeTestToolStripMenuItem.Enabled = true;
                                     stopTestToolStripMenuItem.Enabled = false;
@@ -2989,7 +3095,7 @@ namespace NewBTASProto
                             //update the gui
                             this.Invoke((MethodInvoker)delegate()
                             {
-                                sendNote(station, 3, "Test Cancelled");
+                                sendNote(station, 2, "Test Cancelled");
                                 startNewTestToolStripMenuItem.Enabled = true;
                                 resumeTestToolStripMenuItem.Enabled = true;
                                 stopTestToolStripMenuItem.Enabled = false;
@@ -3026,7 +3132,7 @@ namespace NewBTASProto
                                 //update the gui
                                 this.Invoke((MethodInvoker)delegate()
                                 {
-                                    sendNote(station, 3, "Test Cancelled");
+                                    sendNote(station, 2, "Test Cancelled");
                                     startNewTestToolStripMenuItem.Enabled = true;
                                     resumeTestToolStripMenuItem.Enabled = true;
                                     stopTestToolStripMenuItem.Enabled = false;
@@ -3059,7 +3165,7 @@ namespace NewBTASProto
                         //update the gui
                         this.Invoke((MethodInvoker)delegate()
                         {
-                            sendNote(station, 3, "No Charger Detected");
+                            sendNote(station, 1, "No Charger Detected");
                             startNewTestToolStripMenuItem.Enabled = true;
                             resumeTestToolStripMenuItem.Enabled = true;
                             stopTestToolStripMenuItem.Enabled = false;
@@ -3829,7 +3935,7 @@ namespace NewBTASProto
                                     updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
                                     this.Invoke((MethodInvoker)delegate()
                                     {
-                                        sendNote(station, 3, "Error: Failed to retrieve the required data from the DataBase.");
+                                        sendNote(station, 1, "Error: Failed to retrieve the required data from the DataBase.");
                                         startNewTestToolStripMenuItem.Enabled = true;
                                         resumeTestToolStripMenuItem.Enabled = true;
                                         stopTestToolStripMenuItem.Enabled = false;
@@ -4253,7 +4359,7 @@ namespace NewBTASProto
                                     //update the gui
                                     this.Invoke((MethodInvoker)delegate()
                                     {
-                                        sendNote(station, 3, "Test failed. Charger is not producing any current.  Please check the charger settings.");
+                                        sendNote(station, 1, "Test failed. Charger is not producing any current.  Please check the charger settings.");
                                         startNewTestToolStripMenuItem.Enabled = true;
                                         resumeTestToolStripMenuItem.Enabled = true;
                                         stopTestToolStripMenuItem.Enabled = false;
@@ -4321,7 +4427,7 @@ namespace NewBTASProto
                                                     //update the gui
                                                     this.Invoke((MethodInvoker)delegate()
                                                     {
-                                                        sendNote(station, 3, "Test Cancelled");
+                                                        sendNote(station, 2, "Test Cancelled");
                                                         startNewTestToolStripMenuItem.Enabled = true;
                                                         resumeTestToolStripMenuItem.Enabled = true;
                                                         stopTestToolStripMenuItem.Enabled = false;
@@ -4407,7 +4513,7 @@ namespace NewBTASProto
                                             updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
                                             this.Invoke((MethodInvoker)delegate()
                                             {
-                                                sendNote(station, 3, "Test failed. Charger Status:  " + d.Rows[station][11].ToString());
+                                                sendNote(station, 1, "Test failed. Charger Status:  " + d.Rows[station][11].ToString());
                                                 startNewTestToolStripMenuItem.Enabled = true;
                                                 resumeTestToolStripMenuItem.Enabled = true;
                                                 stopTestToolStripMenuItem.Enabled = false;
@@ -4550,7 +4656,7 @@ namespace NewBTASProto
                                     updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
                                     this.Invoke((MethodInvoker)delegate()
                                     {
-                                        sendNote(station, 3, "Test failed. Charger is not running as programmed.  Please check the charger comms.");
+                                        sendNote(station, 1, "Test failed. Charger is not running as programmed.  Please check the charger comms.");
                                         startNewTestToolStripMenuItem.Enabled = true;
                                         resumeTestToolStripMenuItem.Enabled = true;
                                         stopTestToolStripMenuItem.Enabled = false;
@@ -4598,7 +4704,7 @@ namespace NewBTASProto
                                             updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
                                             this.Invoke((MethodInvoker)delegate()
                                             {
-                                                sendNote(station, 3, "Test canceled while in a power fail.");
+                                                sendNote(station, 2, "Test canceled while in a power fail.");
                                                 startNewTestToolStripMenuItem.Enabled = true;
                                                 resumeTestToolStripMenuItem.Enabled = true;
                                                 stopTestToolStripMenuItem.Enabled = false;
@@ -4647,7 +4753,7 @@ namespace NewBTASProto
                                             updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
                                             this.Invoke((MethodInvoker)delegate()
                                             {
-                                                sendNote(station, 3, "Current has fallen below minimum threshold. Please check the shunt connection and resume or restart the test.");
+                                                sendNote(station, 1, "Current has fallen below minimum threshold. Please check the shunt connection and resume or restart the test.");
                                                 startNewTestToolStripMenuItem.Enabled = true;
                                                 resumeTestToolStripMenuItem.Enabled = true;
                                                 stopTestToolStripMenuItem.Enabled = false;
@@ -4689,7 +4795,7 @@ namespace NewBTASProto
                                             //update the gui
                                             this.Invoke((MethodInvoker)delegate()
                                             {
-                                                sendNote(station, 3, "Current has fallen below minimum threshold.  Please check the shunt connection and resume or restart the test.");
+                                                sendNote(station, 1, "Current has fallen below minimum threshold.  Please check the shunt connection and resume or restart the test.");
                                                 startNewTestToolStripMenuItem.Enabled = true;
                                                 resumeTestToolStripMenuItem.Enabled = true;
                                                 stopTestToolStripMenuItem.Enabled = false;
@@ -4728,7 +4834,7 @@ namespace NewBTASProto
                                 updateFinishTime(MWO1, MWO2, MWO3, SWO1, SWO2, SWO3, stepNum, stepNum2, stepNum3, slaveStepNum, slaveStepNum2, slaveStepNum3);
                                 this.Invoke((MethodInvoker)delegate()
                                 {
-                                    sendNote(station, 3, "Charger disconnected.  Please check connection and resume or restart the test.");
+                                    sendNote(station, 1, "Charger disconnected.  Please check connection and resume or restart the test.");
                                     startNewTestToolStripMenuItem.Enabled = true;
                                     resumeTestToolStripMenuItem.Enabled = true;
                                     stopTestToolStripMenuItem.Enabled = false;
@@ -4810,7 +4916,7 @@ namespace NewBTASProto
                                 //update the gui
                                 this.Invoke((MethodInvoker)delegate()
                                 {
-                                    sendNote(station, 3, "Cancelled");
+                                    sendNote(station, 2, "Cancelled");
                                     startNewTestToolStripMenuItem.Enabled = true;
                                     resumeTestToolStripMenuItem.Enabled = true;
                                     stopTestToolStripMenuItem.Enabled = false;
@@ -4953,7 +5059,7 @@ namespace NewBTASProto
                     //update the gui
                     this.Invoke((MethodInvoker)delegate()
                     {
-                        sendNote(station, 3, "Test Complete");
+                        sendNote(station, 2, "Test Complete");
                         startNewTestToolStripMenuItem.Enabled = true;
                         resumeTestToolStripMenuItem.Enabled = false;
                         stopTestToolStripMenuItem.Enabled = false;
@@ -5570,7 +5676,7 @@ namespace NewBTASProto
                                             if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
                                             updateD(station, 7, "Combo Cancelled");
                                             if (MasterSlaveTest) { updateD(slaveRow, 7, "Combo Cancelled"); }
-                                            sendNote(station, 3, "Combo Test Cancelled");
+                                            sendNote(station, 2, "Combo Test Cancelled");
                                             startNewTestToolStripMenuItem.Enabled = true;
                                             resumeTestToolStripMenuItem.Enabled = true;
                                             stopTestToolStripMenuItem.Enabled = false;
@@ -5637,7 +5743,7 @@ namespace NewBTASProto
                                             if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
                                             updateD(station, 7, "Combo Cancelled");
                                             if (MasterSlaveTest) { updateD(slaveRow, 7, "Combo Cancelled"); }
-                                            sendNote(station, 3, "Combo Test Cancelled");
+                                            sendNote(station, 2, "Combo Test Cancelled");
                                             startNewTestToolStripMenuItem.Enabled = true;
                                             resumeTestToolStripMenuItem.Enabled = true;
                                             stopTestToolStripMenuItem.Enabled = false;

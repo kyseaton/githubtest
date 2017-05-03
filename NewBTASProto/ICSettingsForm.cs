@@ -113,7 +113,7 @@ namespace NewBTASProto
 
 
                 comboBox2.Text = reverseTestMode[GlobalVars.ICSettings[CID].KM1 - 48];
-                comboBox3.SelectedText = reverseAction[GlobalVars.ICSettings[CID].KE3];
+                //comboBox3.SelectedText = reverseAction[GlobalVars.ICSettings[CID].KE3];
                 // Primary Charge
                 //time
                 numericUpDown1.Value = GlobalVars.ICSettings[CID].KM2 - 48;
@@ -359,10 +359,17 @@ namespace NewBTASProto
 
         private void button2_Click(object sender, EventArgs e)
         {
+                   // end thread
+
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            //Reset button
             // set KE1 to 2 ("command")
-            GlobalVars.ICSettings[comboBox1.SelectedIndex].KE1 = (byte) 2;
+            GlobalVars.ICSettings[comboBox1.SelectedIndex].KE1 = (byte)2;
             // reset KE3
-            GlobalVars.ICSettings[comboBox1.SelectedIndex].KE3 = (byte)(action[comboBox3.Text]);
+            GlobalVars.ICSettings[comboBox1.SelectedIndex].KE3 = (byte) 3;
             //Update the output string value
             GlobalVars.ICSettings[comboBox1.SelectedIndex].UpdateOutText();
             ((Main_Form)this.Owner).criticalNum[comboBox1.SelectedIndex] = true;
@@ -373,10 +380,75 @@ namespace NewBTASProto
             {
                 Thread.Sleep(2000);
                 // set KE1 to 1 ("query")
-                GlobalVars.ICSettings[inVal].KE1 = (byte) 0;
+                GlobalVars.ICSettings[inVal].KE1 = (byte)0;
                 GlobalVars.ICSettings[inVal].UpdateOutText();
-            },inVal);                     // end thread
+            }, inVal);   
+        }
 
+        private void button2_Click_1(object sender, EventArgs e)
+        {
+            //Stop button
+            // set KE1 to 2 ("command")
+            GlobalVars.ICSettings[comboBox1.SelectedIndex].KE1 = (byte)2;
+            // reset KE3
+            GlobalVars.ICSettings[comboBox1.SelectedIndex].KE3 = (byte)2;
+            //Update the output string value
+            GlobalVars.ICSettings[comboBox1.SelectedIndex].UpdateOutText();
+            ((Main_Form)this.Owner).criticalNum[comboBox1.SelectedIndex] = true;
+
+            int inVal = comboBox1.SelectedIndex;
+            //now we are going to create a thread to set KE1 back to data mode after 15 seconds
+            ThreadPool.QueueUserWorkItem(s =>
+            {
+                Thread.Sleep(2000);
+                // set KE1 to 1 ("query")
+                GlobalVars.ICSettings[inVal].KE1 = (byte)0;
+                GlobalVars.ICSettings[inVal].UpdateOutText();
+            }, inVal);  
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            // Run button
+            // set KE1 to 2 ("command")
+            GlobalVars.ICSettings[comboBox1.SelectedIndex].KE1 = (byte)2;
+            // reset KE3
+            GlobalVars.ICSettings[comboBox1.SelectedIndex].KE3 = (byte)1;
+            //Update the output string value
+            GlobalVars.ICSettings[comboBox1.SelectedIndex].UpdateOutText();
+            ((Main_Form)this.Owner).criticalNum[comboBox1.SelectedIndex] = true;
+
+            int inVal = comboBox1.SelectedIndex;
+            //now we are going to create a thread to set KE1 back to data mode after 15 seconds
+            ThreadPool.QueueUserWorkItem(s =>
+            {
+                Thread.Sleep(2000);
+                // set KE1 to 1 ("query")
+                GlobalVars.ICSettings[inVal].KE1 = (byte)0;
+                GlobalVars.ICSettings[inVal].UpdateOutText();
+            }, inVal);  
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            // Clear button
+            // set KE1 to 2 ("command")
+            GlobalVars.ICSettings[comboBox1.SelectedIndex].KE1 = (byte)2;
+            // reset KE3
+            GlobalVars.ICSettings[comboBox1.SelectedIndex].KE3 = (byte)0;
+            //Update the output string value
+            GlobalVars.ICSettings[comboBox1.SelectedIndex].UpdateOutText();
+            ((Main_Form)this.Owner).criticalNum[comboBox1.SelectedIndex] = true;
+
+            int inVal = comboBox1.SelectedIndex;
+            //now we are going to create a thread to set KE1 back to data mode after 15 seconds
+            ThreadPool.QueueUserWorkItem(s =>
+            {
+                Thread.Sleep(2000);
+                // set KE1 to 1 ("query")
+                GlobalVars.ICSettings[inVal].KE1 = (byte)0;
+                GlobalVars.ICSettings[inVal].UpdateOutText();
+            }, inVal);  
         }
     }
 }

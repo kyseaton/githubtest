@@ -21,6 +21,8 @@ namespace NewBTASProto
         DataSet graph1Set = new DataSet();
         DataSet graph2Set = new DataSet();
 
+        DataTable customTestParams;
+
         //When the type of battery the technology is retrieved store it here
         string technology1 = "NiCd";
         string technology2 = "NiCd";
@@ -61,6 +63,8 @@ namespace NewBTASProto
 
         private void Graphics_Form_Load(object sender, EventArgs e)
         {
+            customTestParams = ((Main_Form)this.Owner).customTestParams;
+
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
             loadWorkOrderLists();
 
@@ -601,6 +605,7 @@ namespace NewBTASProto
                         switch (cellCable)
                         {
                             case "1":
+                            case "23":
                                 // update the cells value
                                 if (cell1 == 0) { cell1 = 20; }
                                 // Battery combobox
@@ -636,6 +641,42 @@ namespace NewBTASProto
                                 comboBox6.Items.Add("Cell 18");
                                 comboBox6.Items.Add("Cell 19");
                                 comboBox6.Items.Add("Cell 20");
+                                break;
+                            case "2":
+                                // update the cells value
+                                if (cell1 == 0) { cell1 = 20; }
+                                // Battery combobox
+                                comboBox5.Items.Clear();
+                                //comboBox5.Text = "";
+                                comboBox5.Items.Add("Voltage");
+                                comboBox5.Items.Add("Current");
+                                comboBox5.Items.Add("Temperature 1");
+                                comboBox5.Items.Add("Temperature 2");
+                                comboBox5.Items.Add("Temperature 3");
+                                comboBox5.Items.Add("Temperature 4");
+                                // Cells combobox
+                                comboBox6.Items.Clear();
+                                //comboBox6.Text = "";
+                                comboBox6.Items.Add("Ending Voltages");
+                                comboBox6.Items.Add("Cell 1");
+                                comboBox6.Items.Add("Cell 2");
+                                comboBox6.Items.Add("Cell 3");
+                                comboBox6.Items.Add("Cell 4");
+                                comboBox6.Items.Add("Cell 5");
+                                comboBox6.Items.Add("Cell 6");
+                                comboBox6.Items.Add("Cell 7");
+                                comboBox6.Items.Add("Cell 8");
+                                comboBox6.Items.Add("Cell 9");
+                                comboBox6.Items.Add("Cell 10");
+                                comboBox6.Items.Add("Cell 11");
+                                comboBox6.Items.Add("Cell 12");
+                                comboBox6.Items.Add("Cell 13");
+                                comboBox6.Items.Add("Cell 14");
+                                comboBox6.Items.Add("Cell 15");
+                                comboBox6.Items.Add("Cell 16");
+                                comboBox6.Items.Add("Cell 17");
+                                comboBox6.Items.Add("Cell 18");
+                                comboBox6.Items.Add("Cell 19");
                                 break;
                             case "3":
                                 // update the cells value
@@ -718,6 +759,7 @@ namespace NewBTASProto
                                 comboBox6.Items.Add("Cell 21");
                                 break;
                             case "21":
+                            case "24":
                                 // update the cells value
                                 if (cell1 == 0) { cell1 = 21; }
                                 // Battery combobox
@@ -754,6 +796,64 @@ namespace NewBTASProto
                                 comboBox6.Items.Add("Cell 19");
                                 comboBox6.Items.Add("Cell 20");
                                 comboBox6.Items.Add("Cell 21");
+                                break;
+                            case "22":
+                                // update the cells value
+                                if (cell1 == 0) { cell1 = 21; }
+                                // Battery combobox
+                                comboBox5.Items.Clear();
+                                //comboBox5.Text = "";
+                                comboBox5.Items.Add("Voltage");
+                                comboBox5.Items.Add("Current");
+                                comboBox5.Items.Add("Temperature 1");
+                                comboBox5.Items.Add("Temperature 2");
+                                comboBox5.Items.Add("Temperature 3");
+                                comboBox5.Items.Add("Temperature 4");
+                                // Cells combobox
+                                comboBox6.Items.Clear();
+                                //comboBox6.Text = "";
+                                comboBox6.Items.Add("Ending Voltages");
+                                comboBox6.Items.Add("Cell 1");
+                                comboBox6.Items.Add("Cell 2");
+                                comboBox6.Items.Add("Cell 3");
+                                comboBox6.Items.Add("Cell 4");
+                                comboBox6.Items.Add("Cell 5");
+                                comboBox6.Items.Add("Cell 6");
+                                comboBox6.Items.Add("Cell 7");
+                                comboBox6.Items.Add("Cell 8");
+                                comboBox6.Items.Add("Cell 9");
+                                comboBox6.Items.Add("Cell 10");
+                                comboBox6.Items.Add("Cell 11");
+                                comboBox6.Items.Add("Cell 12");
+                                comboBox6.Items.Add("Cell 13");
+                                comboBox6.Items.Add("Cell 14");
+                                comboBox6.Items.Add("Cell 15");
+                                comboBox6.Items.Add("Cell 16");
+                                comboBox6.Items.Add("Cell 17");
+                                comboBox6.Items.Add("Cell 18");
+                                comboBox6.Items.Add("Cell 19");
+                                comboBox6.Items.Add("Cell 20");
+                                comboBox6.Items.Add("Cell 21");
+                                comboBox6.Items.Add("Cell 22");
+                                break;
+                            case "9":
+                            case "11":
+                                // update the cells value
+                                if (cell1 == 0) { cell1 = 20; }
+                                // Battery combobox
+                                comboBox5.Items.Clear();
+                                //comboBox5.Text = "";
+                                comboBox5.Items.Add("Voltage 1");
+                                comboBox5.Items.Add("Voltage 2");
+                                comboBox5.Items.Add("Current");
+                                comboBox5.Items.Add("Temperature 1");
+                                comboBox5.Items.Add("Temperature 2");
+                                comboBox5.Items.Add("Temperature 3");
+                                comboBox5.Items.Add("Temperature 4");
+                                // Cells combobox
+                                comboBox6.Items.Clear();
+                                //comboBox6.Text = "";
+                                comboBox6.Items.Add(" ");
                                 break;
                             case "10":
                                 // update the cells value
@@ -1090,11 +1190,9 @@ namespace NewBTASProto
                         switch (cellCable)
                         {
                             case "1":
+                            case "23":
                                 // update the cells value
-                                if (cell2 == 0) 
-                                { 
-                                    cell2 = 20; 
-                                }
+                                if (cell2 == 0) { cell2 = 20; }
                                 // Battery combobox
                                 comboBox7.Items.Clear();
                                 //comboBox7.Text = "";
@@ -1129,12 +1227,45 @@ namespace NewBTASProto
                                 comboBox8.Items.Add("Cell 19");
                                 comboBox8.Items.Add("Cell 20");
                                 break;
+                            case "2":
+                                // update the cells value
+                                if (cell2 == 0) { cell2 = 20; }
+                                // Battery combobox
+                                comboBox7.Items.Clear();
+                                //comboBox7.Text = "";
+                                comboBox7.Items.Add("Voltage");
+                                comboBox7.Items.Add("Current");
+                                comboBox7.Items.Add("Temperature 1");
+                                comboBox7.Items.Add("Temperature 2");
+                                comboBox7.Items.Add("Temperature 3");
+                                comboBox7.Items.Add("Temperature 4");
+                                // Cells combobox
+                                comboBox8.Items.Clear();
+                                //comboBox8.Text = "";
+                                comboBox8.Items.Add("Ending Voltages");
+                                comboBox8.Items.Add("Cell 1");
+                                comboBox8.Items.Add("Cell 2");
+                                comboBox8.Items.Add("Cell 3");
+                                comboBox8.Items.Add("Cell 4");
+                                comboBox8.Items.Add("Cell 5");
+                                comboBox8.Items.Add("Cell 6");
+                                comboBox8.Items.Add("Cell 7");
+                                comboBox8.Items.Add("Cell 8");
+                                comboBox8.Items.Add("Cell 9");
+                                comboBox8.Items.Add("Cell 10");
+                                comboBox8.Items.Add("Cell 11");
+                                comboBox8.Items.Add("Cell 12");
+                                comboBox8.Items.Add("Cell 13");
+                                comboBox8.Items.Add("Cell 14");
+                                comboBox8.Items.Add("Cell 15");
+                                comboBox8.Items.Add("Cell 16");
+                                comboBox8.Items.Add("Cell 17");
+                                comboBox8.Items.Add("Cell 18");
+                                comboBox8.Items.Add("Cell 19");
+                                break;
                             case "3":
                                 // update the cells value
-                                if (cell2 == 0) 
-                                { 
-                                    cell2 = 22; 
-                                }
+                                if (cell2 == 0) { cell2 = 22; }
                                 // Battery combobox
                                 comboBox7.Items.Clear();
                                 //comboBox7.Text = "";
@@ -1174,10 +1305,7 @@ namespace NewBTASProto
                                 break;
                             case "4":
                                 // update the cells value
-                                if (cell2 == 0) 
-                                { 
-                                    cell2 = 21; 
-                                }
+                                if (cell2 == 0) { cell2 = 21; }
                                 // Battery combobox
                                 comboBox7.Items.Clear();
                                 //comboBox7.Text = "";
@@ -1216,11 +1344,9 @@ namespace NewBTASProto
                                 comboBox8.Items.Add("Cell 21");
                                 break;
                             case "21":
+                            case "24":
                                 // update the cells value
-                                if (cell2 == 0) 
-                                { 
-                                    cell2 = 21; 
-                                }
+                                if (cell2 == 0) { cell2 = 21; }
                                 // Battery combobox
                                 comboBox7.Items.Clear();
                                 //comboBox7.Text = "";
@@ -1256,9 +1382,9 @@ namespace NewBTASProto
                                 comboBox8.Items.Add("Cell 20");
                                 comboBox8.Items.Add("Cell 21");
                                 break;
-                            case "10":
+                            case "22":
                                 // update the cells value
-                                if (cell2 == 0) { cell2 = 20; }
+                                if (cell2 == 0) { cell2 = 21; }
                                 // Battery combobox
                                 comboBox7.Items.Clear();
                                 //comboBox7.Text = "";
@@ -1271,14 +1397,72 @@ namespace NewBTASProto
                                 // Cells combobox
                                 comboBox8.Items.Clear();
                                 //comboBox8.Text = "";
+                                comboBox8.Items.Add("Ending Voltages");
+                                comboBox8.Items.Add("Cell 1");
+                                comboBox8.Items.Add("Cell 2");
+                                comboBox8.Items.Add("Cell 3");
+                                comboBox8.Items.Add("Cell 4");
+                                comboBox8.Items.Add("Cell 5");
+                                comboBox8.Items.Add("Cell 6");
+                                comboBox8.Items.Add("Cell 7");
+                                comboBox8.Items.Add("Cell 8");
+                                comboBox8.Items.Add("Cell 9");
+                                comboBox8.Items.Add("Cell 10");
+                                comboBox8.Items.Add("Cell 11");
+                                comboBox8.Items.Add("Cell 12");
+                                comboBox8.Items.Add("Cell 13");
+                                comboBox8.Items.Add("Cell 14");
+                                comboBox8.Items.Add("Cell 15");
+                                comboBox8.Items.Add("Cell 16");
+                                comboBox8.Items.Add("Cell 17");
+                                comboBox8.Items.Add("Cell 18");
+                                comboBox8.Items.Add("Cell 19");
+                                comboBox8.Items.Add("Cell 20");
+                                comboBox8.Items.Add("Cell 21");
+                                comboBox8.Items.Add("Cell 22");
+                                break;
+                            case "9":
+                            case "11":
+                                // update the cells value
+                                if (cell2 == 0) { cell2 = 20; }
+                                // Battery combobox
+                                comboBox7.Items.Clear();
+                                //comboBox7.Text = "";
+                                comboBox7.Items.Add("Voltage 1");
+                                comboBox7.Items.Add("Voltage 2");
+                                comboBox7.Items.Add("Current");
+                                comboBox7.Items.Add("Temperature 1");
+                                comboBox7.Items.Add("Temperature 2");
+                                comboBox7.Items.Add("Temperature 3");
+                                comboBox7.Items.Add("Temperature 4");
+                                // Cells combobox
+                                comboBox8.Items.Clear();
+                                //comboBox8.Text = "";
+                                comboBox8.Items.Add(" ");
+                                break;
+                            case "10":
+                                // update the cells value
+                                if (cell2 == 0) { cell2 = 20; }
+                                // Battery combobox
+                                comboBox7.Items.Clear();
+                                //comboBox7.Text = "";
+                                comboBox7.Items.Add("Voltage 1");
+                                comboBox7.Items.Add("Voltage 2");
+                                comboBox7.Items.Add("Voltage 3");
+                                comboBox7.Items.Add("Voltage 4");
+                                comboBox7.Items.Add("Current");
+                                comboBox7.Items.Add("Temperature 1");
+                                comboBox7.Items.Add("Temperature 2");
+                                comboBox7.Items.Add("Temperature 3");
+                                comboBox7.Items.Add("Temperature 4");
+                                // Cells combobox
+                                comboBox8.Items.Clear();
+                                //comboBox8.Text = "";
                                 comboBox8.Items.Add(" ");
                                 break;
                             default:
                                 // update the cells value
-                                if (cell2 == 0) 
-                                { 
-                                    cell2 = 20; 
-                                }
+                                if (cell2 == 0) { cell2 = 20; }
                                 // Battery combobox
                                 comboBox7.Items.Clear();
                                 //comboBox7.Text = "";
@@ -1533,16 +1717,11 @@ namespace NewBTASProto
                 };
                 this.chart1.Series.Add(series1);
 
-                for (int i = 0; i < graph1Set.Tables[0].Rows.Count; i++)
-                {
-                    series1.Points.AddXY(Math.Round(GetDouble(graph1Set.Tables[0].Rows[i][7].ToString()) * 1440), graph1Set.Tables[0].Rows[i][q]);
-                    // color test
-                    series1.Points[i].Color = pointColor(technology1, cell1, GetDouble(graph1Set.Tables[0].Rows[i][q].ToString()), type1);
-                }
+
 
                 // pad with zero Vals to help with the look of the plot...
                 // first get the interval and total points
-                int interval = 1;
+                double interval = 1;
                 int points = 1;
 
                 switch (comboBox2.Text.Substring(5))
@@ -1599,16 +1778,43 @@ namespace NewBTASProto
                         chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                         break;
                     case "SlowCharge-16":
+                    case "Shorting-16":
                         interval = 16;
                         points = 61;
                         chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                         break;
                     default:
                         //custom cap and charge get the default...
-                        //Custom Chg
-                        //Custom Cap
+                        //Look it up!
+                        string tempString = comboBox2.Text.Substring(5);
+                        if (tempString.Contains("Combo:") && tempString.Contains("("))
+                        {
+                            tempString = tempString.Substring(tempString.IndexOf("("), tempString.IndexOf(")") - tempString.IndexOf("("));
+                            tempString = tempString.Substring(tempString.IndexOf(" ") + 1);
+
+                        }
+
+                        for (int i = 0; i < customTestParams.Rows.Count; i++)
+                        {
+                            if (customTestParams.Rows[i][1].ToString() == tempString)
+                            {
+                                interval = ((int)customTestParams.Rows[i][4]) / 60.0;
+                                points = (int)customTestParams.Rows[i][3];
+                                chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0.0";
+                                break;
+                            }
+                        }
+
                         chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0.0";
                         break;
+                }
+                
+                // now add points
+                for (int i = 0; i < graph1Set.Tables[0].Rows.Count; i++)
+                {
+                    series1.Points.AddXY(Math.Round(GetDouble(graph1Set.Tables[0].Rows[i][7].ToString()) * 1440, ((interval < 1) ? 1 : 0)), graph1Set.Tables[0].Rows[i][q]);
+                    // color test
+                    series1.Points[i].Color = pointColor(technology1, cell1, GetDouble(graph1Set.Tables[0].Rows[i][q].ToString()), type1);
                 }
 
 
@@ -1785,18 +1991,13 @@ namespace NewBTASProto
                 }
                 else
                 {
-                    for (int i = 0; i < graph1Set.Tables[0].Rows.Count; i++)
-                    {
-                        series1.Points.AddXY(Math.Round(GetDouble(graph1Set.Tables[0].Rows[i][7].ToString()) * 1440), graph1Set.Tables[0].Rows[i][q]);
-                        // color test
-                        series1.Points[i].Color = pointColor(technology1, 1, GetDouble(graph1Set.Tables[0].Rows[i][q].ToString()), type1);
-                    }
+
 
 
 
                     // pad with zero Vals to help with the look of the plot...
                     // first get the interval and total points
-                    int interval = 1;
+                    double interval = 1;
                     int points = 1;
 
                     switch (comboBox2.Text.Substring(5))
@@ -1853,18 +2054,43 @@ namespace NewBTASProto
                             chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                             break;
                         case "SlowCharge-16":
+                        case "Shorting-16":
                             interval = 16;
                             points = 61;
                             chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                             break;
                         default:
                             //custom cap and charge get the default...
-                            //Custom Chg
-                            //Custom Cap
+                            //Look it up!
+                            string tempString = comboBox2.Text.Substring(5);
+                            if (tempString.Contains("Combo:") && tempString.Contains("("))
+                            {
+                                tempString = tempString.Substring(tempString.IndexOf("("), tempString.IndexOf(")") - tempString.IndexOf("("));
+                                tempString = tempString.Substring(tempString.IndexOf(" ") + 1);
+
+                            }
+
+                            for (int i = 0; i < customTestParams.Rows.Count; i++)
+                            {
+                                if (customTestParams.Rows[i][1].ToString() == tempString)
+                                {
+                                    interval = ((int)customTestParams.Rows[i][4]) / 60.0;
+                                    points = (int)customTestParams.Rows[i][3];
+                                    chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0.0";
+                                    break;
+                                }
+                            }
+
                             chart1.ChartAreas[0].AxisX.LabelStyle.Format = "0.0";
                             break;
                     }
 
+                    for (int i = 0; i < graph1Set.Tables[0].Rows.Count; i++)
+                    {
+                        series1.Points.AddXY(Math.Round(GetDouble(graph1Set.Tables[0].Rows[i][7].ToString()) * 1440, ((interval < 1) ? 1 : 0)), graph1Set.Tables[0].Rows[i][q]);
+                        // color test
+                        series1.Points[i].Color = pointColor(technology1, 1, GetDouble(graph1Set.Tables[0].Rows[i][q].ToString()), type1);
+                    }
 
                     if (graph1Set.Tables[0].Rows.Count <= points - 1)
                     {
@@ -1939,7 +2165,7 @@ namespace NewBTASProto
             {
                 case "NiCd":
                     // Discharge
-                    if (type.Contains("As Received") || type.Contains("Cap") || type.Contains("Discharge") || type == "")
+                    if (type.Contains("As Received") || type.Contains("Cap") || type.Contains("Discharge") || type.Contains("Shorting") || type == "")
                     {
                         Min4 = 1 * Cells;
                         Max = 1.05 * Cells;
@@ -1968,7 +2194,7 @@ namespace NewBTASProto
                     }
                 case "Sealed Lead Acid":
                     // Discharge
-                    if (type.Contains("As Received") || type.Contains("Capacity-1") || type.Contains("Discharge") || type.Contains("Custom Cap") || type == "")
+                    if (type.Contains("As Received") || type.Contains("Capacity-1") || type.Contains("Discharge") || type.Contains("Custom Cap") || type.Contains("Shorting") || type == "")
                     {
 
                         Min4 = (20.0 / 24) * NomV1;
@@ -1987,7 +2213,7 @@ namespace NewBTASProto
                     }
                 case "NiCd ULM":
                     // Discharge
-                    if (type.Contains("As Received") || type.Contains("Capacity-1") || type.Contains("Discharge") || type.Contains("Custom Cap") || type == "")
+                    if (type.Contains("As Received") || type.Contains("Capacity-1") || type.Contains("Discharge") || type.Contains("Custom Cap") || type.Contains("Shorting") || type == "")
                     {
                         Min4 = 1 * Cells;
                         Max = 1.05 * Cells;
@@ -2058,7 +2284,7 @@ namespace NewBTASProto
             {
                 case "NiCd":
                     // Discharge
-                    if (type.Contains("As Received") || type.Contains("Cap") || type.Contains("Discharge") || type == "")
+                    if (type.Contains("As Received") || type.Contains("Cap") || type.Contains("Discharge") || type.Contains("Shorting") || type == "")
                     {
                         Min4 = 1 * Cells;
                         Max = 1.05 * Cells;
@@ -2084,7 +2310,7 @@ namespace NewBTASProto
                     }
                 case "Sealed Lead Acid":
                     // Discharge
-                    if (type.Contains("As Received") || type.Contains("Capacity-1") || type.Contains("Discharge") || type.Contains("Custom Cap") || type == "")
+                    if (type.Contains("As Received") || type.Contains("Capacity-1") || type.Contains("Discharge") || type.Contains("Custom Cap") || type.Contains("Shorting") || type == "")
                     {
 
                         Min4 = (20.0 / 24) * NomV2;
@@ -2103,7 +2329,7 @@ namespace NewBTASProto
                     }
                 case "NiCd ULM":
                     // Discharge
-                    if (type.Contains("As Received") || type.Contains("Capacity-1") || type.Contains("Discharge") || type.Contains("Custom Cap") || type == "")
+                    if (type.Contains("As Received") || type.Contains("Capacity-1") || type.Contains("Discharge") || type.Contains("Custom Cap") || type.Contains("Shorting") || type == "")
                     {
                         Min4 = 1.0 * Cells;
                         Max = 1.05 * Cells;
@@ -2221,16 +2447,11 @@ namespace NewBTASProto
                 };
                 this.chart2.Series.Add(series2);
 
-                for (int i = 0; i < graph2Set.Tables[0].Rows.Count; i++)
-                {
-                    series2.Points.AddXY(Math.Round(GetDouble(graph2Set.Tables[0].Rows[i][7].ToString()) * 1440), graph2Set.Tables[0].Rows[i][q]);
-                    // color test
-                    series2.Points[i].Color = pointColor2(technology2, cell2, GetDouble(graph2Set.Tables[0].Rows[i][q].ToString()), type2);
-                }
+
 
                 // pad with zero Vals to help with the look of the plot...
                 // first get the interval and total points
-                int interval = 1;
+                double interval = 1;
                 int points = 1;
 
                 switch (comboBox4.Text.Substring(5))
@@ -2287,18 +2508,44 @@ namespace NewBTASProto
                         chart2.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                         break;
                     case "SlowCharge-16":
+                    case "Shorting-16":
                         interval = 16;
                         points = 61;
                         chart2.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                         break;
                     default:
                         //custom cap and charge get the default...
-                        //Custom Chg
-                        //Custom Cap
+                        //Look it up!
+                        string tempString = comboBox2.Text.Substring(5);
+                        if (tempString.Contains("Combo:") && tempString.Contains("("))
+                        {
+                            tempString = tempString.Substring(tempString.IndexOf("("), tempString.IndexOf(")") - tempString.IndexOf("("));
+                            tempString = tempString.Substring(tempString.IndexOf(" ") + 1);
+
+                        }
+
+                        for (int i = 0; i < customTestParams.Rows.Count; i++)
+                        {
+                            if (customTestParams.Rows[i][1].ToString() == tempString)
+                            {
+                                interval = ((int)customTestParams.Rows[i][4]) / 60.0;
+                                points = (int)customTestParams.Rows[i][3];
+                                chart2.ChartAreas[0].AxisX.LabelStyle.Format = "0.0";
+                                break;
+                            }
+                        }
+
                         chart2.ChartAreas[0].AxisX.LabelStyle.Format = "0.0";
                         break;
                 }
 
+
+                for (int i = 0; i < graph2Set.Tables[0].Rows.Count; i++)
+                {
+                    series2.Points.AddXY(Math.Round(GetDouble(graph2Set.Tables[0].Rows[i][7].ToString()) * 1440, ((interval < 1) ? 1 : 0)), graph2Set.Tables[0].Rows[i][q]);
+                    // color test
+                    series2.Points[i].Color = pointColor2(technology2, cell2, GetDouble(graph2Set.Tables[0].Rows[i][q].ToString()), type2);
+                }
 
                 if (graph2Set.Tables[0].Rows.Count <= points - 1)
                 {
@@ -2476,16 +2723,11 @@ namespace NewBTASProto
                 }
                 else
                 {
-                    for (int i = 0; i < graph2Set.Tables[0].Rows.Count; i++)
-                    {
-                        series2.Points.AddXY(Math.Round(GetDouble(graph2Set.Tables[0].Rows[i][7].ToString()) * 1440), graph2Set.Tables[0].Rows[i][q]);
-                        // color test
-                        series2.Points[i].Color = pointColor2(technology2, 1, GetDouble(graph2Set.Tables[0].Rows[i][q].ToString()), type2);
-                    }
+
 
                     // pad with zero Vals to help with the look of the plot...
                     // first get the interval and total points
-                    int interval = 1;
+                    double interval = 1;
                     int points = 1;
 
                     switch (comboBox4.Text.Substring(5))
@@ -2542,18 +2784,43 @@ namespace NewBTASProto
                             chart2.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                             break;
                         case "SlowCharge-16":
+                        case "Shorting-16":
                             interval = 16;
                             points = 61;
                             chart2.ChartAreas[0].AxisX.LabelStyle.Format = "0";
                             break;
                         default:
                             //custom cap and charge get the default...
-                            //Custom Chg
-                            //Custom Cap
+                            //Look it up!
+                            string tempString = comboBox2.Text.Substring(5);
+                            if (tempString.Contains("Combo:") && tempString.Contains("("))
+                            {
+                                tempString = tempString.Substring(tempString.IndexOf("("), tempString.IndexOf(")") - tempString.IndexOf("("));
+                                tempString = tempString.Substring(tempString.IndexOf(" ") + 1);
+
+                            }
+
+                            for (int i = 0; i < customTestParams.Rows.Count; i++)
+                            {
+                                if (customTestParams.Rows[i][1].ToString() == tempString)
+                                {
+                                    interval = ((int)customTestParams.Rows[i][4]) / 60.0;
+                                    points = (int)customTestParams.Rows[i][3];
+                                    chart2.ChartAreas[0].AxisX.LabelStyle.Format = "0.0";
+                                    break;
+                                }
+                            }
+
                             chart2.ChartAreas[0].AxisX.LabelStyle.Format = "0.0";
                             break;
                     }
 
+                    for (int i = 0; i < graph2Set.Tables[0].Rows.Count; i++)
+                    {
+                        series2.Points.AddXY(Math.Round(GetDouble(graph2Set.Tables[0].Rows[i][7].ToString()) * 1440, ((interval < 1) ? 1 : 0)), graph2Set.Tables[0].Rows[i][q]);
+                        // color test
+                        series2.Points[i].Color = pointColor2(technology2, 1, GetDouble(graph2Set.Tables[0].Rows[i][q].ToString()), type2);
+                    }
 
                     if (graph2Set.Tables[0].Rows.Count <= points - 1)
                     {

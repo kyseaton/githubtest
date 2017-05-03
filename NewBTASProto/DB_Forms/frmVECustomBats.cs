@@ -183,7 +183,30 @@ namespace NewBTASProto
         decimal curTemp118;
         decimal curTemp119;
         decimal curTemp120;
-        decimal curTemp121;
+
+        string curTemp121;
+
+        decimal curTemp122;
+        decimal curTemp123;
+        decimal curTemp124;
+        decimal curTemp125;
+
+        decimal curTemp126;
+        decimal curTemp127;
+        decimal curTemp128;
+        decimal curTemp129;
+
+        string curTemp130;
+
+        decimal curTemp131;
+        decimal curTemp132;
+        decimal curTemp133;
+        decimal curTemp134;
+
+        decimal curTemp135;
+        decimal curTemp136;
+        decimal curTemp137;
+        decimal curTemp138;
 
         public frmVECustomBats()
         {
@@ -328,7 +351,7 @@ namespace NewBTASProto
             numericUpDown41.DataBindings.Add("Text", bindingSource1, "T6Ohms");
             // Discharge Bindings ("T7Mode, T7Time1Hr, T7Time1Min, T7Curr1, T7Volts1, T7Time2Hr, T7Time2Min, T7Curr2, T7Volts2, T7Ohms")
             //comboBox7.DataBindings.Add("Text", bindingSource1, "T7Mode");
-            numericUpDown50.DataBindings.Add("Text", bindingSource1, "T7Time1Hr");
+            //numericUpDown50.DataBindings.Add("Text", bindingSource1, "T7Time1Hr");
             numericUpDown49.DataBindings.Add("Text", bindingSource1, "T7Time1Min");
             numericUpDown48.DataBindings.Add("Text", bindingSource1, "T7Curr1");
             numericUpDown47.DataBindings.Add("Text", bindingSource1, "T7Volts1");
@@ -372,7 +395,7 @@ namespace NewBTASProto
             numericUpDown51.DataBindings.Add("Text", bindingSource1, "T11Ohms");
             // Constant Voltage Bindings ("T12Mode, T12Time1Hr, T12Time1Min, T12Curr1, T12Volts1, T12Time2Hr, T12Time2Min, T12Curr2, T12Volts2, T12Ohms")
             //comboBox12.DataBindings.Add("Text", bindingSource1, "T12Mode");
-            numericUpDown87.DataBindings.Add("Text", bindingSource1, "T12Time1Hr");
+            //numericUpDown87.DataBindings.Add("Text", bindingSource1, "T12Time1Hr");
             numericUpDown86.DataBindings.Add("Text", bindingSource1, "T12Time1Min");
             numericUpDown85.DataBindings.Add("Text", bindingSource1, "T12Curr1");
             numericUpDown84.DataBindings.Add("Text", bindingSource1, "T12Volts1");
@@ -390,6 +413,26 @@ namespace NewBTASProto
             numericUpDown93.DataBindings.Add("Text", bindingSource1, "T13Time2Min");
             numericUpDown92.DataBindings.Add("Text", bindingSource1, "T13Curr2");
             numericUpDown91.DataBindings.Add("Text", bindingSource1, "T13Volts2");
+            // Custom Charge 2 Bindings ("T14Mode, T14Time1Hr, T14Time1Min, T14Curr1, T14Volts1, T14Time2Hr, T14Time2Min, T14Curr2, T14Volts2, T14Ohms")
+            comboBox15.DataBindings.Add("Text", bindingSource1, "T14Mode");
+            numericUpDown106.DataBindings.Add("Text", bindingSource1, "T14Time1Hr");
+            numericUpDown105.DataBindings.Add("Text", bindingSource1, "T14Time1Min");
+            numericUpDown104.DataBindings.Add("Text", bindingSource1, "T14Curr1");
+            numericUpDown103.DataBindings.Add("Text", bindingSource1, "T14Volts1");
+            numericUpDown102.DataBindings.Add("Text", bindingSource1, "T14Time2Hr");
+            numericUpDown101.DataBindings.Add("Text", bindingSource1, "T14Time2Min");
+            numericUpDown100.DataBindings.Add("Text", bindingSource1, "T14Curr2");
+            numericUpDown99.DataBindings.Add("Text", bindingSource1, "T14Volts2");
+            // Custom Charge 3 Bindings ("T15Mode, T15Time1Hr, T15Time1Min, T15Curr1, T15Volts1, T15Time2Hr, T15Time2Min, T15Curr2, T15Volts2, T15Ohms")
+            comboBox16.DataBindings.Add("Text", bindingSource1, "T15Mode");
+            numericUpDown114.DataBindings.Add("Text", bindingSource1, "T15Time1Hr");
+            numericUpDown113.DataBindings.Add("Text", bindingSource1, "T15Time1Min");
+            numericUpDown112.DataBindings.Add("Text", bindingSource1, "T15Curr1");
+            numericUpDown111.DataBindings.Add("Text", bindingSource1, "T15Volts1");
+            numericUpDown110.DataBindings.Add("Text", bindingSource1, "T15Time2Hr");
+            numericUpDown109.DataBindings.Add("Text", bindingSource1, "T15Time2Min");
+            numericUpDown108.DataBindings.Add("Text", bindingSource1, "T15Curr2");
+            numericUpDown107.DataBindings.Add("Text", bindingSource1, "T15Volts2");
 
             
 
@@ -701,6 +744,30 @@ namespace NewBTASProto
             curTemp118 = numericUpDown95.Value;
             curTemp119 = numericUpDown92.Value;
             curTemp120 = numericUpDown91.Value;
+
+            curTemp121 = comboBox15.Text;
+
+            curTemp122 = numericUpDown106.Value;
+            curTemp123 = numericUpDown105.Value;
+            curTemp124 = numericUpDown104.Value;
+            curTemp125 = numericUpDown103.Value;
+
+            curTemp126 = numericUpDown102.Value;
+            curTemp127 = numericUpDown101.Value;
+            curTemp128 = numericUpDown100.Value;
+            curTemp129 = numericUpDown99.Value;
+
+            curTemp130 = comboBox16.Text;
+
+            curTemp131 = numericUpDown114.Value;
+            curTemp132 = numericUpDown113.Value;
+            curTemp133 = numericUpDown112.Value;
+            curTemp134 = numericUpDown111.Value;
+
+            curTemp135 = numericUpDown110.Value;
+            curTemp136 = numericUpDown109.Value;
+            curTemp137 = numericUpDown108.Value;
+            curTemp138 = numericUpDown107.Value;
         }
         
 
@@ -957,6 +1024,30 @@ namespace NewBTASProto
                 decimal temp118 = numericUpDown95.Value;
                 decimal temp119 = numericUpDown92.Value;
                 decimal temp120 = numericUpDown91.Value;
+
+                string temp121 = comboBox15.Text;
+
+                decimal temp122 = numericUpDown106.Value;
+                decimal temp123 = numericUpDown105.Value;
+                decimal temp124 = numericUpDown104.Value;
+                decimal temp125 = numericUpDown103.Value;
+
+                decimal temp126 = numericUpDown102.Value;
+                decimal temp127 = numericUpDown101.Value;
+                decimal temp128 = numericUpDown100.Value;
+                decimal temp129 = numericUpDown99.Value;
+
+                string temp130 = comboBox16.Text;
+
+                decimal temp131 = numericUpDown114.Value;
+                decimal temp132 = numericUpDown113.Value;
+                decimal temp133 = numericUpDown112.Value;
+                decimal temp134 = numericUpDown111.Value;
+
+                decimal temp135 = numericUpDown110.Value;
+                decimal temp136 = numericUpDown109.Value;
+                decimal temp137 = numericUpDown108.Value;
+                decimal temp138 = numericUpDown107.Value;
                 
                 bindingNavigator1.BindingSource.AddNew();
                 bindingNavigator1.BindingSource.Position = 0;
@@ -1111,6 +1202,30 @@ namespace NewBTASProto
                 numericUpDown53.Value = temp113;
                 numericUpDown52.Value = temp114;
                 numericUpDown51.Value = temp115;
+
+                comboBox15.Text = temp121;
+
+                numericUpDown106.Value = temp122;
+                numericUpDown105.Value = temp123;
+                numericUpDown104.Value = temp124;
+                numericUpDown103.Value = temp125;
+
+                numericUpDown102.Value = temp126;
+                numericUpDown101.Value = temp127;
+                numericUpDown100.Value = temp128;
+                numericUpDown99.Value = temp129;
+
+                comboBox16.Text = temp130;
+
+                numericUpDown114.Value = temp131;
+                numericUpDown113.Value = temp132;
+                numericUpDown112.Value = temp133;
+                numericUpDown111.Value = temp134;
+
+                numericUpDown110.Value = temp135;
+                numericUpDown109.Value = temp136;
+                numericUpDown108.Value = temp137;
+                numericUpDown107.Value = temp138;
 
             }
             #endregion
@@ -1295,6 +1410,37 @@ namespace NewBTASProto
                         conn.Close();
                     }
 
+                    cmdStr = "UPDATE BatteriesCustom SET" +
+                        // Custom Charge 2("T14Mode, T14Time1Hr, T14Time1Min, T14Curr1, T14Volts1, T14Time2Hr, T14Time2Min, T14Curr2, T14Volts2, T14Ohms")
+                        " T14Mode='" + comboBox15.Text.Replace("'", "''") +
+                        "', T14Time1Hr='" + numericUpDown106.Text.Replace("'", "''") +
+                        "', T14Time1Min='" + numericUpDown105.Text.Replace("'", "''") +
+                        "', T14Curr1='" + numericUpDown104.Text.Replace("'", "''") +
+                        "', T14Volts1='" + numericUpDown103.Text.Replace("'", "''") +
+                        "', T14Time2Hr='" + numericUpDown102.Text.Replace("'", "''") +
+                        "', T14Time2Min='" + numericUpDown101.Text.Replace("'", "''") +
+                        "', T14Curr2='" + numericUpDown100.Text.Replace("'", "''") +
+                        "', T14Volts2='" + numericUpDown99.Text.Replace("'", "''") +
+                                            // Custom Charge 3("T15Mode, T15Time1Hr, T15Time1Min, T15Curr1, T15Volts1, T15Time2Hr, T15Time2Min, T15Curr2, T15Volts2, T15Ohms")
+                        "', T15Mode='" + comboBox16.Text.Replace("'", "''") +
+                        "', T15Time1Hr='" + numericUpDown114.Text.Replace("'", "''") +
+                        "', T15Time1Min='" + numericUpDown113.Text.Replace("'", "''") +
+                        "', T15Curr1='" + numericUpDown112.Text.Replace("'", "''") +
+                        "', T15Volts1='" + numericUpDown111.Text.Replace("'", "''") +
+                        "', T15Time2Hr='" + numericUpDown110.Text.Replace("'", "''") +
+                        "', T15Time2Min='" + numericUpDown109.Text.Replace("'", "''") +
+                        "', T15Curr2='" + numericUpDown108.Text.Replace("'", "''") +
+                        "', T15Volts2='" + numericUpDown107.Text.Replace("'", "''") +
+                                            // finished with inputs!
+                        "' WHERE RecordID=" + current["RecordID"].ToString();
+                    cmd = new OleDbCommand(cmdStr, conn);
+                    lock (Main_Form.dataBaseLock)
+                    {
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                        conn.Close();
+                    }
+
                     // Also update the model in the other tables!
                     cmdStr = "UPDATE Batteries SET BatteryModel='" + textBox2.Text.Replace("'", "''") + "' WHERE BatteryModel='" + current["BatteryModel"].ToString() + "'";
                     cmd = new OleDbCommand(cmdStr, conn);
@@ -1390,7 +1536,9 @@ namespace NewBTASProto
                        "[T10Mode], T10Time1Hr, T10Time1Min, T10Curr1, T10Volts1, T10Time2Hr, T10Time2Min, T10Curr2, T10Volts2, " +
                        "[T11Mode], T11Time1Hr, T11Time1Min, T11Curr1, T11Volts1, T11Ohms, " +
                        "[T12Mode], T12Time1Hr, T12Time1Min, T12Curr1, T12Volts1, T12Time2Hr, T12Time2Min, T12Curr2, T12Volts2, " +
-                       "[T13Mode], T13Time1Hr, T13Time1Min, T13Curr1, T13Volts1, T13Time2Hr, T13Time2Min, T13Curr2, T13Volts2) " +
+                       "[T13Mode], T13Time1Hr, T13Time1Min, T13Curr1, T13Volts1, T13Time2Hr, T13Time2Min, T13Curr2, T13Volts2, " +
+                       "[T14Mode], T14Time1Hr, T14Time1Min, T14Curr1, T14Volts1, T14Time2Hr, T14Time2Min, T14Curr2, T14Volts2, " +
+                       "[T15Mode], T15Time1Hr, T15Time1Min, T15Curr1, T15Volts1, T15Time2Hr, T15Time2Min, T15Curr2, T15Volts2) " +
                         "VALUES (" + (max + 1).ToString() + ",'" +
                         textBox1.Text.Replace("'", "''") + "','" +
                         textBox2.Text.Replace("'", "''") + "','" +
@@ -1517,7 +1665,7 @@ namespace NewBTASProto
                         numericUpDown82.Text.Replace("'", "''") + "','" +
                         numericUpDown81.Text.Replace("'", "''") + "','" +
                         numericUpDown80.Text.Replace("'", "''") + "','" +
-                        // Constant Voltage ("T13Mode, T13Time1Hr, T13Time1Min, T13Curr1, T13Volts1, T13Time2Hr, T13Time2Min, T13Curr2, T13Volts2, T13Ohms")
+                        // Full Charge 4.5 ("T13Mode, T13Time1Hr, T13Time1Min, T13Curr1, T13Volts1, T13Time2Hr, T13Time2Min, T13Curr2, T13Volts2, T13Ohms")
                         comboBox14.Text.Replace("'", "''") + "','" +
                         numericUpDown98.Text.Replace("'", "''") + "','" +
                         numericUpDown97.Text.Replace("'", "''") + "','" +
@@ -1526,9 +1674,29 @@ namespace NewBTASProto
                         numericUpDown94.Text.Replace("'", "''") + "','" +
                         numericUpDown93.Text.Replace("'", "''") + "','" +
                         numericUpDown92.Text.Replace("'", "''") + "','" +
-                        numericUpDown91.Text.Replace("'", "''")
+                        numericUpDown91.Text.Replace("'", "''") +
+                        // Custom Chg 2("T14Mode, T14Time1Hr, T14Time1Min, T14Curr1, T14Volts1, T14Time2Hr, T14Time2Min, T14Curr2, T14Volts2, T14Ohms")
+                        comboBox15.Text.Replace("'", "''") + "','" +
+                        numericUpDown106.Text.Replace("'", "''") + "','" +
+                        numericUpDown105.Text.Replace("'", "''") + "','" +
+                        numericUpDown104.Text.Replace("'", "''") + "','" +
+                        numericUpDown103.Text.Replace("'", "''") + "','" +
+                        numericUpDown102.Text.Replace("'", "''") + "','" +
+                        numericUpDown101.Text.Replace("'", "''") + "','" +
+                        numericUpDown100.Text.Replace("'", "''") + "','" +
+                        numericUpDown99.Text.Replace("'", "''") + "','" +
+                        // Custom Chg 3("T15Mode, T150Time1Hr, T15Time1Min, T15Curr1, T15Volts1, T15Time2Hr, T15Time2Min, T15Curr2, T15Volts2, T15Ohms")
+                        comboBox16.Text.Replace("'", "''") + "','" +
+                        numericUpDown114.Text.Replace("'", "''") + "','" +
+                        numericUpDown113.Text.Replace("'", "''") + "','" +
+                        numericUpDown112.Text.Replace("'", "''") + "','" +
+                        numericUpDown111.Text.Replace("'", "''") + "','" +
+                        numericUpDown110.Text.Replace("'", "''") + "','" +
+                        numericUpDown109.Text.Replace("'", "''") + "','" +
+                        numericUpDown108.Text.Replace("'", "''") + "','" +
+                        numericUpDown107.Text.Replace("'", "''") + "','" +
                         // finished with inputs!
-                        + "')";
+                        "')";
 
                     OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
                     lock (Main_Form.dataBaseLock)
@@ -2185,8 +2353,33 @@ namespace NewBTASProto
                 curTemp117 != numericUpDown96.Value ||
                 curTemp118 != numericUpDown95.Value ||
                 curTemp119 != numericUpDown92.Value ||
-                curTemp120 != numericUpDown91.Value)
+                curTemp120 != numericUpDown91.Value  ||
+                
+                comboBox15.Text != curTemp121 ||
+
+                numericUpDown106.Value != curTemp122 ||
+                numericUpDown105.Value != curTemp123 ||
+                numericUpDown104.Value != curTemp124 ||
+                numericUpDown103.Value != curTemp125 ||
+
+                numericUpDown102.Value != curTemp126 ||
+                numericUpDown101.Value != curTemp127 ||
+                numericUpDown100.Value != curTemp128 ||
+                numericUpDown99.Value != curTemp129 ||
+                
+                comboBox16.Text != curTemp130 ||
+
+                numericUpDown114.Value != curTemp131 ||
+                numericUpDown113.Value != curTemp132 ||
+                numericUpDown112.Value != curTemp133 ||
+                numericUpDown111.Value != curTemp134 ||
+
+                numericUpDown110.Value != curTemp135 ||
+                numericUpDown109.Value != curTemp136 ||
+                numericUpDown108.Value != curTemp137 ||
+                numericUpDown107.Value != curTemp138)
             {
+
                 // they don't match!
                 // ask if the user is sure that they want to continue...
                 DialogResult dialogResult = MessageBox.Show(this, "Looks like this record has been updated without being saved.  Are you sure you want to navigate away without saving?", "Click Yes to continue or No stay here.", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
@@ -2305,6 +2498,121 @@ namespace NewBTASProto
             }
 
             throw new SystemException(string.Format("strange number format '{0}'", s));
+        }
+
+        private void tabPage10_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox28_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox29_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label185_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBox15_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBox15_SelectedValueChanged(object sender, EventArgs e)
+        {
+
+            if (comboBox15.Text == "10 Single Rate")
+            {
+                groupBox28.Visible = false;
+                groupBox29.Text = "";
+                label181.Text = "Charge Current";
+                label179.Text = "Charge Over Voltage";
+                if (numericUpDown75.Value == 0)
+                {
+                    numericUpDown75.Value = 0;
+                }
+            }
+            else if (comboBox15.Text == "11 Single Rate with Peak Stop")
+            {
+                groupBox28.Visible = false;
+                groupBox29.Text = "";
+                label181.Text = "Charge Current";
+                label179.Text = "Peak Stop Voltage";
+            }
+            else if(comboBox15.Text == "12 Constant Voltage")
+            {
+                groupBox28.Visible = false;
+                groupBox29.Text = "";
+                label181.Text = "Initial Current";
+                label179.Text = "Charge Voltage";
+            }
+            else if(comboBox15.Text == "20 Dual Rate")
+            {
+                groupBox28.Visible = true;
+                groupBox29.Text = "Main Charge";
+                label181.Text = "Main Charge Current";
+                label179.Text = "Main Over Voltage";
+            }
+            else
+            {
+                groupBox28.Visible = true;
+                groupBox29.Text = "Main Charge";
+                label181.Text = "Main Charge Current";
+                label179.Text = "Peak Transfer Voltage";
+            }
+        }
+
+        private void comboBox16_SelectedValueChanged(object sender, EventArgs e)
+        {
+        
+
+            if (comboBox16.Text == "10 Single Rate")
+            {
+                groupBox30.Visible = false;
+                groupBox31.Text = "";
+                label194.Text = "Charge Current";
+                label192.Text = "Charge Over Voltage";
+                if (numericUpDown75.Value == 0)
+                {
+                    numericUpDown75.Value = 0;
+                }
+            }
+            else if (comboBox16.Text == "11 Single Rate with Peak Stop")
+            {
+                groupBox30.Visible = false;
+                groupBox31.Text = "";
+                label194.Text = "Charge Current";
+                label192.Text = "Peak Stop Voltage";
+            }
+            else if(comboBox16.Text == "12 Constant Voltage")
+            {
+                groupBox30.Visible = false;
+                groupBox31.Text = "";
+                label194.Text = "Initial Current";
+                label192.Text = "Charge Voltage";
+            }
+            else if(comboBox16.Text == "20 Dual Rate")
+            {
+                groupBox30.Visible = true;
+                groupBox31.Text = "Main Charge";
+                label194.Text = "Main Charge Current";
+                label192.Text = "Main Over Voltage";
+            }
+            else
+            {
+                groupBox30.Visible = true;
+                groupBox31.Text = "Main Charge";
+                label194.Text = "Main Charge Current";
+                label192.Text = "Peak Transfer Voltage";
+            }
+
         }
         
     }
