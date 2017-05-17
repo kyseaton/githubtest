@@ -32,7 +32,8 @@ namespace NewBTASProto
         DataTable gs = new DataTable();
 
         // and the p(oint) c(olor) i(nformation) table
-        public DataTable pci = new DataTable();
+        public DataTable 
+            pci = new DataTable();
 
 
         /// <summary>

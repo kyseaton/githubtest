@@ -42,8 +42,13 @@ namespace NewBTASProto
         float NomV1;
         float NomV2;
 
-        float CellV1;
-        float CellV2;
+        float CellV1CMax;
+        float CellV1CMin;
+        float CellV1CapMin;
+
+        float CellV2CMax;
+        float CellV2CMin;
+        float CellV2CapMin;
 
         string curStep = "";
         string curWorkOrder = "";
@@ -974,7 +979,7 @@ namespace NewBTASProto
 
 
                     //Now get the nominal voltage and the cell voltage level...
-                    strAccessSelect = @"SELECT VOLT,CCVMAX,BTECH,NCELLS FROM BatteriesCustom WHERE BatteryModel='" + batMod1 + @"'";
+                    strAccessSelect = @"SELECT VOLT,CCVMAX,BTECH,NCELLS,CCVMMIN,CCAPV FROM BatteriesCustom WHERE BatteryModel='" + batMod1 + @"'";
                     batInfo1 = new DataSet();
 
                     // try to open the DB
@@ -1012,11 +1017,11 @@ namespace NewBTASProto
                     }
                     try
                     {
-                        CellV1 = (float) GetDouble(batInfo1.Tables[0].Rows[0][1].ToString());
+                        CellV1CapMin = (float)GetDouble(batInfo1.Tables[0].Rows[0][5].ToString());
                     }
                     catch
                     {
-                        CellV1 = (float)1.75;
+                        CellV1CapMin = (float)1.0;
                     }
                     try
                     {
@@ -1025,6 +1030,37 @@ namespace NewBTASProto
                     catch
                     {
                         technology1 = "NiCd";
+                    }
+                    try
+                    {
+                        CellV1CMax = (float)GetDouble(batInfo1.Tables[0].Rows[0][1].ToString());
+                    }
+                    catch
+                    {
+                        if (technology1 == "NiCd ULM")
+                        {
+                            CellV1CMax = (float)1.82;
+                        }
+                        else
+                        {
+                            CellV1CMax = (float)1.75;
+                        }
+                        
+                    }
+                    try
+                    {
+                        CellV1CMin = (float)GetDouble(batInfo1.Tables[0].Rows[0][4].ToString());
+                    }
+                    catch
+                    {
+                        if (technology1 == "NiCd ULM")
+                        {
+                            CellV1CMax = (float)1.55;
+                        }
+                        else
+                        {
+                            CellV1CMax = (float)1.5;
+                        }
                     }
                     try
                     {
@@ -1556,7 +1592,7 @@ namespace NewBTASProto
 
 
                         //Now get the nominal voltage and the cell voltage level...
-                        strAccessSelect = @"SELECT VOLT,CCVMAX,BTECH,NCELLS FROM BatteriesCustom WHERE BatteryModel='" + batMod2 + @"'";
+                        strAccessSelect = @"SELECT VOLT,CCVMAX,BTECH,NCELLS,CCVMMIN,CCAPV FROM BatteriesCustom WHERE BatteryModel='" + batMod2 + @"'";
                         batInfo2 = new DataSet();
                         myAccessConn = null;
                         // try to open the DB
@@ -1605,14 +1641,7 @@ namespace NewBTASProto
                         {
                             NomV2 = 24;
                         }
-                        try
-                        {
-                            CellV2 = (float) GetDouble(batInfo2.Tables[0].Rows[0][1].ToString());
-                        }
-                        catch
-                        {
-                            CellV2 = (float) 1.75;
-                        }
+
                         try
                         {
                             technology2 = batInfo2.Tables[0].Rows[0][2].ToString();
@@ -1620,6 +1649,47 @@ namespace NewBTASProto
                         catch
                         {
                             technology2 = "NiCd";
+                        }
+
+                        try
+                        {
+                            CellV2CMax = (float)GetDouble(batInfo2.Tables[0].Rows[0][1].ToString());
+                        }
+                        catch
+                        {
+                            if (technology2 == "NiCd ULM")
+                            {
+                                CellV2CMax = (float)1.82;
+                            }
+                            else
+                            {
+                                CellV2CMax = (float)1.75;
+                            }
+                            
+                        }
+                        try
+                        {
+                            CellV2CMin = (float)GetDouble(batInfo2.Tables[0].Rows[0][4].ToString());
+                        }
+                        catch
+                        {
+                            if (technology2 == "NiCd ULM")
+                            {
+                                CellV2CMin = (float)1.55;
+                            }
+                            else
+                            {
+                                CellV2CMin = (float)1.5;
+                            }
+
+                        }
+                        try
+                        {
+                            CellV2CapMin = (float)GetDouble(batInfo2.Tables[0].Rows[0][5].ToString());
+                        }
+                        catch
+                        {
+                            CellV2CapMin = (float)1.0;
                         }
                         try
                         {
@@ -2156,9 +2226,33 @@ namespace NewBTASProto
             double Min4 = 0;
             double Max = 0;
 
-            if (CellV1 == 0)
+            if (CellV1CMax == 0)
             {
-                CellV1 = (float)1.75;
+                if (tech == "NiCd ULM")
+                {
+                    CellV1CMax = (float)1.82;
+                }
+                else
+                {
+                    CellV1CMax = (float)1.75;
+                }
+                
+            }
+            if (CellV1CMin == 0)
+            {
+                if (tech == "NiCd ULM")
+                {
+                    CellV1CMin = (float)1.55;
+                }
+                else
+                {
+                    CellV1CMin = (float)1.5;
+                }
+                
+            }
+            if (CellV1CapMin == 0)
+            {
+                CellV1CapMin = (float)1.0;
             }
 
             switch (tech)
@@ -2167,8 +2261,8 @@ namespace NewBTASProto
                     // Discharge
                     if (type.Contains("As Received") || type.Contains("Cap") || type.Contains("Discharge") || type.Contains("Shorting") || type == "")
                     {
-                        Min4 = 1 * Cells;
-                        Max = 1.05 * Cells;
+                        Min4 = CellV1CapMin * Cells;
+                        Max = (CellV1CapMin + 0.05) * Cells;
 
                         if (Value > Max) { return Color.Green; }
                         else if (Value > Min4) { return Color.Orange; }
@@ -2179,9 +2273,9 @@ namespace NewBTASProto
                     else
                     {
                         Min1 = 0.25 * Cells;
-                        Min2 = 1.5 * Cells;
-                        Min3 = 1.55 * Cells;
-                        Max = CellV1 * Cells;
+                        Min2 = CellV1CMin * Cells;
+                        Min3 = (CellV1CMin + 0.05) * Cells;
+                        Max = CellV1CMax * Cells;
 
                         if (Value > Max) 
                         { 
@@ -2215,8 +2309,8 @@ namespace NewBTASProto
                     // Discharge
                     if (type.Contains("As Received") || type.Contains("Capacity-1") || type.Contains("Discharge") || type.Contains("Custom Cap") || type.Contains("Shorting") || type == "")
                     {
-                        Min4 = 1 * Cells;
-                        Max = 1.05 * Cells;
+                        Min4 = CellV1CapMin * Cells;
+                        Max = (CellV1CapMin + 0.05) * Cells;
 
                         if (Value > Max) { return Color.Green; }
                         else if (Value > Min4) { return Color.Orange; }
@@ -2227,9 +2321,9 @@ namespace NewBTASProto
                     else
                     {
                         Min1 = 0.25 * Cells;
-                        Min2 = 1.55 * Cells;
-                        Min3 = 1.6 * Cells;
-                        Max = ((-1 == CellV1) ? 1.82 : CellV1) * Cells;
+                        Min2 = CellV1CMin * Cells;
+                        Min3 = (CellV1CMin + 0.05) * Cells;
+                        Max = CellV1CMax * Cells;
 
                         if (Value > Max) { return Color.Red; }
                         else if (Value > Min3) { return Color.Green; }
@@ -2275,10 +2369,36 @@ namespace NewBTASProto
             double Min4 = 0;
             double Max = 0;
 
-            if (CellV2 == 0)
+            if (CellV2CMax == 0)
             {
-                CellV2 = (float)1.75;
+                if (tech == "NiCd ULM")
+                {
+                    CellV2CMax = (float)1.82;
+                }
+                else
+                {
+                    CellV2CMax = (float)1.75;
+                }
+
             }
+            if (CellV2CMin == 0)
+            {
+                if (tech == "NiCd ULM")
+                {
+                    CellV2CMin = (float)1.55;
+                }
+                else
+                {
+                    CellV2CMin = (float)1.5;
+                }
+
+            }
+            if (CellV2CapMin == 0)
+            {
+                CellV2CapMin = (float)1.0;
+            }
+
+
 
             switch (tech)
             {
@@ -2286,8 +2406,8 @@ namespace NewBTASProto
                     // Discharge
                     if (type.Contains("As Received") || type.Contains("Cap") || type.Contains("Discharge") || type.Contains("Shorting") || type == "")
                     {
-                        Min4 = 1 * Cells;
-                        Max = 1.05 * Cells;
+                        Min4 = CellV2CapMin * Cells;
+                        Max = (CellV2CapMin + 0.05) * Cells;
 
                         if (Value > Max) { return Color.Green; }
                         else if (Value > Min4) { return Color.Orange; }
@@ -2298,9 +2418,9 @@ namespace NewBTASProto
                     else
                     {
                         Min1 = 0.25 * Cells;
-                        Min2 = 1.5 * Cells;
-                        Min3 = 1.55 * Cells;
-                        Max = CellV2 * Cells;
+                        Min2 = CellV2CMin * Cells;
+                        Min3 = (CellV2CMin + 0.05) * Cells;
+                        Max = CellV2CMax * Cells;
 
                         if (Value > Max) { return Color.Red; }
                         else if (Value > Min3) { return Color.Green; }
@@ -2331,8 +2451,8 @@ namespace NewBTASProto
                     // Discharge
                     if (type.Contains("As Received") || type.Contains("Capacity-1") || type.Contains("Discharge") || type.Contains("Custom Cap") || type.Contains("Shorting") || type == "")
                     {
-                        Min4 = 1.0 * Cells;
-                        Max = 1.05 * Cells;
+                        Min4 = CellV2CapMin * Cells;
+                        Max = (CellV2CapMin + 0.05) * Cells;
 
                         if (Value > Max) { return Color.Green; }
                         else if (Value > Min4) { return Color.Orange; }
@@ -2343,9 +2463,9 @@ namespace NewBTASProto
                     else
                     {
                         Min1 = 0.25 * Cells;
-                        Min2 = 1.55 * Cells;
-                        Min3 = 1.6 * Cells;
-                        Max = CellV2 * Cells;
+                        Min2 = CellV2CMin * Cells;
+                        Min3 = (CellV2CMin + 0.05) * Cells;
+                        Max = CellV2CMax * Cells;
 
                         if (Value > Max) { return Color.Red; }
                         else if (Value > Min3) { return Color.Green; }

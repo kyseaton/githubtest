@@ -2388,8 +2388,8 @@ namespace NewBTASProto
                     if (test_type == "As Received" || test_type.Contains("Cap") || test_type == "Discharge" || test_type.Contains("Shorting") || test_type == "")
                     {
                         Min3 = 0.5 * Cells;
-                        Min4 = 1 * Cells;
-                        Max = 1.05 * Cells;
+                        Min4 = ((-1 == (float)pci.Rows[station][8]) ? 1 : (float)pci.Rows[station][8]) * Cells;
+                        Max = ((-1 == (float)pci.Rows[station][8]) ? 1.05 : (float)pci.Rows[station][8] + 0.05) * Cells;
 
                         if (Value > Max) { return Color.Green; }
                         else if (Value > Min4) { return Color.Orange; }
@@ -2401,8 +2401,8 @@ namespace NewBTASProto
                     else
                     {
                         Min1 = 0.25 * Cells;
-                        Min2 = 1.5 * Cells;
-                        Min3 = 1.55 * Cells;
+                        Min2 = ((-1 == (float)pci.Rows[station][6]) ? 1.5 : (float)pci.Rows[station][6]) * Cells;
+                        Min3 = ((-1 == (float)pci.Rows[station][6]) ? 1.55 : (float)pci.Rows[station][6] + 0.05) * Cells;
                         Max = ((-1 == (float)pci.Rows[station][7]) ? 1.75 : (float)pci.Rows[station][7]) * Cells;
 
                         if (Value > Max) { return Color.Red; }
@@ -2435,8 +2435,8 @@ namespace NewBTASProto
                     if (test_type == "As Received" || test_type == "Capacity-1" || test_type == "Discharge" || test_type == "Custom Cap" || test_type.Contains("Shorting") || test_type == "")
                     {
                         Min3 = 0.5 * Cells;
-                        Min4 = 1 * Cells;
-                        Max = 1.05 * Cells;
+                        Min4 = ((-1 == (float)pci.Rows[station][8]) ? 1 : (float)pci.Rows[station][8]) * Cells;
+                        Max = ((-1 == (float)pci.Rows[station][8]) ? 1.05 : (float)pci.Rows[station][8] + 0.05) * Cells;
 
                         if (Value > Max) { return Color.Green; }
                         else if (Value > Min4) { return Color.Orange; }
@@ -2448,8 +2448,8 @@ namespace NewBTASProto
                     else
                     {
                         Min1 = 0.25 * Cells;
-                        Min2 = 1.55 * Cells;
-                        Min3 = 1.6 * Cells;
+                        Min2 = ((-1 == (float)pci.Rows[station][6]) ? 1.55 : (float)pci.Rows[station][6]) * Cells;
+                        Min3 = ((-1 == (float)pci.Rows[station][6]) ? 1.60 : (float)pci.Rows[station][6] + 0.05) * Cells;
                         Max = ((-1 == (float)pci.Rows[station][7]) ? 1.82 : (float)pci.Rows[station][7]) * Cells;
 
                         if (Value > Max) { return Color.Red; }
