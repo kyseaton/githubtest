@@ -1068,6 +1068,7 @@ namespace NewBTASProto
                             cells = 7;
                             break;
                         case 21:
+                        case 24:
                             cells = 21;
                             break;
                         case 22:

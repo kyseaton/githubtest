@@ -5398,5 +5398,11 @@ namespace NewBTASProto
             }
         }
 
+        private void dataGridView1_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        {
+            // do nothing
+            // there was a clicking error...
+        }
+
     }// end mainform class section...
 }
