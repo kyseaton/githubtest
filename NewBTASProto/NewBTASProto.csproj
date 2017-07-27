@@ -12,7 +12,7 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>publish\final_release\nu\</PublishUrl>
+    <PublishUrl>C:\Users\Kyle\Documents\Visual Studio 2013\Projects\NewBTASProto\NewBTASProto\publish\final_release\nu\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
@@ -22,9 +22,8 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <UpdateUrl>http://www.jfmeng.com/BTAS16_update/final_release/</UpdateUrl>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>171</ApplicationRevision>
+    <ApplicationRevision>176</ApplicationRevision>
     <ApplicationVersion>6.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -50,10 +49,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>AEF007AF9D8C6EF534B7ABD764BDB48B5FC98582</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>37C42F04B053FCA3B6573AB4B47E368340341722</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>NewBTASProto_1_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>NewBTASProto_2_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
@@ -441,6 +440,7 @@
       <DependentUpon>DataSet1.xsd</DependentUpon>
     </None>
     <None Include="NewBTASProto_1_TemporaryKey.pfx" />
+    <None Include="NewBTASProto_2_TemporaryKey.pfx" />
     <None Include="NewBTASProto_TemporaryKey.pfx" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\PT_Sans-Narrow-Web-Regular.ttf" />
@@ -482,6 +482,7 @@
     <None Include="Resources\BTAS16 Manual-K0.14.pdf" />
     <None Include="Resources\BTAS16 Manual-K0.15.pdf" />
     <None Include="Resources\BTAS16 Manual-K0.6.pdf" />
+    <None Include="Resources\BTAS16 Manual-K1.01.pdf" />
     <None Include="Resources\JFM Engineering Logo_small1.jpg" />
   </ItemGroup>
   <ItemGroup>

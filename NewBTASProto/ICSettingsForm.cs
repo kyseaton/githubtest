@@ -257,6 +257,13 @@ namespace NewBTASProto
                 //update KM5
                 GlobalVars.ICSettings[comboBox1.SelectedIndex].KM5 = (byte)(Math.Round(numericUpDown3.Value * 1000) % 100 + 48);
             }
+            else if (((Main_Form)this.Owner).d.Rows[station][10].ToString().Contains("MFC-10"))
+            {
+                //MFC-10 case
+                GlobalVars.ICSettings[comboBox1.SelectedIndex].KM4 = (byte)(numericUpDown3.Value / 1 + 48);
+                //update KM5
+                GlobalVars.ICSettings[comboBox1.SelectedIndex].KM5 = (byte)((numericUpDown3.Value % 1 ) * 100 + 48);
+            }
             else
             {
                 // all other cases
@@ -288,6 +295,13 @@ namespace NewBTASProto
                 GlobalVars.ICSettings[comboBox1.SelectedIndex].KM10 = (byte)(numericUpDown6.Value * 10 + 48);
                 //update KM11
                 GlobalVars.ICSettings[comboBox1.SelectedIndex].KM11 = (byte)(Math.Round(numericUpDown6.Value * 1000) % 100 + 48);
+            }
+            else if (((Main_Form)this.Owner).d.Rows[station][10].ToString().Contains("MFC-10"))
+            {
+                //MFC-10 case
+                GlobalVars.ICSettings[comboBox1.SelectedIndex].KM10 = (byte)(numericUpDown6.Value / 1 + 48);
+                //update KM11
+                GlobalVars.ICSettings[comboBox1.SelectedIndex].KM11 = (byte)((numericUpDown6.Value % 1) * 100 + 48);
             }
             else
             {

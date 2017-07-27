@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.IO.Ports;
 using System.IO;
 using System.Management;
+using System.Threading;
 
 namespace NewBTASProto
 {
@@ -182,6 +183,8 @@ namespace NewBTASProto
             ((Main_Form)this.Owner).CSCANComPort.Dispose();
             ((Main_Form)this.Owner).ICComPort.Close();
             ((Main_Form)this.Owner).ICComPort.Dispose();
+
+            Thread.Sleep(1000);
 
             //Update the Globals
             int i = 0;
