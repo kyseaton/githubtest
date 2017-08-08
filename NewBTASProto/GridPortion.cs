@@ -194,10 +194,22 @@ namespace NewBTASProto
 
             }
 
+            float dpiX;
+            Graphics graphics = this.CreateGraphics();
+            dpiX = graphics.DpiX;
+
             //Now for a little row formatting
             for (int i = 0; i < 16; i++)
             {
-                dataGridView1.Rows[i].Height = 20;
+                if (dpiX > 96)
+                {
+                    dataGridView1.Rows[i].Height = 25;
+                }
+                else
+                {
+                    dataGridView1.Rows[i].Height = 20;
+                }
+                
             }
 
             // finally, so we can clean up the startup jitter

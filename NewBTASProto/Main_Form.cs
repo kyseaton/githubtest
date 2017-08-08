@@ -27,6 +27,7 @@ namespace NewBTASProto
 
             try
             {
+                Font = new Font(Font.Name, 8.25f * 96f / CreateGraphics().DpiX, Font.Style, Font.Unit, Font.GdiCharSet, Font.GdiVerticalFont);
                 SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
                 InitializeComponent();
 
@@ -122,12 +123,30 @@ namespace NewBTASProto
                     this.Width = (int)GlobalVars.FormWidth;
                 }
 
-                //account for rows2Dis
-                dataGridView1.Height = Convert.ToInt32(27 + GlobalVars.rows2Dis * 20);
-                groupBox3.Location = new Point(12, 422 - ((16 - Convert.ToInt32(GlobalVars.rows2Dis)) * 20));
-                groupBox3.Height = this.Height - 485 + ((16 - Convert.ToInt32(GlobalVars.rows2Dis)) * 20);
-                groupBox4.Location = new Point(groupBox4.Location.X, 422 - ((16 - Convert.ToInt32(GlobalVars.rows2Dis)) * 20));
-                groupBox4.Height = this.Height - 485 + ((16 - Convert.ToInt32(GlobalVars.rows2Dis)) * 20);
+                dataGridView1.Height = Convert.ToInt32(27 + GlobalVars.rows2Dis * 21);
+
+                float dpiX;
+                Graphics graphics = this.CreateGraphics();
+                dpiX = graphics.DpiX;
+                
+                // this is the amount to subtract from the height of the form to get the height of the group boxes
+                int toSub = 501;
+
+                if (dpiX > 97)
+                {
+                    toSub = 508;
+                }
+                                
+                groupBox3.Location = new Point(12, 438 - ((16 - Convert.ToInt32(GlobalVars.rows2Dis)) * 21));
+                groupBox3.Height = this.Height - toSub + ((16 - Convert.ToInt32(GlobalVars.rows2Dis)) * 21);
+                groupBox4.Location = new Point(groupBox4.Location.X, 438 - ((16 - Convert.ToInt32(GlobalVars.rows2Dis)) * 21));
+                groupBox4.Height = this.Height - toSub + ((16 - Convert.ToInt32(GlobalVars.rows2Dis)) * 21);
+
+                // also check the height of groupBox1
+                if (groupBox1.Height > this.Height - 132)
+                {
+                    groupBox1.Height = this.Height - 132;
+                }
 
                 // graph selection option...
                 if (GlobalVars.showSels == true)
