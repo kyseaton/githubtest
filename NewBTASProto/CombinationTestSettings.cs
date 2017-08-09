@@ -53,26 +53,11 @@ namespace NewBTASProto
             GlobalVars.rows2Dis = numericUpDown1.Value;
             GlobalVars.robustCSCAN = checkBox4.Checked;
             GlobalVars.advance2Short = checkBox7.Checked;
-
-            ((Main_Form)this.Owner).dataGridView1.Height = Convert.ToInt32(27 + GlobalVars.rows2Dis * 21);
-
-
-            float dpiX;
-            Graphics graphics = this.CreateGraphics();
-            dpiX = graphics.DpiX;
-
-            // this is the amount to subtract from the height of the form to get the height of the group boxes
-            int toSub = 501;
-
-            if (dpiX > 97)
-            {
-                toSub = 508;
-            }
-            
-            ((Main_Form)this.Owner).groupBox3.Location = new Point(12, 438 - ((16 - Convert.ToInt32(GlobalVars.rows2Dis)) * 21));
-            ((Main_Form)this.Owner).groupBox3.Height = ((Main_Form)this.Owner).Height - toSub + ((16 - Convert.ToInt32(GlobalVars.rows2Dis)) * 21);
-            ((Main_Form)this.Owner).groupBox4.Location = new Point(((Main_Form)this.Owner).groupBox4.Location.X, 438 - ((16 - Convert.ToInt32(GlobalVars.rows2Dis)) * 21));
-            ((Main_Form)this.Owner).groupBox4.Height = ((Main_Form)this.Owner).Height - toSub + ((16 - Convert.ToInt32(GlobalVars.rows2Dis)) * 21);
+            ((Main_Form)this.Owner).dataGridView1.Height = Convert.ToInt32(27 + GlobalVars.rows2Dis * 20);
+            ((Main_Form)this.Owner).groupBox3.Location = new Point(12, 422 - ((16 - Convert.ToInt32(GlobalVars.rows2Dis)) * 20));
+            ((Main_Form)this.Owner).groupBox3.Height = ((Main_Form)this.Owner).Height - 485 + ((16 - Convert.ToInt32(GlobalVars.rows2Dis)) * 20);
+            ((Main_Form)this.Owner).groupBox4.Location = new Point(((Main_Form)this.Owner).groupBox4.Location.X, 422 - ((16 - Convert.ToInt32(GlobalVars.rows2Dis)) * 20));
+            ((Main_Form)this.Owner).groupBox4.Height = ((Main_Form)this.Owner).Height - 485 + ((16 - Convert.ToInt32(GlobalVars.rows2Dis)) * 20);
             this.Close();
         }
 
