@@ -27,7 +27,7 @@ namespace NewBTASProto
 
             try
             {
-                Font = new Font(Font.Name, 8.25f * 96f / CreateGraphics().DpiX, Font.Style, Font.Unit, Font.GdiCharSet, Font.GdiVerticalFont);
+                //Font = new Font(Font.Name, 8.25f * 96f / CreateGraphics().DpiX, Font.Style, Font.Unit, Font.GdiCharSet, Font.GdiVerticalFont);
                 SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
                 InitializeComponent();
 
