@@ -104,9 +104,6 @@ namespace NewBTASProto
                     GlobalVars.SS13 = Properties.Settings.Default.SS13;
                     GlobalVars.SS14 = Properties.Settings.Default.SS14;
                     GlobalVars.SS15 = Properties.Settings.Default.SS15;
-                    GlobalVars.DCVPeriod = Properties.Settings.Default.DCVPeriod;
-                    GlobalVars.StopOnEnd = Properties.Settings.Default.StopOnEnd;
-                    GlobalVars.AddOneMin = Properties.Settings.Default.AddOneMin;
 
                 }
                 catch
@@ -1061,9 +1058,6 @@ namespace NewBTASProto
             Properties.Settings.Default.rows2Dis = GlobalVars.rows2Dis;
             Properties.Settings.Default.advance2Short = GlobalVars.advance2Short;
             Properties.Settings.Default.robustCSCAN = GlobalVars.robustCSCAN;
-            Properties.Settings.Default.DCVPeriod = GlobalVars.DCVPeriod;
-            Properties.Settings.Default.StopOnEnd = GlobalVars.StopOnEnd;
-            Properties.Settings.Default.AddOneMin = GlobalVars.AddOneMin;
             Properties.Settings.Default.SS0 = GlobalVars.SS0;
             Properties.Settings.Default.SS1 = GlobalVars.SS1;
             Properties.Settings.Default.SS2 = GlobalVars.SS2;

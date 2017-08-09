@@ -111,7 +111,7 @@
             this.label10.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label10.Location = new System.Drawing.Point(10, 26);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(542, 2);
+            this.label10.Size = new System.Drawing.Size(590, 2);
             this.label10.TabIndex = 19;
             // 
             // numericUpDown1

@@ -31,9 +31,6 @@ namespace NewBTASProto
             checkBox7.Checked = GlobalVars.advance2Short;
             checkBox4.Checked = GlobalVars.robustCSCAN;
             checkBox5.Checked = GlobalVars.InterpolateTime;
-            checkBox8.Checked = GlobalVars.StopOnEnd;
-            checkBox9.Checked = GlobalVars.AddOneMin;
-            numericUpDown3.Value = GlobalVars.DCVPeriod;
             
         }
 
@@ -48,9 +45,6 @@ namespace NewBTASProto
             GlobalVars.DecliningCellVoltageTestEnabled = checkBox2.Checked;
             GlobalVars.DecliningCellVoltageThres = numericUpDown2.Value;
             GlobalVars.InterpolateTime = checkBox5.Checked;
-            GlobalVars.DCVPeriod = numericUpDown3.Value;
-            GlobalVars.StopOnEnd = checkBox8.Checked;
-            GlobalVars.AddOneMin = checkBox9.Checked;
             GlobalVars.CapTestVarEnable = checkBox6.Checked;
             GlobalVars.CapTestVarValue = numericUpDown5.Value;
             GlobalVars.CSErr2Allow = numericUpDown6.Value;
@@ -88,101 +82,6 @@ namespace NewBTASProto
         }
 
         private void checkBox7_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label11_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void checkBox6_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label10_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void numericUpDown5_ValueChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void numericUpDown3_ValueChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label8_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void numericUpDown6_ValueChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void checkBox3_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label3_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label4_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void checkBox4_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label5_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label7_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void checkBox5_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label14_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void checkBox9_CheckedChanged(object sender, EventArgs e)
         {
 
         }
