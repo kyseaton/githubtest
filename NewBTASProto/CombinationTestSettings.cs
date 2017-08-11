@@ -31,7 +31,10 @@ namespace NewBTASProto
             checkBox7.Checked = GlobalVars.advance2Short;
             checkBox4.Checked = GlobalVars.robustCSCAN;
             checkBox5.Checked = GlobalVars.InterpolateTime;
-            
+            checkBox8.Checked = GlobalVars.StopOnEnd;
+            checkBox9.Checked = GlobalVars.AddOneMin;
+            numericUpDown3.Value = GlobalVars.DCVPeriod;
+
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -45,6 +48,9 @@ namespace NewBTASProto
             GlobalVars.DecliningCellVoltageTestEnabled = checkBox2.Checked;
             GlobalVars.DecliningCellVoltageThres = numericUpDown2.Value;
             GlobalVars.InterpolateTime = checkBox5.Checked;
+            GlobalVars.DCVPeriod = numericUpDown3.Value;
+            GlobalVars.StopOnEnd = checkBox8.Checked;
+            GlobalVars.AddOneMin = checkBox9.Checked;
             GlobalVars.CapTestVarEnable = checkBox6.Checked;
             GlobalVars.CapTestVarValue = numericUpDown5.Value;
             GlobalVars.CSErr2Allow = numericUpDown6.Value;
@@ -53,11 +59,26 @@ namespace NewBTASProto
             GlobalVars.rows2Dis = numericUpDown1.Value;
             GlobalVars.robustCSCAN = checkBox4.Checked;
             GlobalVars.advance2Short = checkBox7.Checked;
-            ((Main_Form)this.Owner).dataGridView1.Height = Convert.ToInt32(27 + GlobalVars.rows2Dis * 20);
-            ((Main_Form)this.Owner).groupBox3.Location = new Point(12, 422 - ((16 - Convert.ToInt32(GlobalVars.rows2Dis)) * 20));
-            ((Main_Form)this.Owner).groupBox3.Height = ((Main_Form)this.Owner).Height - 485 + ((16 - Convert.ToInt32(GlobalVars.rows2Dis)) * 20);
-            ((Main_Form)this.Owner).groupBox4.Location = new Point(((Main_Form)this.Owner).groupBox4.Location.X, 422 - ((16 - Convert.ToInt32(GlobalVars.rows2Dis)) * 20));
-            ((Main_Form)this.Owner).groupBox4.Height = ((Main_Form)this.Owner).Height - 485 + ((16 - Convert.ToInt32(GlobalVars.rows2Dis)) * 20);
+
+            ((Main_Form)this.Owner).dataGridView1.Height = Convert.ToInt32(27 + GlobalVars.rows2Dis * 21);
+
+
+            float dpiX;
+            Graphics graphics = this.CreateGraphics();
+            dpiX = graphics.DpiX;
+
+            // this is the amount to subtract from the height of the form to get the height of the group boxes
+            int toSub = 501;
+
+            if (dpiX > 97)
+            {
+                toSub = 508;
+            }
+
+            ((Main_Form)this.Owner).groupBox3.Location = new Point(12, 438 - ((16 - Convert.ToInt32(GlobalVars.rows2Dis)) * 21));
+            ((Main_Form)this.Owner).groupBox3.Height = ((Main_Form)this.Owner).Height - toSub + ((16 - Convert.ToInt32(GlobalVars.rows2Dis)) * 21);
+            ((Main_Form)this.Owner).groupBox4.Location = new Point(((Main_Form)this.Owner).groupBox4.Location.X, 438 - ((16 - Convert.ToInt32(GlobalVars.rows2Dis)) * 21));
+            ((Main_Form)this.Owner).groupBox4.Height = ((Main_Form)this.Owner).Height - toSub + ((16 - Convert.ToInt32(GlobalVars.rows2Dis)) * 21);
             this.Close();
         }
 
@@ -67,6 +88,101 @@ namespace NewBTASProto
         }
 
         private void checkBox7_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label11_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void checkBox6_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label10_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void numericUpDown5_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void numericUpDown3_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label8_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void numericUpDown6_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void checkBox3_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void checkBox4_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label7_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void checkBox5_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label14_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void checkBox9_CheckedChanged(object sender, EventArgs e)
         {
 
         }

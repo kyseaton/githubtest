@@ -14,15 +14,15 @@ namespace NewBTASProto
 
     public partial class ICSettingsForm : Form
     {
-            Dictionary<string, int> testMode = new Dictionary<string, int>();
-            Dictionary<int,string> reverseTestMode;
-            Dictionary<string, int> action = new Dictionary<string, int>();
-            Dictionary<int, string> reverseAction;
+        Dictionary<string, int> testMode = new Dictionary<string, int>();
+        Dictionary<int, string> reverseTestMode;
+        Dictionary<string, int> action = new Dictionary<string, int>();
+        Dictionary<int, string> reverseAction;
 
         public ICSettingsForm()
         {
             InitializeComponent();
-            
+
             //fill up the dictionaries
             //
             //
@@ -131,8 +131,8 @@ namespace NewBTASProto
                 }
 
                 //voltage
-                remainder = ((float)(GlobalVars.ICSettings[CID].KM7- 48) / 100 );
-                numericUpDown4.Value = (decimal) ((GlobalVars.ICSettings[CID].KM6 - 48) + remainder);
+                remainder = ((float)(GlobalVars.ICSettings[CID].KM7 - 48) / 100);
+                numericUpDown4.Value = (decimal)((GlobalVars.ICSettings[CID].KM6 - 48) + remainder);
                 //Secondary Charge
                 //time
                 numericUpDown8.Value = GlobalVars.ICSettings[CID].KM8 - 48;
@@ -193,7 +193,7 @@ namespace NewBTASProto
         {
             // first let's get the station number for the charger, so we can see what type it is.
             int station = 99;
-            for(int i = 0; i < 16; i++)
+            for (int i = 0; i < 16; i++)
             {
                 // first check that we are not trying to parse nothing...
                 if (((Main_Form)this.Owner).d.Rows[i][9].ToString() != "")
@@ -201,7 +201,7 @@ namespace NewBTASProto
                     if (((Main_Form)this.Owner).d.Rows[i][9].ToString().Length == 3)
                     {
                         //do we have the correct station
-                        if (comboBox1.SelectedIndex == int.Parse(((Main_Form)this.Owner).d.Rows[i][9].ToString().Substring(0,1)))
+                        if (comboBox1.SelectedIndex == int.Parse(((Main_Form)this.Owner).d.Rows[i][9].ToString().Substring(0, 1)))
                         {
                             station = i;
                             break;
@@ -211,13 +211,13 @@ namespace NewBTASProto
                     else if (((Main_Form)this.Owner).d.Rows[i][9].ToString().Length == 4)
                     {
                         //do we have the correct station
-                        if (comboBox1.SelectedIndex == int.Parse(((Main_Form)this.Owner).d.Rows[i][9].ToString().Substring(0,2)))
+                        if (comboBox1.SelectedIndex == int.Parse(((Main_Form)this.Owner).d.Rows[i][9].ToString().Substring(0, 2)))
                         {
                             station = i;
                             break;
                         }
                     }// end 4 char if
-                    else 
+                    else
                     {
                         //do we have the correct station
                         if (comboBox1.SelectedIndex == int.Parse(((Main_Form)this.Owner).d.Rows[i][9].ToString()))
@@ -229,16 +229,16 @@ namespace NewBTASProto
                 }// end null check if
 
             }// end for
-            if(station == 99)
+            if (station == 99)
             {
                 //the station isn't there
                 MessageBox.Show(this, "The charger ID you selected isn't valid", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            
-            
+
+
             // set KE1 to data
-            GlobalVars.ICSettings[comboBox1.SelectedIndex].KE1 = (byte) 1;
+            GlobalVars.ICSettings[comboBox1.SelectedIndex].KE1 = (byte)1;
             // update KM1
             GlobalVars.ICSettings[comboBox1.SelectedIndex].KM1 = (byte)(testMode[comboBox2.Text] + 48);
 
@@ -250,19 +250,26 @@ namespace NewBTASProto
 
             // Charge Current 1
             // update KM4
-            if(((Main_Form)this.Owner).d.Rows[station][10].ToString().Contains("mini"))
+            if (((Main_Form)this.Owner).d.Rows[station][10].ToString().Contains("mini"))
             {
                 //mini case
                 GlobalVars.ICSettings[comboBox1.SelectedIndex].KM4 = (byte)(numericUpDown3.Value * 10 + 48);
                 //update KM5
                 GlobalVars.ICSettings[comboBox1.SelectedIndex].KM5 = (byte)(Math.Round(numericUpDown3.Value * 1000) % 100 + 48);
             }
+            else if (((Main_Form)this.Owner).d.Rows[station][10].ToString().Contains("MFC-10"))
+            {
+                //MFC-10 case
+                GlobalVars.ICSettings[comboBox1.SelectedIndex].KM4 = (byte)(numericUpDown3.Value / 1 + 48);
+                //update KM5
+                GlobalVars.ICSettings[comboBox1.SelectedIndex].KM5 = (byte)((numericUpDown3.Value % 1) * 100 + 48);
+            }
             else
             {
                 // all other cases
                 GlobalVars.ICSettings[comboBox1.SelectedIndex].KM4 = (byte)(numericUpDown3.Value / 10 + 48);
                 //update KM5
-                GlobalVars.ICSettings[comboBox1.SelectedIndex].KM5 = (byte)((numericUpDown3.Value % 10)*10 + 48);
+                GlobalVars.ICSettings[comboBox1.SelectedIndex].KM5 = (byte)((numericUpDown3.Value % 10) * 10 + 48);
             }
 
 
@@ -270,7 +277,7 @@ namespace NewBTASProto
             //update KM6
             GlobalVars.ICSettings[comboBox1.SelectedIndex].KM6 = (byte)(numericUpDown4.Value / 1 + 48);
             //update KM7
-            GlobalVars.ICSettings[comboBox1.SelectedIndex].KM7 = (byte)((numericUpDown4.Value % 1)*100 + 48);
+            GlobalVars.ICSettings[comboBox1.SelectedIndex].KM7 = (byte)((numericUpDown4.Value % 1) * 100 + 48);
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -288,6 +295,13 @@ namespace NewBTASProto
                 GlobalVars.ICSettings[comboBox1.SelectedIndex].KM10 = (byte)(numericUpDown6.Value * 10 + 48);
                 //update KM11
                 GlobalVars.ICSettings[comboBox1.SelectedIndex].KM11 = (byte)(Math.Round(numericUpDown6.Value * 1000) % 100 + 48);
+            }
+            else if (((Main_Form)this.Owner).d.Rows[station][10].ToString().Contains("MFC-10"))
+            {
+                //MFC-10 case
+                GlobalVars.ICSettings[comboBox1.SelectedIndex].KM10 = (byte)(numericUpDown6.Value / 1 + 48);
+                //update KM11
+                GlobalVars.ICSettings[comboBox1.SelectedIndex].KM11 = (byte)((numericUpDown6.Value % 1) * 100 + 48);
             }
             else
             {
@@ -344,14 +358,14 @@ namespace NewBTASProto
             //Update the output string value
             GlobalVars.ICSettings[comboBox1.SelectedIndex].UpdateOutText();
             ((Main_Form)this.Owner).criticalNum[comboBox1.SelectedIndex] = true;
-            
+
             int inVal = comboBox1.SelectedIndex;
             //now we are going to create a thread to set KE1 back to query mode after 15 seconds
             ThreadPool.QueueUserWorkItem(s =>
             {
                 Thread.Sleep(2000);
                 // set KE1 to 0 ("data")
-                GlobalVars.ICSettings[inVal].KE1 = (byte) 0;
+                GlobalVars.ICSettings[inVal].KE1 = (byte)0;
                 GlobalVars.ICSettings[inVal].UpdateOutText();
             }, inVal);                     // end thread
 
@@ -359,7 +373,7 @@ namespace NewBTASProto
 
         private void button2_Click(object sender, EventArgs e)
         {
-                   // end thread
+            // end thread
 
         }
 
@@ -369,7 +383,7 @@ namespace NewBTASProto
             // set KE1 to 2 ("command")
             GlobalVars.ICSettings[comboBox1.SelectedIndex].KE1 = (byte)2;
             // reset KE3
-            GlobalVars.ICSettings[comboBox1.SelectedIndex].KE3 = (byte) 3;
+            GlobalVars.ICSettings[comboBox1.SelectedIndex].KE3 = (byte)3;
             //Update the output string value
             GlobalVars.ICSettings[comboBox1.SelectedIndex].UpdateOutText();
             ((Main_Form)this.Owner).criticalNum[comboBox1.SelectedIndex] = true;
@@ -382,7 +396,7 @@ namespace NewBTASProto
                 // set KE1 to 1 ("query")
                 GlobalVars.ICSettings[inVal].KE1 = (byte)0;
                 GlobalVars.ICSettings[inVal].UpdateOutText();
-            }, inVal);   
+            }, inVal);
         }
 
         private void button2_Click_1(object sender, EventArgs e)
@@ -404,7 +418,7 @@ namespace NewBTASProto
                 // set KE1 to 1 ("query")
                 GlobalVars.ICSettings[inVal].KE1 = (byte)0;
                 GlobalVars.ICSettings[inVal].UpdateOutText();
-            }, inVal);  
+            }, inVal);
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -426,7 +440,7 @@ namespace NewBTASProto
                 // set KE1 to 1 ("query")
                 GlobalVars.ICSettings[inVal].KE1 = (byte)0;
                 GlobalVars.ICSettings[inVal].UpdateOutText();
-            }, inVal);  
+            }, inVal);
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -448,7 +462,7 @@ namespace NewBTASProto
                 // set KE1 to 1 ("query")
                 GlobalVars.ICSettings[inVal].KE1 = (byte)0;
                 GlobalVars.ICSettings[inVal].UpdateOutText();
-            }, inVal);  
+            }, inVal);
         }
     }
 }

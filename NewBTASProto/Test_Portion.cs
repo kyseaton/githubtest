@@ -676,7 +676,7 @@ namespace NewBTASProto
 
                         }
 
-                        
+
                         cellCon = true;
                         oldCellCon = true;
                         if (GlobalVars.CScanData[station].shuntCableType != "NONE")
@@ -858,11 +858,16 @@ namespace NewBTASProto
                                     case "Full Charge-6":
                                         tempKMStore[0] = Convert.ToByte(48 + int.Parse(battery.Tables[0].Rows[0][42].ToString().Substring(0, 2)));          //mode
                                         tempKMStore[1] = Convert.ToByte(48 + int.Parse(battery.Tables[0].Rows[0][43].ToString()));                          //time hours
-                                        //tempKMStore[2] = Convert.ToByte(48);                                                                            //time mins
+                                        tempKMStore[2] = Convert.ToByte(48);                                                                            //time mins
                                         if (d.Rows[station][10].ToString().Contains("mini"))
                                         {
                                             tempKMStore[3] = Convert.ToByte(48 + Math.Floor(GetDouble(battery.Tables[0].Rows[0][45].ToString()) * 10));             //top current byte
                                             tempKMStore[4] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][45].ToString()) * 1000) % 100);                                                                            //bottom current byte
+                                        }
+                                        else if (d.Rows[station][10].ToString().Contains("MFC-10"))
+                                        {
+                                            tempKMStore[3] = Convert.ToByte(48 + Math.Floor(GetDouble(battery.Tables[0].Rows[0][45].ToString()) / 1));             //top current byte
+                                            tempKMStore[4] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][45].ToString()) % 1) * 100);                                                                            //bottom current byte
                                         }
                                         else
                                         {
@@ -873,11 +878,16 @@ namespace NewBTASProto
                                         tempKMStore[6] = Convert.ToByte(48 + 100 * ((MasterSlaveTest ? (2 * GetDouble(battery.Tables[0].Rows[0][46].ToString())) : GetDouble(battery.Tables[0].Rows[0][46].ToString())) % 1));            //bottom voltage byte
 
                                         tempKMStore[7] = Convert.ToByte(48 + int.Parse(battery.Tables[0].Rows[0][47].ToString()));                          //time 2 hours
-                                        tempKMStore[8] = Convert.ToByte(48);                                                                            //time 2 mins
+                                        tempKMStore[8] = (GlobalVars.AddOneMin ? Convert.ToByte(49) : Convert.ToByte(48));                                  //time 2 mins
                                         if (d.Rows[station][10].ToString().Contains("mini"))
                                         {
                                             tempKMStore[9] = Convert.ToByte(48 + Math.Floor(GetDouble(battery.Tables[0].Rows[0][49].ToString())) * 10);             //top current 2 byte
                                             tempKMStore[10] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][49].ToString()) * 1000) % 100);                                                                           //bottom current 2 byte
+                                        }
+                                        else if (d.Rows[station][10].ToString().Contains("MFC-10"))
+                                        {
+                                            tempKMStore[9] = Convert.ToByte(48 + Math.Floor(GetDouble(battery.Tables[0].Rows[0][49].ToString())) / 1);             //top current 2 byte
+                                            tempKMStore[10] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][49].ToString()) % 1) * 100);                                                                           //bottom current 2 byte
                                         }
                                         else
                                         {
@@ -897,8 +907,8 @@ namespace NewBTASProto
                                         tempKMStore[20] = (byte)48;                                                                                //discharge resistance low byte
                                         curSet1 = (float)GetDouble(battery.Tables[0].Rows[0][45].ToString());
                                         vSet1 = (MasterSlaveTest ? (2 * (float)GetDouble(battery.Tables[0].Rows[0][46].ToString())) : (float)GetDouble(battery.Tables[0].Rows[0][46].ToString()));
-                                        curSet2 = (float) GetDouble(battery.Tables[0].Rows[0][49].ToString());
-                                        vSet2 = (MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][50].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][50].ToString()));
+                                        curSet2 = (float)GetDouble(battery.Tables[0].Rows[0][49].ToString());
+                                        vSet2 = (MasterSlaveTest ? (2 * (float)GetDouble(battery.Tables[0].Rows[0][50].ToString())) : (float)GetDouble(battery.Tables[0].Rows[0][50].ToString()));
                                         break;
                                     case "Full Charge-4":
                                         tempKMStore[0] = Convert.ToByte(48 + int.Parse(battery.Tables[0].Rows[0][52].ToString().Substring(0, 2)));          //mode
@@ -909,6 +919,11 @@ namespace NewBTASProto
                                             tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][55].ToString())) * 10));             //top current byte
                                             tempKMStore[4] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][55].ToString()) * 1000) % 100);                                                                            //bottom current byte
                                         }
+                                        else if (d.Rows[station][10].ToString().Contains("MFC-10"))
+                                        {
+                                            tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][55].ToString())) / 1));             //top current byte
+                                            tempKMStore[4] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][55].ToString()) % 1) * 100);                                                                            //bottom current byte
+                                        }
                                         else
                                         {
                                             tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][55].ToString()) / 10)));             //top current byte
@@ -918,11 +933,16 @@ namespace NewBTASProto
                                         tempKMStore[6] = Convert.ToByte(48 + 100 * ((MasterSlaveTest ? (2 * GetDouble(battery.Tables[0].Rows[0][56].ToString())) : GetDouble(battery.Tables[0].Rows[0][56].ToString())) % 1));            //bottom current byte
 
                                         tempKMStore[7] = Convert.ToByte(48 + int.Parse(battery.Tables[0].Rows[0][57].ToString()));                          //time 2 hours
-                                        tempKMStore[8] = Convert.ToByte(48);                                                                            //time 2 mins
+                                        tempKMStore[8] = (GlobalVars.AddOneMin ? Convert.ToByte(49) : Convert.ToByte(48));                                  //time 2 mins
                                         if (d.Rows[station][10].ToString().Contains("mini"))
                                         {
                                             tempKMStore[9] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][59].ToString()) * 10)));             //top current 2 byte
                                             tempKMStore[10] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][59].ToString()) * 1000) % 100);                                                                           //bottom current 2 byte
+                                        }
+                                        if (d.Rows[station][10].ToString().Contains("MFC-10"))
+                                        {
+                                            tempKMStore[9] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][59].ToString()) / 1)));             //top current 2 byte
+                                            tempKMStore[10] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][59].ToString()) % 1) * 100);                                                                           //bottom current 2 byte
                                         }
                                         else
                                         {
@@ -940,19 +960,24 @@ namespace NewBTASProto
                                         tempKMStore[18] = (byte)48;                                                                                //discharge voltage low byte
                                         tempKMStore[19] = (byte)48;                                                                                //discharge resistance high byte
                                         tempKMStore[20] = (byte)48;                                                                                //discharge resistance low byte
-                                        curSet1 = (float) GetDouble(battery.Tables[0].Rows[0][55].ToString());
-                                        vSet1 = (MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][56].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][56].ToString()));
-                                        curSet2 = (float) GetDouble(battery.Tables[0].Rows[0][59].ToString());
-                                        vSet2 = (MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][60].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][60].ToString()));
+                                        curSet1 = (float)GetDouble(battery.Tables[0].Rows[0][55].ToString());
+                                        vSet1 = (MasterSlaveTest ? (2 * (float)GetDouble(battery.Tables[0].Rows[0][56].ToString())) : (float)GetDouble(battery.Tables[0].Rows[0][56].ToString()));
+                                        curSet2 = (float)GetDouble(battery.Tables[0].Rows[0][59].ToString());
+                                        vSet2 = (MasterSlaveTest ? (2 * (float)GetDouble(battery.Tables[0].Rows[0][60].ToString())) : (float)GetDouble(battery.Tables[0].Rows[0][60].ToString()));
                                         break;
                                     case "Top Charge-4":
                                         tempKMStore[0] = Convert.ToByte(48 + int.Parse(battery.Tables[0].Rows[0][62].ToString().Substring(0, 2)));          //mode
                                         tempKMStore[1] = Convert.ToByte(48 + int.Parse(battery.Tables[0].Rows[0][63].ToString()));                          //time hours
-                                        tempKMStore[2] = (byte)(48);                                                                            //time mins
+                                        tempKMStore[2] = (GlobalVars.AddOneMin ? Convert.ToByte(49) : Convert.ToByte(48));                                  //time mins
                                         if (d.Rows[station][10].ToString().Contains("mini"))
                                         {
                                             tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][65].ToString())) * 10));             //top current byte
                                             tempKMStore[4] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][65].ToString()) * 1000) % 100);                                                                            //bottom current byte
+                                        }
+                                        else if (d.Rows[station][10].ToString().Contains("MFC-10"))
+                                        {
+                                            tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][65].ToString())) / 1));             //top current byte
+                                            tempKMStore[4] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][65].ToString()) % 1) * 100);                                                                            //bottom current byte
                                         }
                                         else
                                         {
@@ -977,19 +1002,24 @@ namespace NewBTASProto
                                         tempKMStore[18] = (byte)48;                                                                                //discharge voltage low byte
                                         tempKMStore[19] = (byte)48;                                                                                //discharge resistance high byte
                                         tempKMStore[20] = (byte)48;                                                                                //discharge resistance low byte
-                                        curSet1 = (float) GetDouble(battery.Tables[0].Rows[0][65].ToString());
-                                        vSet1 = (MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][66].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][66].ToString()));
+                                        curSet1 = (float)GetDouble(battery.Tables[0].Rows[0][65].ToString());
+                                        vSet1 = (MasterSlaveTest ? (2 * (float)GetDouble(battery.Tables[0].Rows[0][66].ToString())) : (float)GetDouble(battery.Tables[0].Rows[0][66].ToString()));
                                         curSet2 = 0;
                                         vSet2 = 0;
                                         break;
                                     case "Top Charge-2":
                                         tempKMStore[0] = Convert.ToByte(48 + int.Parse(battery.Tables[0].Rows[0][72].ToString().Substring(0, 2)));          //mode
                                         tempKMStore[1] = Convert.ToByte(48 + int.Parse(battery.Tables[0].Rows[0][73].ToString()));                          //time hours
-                                        tempKMStore[2] = (byte)(48);                                                                            //time mins
+                                        tempKMStore[2] = (GlobalVars.AddOneMin ? Convert.ToByte(49) : Convert.ToByte(48));                                  //time mins
                                         if (d.Rows[station][10].ToString().Contains("mini"))
                                         {
                                             tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][75].ToString())) * 10));             //top current byte
                                             tempKMStore[4] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][75].ToString()) * 1000) % 100);                                                                            //bottom current byte
+                                        }
+                                        else if (d.Rows[station][10].ToString().Contains("MFC-10"))
+                                        {
+                                            tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][75].ToString())) / 1));             //top current byte
+                                            tempKMStore[4] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][75].ToString()) % 1) * 100);                                                                            //bottom current byte
                                         }
                                         else
                                         {
@@ -1014,19 +1044,24 @@ namespace NewBTASProto
                                         tempKMStore[18] = (byte)48;                                                                                //discharge voltage low byte
                                         tempKMStore[19] = (byte)48;                                                                                //discharge resistance high byte
                                         tempKMStore[20] = (byte)48;                                                                                //discharge resistance low byte
-                                        curSet1 = (float) GetDouble(battery.Tables[0].Rows[0][75].ToString());
-                                        vSet1 = (MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][76].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][76].ToString()));
+                                        curSet1 = (float)GetDouble(battery.Tables[0].Rows[0][75].ToString());
+                                        vSet1 = (MasterSlaveTest ? (2 * (float)GetDouble(battery.Tables[0].Rows[0][76].ToString())) : (float)GetDouble(battery.Tables[0].Rows[0][76].ToString()));
                                         curSet2 = 0;
                                         vSet2 = 0;
                                         break;
                                     case "Top Charge-1":
                                         tempKMStore[0] = Convert.ToByte(48 + int.Parse(battery.Tables[0].Rows[0][82].ToString().Substring(0, 2)));          //mode
                                         tempKMStore[1] = Convert.ToByte(48 + int.Parse(battery.Tables[0].Rows[0][83].ToString()));                          //time hours
-                                        tempKMStore[2] = (byte)(48);                                                                            //time mins
+                                        tempKMStore[2] = (GlobalVars.AddOneMin ? Convert.ToByte(49) : Convert.ToByte(48));                                  //time mins
                                         if (d.Rows[station][10].ToString().Contains("mini"))
                                         {
                                             tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][85].ToString())) * 10));             //top current byte
                                             tempKMStore[4] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][85].ToString()) * 1000) % 100);                                                                            //bottom current byte
+                                        }
+                                        else if (d.Rows[station][10].ToString().Contains("MFC-10"))
+                                        {
+                                            tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][85].ToString())) / 1));             //top current byte
+                                            tempKMStore[4] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][85].ToString()) % 1) * 100);                                                                            //bottom current byte
                                         }
                                         else
                                         {
@@ -1051,8 +1086,8 @@ namespace NewBTASProto
                                         tempKMStore[18] = (byte)48;                                                                                //discharge voltage low byte
                                         tempKMStore[19] = (byte)48;                                                                                //discharge resistance high byte
                                         tempKMStore[20] = (byte)48;                                                                                //discharge resistance low byte
-                                        curSet1 = (float) GetDouble(battery.Tables[0].Rows[0][85].ToString());
-                                        vSet1 = (MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][86].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][86].ToString()));
+                                        curSet1 = (float)GetDouble(battery.Tables[0].Rows[0][85].ToString());
+                                        vSet1 = (MasterSlaveTest ? (2 * (float)GetDouble(battery.Tables[0].Rows[0][86].ToString())) : (float)GetDouble(battery.Tables[0].Rows[0][86].ToString()));
                                         curSet2 = 0;
                                         vSet2 = 0;
                                         break;
@@ -1073,7 +1108,7 @@ namespace NewBTASProto
                                         tempKMStore[12] = (byte)48;                                                                                //bottom voltage 2 byte
 
                                         tempKMStore[13] = Convert.ToByte(48 + int.Parse(battery.Tables[0].Rows[0][93].ToString()));                         //discharge time hours
-                                        tempKMStore[14] = (byte)(48);                                                                           //discharge time mins
+                                        tempKMStore[14] = (GlobalVars.AddOneMin ? Convert.ToByte(49) : Convert.ToByte(48));                                 //discharge time mins
                                         if (tempKMStore[0] == 31 + 48)
                                         {
                                             if (d.Rows[station][10].ToString().Contains("mini"))
@@ -1095,7 +1130,7 @@ namespace NewBTASProto
                                             tempKMStore[20] = Convert.ToByte(48 + 100 * (GetDouble(battery.Tables[0].Rows[0][101].ToString())) % 1);      //discharge resistance low byte
                                         }
                                         if (tempKMStore[0] == 31 + 48) { curSet1 = (float)GetDouble(battery.Tables[0].Rows[0][95].ToString()); }
-                                        vSet1 = (MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][96].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][96].ToString()));
+                                        vSet1 = (MasterSlaveTest ? (2 * (float)GetDouble(battery.Tables[0].Rows[0][96].ToString())) : (float)GetDouble(battery.Tables[0].Rows[0][96].ToString()));
                                         curSet2 = 0;
                                         vSet2 = 0;
                                         break;
@@ -1116,11 +1151,11 @@ namespace NewBTASProto
                                         tempKMStore[12] = (byte)48;                                                                                //bottom voltage 2 byte
 
                                         tempKMStore[13] = Convert.ToByte(48 + int.Parse(battery.Tables[0].Rows[0][103].ToString()));                        //discharge time hours
-                                        tempKMStore[14] = (byte)(48);                                                                           //discharge time mins
+                                        tempKMStore[14] = (GlobalVars.AddOneMin ? Convert.ToByte(49) : Convert.ToByte(48));                                 //discharge time mins
                                         if (d.Rows[station][10].ToString().Contains("mini"))
                                         {
                                             tempKMStore[15] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][105].ToString())) * 1));            //discharge current high byte
-                                            tempKMStore[16] = Convert.ToByte(48 +(100 * ((float) GetDouble(battery.Tables[0].Rows[0][105].ToString())) % 1));      //discharge current low byte
+                                            tempKMStore[16] = Convert.ToByte(48 + (100 * ((float)GetDouble(battery.Tables[0].Rows[0][105].ToString())) % 1));      //discharge current low byte
                                         }
                                         else
                                         {
@@ -1131,7 +1166,7 @@ namespace NewBTASProto
                                         tempKMStore[18] = (byte)48;                                                                                //discharge voltage low byte
                                         tempKMStore[19] = (byte)48;                                                                                //discharge resistance high byte
                                         tempKMStore[20] = (byte)48;                                                                                //discharge resistance low byte
-                                        curSet1 = (float) GetDouble(battery.Tables[0].Rows[0][105].ToString());
+                                        curSet1 = (float)GetDouble(battery.Tables[0].Rows[0][105].ToString());
                                         vSet1 = 0;
                                         curSet2 = 0;
                                         vSet2 = 0;
@@ -1139,11 +1174,16 @@ namespace NewBTASProto
                                     case "Slow Charge-14":
                                         tempKMStore[0] = Convert.ToByte(48 + int.Parse(battery.Tables[0].Rows[0][112].ToString().Substring(0, 2)));         //mode
                                         tempKMStore[1] = Convert.ToByte(48 + int.Parse(battery.Tables[0].Rows[0][113].ToString()));                         //time hours
-                                        tempKMStore[2] = (byte)(48);                         //time mins
+                                        tempKMStore[2] = (GlobalVars.AddOneMin ? Convert.ToByte(49) : Convert.ToByte(48));                                  //time mins
                                         if (d.Rows[station][10].ToString().Contains("mini"))
                                         {
                                             tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][115].ToString()) * 10)));            //top current byte
                                             tempKMStore[4] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][115].ToString()) * 1000) % 100);                                                                            //bottom current byte
+                                        }
+                                        else if (d.Rows[station][10].ToString().Contains("MFC-10"))
+                                        {
+                                            tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][115].ToString()) / 1)));            //top current byte
+                                            tempKMStore[4] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][115].ToString()) % 1) * 100);                                                                            //bottom current byte
                                         }
                                         else
                                         {
@@ -1168,19 +1208,24 @@ namespace NewBTASProto
                                         tempKMStore[18] = (byte)48;                                                                                //discharge voltage low byte
                                         tempKMStore[19] = (byte)48;                                                                                //discharge resistance high byte
                                         tempKMStore[20] = (byte)48;                                                                                //discharge resistance low byte
-                                        curSet1 = (float) GetDouble(battery.Tables[0].Rows[0][115].ToString());
-                                        vSet1 = (MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][116].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][116].ToString()));
+                                        curSet1 = (float)GetDouble(battery.Tables[0].Rows[0][115].ToString());
+                                        vSet1 = (MasterSlaveTest ? (2 * (float)GetDouble(battery.Tables[0].Rows[0][116].ToString())) : (float)GetDouble(battery.Tables[0].Rows[0][116].ToString()));
                                         curSet2 = 0;
                                         vSet2 = 0;
                                         break;
                                     case "Slow Charge-16":
                                         tempKMStore[0] = Convert.ToByte(48 + int.Parse(battery.Tables[0].Rows[0][122].ToString().Substring(0, 2)));         //mode
                                         tempKMStore[1] = Convert.ToByte(48 + int.Parse(battery.Tables[0].Rows[0][123].ToString()));                         //time hours
-                                        tempKMStore[2] = (byte)(48);                         //time mins
+                                        tempKMStore[2] = (GlobalVars.AddOneMin ? Convert.ToByte(49) : Convert.ToByte(48));                                  //time mins
                                         if (d.Rows[station][10].ToString().Contains("mini"))
                                         {
                                             tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][125].ToString())) * 10));            //top current byte
                                             tempKMStore[4] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][125].ToString()) * 1000) % 100);                                                                            //bottom current byte
+                                        }
+                                        else if (d.Rows[station][10].ToString().Contains("MFC-10"))
+                                        {
+                                            tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][125].ToString())) / 1));            //top current byte
+                                            tempKMStore[4] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][125].ToString()) % 1) * 100);                                                                            //bottom current byte
                                         }
                                         else
                                         {
@@ -1205,22 +1250,26 @@ namespace NewBTASProto
                                         tempKMStore[18] = (byte)48;                                                                                //discharge voltage low byte
                                         tempKMStore[19] = (byte)48;                                                                                //discharge resistance high byte
                                         tempKMStore[20] = (byte)48;                                                                                //discharge resistance low byte
-                                        curSet1 = (float) GetDouble(battery.Tables[0].Rows[0][125].ToString());
-                                        vSet1 = (MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][126].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][126].ToString()));
+                                        curSet1 = (float)GetDouble(battery.Tables[0].Rows[0][125].ToString());
+                                        vSet1 = (MasterSlaveTest ? (2 * (float)GetDouble(battery.Tables[0].Rows[0][126].ToString())) : (float)GetDouble(battery.Tables[0].Rows[0][126].ToString()));
                                         curSet2 = 0;
                                         vSet2 = 0;
                                         break;
                                     case "Custom Chg":
                                         tempKMStore[0] = Convert.ToByte(48 + int.Parse(battery.Tables[0].Rows[0][132].ToString().Substring(0, 2)));         //mode
                                         tempKMStore[1] = Convert.ToByte(48 + int.Parse(battery.Tables[0].Rows[0][133].ToString()));                         //time hours
-                                        if (tempKMStore[0] != 20 && tempKMStore[0] != 21)
-                                        {
-                                            tempKMStore[2] = (byte)(48);                                                                        //time mins
-                                        }
+                                        if (tempKMStore[0] == (20 + 48) || tempKMStore[0] == (21 + 48)) { tempKMStore[2] = (byte)(48); }
+                                        else { tempKMStore[2] = (GlobalVars.AddOneMin ? Convert.ToByte(49) : Convert.ToByte(48)); }                          //time mins
+
                                         if (d.Rows[station][10].ToString().Contains("mini"))
                                         {
                                             tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][135].ToString()) * 10)));            //top current byte
                                             tempKMStore[4] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][135].ToString()) * 1000) % 100);                                                                            //bottom current byte
+                                        }
+                                        else if (d.Rows[station][10].ToString().Contains("MFC-10"))
+                                        {
+                                            tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][135].ToString()) / 1)));            //top current byte
+                                            tempKMStore[4] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][135].ToString()) % 1) * 100);                                                                            //bottom current byte
                                         }
                                         else
                                         {
@@ -1233,11 +1282,16 @@ namespace NewBTASProto
                                         if (tempKMStore[0] == (20 + 48) || tempKMStore[0] == (21 + 48))
                                         {
                                             tempKMStore[7] = Convert.ToByte(48 + int.Parse(battery.Tables[0].Rows[0][137].ToString()));                     //time 2 hours
-                                            tempKMStore[8] = (byte)(48);                                                                        //time 2 mins
+                                            tempKMStore[8] = (GlobalVars.AddOneMin ? Convert.ToByte(49) : Convert.ToByte(48));                              //time 2 mins
                                             if (d.Rows[station][10].ToString().Contains("mini"))
                                             {
                                                 tempKMStore[9] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][139].ToString())) * 10));        //top current 2 byte
-                                                tempKMStore[10] = Convert.ToByte(48 +(GetDouble(battery.Tables[0].Rows[0][139].ToString()) * 1000) % 100);                                                                       //bottom current 2 byte
+                                                tempKMStore[10] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][139].ToString()) * 1000) % 100);                                                                       //bottom current 2 byte
+                                            }
+                                            else if (d.Rows[station][10].ToString().Contains("MFC-10"))
+                                            {
+                                                tempKMStore[9] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][139].ToString())) / 1));        //top current 2 byte
+                                                tempKMStore[10] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][139].ToString()) % 1) * 100);                                                                       //bottom current 2 byte
                                             }
                                             else
                                             {
@@ -1256,10 +1310,10 @@ namespace NewBTASProto
                                         tempKMStore[18] = (byte)48;                                                                                //discharge voltage low byte
                                         tempKMStore[19] = (byte)48;                                                                                //discharge resistance high byte
                                         tempKMStore[20] = (byte)48;                                                                                //discharge resistance low byte
-                                        curSet1 = (float) GetDouble(battery.Tables[0].Rows[0][135].ToString());
-                                        vSet1 = (MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][136].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][136].ToString()));
-                                        if (battery.Tables[0].Rows[0][139].ToString() != "") { curSet2 = (float) GetDouble(battery.Tables[0].Rows[0][139].ToString()); }
-                                        if (battery.Tables[0].Rows[0][140].ToString() != "") { vSet2 = (MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][140].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][140].ToString())); }
+                                        curSet1 = (float)GetDouble(battery.Tables[0].Rows[0][135].ToString());
+                                        vSet1 = (MasterSlaveTest ? (2 * (float)GetDouble(battery.Tables[0].Rows[0][136].ToString())) : (float)GetDouble(battery.Tables[0].Rows[0][136].ToString()));
+                                        if (battery.Tables[0].Rows[0][139].ToString() != "") { curSet2 = (float)GetDouble(battery.Tables[0].Rows[0][139].ToString()); }
+                                        if (battery.Tables[0].Rows[0][140].ToString() != "") { vSet2 = (MasterSlaveTest ? (2 * (float)GetDouble(battery.Tables[0].Rows[0][140].ToString())) : (float)GetDouble(battery.Tables[0].Rows[0][140].ToString())); }
                                         break;
                                     case "Custom Cap":
                                         tempKMStore[0] = Convert.ToByte(48 + int.Parse(battery.Tables[0].Rows[0][142].ToString().Substring(0, 2)));         //mode
@@ -1277,8 +1331,8 @@ namespace NewBTASProto
                                         tempKMStore[11] = (byte)48;                                                                                //top voltage 2 byte
                                         tempKMStore[12] = (byte)48;                                                                                //bottom voltage 2 byte
 
-                                        tempKMStore[13] = Convert.ToByte(48 + int.Parse(battery.Tables[0].Rows[0][143].ToString()));                        //discharge time hours
-                                        tempKMStore[14] = (byte)(48);                                                                           //discharge time mins
+                                        tempKMStore[13] = Convert.ToByte(48 + int.Parse(battery.Tables[0].Rows[0][143].ToString()));               //discharge time hours
+                                        tempKMStore[14] = (GlobalVars.AddOneMin ? Convert.ToByte(49) : Convert.ToByte(48));                        //discharge time mins
                                         if (tempKMStore[0] != 32 + 48)
                                         {
                                             if (d.Rows[station][10].ToString().Contains("mini"))
@@ -1302,19 +1356,24 @@ namespace NewBTASProto
                                             tempKMStore[19] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][151].ToString())) / 1));            //discharge resistance high byte
                                             tempKMStore[20] = Convert.ToByte(48 + 100 * ((GetDouble(battery.Tables[0].Rows[0][151].ToString())) % 1));      //discharge resistance low byte
                                         }
-                                        if (battery.Tables[0].Rows[0][145].ToString() != "") { curSet1 = (float) GetDouble(battery.Tables[0].Rows[0][145].ToString()); }
-                                        if (battery.Tables[0].Rows[0][146].ToString() != "") { vSet1 = (MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][146].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][146].ToString())); }
+                                        if (battery.Tables[0].Rows[0][145].ToString() != "") { curSet1 = (float)GetDouble(battery.Tables[0].Rows[0][145].ToString()); }
+                                        if (battery.Tables[0].Rows[0][146].ToString() != "") { vSet1 = (MasterSlaveTest ? (2 * (float)GetDouble(battery.Tables[0].Rows[0][146].ToString())) : (float)GetDouble(battery.Tables[0].Rows[0][146].ToString())); }
                                         curSet2 = 0;
                                         vSet2 = 0;
                                         break;
                                     case "Constant Voltage":
                                         tempKMStore[0] = Convert.ToByte(48 + int.Parse(battery.Tables[0].Rows[0][152].ToString().Substring(0, 2)));         //mode
                                         tempKMStore[1] = Convert.ToByte(48 + int.Parse(battery.Tables[0].Rows[0][153].ToString()));                         //time hours
-                                        tempKMStore[2] = (byte)(48);                                                                                //time mins
+                                        tempKMStore[2] = (GlobalVars.AddOneMin ? Convert.ToByte(49) : Convert.ToByte(48));                                  //time mins
                                         if (d.Rows[station][10].ToString().Contains("mini"))
                                         {
                                             tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][155].ToString())) * 10));            //top current byte
                                             tempKMStore[4] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][155].ToString()) * 1000) % 100);                                                                            //bottom current byte
+                                        }
+                                        else if (d.Rows[station][10].ToString().Contains("MFC-10"))
+                                        {
+                                            tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][155].ToString())) / 1));            //top current byte
+                                            tempKMStore[4] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][155].ToString()) % 1) * 100);                                                                            //bottom current byte
                                         }
                                         else
                                         {
@@ -1339,8 +1398,8 @@ namespace NewBTASProto
                                         tempKMStore[18] = (byte)48;                                                                                //discharge voltage low byte
                                         tempKMStore[19] = (byte)48;                                                                                //discharge resistance high byte
                                         tempKMStore[20] = (byte)48;                                                                                //discharge resistance low byte
-                                        curSet1 = (float) GetDouble(battery.Tables[0].Rows[0][155].ToString());
-                                        vSet1 = (MasterSlaveTest ? (2 * (float) GetDouble(battery.Tables[0].Rows[0][156].ToString())) : (float) GetDouble(battery.Tables[0].Rows[0][156].ToString()));
+                                        curSet1 = (float)GetDouble(battery.Tables[0].Rows[0][155].ToString());
+                                        vSet1 = (MasterSlaveTest ? (2 * (float)GetDouble(battery.Tables[0].Rows[0][156].ToString())) : (float)GetDouble(battery.Tables[0].Rows[0][156].ToString()));
                                         curSet2 = 0;
                                         vSet2 = 0;
                                         break;
@@ -1353,6 +1412,11 @@ namespace NewBTASProto
                                             tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][165].ToString())) * 10));             //top current byte
                                             tempKMStore[4] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][165].ToString()) * 1000) % 100);                                                                            //bottom current byte
                                         }
+                                        else if (d.Rows[station][10].ToString().Contains("MFC-10"))
+                                        {
+                                            tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][165].ToString())) / 1));             //top current byte
+                                            tempKMStore[4] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][165].ToString()) % 1) * 100);                                                                            //bottom current byte
+                                        }
                                         else
                                         {
                                             tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][165].ToString()) / 10)));             //top current byte
@@ -1362,11 +1426,16 @@ namespace NewBTASProto
                                         tempKMStore[6] = Convert.ToByte(48 + 100 * ((MasterSlaveTest ? (2 * (GetDouble(battery.Tables[0].Rows[0][166].ToString()))) : (GetDouble(battery.Tables[0].Rows[0][166].ToString()))) % 1));            //bottom current byte
 
                                         tempKMStore[7] = Convert.ToByte(48 + int.Parse(battery.Tables[0].Rows[0][167].ToString()));                          //time 2 hours
-                                        tempKMStore[8] = (byte)(48);                                                                            //time 2 mins
+                                        tempKMStore[8] = (GlobalVars.AddOneMin ? Convert.ToByte(49) : Convert.ToByte(48));                                   //time 2 mins
                                         if (d.Rows[station][10].ToString().Contains("mini"))
                                         {
                                             tempKMStore[9] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][169].ToString())) * 10));             //top current 2 byte
                                             tempKMStore[10] = Convert.ToByte((48 + (GetDouble(battery.Tables[0].Rows[0][169].ToString()) * 1000) % 100));                                                                           //bottom current 2 byte
+                                        }
+                                        if (d.Rows[station][10].ToString().Contains("MFC-10"))
+                                        {
+                                            tempKMStore[9] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][169].ToString())) / 1));             //top current 2 byte
+                                            tempKMStore[10] = Convert.ToByte((48 + (GetDouble(battery.Tables[0].Rows[0][169].ToString()) % 1) * 100));                                                                           //bottom current 2 byte
                                         }
                                         else
                                         {
@@ -1392,14 +1461,18 @@ namespace NewBTASProto
                                     case "Custom Chg 2":
                                         tempKMStore[0] = Convert.ToByte(48 + int.Parse(battery.Tables[0].Rows[0][172].ToString().Substring(0, 2)));         //mode
                                         tempKMStore[1] = Convert.ToByte(48 + int.Parse(battery.Tables[0].Rows[0][173].ToString()));                         //time hours
-                                        if (tempKMStore[0] != 20 && tempKMStore[0] != 21)
-                                        {
-                                            tempKMStore[2] = (byte)(48);                                                                        //time mins
-                                        }
+                                        if (tempKMStore[0] == (20 + 48) || tempKMStore[0] == (21 + 48)) { tempKMStore[2] = (byte)(48); }
+                                        else { tempKMStore[2] = (GlobalVars.AddOneMin ? Convert.ToByte(49) : Convert.ToByte(48)); }                                                                        //time mins
+
                                         if (d.Rows[station][10].ToString().Contains("mini"))
                                         {
                                             tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][175].ToString()) * 10)));            //top current byte
                                             tempKMStore[4] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][175].ToString()) * 1000) % 100);                                                                            //bottom current byte
+                                        }
+                                        else if (d.Rows[station][10].ToString().Contains("MFC-10"))
+                                        {
+                                            tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][175].ToString()) / 1)));            //top current byte
+                                            tempKMStore[4] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][175].ToString()) % 1) * 100);                                                                            //bottom current byte
                                         }
                                         else
                                         {
@@ -1412,11 +1485,16 @@ namespace NewBTASProto
                                         if (tempKMStore[0] == (20 + 48) || tempKMStore[0] == (21 + 48))
                                         {
                                             tempKMStore[7] = Convert.ToByte(48 + int.Parse(battery.Tables[0].Rows[0][177].ToString()));                     //time 2 hours
-                                            tempKMStore[8] = (byte)(48);                                                                        //time 2 mins
+                                            tempKMStore[8] = (GlobalVars.AddOneMin ? Convert.ToByte(49) : Convert.ToByte(48));                              //time 2 mins
                                             if (d.Rows[station][10].ToString().Contains("mini"))
                                             {
                                                 tempKMStore[9] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][179].ToString())) * 10));        //top current 2 byte
                                                 tempKMStore[10] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][179].ToString()) * 1000) % 100);                                                                       //bottom current 2 byte
+                                            }
+                                            else if (d.Rows[station][10].ToString().Contains("MFC-10"))
+                                            {
+                                                tempKMStore[9] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][179].ToString())) / 1));        //top current 2 byte
+                                                tempKMStore[10] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][179].ToString()) % 1) * 100);                                                                       //bottom current 2 byte
                                             }
                                             else
                                             {
@@ -1443,14 +1521,18 @@ namespace NewBTASProto
                                     case "Custom Chg 3":
                                         tempKMStore[0] = Convert.ToByte(48 + int.Parse(battery.Tables[0].Rows[0][182].ToString().Substring(0, 2)));         //mode
                                         tempKMStore[1] = Convert.ToByte(48 + int.Parse(battery.Tables[0].Rows[0][183].ToString()));                         //time hours
-                                        if (tempKMStore[0] != 20 && tempKMStore[0] != 21)
-                                        {
-                                            tempKMStore[2] = (byte)(48);                                                                        //time mins
-                                        }
+                                        if (tempKMStore[0] == (20 + 48) || tempKMStore[0] == (21 + 48)) { tempKMStore[2] = (byte)(48); }
+                                        else { tempKMStore[2] = (GlobalVars.AddOneMin ? Convert.ToByte(49) : Convert.ToByte(48)); }                                                                                       //time mins
+
                                         if (d.Rows[station][10].ToString().Contains("mini"))
                                         {
                                             tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][185].ToString()) * 10)));            //top current byte
                                             tempKMStore[4] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][185].ToString()) * 1000) % 100);                                                                            //bottom current byte
+                                        }
+                                        else if (d.Rows[station][10].ToString().Contains("MFC-10"))
+                                        {
+                                            tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][185].ToString()) / 1)));            //top current byte
+                                            tempKMStore[4] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][185].ToString()) % 1) * 100);                                                                            //bottom current byte
                                         }
                                         else
                                         {
@@ -1463,11 +1545,16 @@ namespace NewBTASProto
                                         if (tempKMStore[0] == (20 + 48) || tempKMStore[0] == (21 + 48))
                                         {
                                             tempKMStore[7] = Convert.ToByte(48 + int.Parse(battery.Tables[0].Rows[0][187].ToString()));                     //time 2 hours
-                                            tempKMStore[8] = (byte)(48);                                                                        //time 2 mins
+                                            tempKMStore[8] = (GlobalVars.AddOneMin ? Convert.ToByte(49) : Convert.ToByte(48));                              //time 2 mins
                                             if (d.Rows[station][10].ToString().Contains("mini"))
                                             {
                                                 tempKMStore[9] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][189].ToString())) * 10));        //top current 2 byte
                                                 tempKMStore[10] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][189].ToString()) * 1000) % 100);                                                                       //bottom current 2 byte
+                                            }
+                                            else if (d.Rows[station][10].ToString().Contains("MFC-10"))
+                                            {
+                                                tempKMStore[9] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][189].ToString())) / 1));        //top current 2 byte
+                                                tempKMStore[10] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][189].ToString()) % 1) * 100);                                                                       //bottom current 2 byte
                                             }
                                             else
                                             {
@@ -1503,6 +1590,11 @@ namespace NewBTASProto
                                             tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(testSettings.Tables[0].Rows[0][9].ToString())) * 10));                                //top current byte
                                             tempKMStore[4] = Convert.ToByte(48 + (GetDouble(testSettings.Tables[0].Rows[0][9].ToString()) * 1000) % 100);              //bottom current byte
                                         }
+                                        else if (d.Rows[station][10].ToString().Contains("MC-10"))
+                                        {
+                                            tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(testSettings.Tables[0].Rows[0][9].ToString())) / 1));                                //top current byte
+                                            tempKMStore[4] = Convert.ToByte(48 + (GetDouble(testSettings.Tables[0].Rows[0][9].ToString()) % 1) * 100);              //bottom current byte
+                                        }
                                         else
                                         {
                                             tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(testSettings.Tables[0].Rows[0][9].ToString()) / 10)));                                //top current byte
@@ -1517,6 +1609,11 @@ namespace NewBTASProto
                                         {
                                             tempKMStore[9] = Convert.ToByte(48 + (Math.Floor(GetDouble(testSettings.Tables[0].Rows[0][13].ToString())) * 10));             //top current 2 byte
                                             tempKMStore[10] = Convert.ToByte(48 + ((GetDouble(testSettings.Tables[0].Rows[0][13].ToString()) * 1000) % 100));                                                                           //bottom current 2 byte
+                                        }
+                                        else if (d.Rows[station][10].ToString().Contains("MFC-10"))
+                                        {
+                                            tempKMStore[9] = Convert.ToByte(48 + (Math.Floor(GetDouble(testSettings.Tables[0].Rows[0][13].ToString())) / 1));             //top current 2 byte
+                                            tempKMStore[10] = Convert.ToByte(48 + ((GetDouble(testSettings.Tables[0].Rows[0][13].ToString()) % 1) * 100));                                                                           //bottom current 2 byte
                                         }
                                         else
                                         {
@@ -1551,7 +1648,7 @@ namespace NewBTASProto
                                             tempKMStore[19] = Convert.ToByte(48 + (Math.Floor(GetDouble(testSettings.Tables[0].Rows[0][15].ToString())) / 1));            //discharge resistance high byte
                                             tempKMStore[20] = Convert.ToByte(48 + 100 * ((GetDouble(testSettings.Tables[0].Rows[0][15].ToString())) % 1));      //discharge resistance low byte
                                         }
-                                        
+
                                         // needs to be based on mode...
                                         if (tempKMStore[0] == 10 + 48 || tempKMStore[0] == 11 + 48 || tempKMStore[0] == 12 + 48)
                                         {
@@ -1608,7 +1705,7 @@ namespace NewBTASProto
                                         testType == "Custom Chg" ||
                                         testType == "Custom Chg 2" ||
                                         testType == "Custom Chg 3" ||
-                                        testType == "Slow Charge-16"||
+                                        testType == "Slow Charge-16" ||
                                         testType == "Slow Charge-14" ||
                                         testType == "Discharge" ||
                                         testType == "Capacity-1" ||
@@ -3072,7 +3169,7 @@ namespace NewBTASProto
                             offset = offset.Add(new TimeSpan(0, 0, 0, 0, 2500));
                         }
                         stopwatch.Start();
-                        
+
                         //Thread.Sleep(500);
 
 
@@ -3218,8 +3315,14 @@ namespace NewBTASProto
                         try
                         {
                             // check if we need to take a reading
-                            if (((currentReading - 1) * interval * 1000) < stopwatch.Elapsed.Add(offset).TotalMilliseconds)
+                            if (((currentReading - 1) * interval * 1000) < stopwatch.Elapsed.Add(offset).TotalMilliseconds || (GlobalVars.StopOnEnd && d.Rows[station][11].ToString() == "END"))
                             {
+                                //Compensate for the "END"
+                                if (GlobalVars.StopOnEnd && d.Rows[station][11].ToString() == "END")
+                                {
+                                    currentReading = readings;
+                                }
+
                                 //first record the elapsed amount of time
                                 TimeSpan temp = stopwatch.Elapsed.Add(offset);
                                 if (firstCheat)
@@ -3951,7 +4054,7 @@ namespace NewBTASProto
 
                             //Now update the timer
                             eTime = stopwatch.Elapsed.Add(offset);
-                            if(eTime.Days > 0)
+                            if (eTime.Days > 0)
                             {
                                 eTimeS = eTime.ToString(@"dd\:hh\:mm\:ss");
                             }
@@ -3959,7 +4062,7 @@ namespace NewBTASProto
                             {
                                 eTimeS = eTime.ToString(@"hh\:mm\:ss");
                             }
-                            
+
                             if (oldETime != eTimeS)
                             {
                                 try
@@ -4134,14 +4237,14 @@ namespace NewBTASProto
                                 }
                             }
                             #endregion
-                                                        
+
                             #region failing cell test
                             //we are going to look for failing cells here...
 
                             //only check once every 20 secs...
 
                             //if we have the cell check turned on and the we are in charge check the cells for negative slopes...
-                            if (DateTime.Now.Ticks - cellCheckTimer.Ticks > 200000000 && GlobalVars.DecliningCellVoltageTestEnabled && !(testType.Contains("Dis") || testType.Contains("Cap") || testType.Contains("Shorting")))
+                            if (DateTime.Now.Ticks - cellCheckTimer.Ticks > (GlobalVars.DCVPeriod * 10000000) && GlobalVars.DecliningCellVoltageTestEnabled && !(testType.Contains("Dis") || testType.Contains("Cap") || testType.Contains("Shorting")))
                             {
 
                                 //also check that we don't have an ICA running in a custom discharge mode...
@@ -4944,9 +5047,9 @@ namespace NewBTASProto
                             }
                             else
                             {
-                                MessageBox.Show(this, "Error in main test loop try:  " + ex.Message + Environment.NewLine + ex.TargetSite + Environment.NewLine + ex.HResult + Environment.NewLine + ex.StackTrace,"Main Test Loop Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                MessageBox.Show(this, "Error in main test loop try:  " + ex.Message + Environment.NewLine + ex.TargetSite + Environment.NewLine + ex.HResult + Environment.NewLine + ex.StackTrace, "Main Test Loop Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             }
-                            
+
                         }
 
                     } // end main test loop...
@@ -4955,7 +5058,7 @@ namespace NewBTASProto
                     ////////////////////////////////END TEST SECTION////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     #region END TEST
                     //First lets save the state of the cells at finish to use in the post test section
-                    CScanDataStore lastReading =  GlobalVars.CScanData[station];
+                    CScanDataStore lastReading = GlobalVars.CScanData[station];
                     CScanDataStore lastSlaveReading = lastReading;
                     if (slaveRow != -1)
                     {
@@ -5102,7 +5205,7 @@ namespace NewBTASProto
                         {
                             Cells = (int)pci.Rows[station][3];
                         }
-                        
+
                         // get an initial average
                         for (int i = 0; i < Cells; i++)
                         {
@@ -5778,7 +5881,7 @@ namespace NewBTASProto
                     if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
 
                 }
-                               
+
                 catch (Exception ex)
                 {
                     this.Invoke((MethodInvoker)delegate()
@@ -5791,7 +5894,7 @@ namespace NewBTASProto
                 }
 
             }); // end thread
-            
+
 
         }
 

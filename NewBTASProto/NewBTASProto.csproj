@@ -8,14 +8,14 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NewBTASProto</RootNamespace>
-    <AssemblyName>BTAS-16Knu</AssemblyName>
+    <AssemblyName>BTAS-16K</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>publish\final_release\nu\</PublishUrl>
+    <PublishUrl>publish\final_release\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateEnabled>true</UpdateEnabled>
     <UpdateMode>Foreground</UpdateMode>
     <UpdateInterval>7</UpdateInterval>
     <UpdateIntervalUnits>Days</UpdateIntervalUnits>
@@ -24,7 +24,7 @@
     <MapFileExtensions>true</MapFileExtensions>
     <UpdateUrl>http://www.jfmeng.com/BTAS16_update/final_release/</UpdateUrl>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>171</ApplicationRevision>
+    <ApplicationRevision>181</ApplicationRevision>
     <ApplicationVersion>6.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -59,7 +59,7 @@
     <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>btas7_h_i_jXz_icon.ico</ApplicationIcon>
@@ -483,6 +483,7 @@
     <None Include="Resources\BTAS16 Manual-K0.14.pdf" />
     <None Include="Resources\BTAS16 Manual-K0.15.pdf" />
     <None Include="Resources\BTAS16 Manual-K0.6.pdf" />
+    <None Include="Resources\BTAS16 Manual-K1.01.pdf" />
     <None Include="Resources\JFM Engineering Logo_small1.jpg" />
   </ItemGroup>
   <ItemGroup>

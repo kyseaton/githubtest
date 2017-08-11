@@ -27,7 +27,7 @@ namespace NewBTASProto
 
             try
             {
-                //Font = new Font(Font.Name, 8.25f * 96f / CreateGraphics().DpiX, Font.Style, Font.Unit, Font.GdiCharSet, Font.GdiVerticalFont);
+                Font = new Font(Font.Name, 8.25f * 96f / CreateGraphics().DpiX, Font.Style, Font.Unit, Font.GdiCharSet, Font.GdiVerticalFont);
                 SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
                 InitializeComponent();
 
@@ -104,6 +104,9 @@ namespace NewBTASProto
                     GlobalVars.SS13 = Properties.Settings.Default.SS13;
                     GlobalVars.SS14 = Properties.Settings.Default.SS14;
                     GlobalVars.SS15 = Properties.Settings.Default.SS15;
+                    GlobalVars.DCVPeriod = Properties.Settings.Default.DCVPeriod;
+                    GlobalVars.StopOnEnd = Properties.Settings.Default.StopOnEnd;
+                    GlobalVars.AddOneMin = Properties.Settings.Default.AddOneMin;
 
                 }
                 catch
@@ -111,7 +114,7 @@ namespace NewBTASProto
                     //delete the settings file and warn the user
                     MessageBox.Show("There was an issue loading you configuration file.  Settings will be returned to defaults.");
                     System.IO.File.Delete(AppDomain.CurrentDomain.SetupInformation.ConfigurationFile);
-                    Properties.Settings.Default.Reset();            
+                    Properties.Settings.Default.Reset();
                 }
 
                 if ((int)GlobalVars.FormHeight > 499 && (int)GlobalVars.FormWidth > 269)
@@ -125,7 +128,7 @@ namespace NewBTASProto
                 float dpiX;
                 Graphics graphics = this.CreateGraphics();
                 dpiX = graphics.DpiX;
-                
+
                 // this is the amount to subtract from the height of the form to get the height of the group boxes
                 int toSub = 501;
 
@@ -133,7 +136,7 @@ namespace NewBTASProto
                 {
                     toSub = 508;
                 }
-                                
+
                 groupBox3.Location = new Point(12, 438 - ((16 - Convert.ToInt32(GlobalVars.rows2Dis)) * 21));
                 groupBox3.Height = this.Height - toSub + ((16 - Convert.ToInt32(GlobalVars.rows2Dis)) * 21);
                 groupBox4.Location = new Point(groupBox4.Location.X, 438 - ((16 - Convert.ToInt32(GlobalVars.rows2Dis)) * 21));
@@ -189,7 +192,7 @@ namespace NewBTASProto
             //create the thread...
             ThreadPool.QueueUserWorkItem(s =>
             {
-                
+
                 CancellationToken token = (CancellationToken)s;
                 while (true)
                 {
@@ -308,7 +311,7 @@ namespace NewBTASProto
             //ComboBox TechCB = toolStripComboBox1.ComboBox;
             //TechCB.DataSource = techs;
 
-            
+
             toolStripComboBox1.Items.Clear();
             foreach (string x in techs)
             {
@@ -340,7 +343,7 @@ namespace NewBTASProto
             label10.Text = GlobalVars.businessName;
 
 
-            if (GlobalVars.autoConfig) 
+            if (GlobalVars.autoConfig)
             {
                 this.automaticallyConfigureChargerToolStripMenuItem.Checked = true;
                 this.chargerConfigurationInterfaceToolStripMenuItem.Enabled = false;
@@ -353,8 +356,8 @@ namespace NewBTASProto
             //Now lets pull in our custom tests...
             updateCustomTestDropDown();
             updateComboTestDropDown();
-            
-                        
+
+
         }
 
         public DataTable customTestParams;
@@ -850,24 +853,24 @@ namespace NewBTASProto
                     }
                     if (batData.Tables[0].Rows[0][1].ToString() != "")
                     {
-                        pci.Rows[channel][2] = (float) GetDouble(batData.Tables[0].Rows[0][1].ToString());
+                        pci.Rows[channel][2] = (float)GetDouble(batData.Tables[0].Rows[0][1].ToString());
                     }
                     if (batData.Tables[0].Rows[0][2].ToString() != "")
                     {
-                        pci.Rows[channel][3] =  (A.Length - 1) * int.Parse(batData.Tables[0].Rows[0][2].ToString());
-                        
+                        pci.Rows[channel][3] = (A.Length - 1) * int.Parse(batData.Tables[0].Rows[0][2].ToString());
+
                     }
                     if (batData.Tables[0].Rows[0][3].ToString() != "")
                     {
-                        pci.Rows[channel][4] = (float )GetDouble(batData.Tables[0].Rows[0][3].ToString());
+                        pci.Rows[channel][4] = (float)GetDouble(batData.Tables[0].Rows[0][3].ToString());
                     }
                     if (batData.Tables[0].Rows[0][4].ToString() != "")
                     {
-                        pci.Rows[channel][5] = (float) GetDouble(batData.Tables[0].Rows[0][4].ToString());
+                        pci.Rows[channel][5] = (float)GetDouble(batData.Tables[0].Rows[0][4].ToString());
                     }
                     if (batData.Tables[0].Rows[0][5].ToString() != "")
                     {
-                        pci.Rows[channel][6] = (float) GetDouble(batData.Tables[0].Rows[0][5].ToString());
+                        pci.Rows[channel][6] = (float)GetDouble(batData.Tables[0].Rows[0][5].ToString());
                     }
                     else if (batData.Tables[0].Rows[0][5].ToString() == "" && batData.Tables[0].Rows[0][0].ToString() == "NiCd ULM")
                     {
@@ -875,11 +878,11 @@ namespace NewBTASProto
                     }
                     if (batData.Tables[0].Rows[0][6].ToString() != "")
                     {
-                        pci.Rows[channel][7] = (float) GetDouble(batData.Tables[0].Rows[0][6].ToString());
+                        pci.Rows[channel][7] = (float)GetDouble(batData.Tables[0].Rows[0][6].ToString());
                     }
                     if (batData.Tables[0].Rows[0][7].ToString() != "")
                     {
-                        pci.Rows[channel][8] = (float) GetDouble(batData.Tables[0].Rows[0][7].ToString());
+                        pci.Rows[channel][8] = (float)GetDouble(batData.Tables[0].Rows[0][7].ToString());
                     }
                 }
                 else
@@ -901,7 +904,7 @@ namespace NewBTASProto
             catch
             {
                 MessageBox.Show(this, "Problem loading battery data!", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                
+
                 // we don't have battery data...
                 // reset to default...
                 pci.Rows[channel][0] = "None";
@@ -914,7 +917,7 @@ namespace NewBTASProto
                 pci.Rows[channel][7] = 1.75;         // negative 1 is the default...
                 pci.Rows[channel][8] = -1;         // negative 1 is the default...
                 pci.Rows[channel][9] = "";         // negative 1 is the default...
-                
+
 
             }
         }
@@ -962,7 +965,7 @@ namespace NewBTASProto
                         for (int ii = 0; ii < 16; ii++)
                         {
                             cRunTest[ii].Cancel();
-                        }   
+                        }
                         break;
                     }
                     else
@@ -980,7 +983,8 @@ namespace NewBTASProto
             {
                 for (int i = 0; i < 16; i++)
                 {
-                    if(d.Rows[i][2].ToString().Contains("FC-4")){
+                    if (d.Rows[i][2].ToString().Contains("FC-4"))
+                    {
                         // clear the >> and << 
                         updateD(i, 2, "Combo: FC-4 Cap-1");
                     }
@@ -1058,6 +1062,9 @@ namespace NewBTASProto
             Properties.Settings.Default.rows2Dis = GlobalVars.rows2Dis;
             Properties.Settings.Default.advance2Short = GlobalVars.advance2Short;
             Properties.Settings.Default.robustCSCAN = GlobalVars.robustCSCAN;
+            Properties.Settings.Default.DCVPeriod = GlobalVars.DCVPeriod;
+            Properties.Settings.Default.StopOnEnd = GlobalVars.StopOnEnd;
+            Properties.Settings.Default.AddOneMin = GlobalVars.AddOneMin;
             Properties.Settings.Default.SS0 = GlobalVars.SS0;
             Properties.Settings.Default.SS1 = GlobalVars.SS1;
             Properties.Settings.Default.SS2 = GlobalVars.SS2;
@@ -1074,7 +1081,7 @@ namespace NewBTASProto
             Properties.Settings.Default.SS13 = GlobalVars.SS13;
             Properties.Settings.Default.SS14 = GlobalVars.SS14;
             Properties.Settings.Default.SS15 = GlobalVars.SS15;
-            
+
 
 
             Properties.Settings.Default.Save();
@@ -1709,7 +1716,7 @@ namespace NewBTASProto
                     // there is already a zero in one of the other rows!
                     // make that one the master
 
-                    if ((bool) d.Rows[i][5] == true)
+                    if ((bool)d.Rows[i][5] == true)
                     {
                         MessageBox.Show(this, "Master is already running a test.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
@@ -2587,17 +2594,19 @@ namespace NewBTASProto
 
         private void cMSStartStop_Opening(object sender, CancelEventArgs e)
         {
-            if (d.Rows[dataGridView1.CurrentRow.Index][2].ToString().Contains("(")) 
-            { 
-                if((bool) d.Rows[dataGridView1.CurrentRow.Index][5])
+            if (d.Rows[dataGridView1.CurrentRow.Index][2].ToString().Contains("("))
+            {
+                if ((bool)d.Rows[dataGridView1.CurrentRow.Index][5])
                 {
-                    if (d.Rows[dataGridView1.CurrentRow.Index][6].ToString().Contains(":")) { stopCurrentAndGoToNextToolStripMenuItem.Visible = true; toolStripSeparator9.Visible = true; 
+                    if (d.Rows[dataGridView1.CurrentRow.Index][6].ToString().Contains(":"))
+                    {
+                        stopCurrentAndGoToNextToolStripMenuItem.Visible = true; toolStripSeparator9.Visible = true;
                     }
                     else { stopCurrentAndGoToNextToolStripMenuItem.Visible = false; toolStripSeparator9.Visible = false; }
-                    
+
                     nextTestToolStripMenuItem.Visible = false;
                     previousTestToolStripMenuItem.Visible = false;
-                    
+
                 }
                 else
                 {
@@ -2606,15 +2615,15 @@ namespace NewBTASProto
                     previousTestToolStripMenuItem.Visible = true;
                     toolStripSeparator9.Visible = true;
                 }
-                
+
             }
-            else 
+            else
             {
                 stopCurrentAndGoToNextToolStripMenuItem.Visible = false;
                 nextTestToolStripMenuItem.Visible = false;
                 previousTestToolStripMenuItem.Visible = false;
                 toolStripSeparator9.Visible = false;
-            } 
+            }
         }
 
         private void startNewTestToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2948,7 +2957,7 @@ namespace NewBTASProto
             try
             {
                 // get the right height first...
-                for(int i = 0; i < GlobalVars.rows2Dis; i++)
+                for (int i = 0; i < GlobalVars.rows2Dis; i++)
                 {
                     // go through each a scale them
                     dataGridView1.Rows[i].Height = (dataGridView1.Height - 27) / Convert.ToInt32(GlobalVars.rows2Dis);
@@ -3419,7 +3428,7 @@ namespace NewBTASProto
             {
                 contextMenuStripGraphPrint.Show(Cursor.Position);
             }
-            else if( inClick.Button == MouseButtons.Left)
+            else if (inClick.Button == MouseButtons.Left)
             {
                 contextMenuStripGraphSelect.Show(Cursor.Position);
             }
@@ -3715,9 +3724,9 @@ namespace NewBTASProto
                         //Add columns to BatteriesCustom
                         cmdStr = "ALTER TABLE BatteriesCustom ADD AFLD31 Text(255), AFLD41 Text(255)" +
                             ", T1Mode Text(255), T1Time1Hr Text(255), T1Time1Min Text(255), T1Curr1 Text(255), T1Volts1 Text(255), T1Time2Hr Text(255), T1Time2Min Text(255), T1Curr2 Text(255), T1Volts2 Text(255), T1Ohms Text(255)" +
-                            ", T2Mode Text(255), T2Time1Hr Text(255), T2Time1Min Text(255), T2Curr1 Text(255), T2Volts1 Text(255), T2Time2Hr Text(255), T2Time2Min Text(255), T2Curr2 Text(255), T2Volts2 Text(255), T2Ohms Text(255)" + 
-                            ", T3Mode Text(255), T3Time1Hr Text(255), T3Time1Min Text(255), T3Curr1 Text(255), T3Volts1 Text(255), T3Time2Hr Text(255), T3Time2Min Text(255), T3Curr2 Text(255), T3Volts2 Text(255), T3Ohms Text(255)" + 
-                            ", T4Mode Text(255), T4Time1Hr Text(255), T4Time1Min Text(255), T4Curr1 Text(255), T4Volts1 Text(255), T4Time2Hr Text(255), T4Time2Min Text(255), T4Curr2 Text(255), T4Volts2 Text(255), T4Ohms Text(255)" + 
+                            ", T2Mode Text(255), T2Time1Hr Text(255), T2Time1Min Text(255), T2Curr1 Text(255), T2Volts1 Text(255), T2Time2Hr Text(255), T2Time2Min Text(255), T2Curr2 Text(255), T2Volts2 Text(255), T2Ohms Text(255)" +
+                            ", T3Mode Text(255), T3Time1Hr Text(255), T3Time1Min Text(255), T3Curr1 Text(255), T3Volts1 Text(255), T3Time2Hr Text(255), T3Time2Min Text(255), T3Curr2 Text(255), T3Volts2 Text(255), T3Ohms Text(255)" +
+                            ", T4Mode Text(255), T4Time1Hr Text(255), T4Time1Min Text(255), T4Curr1 Text(255), T4Volts1 Text(255), T4Time2Hr Text(255), T4Time2Min Text(255), T4Curr2 Text(255), T4Volts2 Text(255), T4Ohms Text(255)" +
                             ", T5Mode Text(255), T5Time1Hr Text(255), T5Time1Min Text(255), T5Curr1 Text(255), T5Volts1 Text(255), T5Time2Hr Text(255), T5Time2Min Text(255), T5Curr2 Text(255), T5Volts2 Text(255), T5Ohms Text(255)" +
                             ", T6Mode Text(255), T6Time1Hr Text(255), T6Time1Min Text(255), T6Curr1 Text(255), T6Volts1 Text(255), T6Time2Hr Text(255), T6Time2Min Text(255), T6Curr2 Text(255), T6Volts2 Text(255), T6Ohms Text(255)" +
                             ", T7Mode Text(255), T7Time1Hr Text(255), T7Time1Min Text(255), T7Curr1 Text(255), T7Volts1 Text(255), T7Time2Hr Text(255), T7Time2Min Text(255), T7Curr2 Text(255), T7Volts2 Text(255), T7Ohms Text(255)" +
@@ -3777,7 +3786,7 @@ namespace NewBTASProto
                         cmd.ExecuteNonQuery();
                         conn.Close();
 
-                        
+
 
                         //Set any record that is Archived in the old prog to closed in the new...
 
@@ -3805,7 +3814,7 @@ namespace NewBTASProto
                             cmd.ExecuteNonQuery();
                             conn.Close();
                         }
-                        catch(Exception ex)
+                        catch (Exception ex)
                         {
                             //already there...
                         }
@@ -3814,12 +3823,12 @@ namespace NewBTASProto
                         File.Copy(GlobalVars.folderString + @"\BTAS16_DB\BTS16NV_temp.MDB", GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB", true);
 
                         // now we need to run checkDB to make sure that the DB has the latest and greatest...
-                        ((Splash) this.Owner).checkDB();
+                        ((Splash)this.Owner).checkDB();
 
 
                         MessageBox.Show(this, "DataBase successfully imported.", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     }// end try
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         // that didn't work out!
                         MessageBox.Show(this, "DataBase wasn't imported:  " + ex.ToString(), "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -3857,7 +3866,7 @@ namespace NewBTASProto
                     return;
                 }
             }
-            MasterFillerInterface f2 = new MasterFillerInterface(dataGridView1.CurrentRow.Index, d.Rows[dataGridView1.CurrentRow.Index][1].ToString(),(int)pci.Rows[dataGridView1.CurrentRow.Index][3]);
+            MasterFillerInterface f2 = new MasterFillerInterface(dataGridView1.CurrentRow.Index, d.Rows[dataGridView1.CurrentRow.Index][1].ToString(), (int)pci.Rows[dataGridView1.CurrentRow.Index][3]);
             f2.Owner = this;
             f2.Show();
         }
@@ -3868,21 +3877,170 @@ namespace NewBTASProto
             {
                 if ((bool)d.Rows[i][5])
                 {
-                    MessageBox.Show(this, "Cannot Run Find Stations When a Test is Running","Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                    MessageBox.Show(this, "Cannot Run Find Stations When a Test is Running", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
             }
-                // create a thread to go through and look for the stations, this way the UI will still work while the search is happening
-                ThreadPool.QueueUserWorkItem(s =>
+            // create a thread to go through and look for the stations, this way the UI will still work while the search is happening
+            ThreadPool.QueueUserWorkItem(s =>
+            {
+
+                // setup the canellation token
+                CancellationToken token = (CancellationToken)s;
+
+
+                this.Invoke((MethodInvoker)delegate
                 {
+                    commPortSettingsToolStripMenuItem.Enabled = false;
+                    // start by disabling the button while we look for stations
+                    toolStripMenuItem34.Enabled = false;
+                    // also disable the grid, so the user cannot interfere with the search
+                    dataGridView1.Enabled = false;
+                    //select the first row as your selected cell
+                    dataGridView1.CurrentCell = dataGridView1.Rows[0].Cells[0];
+                    dataGridView1.ClearSelection();
+                });
 
-                    // setup the canellation token
-                    CancellationToken token = (CancellationToken)s;
+                Thread.Sleep(250);
+                if (token.IsCancellationRequested) { return; }
+                Thread.Sleep(250);
+                if (token.IsCancellationRequested) { return; }
 
+                // turn on all of the in use buttons
+                for (int i = 0; i < 16; i++)
+                {
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        updateD(i, 4, true);
+                        dataGridView1.Rows[i].Cells[4].Style.BackColor = Color.Red;
+                    });
+                }
+                // here is the for loop we'll use to look for cscans
+                for (int i = 0; i < 15; i++)
+                {
 
                     this.Invoke((MethodInvoker)delegate
                     {
-                        commPortSettingsToolStripMenuItem.Enabled = false;
+                        dataGridView1.CurrentCell = dataGridView1.Rows[i].Cells[0];
+                        dataGridView1.ClearSelection();
+                    });
+
+                    //give it time to check the channel
+                    Thread.Sleep(250);
+                    if (token.IsCancellationRequested) { return; }
+                    Thread.Sleep(250);
+                    if (token.IsCancellationRequested) { return; }
+                    Thread.Sleep(250);
+                    if (token.IsCancellationRequested) { return; }
+                    Thread.Sleep(250);
+                    if (token.IsCancellationRequested) { return; }
+
+                    // move the current channel
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        dataGridView1.CurrentCell = dataGridView1.Rows[i + 1].Cells[0];
+                        dataGridView1.ClearSelection();
+                    });
+
+                    // wait again
+                    Thread.Sleep(100);
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        if (dataGridView1.Rows[i].Cells[4].Style.BackColor == Color.Red)
+                        {
+                            updateD(i, 4, false);
+                            dataGridView1.Rows[i].Cells[4].Style.BackColor = Color.Gainsboro;
+                        }
+                    });
+                }
+
+                //Finally take care of the last channel
+                //give it time to check the channel
+
+                Thread.Sleep(250);
+                if (token.IsCancellationRequested) { return; }
+                Thread.Sleep(250);
+                if (token.IsCancellationRequested) { return; }
+                Thread.Sleep(250);
+                if (token.IsCancellationRequested) { return; }
+                Thread.Sleep(250);
+                if (token.IsCancellationRequested) { return; }
+
+                // move back to channel 0
+                this.Invoke((MethodInvoker)delegate
+                {
+                    dataGridView1.CurrentCell = dataGridView1.Rows[0].Cells[0];
+                    dataGridView1.ClearSelection();
+                });
+
+                // wait again
+                Thread.Sleep(100);
+                this.Invoke((MethodInvoker)delegate
+                {
+                    if (dataGridView1.Rows[15].Cells[4].Style.BackColor == Color.Red)
+                    {
+                        updateD(15, 4, false);
+                        dataGridView1.Rows[15].Cells[4].Style.BackColor = Color.Gainsboro;
+                    }
+                });
+
+                bool foundOne = false;
+                // let's see if we found any!
+                for (int i = 0; i < 16; i++)
+                {
+                    if ((bool)d.Rows[i][4])
+                    {
+                        foundOne = true;
+                        break;
+                    }
+                }
+
+                Thread.Sleep(750);
+
+                if (!foundOne)
+                {
+                    // flip the comms!
+                    // stop all of the scanning threads
+                    try
+                    {
+                        cPollIC.Cancel();
+                        cPollCScans.Cancel();
+                        sequentialScanT.Cancel();
+
+                        cPollIC.Dispose();
+                        cPollCScans.Dispose();
+                        sequentialScanT.Dispose();
+                    }
+                    catch (Exception ex)
+                    {
+                        if (ex is NullReferenceException || ex is ObjectDisposedException)
+                        {
+
+                        }
+                        else
+                        {
+                            throw ex;
+                        }
+                    }
+
+
+                    // close the comms
+                    CSCANComPort.Close();
+                    CSCANComPort.Dispose();
+                    ICComPort.Close();
+                    ICComPort.Dispose();
+
+                    //Update the Globals
+                    string temp = GlobalVars.CSCANComPort;
+                    GlobalVars.CSCANComPort = GlobalVars.ICComPort;
+                    GlobalVars.ICComPort = temp;
+
+                    //Start the threads back up
+                    Scan();
+
+                    //rerun the same code...
+                    this.Invoke((MethodInvoker)delegate
+                    {
                         // start by disabling the button while we look for stations
                         toolStripMenuItem34.Enabled = false;
                         // also disable the grid, so the user cannot interfere with the search
@@ -3896,6 +4054,7 @@ namespace NewBTASProto
                     if (token.IsCancellationRequested) { return; }
                     Thread.Sleep(250);
                     if (token.IsCancellationRequested) { return; }
+
 
                     // turn on all of the in use buttons
                     for (int i = 0; i < 16; i++)
@@ -3947,7 +4106,6 @@ namespace NewBTASProto
 
                     //Finally take care of the last channel
                     //give it time to check the channel
-
                     Thread.Sleep(250);
                     if (token.IsCancellationRequested) { return; }
                     Thread.Sleep(250);
@@ -3974,168 +4132,19 @@ namespace NewBTASProto
                             dataGridView1.Rows[15].Cells[4].Style.BackColor = Color.Gainsboro;
                         }
                     });
+                }// end if
 
-                    bool foundOne = false;
-                    // let's see if we found any!
-                    for (int i = 0; i < 16; i++)
-                    {
-                        if ((bool)d.Rows[i][4])
-                        {
-                            foundOne = true;
-                            break;
-                        }
-                    }
+                //reenable the button before exit
+                this.Invoke((MethodInvoker)delegate
+                {
+                    commPortSettingsToolStripMenuItem.Enabled = true;
+                    // start by disabling the button while we look for stations
+                    toolStripMenuItem34.Enabled = true;
+                    // also disable the grid, so the user cannot interfere with the search
+                    dataGridView1.Enabled = true;
+                });
 
-                    Thread.Sleep(750);
-
-                    if (!foundOne)
-                    {
-                        // flip the comms!
-                        // stop all of the scanning threads
-                        try
-                        {
-                            cPollIC.Cancel();
-                            cPollCScans.Cancel();
-                            sequentialScanT.Cancel();
-
-                            cPollIC.Dispose();
-                            cPollCScans.Dispose();
-                            sequentialScanT.Dispose();
-                        }
-                        catch (Exception ex)
-                        {
-                            if (ex is NullReferenceException || ex is ObjectDisposedException)
-                            {
-
-                            }
-                            else
-                            {
-                                throw ex;
-                            }
-                        }
-
-
-                        // close the comms
-                        CSCANComPort.Close();
-                        CSCANComPort.Dispose();
-                        ICComPort.Close();
-                        ICComPort.Dispose();
-
-                        //Update the Globals
-                        string temp = GlobalVars.CSCANComPort;
-                        GlobalVars.CSCANComPort = GlobalVars.ICComPort;
-                        GlobalVars.ICComPort = temp;
-
-                        //Start the threads back up
-                        Scan();
-
-                        //rerun the same code...
-                        this.Invoke((MethodInvoker)delegate
-                        {
-                            // start by disabling the button while we look for stations
-                            toolStripMenuItem34.Enabled = false;
-                            // also disable the grid, so the user cannot interfere with the search
-                            dataGridView1.Enabled = false;
-                            //select the first row as your selected cell
-                            dataGridView1.CurrentCell = dataGridView1.Rows[0].Cells[0];
-                            dataGridView1.ClearSelection();
-                        });
-
-                        Thread.Sleep(250);
-                        if (token.IsCancellationRequested) { return; }
-                        Thread.Sleep(250);
-                        if (token.IsCancellationRequested) { return; }
-
-
-                        // turn on all of the in use buttons
-                        for (int i = 0; i < 16; i++)
-                        {
-                            this.Invoke((MethodInvoker)delegate
-                            {
-                                updateD(i, 4, true);
-                                dataGridView1.Rows[i].Cells[4].Style.BackColor = Color.Red;
-                            });
-                        }
-                        // here is the for loop we'll use to look for cscans
-                        for (int i = 0; i < 15; i++)
-                        {
-
-                            this.Invoke((MethodInvoker)delegate
-                            {
-                                dataGridView1.CurrentCell = dataGridView1.Rows[i].Cells[0];
-                                dataGridView1.ClearSelection();
-                            });
-
-                            //give it time to check the channel
-                            Thread.Sleep(250);
-                            if (token.IsCancellationRequested) { return; }
-                            Thread.Sleep(250);
-                            if (token.IsCancellationRequested) { return; }
-                            Thread.Sleep(250);
-                            if (token.IsCancellationRequested) { return; }
-                            Thread.Sleep(250);
-                            if (token.IsCancellationRequested) { return; }
-
-                            // move the current channel
-                            this.Invoke((MethodInvoker)delegate
-                            {
-                                dataGridView1.CurrentCell = dataGridView1.Rows[i + 1].Cells[0];
-                                dataGridView1.ClearSelection();
-                            });
-
-                            // wait again
-                            Thread.Sleep(100);
-                            this.Invoke((MethodInvoker)delegate
-                            {
-                                if (dataGridView1.Rows[i].Cells[4].Style.BackColor == Color.Red)
-                                {
-                                    updateD(i, 4, false);
-                                    dataGridView1.Rows[i].Cells[4].Style.BackColor = Color.Gainsboro;
-                                }
-                            });
-                        }
-
-                        //Finally take care of the last channel
-                        //give it time to check the channel
-                        Thread.Sleep(250);
-                        if (token.IsCancellationRequested) { return; }
-                        Thread.Sleep(250);
-                        if (token.IsCancellationRequested) { return; }
-                        Thread.Sleep(250);
-                        if (token.IsCancellationRequested) { return; }
-                        Thread.Sleep(250);
-                        if (token.IsCancellationRequested) { return; }
-
-                        // move back to channel 0
-                        this.Invoke((MethodInvoker)delegate
-                        {
-                            dataGridView1.CurrentCell = dataGridView1.Rows[0].Cells[0];
-                            dataGridView1.ClearSelection();
-                        });
-
-                        // wait again
-                        Thread.Sleep(100);
-                        this.Invoke((MethodInvoker)delegate
-                        {
-                            if (dataGridView1.Rows[15].Cells[4].Style.BackColor == Color.Red)
-                            {
-                                updateD(15, 4, false);
-                                dataGridView1.Rows[15].Cells[4].Style.BackColor = Color.Gainsboro;
-                            }
-                        });
-                    }// end if
-
-                    //reenable the button before exit
-                    this.Invoke((MethodInvoker)delegate
-                    {
-                        commPortSettingsToolStripMenuItem.Enabled = true;
-                        // start by disabling the button while we look for stations
-                        toolStripMenuItem34.Enabled = true;
-                        // also disable the grid, so the user cannot interfere with the search
-                        dataGridView1.Enabled = true;
-                    });
-
-                }, cFindStations.Token);                     // end thread
+            }, cFindStations.Token);                     // end thread
 
         }
 
@@ -4148,7 +4157,7 @@ namespace NewBTASProto
 
         private void toolStripComboBox1_Click(object sender, EventArgs e)
         {
-            
+
         }
 
         private void contextMenuStripGraphPrint_Opening(object sender, CancelEventArgs e)
@@ -4241,7 +4250,7 @@ namespace NewBTASProto
                 comboBox2.Visible = false;
                 comboBox3.Visible = false;
                 chart1.Height = rtbIncoming.Height;
-                chart1.Location = new Point(6,16);
+                chart1.Location = new Point(6, 16);
             }
         }
 
@@ -4456,7 +4465,7 @@ namespace NewBTASProto
                 {
                     if (frm is frmVEWorkOrders)
                     {
-                        frmVEWorkOrders to_control = (frmVEWorkOrders) frm;
+                        frmVEWorkOrders to_control = (frmVEWorkOrders)frm;
 
                         //wait for it to load
                         Thread.Sleep(100);
@@ -4542,7 +4551,7 @@ namespace NewBTASProto
                         {
                             to_control.toolStripCBBats.SelectedIndex = to_control.toolStripCBBats.FindString(label7.Text);
                         });
-                        
+
                         break;
                     }
 
@@ -4618,7 +4627,7 @@ namespace NewBTASProto
 
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(this, "Error, operation did not work!" + ex.Message + Environment.NewLine + ex.StackTrace, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -4650,7 +4659,7 @@ namespace NewBTASProto
                     // we'll have to execute a number of commands...
                     string cmdStr;
                     OleDbCommand cmd;
-                    
+
                     cmdStr = "UPDATE TestType SET Readings='61', [Interval]='240' WHERE TESTNAME='Top Charge-4';";
                     cmd = new OleDbCommand(cmdStr, myAccessConn);
 
@@ -4814,7 +4823,7 @@ namespace NewBTASProto
                     MessageBox.Show(this, "All test settings reset to defaults.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(this, "Error: Test settings were not reset!" + ex.Message + Environment.NewLine + ex.StackTrace, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

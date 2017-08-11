@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.IO.Ports;
 using System.IO;
 using System.Management;
+using System.Threading;
 
 namespace NewBTASProto
 {
@@ -37,11 +38,11 @@ namespace NewBTASProto
                 {
                     comboBox1.Items.Add(port.portName);
                 }
-                if(port.portName == GlobalVars.CSCANComPort)
+                if (port.portName == GlobalVars.CSCANComPort)
                 {
                     comboBox1.SelectedIndex = i;
                 }
-                if(port.friendlyName != "")
+                if (port.friendlyName != "")
                 {
                     comboBox2.Items.Add(port.friendlyName);
                 }
@@ -49,7 +50,7 @@ namespace NewBTASProto
                 {
                     comboBox2.Items.Add(port.portName);
                 }
-                if(port.portName == GlobalVars.ICComPort)
+                if (port.portName == GlobalVars.ICComPort)
                 {
                     comboBox2.SelectedIndex = i;
                 }
@@ -69,7 +70,7 @@ namespace NewBTASProto
                 comboBox2.SelectedItem = GlobalVars.ICComPort;
                 label4.Visible = true;
             }
-            
+
 
         }
 
@@ -175,13 +176,15 @@ namespace NewBTASProto
                     throw ex;
                 }
             }
-           
+
 
             // close the comms
             ((Main_Form)this.Owner).CSCANComPort.Close();
             ((Main_Form)this.Owner).CSCANComPort.Dispose();
             ((Main_Form)this.Owner).ICComPort.Close();
             ((Main_Form)this.Owner).ICComPort.Dispose();
+
+            Thread.Sleep(1000);
 
             //Update the Globals
             int i = 0;

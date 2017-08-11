@@ -644,5 +644,41 @@ namespace NewBTASProto.Properties {
                 this["InterpolateTime"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("20")]
+        public decimal DCVPeriod {
+            get {
+                return ((decimal)(this["DCVPeriod"]));
+            }
+            set {
+                this["DCVPeriod"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool StopOnEnd {
+            get {
+                return ((bool)(this["StopOnEnd"]));
+            }
+            set {
+                this["StopOnEnd"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AddOneMin {
+            get {
+                return ((bool)(this["AddOneMin"]));
+            }
+            set {
+                this["AddOneMin"] = value;
+            }
+        }
     }
 }

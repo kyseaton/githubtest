@@ -165,6 +165,11 @@ namespace NewBTASProto
             outText[25] = KM21;
             outText[26] = ULCH;
             outText[27] = (byte)'Z'; //send wake-up character, terminal ID, WDO, commands and Z
+
+            for (int i = 0; i < 27; i++)
+            {
+                if (outText[i] == 90) { outText[i] = 254; }
+            }
         }
 
     }
