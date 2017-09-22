@@ -302,20 +302,32 @@ namespace NewBTASProto
                 bindingNavigatorDeleteItem.Enabled = false;
                 label15.Visible = true;
                 comboBox2.Enabled = false;
-                numericUpDown6.Enabled = false;
-                numericUpDown5.Enabled = false;
                 numericUpDown3.Enabled = false;
                 numericUpDown4.Enabled = false;
-                numericUpDown10.Enabled = false;
-                numericUpDown9.Enabled = false;
                 numericUpDown8.Enabled = false;
                 numericUpDown7.Enabled = false;
-                numericUpDown15.Enabled = false;
-                numericUpDown14.Enabled = false;
                 numericUpDown12.Enabled = false;
                 numericUpDown11.Enabled = false;
                 numericUpDown13.Enabled = false;
 
+                if (textBox1.Text == "Custom Cap")
+                {
+                    numericUpDown6.Enabled = false;
+                    numericUpDown5.Enabled = false;
+                    numericUpDown10.Enabled = false;
+                    numericUpDown9.Enabled = false;
+                    numericUpDown15.Enabled = true;
+                    numericUpDown14.Enabled = true;
+                }
+                else
+                {
+                    numericUpDown6.Enabled = true;
+                    numericUpDown5.Enabled = true;
+                    numericUpDown10.Enabled = true;
+                    numericUpDown9.Enabled = true;
+                    numericUpDown15.Enabled = false;
+                    numericUpDown14.Enabled = false;
+                }
             }
             else
             {

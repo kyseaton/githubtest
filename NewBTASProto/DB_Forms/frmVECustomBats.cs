@@ -214,7 +214,7 @@ namespace NewBTASProto
             LoadData();
             bindingNavigator1.BindingSource = bindingSource1;
             bindingNavigator1.Select();
-            SetupForms();
+            //SetupForms();
             
             bindingNavigator1.CausesValidation = true;
             
@@ -378,18 +378,18 @@ namespace NewBTASProto
             numericUpDown64.DataBindings.Add("Text", bindingSource1, "T9Volts2");
             // Custom Charge Bindings ("T10Mode, T10Time1Hr, T10Time1Min, T10Curr1, T10Volts1, T10Time2Hr, T10Time2Min, T10Curr2, T10Volts2, T10Ohms")
             comboBox11.DataBindings.Add("Text", bindingSource1, "T10Mode");
-            numericUpDown79.DataBindings.Add("Text", bindingSource1, "T10Time1Hr");
-            numericUpDown78.DataBindings.Add("Text", bindingSource1, "T10Time1Min");
+            //numericUpDown79.DataBindings.Add("Text", bindingSource1, "T10Time1Hr");
+            //numericUpDown78.DataBindings.Add("Text", bindingSource1, "T10Time1Min");
             numericUpDown77.DataBindings.Add("Text", bindingSource1, "T10Curr1");
             numericUpDown76.DataBindings.Add("Text", bindingSource1, "T10Volts1");
-            numericUpDown75.DataBindings.Add("Text", bindingSource1, "T10Time2Hr");
-            numericUpDown74.DataBindings.Add("Text", bindingSource1, "T10Time2Min");
+            //numericUpDown75.DataBindings.Add("Text", bindingSource1, "T10Time2Hr");
+            //numericUpDown74.DataBindings.Add("Text", bindingSource1, "T10Time2Min");
             numericUpDown73.DataBindings.Add("Text", bindingSource1, "T10Curr2");
             numericUpDown72.DataBindings.Add("Text", bindingSource1, "T10Volts2");
             // Custom Cap Bindings ("T11Mode, T11Time1Hr, T11Time1Min, T11Curr1, T11Volts1, T11Time2Hr, T11Time2Min, T11Curr2, T11Volts2, T11Ohms")
             comboBox8.DataBindings.Add("Text", bindingSource1, "T11Mode");
-            numericUpDown55.DataBindings.Add("Text", bindingSource1, "T11Time1Hr");
-            numericUpDown54.DataBindings.Add("Text", bindingSource1, "T11Time1Min");
+            //numericUpDown55.DataBindings.Add("Text", bindingSource1, "T11Time1Hr");
+            //numericUpDown54.DataBindings.Add("Text", bindingSource1, "T11Time1Min");
             numericUpDown53.DataBindings.Add("Text", bindingSource1, "T11Curr1");
             numericUpDown52.DataBindings.Add("Text", bindingSource1, "T11Volts1");
             numericUpDown51.DataBindings.Add("Text", bindingSource1, "T11Ohms");
@@ -415,22 +415,22 @@ namespace NewBTASProto
             numericUpDown91.DataBindings.Add("Text", bindingSource1, "T13Volts2");
             // Custom Charge 2 Bindings ("T14Mode, T14Time1Hr, T14Time1Min, T14Curr1, T14Volts1, T14Time2Hr, T14Time2Min, T14Curr2, T14Volts2, T14Ohms")
             comboBox15.DataBindings.Add("Text", bindingSource1, "T14Mode");
-            numericUpDown106.DataBindings.Add("Text", bindingSource1, "T14Time1Hr");
-            numericUpDown105.DataBindings.Add("Text", bindingSource1, "T14Time1Min");
+            //numericUpDown106.DataBindings.Add("Text", bindingSource1, "T14Time1Hr");
+            //numericUpDown105.DataBindings.Add("Text", bindingSource1, "T14Time1Min");
             numericUpDown104.DataBindings.Add("Text", bindingSource1, "T14Curr1");
             numericUpDown103.DataBindings.Add("Text", bindingSource1, "T14Volts1");
-            numericUpDown102.DataBindings.Add("Text", bindingSource1, "T14Time2Hr");
-            numericUpDown101.DataBindings.Add("Text", bindingSource1, "T14Time2Min");
+            //numericUpDown102.DataBindings.Add("Text", bindingSource1, "T14Time2Hr");
+            //numericUpDown101.DataBindings.Add("Text", bindingSource1, "T14Time2Min");
             numericUpDown100.DataBindings.Add("Text", bindingSource1, "T14Curr2");
             numericUpDown99.DataBindings.Add("Text", bindingSource1, "T14Volts2");
             // Custom Charge 3 Bindings ("T15Mode, T15Time1Hr, T15Time1Min, T15Curr1, T15Volts1, T15Time2Hr, T15Time2Min, T15Curr2, T15Volts2, T15Ohms")
             comboBox16.DataBindings.Add("Text", bindingSource1, "T15Mode");
-            numericUpDown114.DataBindings.Add("Text", bindingSource1, "T15Time1Hr");
-            numericUpDown113.DataBindings.Add("Text", bindingSource1, "T15Time1Min");
+            //numericUpDown114.DataBindings.Add("Text", bindingSource1, "T15Time1Hr");
+            //numericUpDown113.DataBindings.Add("Text", bindingSource1, "T15Time1Min");
             numericUpDown112.DataBindings.Add("Text", bindingSource1, "T15Curr1");
             numericUpDown111.DataBindings.Add("Text", bindingSource1, "T15Volts1");
-            numericUpDown110.DataBindings.Add("Text", bindingSource1, "T15Time2Hr");
-            numericUpDown109.DataBindings.Add("Text", bindingSource1, "T15Time2Min");
+            //numericUpDown110.DataBindings.Add("Text", bindingSource1, "T15Time2Hr");
+            //numericUpDown109.DataBindings.Add("Text", bindingSource1, "T15Time2Min");
             numericUpDown108.DataBindings.Add("Text", bindingSource1, "T15Curr2");
             numericUpDown107.DataBindings.Add("Text", bindingSource1, "T15Volts2");
 
@@ -444,6 +444,87 @@ namespace NewBTASProto
             CustomerCB.DataSource = bindingSource1;
 
 
+            #endregion
+
+            #region setup custom times
+            decimal outVal = 0;
+            // get the custom times from Custom Chg, Custom Chg 2, Custom Chg 3, Custom Cap
+            strAccessSelect = @"SELECT * FROM TestType WHERE TESTNAME='Custom Chg';";
+            DataSet testInfo = new DataSet();
+            OleDbCommand myAccessCmd = new OleDbCommand(strAccessSelect, myAccessConn);
+            OleDbDataAdapter myDataAdapt = new OleDbDataAdapter(myAccessCmd);
+
+            lock (Main_Form.dataBaseLock)
+            {
+                myAccessConn.Open();
+                myDataAdapt.Fill(testInfo, "testInfo");
+                myAccessConn.Close();
+            }
+            try { numericUpDown79.Value = decimal.Parse(testInfo.Tables[0].Rows[0][7].ToString()); }
+            catch { numericUpDown79.Value = 0; }
+            try { numericUpDown78.Value = decimal.Parse(testInfo.Tables[0].Rows[0][8].ToString()); }
+            catch { numericUpDown78.Value = 0; }
+            try { numericUpDown75.Value = decimal.Parse(testInfo.Tables[0].Rows[0][11].ToString()); }
+            catch { numericUpDown75.Value = 0; }
+            try { numericUpDown74.Value = decimal.Parse(testInfo.Tables[0].Rows[0][12].ToString()); }
+            catch { numericUpDown74.Value = 0; }
+
+            strAccessSelect = @"SELECT * FROM TestType WHERE TESTNAME='Custom Chg 2';";
+            testInfo = new DataSet();
+            myAccessCmd = new OleDbCommand(strAccessSelect, myAccessConn);
+            myDataAdapt = new OleDbDataAdapter(myAccessCmd);
+
+            lock (Main_Form.dataBaseLock)
+            {
+                myAccessConn.Open();
+                myDataAdapt.Fill(testInfo, "testInfo");
+                myAccessConn.Close();
+            }
+
+            try { numericUpDown106.Value = decimal.Parse(testInfo.Tables[0].Rows[0][7].ToString()); }
+            catch { numericUpDown106.Value = 0; }
+            try { numericUpDown105.Value = decimal.Parse(testInfo.Tables[0].Rows[0][8].ToString()); }
+            catch { numericUpDown105.Value = 0; }
+            try { numericUpDown102.Value = decimal.Parse(testInfo.Tables[0].Rows[0][11].ToString()); }
+            catch { numericUpDown102.Value = 0; }
+            try { numericUpDown101.Value = decimal.Parse(testInfo.Tables[0].Rows[0][12].ToString()); }
+            catch { numericUpDown101.Value = 0; }
+
+            strAccessSelect = @"SELECT * FROM TestType WHERE TESTNAME='Custom Chg 3';";
+            testInfo = new DataSet();
+            myAccessCmd = new OleDbCommand(strAccessSelect, myAccessConn);
+            myDataAdapt = new OleDbDataAdapter(myAccessCmd);
+
+            lock (Main_Form.dataBaseLock)
+            {
+                myAccessConn.Open();
+                myDataAdapt.Fill(testInfo, "testInfo");
+                myAccessConn.Close();
+            }
+            try { numericUpDown114.Value = decimal.Parse(testInfo.Tables[0].Rows[0][7].ToString()); }
+            catch { numericUpDown114.Value = 0; } 
+            try { numericUpDown113.Value = decimal.Parse(testInfo.Tables[0].Rows[0][8].ToString()); }
+            catch { numericUpDown113.Value = 0; }
+            try { numericUpDown110.Value = decimal.Parse(testInfo.Tables[0].Rows[0][11].ToString()); }
+            catch { numericUpDown110.Value = 0; } 
+            try { numericUpDown109.Value = decimal.Parse(testInfo.Tables[0].Rows[0][12].ToString()); }
+            catch { numericUpDown109.Value = 0; }
+
+            strAccessSelect = @"SELECT * FROM TestType WHERE TESTNAME='Custom Cap';";
+            testInfo = new DataSet();
+            myAccessCmd = new OleDbCommand(strAccessSelect, myAccessConn);
+            myDataAdapt = new OleDbDataAdapter(myAccessCmd);
+
+            lock (Main_Form.dataBaseLock)
+            {
+                myAccessConn.Open();
+                myDataAdapt.Fill(testInfo, "testInfo");
+                myAccessConn.Close();
+            }
+            try { numericUpDown55.Value = decimal.Parse(testInfo.Tables[0].Rows[0][16].ToString()); }
+            catch { numericUpDown55.Value = 0; }
+            try { numericUpDown54.Value = decimal.Parse(testInfo.Tables[0].Rows[0][17].ToString()); }
+            catch { numericUpDown54.Value = 0; }
             #endregion
 
         }
@@ -2620,6 +2701,11 @@ namespace NewBTASProto
                 label194.Text = "Main Charge Current";
                 label192.Text = "Peak Transfer Voltage";
             }
+
+        }
+
+        private void tabPage11_Click(object sender, EventArgs e)
+        {
 
         }
         

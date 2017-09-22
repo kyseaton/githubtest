@@ -29,6 +29,7 @@ namespace NewBTASProto
             checkBox3.Checked = GlobalVars.allowZeroTest;
             numericUpDown1.Value = GlobalVars.rows2Dis;
             checkBox7.Checked = GlobalVars.advance2Short;
+            checkBox10.Checked = GlobalVars.manualCol;
             checkBox4.Checked = GlobalVars.robustCSCAN;
             checkBox5.Checked = GlobalVars.InterpolateTime;
             checkBox8.Checked = GlobalVars.StopOnEnd;
@@ -59,9 +60,18 @@ namespace NewBTASProto
             GlobalVars.rows2Dis = numericUpDown1.Value;
             GlobalVars.robustCSCAN = checkBox4.Checked;
             GlobalVars.advance2Short = checkBox7.Checked;
+            GlobalVars.manualCol = checkBox10.Checked;
 
+            // adjust for rows to dis
             ((Main_Form)this.Owner).dataGridView1.Height = Convert.ToInt32(27 + GlobalVars.rows2Dis * 21);
 
+            //also setup manual column adjustment
+            if (GlobalVars.manualCol == true) { ((Main_Form)this.Owner).dataGridView1.AllowUserToResizeColumns = true; }
+            else 
+            { 
+                ((Main_Form)this.Owner).dataGridView1.AllowUserToResizeColumns = false;
+                ((Main_Form)this.Owner).dataGridView1_Resize(null, null);
+            }
 
             float dpiX;
             Graphics graphics = this.CreateGraphics();
@@ -183,6 +193,21 @@ namespace NewBTASProto
         }
 
         private void checkBox9_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void checkBox10_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label23_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label24_Click(object sender, EventArgs e)
         {
 
         }

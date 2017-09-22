@@ -781,6 +781,53 @@ namespace NewBTASProto
 
                     #endregion
 
+
+                    #region load test readings and interval values (true for all cases)
+                    // Now we'll load the test parameters
+                    // We need to know the Interval and the number of readings///////////////////////////////////////////////////////////////////////
+
+                    int readings;
+                    int interval;
+
+                    //  open the db and pull in the options table
+                    try
+                    {
+                        strAccessSelect = @"SELECT * FROM TestType WHERE TESTNAME='" + testType + "';";
+                        DataSet settings = new DataSet();
+                        OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
+                        OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
+
+                        lock (dataBaseLock)
+                        {
+                            myAccessConn.Open();
+                            myDataAdapter.Fill(settings, "TestType");
+                            myAccessConn.Close();
+                        }
+
+                        readings = (int)settings.Tables[0].Rows[0][3];
+                        interval = (int)settings.Tables[0].Rows[0][4];
+
+                    }
+                    catch (Exception ex)
+                    {
+                        myAccessConn.Close();
+
+                        updateD(station, 5, false);
+                        if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
+                        //clear values from d
+                        updateD(station, 7, ("Error"));
+                        if (MasterSlaveTest) { updateD(slaveRow, 7, "Error"); }
+                        clearTLock();
+                        cRunTest[station].Cancel();
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            sendNote(station, 3, "Error: Failed to retrieve the required data from the DataBase.");
+                            MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        });
+                        return;
+                    }
+                    #endregion
+
                     #region if we are doing the autoconfig, let's get the charger settings in order and then loaded into the charger! (case 2 only)
 
                     // these will be used later in the IC check portion to confirm that the charger is running as expected
@@ -844,6 +891,8 @@ namespace NewBTASProto
                                 myDataAdapter.Fill(testSettings, "testSettings");
                                 myAccessConn.Close();
                             }
+
+                            
 
                             // now we can assign the battery settings to the GlobalVars.
                             // We will decide on the settings based on the test being performed...
@@ -1256,10 +1305,9 @@ namespace NewBTASProto
                                         vSet2 = 0;
                                         break;
                                     case "Custom Chg":
-                                        tempKMStore[0] = Convert.ToByte(48 + int.Parse(battery.Tables[0].Rows[0][132].ToString().Substring(0, 2)));         //mode
-                                        tempKMStore[1] = Convert.ToByte(48 + int.Parse(battery.Tables[0].Rows[0][133].ToString()));                         //time hours
-                                        if (tempKMStore[0] == (20 + 48) || tempKMStore[0] == (21 + 48)) { tempKMStore[2] = (byte)(48); }
-                                        else { tempKMStore[2] = (GlobalVars.AddOneMin ? Convert.ToByte(49) : Convert.ToByte(48)); }                          //time mins
+                                        tempKMStore[0] = Convert.ToByte(48 + int.Parse(battery.Tables[0].Rows[0][132].ToString().Substring(0, 2)));             //mode
+                                        tempKMStore[1] = Convert.ToByte(48 + int.Parse(testSettings.Tables[0].Rows[0][7].ToString()));                          //time hours
+                                        tempKMStore[2] = Convert.ToByte(48 + int.Parse(testSettings.Tables[0].Rows[0][8].ToString()));                          //time mins
 
                                         if (d.Rows[station][10].ToString().Contains("mini"))
                                         {
@@ -1281,8 +1329,8 @@ namespace NewBTASProto
 
                                         if (tempKMStore[0] == (20 + 48) || tempKMStore[0] == (21 + 48))
                                         {
-                                            tempKMStore[7] = Convert.ToByte(48 + int.Parse(battery.Tables[0].Rows[0][137].ToString()));                     //time 2 hours
-                                            tempKMStore[8] = (GlobalVars.AddOneMin ? Convert.ToByte(49) : Convert.ToByte(48));                              //time 2 mins
+                                            tempKMStore[7] = Convert.ToByte(48 + int.Parse(testSettings.Tables[0].Rows[0][11].ToString()));                          //time 2 hours
+                                            tempKMStore[8] = Convert.ToByte(48 + int.Parse(testSettings.Tables[0].Rows[0][12].ToString()));                          //time 2 mins
                                             if (d.Rows[station][10].ToString().Contains("mini"))
                                             {
                                                 tempKMStore[9] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][139].ToString())) * 10));        //top current 2 byte
@@ -1331,8 +1379,8 @@ namespace NewBTASProto
                                         tempKMStore[11] = (byte)48;                                                                                //top voltage 2 byte
                                         tempKMStore[12] = (byte)48;                                                                                //bottom voltage 2 byte
 
-                                        tempKMStore[13] = Convert.ToByte(48 + int.Parse(battery.Tables[0].Rows[0][143].ToString()));               //discharge time hours
-                                        tempKMStore[14] = (GlobalVars.AddOneMin ? Convert.ToByte(49) : Convert.ToByte(48));                        //discharge time mins
+                                        tempKMStore[13] = Convert.ToByte(48 + int.Parse(testSettings.Tables[0].Rows[0][16].ToString()));                         //discharge time hours
+                                        tempKMStore[14] = Convert.ToByte(48 + int.Parse(testSettings.Tables[0].Rows[0][17].ToString()));                         //discharge time mins
                                         if (tempKMStore[0] != 32 + 48)
                                         {
                                             if (d.Rows[station][10].ToString().Contains("mini"))
@@ -1460,9 +1508,8 @@ namespace NewBTASProto
                                         break;
                                     case "Custom Chg 2":
                                         tempKMStore[0] = Convert.ToByte(48 + int.Parse(battery.Tables[0].Rows[0][172].ToString().Substring(0, 2)));         //mode
-                                        tempKMStore[1] = Convert.ToByte(48 + int.Parse(battery.Tables[0].Rows[0][173].ToString()));                         //time hours
-                                        if (tempKMStore[0] == (20 + 48) || tempKMStore[0] == (21 + 48)) { tempKMStore[2] = (byte)(48); }
-                                        else { tempKMStore[2] = (GlobalVars.AddOneMin ? Convert.ToByte(49) : Convert.ToByte(48)); }                                                                        //time mins
+                                        tempKMStore[1] = Convert.ToByte(48 + int.Parse(testSettings.Tables[0].Rows[0][7].ToString()));                          //time hours
+                                        tempKMStore[2] = Convert.ToByte(48 + int.Parse(testSettings.Tables[0].Rows[0][8].ToString()));                          //time mins
 
                                         if (d.Rows[station][10].ToString().Contains("mini"))
                                         {
@@ -1484,8 +1531,8 @@ namespace NewBTASProto
 
                                         if (tempKMStore[0] == (20 + 48) || tempKMStore[0] == (21 + 48))
                                         {
-                                            tempKMStore[7] = Convert.ToByte(48 + int.Parse(battery.Tables[0].Rows[0][177].ToString()));                     //time 2 hours
-                                            tempKMStore[8] = (GlobalVars.AddOneMin ? Convert.ToByte(49) : Convert.ToByte(48));                              //time 2 mins
+                                            tempKMStore[7] = Convert.ToByte(48 + int.Parse(testSettings.Tables[0].Rows[0][11].ToString()));                          //time 2 hours
+                                            tempKMStore[8] = Convert.ToByte(48 + int.Parse(testSettings.Tables[0].Rows[0][12].ToString()));                          //time 2 mins
                                             if (d.Rows[station][10].ToString().Contains("mini"))
                                             {
                                                 tempKMStore[9] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][179].ToString())) * 10));        //top current 2 byte
@@ -1520,9 +1567,8 @@ namespace NewBTASProto
                                         break;
                                     case "Custom Chg 3":
                                         tempKMStore[0] = Convert.ToByte(48 + int.Parse(battery.Tables[0].Rows[0][182].ToString().Substring(0, 2)));         //mode
-                                        tempKMStore[1] = Convert.ToByte(48 + int.Parse(battery.Tables[0].Rows[0][183].ToString()));                         //time hours
-                                        if (tempKMStore[0] == (20 + 48) || tempKMStore[0] == (21 + 48)) { tempKMStore[2] = (byte)(48); }
-                                        else { tempKMStore[2] = (GlobalVars.AddOneMin ? Convert.ToByte(49) : Convert.ToByte(48)); }                                                                                       //time mins
+                                        tempKMStore[1] = Convert.ToByte(48 + int.Parse(testSettings.Tables[0].Rows[0][7].ToString()));                          //time hours
+                                        tempKMStore[2] = Convert.ToByte(48 + int.Parse(testSettings.Tables[0].Rows[0][8].ToString()));                          //time mins
 
                                         if (d.Rows[station][10].ToString().Contains("mini"))
                                         {
@@ -1544,8 +1590,8 @@ namespace NewBTASProto
 
                                         if (tempKMStore[0] == (20 + 48) || tempKMStore[0] == (21 + 48))
                                         {
-                                            tempKMStore[7] = Convert.ToByte(48 + int.Parse(battery.Tables[0].Rows[0][187].ToString()));                     //time 2 hours
-                                            tempKMStore[8] = (GlobalVars.AddOneMin ? Convert.ToByte(49) : Convert.ToByte(48));                              //time 2 mins
+                                            tempKMStore[7] = Convert.ToByte(48 + int.Parse(testSettings.Tables[0].Rows[0][11].ToString()));                          //time 2 hours
+                                            tempKMStore[8] = Convert.ToByte(48 + int.Parse(testSettings.Tables[0].Rows[0][12].ToString()));                          //time 2 mins
                                             if (d.Rows[station][10].ToString().Contains("mini"))
                                             {
                                                 tempKMStore[9] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][189].ToString())) * 10));        //top current 2 byte
@@ -1816,51 +1862,6 @@ namespace NewBTASProto
 
                     #endregion
 
-                    #region load test readings and interval values (true for all cases)
-                    // Now we'll load the test parameters
-                    // We need to know the Interval and the number of readings///////////////////////////////////////////////////////////////////////
-
-                    int readings;
-                    int interval;
-
-                    //  open the db and pull in the options table
-                    try
-                    {
-                        strAccessSelect = @"SELECT * FROM TestType WHERE TESTNAME='" + testType + "';";
-                        DataSet settings = new DataSet();
-                        OleDbCommand myAccessCommand = new OleDbCommand(strAccessSelect, myAccessConn);
-                        OleDbDataAdapter myDataAdapter = new OleDbDataAdapter(myAccessCommand);
-
-                        lock (dataBaseLock)
-                        {
-                            myAccessConn.Open();
-                            myDataAdapter.Fill(settings, "TestType");
-                            myAccessConn.Close();
-                        }
-
-                        readings = (int)settings.Tables[0].Rows[0][3];
-                        interval = (int)settings.Tables[0].Rows[0][4];
-
-                    }
-                    catch (Exception ex)
-                    {
-                        myAccessConn.Close();
-
-                        updateD(station, 5, false);
-                        if (MasterSlaveTest) { updateD(slaveRow, 5, false); }
-                        //clear values from d
-                        updateD(station, 7, ("Error"));
-                        if (MasterSlaveTest) { updateD(slaveRow, 7, "Error"); }
-                        clearTLock();
-                        cRunTest[station].Cancel();
-                        this.Invoke((MethodInvoker)delegate()
-                        {
-                            sendNote(station, 3, "Error: Failed to retrieve the required data from the DataBase.");
-                            MessageBox.Show(this, "Error: Failed to retrieve the required data from the DataBase.\n" + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        });
-                        return;
-                    }
-                    #endregion
 
                     #region check for new or resume and get step numbers
                     // step number variables for the 6 possible workorders..
@@ -3315,10 +3316,10 @@ namespace NewBTASProto
                         try
                         {
                             // check if we need to take a reading
-                            if (((currentReading - 1) * interval * 1000) < stopwatch.Elapsed.Add(offset).TotalMilliseconds || (GlobalVars.StopOnEnd && d.Rows[station][11].ToString() == "END"))
+                            if (((currentReading - 1) * interval * 1000) < stopwatch.Elapsed.Add(offset).TotalMilliseconds || (GlobalVars.StopOnEnd && (d.Rows[station][11].ToString() == "END" || d.Rows[station][11].ToString() == "Peak End")))
                             {
                                 //Compensate for the "END"
-                                if (GlobalVars.StopOnEnd && d.Rows[station][11].ToString() == "END")
+                                if (GlobalVars.StopOnEnd && (d.Rows[station][11].ToString() == "END" || d.Rows[station][11].ToString() == "Peak End"))
                                 {
                                     currentReading = readings;
                                 }

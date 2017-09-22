@@ -32,6 +32,20 @@
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label23 = new System.Windows.Forms.Label();
+            this.checkBox10 = new System.Windows.Forms.CheckBox();
+            this.label24 = new System.Windows.Forms.Label();
+            this.label21 = new System.Windows.Forms.Label();
+            this.label22 = new System.Windows.Forms.Label();
+            this.label20 = new System.Windows.Forms.Label();
+            this.label19 = new System.Windows.Forms.Label();
+            this.label18 = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label37 = new System.Windows.Forms.Label();
+            this.checkBox9 = new System.Windows.Forms.CheckBox();
+            this.label14 = new System.Windows.Forms.Label();
             this.checkBox8 = new System.Windows.Forms.CheckBox();
             this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
@@ -59,17 +73,6 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.checkBox7 = new System.Windows.Forms.CheckBox();
             this.label13 = new System.Windows.Forms.Label();
-            this.checkBox9 = new System.Windows.Forms.CheckBox();
-            this.label14 = new System.Windows.Forms.Label();
-            this.label37 = new System.Windows.Forms.Label();
-            this.label15 = new System.Windows.Forms.Label();
-            this.label16 = new System.Windows.Forms.Label();
-            this.label17 = new System.Windows.Forms.Label();
-            this.label18 = new System.Windows.Forms.Label();
-            this.label19 = new System.Windows.Forms.Label();
-            this.label20 = new System.Windows.Forms.Label();
-            this.label21 = new System.Windows.Forms.Label();
-            this.label22 = new System.Windows.Forms.Label();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
@@ -81,7 +84,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(446, 374);
+            this.button1.Location = new System.Drawing.Point(446, 411);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 1;
@@ -91,7 +94,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(527, 374);
+            this.button2.Location = new System.Drawing.Point(527, 411);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 2;
@@ -101,6 +104,9 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.label23);
+            this.groupBox2.Controls.Add(this.checkBox10);
+            this.groupBox2.Controls.Add(this.label24);
             this.groupBox2.Controls.Add(this.label21);
             this.groupBox2.Controls.Add(this.label22);
             this.groupBox2.Controls.Add(this.label20);
@@ -139,10 +145,137 @@
             this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox2.Location = new System.Drawing.Point(12, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(590, 303);
+            this.groupBox2.Size = new System.Drawing.Size(590, 340);
             this.groupBox2.TabIndex = 8;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Global Settings";
+            // 
+            // label23
+            // 
+            this.label23.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.label23.Location = new System.Drawing.Point(6, 299);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(578, 2);
+            this.label23.TabIndex = 110;
+            this.label23.Click += new System.EventHandler(this.label23_Click);
+            // 
+            // checkBox10
+            // 
+            this.checkBox10.AutoSize = true;
+            this.checkBox10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox10.Location = new System.Drawing.Point(524, 304);
+            this.checkBox10.Name = "checkBox10";
+            this.checkBox10.Size = new System.Drawing.Size(59, 17);
+            this.checkBox10.TabIndex = 109;
+            this.checkBox10.Text = "Enable";
+            this.checkBox10.UseVisualStyleBackColor = true;
+            this.checkBox10.CheckedChanged += new System.EventHandler(this.checkBox10_CheckedChanged);
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label24.Location = new System.Drawing.Point(389, 305);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(130, 13);
+            this.label24.TabIndex = 108;
+            this.label24.Text = "Manually Resize Columns:";
+            this.label24.Click += new System.EventHandler(this.label24_Click);
+            // 
+            // label21
+            // 
+            this.label21.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.label21.Location = new System.Drawing.Point(6, 247);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(578, 2);
+            this.label21.TabIndex = 107;
+            // 
+            // label22
+            // 
+            this.label22.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.label22.Location = new System.Drawing.Point(6, 272);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(578, 2);
+            this.label22.TabIndex = 106;
+            // 
+            // label20
+            // 
+            this.label20.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.label20.Location = new System.Drawing.Point(6, 222);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(578, 2);
+            this.label20.TabIndex = 104;
+            // 
+            // label19
+            // 
+            this.label19.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.label19.Location = new System.Drawing.Point(6, 197);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(578, 2);
+            this.label19.TabIndex = 103;
+            // 
+            // label18
+            // 
+            this.label18.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.label18.Location = new System.Drawing.Point(6, 169);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(578, 2);
+            this.label18.TabIndex = 102;
+            // 
+            // label17
+            // 
+            this.label17.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.label17.Location = new System.Drawing.Point(6, 144);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(578, 2);
+            this.label17.TabIndex = 101;
+            // 
+            // label16
+            // 
+            this.label16.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.label16.Location = new System.Drawing.Point(6, 119);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(578, 2);
+            this.label16.TabIndex = 100;
+            // 
+            // label15
+            // 
+            this.label15.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.label15.Location = new System.Drawing.Point(6, 91);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(578, 2);
+            this.label15.TabIndex = 99;
+            // 
+            // label37
+            // 
+            this.label37.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.label37.Location = new System.Drawing.Point(6, 63);
+            this.label37.Name = "label37";
+            this.label37.Size = new System.Drawing.Size(578, 2);
+            this.label37.TabIndex = 98;
+            // 
+            // checkBox9
+            // 
+            this.checkBox9.AutoSize = true;
+            this.checkBox9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox9.Location = new System.Drawing.Point(524, 277);
+            this.checkBox9.Name = "checkBox9";
+            this.checkBox9.Size = new System.Drawing.Size(59, 17);
+            this.checkBox9.TabIndex = 34;
+            this.checkBox9.Text = "Enable";
+            this.checkBox9.UseVisualStyleBackColor = true;
+            this.checkBox9.CheckedChanged += new System.EventHandler(this.checkBox9_CheckedChanged);
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label14.Location = new System.Drawing.Point(158, 278);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(361, 13);
+            this.label14.TabIndex = 33;
+            this.label14.Text = "Add One Min to Programmed Test Time When Using ICA with AutoConfig:  ";
+            this.label14.Click += new System.EventHandler(this.label14_Click);
             // 
             // checkBox8
             // 
@@ -159,11 +292,11 @@
             // 
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(199, 253);
+            this.label9.Location = new System.Drawing.Point(137, 253);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(319, 13);
+            this.label9.Size = new System.Drawing.Size(381, 13);
             this.label9.TabIndex = 31;
-            this.label9.Text = "End test as soon as END is detected rather than indicate a Fault:  ";
+            this.label9.Text = "End test as soon as END or Peak End is detected rather than indicate a Fault:  ";
             // 
             // label8
             // 
@@ -216,7 +349,7 @@
             // 
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(350, 228);
+            this.label7.Location = new System.Drawing.Point(351, 228);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(168, 13);
             this.label7.TabIndex = 27;
@@ -466,7 +599,7 @@
             this.groupBox1.Controls.Add(this.checkBox7);
             this.groupBox1.Controls.Add(this.label13);
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox1.Location = new System.Drawing.Point(12, 321);
+            this.groupBox1.Location = new System.Drawing.Point(12, 358);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(590, 46);
             this.groupBox1.TabIndex = 9;
@@ -489,112 +622,17 @@
             // 
             this.label13.AutoSize = true;
             this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.Location = new System.Drawing.Point(6, 16);
+            this.label13.Location = new System.Drawing.Point(200, 16);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(319, 13);
             this.label13.TabIndex = 8;
             this.label13.Text = "Force Advance to Shorting Test on Current Fault from Discharge:  ";
             // 
-            // checkBox9
-            // 
-            this.checkBox9.AutoSize = true;
-            this.checkBox9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox9.Location = new System.Drawing.Point(524, 277);
-            this.checkBox9.Name = "checkBox9";
-            this.checkBox9.Size = new System.Drawing.Size(59, 17);
-            this.checkBox9.TabIndex = 34;
-            this.checkBox9.Text = "Enable";
-            this.checkBox9.UseVisualStyleBackColor = true;
-            this.checkBox9.CheckedChanged += new System.EventHandler(this.checkBox9_CheckedChanged);
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label14.Location = new System.Drawing.Point(157, 278);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(361, 13);
-            this.label14.TabIndex = 33;
-            this.label14.Text = "Add One Min to Programmed Test Time When Using ICA with AutoConfig:  ";
-            this.label14.Click += new System.EventHandler(this.label14_Click);
-            // 
-            // label37
-            // 
-            this.label37.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.label37.Location = new System.Drawing.Point(6, 63);
-            this.label37.Name = "label37";
-            this.label37.Size = new System.Drawing.Size(578, 2);
-            this.label37.TabIndex = 98;
-            // 
-            // label15
-            // 
-            this.label15.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.label15.Location = new System.Drawing.Point(6, 91);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(578, 2);
-            this.label15.TabIndex = 99;
-            // 
-            // label16
-            // 
-            this.label16.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.label16.Location = new System.Drawing.Point(6, 119);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(578, 2);
-            this.label16.TabIndex = 100;
-            // 
-            // label17
-            // 
-            this.label17.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.label17.Location = new System.Drawing.Point(6, 144);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(578, 2);
-            this.label17.TabIndex = 101;
-            // 
-            // label18
-            // 
-            this.label18.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.label18.Location = new System.Drawing.Point(6, 169);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(578, 2);
-            this.label18.TabIndex = 102;
-            // 
-            // label19
-            // 
-            this.label19.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.label19.Location = new System.Drawing.Point(6, 197);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(578, 2);
-            this.label19.TabIndex = 103;
-            // 
-            // label20
-            // 
-            this.label20.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.label20.Location = new System.Drawing.Point(6, 222);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(578, 2);
-            this.label20.TabIndex = 104;
-            // 
-            // label21
-            // 
-            this.label21.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.label21.Location = new System.Drawing.Point(6, 247);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(578, 2);
-            this.label21.TabIndex = 107;
-            // 
-            // label22
-            // 
-            this.label22.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.label22.Location = new System.Drawing.Point(6, 272);
-            this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(578, 2);
-            this.label22.TabIndex = 106;
-            // 
             // CombinationTestSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(614, 409);
+            this.ClientSize = new System.Drawing.Size(614, 446);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.button2);
@@ -663,5 +701,8 @@
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label label37;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.CheckBox checkBox10;
+        private System.Windows.Forms.Label label24;
     }
 }

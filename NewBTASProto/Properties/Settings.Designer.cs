@@ -680,5 +680,173 @@ namespace NewBTASProto.Properties {
                 this["AddOneMin"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool manualCol {
+            get {
+                return ((bool)(this["manualCol"]));
+            }
+            set {
+                this["manualCol"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int col0Width {
+            get {
+                return ((int)(this["col0Width"]));
+            }
+            set {
+                this["col0Width"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int col1Width {
+            get {
+                return ((int)(this["col1Width"]));
+            }
+            set {
+                this["col1Width"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int col2Width {
+            get {
+                return ((int)(this["col2Width"]));
+            }
+            set {
+                this["col2Width"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int col3Width {
+            get {
+                return ((int)(this["col3Width"]));
+            }
+            set {
+                this["col3Width"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int col4Width {
+            get {
+                return ((int)(this["col4Width"]));
+            }
+            set {
+                this["col4Width"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int col5Width {
+            get {
+                return ((int)(this["col5Width"]));
+            }
+            set {
+                this["col5Width"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int col6Width {
+            get {
+                return ((int)(this["col6Width"]));
+            }
+            set {
+                this["col6Width"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int col7Width {
+            get {
+                return ((int)(this["col7Width"]));
+            }
+            set {
+                this["col7Width"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int col8Width {
+            get {
+                return ((int)(this["col8Width"]));
+            }
+            set {
+                this["col8Width"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int col9Width {
+            get {
+                return ((int)(this["col9Width"]));
+            }
+            set {
+                this["col9Width"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int col10Width {
+            get {
+                return ((int)(this["col10Width"]));
+            }
+            set {
+                this["col10Width"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int col11Width {
+            get {
+                return ((int)(this["col11Width"]));
+            }
+            set {
+                this["col11Width"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int col12Width {
+            get {
+                return ((int)(this["col12Width"]));
+            }
+            set {
+                this["col12Width"] = value;
+            }
+        }
     }
 }

@@ -758,11 +758,12 @@
             this.label15.AutoSize = true;
             this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label15.ForeColor = System.Drawing.Color.Red;
-            this.label15.Location = new System.Drawing.Point(384, 360);
+            this.label15.Location = new System.Drawing.Point(400, 327);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(227, 51);
+            this.label15.Size = new System.Drawing.Size(240, 68);
             this.label15.TabIndex = 26;
-            this.label15.Text = "Based On Battery Model!\r\nEdit settings under the \r\nManage Battery Models menu.";
+            this.label15.Text = "All Current and Voltage Values \r\nBased On Battery Model!\r\nEdit settings under the" +
+    " Manage \r\nBattery Models menu.";
             // 
             // frmVETests
             // 

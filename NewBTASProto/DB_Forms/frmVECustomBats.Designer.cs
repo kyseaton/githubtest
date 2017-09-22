@@ -337,6 +337,7 @@
             this.label165 = new System.Windows.Forms.Label();
             this.comboBox12 = new System.Windows.Forms.ComboBox();
             this.tabPage10 = new System.Windows.Forms.TabPage();
+            this.textBox6 = new System.Windows.Forms.TextBox();
             this.groupBox24 = new System.Windows.Forms.GroupBox();
             this.numericUpDown72 = new System.Windows.Forms.NumericUpDown();
             this.label140 = new System.Windows.Forms.Label();
@@ -362,6 +363,7 @@
             this.label152 = new System.Windows.Forms.Label();
             this.comboBox11 = new System.Windows.Forms.ComboBox();
             this.tabPage14 = new System.Windows.Forms.TabPage();
+            this.textBox7 = new System.Windows.Forms.TextBox();
             this.groupBox28 = new System.Windows.Forms.GroupBox();
             this.numericUpDown99 = new System.Windows.Forms.NumericUpDown();
             this.label173 = new System.Windows.Forms.Label();
@@ -387,6 +389,7 @@
             this.label185 = new System.Windows.Forms.Label();
             this.comboBox15 = new System.Windows.Forms.ComboBox();
             this.tabPage15 = new System.Windows.Forms.TabPage();
+            this.textBox8 = new System.Windows.Forms.TextBox();
             this.groupBox30 = new System.Windows.Forms.GroupBox();
             this.numericUpDown107 = new System.Windows.Forms.NumericUpDown();
             this.label186 = new System.Windows.Forms.Label();
@@ -412,6 +415,7 @@
             this.label198 = new System.Windows.Forms.Label();
             this.comboBox16 = new System.Windows.Forms.ComboBox();
             this.tabPage11 = new System.Windows.Forms.TabPage();
+            this.textBox9 = new System.Windows.Forms.TextBox();
             this.groupBox19 = new System.Windows.Forms.GroupBox();
             this.numericUpDown51 = new System.Windows.Forms.NumericUpDown();
             this.label105 = new System.Windows.Forms.Label();
@@ -1342,7 +1346,7 @@
             // 
             this.numericUpDown1.Location = new System.Drawing.Point(100, 19);
             this.numericUpDown1.Maximum = new decimal(new int[] {
-            6,
+            2,
             0,
             0,
             0});
@@ -4113,6 +4117,7 @@
             // 
             // tabPage10
             // 
+            this.tabPage10.Controls.Add(this.textBox6);
             this.tabPage10.Controls.Add(this.groupBox24);
             this.tabPage10.Controls.Add(this.groupBox25);
             this.tabPage10.Controls.Add(this.label152);
@@ -4125,6 +4130,18 @@
             this.tabPage10.Text = "Custom Chg  ";
             this.tabPage10.UseVisualStyleBackColor = true;
             this.tabPage10.Click += new System.EventHandler(this.tabPage10_Click);
+            // 
+            // textBox6
+            // 
+            this.textBox6.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBox6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox6.ForeColor = System.Drawing.Color.Red;
+            this.textBox6.Location = new System.Drawing.Point(395, 72);
+            this.textBox6.Multiline = true;
+            this.textBox6.Name = "textBox6";
+            this.textBox6.Size = new System.Drawing.Size(112, 79);
+            this.textBox6.TabIndex = 121;
+            this.textBox6.Text = "Time Set in Custom Test Settings";
             // 
             // groupBox24
             // 
@@ -4206,10 +4223,10 @@
             this.numericUpDown74.Name = "numericUpDown74";
             this.numericUpDown74.Size = new System.Drawing.Size(201, 20);
             this.numericUpDown74.TabIndex = 105;
-            this.numericUpDown74.Visible = false;
             // 
             // numericUpDown75
             // 
+            this.numericUpDown75.Enabled = false;
             this.numericUpDown75.Location = new System.Drawing.Point(100, 21);
             this.numericUpDown75.Maximum = new decimal(new int[] {
             99,
@@ -4338,10 +4355,10 @@
             this.numericUpDown78.Name = "numericUpDown78";
             this.numericUpDown78.Size = new System.Drawing.Size(201, 20);
             this.numericUpDown78.TabIndex = 101;
-            this.numericUpDown78.Visible = false;
             // 
             // numericUpDown79
             // 
+            this.numericUpDown79.Enabled = false;
             this.numericUpDown79.Location = new System.Drawing.Point(100, 19);
             this.numericUpDown79.Maximum = new decimal(new int[] {
             99,
@@ -4417,6 +4434,7 @@
             // 
             // tabPage14
             // 
+            this.tabPage14.Controls.Add(this.textBox7);
             this.tabPage14.Controls.Add(this.groupBox28);
             this.tabPage14.Controls.Add(this.groupBox29);
             this.tabPage14.Controls.Add(this.label185);
@@ -4428,6 +4446,18 @@
             this.tabPage14.TabIndex = 13;
             this.tabPage14.Text = "Custom Chg 2";
             this.tabPage14.UseVisualStyleBackColor = true;
+            // 
+            // textBox7
+            // 
+            this.textBox7.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBox7.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox7.ForeColor = System.Drawing.Color.Red;
+            this.textBox7.Location = new System.Drawing.Point(395, 72);
+            this.textBox7.Multiline = true;
+            this.textBox7.Name = "textBox7";
+            this.textBox7.Size = new System.Drawing.Size(112, 79);
+            this.textBox7.TabIndex = 123;
+            this.textBox7.Text = "Time Set in Custom Test Settings";
             // 
             // groupBox28
             // 
@@ -4510,10 +4540,10 @@
             this.numericUpDown101.Name = "numericUpDown101";
             this.numericUpDown101.Size = new System.Drawing.Size(201, 20);
             this.numericUpDown101.TabIndex = 105;
-            this.numericUpDown101.Visible = false;
             // 
             // numericUpDown102
             // 
+            this.numericUpDown102.Enabled = false;
             this.numericUpDown102.Location = new System.Drawing.Point(100, 21);
             this.numericUpDown102.Maximum = new decimal(new int[] {
             99,
@@ -4643,10 +4673,10 @@
             this.numericUpDown105.Name = "numericUpDown105";
             this.numericUpDown105.Size = new System.Drawing.Size(201, 20);
             this.numericUpDown105.TabIndex = 101;
-            this.numericUpDown105.Visible = false;
             // 
             // numericUpDown106
             // 
+            this.numericUpDown106.Enabled = false;
             this.numericUpDown106.Location = new System.Drawing.Point(100, 19);
             this.numericUpDown106.Maximum = new decimal(new int[] {
             99,
@@ -4724,6 +4754,7 @@
             // 
             // tabPage15
             // 
+            this.tabPage15.Controls.Add(this.textBox8);
             this.tabPage15.Controls.Add(this.groupBox30);
             this.tabPage15.Controls.Add(this.groupBox31);
             this.tabPage15.Controls.Add(this.label198);
@@ -4735,6 +4766,18 @@
             this.tabPage15.TabIndex = 14;
             this.tabPage15.Text = "Custom Chg 3";
             this.tabPage15.UseVisualStyleBackColor = true;
+            // 
+            // textBox8
+            // 
+            this.textBox8.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBox8.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox8.ForeColor = System.Drawing.Color.Red;
+            this.textBox8.Location = new System.Drawing.Point(395, 72);
+            this.textBox8.Multiline = true;
+            this.textBox8.Name = "textBox8";
+            this.textBox8.Size = new System.Drawing.Size(112, 69);
+            this.textBox8.TabIndex = 123;
+            this.textBox8.Text = "Time Set in Custom Test Settings";
             // 
             // groupBox30
             // 
@@ -4816,10 +4859,10 @@
             this.numericUpDown109.Name = "numericUpDown109";
             this.numericUpDown109.Size = new System.Drawing.Size(201, 20);
             this.numericUpDown109.TabIndex = 105;
-            this.numericUpDown109.Visible = false;
             // 
             // numericUpDown110
             // 
+            this.numericUpDown110.Enabled = false;
             this.numericUpDown110.Location = new System.Drawing.Point(100, 21);
             this.numericUpDown110.Maximum = new decimal(new int[] {
             99,
@@ -4948,10 +4991,10 @@
             this.numericUpDown113.Name = "numericUpDown113";
             this.numericUpDown113.Size = new System.Drawing.Size(201, 20);
             this.numericUpDown113.TabIndex = 101;
-            this.numericUpDown113.Visible = false;
             // 
             // numericUpDown114
             // 
+            this.numericUpDown114.Enabled = false;
             this.numericUpDown114.Location = new System.Drawing.Point(100, 19);
             this.numericUpDown114.Maximum = new decimal(new int[] {
             99,
@@ -5027,6 +5070,7 @@
             // 
             // tabPage11
             // 
+            this.tabPage11.Controls.Add(this.textBox9);
             this.tabPage11.Controls.Add(this.groupBox19);
             this.tabPage11.Controls.Add(this.label113);
             this.tabPage11.Controls.Add(this.comboBox8);
@@ -5037,6 +5081,19 @@
             this.tabPage11.TabIndex = 10;
             this.tabPage11.Text = "Custom Cap   ";
             this.tabPage11.UseVisualStyleBackColor = true;
+            this.tabPage11.Click += new System.EventHandler(this.tabPage11_Click);
+            // 
+            // textBox9
+            // 
+            this.textBox9.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBox9.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox9.ForeColor = System.Drawing.Color.Red;
+            this.textBox9.Location = new System.Drawing.Point(395, 71);
+            this.textBox9.Multiline = true;
+            this.textBox9.Name = "textBox9";
+            this.textBox9.Size = new System.Drawing.Size(112, 68);
+            this.textBox9.TabIndex = 125;
+            this.textBox9.Text = "Time Set in Custom Test Settings";
             // 
             // groupBox19
             // 
@@ -5156,10 +5213,10 @@
             this.numericUpDown54.Name = "numericUpDown54";
             this.numericUpDown54.Size = new System.Drawing.Size(201, 20);
             this.numericUpDown54.TabIndex = 110;
-            this.numericUpDown54.Visible = false;
             // 
             // numericUpDown55
             // 
+            this.numericUpDown55.Enabled = false;
             this.numericUpDown55.Location = new System.Drawing.Point(100, 18);
             this.numericUpDown55.Name = "numericUpDown55";
             this.numericUpDown55.Size = new System.Drawing.Size(201, 20);
@@ -5877,5 +5934,9 @@
         private System.Windows.Forms.Label label197;
         private System.Windows.Forms.Label label198;
         private System.Windows.Forms.ComboBox comboBox16;
+        private System.Windows.Forms.TextBox textBox6;
+        private System.Windows.Forms.TextBox textBox7;
+        private System.Windows.Forms.TextBox textBox8;
+        private System.Windows.Forms.TextBox textBox9;
     }
 }

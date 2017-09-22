@@ -87,6 +87,7 @@ namespace NewBTASProto
                     GlobalVars.rows2Dis = Properties.Settings.Default.rows2Dis;
                     GlobalVars.robustCSCAN = Properties.Settings.Default.robustCSCAN;
                     GlobalVars.advance2Short = Properties.Settings.Default.advance2Short;
+                    GlobalVars.manualCol = Properties.Settings.Default.manualCol;
                     //GlobalVars.folderString = Properties.Settings.Default.folderString;  NEED TODO THIS ON THE SPLASH SCREEN!
                     GlobalVars.SS0 = Properties.Settings.Default.SS0;
                     GlobalVars.SS1 = Properties.Settings.Default.SS1;
@@ -107,6 +108,21 @@ namespace NewBTASProto
                     GlobalVars.DCVPeriod = Properties.Settings.Default.DCVPeriod;
                     GlobalVars.StopOnEnd = Properties.Settings.Default.StopOnEnd;
                     GlobalVars.AddOneMin = Properties.Settings.Default.AddOneMin;
+
+                    //load column width (doesn't go into globals)
+                    dataGridView1.Columns[0].Width = Properties.Settings.Default.col0Width;
+                    dataGridView1.Columns[1].Width = Properties.Settings.Default.col1Width;
+                    dataGridView1.Columns[2].Width = Properties.Settings.Default.col2Width;
+                    dataGridView1.Columns[3].Width = Properties.Settings.Default.col3Width;
+                    dataGridView1.Columns[4].Width = Properties.Settings.Default.col4Width;
+                    dataGridView1.Columns[5].Width = Properties.Settings.Default.col5Width;
+                    dataGridView1.Columns[6].Width = Properties.Settings.Default.col6Width;
+                    dataGridView1.Columns[7].Width = Properties.Settings.Default.col7Width;
+                    dataGridView1.Columns[8].Width = Properties.Settings.Default.col8Width;
+                    dataGridView1.Columns[9].Width = Properties.Settings.Default.col9Width;
+                    dataGridView1.Columns[10].Width = Properties.Settings.Default.col10Width;
+                    dataGridView1.Columns[11].Width = Properties.Settings.Default.col11Width;
+                    dataGridView1.Columns[12].Width = Properties.Settings.Default.col12Width;
 
                 }
                 catch
@@ -169,6 +185,10 @@ namespace NewBTASProto
                     chart1.Height = rtbIncoming.Height;
                     chart1.Location = new Point(6, 16);
                 }
+
+                //should we let the user adjust the cols?
+                if (GlobalVars.manualCol == true) { dataGridView1.AllowUserToResizeColumns = true; }
+                else { dataGridView1.AllowUserToResizeColumns = false; }
 
 
             }
@@ -1061,6 +1081,7 @@ namespace NewBTASProto
             Properties.Settings.Default.folderString = GlobalVars.folderString;
             Properties.Settings.Default.rows2Dis = GlobalVars.rows2Dis;
             Properties.Settings.Default.advance2Short = GlobalVars.advance2Short;
+            Properties.Settings.Default.manualCol = GlobalVars.manualCol;
             Properties.Settings.Default.robustCSCAN = GlobalVars.robustCSCAN;
             Properties.Settings.Default.DCVPeriod = GlobalVars.DCVPeriod;
             Properties.Settings.Default.StopOnEnd = GlobalVars.StopOnEnd;
@@ -1082,7 +1103,20 @@ namespace NewBTASProto
             Properties.Settings.Default.SS14 = GlobalVars.SS14;
             Properties.Settings.Default.SS15 = GlobalVars.SS15;
 
-
+            //Also the column widths...
+            Properties.Settings.Default.col0Width = dataGridView1.Columns[0].Width;
+            Properties.Settings.Default.col1Width = dataGridView1.Columns[1].Width;
+            Properties.Settings.Default.col2Width = dataGridView1.Columns[2].Width;
+            Properties.Settings.Default.col3Width = dataGridView1.Columns[3].Width;
+            Properties.Settings.Default.col4Width = dataGridView1.Columns[4].Width;
+            Properties.Settings.Default.col5Width = dataGridView1.Columns[5].Width;
+            Properties.Settings.Default.col6Width = dataGridView1.Columns[6].Width;
+            Properties.Settings.Default.col7Width = dataGridView1.Columns[7].Width;
+            Properties.Settings.Default.col8Width = dataGridView1.Columns[8].Width;
+            Properties.Settings.Default.col9Width = dataGridView1.Columns[9].Width;
+            Properties.Settings.Default.col10Width = dataGridView1.Columns[10].Width;
+            Properties.Settings.Default.col11Width = dataGridView1.Columns[11].Width;
+            Properties.Settings.Default.col12Width = dataGridView1.Columns[12].Width;
 
             Properties.Settings.Default.Save();
 
@@ -2885,18 +2919,21 @@ namespace NewBTASProto
                     }
                 }
 
-                // otherwise turn on the autoconfig...
+                
                 automaticallyConfigureChargerToolStripMenuItem.Checked = true;
                 GlobalVars.autoConfig = true;
                 chargerConfigurationInterfaceToolStripMenuItem.Enabled = false;
                 this.toolStripComboBox5.Enabled = true;
+                dataGridView1.Columns[12].Width = 25;
             }
             else
             {
+                // otherwise turn on the autoconfig...
                 automaticallyConfigureChargerToolStripMenuItem.Checked = false;
                 GlobalVars.autoConfig = false;
                 chargerConfigurationInterfaceToolStripMenuItem.Enabled = true;
                 this.toolStripComboBox5.Enabled = false;
+                dataGridView1.Columns[12].Width = 0;
             }
 
             dataGridView1_Resize(this, null);
@@ -2952,7 +2989,7 @@ namespace NewBTASProto
 
         }
 
-        private void dataGridView1_Resize(object sender, EventArgs e)
+        public void dataGridView1_Resize(object sender, EventArgs e)
         {
             try
             {
@@ -2964,59 +3001,63 @@ namespace NewBTASProto
                 }
                 int cumWidth = 0;
                 //Scale the columns to the new width!
-                if (GlobalVars.autoConfig)
+                if (GlobalVars.manualCol == false)
                 {
-                    dataGridView1.Columns[0].Width = (40 * dataGridView1.Width) / 1057;
-                    cumWidth += (40 * dataGridView1.Width) / 1057;
-                    dataGridView1.Columns[1].Width = (180 * dataGridView1.Width) / 1057;
-                    cumWidth += (180 * dataGridView1.Width) / 1057;
-                    dataGridView1.Columns[2].Width = (140 * dataGridView1.Width) / 1057;
-                    cumWidth += (140 * dataGridView1.Width) / 1057;
-                    dataGridView1.Columns[3].Width = (40 * dataGridView1.Width) / 1057;
-                    cumWidth += (40 * dataGridView1.Width) / 1057;
-                    dataGridView1.Columns[4].Width = (44 * dataGridView1.Width) / 1057;
-                    cumWidth += (44 * dataGridView1.Width) / 1057;
-                    dataGridView1.Columns[5].Width = (44 * dataGridView1.Width) / 1057;
-                    cumWidth += (44 * dataGridView1.Width) / 1057;
-                    dataGridView1.Columns[6].Width = (100 * dataGridView1.Width) / 1057;
-                    cumWidth += (100 * dataGridView1.Width) / 1057;
-                    dataGridView1.Columns[7].Width = (120 * dataGridView1.Width) / 1057;
-                    cumWidth += (120 * dataGridView1.Width) / 1057;
-                    dataGridView1.Columns[8].Width = (60 * dataGridView1.Width) / 1057;
-                    cumWidth += (60 * dataGridView1.Width) / 1057;
-                    dataGridView1.Columns[9].Width = (50 * dataGridView1.Width) / 1057;
-                    cumWidth += (50 * dataGridView1.Width) / 1057;
-                    dataGridView1.Columns[10].Width = (78 * dataGridView1.Width) / 1057;
-                    cumWidth += (78 * dataGridView1.Width) / 1057;
-                    dataGridView1.Columns[11].Width = (78 * dataGridView1.Width) / 1057;
-                    cumWidth += (78 * dataGridView1.Width) / 1057;
-                    dataGridView1.Columns[12].Width = (dataGridView1.Width - 43) - cumWidth;
-                }
-                else
-                {
-                    dataGridView1.Columns[0].Width = (40 * dataGridView1.Width) / 1017;
-                    cumWidth += (40 * dataGridView1.Width) / 1017;
-                    dataGridView1.Columns[1].Width = (180 * dataGridView1.Width) / 1017;
-                    cumWidth += (180 * dataGridView1.Width) / 1017;
-                    dataGridView1.Columns[2].Width = (140 * dataGridView1.Width) / 1017;
-                    cumWidth += (140 * dataGridView1.Width) / 1017;
-                    dataGridView1.Columns[3].Width = (40 * dataGridView1.Width) / 1017;
-                    cumWidth += (40 * dataGridView1.Width) / 1017;
-                    dataGridView1.Columns[4].Width = (44 * dataGridView1.Width) / 1017;
-                    cumWidth += (44 * dataGridView1.Width) / 1017;
-                    dataGridView1.Columns[5].Width = (44 * dataGridView1.Width) / 1017;
-                    cumWidth += (44 * dataGridView1.Width) / 1017;
-                    dataGridView1.Columns[6].Width = (100 * dataGridView1.Width) / 1017;
-                    cumWidth += (100 * dataGridView1.Width) / 1017;
-                    dataGridView1.Columns[7].Width = (120 * dataGridView1.Width) / 1017;
-                    cumWidth += (120 * dataGridView1.Width) / 1017;
-                    dataGridView1.Columns[8].Width = (60 * dataGridView1.Width) / 1017;
-                    cumWidth += (60 * dataGridView1.Width) / 1017;
-                    dataGridView1.Columns[9].Width = (50 * dataGridView1.Width) / 1017;
-                    cumWidth += (50 * dataGridView1.Width) / 1017;
-                    dataGridView1.Columns[10].Width = (78 * dataGridView1.Width) / 1017;
-                    cumWidth += (78 * dataGridView1.Width) / 1017;
-                    dataGridView1.Columns[11].Width = (dataGridView1.Width - 43) - cumWidth;
+                    if (GlobalVars.autoConfig)
+                    {
+                        dataGridView1.Columns[0].Width = (40 * dataGridView1.Width) / 1057;
+                        cumWidth += (40 * dataGridView1.Width) / 1057;
+                        dataGridView1.Columns[1].Width = (180 * dataGridView1.Width) / 1057;
+                        cumWidth += (180 * dataGridView1.Width) / 1057;
+                        dataGridView1.Columns[2].Width = (140 * dataGridView1.Width) / 1057;
+                        cumWidth += (140 * dataGridView1.Width) / 1057;
+                        dataGridView1.Columns[3].Width = (40 * dataGridView1.Width) / 1057;
+                        cumWidth += (40 * dataGridView1.Width) / 1057;
+                        dataGridView1.Columns[4].Width = (44 * dataGridView1.Width) / 1057;
+                        cumWidth += (44 * dataGridView1.Width) / 1057;
+                        dataGridView1.Columns[5].Width = (44 * dataGridView1.Width) / 1057;
+                        cumWidth += (44 * dataGridView1.Width) / 1057;
+                        dataGridView1.Columns[6].Width = (100 * dataGridView1.Width) / 1057;
+                        cumWidth += (100 * dataGridView1.Width) / 1057;
+                        dataGridView1.Columns[7].Width = (120 * dataGridView1.Width) / 1057;
+                        cumWidth += (120 * dataGridView1.Width) / 1057;
+                        dataGridView1.Columns[8].Width = (60 * dataGridView1.Width) / 1057;
+                        cumWidth += (60 * dataGridView1.Width) / 1057;
+                        dataGridView1.Columns[9].Width = (50 * dataGridView1.Width) / 1057;
+                        cumWidth += (50 * dataGridView1.Width) / 1057;
+                        dataGridView1.Columns[10].Width = (78 * dataGridView1.Width) / 1057;
+                        cumWidth += (78 * dataGridView1.Width) / 1057;
+                        dataGridView1.Columns[11].Width = (78 * dataGridView1.Width) / 1057;
+                        cumWidth += (78 * dataGridView1.Width) / 1057;
+                        dataGridView1.Columns[12].Width = (dataGridView1.Width - 43) - cumWidth;
+                    }
+                    else
+                    {
+                        dataGridView1.Columns[0].Width = (40 * dataGridView1.Width) / 1017;
+                        cumWidth += (40 * dataGridView1.Width) / 1017;
+                        dataGridView1.Columns[1].Width = (180 * dataGridView1.Width) / 1017;
+                        cumWidth += (180 * dataGridView1.Width) / 1017;
+                        dataGridView1.Columns[2].Width = (140 * dataGridView1.Width) / 1017;
+                        cumWidth += (140 * dataGridView1.Width) / 1017;
+                        dataGridView1.Columns[3].Width = (40 * dataGridView1.Width) / 1017;
+                        cumWidth += (40 * dataGridView1.Width) / 1017;
+                        dataGridView1.Columns[4].Width = (44 * dataGridView1.Width) / 1017;
+                        cumWidth += (44 * dataGridView1.Width) / 1017;
+                        dataGridView1.Columns[5].Width = (44 * dataGridView1.Width) / 1017;
+                        cumWidth += (44 * dataGridView1.Width) / 1017;
+                        dataGridView1.Columns[6].Width = (100 * dataGridView1.Width) / 1017;
+                        cumWidth += (100 * dataGridView1.Width) / 1017;
+                        dataGridView1.Columns[7].Width = (120 * dataGridView1.Width) / 1017;
+                        cumWidth += (120 * dataGridView1.Width) / 1017;
+                        dataGridView1.Columns[8].Width = (60 * dataGridView1.Width) / 1017;
+                        cumWidth += (60 * dataGridView1.Width) / 1017;
+                        dataGridView1.Columns[9].Width = (50 * dataGridView1.Width) / 1017;
+                        cumWidth += (50 * dataGridView1.Width) / 1017;
+                        dataGridView1.Columns[10].Width = (78 * dataGridView1.Width) / 1017;
+                        cumWidth += (78 * dataGridView1.Width) / 1017;
+                        dataGridView1.Columns[11].Width = (dataGridView1.Width - 43) - cumWidth;
+                        dataGridView1.Columns[12].Width = 0;
+                    }
                 }
 
 
@@ -5430,6 +5471,95 @@ namespace NewBTASProto
         {
             // do nothing
             // there was a clicking error...
+        }
+
+
+        private void dataGridView1_ColumnWidthChanged(object sender, DataGridViewColumnEventArgs e)
+        {
+            //if (colLock == true) { return; }
+            //colLock = true;
+            //int cumWidth = 0;
+
+            //if (GlobalVars.autoConfig)
+            //{
+
+            //    col0R = dataGridView1.Columns[0].Width / 1057.0;
+            //    col1R = dataGridView1.Columns[1].Width / 1057.0;
+            //    col2R = dataGridView1.Columns[2].Width / 1057.0;
+            //    col3R = dataGridView1.Columns[3].Width / 1057.0;
+            //    col4R = dataGridView1.Columns[4].Width / 1057.0;
+            //    col5R = dataGridView1.Columns[5].Width / 1057.0;
+            //    col6R = dataGridView1.Columns[6].Width / 1057.0;
+            //    col7R = dataGridView1.Columns[7].Width / 1057.0;
+            //    col8R = dataGridView1.Columns[8].Width / 1057.0;
+            //    col9R = dataGridView1.Columns[9].Width / 1057.0;
+            //    col10R = dataGridView1.Columns[10].Width / 1057.0;
+            //    col11R = dataGridView1.Columns[11].Width / 1057.0;
+            //    col12R = dataGridView1.Columns[12].Width / 1057.0;
+
+
+            //    dataGridView1.Columns[0].Width = (int) (col0R * dataGridView1.Width);
+            //    cumWidth += (int) (col0R * dataGridView1.Width);
+            //    dataGridView1.Columns[1].Width = (int) (col1R * dataGridView1.Width);
+            //    cumWidth += (int) (col1R * dataGridView1.Width);
+            //    dataGridView1.Columns[2].Width = (int) (col2R * dataGridView1.Width);
+            //    cumWidth += (int) (col2R * dataGridView1.Width);
+            //    dataGridView1.Columns[3].Width = (int) (col3R * dataGridView1.Width);
+            //    cumWidth += (int) (col3R * dataGridView1.Width);
+            //    dataGridView1.Columns[4].Width = (int) (col4R * dataGridView1.Width);
+            //    cumWidth += (int) (col4R * dataGridView1.Width);
+            //    dataGridView1.Columns[5].Width = (int) (col5R * dataGridView1.Width);
+            //    cumWidth += (int) (col5R * dataGridView1.Width);
+            //    dataGridView1.Columns[6].Width = (int) (col6R * dataGridView1.Width);
+            //    cumWidth += (int) (col6R * dataGridView1.Width);
+            //    dataGridView1.Columns[7].Width = (int) (col7R * dataGridView1.Width);
+            //    cumWidth += (int) (col7R * dataGridView1.Width);
+            //    dataGridView1.Columns[8].Width = (int) (col8R * dataGridView1.Width);
+            //    cumWidth += (int) (col8R * dataGridView1.Width);
+            //    dataGridView1.Columns[9].Width = (int) (col9R * dataGridView1.Width);
+            //    cumWidth += (int) (col9R * dataGridView1.Width);
+            //    dataGridView1.Columns[10].Width = (int) (col10R * dataGridView1.Width);
+            //    cumWidth += (int) (col10R * dataGridView1.Width);
+            //    dataGridView1.Columns[11].Width = (int) (col11R * dataGridView1.Width);
+            //    cumWidth += (int) (col11R * dataGridView1.Width);
+            //    dataGridView1.Columns[12].Width = (int)(dataGridView1.Width - 43) - cumWidth;
+            //}
+            //else
+            //{
+            //    dataGridView1.Columns[0].Width = (40 * dataGridView1.Width) / 1017;
+            //    cumWidth += (40 * dataGridView1.Width) / 1017;
+            //    dataGridView1.Columns[1].Width = (180 * dataGridView1.Width) / 1017;
+            //    cumWidth += (180 * dataGridView1.Width) / 1017;
+            //    dataGridView1.Columns[2].Width = (140 * dataGridView1.Width) / 1017;
+            //    cumWidth += (140 * dataGridView1.Width) / 1017;
+            //    dataGridView1.Columns[3].Width = (40 * dataGridView1.Width) / 1017;
+            //    cumWidth += (40 * dataGridView1.Width) / 1017;
+            //    dataGridView1.Columns[4].Width = (44 * dataGridView1.Width) / 1017;
+            //    cumWidth += (44 * dataGridView1.Width) / 1017;
+            //    dataGridView1.Columns[5].Width = (44 * dataGridView1.Width) / 1017;
+            //    cumWidth += (44 * dataGridView1.Width) / 1017;
+            //    dataGridView1.Columns[6].Width = (100 * dataGridView1.Width) / 1017;
+            //    cumWidth += (100 * dataGridView1.Width) / 1017;
+            //    dataGridView1.Columns[7].Width = (120 * dataGridView1.Width) / 1017;
+            //    cumWidth += (120 * dataGridView1.Width) / 1017;
+            //    dataGridView1.Columns[8].Width = (60 * dataGridView1.Width) / 1017;
+            //    cumWidth += (60 * dataGridView1.Width) / 1017;
+            //    dataGridView1.Columns[9].Width = (50 * dataGridView1.Width) / 1017;
+            //    cumWidth += (50 * dataGridView1.Width) / 1017;
+            //    dataGridView1.Columns[10].Width = (78 * dataGridView1.Width) / 1017;
+            //    cumWidth += (78 * dataGridView1.Width) / 1017;
+            //    dataGridView1.Columns[11].Width = (dataGridView1.Width - 43) - cumWidth;
+            //}
+            //colLock = false;
+
+            if (GlobalVars.autoConfig)
+            {
+
+            }
+            else
+            {
+                dataGridView1.Columns[12].Width = 0;
+            }
         }
 
     }// end mainform class section...
