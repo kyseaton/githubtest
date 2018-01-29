@@ -913,7 +913,7 @@ namespace NewBTASProto
                                             tempKMStore[3] = Convert.ToByte(48 + Math.Floor(GetDouble(battery.Tables[0].Rows[0][45].ToString()) * 10));             //top current byte
                                             tempKMStore[4] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][45].ToString()) * 1000) % 100);                                                                            //bottom current byte
                                         }
-                                        else if (d.Rows[station][10].ToString().Contains("MFC-10"))
+                                        else if (d.Rows[station][10].ToString().Contains("MFC"))
                                         {
                                             tempKMStore[3] = Convert.ToByte(48 + Math.Floor(GetDouble(battery.Tables[0].Rows[0][45].ToString()) / 1));             //top current byte
                                             tempKMStore[4] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][45].ToString()) % 1) * 100);                                                                            //bottom current byte
@@ -933,7 +933,7 @@ namespace NewBTASProto
                                             tempKMStore[9] = Convert.ToByte(48 + Math.Floor(GetDouble(battery.Tables[0].Rows[0][49].ToString())) * 10);             //top current 2 byte
                                             tempKMStore[10] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][49].ToString()) * 1000) % 100);                                                                           //bottom current 2 byte
                                         }
-                                        else if (d.Rows[station][10].ToString().Contains("MFC-10"))
+                                        else if (d.Rows[station][10].ToString().Contains("MFC"))
                                         {
                                             tempKMStore[9] = Convert.ToByte(48 + Math.Floor(GetDouble(battery.Tables[0].Rows[0][49].ToString())) / 1);             //top current 2 byte
                                             tempKMStore[10] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][49].ToString()) % 1) * 100);                                                                           //bottom current 2 byte
@@ -968,7 +968,7 @@ namespace NewBTASProto
                                             tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][55].ToString())) * 10));             //top current byte
                                             tempKMStore[4] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][55].ToString()) * 1000) % 100);                                                                            //bottom current byte
                                         }
-                                        else if (d.Rows[station][10].ToString().Contains("MFC-10"))
+                                        else if (d.Rows[station][10].ToString().Contains("MFC"))
                                         {
                                             tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][55].ToString())) / 1));             //top current byte
                                             tempKMStore[4] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][55].ToString()) % 1) * 100);                                                                            //bottom current byte
@@ -988,7 +988,7 @@ namespace NewBTASProto
                                             tempKMStore[9] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][59].ToString()) * 10)));             //top current 2 byte
                                             tempKMStore[10] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][59].ToString()) * 1000) % 100);                                                                           //bottom current 2 byte
                                         }
-                                        if (d.Rows[station][10].ToString().Contains("MFC-10"))
+                                        if (d.Rows[station][10].ToString().Contains("MFC"))
                                         {
                                             tempKMStore[9] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][59].ToString()) / 1)));             //top current 2 byte
                                             tempKMStore[10] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][59].ToString()) % 1) * 100);                                                                           //bottom current 2 byte
@@ -1023,7 +1023,7 @@ namespace NewBTASProto
                                             tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][65].ToString())) * 10));             //top current byte
                                             tempKMStore[4] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][65].ToString()) * 1000) % 100);                                                                            //bottom current byte
                                         }
-                                        else if (d.Rows[station][10].ToString().Contains("MFC-10"))
+                                        else if (d.Rows[station][10].ToString().Contains("MFC"))
                                         {
                                             tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][65].ToString())) / 1));             //top current byte
                                             tempKMStore[4] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][65].ToString()) % 1) * 100);                                                                            //bottom current byte
@@ -1065,7 +1065,7 @@ namespace NewBTASProto
                                             tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][75].ToString())) * 10));             //top current byte
                                             tempKMStore[4] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][75].ToString()) * 1000) % 100);                                                                            //bottom current byte
                                         }
-                                        else if (d.Rows[station][10].ToString().Contains("MFC-10"))
+                                        else if (d.Rows[station][10].ToString().Contains("MFC"))
                                         {
                                             tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][75].ToString())) / 1));             //top current byte
                                             tempKMStore[4] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][75].ToString()) % 1) * 100);                                                                            //bottom current byte
@@ -1107,7 +1107,7 @@ namespace NewBTASProto
                                             tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][85].ToString())) * 10));             //top current byte
                                             tempKMStore[4] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][85].ToString()) * 1000) % 100);                                                                            //bottom current byte
                                         }
-                                        else if (d.Rows[station][10].ToString().Contains("MFC-10"))
+                                        else if (d.Rows[station][10].ToString().Contains("MFC"))
                                         {
                                             tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][85].ToString())) / 1));             //top current byte
                                             tempKMStore[4] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][85].ToString()) % 1) * 100);                                                                            //bottom current byte
@@ -1229,7 +1229,7 @@ namespace NewBTASProto
                                             tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][115].ToString()) * 10)));            //top current byte
                                             tempKMStore[4] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][115].ToString()) * 1000) % 100);                                                                            //bottom current byte
                                         }
-                                        else if (d.Rows[station][10].ToString().Contains("MFC-10"))
+                                        else if (d.Rows[station][10].ToString().Contains("MFC"))
                                         {
                                             tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][115].ToString()) / 1)));            //top current byte
                                             tempKMStore[4] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][115].ToString()) % 1) * 100);                                                                            //bottom current byte
@@ -1271,7 +1271,7 @@ namespace NewBTASProto
                                             tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][125].ToString())) * 10));            //top current byte
                                             tempKMStore[4] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][125].ToString()) * 1000) % 100);                                                                            //bottom current byte
                                         }
-                                        else if (d.Rows[station][10].ToString().Contains("MFC-10"))
+                                        else if (d.Rows[station][10].ToString().Contains("MFC"))
                                         {
                                             tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][125].ToString())) / 1));            //top current byte
                                             tempKMStore[4] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][125].ToString()) % 1) * 100);                                                                            //bottom current byte
@@ -1314,7 +1314,7 @@ namespace NewBTASProto
                                             tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][135].ToString()) * 10)));            //top current byte
                                             tempKMStore[4] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][135].ToString()) * 1000) % 100);                                                                            //bottom current byte
                                         }
-                                        else if (d.Rows[station][10].ToString().Contains("MFC-10"))
+                                        else if (d.Rows[station][10].ToString().Contains("MFC"))
                                         {
                                             tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][135].ToString()) / 1)));            //top current byte
                                             tempKMStore[4] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][135].ToString()) % 1) * 100);                                                                            //bottom current byte
@@ -1336,7 +1336,7 @@ namespace NewBTASProto
                                                 tempKMStore[9] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][139].ToString())) * 10));        //top current 2 byte
                                                 tempKMStore[10] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][139].ToString()) * 1000) % 100);                                                                       //bottom current 2 byte
                                             }
-                                            else if (d.Rows[station][10].ToString().Contains("MFC-10"))
+                                            else if (d.Rows[station][10].ToString().Contains("MFC"))
                                             {
                                                 tempKMStore[9] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][139].ToString())) / 1));        //top current 2 byte
                                                 tempKMStore[10] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][139].ToString()) % 1) * 100);                                                                       //bottom current 2 byte
@@ -1418,7 +1418,7 @@ namespace NewBTASProto
                                             tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][155].ToString())) * 10));            //top current byte
                                             tempKMStore[4] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][155].ToString()) * 1000) % 100);                                                                            //bottom current byte
                                         }
-                                        else if (d.Rows[station][10].ToString().Contains("MFC-10"))
+                                        else if (d.Rows[station][10].ToString().Contains("MFC"))
                                         {
                                             tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][155].ToString())) / 1));            //top current byte
                                             tempKMStore[4] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][155].ToString()) % 1) * 100);                                                                            //bottom current byte
@@ -1460,7 +1460,7 @@ namespace NewBTASProto
                                             tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][165].ToString())) * 10));             //top current byte
                                             tempKMStore[4] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][165].ToString()) * 1000) % 100);                                                                            //bottom current byte
                                         }
-                                        else if (d.Rows[station][10].ToString().Contains("MFC-10"))
+                                        else if (d.Rows[station][10].ToString().Contains("MFC"))
                                         {
                                             tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][165].ToString())) / 1));             //top current byte
                                             tempKMStore[4] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][165].ToString()) % 1) * 100);                                                                            //bottom current byte
@@ -1480,7 +1480,7 @@ namespace NewBTASProto
                                             tempKMStore[9] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][169].ToString())) * 10));             //top current 2 byte
                                             tempKMStore[10] = Convert.ToByte((48 + (GetDouble(battery.Tables[0].Rows[0][169].ToString()) * 1000) % 100));                                                                           //bottom current 2 byte
                                         }
-                                        if (d.Rows[station][10].ToString().Contains("MFC-10"))
+                                        if (d.Rows[station][10].ToString().Contains("MFC"))
                                         {
                                             tempKMStore[9] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][169].ToString())) / 1));             //top current 2 byte
                                             tempKMStore[10] = Convert.ToByte((48 + (GetDouble(battery.Tables[0].Rows[0][169].ToString()) % 1) * 100));                                                                           //bottom current 2 byte
@@ -1516,7 +1516,7 @@ namespace NewBTASProto
                                             tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][175].ToString()) * 10)));            //top current byte
                                             tempKMStore[4] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][175].ToString()) * 1000) % 100);                                                                            //bottom current byte
                                         }
-                                        else if (d.Rows[station][10].ToString().Contains("MFC-10"))
+                                        else if (d.Rows[station][10].ToString().Contains("MFC"))
                                         {
                                             tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][175].ToString()) / 1)));            //top current byte
                                             tempKMStore[4] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][175].ToString()) % 1) * 100);                                                                            //bottom current byte
@@ -1538,7 +1538,7 @@ namespace NewBTASProto
                                                 tempKMStore[9] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][179].ToString())) * 10));        //top current 2 byte
                                                 tempKMStore[10] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][179].ToString()) * 1000) % 100);                                                                       //bottom current 2 byte
                                             }
-                                            else if (d.Rows[station][10].ToString().Contains("MFC-10"))
+                                            else if (d.Rows[station][10].ToString().Contains("MFC"))
                                             {
                                                 tempKMStore[9] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][179].ToString())) / 1));        //top current 2 byte
                                                 tempKMStore[10] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][179].ToString()) % 1) * 100);                                                                       //bottom current 2 byte
@@ -1575,7 +1575,7 @@ namespace NewBTASProto
                                             tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][185].ToString()) * 10)));            //top current byte
                                             tempKMStore[4] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][185].ToString()) * 1000) % 100);                                                                            //bottom current byte
                                         }
-                                        else if (d.Rows[station][10].ToString().Contains("MFC-10"))
+                                        else if (d.Rows[station][10].ToString().Contains("MFC"))
                                         {
                                             tempKMStore[3] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][185].ToString()) / 1)));            //top current byte
                                             tempKMStore[4] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][185].ToString()) % 1) * 100);                                                                            //bottom current byte
@@ -1597,7 +1597,7 @@ namespace NewBTASProto
                                                 tempKMStore[9] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][189].ToString())) * 10));        //top current 2 byte
                                                 tempKMStore[10] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][189].ToString()) * 1000) % 100);                                                                       //bottom current 2 byte
                                             }
-                                            else if (d.Rows[station][10].ToString().Contains("MFC-10"))
+                                            else if (d.Rows[station][10].ToString().Contains("MFC"))
                                             {
                                                 tempKMStore[9] = Convert.ToByte(48 + (Math.Floor(GetDouble(battery.Tables[0].Rows[0][189].ToString())) / 1));        //top current 2 byte
                                                 tempKMStore[10] = Convert.ToByte(48 + (GetDouble(battery.Tables[0].Rows[0][189].ToString()) % 1) * 100);                                                                       //bottom current 2 byte
@@ -1656,7 +1656,7 @@ namespace NewBTASProto
                                             tempKMStore[9] = Convert.ToByte(48 + (Math.Floor(GetDouble(testSettings.Tables[0].Rows[0][13].ToString())) * 10));             //top current 2 byte
                                             tempKMStore[10] = Convert.ToByte(48 + ((GetDouble(testSettings.Tables[0].Rows[0][13].ToString()) * 1000) % 100));                                                                           //bottom current 2 byte
                                         }
-                                        else if (d.Rows[station][10].ToString().Contains("MFC-10"))
+                                        else if (d.Rows[station][10].ToString().Contains("MFC"))
                                         {
                                             tempKMStore[9] = Convert.ToByte(48 + (Math.Floor(GetDouble(testSettings.Tables[0].Rows[0][13].ToString())) / 1));             //top current 2 byte
                                             tempKMStore[10] = Convert.ToByte(48 + ((GetDouble(testSettings.Tables[0].Rows[0][13].ToString()) % 1) * 100));                                                                           //bottom current 2 byte
@@ -3243,7 +3243,7 @@ namespace NewBTASProto
                             }
                             #endregion
                             // look for a current
-                            if (Math.Abs(GlobalVars.CScanData[station].currentOne) > 0.2)
+                            if (Math.Abs(GlobalVars.CScanData[station].currentOne) > 0.2 || GlobalVars.allowZeroShunt)
                             {
                                 // we found a current!
                                 stopwatch.Start();
@@ -4876,7 +4876,7 @@ namespace NewBTASProto
                             {
                                 //test that the current is still above the 0.2 threshold...
                                 // check that the C-Scan is still running...
-                                if (Math.Abs(GlobalVars.CScanData[station].currentOne) < 0.2)
+                                if (Math.Abs(GlobalVars.CScanData[station].currentOne) < 0.2 && !GlobalVars.allowZeroShunt)
                                 {
                                     int count = 0;
 

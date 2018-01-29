@@ -285,6 +285,14 @@ namespace NewBTASProto
                                                     updateD(slaveRow, 10, "MCF-10");
                                                 }
                                             }
+                                            else if (testData.boardID == 21)
+                                            {
+                                                updateD(j, 10, "MFC-25");
+                                                if (slaveRow > -1)
+                                                {
+                                                    updateD(slaveRow, 10, "MCF-25");
+                                                }
+                                            }
                                         }
                                         
                                         //rtbIncoming.Text = j.ToString() + "  :  " + tempBuff;
@@ -432,6 +440,7 @@ namespace NewBTASProto
                                         else if (testData.boardID == 8) { updateD(chanNum, 10, "ICA SMC EXD"); }
                                         else if (testData.boardID == 4) { updateD(chanNum, 10, "ICA SMI"); }
                                         else if (testData.boardID == 20) { updateD(chanNum, 10, "MFC-10"); }
+                                        else if (testData.boardID == 21) { updateD(chanNum, 10, "MFC-25"); }
                                     }
                                     // and we don't need to check any more
                                     check = false;
@@ -736,6 +745,14 @@ namespace NewBTASProto
                                                     if (slaveRow > -1)
                                                     {
                                                         updateD(slaveRow, 10, "MFC-10");
+                                                    }
+                                                }
+                                                else if (testData.boardID == 20)
+                                                {
+                                                    updateD(station, 10, "MFC-25");
+                                                    if (slaveRow > -1)
+                                                    {
+                                                        updateD(slaveRow, 10, "MFC-25");
                                                     }
                                                 }
                                             }

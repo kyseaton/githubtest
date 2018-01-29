@@ -848,5 +848,17 @@ namespace NewBTASProto.Properties {
                 this["col12Width"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool allowZeroShunt {
+            get {
+                return ((bool)(this["allowZeroShunt"]));
+            }
+            set {
+                this["allowZeroShunt"] = value;
+            }
+        }
     }
 }

@@ -22,9 +22,9 @@ namespace NewBTASProto
         //send Battery Test Profile programming parameters
         //command: issue a command (start,stop, reset)
         //data/command: program parameters and issue a command
-        public byte KE2;                                           //KE2 not used for now (3 bits, available)
-        public byte KE3;                                           //action: 0=clear, 1=run, 2=stop, 3=reset
-        public byte KM0;    //first command [type + test + action] lower 8 bits   KM0 = (byte)((KE1 + 4 * KE2 + 64 * KE3) + 48)
+        public byte KE2;                            //GOING TO USE FOR HUB CONTROL ON MFC GEN UNITS previoiusly "KE2 not used for now (3 bits, available)"
+        public byte KE3;                            //action: 0=clear, 1=run, 2=stop, 3=reset
+        public byte KM0;                            //first command [type + test + action] lower 8 bits   KM0 = (byte)((KE1 + 4 * KE2 + 64 * KE3) + 48)
         public byte KM1;                            //'Mode (10, 11, 12, 21, 22, 30, 31, 32 [for now] )  KM1 = (byte)(10 + 48)
 
         //--- A ---
@@ -74,7 +74,7 @@ namespace NewBTASProto
             KE2 = 0;                                           //KE2 not used for now (3 bits, available)
             KE3 = 3;                                           //action: 0=clear, 1=run, 2=stop, 3=reset
             KM0 = (byte)((KE1 + 4 * KE2 + 64 * KE3) + 48);    //first command [type + test + action] lower 8 bits
-            KM1 = (byte)(10 + 48);                            //'Mode (10, 11, 12, 21, 21, 30, 31, 32 [for now] )
+            KM1 = (byte)(10 + 48);                            //'Mode (10, 11, 12, 20, 21, 30, 31, 32 [for now] ) MODE 40, 41, 42, 50, 51 FOR HUB ON MFC and 60, 61 and 62 for UCAP (+30) 
             
             //--- A ---
             KM2 = (byte)'0';                             //CT1H, Charge Time 1, Hours

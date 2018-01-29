@@ -35,6 +35,7 @@ namespace NewBTASProto
             checkBox8.Checked = GlobalVars.StopOnEnd;
             checkBox9.Checked = GlobalVars.AddOneMin;
             numericUpDown3.Value = GlobalVars.DCVPeriod;
+            checkBox11.Checked = GlobalVars.allowZeroShunt;
 
         }
 
@@ -57,6 +58,7 @@ namespace NewBTASProto
             GlobalVars.CSErr2Allow = numericUpDown6.Value;
             GlobalVars.showDeepDis = checkBox1.Checked;
             GlobalVars.allowZeroTest = checkBox3.Checked;
+            GlobalVars.allowZeroShunt = checkBox11.Checked;
             GlobalVars.rows2Dis = numericUpDown1.Value;
             GlobalVars.robustCSCAN = checkBox4.Checked;
             GlobalVars.advance2Short = checkBox7.Checked;
@@ -208,6 +210,11 @@ namespace NewBTASProto
         }
 
         private void label24_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label26_Click(object sender, EventArgs e)
         {
 
         }

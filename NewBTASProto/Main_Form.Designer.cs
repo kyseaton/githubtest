@@ -134,6 +134,7 @@
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.cMSStartStop = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.startNewTestToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resumeTestToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -211,7 +212,6 @@
             this.toolStripComboBox4 = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripMenuItem49 = new System.Windows.Forms.ToolStripMenuItem();
             this.folderBrowserDialog3 = new System.Windows.Forms.FolderBrowserDialog();
-            this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -219,6 +219,7 @@
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.cMSStartStop.SuspendLayout();
             this.cMSChargerChannel.SuspendLayout();
             this.cMSChargerType.SuspendLayout();
@@ -228,7 +229,6 @@
             this.contextMenuStripClear.SuspendLayout();
             this.contextMenuStripGraphSelect.SuspendLayout();
             this.cMSTestType.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.SuspendLayout();
             // 
             // dataGridView1
@@ -828,7 +828,7 @@
             // 
             this.toolStripStatusLabel5.Name = "toolStripStatusLabel5";
             this.toolStripStatusLabel5.Size = new System.Drawing.Size(216, 17);
-            this.toolStripStatusLabel5.Text = "Copyright © 2017 JFM Engineering, Inc.";
+            this.toolStripStatusLabel5.Text = "Copyright © 2018 JFM Engineering, Inc.";
             // 
             // toolStripStatusLabel1
             // 
@@ -1145,6 +1145,31 @@
             this.radioButton1.Text = "Battery";
             this.radioButton1.UseVisualStyleBackColor = true;
             this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+            // 
+            // chart1
+            // 
+            this.chart1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.chart1.BorderlineColor = System.Drawing.Color.DimGray;
+            this.chart1.BorderlineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
+            chartArea1.AxisX.IntervalAutoMode = System.Windows.Forms.DataVisualization.Charting.IntervalAutoMode.VariableCount;
+            chartArea1.AxisX.MajorGrid.Enabled = false;
+            chartArea1.AxisX.MajorTickMark.Enabled = false;
+            chartArea1.AxisX.Title = "Cells";
+            chartArea1.AxisY.IntervalAutoMode = System.Windows.Forms.DataVisualization.Charting.IntervalAutoMode.VariableCount;
+            chartArea1.AxisY.Title = "Voltage";
+            chartArea1.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea1);
+            this.chart1.Location = new System.Drawing.Point(6, 42);
+            this.chart1.Name = "chart1";
+            series1.ChartArea = "ChartArea1";
+            series1.Name = "Series1";
+            this.chart1.Series.Add(series1);
+            this.chart1.Size = new System.Drawing.Size(696, 253);
+            this.chart1.TabIndex = 36;
+            this.chart1.Text = "chart1";
+            this.chart1.Click += new System.EventHandler(this.chart1_Click);
             // 
             // cMSStartStop
             // 
@@ -1747,31 +1772,6 @@
             // 
             this.folderBrowserDialog3.Description = "Select the directory where you want the Program Data to be stored.";
             // 
-            // chart1
-            // 
-            this.chart1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.chart1.BorderlineColor = System.Drawing.Color.DimGray;
-            this.chart1.BorderlineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
-            chartArea1.AxisX.IntervalAutoMode = System.Windows.Forms.DataVisualization.Charting.IntervalAutoMode.VariableCount;
-            chartArea1.AxisX.MajorGrid.Enabled = false;
-            chartArea1.AxisX.MajorTickMark.Enabled = false;
-            chartArea1.AxisX.Title = "Cells";
-            chartArea1.AxisY.IntervalAutoMode = System.Windows.Forms.DataVisualization.Charting.IntervalAutoMode.VariableCount;
-            chartArea1.AxisY.Title = "Voltage";
-            chartArea1.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea1);
-            this.chart1.Location = new System.Drawing.Point(6, 42);
-            this.chart1.Name = "chart1";
-            series1.ChartArea = "ChartArea1";
-            series1.Name = "Series1";
-            this.chart1.Series.Add(series1);
-            this.chart1.Size = new System.Drawing.Size(696, 253);
-            this.chart1.TabIndex = 36;
-            this.chart1.Text = "chart1";
-            this.chart1.Click += new System.EventHandler(this.chart1_Click);
-            // 
             // Main_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1807,6 +1807,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             this.cMSStartStop.ResumeLayout(false);
             this.cMSChargerChannel.ResumeLayout(false);
             this.cMSChargerType.ResumeLayout(false);
@@ -1816,7 +1817,6 @@
             this.contextMenuStripClear.ResumeLayout(false);
             this.contextMenuStripGraphSelect.ResumeLayout(false);
             this.cMSTestType.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -66,7 +66,7 @@ namespace NewBTASProto
             string strAccessSelect;
             // Open database containing all the battery data....
             strAccessConn = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + GlobalVars.folderString + @"\BTAS16_DB\BTS16NV.MDB";
-            strAccessSelect = @"SELECT WorkOrderNumber FROM WorkOrders";
+            strAccessSelect = @"SELECT WorkOrderNumber FROM WorkOrders ORDER BY WorkOrderNumber ASC";
 
 
 

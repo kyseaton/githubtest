@@ -124,6 +124,11 @@ namespace NewBTASProto
                     remainder = ((float)(GlobalVars.ICSettings[CID].KM5 - 48) / 1000);
                     numericUpDown3.Value = (decimal)((double)(GlobalVars.ICSettings[CID].KM4 - 48) / 10 + remainder);
                 }
+                else if (((Main_Form)this.Owner).d.Rows[selectedIndex][10].ToString().Contains("MFC"))
+                {
+                    remainder = ((float)(GlobalVars.ICSettings[CID].KM5 - 48) / 100);
+                    numericUpDown3.Value = (decimal)((double)(GlobalVars.ICSettings[CID].KM4 - 48) + remainder);
+                }
                 else
                 {
                     remainder = ((float)(GlobalVars.ICSettings[CID].KM5 - 48) / 10);
@@ -144,6 +149,11 @@ namespace NewBTASProto
                     remainder = ((float)(GlobalVars.ICSettings[CID].KM11 - 48) / 1000);
                     numericUpDown6.Value = (decimal)((double)(GlobalVars.ICSettings[CID].KM10 - 48) / 10 + remainder);
                 }
+                else if (((Main_Form)this.Owner).d.Rows[selectedIndex][10].ToString().Contains("MFC"))
+                {
+                    remainder = ((float)(GlobalVars.ICSettings[CID].KM11 - 48) / 100);
+                    numericUpDown6.Value = (decimal)((double)(GlobalVars.ICSettings[CID].KM10 - 48) + remainder);
+                }
                 else
                 {
                     remainder = ((float)(GlobalVars.ICSettings[CID].KM11 - 48) / 10);
@@ -163,6 +173,11 @@ namespace NewBTASProto
                 {
                     remainder = ((float)(GlobalVars.ICSettings[CID].KM17 - 48) / 1000);
                     numericUpDown10.Value = (decimal)((double)(GlobalVars.ICSettings[CID].KM16 - 48) / 10 + remainder);
+                }
+                if (((Main_Form)this.Owner).d.Rows[selectedIndex][10].ToString().Contains("MFC"))
+                {
+                    remainder = ((float)(GlobalVars.ICSettings[CID].KM17 - 48) / 100);
+                    numericUpDown10.Value = (decimal)((double)(GlobalVars.ICSettings[CID].KM16 - 48) + remainder);
                 }
                 else
                 {
@@ -257,9 +272,9 @@ namespace NewBTASProto
                 //update KM5
                 GlobalVars.ICSettings[comboBox1.SelectedIndex].KM5 = (byte)(Math.Round(numericUpDown3.Value * 1000) % 100 + 48);
             }
-            else if (((Main_Form)this.Owner).d.Rows[station][10].ToString().Contains("MFC-10"))
+            else if (((Main_Form)this.Owner).d.Rows[station][10].ToString().Contains("MFC"))
             {
-                //MFC-10 case
+                //MFC-10 or MFC-25 case
                 GlobalVars.ICSettings[comboBox1.SelectedIndex].KM4 = (byte)(numericUpDown3.Value / 1 + 48);
                 //update KM5
                 GlobalVars.ICSettings[comboBox1.SelectedIndex].KM5 = (byte)((numericUpDown3.Value % 1) * 100 + 48);
@@ -296,9 +311,9 @@ namespace NewBTASProto
                 //update KM11
                 GlobalVars.ICSettings[comboBox1.SelectedIndex].KM11 = (byte)(Math.Round(numericUpDown6.Value * 1000) % 100 + 48);
             }
-            else if (((Main_Form)this.Owner).d.Rows[station][10].ToString().Contains("MFC-10"))
+            else if (((Main_Form)this.Owner).d.Rows[station][10].ToString().Contains("MFC"))
             {
-                //MFC-10 case
+                //MFC-10 or MFC-25 case
                 GlobalVars.ICSettings[comboBox1.SelectedIndex].KM10 = (byte)(numericUpDown6.Value / 1 + 48);
                 //update KM11
                 GlobalVars.ICSettings[comboBox1.SelectedIndex].KM11 = (byte)((numericUpDown6.Value % 1) * 100 + 48);

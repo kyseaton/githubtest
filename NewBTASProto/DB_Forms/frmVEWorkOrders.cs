@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Data.OleDb;
 using System.Threading;
+using System.Text.RegularExpressions;
 
 namespace NewBTASProto
 {
@@ -920,8 +921,10 @@ namespace NewBTASProto
                 {
                     //record already exist as we need to do an update
                     //first update the WorkOrders table
+                    string workOrderToUpdate = textBox1.Text.Replace("'", "''").Trim();
+                    workOrderToUpdate = Regex.Replace(workOrderToUpdate, @"\p{C}+", string.Empty);
 
-                    string cmdStr = "UPDATE WorkOrders SET WorkOrderNumber='" + textBox1.Text.Replace("'", "''") +
+                    string cmdStr = "UPDATE WorkOrders SET WorkOrderNumber='" + workOrderToUpdate +
                         "', DateReceived='" + dateTimePicker1.Text +
                         "', PlaneType='" + textBox3.Text.Replace("'", "''") +
                         "', TailNumber='" + textBox4.Text.Replace("'", "''") +
@@ -946,7 +949,7 @@ namespace NewBTASProto
                     }
 
                     // Also update the workorder number in the other tables!
-                    cmdStr = "UPDATE Tests SET WorkOrderNumber='" + textBox1.Text.Replace("'", "''") + "' WHERE WorkOrderNumber='" + current["WorkOrderNumber"].ToString() + "'";
+                    cmdStr = "UPDATE Tests SET WorkOrderNumber='" + workOrderToUpdate + "' WHERE WorkOrderNumber='" + current["WorkOrderNumber"].ToString() + "'";
                     cmd = new OleDbCommand(cmdStr, conn);
                     lock (Main_Form.dataBaseLock)
                     {
@@ -955,7 +958,16 @@ namespace NewBTASProto
                         conn.Close();
                     }
 
-                    cmdStr = "UPDATE ScanData SET BWO='" + textBox1.Text.Replace("'", "''") + "' WHERE BWO='" + current["WorkOrderNumber"].ToString() + "'";
+                    cmdStr = "UPDATE WaterLevel SET WorkOrderNumber='" + workOrderToUpdate + "' WHERE WorkOrderNumber='" + current["WorkOrderNumber"].ToString() + "'";
+                    cmd = new OleDbCommand(cmdStr, conn);
+                    lock (Main_Form.dataBaseLock)
+                    {
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                        conn.Close();
+                    }
+
+                    cmdStr = "UPDATE ScanData SET BWO='" + workOrderToUpdate + "' WHERE BWO='" + current["WorkOrderNumber"].ToString() + "'";
                     cmd = new OleDbCommand(cmdStr, conn);
                     lock (Main_Form.dataBaseLock)
                     {
@@ -966,15 +978,18 @@ namespace NewBTASProto
 
 
                     //now update the combobox..
-                    toolStripCBWorkOrders.ComboBox.Text = textBox1.Text.Replace("'", "''");
-                    MessageBox.Show(this, textBox1.Text.Replace("'", "''") + " has been updated.", "Successful", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    toolStripCBWorkOrders.ComboBox.Text = workOrderToUpdate;
+                    MessageBox.Show(this, workOrderToUpdate + " has been updated.", "Successful", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 
                 }
                 else
                 {
+                    string workOrderToInsert = textBox1.Text.Replace("'", "''").Trim();
+                    workOrderToInsert = Regex.Replace(workOrderToInsert, @"\p{C}+", string.Empty);
+
                     // we need to insert a new record...
                     // first check to see if the serial number is already in use.
-                    string checkString = "SELECT * FROM WorkOrders WHERE WorkOrderNumber = '" + textBox1.Text.Replace("'", "''") + "'";
+                    string checkString = "SELECT * FROM WorkOrders WHERE WorkOrderNumber = '" + workOrderToInsert + "'";
                     DataSet checkSet = new DataSet();
                     OleDbCommand checkCmd = new OleDbCommand(checkString, conn);
                     OleDbDataAdapter checkAdapter = new OleDbDataAdapter(checkCmd);
@@ -998,7 +1013,7 @@ namespace NewBTASProto
                     // find the max value in the CustomerID column so we know what to assign to the new record
                     string cmdStr = "INSERT INTO WorkOrders (WorkOrderNumber, DateReceived, PlaneType, TailNumber, TestRequested, DateCompleted, OrderStatus, Notes, BatteryModel, BatterySerialNumber, BatteryBCN, CustomerName, BID) " +
                         "VALUES ('" +
-                        textBox1.Text.Replace("'", "''") + "','" +
+                        workOrderToInsert + "','" +
                         dateTimePicker1.Text + "','" +
                         textBox3.Text.Replace("'", "''") + "','" +
                         textBox4.Text.Replace("'", "''") + "','" +
@@ -1033,13 +1048,16 @@ namespace NewBTASProto
                 if (testList.Tables[0].Rows.Count < 1) return;
                 else
                 {
+                    string workOrderToUpdate = textBox1.Text.Replace("'", "''").Trim();
+                    workOrderToUpdate = Regex.Replace(workOrderToUpdate, @"\p{C}+", string.Empty);
+
                     dataGridView1.EndEdit();
                     for (int i = 0; i < testList.Tables[0].Rows.Count; i++ )
                     {
                         if (dataGridView1.Rows[i].Cells[2].Value.ToString().Replace("'", "''") != "")
                         {
                             string cmdStr = "UPDATE Tests SET Notes='" + dataGridView1.Rows[i].Cells[2].Value.ToString().Replace("'", "''") +
-                                "' WHERE WorkOrderNumber='" + textBox1.Text.Replace("'", "''") + "' AND StepNumber='" + dataGridView1.Rows[i].Cells[0].Value.ToString() + "'";
+                                "' WHERE WorkOrderNumber='" + workOrderToUpdate + "' AND StepNumber='" + dataGridView1.Rows[i].Cells[0].Value.ToString() + "'";
                             OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
                             lock (Main_Form.dataBaseLock)
                             {
@@ -1050,7 +1068,7 @@ namespace NewBTASProto
                         }
                         else
                         {
-                            string cmdStr = "UPDATE Tests SET Notes= Null WHERE WorkOrderNumber='" + textBox1.Text.Replace("'", "''") + "' AND StepNumber='" + dataGridView1.Rows[i].Cells[0].Value.ToString() + "'";
+                            string cmdStr = "UPDATE Tests SET Notes= Null WHERE WorkOrderNumber='" + workOrderToUpdate + "' AND StepNumber='" + dataGridView1.Rows[i].Cells[0].Value.ToString() + "'";
                             OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
                             lock (Main_Form.dataBaseLock)
                             {
@@ -1099,6 +1117,15 @@ namespace NewBTASProto
                         // first delete the tests and scandata!
                         string cmdStr = "DELETE FROM Tests WHERE WorkOrderNumber='" + current["WorkOrderNumber"].ToString() + "'";
                         OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
+                        lock (Main_Form.dataBaseLock)
+                        {
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                            conn.Close();
+                        }
+
+                        cmdStr = "DELETE FROM WaterLevel WHERE WorkOrderNumber='" + current["WorkOrderNumber"].ToString() + "'";
+                        cmd = new OleDbCommand(cmdStr, conn);
                         lock (Main_Form.dataBaseLock)
                         {
                             conn.Open();
@@ -1770,13 +1797,16 @@ namespace NewBTASProto
                 if (testList.Tables[0].Rows.Count < 1) return;
                 else
                 {
+                    string workOrderToUpdate = textBox1.Text.Replace("'", "''").Trim();
+                    workOrderToUpdate = Regex.Replace(workOrderToUpdate, @"\p{C}+", string.Empty);
+
                     dataGridView1.EndEdit();
                     for (int i = 0; i < testList.Tables[0].Rows.Count; i++)
                     {
                         if (dataGridView1.Rows[i].Cells[2].Value.ToString().Replace("'", "''") != "")
                         {
                             string cmdStr = "UPDATE Tests SET Notes='" + dataGridView1.Rows[i].Cells[2].Value.ToString().Replace("'", "''") +
-                                "' WHERE WorkOrderNumber='" + textBox1.Text.Replace("'", "''") + "' AND StepNumber='" + dataGridView1.Rows[i].Cells[0].Value.ToString() + "'";
+                                "' WHERE WorkOrderNumber='" + workOrderToUpdate + "' AND StepNumber='" + dataGridView1.Rows[i].Cells[0].Value.ToString() + "'";
                             OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
                             lock (Main_Form.dataBaseLock)
                             {
@@ -1787,7 +1817,7 @@ namespace NewBTASProto
                         }
                         else
                         {
-                            string cmdStr = "UPDATE Tests SET Notes= Null WHERE WorkOrderNumber='" + textBox1.Text.Replace("'", "''") + "' AND StepNumber='" + dataGridView1.Rows[i].Cells[0].Value.ToString() + "'";
+                            string cmdStr = "UPDATE Tests SET Notes= Null WHERE WorkOrderNumber='" + workOrderToUpdate + "' AND StepNumber='" + dataGridView1.Rows[i].Cells[0].Value.ToString() + "'";
                             OleDbCommand cmd = new OleDbCommand(cmdStr, conn);
                             lock (Main_Form.dataBaseLock)
                             {

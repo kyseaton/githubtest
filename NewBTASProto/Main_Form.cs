@@ -84,6 +84,7 @@ namespace NewBTASProto
                     GlobalVars.CSErr2Allow = Properties.Settings.Default.CSErr2Allow;
                     GlobalVars.showDeepDis = Properties.Settings.Default.showDeepDis;
                     GlobalVars.allowZeroTest = Properties.Settings.Default.allowZeroTest;
+                    GlobalVars.allowZeroShunt = Properties.Settings.Default.allowZeroShunt;
                     GlobalVars.rows2Dis = Properties.Settings.Default.rows2Dis;
                     GlobalVars.robustCSCAN = Properties.Settings.Default.robustCSCAN;
                     GlobalVars.advance2Short = Properties.Settings.Default.advance2Short;
@@ -1078,6 +1079,7 @@ namespace NewBTASProto
             Properties.Settings.Default.CSErr2Allow = GlobalVars.CSErr2Allow;
             Properties.Settings.Default.showDeepDis = GlobalVars.showDeepDis;
             Properties.Settings.Default.allowZeroTest = GlobalVars.allowZeroTest;
+            Properties.Settings.Default.allowZeroShunt = GlobalVars.allowZeroShunt;
             Properties.Settings.Default.folderString = GlobalVars.folderString;
             Properties.Settings.Default.rows2Dis = GlobalVars.rows2Dis;
             Properties.Settings.Default.advance2Short = GlobalVars.advance2Short;

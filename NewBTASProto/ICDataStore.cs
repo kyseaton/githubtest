@@ -63,7 +63,7 @@ namespace NewBTASProto
                 {
                     battCurrent = ((float) GetDouble(ICDATA[10]) - 1000) / 1000;
                 }
-                else if (boardID == 20)
+                else if (boardID == 20 || boardID == 21)
                 {
                     battCurrent = ((float)GetDouble(ICDATA[10]) - 1000) / 100;
                 }
@@ -203,7 +203,7 @@ namespace NewBTASProto
                         availabilityStatus = "Disabled";
                         break;
                     case 2:
-                        availabilityStatus = "x2x";
+                        availabilityStatus = "Soft Start";
                         break;
                     case 3:
                         availabilityStatus = "x3x";

@@ -24,7 +24,7 @@
     <MapFileExtensions>true</MapFileExtensions>
     <UpdateUrl>http://www.jfmeng.com/BTAS16_update/final_release/</UpdateUrl>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>184</ApplicationRevision>
+    <ApplicationRevision>187</ApplicationRevision>
     <ApplicationVersion>6.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -280,6 +280,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WorkFlow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WorkFlow.Designer.cs">
+      <DependentUpon>WorkFlow.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Cap_Var_Form.resx">
       <DependentUpon>Cap_Var_Form.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -427,6 +433,9 @@
     </Compile>
     <EmbeddedResource Include="Splash.resx">
       <DependentUpon>Splash.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WorkFlow.resx">
+      <DependentUpon>WorkFlow.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="ClassDiagram1.cd" />
     <None Include="DataSet1.xsc">

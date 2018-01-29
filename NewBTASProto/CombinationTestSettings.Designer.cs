@@ -73,6 +73,9 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.checkBox7 = new System.Windows.Forms.CheckBox();
             this.label13 = new System.Windows.Forms.Label();
+            this.label25 = new System.Windows.Forms.Label();
+            this.checkBox11 = new System.Windows.Forms.CheckBox();
+            this.label26 = new System.Windows.Forms.Label();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
@@ -84,7 +87,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(446, 411);
+            this.button1.Location = new System.Drawing.Point(446, 430);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 1;
@@ -94,7 +97,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(527, 411);
+            this.button2.Location = new System.Drawing.Point(527, 430);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 2;
@@ -104,6 +107,9 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.label25);
+            this.groupBox2.Controls.Add(this.checkBox11);
+            this.groupBox2.Controls.Add(this.label26);
             this.groupBox2.Controls.Add(this.label23);
             this.groupBox2.Controls.Add(this.checkBox10);
             this.groupBox2.Controls.Add(this.label24);
@@ -145,7 +151,7 @@
             this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox2.Location = new System.Drawing.Point(12, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(590, 340);
+            this.groupBox2.Size = new System.Drawing.Size(590, 354);
             this.groupBox2.TabIndex = 8;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Global Settings";
@@ -599,7 +605,7 @@
             this.groupBox1.Controls.Add(this.checkBox7);
             this.groupBox1.Controls.Add(this.label13);
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox1.Location = new System.Drawing.Point(12, 358);
+            this.groupBox1.Location = new System.Drawing.Point(12, 378);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(590, 46);
             this.groupBox1.TabIndex = 9;
@@ -628,11 +634,41 @@
             this.label13.TabIndex = 8;
             this.label13.Text = "Force Advance to Shorting Test on Current Fault from Discharge:  ";
             // 
+            // label25
+            // 
+            this.label25.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.label25.Location = new System.Drawing.Point(5, 324);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(578, 2);
+            this.label25.TabIndex = 113;
+            // 
+            // checkBox11
+            // 
+            this.checkBox11.AutoSize = true;
+            this.checkBox11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox11.Location = new System.Drawing.Point(524, 329);
+            this.checkBox11.Name = "checkBox11";
+            this.checkBox11.Size = new System.Drawing.Size(59, 17);
+            this.checkBox11.TabIndex = 112;
+            this.checkBox11.Text = "Enable";
+            this.checkBox11.UseVisualStyleBackColor = true;
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label26.Location = new System.Drawing.Point(239, 330);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(279, 13);
+            this.label26.TabIndex = 111;
+            this.label26.Text = "Allow Zero Current Shunt Tests (For Resistor Cap Tests):  ";
+            this.label26.Click += new System.EventHandler(this.label26_Click);
+            // 
             // CombinationTestSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(614, 446);
+            this.ClientSize = new System.Drawing.Size(614, 465);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.button2);
@@ -704,5 +740,8 @@
         private System.Windows.Forms.Label label23;
         private System.Windows.Forms.CheckBox checkBox10;
         private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.Label label25;
+        private System.Windows.Forms.CheckBox checkBox11;
+        private System.Windows.Forms.Label label26;
     }
 }
